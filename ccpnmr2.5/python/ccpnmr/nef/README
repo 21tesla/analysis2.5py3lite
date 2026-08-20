@@ -1,0 +1,11 @@
+The directory contains a series of modules for the processing of Nef files.
+
+  CompareNef - a series of routines to compare the contents of two Nef files.
+               For more details see ./CompareNef.py
+  GenericStarParser - a Star-type file parser, for more details see ./GenericStarParser.py
+  Specification - contains the code for handling the NEF specification.
+  StarIo - contains the code for handling the I/O for NEF and NmrStar formats.
+           For more details see ./StarIo.py
+  StarTokeniser - STAR file tokenizer
+
+  NefImporter - a series of routines for reading a Nef file and examining the contents.
