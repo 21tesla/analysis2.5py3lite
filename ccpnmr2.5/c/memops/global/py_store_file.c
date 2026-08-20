@@ -101,7 +101,7 @@ static PyObject *new_py_store_file(CcpnString file_name, int ndim,
     if (!store_file)
 	RETURN_OBJ_ERROR(error_msg);
 
-    PY_MALLOC(obj, struct Py_Store_file, &Store_file_type);
+    obj = (Py_Store_file) PyObject_New(struct Py_Store_file, &Store_file_type);
 
     if (!obj)
     {
@@ -120,13 +120,9 @@ static void delete_py_store_file(PyObject *self)
     Py_Store_file obj = (Py_Store_file) self;
     Store_file store_file = obj->store_file;
 
-/*
-    printf("delete_py_store_file\n");
-*/
-
     delete_store_file(store_file);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -138,19 +134,23 @@ static int print_py_store_file(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_store_file(PyObject *self, char *name)
+static PyObject *getattr_py_store_file(PyObject *self, PyObject *attr_name)
 {
     Py_Store_file obj = (Py_Store_file) self;
     Store_file store_file = obj->store_file;
 
-    if (equal_strings(name, "have_pos"))
-	return Py_BuildValue("i", store_file->have_pos);
-    else if (equal_strings(name, "have_neg"))
-	return Py_BuildValue("i", store_file->have_neg);
-    else if (equal_strings(name, "dir_size"))
-	return Py_BuildValue("i", store_file->dir_size);
-    else
-	return Py_FindMethod(py_file_methods, self, name);
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return NULL;
+
+    if (strcmp(name, "have_pos") == 0)
+        return PyLong_FromLong((long) store_file->have_pos);
+    else if (strcmp(name, "have_neg") == 0)
+        return PyLong_FromLong((long) store_file->have_neg);
+    else if (strcmp(name, "dir_size") == 0)
+        return PyLong_FromLong((long) store_file->dir_size);
+
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -183,23 +183,44 @@ static PySequenceMethods Store_file_sequence_methods =
 
 static PyTypeObject Store_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "StoreFile", /* name */
-    sizeof(struct Py_Store_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_store_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_store_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Store_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "StoreFile",                              /* tp_name */
+    sizeof(struct Py_Store_file),             /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    (destructor) delete_py_store_file,        /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    0,                                        /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    (getattrofunc) getattr_py_store_file,     /* tp_getattro */
+    0,                                        /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "StoreFile -- NMR store file model",      /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    py_file_methods,                          /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    0,                                        /* tp_new */
 };
 
 /*****************************************************************************
@@ -245,22 +266,37 @@ static struct PyMethodDef Store_file_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initStoreFile(void)
+static struct PyModuleDef store_file_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "StoreFile",
+    "CCPNMR Store File module (Python 3 compatible)",
+    -1,
+    Store_file_type_methods
+};
 
-#ifdef WIN64
-    Store_file_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("StoreFile", Store_file_type_methods);
+PyMODINIT_FUNC PyInit_StoreFile(void)
+{
+    if (PyType_Ready(&Store_file_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&store_file_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("StoreFile.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module StoreFile");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

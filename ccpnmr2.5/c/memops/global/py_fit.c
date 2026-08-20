@@ -168,7 +168,7 @@ static Py_Fit_method new_py_fit(int method, float noise)
     if (!fit)
 	 RETURN_OBJ_ERROR("allocating Fit_method object");
 
-    PY_MALLOC(py_fit, struct Py_Fit_method, &Fit_method_type);
+    py_fit = (Py_Fit_method) PyObject_New(struct Py_Fit_method, &Fit_method_type);
 
     if (!py_fit)
     {
@@ -187,43 +187,9 @@ static void delete_py_fit(PyObject *self)
     Py_Fit_method py_fit = (Py_Fit_method) self;
     Fit_method fit = py_fit->fit;
 
-/*
-    printf("in delete_py_fit\n");
-*/
-
     delete_fit(fit);
 
-    PY_FREE(self);
-}
-
-static int print_py_fit(PyObject *self, FILE *fp, int flags)
-{
-    Py_Fit_method py_fit = (Py_Fit_method) self;
-    Fit_method fit = py_fit->fit;
-
-    fprintf(fp, "<Fit_method object %p>", fit);
-
-    return 0;
-}
-
-static PyObject *getattr_py_fit(PyObject *self, char *name)
-{
-/*
-    Py_Fit_method py_fit = (Py_Fit_method) self;
-    Fit_method fit = py_fit->fit;
-*/
-
-/*
-    if (equal_strings(name, "rp_force_const"))
-	return Py_BuildValue("f", fit->rp_force_const);
-    else
-*/
-	return Py_FindMethod(py_handler_methods, self, name);
-}
-
-static int setattr_py_fit(PyObject *self, char *name, PyObject *value)
-{
-    return 0;
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*****************************************************************************
@@ -254,25 +220,70 @@ static PySequenceMethods Fit_method_sequence_methods =
 };
 */
 
+static PyObject *getattr_py_fit(PyObject *self, PyObject *attr_name)
+{
+    return PyObject_GenericGetAttr(self, attr_name);
+}
+
+static PyObject *fit_method_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = { "method", "noise", NULL };
+    int method;
+    float noise;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "if", kwlist,
+                                     &method, &noise))
+    {
+        RETURN_OBJ_ERROR("must have arguments: method, noise");
+    }
+
+    return (PyObject *) new_py_fit(method, noise);
+}
+
+/*****************************************************************************
+ * TYPE DESCRIPTORS
+ *****************************************************************************/
+
 static PyTypeObject Fit_method_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "FitMethod", /* name */
-    sizeof(struct Py_Fit_method), /* basicsize */
-    0, /* itemsize */
-    delete_py_fit, /* destructor */
-    print_py_fit, /* printfunc */
-    getattr_py_fit, /* getattr */
-    setattr_py_fit, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Fit_method_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "FitMethod",                              /* tp_name */
+    sizeof(struct Py_Fit_method),             /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    (destructor) delete_py_fit,               /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    0,                                        /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    (getattrofunc) getattr_py_fit,            /* tp_getattro */
+    0,                                        /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "FitMethod -- NMR fit methods",           /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    py_handler_methods,                       /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    fit_method_new,                           /* tp_new */
 };
 
 /*****************************************************************************
@@ -642,22 +653,44 @@ static struct PyMethodDef Fit_method_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initFitMethod(void)
+static struct PyModuleDef fit_method_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "FitMethod",
+    "CCPNMR Fit Method module (Python 3 compatible)",
+    -1,
+    Fit_method_type_methods
+};
 
-#ifdef WIN64
-    Fit_method_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("FitMethod", Fit_method_type_methods);
+PyMODINIT_FUNC PyInit_FitMethod(void)
+{
+    if (PyType_Ready(&Fit_method_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&fit_method_module_def);
+    if (!m)
+        return NULL;
+
+    if (PyDict_SetItemString(PyModule_GetDict(m), "FitMethod",
+                             (PyObject *) &Fit_method_type) < 0)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
+
     ErrorObject = PyErr_NewException("FitMethod.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module FitMethod");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

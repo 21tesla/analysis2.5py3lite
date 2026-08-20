@@ -26,10 +26,16 @@ ext_modules = [
          "python_util.c", "utility.c"]),
 
     ext("BlockFile",
-        ["py_block_file.c", "block_file.c", "python_util.c", "utility.c"]),
+        ["py_block_file.c", "block_file.c",
+         "py_mem_cache.c", "py_shape_file.c",
+         "hash_list.c", "hash_table.c", "int_array.c",
+         "list.c", "mutex.c", "mem_cache.c", "shape_file.c",
+         "python_util.c", "utility.c"]),
 
     ext("FitMethod",
         ["py_fit.c", "fit.c", "fit1d.c", "nonlinear_model.c",
+         "cpmg.c", "line_fit.c", "random.c", "gauss_jordan.c",
+         "gamma.c",
          "python_util.c", "utility.c"]),
 
     ext("StoreFile",
@@ -39,10 +45,12 @@ ext_modules = [
         ["py_store_handler.c", "store_handler.c", "python_util.c", "utility.c"]),
 
     ext("PdfHandler",
-        ["py_pdf_handler.c", "pdf_handler.c", "python_util.c", "utility.c"]),
+        ["py_pdf_handler.c", "pdf_handler.c", "clipping.c",
+         "python_util.c", "utility.c"]),
 
     ext("PsHandler",
-        ["py_ps_handler.c", "ps_handler.c", "python_util.c", "utility.c"]),
+        ["py_ps_handler.c", "ps_handler.c", "clipping.c",
+         "python_util.c", "utility.c"]),
 ]
 
 setup(

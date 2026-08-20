@@ -278,7 +278,7 @@ static PyObject *new_py_pdf_handler(CcpnString *file_name, float width, float he
     if (!pdf_handler)
 	 RETURN_OBJ_ERROR("allocating Pdf_handler object");
 
-    PY_MALLOC(obj, struct Py_Pdf_handler, &Pdf_handler_type);
+    obj = (Py_Pdf_handler) PyObject_New(struct Py_Pdf_handler, &Pdf_handler_type);
 
     if (!obj)
     {
@@ -299,7 +299,7 @@ static void delete_py_pdf_handler(PyObject *self)
 
     delete_pdf_handler(pdf_handler);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -311,21 +311,9 @@ static int print_py_pdf_handler(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_pdf_handler(PyObject *self, char *name)
+static PyObject *getattr_py_pdf_handler(PyObject *self, PyObject *attr_name)
 {
-/*
-    Pdf_handler *obj = (Pdf_handler *) self;
-    Random_access *a = obj->py_handler;
-
-    if (equal_strings(name, "par_file"))
-	return Py_BuildValue("s", a->par_file);
-    else if (equal_strings(name, "access_method"))
-	return Py_BuildValue("s", access_method_name(a->access_method));
-    else if (equal_strings(name, "data_format"))
-	return get_Pdf_handler_format(a);
-    else
-*/
-	return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -358,23 +346,44 @@ static PySequenceMethods Pdf_handler_sequence_methods =
 
 static PyTypeObject Pdf_handler_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "PdfHandler", /* name */
-    sizeof(struct Py_Pdf_handler), /* basicsize */
-    0, /* itemsize */
-    delete_py_pdf_handler, /* destructor */
-    0, /* printfunc */
-    getattr_py_pdf_handler, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Pdf_handler_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "PdfHandler",                             /* tp_name */
+    sizeof(struct Py_Pdf_handler),            /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    (destructor) delete_py_pdf_handler,       /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    0,                                        /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    (getattrofunc) getattr_py_pdf_handler,    /* tp_getattro */
+    0,                                        /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "PdfHandler -- NMR PDF drawing handler",  /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    py_handler_methods,                       /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    0,                                        /* tp_new */
 };
 
 /*****************************************************************************
@@ -423,23 +432,37 @@ static struct PyMethodDef Pdf_handler_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initPdfHandler(void)
+static struct PyModuleDef pdf_handler_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "PdfHandler",
+    "CCPNMR PDF Handler module (Python 3 compatible)",
+    -1,
+    Pdf_handler_type_methods
+};
 
-#ifdef WIN64
-    Pdf_handler_type.ob_type = &PyType_Type;
-#endif
+PyMODINIT_FUNC PyInit_PdfHandler(void)
+{
+    if (PyType_Ready(&Pdf_handler_type) < 0)
+        return NULL;
 
-    /* create the module and add the functions */
-    m = Py_InitModule("PdfHandler", Pdf_handler_type_methods);
+    PyObject *m = PyModule_Create(&pdf_handler_module_def);
+    if (!m)
+        return NULL;
 
-    /* create exception object and add to module */
     ErrorObject = PyErr_NewException("PdfHandler.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module PdfHandler");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

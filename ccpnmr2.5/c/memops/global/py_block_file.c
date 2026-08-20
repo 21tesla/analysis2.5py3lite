@@ -571,7 +571,7 @@ static PyObject *new_py_block_file(char *file, int ndim,
     if (!block_file)
 	RETURN_OBJ_ERROR("allocating Block_file object");
 
-    PY_MALLOC(obj, struct Py_Block_file, &Block_file_type);
+    obj = (Py_Block_file) PyObject_New(struct Py_Block_file, &Block_file_type);
 
     if (!obj)
     {
@@ -633,7 +633,7 @@ static PyObject *new_py_shape_block_file(char *file, int ndim,
     if (!block_file)
 	RETURN_OBJ_ERROR("allocating Shape_block_file object");
 
-    PY_MALLOC(obj, struct Py_Shape_block_file, &Shape_block_file_type);
+    obj = (Py_Shape_block_file) PyObject_New(struct Py_Shape_block_file, &Shape_block_file_type);
 
     if (!obj)
     {
@@ -672,7 +672,7 @@ static void delete_py_block_file(PyObject *self)
 
     delete_block_file(block_file);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -684,27 +684,30 @@ static int print_py_block_file(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_block_file(PyObject *self, char *name)
+static PyObject *getattr_py_block_file(PyObject *self, PyObject *attr_name)
 {
     Py_Block_file obj = (Py_Block_file) self;
     Py_Shape_block_file shape_block_file_obj;
     Py_Shape_file shape_file_obj;
     Block_file block_file = obj->block_file;
 
-    if (equal_strings(name, "ndim"))
-	return Py_BuildValue("i", block_file->ndim);
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return NULL;
 
-    else if ((block_file->block_file_kind == SHAPE_FILE) && equal_strings(name, "shapeFile"))
+    if (strcmp(name, "ndim") == 0)
+        return PyLong_FromLong((long) block_file->ndim);
+
+    else if ((block_file->block_file_kind == SHAPE_FILE) && strcmp(name, "shapeFile") == 0)
     {
-	shape_block_file_obj = (Py_Shape_block_file) obj;
-	shape_file_obj = shape_block_file_obj->shape_file_obj;
-	Py_INCREF(shape_file_obj);
+        shape_block_file_obj = (Py_Shape_block_file) obj;
+        shape_file_obj = shape_block_file_obj->shape_file_obj;
+        Py_INCREF(shape_file_obj);
 
-	return (PyObject *) shape_file_obj;
+        return (PyObject *) shape_file_obj;
     }
 
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -737,44 +740,86 @@ static PySequenceMethods Block_file_sequence_methods =
 
 static PyTypeObject Block_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "BlockFile", /* name */
-    sizeof(struct Py_Block_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_block_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_block_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Block_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "BlockFile",                                /* tp_name */
+    sizeof(struct Py_Block_file),              /* tp_basicsize */
+    0,                                          /* tp_itemsize */
+    (destructor) delete_py_block_file,          /* tp_dealloc */
+    0,                                          /* tp_vectorcall */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    0,                                          /* tp_as_async */
+    0,                                          /* tp_repr */
+    0,                                          /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    0,                                          /* tp_call */
+    0,                                          /* tp_str */
+    (getattrofunc) getattr_py_block_file,       /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                         /* tp_flags */
+    "BlockFile -- NMR block data file model",   /* tp_doc */
+    0,                                          /* tp_traverse */
+    0,                                          /* tp_clear */
+    0,                                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    0,                                          /* tp_iter */
+    0,                                          /* tp_iternext */
+    py_handler_methods,                         /* tp_methods */
+    0,                                          /* tp_members */
+    0,                                          /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    0,                                          /* tp_new */
 };
 
 static PyTypeObject Shape_block_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "ShapeBlockFile", /* name */
-    sizeof(struct Py_Shape_block_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_block_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_block_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Block_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "ShapeBlockFile",                           /* tp_name */
+    sizeof(struct Py_Shape_block_file),         /* tp_basicsize */
+    0,                                          /* tp_itemsize */
+    (destructor) delete_py_block_file,          /* tp_dealloc */
+    0,                                          /* tp_vectorcall */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    0,                                          /* tp_as_async */
+    0,                                          /* tp_repr */
+    0,                                          /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    0,                                          /* tp_call */
+    0,                                          /* tp_str */
+    (getattrofunc) getattr_py_block_file,       /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                         /* tp_flags */
+    "ShapeBlockFile -- NMR shape-based block",  /* tp_doc */
+    0,                                          /* tp_traverse */
+    0,                                          /* tp_clear */
+    0,                                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    0,                                          /* tp_iter */
+    0,                                          /* tp_iternext */
+    py_handler_methods,                         /* tp_methods */
+    0,                                          /* tp_members */
+    0,                                          /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    0,                                          /* tp_new */
 };
 
 /*****************************************************************************
@@ -900,22 +945,40 @@ static struct PyMethodDef Block_file_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initBlockFile(void)
+static struct PyModuleDef block_file_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "BlockFile",
+    "CCPNMR Block File module (Python 3 compatible)",
+    -1,
+    Block_file_type_methods
+};
 
-#ifdef WIN64
-    Block_file_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("BlockFile", Block_file_type_methods);
+PyMODINIT_FUNC PyInit_BlockFile(void)
+{
+    if (PyType_Ready(&Block_file_type) < 0)
+        return NULL;
+    if (PyType_Ready(&Shape_block_file_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&block_file_module_def);
+    if (!m)
+        return NULL;
+
+
     ErrorObject = PyErr_NewException("BlockFile.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module BlockFile");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }
