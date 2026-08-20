@@ -1,0 +1,160 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ccpnmr"
+version = "2.5.2"
+description = "CCP NMR — NMR data analysis workbench (biochemistry)"
+readme = "survey.md"
+requires-python = ">=3.13"
+license = {text = "LGPL-2.1"}
+authors = [
+    {name = "CCP NMR Consortium"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.0",
+    "PyOpenGL>=3.1.9",
+    "Pillow>=10.0",
+    "olefile>=0.47",
+    "requests>=2.31",
+    "python-dateutil>=2.9",
+    "pytz>=2024.1",
+]
+
+[project.optional-dependencies]
+gui = [
+    "PyOpenGL>=3.1.9",
+    "Pillow>=10.0",
+]
+testing = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+dev = [
+    "ruff>=0.4",
+    "pyupgrade>=3.15",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[project.scripts]
+ccpnmr = "ccpnmr.analysis.AnalysisGui:main"
+ccpnmr-eci = "ccpnmr.eci.EntryCompletionGui:main"
+ccpnmr-dangle = "cambridge.dangle.DangleGui:main"
+ccpnmr-data-shifter = "ccpnmr.format.gui.DataShifter:main"
+ccpnmr-deposition = "pdbe.deposition.dataFileImport.dataFileImportGui:main"
+ccpnmr-extend-nmr = "extendNmr.ExtendNmrGui:main"
+ccpnmr-format-converter = "ccpnmr.format.gui.FormatConverter:main"
+ccpnmr-update = "ccpnmr.update.UpdateAuto:main"
+
+[project.urls]
+Homepage = "https://ccpnc.iqfr.csic.es/"
+Source = "https://github.com/ccpnccpn/ccpnmr2"
+
+[tool.setuptools.packages.find]
+where = ["ccpnmr2.5/python"]
+include = [
+    "memops*",
+    "ccp*",
+    "ccpnmr*",
+    "cambridge*",
+    "cing*",
+    "cyana2ccpn*",
+    "extendNmr*",
+    "gothenburg*",
+    "gottingen*",
+    "grenoble*",
+    "molsim*",
+    "nijmegen*",
+    "paris*",
+    "pdbe*",
+    "regensburg*",
+    "rutgers*",
+    "utrecht*",
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.xml", "*.py", "*.html", "*.nef", "*.cui"]
+
+# ---------------------------------------------------------------------------
+# Tool configuration
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+src = ["ccpnmr2.5/python"]
+extend-exclude = [
+    "ccpnmr2.5/python/ccp/api",       # auto-generated
+    "ccpnmr2.5/python/ccpnmr/api",    # auto-generated
+    "ccpnmr2.5/python/ccpnmr/xml",    # codegen output
+    "doc/",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes (unused imports, undefined names, star imports)
+    "W",    # pycodestyle warnings
+    "I",    # isort (import ordering)
+    "UP",   # pyupgrade (py2→py3 remnants)
+]
+ignore = [
+    "E501",   # line too long (legacy codebase, too noisy)
+    "E741",   # ambiguous variable name (l, O, I) — common in NMR
+    "F403",   # star imports (262 files, fix in Phase 2)
+    "F405",   # star import may overwrite name
+    "UP007",  # use X | Y instead of Union (prefer typing.Optional for now)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"ccpnmr2.5/python/*/test*" = ["F841"]
+"ccpnmr2.5/python/*/testing*" = ["F841"]
+"*_test.py" = ["F841"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "memops",
+    "ccp",
+    "ccpnmr",
+    "cambridge",
+    "cing",
+    "extendNmr",
+    "gothenburg",
+    "gottingen",
+    "grenoble",
+    "molsim",
+    "nijmegen",
+    "paris",
+    "pdbe",
+    "regensburg",
+    "rutgers",
+    "utrecht",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "ccpnmr2.5/python/ccpnmr/nef/testing",
+    "ccpnmr2.5/python/cing",
+]
+pythonpath = ["ccpnmr2.5/python"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.13"
+mypy_path = "ccpnmr2.5/python"
+ignore_missing_imports = true
+check_untyped_defs = false
+disallow_untyped_defs = false
+warn_return_any = false
