@@ -1,0 +1,35 @@
+# Bundled conda Python 2.7 runtime (recreated via uv / conda-forge)
+miniconda/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.so
+!ccpnmr2.5/c/**/*.so
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# uv
+.uv/
+
+# Python 3 migration working files
+*.migrated
+*.bak
