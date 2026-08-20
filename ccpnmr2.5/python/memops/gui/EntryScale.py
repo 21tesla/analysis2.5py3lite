@@ -76,7 +76,7 @@ class EntryScale(Frame):
         self.values = tuple(values)
         self.set_callback = set_callback
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         if orient == Tkinter.HORIZONTAL:
             self.grid_columnconfigure(1, weight=1)

@@ -58,7 +58,7 @@ from memops.gui.Text import Text
 class ScrolledText(Frame):
     def __init__(self, parent, text="", width=60, height=10, xscroll=True, yscroll=True, *args, **kw):
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)

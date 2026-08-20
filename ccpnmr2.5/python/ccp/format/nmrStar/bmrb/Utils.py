@@ -61,13 +61,7 @@ def transpose(matrix):
         else:
             return map(lambda y: (y,), matrix[0])
     else:
-        return apply(
-            map,
-            [
-                None,
-            ]
-            + list(matrix),
-        )
+        return list(zip(*list(matrix)))
 
 
 ###############################################################################

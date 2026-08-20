@@ -67,7 +67,7 @@ class FloatEntry(Entry):
         else:
             kw["strToVal"] = float
 
-        apply(Entry.__init__, (self, parent) + args, kw)
+        Entry.__init__(self, parent, *args, **kw)
 
     def cleanFloat(self, val):
 

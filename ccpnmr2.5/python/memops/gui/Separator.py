@@ -72,7 +72,7 @@ class Separator(Frame):
 
         kw["borderwidth"] = (size - 1) / 2
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.config(bg=color)
         self.relief = relief

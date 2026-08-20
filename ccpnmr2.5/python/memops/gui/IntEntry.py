@@ -66,7 +66,7 @@ class IntEntry(Entry):
         else:
             kw["strToVal"] = int
 
-        apply(Entry.__init__, (self, parent) + args, kw)
+        Entry.__init__(self, parent, *args, **kw)
 
     def cleanInt(self, val):
 

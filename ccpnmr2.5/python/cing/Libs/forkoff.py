@@ -396,7 +396,7 @@ class Process:
 #                os.getpgrp(), os.getpid() ))
 
         try:
-            exit_status = apply( function, arguments )
+            exit_status = function(*arguments)
         except KeyboardInterrupt:
             if self.verbosity:
                 nTwarning("Caught KeyboardInterrupt in subprocess, subprocess will exit(1)")

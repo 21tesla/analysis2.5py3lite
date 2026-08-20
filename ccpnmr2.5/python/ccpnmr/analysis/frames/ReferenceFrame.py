@@ -50,7 +50,7 @@ from memops.gui.MessageReporter import showYesNo
 class ReferenceFrame(Frame):
     def __init__(self, parent, peakList):
 
-        apply(Frame.__init__, (self, parent))
+        Frame.__init__(self, parent)
 
         # parent.grid_columnconfigure(0, weight=1)
         # parent.grid_rowconfigure(1, weight=1)

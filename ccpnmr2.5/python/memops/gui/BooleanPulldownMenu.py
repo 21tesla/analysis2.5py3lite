@@ -71,7 +71,7 @@ class BooleanPulldownMenu(PulldownMenu):
         kw["selected_index"] = self.booleanToIndex[selected]
         kw["callback"] = self.doCallback
 
-        apply(PulldownMenu.__init__, (self, parent) + args, kw)
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
     def doCallback(self, selected_index, selected):
 

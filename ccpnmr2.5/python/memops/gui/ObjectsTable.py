@@ -103,7 +103,7 @@ class ObjectsTable(Frame):
         if constructorKw is None:
             constructorKw = {}
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.ndim = len(objects)
         self.objects = objects

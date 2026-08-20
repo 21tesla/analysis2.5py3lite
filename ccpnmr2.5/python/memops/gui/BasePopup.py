@@ -504,7 +504,7 @@ if __name__ == "__main__":
     class TestFrame(Frame):
         def __init__(self, parent, *args, **kw):
 
-            apply(Frame.__init__, (self, parent) + args, kw)
+            Frame.__init__(self, parent, *args, **kw)
 
             button = Button(self, text="close", command=parent.close)
             button.pack(side=Tkinter.LEFT)
@@ -517,7 +517,7 @@ if __name__ == "__main__":
             kw["modal"] = True
             kw["title"] = "Test popup"
             self.result = None
-            apply(BasePopup.__init__, (self, root) + args, kw)
+            BasePopup.__init__(self, root, *args, **kw)
 
         def body(self, master):
 

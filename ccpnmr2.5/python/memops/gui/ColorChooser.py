@@ -62,7 +62,7 @@ from memops.universal.Util import buttonClick
 class ColorChooser(Frame):
     def __init__(self, parent, *args, **kw):
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=0)

@@ -63,7 +63,7 @@ class ExptSpectrumPeakList(Frame):
         self.analysis = analysis
         self.callback = callback
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         label = Label(self, text="Experiment:")
         label.grid(row=0, column=0, sticky="ne")

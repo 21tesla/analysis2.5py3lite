@@ -115,7 +115,7 @@ class Relation:
         if column == None:
             return None
         for idx,v in enumerate(column):
-            column[idx] = apply(func,(v,))
+            column[idx] = func(v)
         return column
 
     def readCsvFile(self, file_name, containsHeaderRow,

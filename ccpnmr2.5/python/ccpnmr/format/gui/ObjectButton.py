@@ -56,7 +56,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 class ObjectButton(Tkinter.Button):
     def __init__(self, parent, toggledDict={}, untoggledDict={}, command=None, toggled=False, *args, **kw):
 
-        apply(Tkinter.Button.__init__, (self, parent) + args, kw)
+        tkinter.Button.__init__(self, parent, *args, **kw)
 
         self.parent = parent
 

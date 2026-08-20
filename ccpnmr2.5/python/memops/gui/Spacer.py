@@ -58,7 +58,7 @@ from memops.gui.Frame import Frame
 class Spacer(Frame):
     def __init__(self, parent, relief="raised", *args, **kw):
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         # self.grid_rowconfigure(0, weight=1)
         # self.grid_columnconfigure(1, weight=1)

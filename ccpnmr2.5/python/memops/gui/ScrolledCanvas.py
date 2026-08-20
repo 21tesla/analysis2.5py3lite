@@ -68,7 +68,7 @@ class ScrolledCanvas(Frame):
         self.initialY = None
         self.resizeCallback = resizeCallback
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)

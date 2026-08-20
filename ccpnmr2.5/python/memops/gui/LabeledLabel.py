@@ -70,7 +70,7 @@ class LabeledLabel(Frame):
         **kw,
     ):
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.grid_columnconfigure(1, weight=1)
 

@@ -68,7 +68,7 @@ from memops.gui.ToggleArrow import ToggleArrow
 class HelpFrame(Frame):
     def __init__(self, parent, width=70, height=20, xscroll=False, yscroll=True, *args, **kw):
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.grid_columnconfigure(1, weight=1)
 

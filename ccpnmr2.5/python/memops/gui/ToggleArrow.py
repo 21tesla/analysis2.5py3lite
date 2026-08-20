@@ -64,7 +64,7 @@ class ToggleArrow(Frame):
         self.isArrowClosed = isArrowClosed
         self.callback = callback
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         bg = kw.get("bg")
         if not bg:

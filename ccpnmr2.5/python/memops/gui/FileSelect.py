@@ -509,7 +509,7 @@ class FileSelect(Frame):
 
         if os.path.islink(file):
             # plain arrow: u' \u2192 '
-            entry = entry + " \u21d2 " + unicode(os.readlink(file), "utf-8")
+            entry = entry + " \u21d2 " + os.readlink(file)
             size = None
             color = "#E0D0C0"
 

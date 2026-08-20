@@ -271,7 +271,7 @@ class SliceCanvas(Frame):
         #  kw['width'] = size
 
         # apply(Canvas.__init__, (self, parent) + args, kw)
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.orient = orient
         self.label = label
@@ -327,7 +327,7 @@ class CornerCanvas(Canvas):
 
     def __init__(self, parent, *args, **kw):
 
-        apply(Canvas.__init__, (self, parent) + args, kw)
+        Canvas.__init__(self, parent, *args, **kw)
 
         self.xMultiplier = 1  # arbitrary
         self.yMultiplier = 1  # arbitrary
@@ -547,7 +547,7 @@ class WindowCanvas(Frame):
     def __init__(self, parent, xview_region, yview_region, *args, **kw):
 
         # apply(Canvas.__init__, (self, parent) + args, kw)
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         self.xview_region = xview_region
         self.yview_region = yview_region
@@ -748,7 +748,7 @@ class ScrolledWindow(Frame):
         self.get_geometry = get_geometry
         self.set_geometry = set_geometry
 
-        apply(Frame.__init__, (self, parent) + args, kw)
+        Frame.__init__(self, parent, *args, **kw)
 
         # self.grid_rowconfigure(0, weight=1)
         # self.grid_columnconfigure(0, weight=1)
