@@ -193,9 +193,9 @@ def setPrintOption(appObject, key, value):
   if hasattr(appObject, name):
     try:
       setattr(appObject, name, value)
-    except ApiError, e:
+    except ApiError as e:
       if key != 'TickPlacement':
-        print 'Warning: print option "%s" not stored in data model as "%s" because of exception: %s' % (key, value, str(e))
+        print('Warning: print option "%s" not stored in data model as "%s" because of exception: %s' % (key, value, str(e)))
 
   elif key in ('PositiveColors', 'NegativeColors'):
     appObject.root.application.setValues(appObject, keyword=name, values=value)

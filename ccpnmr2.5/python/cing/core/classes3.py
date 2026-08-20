@@ -7,7 +7,7 @@ from cing.core.constants import * #@UnusedWildImport
 #from cing.core.sml import SMLhandler
 
 #class GumboObject(): # pylint: disable=R0903
-class SMLhandled(): # pylint: disable=R0903
+class SMLhandled: # pylint: disable=R0903
     '''
     Place holder for any attributes that were dynamically added.
     Gumbo stands for soup and soup stands for any 3D object like an atom 
@@ -22,7 +22,7 @@ class SMLhandled(): # pylint: disable=R0903
     # end def
 # end class
 
-class Formatted(): # pylint: disable=R0903
+class Formatted: # pylint: disable=R0903
     'Can be formatted as in having the __FORMAT__ attribute. E.g. NTlist'
     def __init__(self):
         self.__FORMAT__ = None

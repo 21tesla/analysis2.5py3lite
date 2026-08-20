@@ -75,7 +75,7 @@ class VarianParams(ExternalParams):
     try:
       procparParams = parseProcparFile(self.procpar_file)
       dataFileParams = readDataFileHeader(self.data_file)
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
 
     ccpnParams = procparParams['ccpnParams']
@@ -110,7 +110,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: required argument: <procpar_file>'
+    print('Error: required argument: <procpar_file>')
     sys.exit(1)
 
   procs_file = sys.argv[1]

@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import math
-import Tkinter
+import tkinter
 from memops.gui.Frame import Frame
 from memops.gui.ScrolledCanvas import ScrolledCanvas
 from memops.gui.Color import hexRepr, hexToRgb
@@ -430,11 +430,11 @@ class ScrolledGraph(Frame):
     for i in range(len(dataSets)):
       if (len(dataSets[i]) > maxN):
         maxN = len(dataSets[i])
-	bigSet = i
-	
+    bigSet = i
+    
     if (maxN < 1):
       return [0.0,1.0,0.0,1.0,1,1.0,1.0]
-	
+    
     maxX = dataSets[bigSet][0][0] or 0.0
     minX = dataSets[bigSet][0][0] or 0.0
     maxY = dataSets[bigSet][0][1] or 0.0
@@ -534,16 +534,16 @@ class ScrolledGraph(Frame):
 
         if (not y) and (y != 0):
           y = None 
-	
+    
         if (not x) and (x != 0):
           x = None 
 
         else:
           t = type(x)
           
-	  if t not in validTypes:
-	    x = c
-	    c += 1.0
+      if t not in validTypes:
+        x = c
+        c += 1.0
 
         dataSets[i][j] = (x,y,e)
 
@@ -712,10 +712,10 @@ class ScrolledGraph(Frame):
       
       for (x,y,yU,yL) in coords:
         x0 = x
-	x1 = x+d1
-	x2 = x-d1
-	y0 = y-dB
-	y1 = y+d2
+    x1 = x+d1
+    x2 = x-d1
+    y0 = y-dB
+    y1 = y+d2
     
         if yU is not None:
           item = create_line(x,y,x,yU,fill=outline)
@@ -750,12 +750,12 @@ class ScrolledGraph(Frame):
       
       for (x,y,yU,yL) in coords:
         x0 = x
-	x1 = x+d3
-	x2 = x+d5
+    x1 = x+d3
+    x2 = x+d5
         x3 = x-d5
         x4 = x-d3
-	y0 = y-d1
-	y1 = y-d2
+    y0 = y-d1
+    y1 = y-d2
         y2 = y+d4
         y3 = y+d4 
         y4 = y-d2
@@ -943,7 +943,7 @@ class ScrolledGraph(Frame):
       if self.graphType == 'line':
         items = self.drawLines(coords, color, lineWidth)
         self.items.extend(items)
-	items = self.drawSymbols(coords, symbolSize,
+    items = self.drawSymbols(coords, symbolSize,
                                  lineWidth, shape=symbol,
                                  outline=color, fill=fcolor)
         self.items.extend(items)
@@ -1409,7 +1409,7 @@ if __name__ == '__main__':
   root.grid_rowconfigure(0, weight=1)
   
   def click(*args):
-    print 'Clicked', args
+    print('Clicked', args)
   
   dataSets = []
   

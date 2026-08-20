@@ -16,7 +16,7 @@ class AllChecks(TestCase):
     def test_WhyNot(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         whyNot = WhyNot()
         for entryId in ['1brv', '9pcy']:

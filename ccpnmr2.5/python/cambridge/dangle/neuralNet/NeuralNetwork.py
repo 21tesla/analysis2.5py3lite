@@ -99,8 +99,8 @@ class NN:
         self.missingInput = {}
         
         if len(inputs) != self.nInput-1:
-            print len(inputs), self.nInput-1
-            raise ValueError, 'wrong number of inputs'
+            print(len(inputs), self.nInput-1)
+            raise ValueError('wrong number of inputs')
 
         # input activations
         for i in range(self.nInput-1):
@@ -143,7 +143,7 @@ class NN:
         nInp = range(self.nInput)
     
         if len(targets) != self.nOutput:
-            raise ValueError, 'wrong number of target values'
+            raise ValueError('wrong number of target values')
 
         # calculate error terms for output
         output_deltas = [0.0] * self.nOutput
@@ -206,17 +206,17 @@ class NN:
         pc = (100.0*n)/m
         
         if verbose:
-          print "Success rate %d from %d : %.2f%% error %.2f" % (n,m,pc,err)
+          print("Success rate %d from %d : %.2f%% error %.2f" % (n,m,pc,err))
         return pc
 
     def weights(self):
-        print 'Input weights:'
+        print('Input weights:')
         for i in range(self.nInput):
-            print self.weightsInput[i]
-        print
-        print 'Output weights:'
+            print(self.weightsInput[i])
+        print()
+        print('Output weights:')
         for j in range(self.nHidden):
-            print self.weightsOutput[j]
+            print(self.weightsOutput[j])
 
     def train(self, patterns, iterations=10, N=0.5, M=0.1):
 
@@ -228,27 +228,27 @@ class NN:
 
       """
       """
-      print "Phase 1"
+      print("Phase 1")
       nSplit = 10
       for i in range(nSplit):
-        print 'Subset: %d' % i
+        print('Subset: %d' % i)
         random.shuffle(patterns)
         self.backPropagateTrain(patterns[:int(n/nSplit)], 7, 0.5,  0.2)
       
-      print "Phase 2"
+      print("Phase 2")
       self.backPropagateTrain(patterns, iterations, 0.5,  0.2)
-      print "Phase 3"
+      print("Phase 3")
       self.backPropagateTrain(patterns, iterations, 0.5,  0.1)
-      print "Phase 4"
+      print("Phase 4")
       self.backPropagateTrain(patterns, iterations, 0.5, 0.05)
-      print "Phase 5"
+      print("Phase 5")
       self.bestScore = None
       self.backPropagateTrain(patterns, iterations, 0.5, 0.025)
 
       self.weightsInput  = [x[:] for x in self.weightsBestIn]
       self.weightsOutput = [x[:] for x in self.weightsBestOut]
 
-      print "Time taken:", time.time()-t0
+      print("Time taken:", time.time()-t0)
 
 
     def backPropagateTrain(self, patterns, iterations=10, N=0.5, M=0.1):
@@ -256,7 +256,7 @@ class NN:
       
       # N: learning rate
       # M: momentum factor
-      for i in xrange(iterations):
+      for i in range(iterations):
         #error = 0.0
         
         #print i
@@ -303,4 +303,4 @@ def demo():
 if __name__ == '__main__':
     t1 = time.time()
     demo()
-    print time.time() - t1
+    print(time.time() - t1)

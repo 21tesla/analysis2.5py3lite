@@ -372,7 +372,7 @@ class FormatConverterWrapper:
               if chainMappingResetAttempted or not forceChainMappings:
                 break
               else:
-                print("  WARNING: trying new chain mapping {}".format(str(forceChainMappings)))
+                print(f"  WARNING: trying new chain mapping {str(forceChainMappings)}")
                 chainMappingResetAttempted = True
               
             origUnlinked = self.formatConversion.numResonancesLinked['origUnlinked']
@@ -489,8 +489,8 @@ class FormatConverterWrapper:
     
     forceChainMappings = self.sequenceComparison.compareFormatFileToCcpnInfo()
 
-    print "\n*** Chain mappings set by alignment information ***\n"
-    print forceChainMappings
+    print("\n*** Chain mappings set by alignment information ***\n")
+    print(forceChainMappings)
       
     #
     # Reset list of resonances for FormatClass!

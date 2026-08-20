@@ -186,9 +186,9 @@ if __name__ == '__main__':
   x12 = uniGeometry.vectorsSubtract(coord2, coord1)
   x32 = uniGeometry.vectorsSubtract(coord2, coord3)
 
-  print 'dist12 = %3.2f' % uniGeometry.vectorLength(x12)
-  print 'dist32 = %3.2f' % uniGeometry.vectorLength(x32)
-  print 'angle123 = %3.2f' % (uniGeometry.vectorsAngle(x12, x32)*180/math.pi)
+  print('dist12 = %3.2f' % uniGeometry.vectorLength(x12))
+  print('dist32 = %3.2f' % uniGeometry.vectorLength(x32))
+  print('angle123 = %3.2f' % (uniGeometry.vectorsAngle(x12, x32)*180/math.pi))
 
   dist24 = 1.33
   #angle124 = None
@@ -197,12 +197,12 @@ if __name__ == '__main__':
 
   x42 = uniGeometry.vectorsSubtract(coord2, coord4)
 
-  print 'coord4 = %s' % (['%4.3f' % x for x in coord4])
-  print 'dist24 = %3.2f' % uniGeometry.vectorLength(x42)
-  print 'angle124 = %3.2f' % (uniGeometry.vectorsAngle(x12, x42)*180/math.pi)
-  print 'angle324 = %3.2f' % (uniGeometry.vectorsAngle(x32, x42)*180/math.pi)
+  print('coord4 = %s' % (['%4.3f' % x for x in coord4]))
+  print('dist24 = %3.2f' % uniGeometry.vectorLength(x42))
+  print('angle124 = %3.2f' % (uniGeometry.vectorsAngle(x12, x42)*180/math.pi))
+  print('angle324 = %3.2f' % (uniGeometry.vectorsAngle(x32, x42)*180/math.pi))
 
-  print 'torsion_angle1234 = %3.2f' % calcTorsionAngleDegrees(coord1, coord2, coord3, coord4)
+  print('torsion_angle1234 = %3.2f' % calcTorsionAngleDegrees(coord1, coord2, coord3, coord4))
 
   coord4 = coord3
-  print 'torsion_angle1234 = %3.2f' % calcTorsionAngleDegrees(coord1, coord2, coord3, coord4)
+  print('torsion_angle1234 = %3.2f' % calcTorsionAngleDegrees(coord1, coord2, coord3, coord4))

@@ -20,7 +20,7 @@ from cing.main import getStopMessage
 from memops.general.Io import loadProject
 from memops.general.Io import saveProject
 from shutil import rmtree
-import Tkinter
+import tkinter
 import tarfile
 
 
@@ -67,16 +67,16 @@ def annotateEntry(entry_code, bmrb_id, *extraArgList):
 #        minimalPrompts = True
 #        verbose = False
 
-    print 'entry_code                                                                                    ', entry_code
-    print 'bmrb_id                                                                                       ', bmrb_id
-    print 'allowPopups                                                                                   ', allowPopups
-    print 'isInteractive                                                                                 ', isInteractive
-    print 'minimalPrompts                                                                                ', minimalPrompts
-    print 'verbose                                                                                       ', verbose
-    print 'checkOrgProject                                                                               ', checkOrgProject
-    print 'doSwapCheck                                                                                   ', doSwapCheck
-    print 'doSaveProject                                                                                 ', doSaveProject
-    print 'doExport                                                                                      ', doExport
+    print('entry_code                                                                                    ', entry_code)
+    print('bmrb_id                                                                                       ', bmrb_id)
+    print('allowPopups                                                                                   ', allowPopups)
+    print('isInteractive                                                                                 ', isInteractive)
+    print('minimalPrompts                                                                                ', minimalPrompts)
+    print('verbose                                                                                       ', verbose)
+    print('checkOrgProject                                                                               ', checkOrgProject)
+    print('doSwapCheck                                                                                   ', doSwapCheck)
+    print('doSaveProject                                                                                 ', doSaveProject)
+    print('doExport                                                                                      ', doExport)
 
     guiRoot = None
     if allowPopups:

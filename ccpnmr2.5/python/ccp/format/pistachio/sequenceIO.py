@@ -108,7 +108,7 @@ class PistachioSequenceFile(PistachioGenericFile):
 
   def write(self,verbose = 0):
 
-    print "%s sequence writing not available - try writing chemical shift file" % self.format
+    print("%s sequence writing not available - try writing chemical shift file" % self.format)
 
 #
 # Casting here for imports in ccpnmr.format.converters

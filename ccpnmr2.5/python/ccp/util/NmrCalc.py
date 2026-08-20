@@ -9,10 +9,10 @@ November 2012: Removed references to groupId
 
 
 DATA_MISSING = '*DATA MISSING*'
-PARAM_ATTR_DICT = {type(1.0):'floatValue',
-                   type(1):'intValue',
-                   type(''):'textValue',
-                   type(True):'booleanValue'}
+PARAM_ATTR_DICT = {float:'floatValue',
+                   int:'intValue',
+                   str:'textValue',
+                   bool:'booleanValue'}
 
 def getObjBooleanParameter(dataObj, code, default=True):
 

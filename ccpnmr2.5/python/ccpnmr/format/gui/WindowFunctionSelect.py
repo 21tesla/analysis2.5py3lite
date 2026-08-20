@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 import string
 
 from memops.universal.Util import returnFloat
@@ -99,20 +99,20 @@ class WindowFunctionSelect(BasePopup):
                             ['sine','sinebell',[['Angle (deg)',0,'deg']]],
                             ['sine^2','sinebell2',[['Angle (deg)',0,'deg']]],
                             ['exponential (fixed)','decay',[['End value',0.5,'end']]],
-	        ['exponential','decay_sw',[['Line broadening (Hz)',10,'lb'],['Spectral width (Hz)',specWidth,'sw']]],
-	        ['gaussian (fixed)','gaussian',[['Total points fraction for max',0.25,'frac'],['End value',1,'end']]],
-	        ['gaussian','gaussian_sw',[['Line broadening (Hz)',10,'lb'],['Sharpening factor',0.7,'shrp'],['Spectral width (Hz)',specWidth,'sw']]],
+            ['exponential','decay_sw',[['Line broadening (Hz)',10,'lb'],['Spectral width (Hz)',specWidth,'sw']]],
+            ['gaussian (fixed)','gaussian',[['Total points fraction for max',0.25,'frac'],['End value',1,'end']]],
+            ['gaussian','gaussian_sw',[['Line broadening (Hz)',10,'lb'],['Sharpening factor',0.7,'shrp'],['Spectral width (Hz)',specWidth,'sw']]],
                             ['inverse cosine','inv_cosine',[['Frequency (Hz)',0,'freq'],['Spectral width (Hz)',specWidth,'sw']]]
-	       ]
+           ]
 
     self.windowFunctions[self.nmrPipe] = [
                             ['sine','SP',[['Start sine at (pi)',0,'off'],['End sine at (pi)',1,'end'],['Sine to power',1,'pow']]],
-	        ['exponential','EM',[['Line broadening (Hz)',10,'lb']]],
-	        ['lorentz-gauss','GM',[['Inverse exp width (Hz)',0,'g1'],['Gaussian width (Hz)',0,'g2'],['Center (0-1)',0,'g3']]],
-	        ['gaussian','GMB',[['Exponential term',0,'lb'],['Gaussian term',0,'gb']]],
-	        ['trapezoid','TM',[['Ramp length left',0,'t1'],['Ramp length right',0,'t2']]],
-	        ['triangle','TRI',[['Point loc of apex',0,'loc'],['Left edge height',0,'lHi'],['Right edge height',0,'rHi']]]
-	       ]
+            ['exponential','EM',[['Line broadening (Hz)',10,'lb']]],
+            ['lorentz-gauss','GM',[['Inverse exp width (Hz)',0,'g1'],['Gaussian width (Hz)',0,'g2'],['Center (0-1)',0,'g3']]],
+            ['gaussian','GMB',[['Exponential term',0,'lb'],['Gaussian term',0,'gb']]],
+            ['trapezoid','TM',[['Ramp length left',0,'t1'],['Ramp length right',0,'t2']]],
+            ['triangle','TRI',[['Point loc of apex',0,'loc'],['Left edge height',0,'lHi'],['Right edge height',0,'rHi']]]
+           ]
  
     #
     # Make list of names for pulldown menu
@@ -396,8 +396,8 @@ if __name__ == '__main__':
   popup = WindowFunctionSelect(root)
 
   if popup.chemAtoms:
-    print "chemAtoms %s selected" % (popup.chemAtoms)
+    print("chemAtoms %s selected" % (popup.chemAtoms))
   
   else:
-    print "Nothing selected - aborting script"
+    print("Nothing selected - aborting script")
     

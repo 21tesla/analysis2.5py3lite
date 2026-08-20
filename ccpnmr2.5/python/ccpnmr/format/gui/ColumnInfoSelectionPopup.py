@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 import string
 
@@ -81,7 +81,7 @@ class ColumnInfoSelectionPopup(TemporaryBasePopup):
     
     if not title:
       title = "Column information selection"
-    print title
+    print(title)
     
     TemporaryBasePopup.__init__(self,parent = parent, title = title, modal = False, transient=True)
  

@@ -97,4 +97,4 @@ def extraMapChanges(globalMapping):
       guid = tt[4]
       dd = getGuidMap(guid)
       if dd and 'proc' in dd:
-	del dd['proc']  # should not be 'proc':'delay' after all.
+    del dd['proc']  # should not be 'proc':'delay' after all.

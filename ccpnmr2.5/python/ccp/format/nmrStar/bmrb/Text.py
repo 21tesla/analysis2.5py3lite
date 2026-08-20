@@ -18,7 +18,8 @@ Revision 1.11  2007/07/09 12:22:27  wimvranken
 Merge with branch 4.
 
 Revision 1.10.4.1.4.1  2007/06/13 08:36:19  wimvranken
-Removed copyright - is not CCPN Bug fix for final _save tag
+Removed copyright - is not CCPN 
+Bug fix for final _save tag
 
 Revision 1.10.4.1  2006/05/23 16:41:41  wimvranken
 Bug fix by Jurgen Doreleijers (BMRB) in semicolons_add()
@@ -156,12 +157,12 @@ pattern_e_semicolon    = re.compile( eol_string + r"""\;\s*""", re.MULTILINE ) #
 # Set beginning of line BEFORE whitespace - Wim 06/03/2003
 pattern_comment_begin  = re.compile (r"""^\s*\#.*\n           # A string starting a line with a sharp
                                    """, re.MULTILINE | re.VERBOSE)
-	               
+                   
 pattern_nmrView_compress_empty = re.compile(r""" \{(\s+)\}
                                              """, re.MULTILINE | re.VERBOSE)
 pattern_nmrView_compress_questionmark = re.compile(r""" \{(\s+\?)\}
                                                     """, re.MULTILINE | re.VERBOSE)
-	               
+                   
 pattern_comment_middle = re.compile (r""" (^[^;^\n]
                                           (?:([\'][^\']*\#[^\']*[\']|[\"][^\"]*\#[^\"]*[\"])|[^\#.])*? )  # Any string beginning a line other than with a semicolon and with no quotes in it
                                           (\s+\#.*)?    $	    # Any string ending a line and starting with a sharp
@@ -207,7 +208,7 @@ def pattern_unquoted_find(text, pattern, pos=0):
         ## Is the first character matched an eol it self
         if text[pos]=='\n':
             if verbosity >= 9:
-                print 'Found pattern: [%s] at the beginning of a line' % pattern.pattern
+                print('Found pattern: [%s] at the beginning of a line' % pattern.pattern)
             return pos
             
         ## I hope the rfind is optimized to stroll backwards from pos
@@ -223,8 +224,8 @@ def pattern_unquoted_find(text, pattern, pos=0):
         # Not the one
         if line[0] == ';': 
             if verbosity > 1:
-                print 'WARNING: (1) found pattern: [%s] preceded by: [%s]' % (
-                    pattern.pattern, line )
+                print('WARNING: (1) found pattern: [%s] preceded by: [%s]' % (
+                    pattern.pattern, line ))
             pos = pos + 1
             continue
 
@@ -244,8 +245,8 @@ def pattern_unquoted_find(text, pattern, pos=0):
 ##                print "ERROR: [%s]" % line
 ##                return None
             if verbosity > 1:
-                print 'WARNING: (2) found pattern: [%s] preceded by: [%s]' % (
-                    pattern.pattern, line )
+                print('WARNING: (2) found pattern: [%s] preceded by: [%s]' % (
+                    pattern.pattern, line ))
 
             # Not the one
             pos = pos + 1 
@@ -266,8 +267,8 @@ def tag_value_quoted_parse( text, pos ):
     if text[ pos ] == '"':
         match_d_quote = pattern_d_quote.search( text, pos+1)
         if not match_d_quote:
-            print "ERROR: No matching double quote char found for double quote char at offset:", 0
-            print "ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ]
+            print("ERROR: No matching double quote char found for double quote char at offset:", 0)
+            print("ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ])
             return None, None
     ##            if verbosity >= 9:
     ##                print "pos, span():", pos, match_d_quote.span()
@@ -277,8 +278,8 @@ def tag_value_quoted_parse( text, pos ):
     if text[ pos ] == "'":
         match_s_quote = pattern_s_quote.search( text, pos+1)
         if not match_s_quote:
-            print "ERROR: No matching single quote char found for single quote char at offset:", 0
-            print "ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ]
+            print("ERROR: No matching single quote char found for single quote char at offset:", 0)
+            print("ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ])
             return None, None
         value = text[ pos+1:match_s_quote.start() ]
     ##            if verbosity >= 9:
@@ -291,8 +292,8 @@ def tag_value_quoted_parse( text, pos ):
     if text[ pos ] == ";":
         match_e_semicolon = pattern_e_semicolon.search( text, pos+1)
         if not match_e_semicolon:
-            print "ERROR: No matching semicolon found for semicolon char at offset:", 0
-            print "ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ]
+            print("ERROR: No matching semicolon found for semicolon char at offset:", 0)
+            print("ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ])
             return None, None
     ##            print "pos, span():", pos, match_e_semicolon.span()
         ## Include the first eol and the eol before the semicolon
@@ -308,9 +309,9 @@ def tag_value_quoted_parse( text, pos ):
         
         return value, match_e_semicolon.end() 
 
-    print   "ERROR: Position in text:", pos
-    print """ERROR: should contain a ', ", or a ; but was not found:"""
-    print   "ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ]
+    print("ERROR: Position in text:", pos)
+    print("""ERROR: should contain a ', ", or a ; but was not found:""")
+    print("ERROR: Next 70 chars are: [%s]" % text[ pos:pos+70 ])
     return None, None
 
 
@@ -329,12 +330,12 @@ def tag_value_parse( text, pos):
                 
     match_word = pattern_word.search( text, pos )
     if not match_word:
-        print "ERROR: No match for a 'word' at offset:", pos
-        print "ERROR: Next 70 chars are:", text[ pos:pos+70 ]
+        print("ERROR: No match for a 'word' at offset:", pos)
+        print("ERROR: Next 70 chars are:", text[ pos:pos+70 ])
         return None, None
     if match_word.start() != pos:
-        print "ERROR: Match for a 'word' at wrong offset:", match_word.start() - pos
-        print "ERROR: Next 70 chars are:", text[ pos:pos+70 ]
+        print("ERROR: Match for a 'word' at wrong offset:", match_word.start() - pos)
+        print("ERROR: Next 70 chars are:", text[ pos:pos+70 ])
         return None, None
 
     ## Include the first eol and the eol before the semicolon
@@ -383,7 +384,7 @@ def semicolon_block_collapse( text ):
       try:
         endpos = startpos + 1 + semicolon_end.end() #- len(semicolon_end.group(1)) + 1
       except:
-        print text[startpos:startpos+100]
+        print(text[startpos:startpos+100])
         raise
 
       # FOR TESTING
@@ -403,7 +404,7 @@ def semicolon_block_collapse( text ):
     # Original code: can't handle re matches that are too long
     #text, count = pattern_semicolon_block.subn( semicolon_block_replace, text )
     if STAR.verbosity >= 9:
-        print 'Done [%s] subs with semicolon blocks' % count
+        print('Done [%s] subs with semicolon blocks' % count)
     return text
 
 def semicolon_block_expand( text ):        
@@ -501,10 +502,10 @@ def comments_strip( text ):
 def nmrView_compress( text ):
 
     text, count = pattern_nmrView_compress_empty.subn( '{}', text )    
-    print 'Compressed [%s] nmrView empty { } tags' % count
+    print('Compressed [%s] nmrView empty { } tags' % count)
 
     text, count = pattern_nmrView_compress_questionmark.subn( '{?}', text )    
-    print 'Compressed [%s] nmrView question mark { ?} tags' % count
+    print('Compressed [%s] nmrView question mark { ?} tags' % count)
     
     return text
 
@@ -516,12 +517,12 @@ mmy xie
 ;;
 __Test
 """
-        print 'got text:    [%s]' % text
+        print('got text:    [%s]' % text)
         text = semicolon_block_collapse( text )
-        print 'transformed: [%s]' % text
+        print('transformed: [%s]' % text)
         value, pos = tag_value_quoted_parse( text, 0 )
-        print 'parsed     : [%s]' % value
-        print 'pos (after): [%s]' % pos
+        print('parsed     : [%s]' % value)
+        print('pos (after): [%s]' % pos)
     ##        print 'back:       [%s]' % t.semicolon_block_expand( text )
 
     if 1:
@@ -530,6 +531,6 @@ __Test
 ## comment 1
 value ## comment 2
 """
-        print 'Text (1):     [%s]' % text
-        print 'Stripped: [%s]' % comments_strip( text )
+        print('Text (1):     [%s]' % text)
+        print('Stripped: [%s]' % comments_strip( text ))
 

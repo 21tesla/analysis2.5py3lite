@@ -7,10 +7,6 @@ MemopsError = MetaModel.MemopsError
 from memops.metamodel import ImpConstants
 from memops.metamodel import Util as metaUtil
 from memops.general import Constants as genConstants
-
-True = not 0
-False = not True
-
 class ModelPortal:
   """ Access to In-memory model. Independent of language and storage. 
   All functions (except for __init__) are queries on the model
@@ -263,7 +259,7 @@ class ModelPortal:
     flav = flavours.get(key)
     if flav is not None and flav != val:
       raise MemopsError(
-       "attempt to change model flavour from %s:%s to :%s" % (`flav`,`val`,)
+       "attempt to change model flavour from %s:%s to :%s" % (str(flav),str(val),)
       )
     else:
       flavours[key] = val
@@ -280,7 +276,7 @@ class ModelPortal:
     flav = flavours.get(key)
     if flav != val:
       raise MemopsError(
-       "found wrong model flavour %s:%s, should be :%s" % (key, `flav`,`val`,)
+       "found wrong model flavour %s:%s, should be :%s" % (key, str(flav),str(val),)
       )
     
   

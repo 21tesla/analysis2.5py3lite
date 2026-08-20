@@ -110,7 +110,7 @@ def getCcpCodeList(storageDir, testMode = False, sourceName = ""):
       archiveStorageDir = os.path.join(storageDir,sourceName,molType)
       
       if not os.path.exists(archiveStorageDir):
-        print "  Warning: directory %s does not exist!" % archiveStorageDir
+        print("  Warning: directory %s does not exist!" % archiveStorageDir)
         continue
       
       if sourceName:
@@ -165,7 +165,7 @@ def getCcpCodeList(storageDir, testMode = False, sourceName = ""):
               break
               
           if not ccpCode:
-            print "  Error: no ccpCode for file with name %s... ignored!" % ccpFile
+            print("  Error: no ccpCode for file with name %s... ignored!" % ccpFile)
           
         # Exceptions - these are handled only on CCPN side
         if molType in ['DNA','RNA'] and ccpCode == 'X':

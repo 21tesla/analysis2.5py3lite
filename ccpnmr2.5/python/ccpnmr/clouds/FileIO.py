@@ -42,7 +42,7 @@ from memops.universal.Util import returnInt, returnFloat
 
 def readPdbCloud(pdbFileName):
 
-  fileHandle = open(pdbFileName, 'r')
+  fileHandle = open(pdbFileName)
 
   # assumes order of atoms
 
@@ -62,7 +62,7 @@ def readPdbCloud(pdbFileName):
 
 def readTypedPdbCloud(pdbFileName):
 
-  fileHandle = open(pdbFileName, 'r')
+  fileHandle = open(pdbFileName)
 
   # assumes order of atoms
 

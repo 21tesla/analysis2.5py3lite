@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter
+import tkinter
 
 from math import sqrt
 
@@ -243,8 +243,8 @@ class CalcShiftDifferencePopup(BasePopup):
                 'The square root of the sum of the isotope weighted shift differences squared',
                 'Sequence number of any assigned residue (for easy graphing)']
     headingList = ['Residue(s)',
-                   'Reson.\n1','Shift\n 1A','Shift\n1B',u'\u0394 1\n(ppm)',
-                   'Reson.\n2','Shift\n 2A','Shift\n2B',u'\u0394 2\n(ppm)',
+                   'Reson.\n1','Shift\n 1A','Shift\n1B','\u0394 1\n(ppm)',
+                   'Reson.\n2','Shift\n 2A','Shift\n2B','\u0394 2\n(ppm)',
                    'Shift\nSum','Shift\nDist','Seq\nNum']
     self.peakCompTable = ScrolledMatrix(frameA, headingList=headingList, grid=(1,0),
                                          callback=self.selectRow,
@@ -287,7 +287,7 @@ class CalcShiftDifferencePopup(BasePopup):
                 'Chemical shift difference, in units of the shift list']
     headingList = ['#1','#2','Assign\nName',
                    'Residue\n1','Residue\n2',
-                   'Shift 1','Shift 2',u'\u0394']
+                   'Shift 1','Shift 2','\u0394']
     self.shiftCompTable = ScrolledMatrix(frameB, headingList=headingList,
                                          grid=(1,0), callback=self.selectRow,
                                          multiSelect=True, tipTexts=tipTexts)

@@ -28,7 +28,7 @@ if __name__ == "__main__":
       chemComp = getChemComp(project,molType,ccpCode,copyFile=False,download=False)
       chemComp.isModifiable = True
 
-      print "\nChemComp code %s, molType %s" % (chemComp.ccpCode,chemComp.molType)
+      print("\nChemComp code %s, molType %s" % (chemComp.ccpCode,chemComp.molType))
 
       makeAtomSets.setChemComps(chemComp)
 

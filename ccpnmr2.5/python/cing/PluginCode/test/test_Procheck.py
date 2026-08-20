@@ -16,7 +16,7 @@ import unittest
 try:
     from cing.PluginCode.procheck import Procheck #@UnusedImport Keep to indicate dep and proper handeling.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( PROCHECK_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( PROCHECK_STR, getCallerFileName() ))
     raise SkipTest(PROCHECK_STR)
 # end try
 
@@ -25,7 +25,7 @@ class AllChecks(TestCase):
     def test_Procheck(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         runAqua = True
@@ -62,18 +62,18 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         project = Project( entryId )
-        self.failIf( project.removeFromDisk() )
+        self.assertFalse( project.removeFromDisk() )
         project = Project.open( entryId, status='new' )
         cyanaFile = os.path.join(cingDirTestsData, "cyana", entryId + ".cyana.tgz")
         self.assertTrue(project.initCyana(cyanaFolder = cyanaFile))
         project.molecule.setRanges(ranges)
         
         project.save()
-        self.failIf(project.runProcheck(createPlots=True, runAqua=runAqua) is None)
+        self.assertFalse(project.runProcheck(createPlots=True, runAqua=runAqua) is None)
 
         if showProcheckResults:
             for res in project.molecule.allResidues():

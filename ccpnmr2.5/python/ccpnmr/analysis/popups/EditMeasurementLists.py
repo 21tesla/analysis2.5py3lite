@@ -100,7 +100,7 @@ class EditMeasurementListsPopup(BasePopup):
   automatically to record the shifts of any assignments.
 
   The shift list with which an experiment is associate may be changed via the "Shift
-  List" column of the main `Experiments`_ table.
+  List" column of the main str(Experiments)_ table.
 
   Measurements other than chemical shift, like T1 and T2 relaxation times will only
   appear within this system if a measurement list entity is formally made. Simply
@@ -108,7 +108,7 @@ class EditMeasurementListsPopup(BasePopup):
   tool
 
   .. _`Follow Intensity Changes`: CalcRatesPopup.html
-  .. _`Experiments`: EditExperimentPopup.html
+  .. _str(Experiments): EditExperimentPopup.html
   
   """
 

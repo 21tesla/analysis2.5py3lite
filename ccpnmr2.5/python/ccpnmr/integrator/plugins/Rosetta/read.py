@@ -92,13 +92,13 @@ def read(nmrCalcRun, dataDir):
   
   # check presence of files:
   if not os.path.isdir(dataDir):
-    raise IOError("Data directory %s not found" % dataDir)
+    raise OSError("Data directory %s not found" % dataDir)
   
   for tag in ('scores', 'rms', 'rawRms', ):
     ss = uniIo.joinPath(dataDir, fileNames[tag])
     files[tag] = ss
     if not os.path.isfile(ss):
-      raise IOError("%s file %s not found in directory %s" % (tag, ss, dataDir))
+      raise OSError("%s file %s not found in directory %s" % (tag, ss, dataDir))
   
   # check NmrCalcRun:
   if not intUtil.runIsWritable(nmrCalcRun):
@@ -216,12 +216,12 @@ if __name__ == '__main__':
     
     nmrCalcRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId)
     if nmrCalcRun is None:
-      print "No NmrCalcRun found. Aborting"
+      print("No NmrCalcRun found. Aborting")
     else:
       read(nmrCalcRun, rosettaDir)
       nmrCalcRun.root.saveModified()
     
   else:
-    print "Usage: read projectDir NmrCalcRun.IDstring RosettaDataDir"
+    print("Usage: read projectDir NmrCalcRun.IDstring RosettaDataDir")
   
   

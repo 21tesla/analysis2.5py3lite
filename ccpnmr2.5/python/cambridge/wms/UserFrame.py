@@ -5,7 +5,7 @@
 import os
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -56,7 +56,7 @@ class UserFrame(Frame):
     # e.g. new peak lists, so that the GUI can update to the latest
     # state
 
-    print 'setting up userFrame'
+    print('setting up userFrame')
     
     self.basePopup = basePopup
     self.guiParent = guiParent

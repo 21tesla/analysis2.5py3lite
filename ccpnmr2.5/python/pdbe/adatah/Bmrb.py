@@ -108,7 +108,7 @@ def getBmrbEntry(bmrbId,skipCodes = None, forceGet = False):
   # Download
   #
 
-  print "Downloading %s..." % bmrbFile
+  print("Downloading %s..." % bmrbFile)
 
   bmrbFileLink = '%s%s' % (bmrbArchiveUrlLocation,bmrbId)
 
@@ -119,7 +119,7 @@ def getBmrbEntry(bmrbId,skipCodes = None, forceGet = False):
   #
   
   if not data:
-    print "  Download failed!"
+    print("  Download failed!")
     return False
 
   #
@@ -150,7 +150,7 @@ def getBmrbCodeShortInfo(bmrbCode, bmrbCodeShortInfo = None, overwrite = False, 
   if not bmrbCodeShortInfo:
   
     from pdbe.analysis.Util import getPickledDict
-    print "  Loading BMRB short info file..."
+    print("  Loading BMRB short info file...")
     bmrbCodeShortInfo = getPickledDict(pickledDictFilePath)
 
   #
@@ -169,7 +169,7 @@ def getBmrbCodeShortInfo(bmrbCode, bmrbCodeShortInfo = None, overwrite = False, 
     nmrStarFilePath = os.path.join(bmrbArchiveDataDir,"%s.str" % bmrbCode)
     
     if not os.path.exists(nmrStarFilePath):
-      print "BMRB file for %s not available!" % bmrbCode
+      print("BMRB file for %s not available!" % bmrbCode)
       return bmrbCodeShortInfo
 
     nmrStarFile = NmrStarProjectFile(nmrStarFilePath)
@@ -225,13 +225,13 @@ def getBmrbCodeShortInfo(bmrbCode, bmrbCodeShortInfo = None, overwrite = False, 
           
     for chainName in chemShiftInfo.keys():
       if not seqInfo.has_key(chainName):
-        print 'Error: chain info missing (from chemical shifts), not using for BmrbCodeShortInfo dictionary'
+        print('Error: chain info missing (from chemical shifts), not using for BmrbCodeShortInfo dictionary')
         seqInfo = {}
       
       else:
         for seqEl in chemShiftInfo[chainName]:
           if not seqEl in seqInfo[chainName]['sequence']:
-            print 'Error: sequence element info missing (from chemical shifts), not using for BmrbCodeShortInfo dictionary'
+            print('Error: sequence element info missing (from chemical shifts), not using for BmrbCodeShortInfo dictionary')
             seqInfo = {}
             break
       
@@ -388,7 +388,7 @@ def getBmrbCodeShortInfo(bmrbCode, bmrbCodeShortInfo = None, overwrite = False, 
       # Forcing a write here because 'deep' structure and default saveReferencePickledDict doesn't
       # pick up on this...
       
-      print "  Saving reference information for %s..." % bmrbCode
+      print("  Saving reference information for %s..." % bmrbCode)
       
       saveReferencePickledDict(pickledDictFilePath,bmrbCodeShortInfo,forceWrite=True)
   
@@ -428,7 +428,7 @@ def getBmrbPdbMappingInfo(dataFilePath=None):
         bmrbPdbMappingDict[bmrbId] = pdbCode.lower()
       else:
         # This should never happen... raise it?
-        print "MULTIPLE MATCH FOR %d!!" % bmrbId
+        print("MULTIPLE MATCH FOR %d!!" % bmrbId)
       
   return bmrbPdbMappingDict
 
@@ -567,7 +567,7 @@ def getBmrbInfo(dataType=None):
     valueNames  = ('bmrbId','name','numHProtectionValues','hasProtein','hasDNA','hasRNA')
 
   else:
-    print "Unknown data type %s, aborting..." % dataType
+    print("Unknown data type %s, aborting..." % dataType)
     return None
 
   bmrbQueryUrl = "%s/search/query_grid/%s" % (bmrbUrl,bmrbQueryFile)
@@ -593,7 +593,7 @@ def getBmrbInfo(dataType=None):
       
         valueSearch = valuePatt.search(dataLine)
         if not valueSearch:
-          print dataLine
+          print(dataLine)
           
         value = valueSearch.group(1)
         

@@ -42,7 +42,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import math
 import time
 import sys
-import Tkinter
+import tkinter
 
 from memops.general import Implementation
 
@@ -68,10 +68,10 @@ try:
   import ccpnmr.c.PeakList as PeakList
   import ccpnmr.c.SliceFile as SliceFile
   import ccpnmr.c.WinPeakList as WinPeakList
-except Exception, e:
-  print 'Error, the WindowFrame module will not work, something is wrong with the C code.'
-  print 'Exception:', e
-  print 'Will continue without Analysis window drawing functionality'
+except Exception as e:
+  print('Error, the WindowFrame module will not work, something is wrong with the C code.')
+  print('Exception:', e)
+  print('Will continue without Analysis window drawing functionality')
   ContourFile = ContourStyle = ContourLevels = PeakList = SliceFile = WinPeakList = None
 
 try:
@@ -83,7 +83,7 @@ try:
 except:
   TkHandler = None
 if (not GlHandler and not TkHandler):
-  print 'Error, the WindowFrame module will not work, something is wrong with both the GlHandler and TkHandler C code.'
+  print('Error, the WindowFrame module will not work, something is wrong with both the GlHandler and TkHandler C code.')
 
 from ccpnmr.analysis.core.AssignmentBasic import clearSeqSpinSystemLinks, addPeakResonancesToSeqSpinSystems, propagatePeakAssignments, addPeakResonancesToSpinSystem
 from ccpnmr.analysis.core.ExperimentBasic import getSpectrumIsotopes, getDataDimRefFullRange
@@ -1957,7 +1957,7 @@ class WindowFrame(Frame, WindowDraw):
             region0 = int(math.floor(region0))
             region1 = int(math.ceil(region1))
             if region0 < 0 or region1 > dataDim.numPoints:
-              print 'Outside fundamental region for spectrum %s:%s and noise calculation only works inside that' %(spectrum.experiment.name, spectrum.name)
+              print('Outside fundamental region for spectrum %s:%s and noise calculation only works inside that' %(spectrum.experiment.name, spectrum.name))
               break
             boxMin[dataDim.dim-1] = region0
             boxMax[dataDim.dim-1] = region1
@@ -3224,12 +3224,12 @@ class WindowFrame(Frame, WindowDraw):
 
     for j in range(self.scrolled_window.nrows):
       if j >= len(self.scrolled_window.canvases):
-        print "Cleanup called on non-existent canvases"
+        print("Cleanup called on non-existent canvases")
         continue
 
       for i in range(self.scrolled_window.ncols):
         if i >= len(self.scrolled_window.canvases[j]):
-          print "Cleanup called on non-existent canvases"
+          print("Cleanup called on non-existent canvases")
           continue
 
         canvas = self.scrolled_window.canvases[j][i]
@@ -4714,18 +4714,18 @@ class WindowFrame(Frame, WindowDraw):
         self.drawViewTileReal(handler, view, contourLevels, contourStyle,
                               worldPointRanges, spectrumPointRanges, row)
         #print 'drawViewTile1', self.windowPane.name
-      except Implementation.ApiError, e:
-        print 'Drawing canvas tile error:', e.error_msg
-      except self.handlerExc, e:
-        print 'Drawing canvas tile handler error:', e
-      except ContourFile.error, e:
-        print 'Drawing canvas tile ContourFile error:', e
-      except SliceFile.error, e:
-        print 'Drawing canvas tile SliceFile error:', e
-      except PeakList.error, e:
-        print 'Drawing canvas tile PeakList error:', e
-      except WinPeakList.error, e:
-        print 'Drawing canvas tile WinPeakList error:', e
+      except Implementation.ApiError as e:
+        print('Drawing canvas tile error:', e.error_msg)
+      except self.handlerExc as e:
+        print('Drawing canvas tile handler error:', e)
+      except ContourFile.error as e:
+        print('Drawing canvas tile ContourFile error:', e)
+      except SliceFile.error as e:
+        print('Drawing canvas tile SliceFile error:', e)
+      except PeakList.error as e:
+        print('Drawing canvas tile PeakList error:', e)
+      except WinPeakList.error as e:
+        print('Drawing canvas tile WinPeakList error:', e)
       except:
         #print 'Unknown canvas tile error'
         pass
@@ -4855,30 +4855,30 @@ class WindowFrame(Frame, WindowDraw):
       self.doCanvas(handler, canvas, row, col)
       handler.flush()
 
-    except Implementation.ApiError, e:
-      print 'Drawing real canvas error:', e.error_msg
+    except Implementation.ApiError as e:
+      print('Drawing real canvas error:', e.error_msg)
       #canvas.beingDrawn = False
 
-    except self.handlerExc, e:
-      print 'Drawing real canvas handler error:', e
+    except self.handlerExc as e:
+      print('Drawing real canvas handler error:', e)
 
-    except ContourFile.error, e:
-      print 'Drawing real canvas ContourFile error:', e
+    except ContourFile.error as e:
+      print('Drawing real canvas ContourFile error:', e)
 
-    except SliceFile.error, e:
-      print 'Drawing real canvas SliceFile error:', e
+    except SliceFile.error as e:
+      print('Drawing real canvas SliceFile error:', e)
 
-    except ContourLevels.error, e:
-      print 'Drawing real canvas ContourLevels error:', e
+    except ContourLevels.error as e:
+      print('Drawing real canvas ContourLevels error:', e)
 
-    except ContourStyle.error, e:
-      print 'Drawing real canvas ContourStyle error:', e
+    except ContourStyle.error as e:
+      print('Drawing real canvas ContourStyle error:', e)
 
-    except PeakList.error, e:
-      print 'Drawing real canvas PeakList error:', e
+    except PeakList.error as e:
+      print('Drawing real canvas PeakList error:', e)
 
-    except WinPeakList.error, e:
-      print 'Drawing real canvas WinPeakList error:', e
+    except WinPeakList.error as e:
+      print('Drawing real canvas WinPeakList error:', e)
 
     except:
       #canvas.beingDrawn = False
@@ -4938,22 +4938,22 @@ class WindowFrame(Frame, WindowDraw):
         self.drawRow(j)
 
       self.drawAllSlices()
-    except Implementation.ApiError, e:
-      print 'Drawing all error:', e.error_msg
-    except self.handlerExc, e:
-      print 'Drawing all handler error:', e
-    except ContourFile.error, e:
-      print 'Drawing all ContourFile error:', e
-    except SliceFile.error, e:
-      print 'Drawing all SliceFile error:', e
-    except PeakList.error, e:
-      print 'Drawing all PeakList error:', e
-    except WinPeakList.error, e:
-      print 'Drawing all WinPeakList error:', e
-    except ContourLevels.error, e:
-      print 'Drawing all ContourLevels error:', e
-    except ContourStyle.error, e:
-      print 'Drawing all ContourStyle error:', e
+    except Implementation.ApiError as e:
+      print('Drawing all error:', e.error_msg)
+    except self.handlerExc as e:
+      print('Drawing all handler error:', e)
+    except ContourFile.error as e:
+      print('Drawing all ContourFile error:', e)
+    except SliceFile.error as e:
+      print('Drawing all SliceFile error:', e)
+    except PeakList.error as e:
+      print('Drawing all PeakList error:', e)
+    except WinPeakList.error as e:
+      print('Drawing all WinPeakList error:', e)
+    except ContourLevels.error as e:
+      print('Drawing all ContourLevels error:', e)
+    except ContourStyle.error as e:
+      print('Drawing all ContourStyle error:', e)
     except:
       #print 'Unknown drawing all error'
       pass
@@ -5200,14 +5200,14 @@ class WindowFrame(Frame, WindowDraw):
       handler.endBack()
       handler.swapBuffers()
 
-    except Implementation.ApiError, e:
-      print 'Drawing slice error:', e.error_msg
+    except Implementation.ApiError as e:
+      print('Drawing slice error:', e.error_msg)
 
-    except self.handlerExc, e:
-      print 'Drawing slice handler error:', e
+    except self.handlerExc as e:
+      print('Drawing slice handler error:', e)
 
-    except SliceFile.error, e:
-      print 'Drawing slice SliceFile error:', e
+    except SliceFile.error as e:
+      print('Drawing slice SliceFile error:', e)
 
     except:
       #print 'Unknown drawing slice error'

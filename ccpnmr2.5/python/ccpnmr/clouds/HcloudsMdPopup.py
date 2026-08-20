@@ -37,7 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 import os
-import Tkinter
+import tkinter
 
 from memops.general import Implementation
 from ccp.api.nmr import Nmr

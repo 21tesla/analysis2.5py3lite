@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.Label import Label
@@ -91,7 +91,7 @@ class InfoPopup(TemporaryBasePopup):
 
         value = self.infoDict[infoListItem]
 
-        if type(value) == type(''):
+        if type(value) == str:
           value = "[" + value + "]"
         else:
           value = str(value)

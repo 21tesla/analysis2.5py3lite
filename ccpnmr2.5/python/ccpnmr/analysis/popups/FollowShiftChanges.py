@@ -957,9 +957,9 @@ class FollowShiftChangesPopup(BasePopup):
       dataFitting.fitErrorFunction = fitErrorFunc
       try:
         dataFitting = functionFitData(dataFitting)
-      except Exception, e:
+      except Exception as e:
         ###showWarning('Function fit failure', e, parent=self)
-        print e
+        print(e)
         return 1.0e20  # arbitrary large number
 
       fitError = dataFitting.fitError

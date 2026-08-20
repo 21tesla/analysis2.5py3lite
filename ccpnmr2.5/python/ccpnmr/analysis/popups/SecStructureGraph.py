@@ -68,12 +68,12 @@ from memops.gui.TabbedFrame import TabbedFrame
 from ccp.general.Constants import code1LetterToCcpCodeDict as codeDict
 
 FIXED_HEADINGS = ['Residue','Sec\nStruc',
-                    u'd_\u03B1N\ni,i+1',
-                    'd_NN\ni,i+1',u'd_\u03B2N\ni,i+1',
-                    u'd_\u03B1N\ni,i+3',
-                    u'd_\u03B1\u03B2\ni,i+3',
-                    u'd_\u03B1N\ni,i+4','d_NN\ni,i+2',
-                    u'd_\u03B1N\ni,i+2']
+                    'd_\u03B1N\ni,i+1',
+                    'd_NN\ni,i+1','d_\u03B2N\ni,i+1',
+                    'd_\u03B1N\ni,i+3',
+                    'd_\u03B1\u03B2\ni,i+3',
+                    'd_\u03B1N\ni,i+4','d_NN\ni,i+2',
+                    'd_\u03B1N\ni,i+2']
 
 FIXED_TIP_TEXTS = ['The sequence number and residue type',
                    'The stated secondary structure type for the residue',
@@ -86,16 +86,16 @@ FIXED_TIP_TEXTS = ['The sequence number and residue type',
                    'Indicates residue that show an amide(i) to amide(i+2) through-space/NOE connection',
                    'Indicates residue that show an alpha(i) to amide(i+2) through-space/NOE connection']
 
-OPTIONAL_COLUMNS  = [u'\u0394\n\u03B413C\u03B1',u'\u0394\n\u03B413C\u03B2',
-                      u"\u0394\n\u03B413C'",u'\u0394\n\u03B41H\u03B1',
-                      'CSI',u'3JH-H\u03B1']
+OPTIONAL_COLUMNS  = ['\u0394\n\u03B413C\u03B1','\u0394\n\u03B413C\u03B2',
+                      "\u0394\n\u03B413C'",'\u0394\n\u03B41H\u03B1',
+                      'CSI','3JH-H\u03B1']
 
-OPTIONAL_TIP_TEXTS = {u'\u0394\n\u03B413C\u03B1': 'Carbon alpha secondary chemical shift (difference to random coil value)',
-                      u'\u0394\n\u03B413C\u03B2': 'Carbon beta secondary chemical shift (difference to random coil value)',
-                      u"\u0394\n\u03B413C'": 'Backbone carbonyl carbon secondary chemical shift (difference to random coil value)',
-                      u'\u0394\n\u03B41H\u03B1': 'Hydrogen alpha secondary chemical shift (difference to random coil value)',
+OPTIONAL_TIP_TEXTS = {'\u0394\n\u03B413C\u03B1': 'Carbon alpha secondary chemical shift (difference to random coil value)',
+                      '\u0394\n\u03B413C\u03B2': 'Carbon beta secondary chemical shift (difference to random coil value)',
+                      "\u0394\n\u03B413C'": 'Backbone carbonyl carbon secondary chemical shift (difference to random coil value)',
+                      '\u0394\n\u03B41H\u03B1': 'Hydrogen alpha secondary chemical shift (difference to random coil value)',
                       'CSI': 'Chemical shift index value, using 13C and 1H shifts (Wishart DS, Sykes BD)',
-                      u'3JH-H\u03B1': 'The 3-bond amide hydrogen to alpha hydrogen coupling'}
+                      '3JH-H\u03B1': 'The 3-bond amide hydrogen to alpha hydrogen coupling'}
 
 SEC_STRUCT_COLORS = {'H': '#8080F0',
                    'B': '#F0B080',
@@ -498,7 +498,7 @@ class SecStructureGraphPopup(BasePopup):
         shiftList = self.shiftList
       else:
         index = 0
-	shiftList = shiftLists[0]
+    shiftList = shiftLists[0]
           
     if shiftList is not self.shiftList:
       self.shiftList = shiftList
@@ -544,7 +544,7 @@ class SecStructureGraphPopup(BasePopup):
     
     if fileName:
       dict = {}
-      file = open(fileName,'r')
+      file = open(fileName)
       file.readline()
       
       line = file.readline()
@@ -1110,7 +1110,7 @@ class SecStructureGraph(Frame):
       font2 = font 
       
     spans  = [3,3,4,2,2]
-    texts1 = [u'\u03B1N','NN',u'\u03B2N',u'\u03B1N',u'\u03B1\u03B2',u'\u03B1N','NN',u'\u03B1N']
+    texts1 = ['\u03B1N','NN','\u03B2N','\u03B1N','\u03B1\u03B2','\u03B1N','NN','\u03B1N']
     optLineY = []
     for datum in data:
       if datum[-1] is not None:
@@ -1171,7 +1171,7 @@ class SecStructureGraph(Frame):
           x += sdx
  
           if i == 0:
-            item = ctext(x,y+ss,text=u'\u03B1\u03B4',font=smallFont,anchor='sw')
+            item = ctext(x,y+ss,text='\u03B1\u03B4',font=smallFont,anchor='sw')
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
@@ -1185,7 +1185,7 @@ class SecStructureGraph(Frame):
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
-            item = ctext(x,y+ss,text=u'\u03B4',font=smallFont,anchor='sw')
+            item = ctext(x,y+ss,text='\u03B4',font=smallFont,anchor='sw')
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
@@ -1193,7 +1193,7 @@ class SecStructureGraph(Frame):
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
-            item = ctext(x,y+ss,text=u'\u03B4',font=smallFont,anchor='sw')
+            item = ctext(x,y+ss,text='\u03B4',font=smallFont,anchor='sw')
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
@@ -1207,7 +1207,7 @@ class SecStructureGraph(Frame):
             x += sdx
  
           else:
-            item = ctext(x,y+ss,text=u'\u03B2\u03B4',font=smallFont,anchor='sw')
+            item = ctext(x,y+ss,text='\u03B2\u03B4',font=smallFont,anchor='sw')
             bbox = c.bbox(item)
             sdx = bbox[2]-bbox[0]
             x += sdx
@@ -1230,7 +1230,7 @@ class SecStructureGraph(Frame):
         y += d2
         y += d2
         x = 0.0
-        item = ctext(x,y,text=u'\u0394\u03B4(',anchor='sw',font=font2)
+        item = ctext(x,y,text='\u0394\u03B4(',anchor='sw',font=font2)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1242,7 +1242,7 @@ class SecStructureGraph(Frame):
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
-        item = ctext(x,y-ss,text=u'\u03B1',anchor='sw',font=smallFont)
+        item = ctext(x,y-ss,text='\u03B1',anchor='sw',font=smallFont)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1254,7 +1254,7 @@ class SecStructureGraph(Frame):
         y += d2
         y += d2
         x = 0.0
-        item = ctext(x,y,text=u'\u0394\u03B4(',anchor='sw',font=font2)
+        item = ctext(x,y,text='\u0394\u03B4(',anchor='sw',font=font2)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1266,7 +1266,7 @@ class SecStructureGraph(Frame):
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
-        item = ctext(x,y-ss,text=u'\u03B2',anchor='sw',font=smallFont)
+        item = ctext(x,y-ss,text='\u03B2',anchor='sw',font=smallFont)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1278,7 +1278,7 @@ class SecStructureGraph(Frame):
         y += d2
         y += d2
         x = 0.0
-        item = ctext(x,y,text=u'\u0394\u03B4(',anchor='sw',font=font2)
+        item = ctext(x,y,text='\u0394\u03B4(',anchor='sw',font=font2)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1298,7 +1298,7 @@ class SecStructureGraph(Frame):
         y += d2
         y += d2
         x = 0.0
-        item = ctext(x,y,text=u'\u0394\u03B4(',anchor='sw',font=font2)
+        item = ctext(x,y,text='\u0394\u03B4(',anchor='sw',font=font2)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1310,7 +1310,7 @@ class SecStructureGraph(Frame):
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
-        item = ctext(x,y-4,text=u'\u03B1',anchor='sw',font=smallFont)
+        item = ctext(x,y-4,text='\u03B1',anchor='sw',font=smallFont)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
@@ -1330,11 +1330,11 @@ class SecStructureGraph(Frame):
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
-        item = ctext(x,y,text=u'H-H',anchor='sw',font=font)
+        item = ctext(x,y,text='H-H',anchor='sw',font=font)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx
-        item = ctext(x,y-4,text=u'\u03B1',anchor='sw',font=smallFont)
+        item = ctext(x,y-4,text='\u03B1',anchor='sw',font=smallFont)
         bbox = c.bbox(item)
         sdx = bbox[2]-bbox[0]
         x += sdx

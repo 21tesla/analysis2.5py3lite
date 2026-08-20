@@ -138,7 +138,7 @@ def getCingTextFloat(value):
   
 def getCingCcpnTgzFileList(nrgCingCcpnUrl=None):
   
-  print "Getting information about current NRG-CING files..."
+  print("Getting information about current NRG-CING files...")
   
   from pdbe.adatah.Io import getTextFromHttp
   
@@ -204,7 +204,7 @@ try:
 
       for pdbCode in pdbCodes:
 
-        print pdbCode
+        print(pdbCode)
 
         downloadTgz = False
 
@@ -215,7 +215,7 @@ try:
 
         elif self.nrgCingPdbCodes[pdbCode][0] != date:
           # Date change...
-          print "  Date change on NRG-CING file for %s..." % (pdbCode)
+          print("  Date change on NRG-CING file for %s..." % (pdbCode))
           downloadTgz = True
 
         #
@@ -236,7 +236,7 @@ try:
 
         if downloadTgz:
 
-          print "  Downloading..."
+          print("  Downloading...")
 
           data = getDataFromHttp(downloadUrl)
 
@@ -252,10 +252,10 @@ try:
           self.createPickleFile("nrgCingPdbCodes")
 
 except:
-  print "  Warning need to install sbb/ directory for NRG-CING downloads!"
+  print("  Warning need to install sbb/ directory for NRG-CING downloads!")
   
 if __name__ == '__main__':
 
   cd = getCingSummaryTextInfo("summary.txt")
   
-  print cd
+  print(cd)

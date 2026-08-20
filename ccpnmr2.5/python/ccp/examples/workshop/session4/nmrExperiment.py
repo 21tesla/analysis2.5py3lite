@@ -36,16 +36,16 @@ def setRefExperiment(experiment, expPrototypeSynonym, refExperimentName = None):
   root = experiment.root
   nmrExpPrototype = root.findFirstNmrExpPrototype(synonym=expPrototypeSynonym)
   if not nmrExpPrototype:
-    print 'WARNING: no nmrExpPrototype with synonym %s' % expPrototypeSynonym
+    print('WARNING: no nmrExpPrototype with synonym %s' % expPrototypeSynonym)
     return
 
   if refExperimentName:
     refExperiment = nmrExpPrototype.findFirstRefExperiment(name=refExperimentName)
     if not refExperiment:
-      print 'WARNING: no refExperiment with name %s for nmrExpPrototype with synonym %s' % (refExperimentName, expPrototypeSynonym)
+      print('WARNING: no refExperiment with name %s for nmrExpPrototype with synonym %s' % (refExperimentName, expPrototypeSynonym))
       return
   elif len(nmrExpPrototype.refExperiments) > 1:
-    print 'WARNING: more than one refExperiment for nmrExpPrototype with synonym %s' % expPrototypeSynonym
+    print('WARNING: more than one refExperiment for nmrExpPrototype with synonym %s' % expPrototypeSynonym)
     return
   else:
     refExperiment = nmrExpPrototype.findFirstRefExperiment()

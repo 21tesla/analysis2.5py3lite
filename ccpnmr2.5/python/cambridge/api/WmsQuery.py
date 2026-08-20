@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -227,7 +227,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -294,7 +294,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -375,7 +375,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -501,7 +501,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.ProjectResult.__init__"
+        print("ERROR in cambridge.WmsQuery.ProjectResult.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -547,10 +547,10 @@ class ProjectResult(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -571,7 +571,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -592,7 +592,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     projectQuery = dataDict.get('projectQuery')
@@ -643,7 +643,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -763,7 +763,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -1161,7 +1161,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1305,7 +1305,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1443,7 +1443,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.ProjectVersionResult.__init__"
+        print("ERROR in cambridge.WmsQuery.ProjectVersionResult.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1489,10 +1489,10 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1513,7 +1513,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -1534,7 +1534,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     projectVersionQuery = dataDict.get('projectVersionQuery')
@@ -1585,7 +1585,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -1733,7 +1733,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -2462,7 +2462,7 @@ class TaskResult(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.TaskResult.__init__"
+        print("ERROR in cambridge.WmsQuery.TaskResult.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2508,10 +2508,10 @@ class TaskResult(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2532,7 +2532,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -2553,7 +2553,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     taskQuery = dataDict.get('taskQuery')
@@ -2604,7 +2604,7 @@ class TaskResult(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2707,7 +2707,7 @@ class TaskResult(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3346,7 +3346,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.WmsQueryStore.__init__"
+        print("ERROR in cambridge.WmsQuery.WmsQueryStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3404,7 +3404,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentWmsQueryStore') is None)):
+      if (notIsReading or root.__dict__.get('currentWmsQueryStore') is None):
         root.__dict__['currentWmsQueryStore'] = self
 
       if (notIsReading):
@@ -3418,10 +3418,10 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3441,11 +3441,11 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     function* - should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -3493,7 +3493,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsQueryStore'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
@@ -3521,7 +3521,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     CheckAllValid for cambridge.WmsQuery.WmsQueryStore
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -3563,11 +3563,11 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -3742,7 +3742,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3919,21 +3919,21 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectQueries').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectQueries').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -3980,21 +3980,21 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectVersionQueries').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectVersionQueries').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -4041,21 +4041,21 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('taskQueries').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('taskQueries').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -4106,7 +4106,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectQueries').values()
@@ -4118,7 +4118,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('projectQueries').get(objKey)
@@ -4134,7 +4134,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('projectQueries').values()
@@ -4142,7 +4142,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -4189,7 +4189,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projectVersionQueries').values()
@@ -4201,7 +4201,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('projectVersionQueries').get(objKey)
@@ -4217,7 +4217,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('projectVersionQueries').values()
@@ -4225,7 +4225,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -4272,7 +4272,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('taskQueries').values()
@@ -4284,7 +4284,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('taskQueries').get(objKey)
@@ -4300,7 +4300,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('taskQueries').values()
@@ -4308,7 +4308,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
         if (key in directAttrs):
@@ -4463,7 +4463,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Get for cambridge.WmsQuery.WmsQueryStore.projectQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('projectQueries').values()
@@ -4475,7 +4475,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Get for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('projectVersionQueries').values()
@@ -4499,7 +4499,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Get for cambridge.WmsQuery.WmsQueryStore.taskQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('taskQueries').values()
@@ -4575,7 +4575,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('serial')
@@ -4625,7 +4625,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsQuery.WmsQueryStore.projectQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('projectQueries')
@@ -4640,7 +4640,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('projectVersionQueries')
@@ -4655,7 +4655,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsQuery.WmsQueryStore.taskQueries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('taskQueries')
@@ -4785,7 +4785,7 @@ class TaskQuery(AbstractQuery):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -4812,7 +4812,7 @@ class TaskQuery(AbstractQuery):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.TaskQuery.__init__"
+        print("ERROR in cambridge.WmsQuery.TaskQuery.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4862,10 +4862,10 @@ class TaskQuery(AbstractQuery):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4886,7 +4886,7 @@ class TaskQuery(AbstractQuery):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -4913,7 +4913,7 @@ class TaskQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
@@ -4967,7 +4967,7 @@ class TaskQuery(AbstractQuery):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -5078,7 +5078,7 @@ class TaskQuery(AbstractQuery):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -5214,7 +5214,7 @@ class TaskQuery(AbstractQuery):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'taskSerial', 'wmsSegmentName', 'access', 'taskQuery',))
         if (key in directAttrs):
@@ -5290,7 +5290,7 @@ class TaskQuery(AbstractQuery):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'taskSerial', 'wmsSegmentName', 'access', 'taskQuery',))
         if (key in directAttrs):
@@ -5670,7 +5670,7 @@ class ProjectVersionQuery(AbstractQuery):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -5697,7 +5697,7 @@ class ProjectVersionQuery(AbstractQuery):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.ProjectVersionQuery.__init__"
+        print("ERROR in cambridge.WmsQuery.ProjectVersionQuery.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5747,10 +5747,10 @@ class ProjectVersionQuery(AbstractQuery):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5771,7 +5771,7 @@ class ProjectVersionQuery(AbstractQuery):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -5798,7 +5798,7 @@ class ProjectVersionQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
@@ -5852,7 +5852,7 @@ class ProjectVersionQuery(AbstractQuery):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -5963,7 +5963,7 @@ class ProjectVersionQuery(AbstractQuery):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -6099,7 +6099,7 @@ class ProjectVersionQuery(AbstractQuery):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'versionTag', 'wmsSegmentName', 'access', 'projectVersionQuery',))
         if (key in directAttrs):
@@ -6176,7 +6176,7 @@ class ProjectVersionQuery(AbstractQuery):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'versionTag', 'wmsSegmentName', 'access', 'projectVersionQuery',))
         if (key in directAttrs):
@@ -6556,7 +6556,7 @@ class ProjectQuery(AbstractQuery):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -6583,7 +6583,7 @@ class ProjectQuery(AbstractQuery):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsQuery.ProjectQuery.__init__"
+        print("ERROR in cambridge.WmsQuery.ProjectQuery.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6633,10 +6633,10 @@ class ProjectQuery(AbstractQuery):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6657,7 +6657,7 @@ class ProjectQuery(AbstractQuery):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -6684,7 +6684,7 @@ class ProjectQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
@@ -6738,7 +6738,7 @@ class ProjectQuery(AbstractQuery):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -6849,7 +6849,7 @@ class ProjectQuery(AbstractQuery):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -6985,7 +6985,7 @@ class ProjectQuery(AbstractQuery):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'wmsSegmentName', 'access', 'projectQuery',))
         if (key in directAttrs):
@@ -7061,7 +7061,7 @@ class ProjectQuery(AbstractQuery):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'wmsSegmentName', 'access', 'projectQuery',))
         if (key in directAttrs):

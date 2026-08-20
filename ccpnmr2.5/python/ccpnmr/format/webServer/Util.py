@@ -11,7 +11,7 @@ passwordFile = 'data/users.db'
 SESSION_KEY = 'formatConversion'
 localUserData = os.path.join('data','user')
 
-userPresentMessage = u"You cannot login because another user is currently logged in from this browser. Log out the other user if you want to continue."
+userPresentMessage = "You cannot login because another user is currently logged in from this browser. Log out the other user if you want to continue."
 
 class SessionInfo:
 
@@ -86,7 +86,7 @@ def check_auth(*args, **kwargs):
       for condition in conditions:
         # A condition is just a callable that returns true or false
         if not condition():
-          print "NO GOOD"
+          print("NO GOOD")
           raise cherrypy.HTTPRedirect("/auth/login")
     else:
       raise cherrypy.HTTPRedirect("/auth/login")
@@ -120,7 +120,7 @@ def check_credentials(username,password):
 
   usersDict = fetch_users()
   
-  error_msg = u'Wrong username/password - please try again.'
+  error_msg = 'Wrong username/password - please try again.'
   
   if usersDict.has_key(username):
     if password == usersDict[username]:
@@ -143,7 +143,7 @@ def check_newuser(username,password):
     if password == usersDict[username]:
       error_msg = None
     else:
-      error_msg = u"Username already exists with different password. Please login or use different username."
+      error_msg = "Username already exists with different password. Please login or use different username."
   else:
     userDb = anydbm.open(passwordFile,'w')
     if userDb.has_key(''):
@@ -153,7 +153,7 @@ def check_newuser(username,password):
       
   return error_msg
 
-class AuthController(object):
+class AuthController:
     
     #
     #

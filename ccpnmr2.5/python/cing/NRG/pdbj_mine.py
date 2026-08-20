@@ -18,17 +18,17 @@ def postQuery(sql_query, saveCsvFile = None, base_url='http://service.pdbj.org/m
     # generate access query
     connection = urllib.urlopen(base_url, post_parameter)
     if not connection:
-        print "ERROR: Failed to connect to PDBj Mine"
+        print("ERROR: Failed to connect to PDBj Mine")
         return
     resultTxt = connection.read()
     if not resultTxt:
-        print "ERROR: Failed to get any result back from PDBj Mine"
+        print("ERROR: Failed to get any result back from PDBj Mine")
         return
     if len(resultTxt) > STACKTRACE_LENGHT_MIN:
         # cheap scan.
         if resultTxt.count(STACKTRACE_COMPONENT, 0, STACKTRACE_LENGHT_MIN):
-            print "ERROR: Found stack trace:"
-            print resultTxt
+            print("ERROR: Found stack trace:")
+            print(resultTxt)
             return
     if saveCsvFile:
         writeTextToFile( saveCsvFile, resultTxt)
@@ -46,11 +46,11 @@ def postQuery(sql_query, saveCsvFile = None, base_url='http://service.pdbj.org/m
             total += int(row[1])
         isHeader = False
     # show result
-    print "DEBUG: Found result: %s" % result
-    print "DEBUG: Found total: %s" % total
+    print("DEBUG: Found result: %s" % result)
+    print("DEBUG: Found total: %s" % total)
     return result
 
 if __name__ == '__main__':
-    sql_query = open(sys.argv[1], 'r').read()
+    sql_query = open(sys.argv[1]).read()
 #    print 'sql_query: %s' % sql_query
     postQuery(sql_query,saveCsvFile='result.csv')

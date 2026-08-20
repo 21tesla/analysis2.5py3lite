@@ -156,7 +156,7 @@ class PalesFormat(DataFormat):
         for fixedResonance in item.resonances:
           if fixedResonance.resonanceSet:
             refAtom = fixedResonance.resonanceSet.findFirstAtomSet().findFirstAtom()
-	    if refAtom.residue.chain not in chains:
+        if refAtom.residue.chain not in chains:
               chains.append(refAtom.residue.chain)
     
     seqStrings = []
@@ -166,7 +166,7 @@ class PalesFormat(DataFormat):
          seqStrings.append(chain.molecule.seqString)
     
     if len(seqStrings) > 1:
-      print "Warning: multiple sequences present, picking first one"
+      print("Warning: multiple sequences present, picking first one")
     
-    print 'in', self
+    print('in', self)
     self.writeKeywds['oneLetterSequence'] = seqStrings[0]

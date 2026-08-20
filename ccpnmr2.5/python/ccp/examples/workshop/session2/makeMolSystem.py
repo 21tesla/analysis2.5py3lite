@@ -140,41 +140,41 @@ if __name__ == '__main__':
 
   molecule = makeMolecule(project, tlcSeq)
 
-  print 'Molecule: [%s]' % molecule.name, '\n'
+  print('Molecule: [%s]' % molecule.name, '\n')
 
   for molRes in molecule.sortedMolResidues():
-    print 'MolResidue: [%s]' % molRes.ccpCode
+    print('MolResidue: [%s]' % molRes.ccpCode)
 
-  print
+  print()
 
   molSystem = makeMolSystem(project, molecule, chainCodes = ['A', 'B'])
 
-  print 'MolSystem: [%s]' % molSystem.name, '\n'
+  print('MolSystem: [%s]' % molSystem.name, '\n')
 
   for chain in molSystem.sortedChains():
-    print 'Chain: [%s]' % chain.code
+    print('Chain: [%s]' % chain.code)
 
-  print
+  print()
 
   dnaSeq = 'ACGT'
 
   dnaMol = makeMolecule(project, dnaSeq, molType = 'DNA', molName = 'dnaMol')
 
-  print 'Molecule: [%s]' % dnaMol.name, '\n'
+  print('Molecule: [%s]' % dnaMol.name, '\n')
 
   for molRes in dnaMol.sortedMolResidues():
-    print 'MolResidue: [%s]' % molRes.ccpCode
+    print('MolResidue: [%s]' % molRes.ccpCode)
 
-  print
+  print()
 
   dnaMolSys = makeMolSystem(project, dnaMol, chainCodes = 'A', molSysCode = 'dnaMolCode')
 
-  print 'MolSystem: [%s]' % dnaMolSys.name, '\n'
+  print('MolSystem: [%s]' % dnaMolSys.name, '\n')
 
   for chain in dnaMolSys.sortedChains():
-    print 'Chain: [%s]' % chain.code
+    print('Chain: [%s]' % chain.code)
 
-  print
+  print()
 
   project.currentChemElementStore = project.findFirstChemElementStore()
   project.checkAllValid(complete = True)

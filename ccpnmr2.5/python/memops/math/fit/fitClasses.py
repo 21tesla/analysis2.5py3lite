@@ -25,7 +25,7 @@ if __name__ == '__main__':
   fit = FitLinear()
   ((a,b), chisq, ysFit, (aDev,bDev)) = fit.calcFit(xs, ys, findDev=True)
 
-  print 'FitLinear'
-  print 'Input params: %.2f %.2f' % (A, B)
-  print 'Fit params: %.2f %.2f' % (a, b)
+  print('FitLinear')
+  print('Input params: %.2f %.2f' % (A, B))
+  print('Fit params: %.2f %.2f' % (a, b))
 

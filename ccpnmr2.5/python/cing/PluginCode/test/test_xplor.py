@@ -20,7 +20,7 @@ import unittest
 try:
     from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try
 
@@ -38,7 +38,7 @@ class AllChecks(TestCase):
         entryList  = "1brv     2fws                      ".split()
         cingDirTmpTest = os.path.join(cingDirTmp, getCallerName())
         mkdirs(cingDirTmpTest)
-        self.failIf(os.chdir(cingDirTmpTest), msg=
+        self.assertFalse(os.chdir(cingDirTmpTest), msg=
             "Failed to change to test directory for files: " + cingDirTmpTest)
         for i, entryId in enumerate(entryList):
             if i != 0: # Selection of the entries.
@@ -68,7 +68,7 @@ class AllChecks(TestCase):
         entryList  = "1brv_023     1dum                      ".split()
         cingDirTmpTest = os.path.join(cingDirTmp, getCallerName())
         mkdirs(cingDirTmpTest)
-        self.failIf(os.chdir(cingDirTmpTest), msg=
+        self.assertFalse(os.chdir(cingDirTmpTest), msg=
             "Failed to change to test directory for files: " + cingDirTmpTest)
         for i, entryId in enumerate(entryList):
             if i != 0: # Selection of the entries.

@@ -43,7 +43,7 @@ def _iter_incrementing_file_names(path):
     yield path
     prefix, ext = os.path.splitext(path)
     for i in itertools.count(start=1, step=1):
-        yield prefix + '({0})'.format(i) + ext
+        yield prefix + f'({i})' + ext
 
 
 @contextmanager

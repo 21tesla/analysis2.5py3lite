@@ -64,9 +64,6 @@ try:
   junk = True
   junk = False
 except:
-  True = 1
-  False = 0
-
 import time
 strftime = time.strftime
 
@@ -204,7 +201,7 @@ def parseCardinality(cardString):
         result.append(int(tag))
       except:
         raise MemopsError("inValid content in cardinality string %s"
-         % `cardString`
+         % str(cardString)
         )
   
   #
@@ -219,7 +216,7 @@ def parseCardinality(cardString):
     
   else:
     raise MemopsError("inValid cardinality string %s"
-     % `cardString`
+     % str(cardString)
     )
 
 
@@ -241,12 +238,12 @@ class SimpleGuidGenerator:
       if char in self.operator:
         raise MemopsError(
          "operator %s contains disallowed character %s"
-         % (`self.operator`,`char`)
+         % (`self.operator`,str(char))
         )
       if char in self.organisation:
         raise MemopsError(
          "organisation %s contains disallowed character %s"
-         % (`self.organisation`,`char`)
+         % (`self.organisation`,str(char))
         )
   
   def newGuid(self):
@@ -333,7 +330,7 @@ def getFuncname(op, inClass=None):
     inClass = op.container
   
   if not op.__class__.__name__ == 'MetaOperation':
-    raise MemopsError("Illegal parameter for getFuncname : %s" % `op`)
+    raise MemopsError("Illegal parameter for getFuncname : %s" % str(op))
   
   if op.opSubType is not None:
     op = getOperation(op.target, op.opType, inClass)
@@ -400,7 +397,7 @@ def coerceToList(params):
   # wrap non-iterables into list
   if (params is None):
     params = []
-  elif isinstance(params, basestring):
+  elif isinstance(params, str):
     params = [params]
   else:
     try:

@@ -99,11 +99,11 @@ if __name__ == '__main__':
 
   def usage(msg):
 
-    print 'Error: %s' % msg
-    print 'Arguments: <XEASY param file> [<azaraDataFile> <azaraParFile> ]'
-    print '     For example: HNCO.param'
-    print '              or: HNCO.param HNCO.spc'
-    print '              or: HNCO.param HNCO.spc HNCO.spc.par'
+    print('Error: %s' % msg)
+    print('Arguments: <XEASY param file> [<azaraDataFile> <azaraParFile> ]')
+    print('     For example: HNCO.param')
+    print('              or: HNCO.param HNCO.spc')
+    print('              or: HNCO.param HNCO.spc HNCO.spc.par')
     # sys.exit(1)
     os._exit(1)
 

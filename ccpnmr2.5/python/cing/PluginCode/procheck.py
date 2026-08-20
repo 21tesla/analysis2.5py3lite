@@ -643,7 +643,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
             nTerror('Procheck.parseResult: file "%s" not found', path)
             return True
 #        nTdebug( '> parsing sum >'+ path)
-        text = open(path, 'r').read()
+        text = open(path).read()
 #        nTdebug( 'got: \n'+ text)
         if text:
             self.summary = ProcheckSummaryResult( text, self.molecule, self.ranges )

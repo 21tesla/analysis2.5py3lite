@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 import glob
 import os
@@ -476,7 +476,7 @@ class FileSelect(Frame):
 
     if os.path.islink(file):
       # plain arrow: u' \u2192 '
-      entry = entry + u' \u21D2 ' + unicode(os.readlink(file), 'utf-8')
+      entry = entry + ' \u21D2 ' + unicode(os.readlink(file), 'utf-8')
       size  = None
       color = '#E0D0C0'
       
@@ -536,7 +536,7 @@ class FileSelect(Frame):
       else:
         directory = dirsep
       entries = self.getFilterFiles(directory)
-    except OSError, e:
+    except OSError as e:
       showError('OS Error', str(e))
       if self.prev_directory:
         self.directory = None
@@ -749,10 +749,10 @@ class FileSelect(Frame):
 if __name__ == '__main__':
 
   def f(file):
-    print 'double_callback', file
+    print('double_callback', file)
 
   def g(directory):
-    print 'change_dir_callback', directory
+    print('change_dir_callback', directory)
 
   root = Tkinter.Tk()
 

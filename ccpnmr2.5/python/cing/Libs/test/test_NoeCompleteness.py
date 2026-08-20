@@ -55,7 +55,7 @@ class AllChecks(TestCase):
         pdbFilePath = os.path.join( pdbDirectory, pdbFileName)
 
         project = Project( entryId )
-        self.failIf( project.removeFromDisk())
+        self.assertFalse( project.removeFromDisk())
         project = Project.open( entryId, status='new' )
         project.initPDB( pdbFile=pdbFilePath, convention = convention )
 

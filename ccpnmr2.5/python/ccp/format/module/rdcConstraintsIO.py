@@ -78,12 +78,12 @@ class ModuleRdcConstraintFile(ModuleGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s rdc constraint list %s" % (self.format,self.name)
+      print("Reading %s rdc constraint list %s" % (self.format,self.name))
 
     rdcId = 0
     chainCode = self.defaultMolCode
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -121,7 +121,7 @@ class ModuleRdcConstraintFile(ModuleGenericFile):
     # ...
 
     if verbose == 1:
-      print "Writing %s rdc constraint list %s" % (self.format,self.name)
+      print("Writing %s rdc constraint list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -186,18 +186,18 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
 
     for constraint in constraintFile.constraints:
-      print constraint.Id,
+      print(constraint.Id,)
 
-      print constraint.value, constraint.error,
+      print(constraint.value, constraint.error,)
 
       for item in constraint.items:
         for member in item.members:
 
-          print member.seqCode, member.atomName,
+          print(member.seqCode, member.atomName,)
 
-        print "|",
+        print("|",)
 
-      print
+      print()
     
     constraintFile.name = 'local/rdc.testout'
 

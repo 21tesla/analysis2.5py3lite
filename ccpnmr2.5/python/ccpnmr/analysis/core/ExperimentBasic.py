@@ -1721,7 +1721,7 @@ def getNoiseEstimate(dataSource, nsamples=1000, nsubsets=10, fraction=0.1):
   
   if fails:
     msg = "Attempt to access %d non-existent data points in spectrum %s:%s"
-    print msg % (fails, dataSource.experiment.name, dataSource.name)
+    print(msg % (fails, dataSource.experiment.name, dataSource.name))
 
   good = nsamples - fails
   if good == 0:
@@ -1788,7 +1788,7 @@ def calculateNoiseInBox(dataSource, boxMin, boxMax):
     noise = dataSource.scale * numpy.std(values, ddof=1)
 
     dataSource.noiseLevel = noise
-    print 'Set noise level for spectrum %s:%s to %f' % (dataSource.experiment.name, dataSource.name, noise)
+    print('Set noise level for spectrum %s:%s to %f' % (dataSource.experiment.name, dataSource.name, noise))
 
 def getMinMaxValues(dataSource):
   """
@@ -1836,7 +1836,7 @@ def getMinMaxValues(dataSource):
   
   if fails:
     msg = "Attempt to access %d non-existent data points in spectrum %s:%s"
-    print msg % (fails, dataSource.experiment.name, dataSource.name)
+    print(msg % (fails, dataSource.experiment.name, dataSource.name))
 
   if data:
     minValue = min(data)
@@ -2440,13 +2440,13 @@ def isDataBigEndian(fileName, numberType='float', fileHeaderSize=0,
   """
 
   if nbytes != 4:  # TBD: not sure what else to do here right now
-    print 'WARNING: isDataBigEndian() returning True for nbytes != 4 right now'
+    print('WARNING: isDataBigEndian() returning True for nbytes != 4 right now')
     return True
 
   try:
     fp = open(fileName, 'rb')
   except:
-    print 'WARNING: file "%s" does not exist, isDataBigEndian() returning True' % fileName
+    print('WARNING: file "%s" does not exist, isDataBigEndian() returning True' % fileName)
     return True
 
   s = fp.read(fileHeaderSize)
@@ -2477,7 +2477,7 @@ def isDataBigEndian(fileName, numberType='float', fileHeaderSize=0,
 
   fp.close()
   if not x:
-    print 'WARNING: file "%s" seems to be mostly 0, isDataBigEndian() returning True' % fileName
+    print('WARNING: file "%s" seems to be mostly 0, isDataBigEndian() returning True' % fileName)
     return True
 
   knt = 0
@@ -2686,7 +2686,7 @@ def isReferencingIncorrect(spectrum, fixErrors=False, printChecks=True):
           elif abs(bf2 - baseFreq) <= sfTolerance:
             continue
             
-          print ("WARNING, %s baseFrequency differs: %s:%s; %s:%s"
+          print("WARNING, %s baseFrequency differs: %s:%s; %s:%s"
                  % (isotopes, ddr0, baseFreq, ddr, bf2))
   
   # check for misreferencing
@@ -2721,7 +2721,7 @@ def cloneExperiment(experimentOld, experimentNameNew, dataSourceNameNew=None, cl
   keys = ('date', 'details', 'nmrTubeType', 'numDim', 'numScans', 'sampleState',
           'sampleVolume', 'spinningAngle', 'spinningRate', 'volumeUnit',
           'refExperiment', 'shiftList')
-  dd = dict(((x,getattr(experimentOld,x)) for x in keys))
+  dd = dict((x,getattr(experimentOld,x)) for x in keys)
   dd['name'] = experimentNameNew
   experimentNew = experimentOld.nmrProject.newExperiment(**dd)
 
@@ -2733,7 +2733,7 @@ def cloneExperiment(experimentOld, experimentNameNew, dataSourceNameNew=None, cl
     expDimNew = experimentNew.findFirstExpDim(dim=expDimOld.dim)
     expDimMap[expDimOld] = expDimNew
     keys = ('isAcquisition', 'refExpDim')
-    dd = dict(((x,getattr(expDimOld,x)) for x in keys))
+    dd = dict((x,getattr(expDimOld,x)) for x in keys)
     for key in dd:
       setattr(expDimNew, key, dd[key])
 
@@ -2742,13 +2742,13 @@ def cloneExperiment(experimentOld, experimentNameNew, dataSourceNameNew=None, cl
               'isotopeCodes', 'maxAliasedFreq', 'measurementType', 'minAliasedFreq',
               'name', 'nominalRefValue', 'sf', 'unit', 'variableIncrFraction',
               'refExpDimRef')
-      dd = dict(((x,getattr(expDimRefOld,x)) for x in keys))
+      dd = dict((x,getattr(expDimRefOld,x)) for x in keys)
       expDimRefNew = expDimNew.newExpDimRef(**dd)
       expDimRefMap[expDimRefOld] = expDimRefNew
 
   for expTransferOld in experimentOld.expTransfers:
     keys = ('isDirect', 'mixingTime', 'transferSubType', 'transferType')
-    dd = dict(((x,getattr(expTransferOld,x)) for x in keys))
+    dd = dict((x,getattr(expTransferOld,x)) for x in keys)
     dd['expDimRefs'] = [expDimRefMap[expDimRefOld] for expDimRefOld in expTransferOld.sortedExpDimRefs()]
     expTransferNew = experimentNew.newExpTransfer(**dd)
         
@@ -2762,7 +2762,7 @@ def cloneExperiment(experimentOld, experimentNameNew, dataSourceNameNew=None, cl
   if cloneDataFile:
     keys += ('isNormalStorage', 'storageDetails',
              'compressMethod', 'dataStore', 'processMethod')
-  dd = dict(((x,getattr(dataSourceOld,x)) for x in keys))
+  dd = dict((x,getattr(dataSourceOld,x)) for x in keys)
   if dataSourceNameNew is not None:
     dd['name'] = dataSourceNameNew
 
@@ -2770,30 +2770,30 @@ def cloneExperiment(experimentOld, experimentNameNew, dataSourceNameNew=None, cl
 
   for dataDimOld in dataSourceOld.sortedDataDims():
     keys = ('dim', 'fileDim', 'isComplex', 'numPoints', 'shapeSerial', 'unit')
-    dd = dict(((x,getattr(dataDimOld,x)) for x in keys))
+    dd = dict((x,getattr(dataDimOld,x)) for x in keys)
     expDimOld = dataDimOld.expDim
     dd['expDim'] = expDimMap[expDimOld]
     if dataDimOld.className == 'FidDataDim':
       keys = ('alternateSign', 'firstValue', 'negateImaginary',
               'numPointsValid', 'oversamplingInfo', 'phase0', 'phase1',
               'pointOffset', 'valuePerPoint')
-      dd.update(((x,getattr(dataDimOld,x)) for x in keys))
+      dd.update((x,getattr(dataDimOld,x)) for x in keys)
       dataDimNew = dataSourceNew.newFidDataDim(**dd)
     elif dataDimOld.className == 'FreqDataDim':
       keys = ('numPointsOrig', 'phase0', 'phase1',
               'pointOffset', 'valuePerPoint', 'predictMethod')
-      dd.update(((x,getattr(dataDimOld,x)) for x in keys))
+      dd.update((x,getattr(dataDimOld,x)) for x in keys)
       dataDimNew = dataSourceNew.newFreqDataDim(**dd)
 
       keys = ('localValuePerPoint', 'refPoint', 'refValue')
       dataDimRefOld = getPrimaryDataDimRef(dataDimOld)
       expDimRefOld = dataDimRefOld.expDimRef
-      dd = dict(((x,getattr(dataDimRefOld,x)) for x in keys))
+      dd = dict((x,getattr(dataDimRefOld,x)) for x in keys)
       dd['expDimRef'] = expDimRefMap[expDimRefOld]
       dataDimRefNew = dataDimNew.newDataDimRef(**dd)
     elif dataDimOld.className == 'SampledDataDim':
       keys = ('conditionVaried', 'details', 'pointErrors', 'pointValues')
-      dd.update(((x,getattr(dataDimOld,x)) for x in keys))
+      dd.update((x,getattr(dataDimOld,x)) for x in keys)
       dataDimNew = dataSourceNew.newSampledDataDim(**dd)
 
   return experimentNew

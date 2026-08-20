@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 import sys
-import Tkinter
+import tkinter
 
 from memops.api                    import Implementation
 
@@ -150,11 +150,10 @@ class ApplicationPopup(AnalysisPopup):
 
   def printCommandLineInfo(self):
     
-    print """
+    print("""
  For program documentation see:
  http://www.extend-nmr.eu   
-    """
-
+    """)
   def body(self, guiParent):
     
     self.menus = {}
@@ -378,7 +377,7 @@ class ApplicationPopup(AnalysisPopup):
     self.menus[ProjectMenu] = menu
     self.menu_items[ProjectMenu] = ['New', 'Open Project', 'Open Spectra',
                                     'Save', 'Save As', 'Import', 'Close', 
-				    'Quit', 'Preferences',
+                    'Quit', 'Preferences',
                                     'Validate',  'Backup', 'Archive',]
     
     # Menus that area ctive in absence of a project
@@ -402,7 +401,7 @@ class ApplicationPopup(AnalysisPopup):
      
     frame = self.tabbedFrame.frames[index]
     if hasattr(frame,'printOutDocString'):
-      print frame.printOutDocString
+      print(frame.printOutDocString)
       # only print it once
       del frame.printOutDocString
 
@@ -648,7 +647,7 @@ def launchApplication(projectDir=None):
     projectDir = normalisePath(projectDir)
     try:
       project = loadProject(top, path=projectDir)
-    except ApiError, e:
+    except ApiError as e:
       showError('Reading project', e.error_msg, parent=top)
 
   top.update_idletasks()

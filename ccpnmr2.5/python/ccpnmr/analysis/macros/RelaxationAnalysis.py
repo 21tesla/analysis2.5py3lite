@@ -67,14 +67,14 @@ from memops.gui.PulldownList import PulldownList
 from memops.gui.ScrolledGraph import ScrolledGraph
 from memops.gui.TabbedFrame import TabbedFrame
 from memops.gui.ButtonList import ButtonList, UtilityButtonList
-import Tkinter
+import tkinter
 
 MS_UNIT_MULTIPLIERS = {'s':1000.0,'ms':1.0,'us':1e-3,'ns':1e-6,}
 
-T1 = u'T\u2081'
-T2 = u'T\u2082'
-S2 = u'S\u00B2'
-Te = u'\u03C4e'
+T1 = 'T\u2081'
+T2 = 'T\u2082'
+S2 = 'S\u00B2'
+Te = '\u03C4e'
 
 def relaxationAnalysisMacro(argServer):
 
@@ -109,10 +109,10 @@ class RelaxationAnalysisPopup(BasePopup):
     frame = Frame(guiFrame, grid=(0,0))
     frame.expandGrid(None,8)
     
-    label = Label(frame, text=u' %s List:' % T1, grid=(0,0))
+    label = Label(frame, text=' %s List:' % T1, grid=(0,0))
     self.t1Pulldown = PulldownList(frame, callback=self.selectT1List, grid=(0,1))
     
-    label = Label(frame, text=u'  %s List:' % T2, grid=(0,2))
+    label = Label(frame, text='  %s List:' % T2, grid=(0,2))
     self.t2Pulldown = PulldownList(frame, callback=self.selectT2List, grid=(0,3))
     
     label = Label(frame, text='  NOE List:', grid=(0,4))
@@ -125,10 +125,10 @@ class RelaxationAnalysisPopup(BasePopup):
     
     # Tabs
     
-    options = [u'%s vs %s Scatter' % (T1, T2),
-               u'%s,%s & NOE Graphs' % (T1, T2) ,
-               u'%s/%s Graph' % (T1, T2),
-               u'%s Estimate Graph' % S2,
+    options = ['%s vs %s Scatter' % (T1, T2),
+               '%s,%s & NOE Graphs' % (T1, T2) ,
+               '%s/%s Graph' % (T1, T2),
+               '%s Estimate Graph' % S2,
                'Options']
     self.tabbedFrame = TabbedFrame(guiFrame, options=options,
                                    callback=self.toggleTab, grid=(1,0))
@@ -162,20 +162,20 @@ class RelaxationAnalysisPopup(BasePopup):
     frameE.expandGrid(1,0)
     frameE.expandGrid(2,0)
     
-    self.s2Graph = ScrolledGraph(frameE, title=u'%s vs Residue Sequence' % S2,
+    self.s2Graph = ScrolledGraph(frameE, title='%s vs Residue Sequence' % S2,
                                  xLabel='Residue number', yLabel=S2,
                                  width=500, height=150, graphType='histogram', 
                                  xGrid=True, yGrid=False, grid=(0,0),
                                  dataColors=['#0000A0','#808000'],
                                  dataNames=['Isotropic',])
 
-    self.teGraph = ScrolledGraph(frameE, title=u'%s vs Residue Sequence' % Te,
-                                 xLabel='Residue number', yLabel=u'%s (ps)' % Te,
+    self.teGraph = ScrolledGraph(frameE, title='%s vs Residue Sequence' % Te,
+                                 xLabel='Residue number', yLabel='%s (ps)' % Te,
                                  width=500, height=150, graphType='histogram',
                                  xGrid=True, yGrid=False, grid=(1,0),
                                  dataColors=['#008000',])
                                  
-    self.rexGraph = ScrolledGraph(frameE, title=u'%s vs Residue Sequence' % 'Rex',
+    self.rexGraph = ScrolledGraph(frameE, title='%s vs Residue Sequence' % 'Rex',
                                   xLabel='Residue number', yLabel='Rex',
                                   width=500, height=150, graphType='histogram',
                                   xGrid=True, yGrid=False, grid=(2,0),
@@ -188,17 +188,17 @@ class RelaxationAnalysisPopup(BasePopup):
     frame = LabelFrame(frameB, text='Physical Params', grid=(0,0))
     frame.expandGrid(None,3)
    
-    label = Label(frame, text=u'N-H bond length (\u00C5)', grid=(0,0))
+    label = Label(frame, text='N-H bond length (\u00C5)', grid=(0,0))
     self.lenNhEntry = FloatEntry(frame, text=1.015, grid=(0,1), width=8)
 
-    label = Label(frame, text=u'Internal correlation\ntime, \u03C4e (ps)', grid=(1,0))
+    label = Label(frame, text='Internal correlation\ntime, \u03C4e (ps)', grid=(1,0))
     self.ictEntry = FloatEntry(frame, text=50.0, grid=(1,1), width=8)
     
-    label = Label(frame, text=u'15N Chemical Shift\nAnisotopy,\u0394N (ppm)',
+    label = Label(frame, text='15N Chemical Shift\nAnisotopy,\u0394N (ppm)',
                   grid=(2,0))
     self.csaNEntry = FloatEntry(frame, text=-160.0, grid=(2,1), width=8)
     
-    frame = LabelFrame(frameB, text=u'%s vs %s Scatter' % (T1, T2), grid=(1,0))
+    frame = LabelFrame(frameB, text='%s vs %s Scatter' % (T1, T2), grid=(1,0))
     
     label = Label(frame, text='Max cluster difference (ms):', grid=(0,0))
     self.clusterDictEntry = FloatEntry(frame, text=20.0, grid=(0,1), width=8)    
@@ -206,19 +206,19 @@ class RelaxationAnalysisPopup(BasePopup):
     label = Label(frame, text='Min cluster size:', grid=(1,0))
     self.clusterSizeEntry = FloatEntry(frame, text=5, grid=(1,1), width=8)    
 
-    label = Label(frame, text=u'Min graph %s (ms):' % T1, grid=(2,0))
+    label = Label(frame, text='Min graph %s (ms):' % T1, grid=(2,0))
     self.minT1Entry = FloatEntry(frame, text=300.0, grid=(2,1), width=8)    
 
-    label = Label(frame, text=u'Max graph %s (ms):' % T1, grid=(3,0))
+    label = Label(frame, text='Max graph %s (ms):' % T1, grid=(3,0))
     self.maxT1Entry = FloatEntry(frame, text=1000.0, grid=(3,1), width=8)    
 
-    label = Label(frame, text=u'Min graph %s (ms):' % T2, grid=(4,0))
+    label = Label(frame, text='Min graph %s (ms):' % T2, grid=(4,0))
     self.minT2Entry = FloatEntry(frame, text=0.0, grid=(4,1), width=8)    
 
-    label = Label(frame, text=u'Max graph %s (ms):' % T2, grid=(5,0))
+    label = Label(frame, text='Max graph %s (ms):' % T2, grid=(5,0))
     self.maxT2Entry = FloatEntry(frame, text=600.0, grid=(5,1), width=8)    
     
-    frame = LabelFrame(frameB, text=u'%s Contours' % S2, grid=(0,1))
+    frame = LabelFrame(frameB, text='%s Contours' % S2, grid=(0,1))
     frame.expandGrid(4,3)
 
     label = Label(frame, text='(Order Parameter Lines)',
@@ -233,7 +233,7 @@ class RelaxationAnalysisPopup(BasePopup):
     label = Label(frame, text='Step:', grid=(3,0))
     self.stepS2Entry = FloatEntry(frame, text=0.1, grid=(3,1), width=8)
 
-    frame = LabelFrame(frameB, text=u'\u03C4m Contours', grid=(1,1))
+    frame = LabelFrame(frameB, text='\u03C4m Contours', grid=(1,1))
     frame.expandGrid(4,3)
 
     label = Label(frame, text='(Rotational Correlation Time Lines)',
@@ -250,7 +250,7 @@ class RelaxationAnalysisPopup(BasePopup):
 
     # Bottom frame
  
-    texts = [u'Show %s Table' % T1,u'Show %s Table' % T2, u'Estimate %s' % S2]
+    texts = ['Show %s Table' % T1,'Show %s Table' % T2, 'Estimate %s' % S2]
     commands = [self.showT1List, self.showT2List, self.mc]
     buttonList = ButtonList(guiFrame, grid=(2,0), texts=texts, commands=commands)
 
@@ -592,7 +592,7 @@ class RelaxationAnalysisPopup(BasePopup):
       teBest = [0.0] * n
       rexBest = [0.0] * n
       
-      print ''
+      print('')
       
       for residue in residues:
         t1,t2, noe = t1t2Points.get(residue, (None, None, None))
@@ -630,7 +630,7 @@ class RelaxationAnalysisPopup(BasePopup):
       score, s2, te0, tm0, rex, t1t, t2t, noet = ensemble[0]
  
       data = (s2, te0*1e12, tm0*1e9, rex, t1, t1t, t2, t2t, noe or 0.0, noet,  score, i)
-      print 'Mean A S2:%5.3f Te:%5.1f Tm:%5.3f Rex:%5.3f T1:%5.3f %5.3f T2:%5.3f %5.3f NOE:%5.3f %5.3f %e %6d' % data
+      print('Mean A S2:%5.3f Te:%5.1f Tm:%5.3f Rex:%5.3f T1:%5.3f %5.3f T2:%5.3f %5.3f NOE:%5.3f %5.3f %e %6d' % data)
       
       rexCheck = 999 # 1.40 * t1/t2
        
@@ -644,7 +644,7 @@ class RelaxationAnalysisPopup(BasePopup):
           continue
          
         residue = residues[j]
-        print '%3d%s' %  (residue.seqCode, residue.ccpCode),
+        print('%3d%s' %  (residue.seqCode, residue.ccpCode),)
         
         i, ensemble = self.fitT1T2(t1, t2, noe, sf, tmFix=tm0, teFix=None, s2Fix=None,
                                    tmMin=tm0*0.1, tmMax=tm0*5, teMin=te0/100, teMax=te0*20,
@@ -665,7 +665,7 @@ class RelaxationAnalysisPopup(BasePopup):
         rexBest[j] = rex
  
         data = (s2, te*1e12, tm*1e9, rex, t1, t1t, t2, t2t, noe or 0.0, noet, score, i)
-        print 'S2:%5.3f Te:%5.1f Tm:%5.3f Rex:%5.3f T1:%5.3f %5.3f T2:%5.3f %5.3f NOE:%5.3f %5.3f %e %6d' % data
+        print('S2:%5.3f Te:%5.1f Tm:%5.3f Rex:%5.3f T1:%5.3f %5.3f T2:%5.3f %5.3f NOE:%5.3f %5.3f %e %6d' % data)
 
       dataSet1 = []
       dataSet2 = []
@@ -784,7 +784,7 @@ class RelaxationAnalysisPopup(BasePopup):
          
     bestScore = 1e99
     
-    for i in xrange(niter):
+    for i in range(niter):
  
       f = i/float(niter)
       f = exp(-10.0*f)
@@ -871,9 +871,9 @@ class T1VersesT2Plot(ScrolledGraph):
 
   def __init__(self, parent, contourColorA='#FFC0B0', contourColorB='#B0C0FF', *args, **kw):
    
-    kw['title'] =  u'%s vs %s Relaxation Analysis' % (T1, T2)
-    kw['xLabel'] = u'%s (ms)' % T1
-    kw['yLabel'] = u'%s (ms)' % T2
+    kw['title'] =  '%s vs %s Relaxation Analysis' % (T1, T2)
+    kw['xLabel'] = '%s (ms)' % T1
+    kw['yLabel'] = '%s (ms)' % T2
     kw['width'] = 500
     kw['height'] = 500
     kw['xGrid'] = False
@@ -1298,9 +1298,9 @@ class T1OverT2Plot(ScrolledGraph):
 
   def __init__(self, parent, *args, **kw):
    
-    kw['title'] = u'%s/%s vs Residue Sequence' % (T1, T2)
+    kw['title'] = '%s/%s vs Residue Sequence' % (T1, T2)
     kw['xLabel'] = 'Residue number'
-    kw['yLabel'] = u'%s/%s' % (T1, T2)
+    kw['yLabel'] = '%s/%s' % (T1, T2)
     kw['width'] = 500
     kw['height'] = 500
     kw['xGrid'] = True
@@ -1405,9 +1405,9 @@ class MeasurementPlot(ScrolledGraph):
 
   def __init__(self, parent, name, *args, **kw):
    
-    kw['title'] = u'%s vs Residue Sequence' % name
+    kw['title'] = '%s vs Residue Sequence' % name
     kw['xLabel'] = 'Residue number'
-    kw['yLabel'] = u'%s (ms)' % name
+    kw['yLabel'] = '%s (ms)' % name
     kw['width'] = 500
     kw['height'] = 150
     kw['xGrid'] = True

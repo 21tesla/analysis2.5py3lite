@@ -58,7 +58,7 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter, math, time, threading, sys
+import tkinter, math, time, threading, sys
 
 from memops.universal import PrintHandler
 from memops.universal.Geometry import matrixRotY, matrixRotX, matrixMultiply
@@ -74,10 +74,10 @@ try:
   from ccp.c import StructBond
   from ccp.c import StructStructure
   from memops.c import TkHandler
-except Exception, e:
-  print 'Error, the ViewStructureFrame module will not work, something is wrong with the C code.'
-  print 'Exception:', e
-  print 'Will continue without Analysis structure viewing functionality'
+except Exception as e:
+  print('Error, the ViewStructureFrame module will not work, something is wrong with the C code.')
+  print('Exception:', e)
+  print('Will continue without Analysis structure viewing functionality')
   StructAtom = StructBond = StructStructure = TkHandler = None
 
 from memops.universal.Util import isWindowsOS, buttonClick, buttonRelease, buttonMotion
@@ -1153,7 +1153,7 @@ class ViewStructureFrame(ScrolledCanvas):
       file_name = outputHandler.file_name
       printHandler.close() # clears file_name, hence first need to save, as above
       showInfo('Wrote file', 'Successfully wrote file "%s"' % file_name, parent=self)
-    except IOError, e:
+    except OSError as e:
       showError('IO Error', str(e), parent=self)
 
   def drawStructure(self, handler=None):

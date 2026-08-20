@@ -22,7 +22,7 @@ for res in project.molecule.A.allResidues():
     for i in [-1,0,1]:
         triplet.append( res.sibling(i) )
     if None in triplet:
-        print 'Skipping ', res
+        print('Skipping ', res)
 
     else:
         CA_atms = triplet.zap('CA')
@@ -31,7 +31,7 @@ for res in project.molecule.A.allResidues():
 #        print res, triplet, CA_atms, CB_atms
 
         if None in CB_atms: # skip Gly for now
-            print 'Skipping ', res
+            print('Skipping ', res)
         else:
             d1 = Dihedral( res, 'Cb4N', range=[0.0,360.0] )
             d1.atoms = [CB_atms[0], CA_atms[0], CA_atms[1], CB_atms[1]]
@@ -45,7 +45,7 @@ for res in project.molecule.A.allResidues():
 
             bb = getDeepByKeys( res, WHATIF_STR, BBCCHK_STR, VALUE_LIST_STR, 0) # check first one.
             if bb ==  None:
-                print 'Skipping without BB', res
+                print('Skipping without BB', res)
                 continue
 
             if d1.cv < 0.03 and d2.cv < 0.03: # Only include structured residues
@@ -53,7 +53,7 @@ for res in project.molecule.A.allResidues():
 #                    bb = res.Whatif.bbNormality.valueList[i]
                     bb = getDeepByKeys( res, WHATIF_STR, BBCCHK_STR, VALUE_LIST_STR, i)
                     if bb ==  None:
-                        print 'Skipping without BB', res
+                        print('Skipping without BB', res)
                         continue
                     angles = NTlist() # store phi, psi, chi1, chi2
                     for angle in ['PHI','PSI','CHI1','CHI2']:

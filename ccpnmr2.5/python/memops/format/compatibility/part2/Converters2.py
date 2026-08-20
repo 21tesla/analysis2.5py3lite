@@ -13,7 +13,6 @@ trick for razing sys.modules.
 """
 
 # needed  to make it work in Python 2.5
-from __future__ import absolute_import
 
 def getOldData(oldPath, oldTag, currentVersionStr, oldName=None):
   import os

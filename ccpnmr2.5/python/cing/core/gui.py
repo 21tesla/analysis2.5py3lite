@@ -42,7 +42,7 @@ labelFrameAttributes = dict(
     foreground = 'steelblue'
 )
 
-import Tkinter
+import tkinter
 
 # pylint: disable=R0904
 class LabelFrame(Tkinter.LabelFrame):
@@ -155,7 +155,7 @@ class CingGui(BasePopup):
         row = +1
         col =0
         frame = LabelFrame(guiFrame, text='Project', **labelFrameAttributes )
-        print '>', frame.keys()
+        print('>', frame.keys())
         frame.grid(row=row, column=col, sticky='nsew' )
         frame.grid_columnconfigure(2, weight=1)
 #    frame.grid_rowconfigure(0, weight=1)
@@ -560,13 +560,13 @@ class CingGui(BasePopup):
 
             projectName, makeNewProject, projectImport, doValidation, checks, exports, miscScript = options
 
-            print 'Project name:', projectName
-            print 'Make new project?', makeNewProject
-            print 'Import source:', projectImport
-            print 'Do vailidation?', doValidation
-            print 'Validation checks:', ','.join(checks)
-            print 'Export to:', ','.join(exports)
-            print 'User script:', miscScript
+            print('Project name:', projectName)
+            print('Make new project?', makeNewProject)
+            print('Import source:', projectImport)
+            print('Do vailidation?', doValidation)
+            print('Validation checks:', ','.join(checks))
+            print('Export to:', ','.join(exports))
+            print('User script:', miscScript)
         # end if
     # end def runCing
 
@@ -840,7 +840,7 @@ class CingGui(BasePopup):
         self.resetConsole()
         BasePopup.close(self)
 
-        print 'close:',geometry
+        print('close:',geometry)
         sys.exit(0) # remove later
     # end def close
 
@@ -850,7 +850,7 @@ class CingGui(BasePopup):
         self.resetConsole()
         BasePopup.destroy(self)
 
-        print 'destroy:',geometry
+        print('destroy:',geometry)
         sys.exit(0) # remove later
     # end def destroy
 # end class CingGui

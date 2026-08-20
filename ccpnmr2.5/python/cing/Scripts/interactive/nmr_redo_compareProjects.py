@@ -65,7 +65,7 @@ nTmessage( header )
 nTmessage( "Targets:         " + str(targets ))
 nTmessage( "Groups:          " + str(groups ))
 for g in groups:
-    print  groupDefs[g].format()
+    print(groupDefs[g].format())
 
 
 parser = OptionParser(usage="nmr_redo_compareProjects.py [options] Use -h or --help for full options.")

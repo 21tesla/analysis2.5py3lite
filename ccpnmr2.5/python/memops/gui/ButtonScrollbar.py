@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter
+import tkinter
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Color  import scaleColor
@@ -330,7 +330,7 @@ class ButtonScrollbar(Frame):
 if __name__ == '__main__':
  
   def callback(selected):
-    print 'callback', selected
+    print('callback', selected)
 
   root = Tkinter.Tk()
   root.grid_rowconfigure(0, weight=1)

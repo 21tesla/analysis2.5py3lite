@@ -21,10 +21,10 @@ class AllChecks(TestCase):
         # c is the column
         # but when printed the matrix is printed differently?
         z = r + c
-        print z
+        print(z)
 #        z = sin( x - y )
         bins = (r,c)
-        print bins
+        print(bins)
         testList = [
                     [ 1.25, 0.0, 1.25], # first the corners
                     [ 1.25, 0.125, 1.375], # first the corners
@@ -48,7 +48,7 @@ class AllChecks(TestCase):
 #            nTdebug(" tx: \n%s" % tx)
 #            nTdebug(" interpolatedValueSection: \n%s" % interpolatedValueSection)
             nTdebug(" interpolatedValue: %s" % interpolatedValue)
-            self.assertAlmostEquals( resultExpected, interpolatedValue, 8)
+            self.assertAlmostEqual( resultExpected, interpolatedValue, 8)
 
     def _test_jfd_2(self):
         r,c = ogrid[ 0:360:37j, 0:360:37j ]
@@ -67,7 +67,7 @@ class AllChecks(TestCase):
             tx = ogrid[ qr:qr:1j, qc:qc:1j ]
             interpolatedValueSection = interpn_linear( z, tx, bins )
             interpolatedValue = interpolatedValueSection[ 0,0 ] # need to use comma to separate
-            self.assertAlmostEquals( resultExpected, interpolatedValue, 8)
+            self.assertAlmostEqual( resultExpected, interpolatedValue, 8)
 
     def _test_jfd_2b(self):
         r,c = ogrid[ -180:180:37j, -180:180:37j ]
@@ -88,7 +88,7 @@ class AllChecks(TestCase):
             tx = ogrid[ qr:qr:1j, qc:qc:1j ]
             interpolatedValueSection = interpn_linear( z, tx, bins )
             interpolatedValue = interpolatedValueSection[ 0,0 ] # need to use comma to separate
-            self.assertAlmostEquals( resultExpected, interpolatedValue, 8)
+            self.assertAlmostEqual( resultExpected, interpolatedValue, 8)
 
     def _test_jfd_3(self):
         r,c = ogrid[ -180:180:10, -180:180:10 ]
@@ -123,7 +123,7 @@ class AllChecks(TestCase):
                     f = interpn_nearest
                 interpolatedValueSection = f( z, tx, bins )
                 interpolatedValue = interpolatedValueSection[ 0,0 ] # need to use comma to separate
-                self.assertAlmostEquals( resultExpected, interpolatedValue, 1)
+                self.assertAlmostEqual( resultExpected, interpolatedValue, 1)
 
     def test_ExtendingMatrix(self):
         qExpectedList = [

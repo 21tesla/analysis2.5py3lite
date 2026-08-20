@@ -34,9 +34,6 @@ from memops.universal.ElementTree import ElementTree
 from memops.universal.ElementTree import ElementInclude
 XINCLUDE_FALLBACK = ElementInclude.XINCLUDE_FALLBACK
 XINCLUDE_INCLUDE = ElementInclude.XINCLUDE_INCLUDE
-True = not 0
-False = not True
-
 xmlTrue = 'true'
 xmlFalse = 'false'
 
@@ -118,15 +115,15 @@ def readModel(rootFileName=None, rootDirName=None,
   topPackage = xmlModelRead.readModel()
   
   end = time.time()
-  print 'Model read finished. Duration %s ' % (end-start)
+  print('Model read finished. Duration %s ' % (end-start))
   
   if checkValidity:
     start = time.time()
     topPackage.checkValid()
     end = time.time()
-    print "Model validity checked. Duration %s" % (end-start)
+    print("Model validity checked. Duration %s" % (end-start))
   else:
-    print "Model validity check skipped"
+    print("Model validity check skipped")
     
   
   #
@@ -246,7 +243,7 @@ class XmlModelRead(TextWriter_py_2_1.TextWriter_py_2_1):
       from elementtree import SimpleXMLTreeBuilder
       fp.close()
       
-      print 'WARNING, standard parser not found - trying alternative parser'
+      print('WARNING, standard parser not found - trying alternative parser')
       
       fp = open(absFilename,'rb')
       elemtree = ElementTree.parse(fp,
@@ -360,7 +357,7 @@ class XmlModelRead(TextWriter_py_2_1.TextWriter_py_2_1):
               href = self.getHref(elem)
               href = os.path.normpath(os.path.join(currentDir, href))
             except:
-              print 'Error in ', currentObj, 'in ', currentDir
+              print('Error in ', currentObj, 'in ', currentDir)
               raise
             try:
               self.loadXmlFile(href)
@@ -425,7 +422,7 @@ class XmlModelRead(TextWriter_py_2_1.TextWriter_py_2_1):
           result = val
           break
       if result:
-        print "WARNING - suspected xmllib bug. tag %s found" % tag
+        print("WARNING - suspected xmllib bug. tag %s found" % tag)
         
     if mandatory and not result:
       raise MemopsError("""Probable xmllib bug - 
@@ -468,9 +465,9 @@ no href attribute found for %s element
           objMap[obj.guid] = newObj
           
       if not modified:
-        print 'Object-Container pairs:'
+        print('Object-Container pairs:')
         for x in ll:
-          print x.name, x.guid, ' ; ', x.container
+          print(x.name, x.guid, ' ; ', x.container)
         raise MemopsError(
          "Delayed load data do not load (no container). %s objects remain"
          % len(ll)
@@ -696,7 +693,7 @@ class XmlModelGen(TextWriter_py_2_1.TextWriter_py_2_1,
                 ss = '%s.%s' % (pName, metaObj.name)
                 oldRepData[ss] = (x1,x2)
     except:
-      print 'WARNING - import of XML reader failed'
+      print('WARNING - import of XML reader failed')
       pass
     
     # set xml tag lists

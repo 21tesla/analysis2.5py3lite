@@ -123,7 +123,7 @@ def getHeader(fileName):
 
     try:
       fp = open(fileName, 'rb')
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
 
     s = fp.read(head)
@@ -223,7 +223,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: correct syntax: <script> <NMRPipe_file>'
+    print('Error: correct syntax: <script> <NMRPipe_file>')
     sys.exit(1)
 
   nmrpipe_file = sys.argv[1]

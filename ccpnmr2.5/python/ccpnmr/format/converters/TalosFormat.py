@@ -99,7 +99,7 @@ class TalosFormat(DataFormat):
   def getFullProject(self,fileName,chemShiftKeyWdList = None, sequenceKeyWds = None):
   
     if self.verbose == 1:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.TalosProjectFile(fileName)
     self.file.read()
@@ -144,7 +144,7 @@ class TalosFormat(DataFormat):
   def createFullProject(self,fileName):
   
     if self.verbose == 1:
-      print "Writing %s project from file %s" % (self.formatLabel,fileName)
+      print("Writing %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.TalosProjectFile(fileName)
    

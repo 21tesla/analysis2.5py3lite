@@ -13,7 +13,7 @@ class AllChecks(TestCase):
     def _test_linkdataNRGforGeerten(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         if os.path.exists(outputFnLinkData):

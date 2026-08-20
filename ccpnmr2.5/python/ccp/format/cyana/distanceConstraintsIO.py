@@ -74,7 +74,7 @@ class CyanaDistanceConstraintFile(DyanaDistanceConstraintFile):
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
 
-      print "Writing %s distance constraint list %s" % (self.format,fileText)
+      print("Writing %s distance constraint list %s" % (self.format,fileText))
     
     #
     # CYANA can handle ambiguous...
@@ -101,17 +101,17 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
   
     for constraint in constraintFile.constraints:
-      print constraint.Id,
+      print(constraint.Id,)
       
-      print constraint.upperDist,
-      print constraint.peakNum, constraint.qualityFactor
+      print(constraint.upperDist,)
+      print(constraint.peakNum, constraint.qualityFactor)
       for item in constraint.items:
-        print item.support,
+        print(item.support,)
         for member in item.members:
-          print member.seqCode, member.atomName,
-        print "|",
+          print(member.seqCode, member.atomName,)
+        print("|",)
       
-      print
+      print()
 
     #constraintFile.name = 'local/dist.testout.upl'
     #constraintFile.lowerDistanceFile = 'local/dist.testout.lol'

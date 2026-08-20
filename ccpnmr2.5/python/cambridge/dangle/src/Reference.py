@@ -114,9 +114,9 @@ class Reference:
     self.scatDir = os.path.join(self.location,'scattergrams')
     
     try:
-      fopen = open(config,'r')
+      fopen = open(config)
     except:
-      print 'Error: Cannot open config file: %s' % config
+      print('Error: Cannot open config file: %s' % config)
       #sys.exit(0)
       
     for line in fopen.readlines():
@@ -148,13 +148,13 @@ class Reference:
   def readHomologyTable(self, filename):
   
     if not isfile(filename):
-      print 'Error: Homology file %s does not exist.' % filename
+      print('Error: Homology file %s does not exist.' % filename)
       #sys.exit(0)
   
     try:
-      fopen = open(filename,'r')
+      fopen = open(filename)
     except:
-      print 'Error: Cannot open %s.' % filename
+      print('Error: Cannot open %s.' % filename)
       #sys.exit(0)
   
     dict = None
@@ -182,13 +182,13 @@ class Reference:
   def readRandomCoilShift(self, filename):
     
     if not isfile(filename):
-      print 'Error: Reference random coil shift file %s does not exist.' % filename
+      print('Error: Reference random coil shift file %s does not exist.' % filename)
       #sys.exit(0)
   
     try:
-      fopen = open(filename,'r')
+      fopen = open(filename)
     except:
-      print 'Error: Cannot open %s.' % filename
+      print('Error: Cannot open %s.' % filename)
       #sys.exit(0)
       
     dict = {}
@@ -223,13 +223,13 @@ class Reference:
   def readRandomCoilShiftCorr(self, filename):
     
     if not isfile(filename):
-      print 'Error: Random coil shift correction file %s does not exist.' % filename
+      print('Error: Random coil shift correction file %s does not exist.' % filename)
       #sys.exit(0)
   
     try:
-      fopen = open(filename,'r')
+      fopen = open(filename)
     except:
-      print 'Error: Cannot open %s.' % filename
+      print('Error: Cannot open %s.' % filename)
       #sys.exit(0)
       
     dict = {}
@@ -261,13 +261,13 @@ class Reference:
   def readAngleProb(self, filename):
     
     if not isfile(filename):
-      print 'Error: Angle probability file %s does not exist.' % filename
+      print('Error: Angle probability file %s does not exist.' % filename)
       #sys.exit(0)
   
     try:
-      fopen = open(filename,'r')
+      fopen = open(filename)
     except:
-      print 'Error: Cannot open %s.' % filename
+      print('Error: Cannot open %s.' % filename)
       #sys.exit(0)
     
     dict = {}
@@ -332,7 +332,7 @@ class Reference:
   def readDatabase(self, dbFile):
     
     dict = {}
-    fopen = open(dbFile,'r')
+    fopen = open(dbFile)
     for line in fopen.readlines():
       if (line == '\n')or(line[0] == '#'):
         continue
@@ -362,9 +362,9 @@ class Reference:
           shiftSet.append(shift)
         shifts.append(shiftSet)
       
-      phi = float((line[index:index+10]))
+      phi = float(line[index:index+10])
       index += 10
-      psi = float((line[index:index+10]))
+      psi = float(line[index:index+10])
       index += 10
       ss  = line[index+4]
       

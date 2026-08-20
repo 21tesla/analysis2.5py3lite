@@ -85,9 +85,9 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
   
     for constraint in constraintFile.constraints:
-      print constraint.Id, constraint.name,
+      print(constraint.Id, constraint.name,)
 
-      print constraint.seqCode, constraint.lowerAngle, constraint.upperAngle, constraint.energyCst
+      print(constraint.seqCode, constraint.lowerAngle, constraint.upperAngle, constraint.energyCst)
 
     constraintFile.name = 'local/dihedral.testout'
 

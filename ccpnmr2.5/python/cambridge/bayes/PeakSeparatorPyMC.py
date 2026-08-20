@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 PeakSeparatorPyMC.py
 
@@ -15,7 +14,7 @@ try:
   import pymc
 
 except ImportError:
-  print 'Python cannot find PyMC module'
+  print('Python cannot find PyMC module')
   raise
 
   # if ndim == 1:
@@ -100,7 +99,7 @@ except ImportError:
 def PeakSeparatorPyMC( params ):
 
   if params.Ndim != 2:
-    print 'PyMC only works with 2d currently'
+    print('PyMC only works with 2d currently')
     return
 
   ndim = params.Ndim
@@ -114,8 +113,8 @@ def PeakSeparatorPyMC( params ):
   data              = block_file.getValues( params.sampleStart, params.sampleEnd )
 
   if params.minAtoms != params.maxAtoms:
-    print '&&& PyMC cannot do RJ MCMC - have to specify exact number of peaks'
-    print 'Peak separator assuming %d peaks (min peaks)' % params.minAtoms
+    print('&&& PyMC cannot do RJ MCMC - have to specify exact number of peaks')
+    print('Peak separator assuming %d peaks (min peaks)' % params.minAtoms)
 
   nsignals = params.minAtoms
   shape    = params.peakShape
@@ -125,7 +124,7 @@ def PeakSeparatorPyMC( params ):
 
   params.ClibKeys.sort()
   for key in params.ClibKeys:
-    print key, params.__dict__[key]
+    print(key, params.__dict__[key])
 
   # These are all stochastic methods (height, sigma and mean position)
   # hyper-prior
@@ -160,7 +159,7 @@ def PeakSeparatorPyMC( params ):
           model[i] += np.power( ss, 2 ) / (np.power( x_range[i] - mm, 2 ) + np.power( ss, 2 ))
 
         else:
-          print 'Unknown shape %d' % i
+          print('Unknown shape %d' % i)
           return
 
       model[0] *= h[n]

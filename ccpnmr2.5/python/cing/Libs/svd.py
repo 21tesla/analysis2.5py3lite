@@ -17,7 +17,7 @@ for x in xs:
 # create SVDfitPoly instance
 svd = SVDfitPoly( xs, sigma=None, order=2)
 p = svd.fit(ys)
-print p
+print(p)
 """
 
 from cing.Libs.NTutils import * #@UnusedWildImport

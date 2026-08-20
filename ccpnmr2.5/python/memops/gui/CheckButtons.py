@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.CheckButton import CheckButton
@@ -164,17 +164,17 @@ if __name__ == '__main__':
   from memops.gui.Button import Button
 
   def get_me():
-    print 'get_me:', c.getSelected()
+    print('get_me:', c.getSelected())
 
   n = 0
   def toggle_me():
     global n
-    print 'toggle_me:', n
+    print('toggle_me:', n)
     c.toggleIndex(n)
     n = (n + 1) % 3
 
   def my_callback(selected):
-    print 'my_callback:', selected
+    print('my_callback:', selected)
 
   root = Tkinter.Tk()
 

@@ -184,7 +184,7 @@ def parseVersionString(s):
     rest = rest[n:]
   
   else:
-    raise ValueError("Invalid argument to getVersion: %s" % `s`)
+    raise ValueError("Invalid argument to getVersion: %s" % str(s))
   
   # finish processing and return result
   if rest[-1] in '0123456789':

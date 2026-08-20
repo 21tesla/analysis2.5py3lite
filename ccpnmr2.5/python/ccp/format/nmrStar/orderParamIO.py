@@ -237,4 +237,4 @@ if __name__ == "__main__":
 
     for orderParamFile in nmrStarFile.orderParamFiles:
       for orderParam in orderParamFile.orderParamValues:
-        print orderParam.Id, orderParam.seqCode, orderParam.resLabel, orderParam.atomName, orderParam.s2Value, orderParam.tauEValue, orderParam.tauEError
+        print(orderParam.Id, orderParam.seqCode, orderParam.resLabel, orderParam.atomName, orderParam.s2Value, orderParam.tauEValue, orderParam.tauEError)

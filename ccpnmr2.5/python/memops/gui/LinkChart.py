@@ -1,4 +1,4 @@
-import Tkinter
+import tkinter
 
 from math import sqrt
 

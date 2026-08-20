@@ -222,7 +222,7 @@ class NmrStarProjectFile(NmrStarFile):
           cyanaLibUsed = 1
 
     if cyanaLibUsed:
-      print "Using CYANA library - courtesy of Peter Guentert."
+      print("Using CYANA library - courtesy of Peter Guentert.")
 
     #
     # Sequence
@@ -538,7 +538,7 @@ class NmrStarProjectDataComponent(NmrStarGenericFile):
   def checkVersion(self):
     
     if self.version not in ('3.1',):
-      print "  Cannot parse nmrStar distance constraints for version %s" % self.version
+      print("  Cannot parse nmrStar distance constraints for version %s" % self.version)
       return False
 
     return True        

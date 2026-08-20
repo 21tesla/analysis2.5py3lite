@@ -69,9 +69,9 @@ class MarsAssignmentFile(MarsGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s assignment file %s" % (self.format,self.name)
+      print("Reading %s assignment file %s" % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()

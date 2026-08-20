@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import sys, os
 import types
 
-import Tkinter
+import tkinter
 
 from memops.gui.Base import getPopup
 from memops.gui.Button import Button

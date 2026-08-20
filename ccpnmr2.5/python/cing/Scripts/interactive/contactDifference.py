@@ -74,7 +74,7 @@ for pairIdx in range(4): # p for pairs use 4 pairs for final
     fn = 'models_%s_%s.csv' % (i, j)
     savetxt(fn, caDiffDistMatrix, fmt='%6.2f', delimiter=',')
 #    show()
-    print 'Models %d/%d C alpha contact difference res %s/%s %8.3f' % (i, j, res_k, res_l, caDiffDistMatrix[res_k,res_l])
+    print('Models %d/%d C alpha contact difference res %s/%s %8.3f' % (i, j, res_k, res_l, caDiffDistMatrix[res_k,res_l]))
 
 
 

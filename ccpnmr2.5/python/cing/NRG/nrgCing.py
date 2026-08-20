@@ -1351,8 +1351,7 @@ class NrgCing(Lister):
         '''
         #Write headers: 'name', 'rog', 'distance_count', 'cs_count', 'chothia_class', 'chain_count', 'res_count'
         for i,_header in enumerate(summaryHeaderList):
-            new_string += '\t<th title="{help}">{header}</th>\n'.format(header = summaryHeader2List[i],
-                                                                          help = summaryHeaderTitleList[i])
+            new_string += f'\t<th title="{summaryHeaderTitleList[i]}">{summaryHeader2List[i]}</th>\n'
         # end for        
         new_string += '''
             </tr> 
@@ -1453,7 +1452,7 @@ class NrgCing(Lister):
 #        nTmessage("Generating %s index html files" % (number_of_files))
 
         file_name = os.path.join (self.base_dir, "data", self.results_base, "indexPplot.html")
-        file_content = open(file_name, 'r').read()
+        file_content = open(file_name).read()
         old_string = r"<!-- INSERT NEW TITLE HERE -->"
         new_string = capitalizeFirst( inputDirBase )
         file_content = string.replace(file_content, old_string, new_string)
@@ -1629,7 +1628,7 @@ class NrgCing(Lister):
 #                nTdebug("-1- Added extra file %s." % dstFile)
                 continue
             # end if
-            file_content = open(srcFile, 'r').read()                    
+            file_content = open(srcFile).read()                    
             old_string = r"<!-- INSERT NEW FOOTER HERE -->"
             file_content = string.replace(file_content, old_string, self.htmlFooter)
             old_string = r"<!-- INSERT GOOGLE ANALYTICS TEMPLATE HERE -->"

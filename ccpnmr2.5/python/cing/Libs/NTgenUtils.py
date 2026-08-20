@@ -59,39 +59,39 @@ def checkCingLogForErrors( entry_code, results_dir, log_dir, requiresLogFilePres
     entryCodeChar2and3 = entry_code[1:3]
     logDir = os.path.join( results_dir, DATA_STR, entryCodeChar2and3, entry_code, log_dir )
     if not os.path.exists(logDir):
-        print "ERROR: Failed to find log dir: %s" % logDir
+        print("ERROR: Failed to find log dir: %s" % logDir)
         return True
     # end if    
     logLastFile = globLast(logDir + '/*.log')
 #            nTdebug("logLastFile: %s" % logLastFile)
     if not logLastFile:
         if requiresLogFilePresent:
-            print "ERROR: Failed to find any prep log file in directory: %s" % logDir
+            print("ERROR: Failed to find any prep log file in directory: %s" % logDir)
             return True
         # end if                            
         return
     # end if            
     analysisResultTuple = analyzeCingLog(logLastFile)
     if not analysisResultTuple:
-        print "ERROR: Failed to analyze log file: %s" % logLastFile
+        print("ERROR: Failed to analyze log file: %s" % logLastFile)
         return True
     # end if                    
     timeTaken, entryCrashed, nr_error, nr_warning, nr_message, nr_debug = analysisResultTuple
     if entryCrashed:
-        print "ERROR: Detected a crash: %s in %s" % (entry_code, logLastFile)
+        print("ERROR: Detected a crash: %s in %s" % (entry_code, logLastFile))
         return True
     # end if
     if not timeTaken:
-        print "ERROR: Unexpected [%s] for time taken in CING prep log file: %s assumed crashed." % (timeTaken, logLastFile)
+        print("ERROR: Unexpected [%s] for time taken in CING prep log file: %s assumed crashed." % (timeTaken, logLastFile))
         return True
     # end if
     if nr_error > maxErrors:
         msg = "For %s found %s/%s timeTaken/entryCrashed and %d/%d/%d/%d error,warning,message, and debug lines." % (
             entry_code, timeTaken, entryCrashed, nr_error, nr_warning, nr_message, nr_debug)
-        print "ERROR: " + msg + " Please check: " + logLastFile
+        print("ERROR: " + msg + " Please check: " + logLastFile)
         return True
     # end if
-    print "Checked: " + logLastFile
+    print("Checked: " + logLastFile)
     return
 # end def
 

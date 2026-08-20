@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -696,7 +696,7 @@ class Component(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.Component.__init__"
+        print("ERROR in ccp.general.DataLocation.Component.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -742,10 +742,10 @@ class Component(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1747,7 +1747,7 @@ reconstruct a component.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.ComponentShape.__init__"
+        print("ERROR in ccp.general.DataLocation.ComponentShape.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1793,10 +1793,10 @@ reconstruct a component.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2443,7 +2443,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.DataLocationStore.__init__"
+        print("ERROR in ccp.general.DataLocation.DataLocationStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2503,10 +2503,10 @@ class DataLocationStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3726,7 +3726,7 @@ class DataUrl(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.DataUrl.__init__"
+        print("ERROR in ccp.general.DataLocation.DataUrl.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3772,10 +3772,10 @@ class DataUrl(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6814,7 +6814,7 @@ class MimeTypeDataStore(AbstractDataStore):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.MimeTypeDataStore.__init__"
+        print("ERROR in ccp.general.DataLocation.MimeTypeDataStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6860,10 +6860,10 @@ class MimeTypeDataStore(AbstractDataStore):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8316,7 +8316,7 @@ class BlockedBinaryMatrix(NumericMatrix):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.BlockedBinaryMatrix.__init__"
+        print("ERROR in ccp.general.DataLocation.BlockedBinaryMatrix.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8362,10 +8362,10 @@ class BlockedBinaryMatrix(NumericMatrix):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9899,7 +9899,7 @@ header size refers to the header of the entire dataasource.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.DataLocation.ShapeMatrix.__init__"
+        print("ERROR in ccp.general.DataLocation.ShapeMatrix.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9950,10 +9950,10 @@ header size refers to the header of the entire dataasource.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

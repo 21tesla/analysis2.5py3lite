@@ -54,19 +54,19 @@ software development. Bioinformatics 21, 1678-1684.
 """
 def showMessage(message_type, message):
 
-  print message_type + ': ' + message
+  print(message_type + ': ' + message)
 
 def showInputMessage(input_types, message):
 
   assert len(input_types) == 2
 
-  print message + ':'
+  print(message + ':')
   prompt = 'Choose one of: ' + ', '.join(input_types) + ' [' + input_types[0] + ']: '
 
   # danger: n = 0, 1 backwards below because want yes/ok to be 1, no/cancel to be 0
   n = -1
   while (n < 0):
-    answer = raw_input(prompt)
+    answer = input(prompt)
     if (not answer):
       n = 1
     else:
@@ -129,5 +129,5 @@ if (__name__ == '__main__'):
   messageReporter.showError('error title', 'error message')
   messageReporter.showInfo('info title', 'info message')
   messageReporter.showWarning('warning title', 'warning message')
-  print messageReporter.showOkCancel('ok cancel title', 'ok cancel message')
-  print messageReporter.showYesNo('yes no title', 'yes no message')
+  print(messageReporter.showOkCancel('ok cancel title', 'ok cancel message'))
+  print(messageReporter.showYesNo('yes no title', 'yes no message'))

@@ -117,7 +117,7 @@ class MarvinFormat(DataFormat):
     validList = [prob >= self.probabilityCutoff for prob in self.rawPeak.probabilities]
     #print 'validList', validList
 
-    print 'thisPeakValid, rawPeak.num', self.rawPeak.num
+    print('thisPeakValid, rawPeak.num', self.rawPeak.num)
     #print 'thisPeakValid, rawPeak.assignList', self.rawPeak.assignList
     self.rawPeak.assignList  = self.filterByValid(self.rawPeak.assignList, validList)
     self.rawPeak.label  = self.filterByValid(self.rawPeak.label, validList)
@@ -143,8 +143,8 @@ class MarvinFormat(DataFormat):
 
   def filterByValid(self,elementArray,truthArray):
       if len(truthArray) != len(elementArray):
-          print elementArray
-          print truthArray
+          print(elementArray)
+          print(truthArray)
           raise self.FormatConverterError('internal error the length of the truth array and element array dont agree!')
 
       result  = []
@@ -353,7 +353,7 @@ class MarvinFormat(DataFormat):
             if len(target_peak.sortedPeakContribs()) > 0:
                 #peakName = "%s:%d[%d]" % (target_peak.peakList.dataSource.name,target_peak.peakList.serial, target_peak.serial)
 
-                print 'Warning: replacing assignments for peak %s' % peakName
+                print('Warning: replacing assignments for peak %s' % peakName)
                 for peakContrib in target_peak.sortedPeakContribs():
                     peakContrib.delete()
         ###print self.rawPeak
@@ -362,7 +362,7 @@ class MarvinFormat(DataFormat):
 
     if newPeak:
 
-      print 'Warning: ignored  marvin peak assignmnet %s no corresponding analysis peak found' % self.rawPeak.num
+      print('Warning: ignored  marvin peak assignmnet %s no corresponding analysis peak found' % self.rawPeak.num)
 
       #note I have guarded all the other peak reading routines so they ignore peaks of type None
       # it think this shlould work but I may need some more work elsewhere
@@ -378,7 +378,7 @@ class MarvinFormat(DataFormat):
   ### can be removed when removeDuplicateAssignments is implimented
   def setPeaks(self):
     if self.removeDuplicateAssignments:
-      print 'Warning: removal of duplicate assignments is selected but is not implimented!'
+      print('Warning: removal of duplicate assignments is selected but is not implimented!')
 
     DataFormat.setPeaks(self)
 
@@ -447,10 +447,10 @@ class MarvinFormat(DataFormat):
       #print ''
 
       if len(targetResonances) > 1:
-          selectName = '.'.join((chainCode,`seqCode`,atomName),)
+          selectName = '.'.join((chainCode,str(seqCode),atomName),)
           resonanceIds = [`resonance.serial` for resonance in targetResonances]
-          print 'Warning: found more than one resonance for peak (%s) %s' % (selectName,self.rawPeak.num)
-          print '         resonances are: ', ','.join(resonanceIds)
+          print('Warning: found more than one resonance for peak (%s) %s' % (selectName,self.rawPeak.num))
+          print('         resonances are: ', ','.join(resonanceIds))
 
 
       #if targetResonances == None:
@@ -610,5 +610,5 @@ class MarvinFormat(DataFormat):
                       peakExperiment=peak.peakList.dataSource.experiment.name
                       peakId = '%s:%s[%s].%d' % (peakExperiment,peakDataSource,peakPeakList,peakSerial)
                       msg  = 'Warning: using application data %s but peak %s doesn\'t have integer appdata'
-                      print  msg % (self.appDataKey,peakId)
+                      print(msg % (self.appDataKey,peakId))
       DataFormat.setPeaks(self)

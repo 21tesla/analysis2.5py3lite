@@ -561,7 +561,7 @@ class ViewAssignmentPopup(BasePopup):
       else:
         self.canvasDict[residue]['inactive'] = True
       self.updateResidueAtoms(residue)
-	
+    
     self.updateResidueSelector()
     self.updateAllConnections()
 
@@ -1241,7 +1241,7 @@ class ViewAssignmentPopup(BasePopup):
     for i in range(len(ccpCodes)):
       if ccpCodesDict.get(ccpCodes[i]):
         self.residueSelector.setButtonState(i, True)
-	self.residuesDict[ccpCodes[i]] = True
+    self.residuesDict[ccpCodes[i]] = True
       else:
         self.residueSelector.setButtonState(i, False)
         self.residuesDict[ccpCodes[i]] = False

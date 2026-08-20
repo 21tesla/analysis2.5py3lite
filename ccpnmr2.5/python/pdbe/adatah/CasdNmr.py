@@ -46,8 +46,8 @@ def getCasdNmrProjectInfo(casdNmrRefFile=None):
       if dataLine.count("rutgers") or dataLine.count('Data for') or dataLine.count('/wenmr/files/files/'):
 
         hrefSearch = hrefPatt.search(dataLine)
-	dataLine = dataLine.replace("<span>","")
-	dataLine = dataLine.replace("</span>","")
+    dataLine = dataLine.replace("<span>","")
+    dataLine = dataLine.replace("</span>","")
         projectNameSearch = hrefNamePatt.search(dataLine)
 
         if hrefSearch:
@@ -89,7 +89,7 @@ def getCasdNmrProjects(saveDataDir = None, forceWrite = False):
     localDataFilePath = os.path.join(saveDataDir,fileName)
     
     if forceWrite or not os.path.exists(localDataFilePath):
-      print "  Downloading CASD-NMR project %s..." % fileName
+      print("  Downloading CASD-NMR project %s..." % fileName)
 
       dataLines = getDataFromHttp(dataUrl)
       

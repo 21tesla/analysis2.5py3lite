@@ -72,11 +72,11 @@ class CsiSequenceFile(CsiGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s sequence file %s" % (self.format,self.name)
+      print("Reading %s sequence file %s" % (self.format,self.name))
 
     self.sequences.append(CsiSequence())
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     
     headerCols = []
     lineErrors = []
@@ -127,9 +127,9 @@ class CsiSequenceFile(CsiGenericFile):
     
     if len(lineErrors) > min(5,validLines * 0.5):
       self.sequences = []
-      print "  Bad %s format lines:%s" % (self.format,self.newline)
+      print("  Bad %s format lines:%s" % (self.format,self.newline))
       for lineError in lineErrors:
-        print lineError
+        print(lineError)
 
     
 CsiSequence = Sequence

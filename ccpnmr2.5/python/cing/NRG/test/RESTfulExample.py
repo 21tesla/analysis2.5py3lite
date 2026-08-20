@@ -1,4 +1,4 @@
-import urllib2
+import urllib.request
 # For http://www.rcsb.org/pdb/software/static.do?p=/software/webservices/search_nmr.jsp
 
 url = 'http://www.rcsb.org/pdb/rest/search'
@@ -13,15 +13,15 @@ queryText = """
 """
 
 
-print "query:\n", queryText
-print "querying PDB...\n"
+print("query:\n", queryText)
+print("querying PDB...\n")
 
-req = urllib2.Request(url, data=queryText)
-f = urllib2.urlopen(req)
+req = urllib.request.Request(url, data=queryText)
+f = urllib.request.urlopen(req)
 result = f.read()
 
 
 if result:
-    print "Found number of PDB entries:", result.count('\n')
+    print("Found number of PDB entries:", result.count('\n'))
 else:
-    print "Failed to retrieve results"
+    print("Failed to retrieve results")

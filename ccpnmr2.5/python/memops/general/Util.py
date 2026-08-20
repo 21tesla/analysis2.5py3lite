@@ -60,9 +60,6 @@ try:
   junk = True
   junk = False
 except:
-  True = not 0
-  False = not 1
-  
 # miscellaneous useful functions
 
 import os
@@ -665,8 +662,8 @@ def transferData(newParent, sourceObj, oldToNew=None,
         obj._singleDelete(objsToBeDeleted)
       except:
         deleteFailed = True
-        print ("WARNING Error in deleting object of class %s, id %s"
-               % (xx.__class__, id(xx)))
+        print(("WARNING Error in deleting object of class %s, id %s"
+               % (xx.__class__, id(xx))))
   
     if targetObj is not None:
       try:
@@ -676,13 +673,13 @@ def transferData(newParent, sourceObj, oldToNew=None,
         deleteFailed = True
     
     if deleteFailed:
-      print '''WARNING Error in clean-up of incorrectly copied data tree. 
-      Data may be left in an illegal state'''
+      print('''WARNING Error in clean-up of incorrectly copied data tree. 
+      Data may be left in an illegal state''')
     else:
-      print "NOTE created objects deleted without error"
+      print("NOTE created objects deleted without error")
     
     # re-raise original exception
-    raise exc_info[0], exc_info[1], exc_info[2]
+    raise exc_info[1]
   
   # unset isReading and set to modified
   newTopObj.__dict__['isReading'] = False
@@ -758,9 +755,9 @@ def delayedLoadLinksComp(objectDict, linkData):
         setattr(obj, name, ov)
 
   except:
-    print 'Error during link dereferencing. Object was: ', obj
-    print 'values were: ', val
-    print 'tag name was: ', name
+    print('Error during link dereferencing. Object was: ', obj)
+    print('values were: ', val)
+    print('tag name was: ', name)
     raise
 
 

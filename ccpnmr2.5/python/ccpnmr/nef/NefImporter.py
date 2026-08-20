@@ -173,10 +173,6 @@ Items are entered as a string key - string value pair.
                                     the string value can be a dictionary
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -785,8 +781,8 @@ class NefImporter(el.ErrorLog):
                     self._nefDict[name]['experiment_type'] = experiment_type
 
                 return self._nefDict[name]
-            raise Exception('{} is not a nef_chemical_shift_list.'.format(chemical_shift_list))
-        raise Exception('{} does not exist.'.format(chemical_shift_list))
+            raise Exception(f'{chemical_shift_list} is not a nef_chemical_shift_list.')
+        raise Exception(f'{chemical_shift_list} does not exist.')
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
     def addLinkageTable(self):

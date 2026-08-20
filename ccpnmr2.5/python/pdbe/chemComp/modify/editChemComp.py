@@ -1,4 +1,4 @@
-import Tkinter
+import tkinter
 
 from memops.api import Implementation
 from memops.gui.Button import Button

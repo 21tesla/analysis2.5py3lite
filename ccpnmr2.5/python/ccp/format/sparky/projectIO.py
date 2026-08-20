@@ -114,9 +114,9 @@ class SparkyProjectFile(SparkyGenericFile):
   def read(self,fileType = 'project',saveFileKey = None,readSaveFiles = True,verbose = 0):
 
     if verbose == 1:
-      print "Reading sparky %s file %s" % (fileType,self.name)
+      print("Reading sparky %s file %s" % (fileType,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     #
     # Start reading, look for header line
@@ -130,7 +130,7 @@ class SparkyProjectFile(SparkyGenericFile):
     line = fin.readline()
 
     if not line.count("<sparky %s file>" % fileType):
-      print "  File %s is not a %s file - ignored." % (self.name,fileType)
+      print("  File %s is not a %s file - ignored." % (self.name,fileType))
       return
 
     line = fin.readline()
@@ -173,7 +173,7 @@ class SparkyProjectFile(SparkyGenericFile):
             pass
 
           elif bracketName != location[level]:
-            print "  Bracketing mismatch for %s in sparky project. Exiting." % bracketName
+            print("  Bracketing mismatch for %s in sparky project. Exiting." % bracketName)
             return
 
           else:
@@ -185,7 +185,7 @@ class SparkyProjectFile(SparkyGenericFile):
 
           if bracketName not in locationSubs:
 
-            print "  Unrecognized subbracket name %s in %s!" % (bracketName,str(location))
+            print("  Unrecognized subbracket name %s in %s!" % (bracketName,str(location)))
 
             if level != -1:
               location.append(bracketName)
@@ -267,7 +267,7 @@ class SparkyProjectFile(SparkyGenericFile):
               atomInfo = []
           
           if len(atomInfo) != 4:
-            print "  Error: bad '%s' atom information for chemical shift. Ignored." % cols[0]
+            print("  Error: bad '%s' atom information for chemical shift. Ignored." % cols[0])
           else:
             (void1,residue,atom,void2) = atomInfo
   
@@ -350,7 +350,7 @@ class SparkyProjectFile(SparkyGenericFile):
     #
     
     if verbose == 1:
-      print "Writing Sparky project file %s." % self.name
+      print("Writing Sparky project file %s." % self.name)
 
     fout = open(self.name,'w')
 
@@ -432,7 +432,7 @@ class SparkyProjectFile(SparkyGenericFile):
     for saveFile in self.saveFiles:
        
       if verbose == 1:
-        print "Writing associated save file %s." % saveFile
+        print("Writing associated save file %s." % saveFile)
 
       fout = open(saveFile,'w')
 
@@ -510,7 +510,7 @@ class SparkyProjectFile(SparkyGenericFile):
   def setLocationSubs(self,level,location):
 
     if len(location) - 1 != level :
-      print "  Error: level/location mismatch"
+      print("  Error: level/location mismatch")
       return None
 
     if level == -1:
@@ -533,7 +533,7 @@ class SparkyProjectFile(SparkyGenericFile):
         break
 
     if curBracketSubs == None:
-      print "  Error: could not find subbrackets for %s" % curLocationName
+      print("  Error: could not find subbrackets for %s" % curLocationName)
       return
 
     else:

@@ -17,7 +17,7 @@ import unittest
 try:
     from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try
 try:
@@ -27,7 +27,7 @@ try:
     from cing.Scripts.Analysis.PyRPF import DEFAULT_DISTANCE_THRESHOLD
     from cing.Scripts.Analysis.PyRPF import DEFAULT_PROCHIRAL_EXCLUSION_SHIFT
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( ANALYSIS_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( ANALYSIS_STR, getCallerFileName() ))
     raise SkipTest(ANALYSIS_STR)
 # end try
 
@@ -46,7 +46,7 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         for entryId in AllChecks.entryList:

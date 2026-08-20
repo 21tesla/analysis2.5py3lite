@@ -101,7 +101,7 @@ def matchCloudsToHomologue(clouds, chainH, structure, threshold=3.0):
   for resonance in amideCloud.keys():
     spinSystem = resonance.resonanceSet
     if not spinSystem:
-      print 'Warning: Missing spin system for cloud resonance', resonance
+      print('Warning: Missing spin system for cloud resonance', resonance)
       continue
       
     x1,y1,z1 = amideCloud[resonance]
@@ -116,13 +116,13 @@ def matchCloudsToHomologue(clouds, chainH, structure, threshold=3.0):
         close.append( (d2, (x2,y2,z2), residue) )
     
     if not close:
-      print 'Warning: No homologue match for resonance', resonance
+      print('Warning: No homologue match for resonance', resonance)
     
     close.sort()
     d2, bestCoord, residue = close[0]
     
     if mapping.get(residue):
-      print 'Warning: Multiple matches for homologue residue', residue
+      print('Warning: Multiple matches for homologue residue', residue)
     else:
       mapping[residue] = spinSystem  
   

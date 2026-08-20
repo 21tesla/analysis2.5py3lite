@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Frame import Frame
 from memops.gui.RadioButton import RadioButton
@@ -227,16 +227,16 @@ if __name__ == '__main__':
   from memops.gui.Button import Button
 
   def get_me():
-    print 'get_me:', r.get(), r.getIndex()
+    print('get_me:', r.get(), r.getIndex())
 
   def set_me():
     c = r.getIndex()
     c = (c + 1) % 3
-    print 'set_me:', c
+    print('set_me:', c)
     r.setIndex(c)
 
   def my_callback(text):
-    print 'my_callback:', text
+    print('my_callback:', text)
 
   root = Tkinter.Tk()
 

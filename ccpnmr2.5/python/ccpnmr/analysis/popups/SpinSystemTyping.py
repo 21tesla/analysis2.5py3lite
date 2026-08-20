@@ -408,9 +408,9 @@ class SpinSystemTypeScoresPopup(BasePopup):
       for molSystem in self.project.sortedMolSystems():
         for chain in molSystem.sortedChains():
           if chain.molecule.molType in ('protein',None):
-	    text = '%s:%s' % (molSystem.code, chain.code)
+        text = '%s:%s' % (molSystem.code, chain.code)
             chains.append( [text, chain] )
-	
+    
     return chains
 
 
@@ -910,7 +910,7 @@ class SpinSystemTypingPopup(BasePopup):
 
     for spinSystem in self.scrolledMatrix.objectList:
       if spinSystem.sstSelected == 'Yes':
-	if (len(spinSystem.sstTypes) == 1) and (spinSystem.ssScore > self.threshold):
+    if (len(spinSystem.sstTypes) == 1) and (spinSystem.ssScore > self.threshold):
           ccpCode = spinSystem.sstTypes[0]
           
           if spinSystem.residue and (spinSystem.residue.ccpCode != ccpCode):
@@ -1020,18 +1020,18 @@ class SpinSystemTypingPopup(BasePopup):
           if spinSystem.chains and (self.chain not in spinSystem.chains):
             continue
         
-	if hasattr(spinSystem, 'sstSelected'):
-	  includeText = spinSystem.sstSelected
+    if hasattr(spinSystem, 'sstSelected'):
+      includeText = spinSystem.sstSelected
       
         else:
-	  spinSystem.sstSelected = 'Yes'
-	  includeText = 'Yes'
+      spinSystem.sstSelected = 'Yes'
+      includeText = 'Yes'
 
-	if not hasattr(spinSystem, 'sstTypes'):
-	  spinSystem.sstTypes = []
+    if not hasattr(spinSystem, 'sstTypes'):
+      spinSystem.sstTypes = []
 
-	if not hasattr(spinSystem, 'ssScore'):
-	  spinSystem.ssScore = None
+    if not hasattr(spinSystem, 'ssScore'):
+      spinSystem.ssScore = None
       
         if spinSystem.ssScore:
           scoreText = '%.2f' % spinSystem.ssScore
@@ -1041,11 +1041,11 @@ class SpinSystemTypingPopup(BasePopup):
         typesText = ' '.join(spinSystem.sstTypes)
       
         residueText = ''
-	
-	if spinSystem.residue:
+    
+    if spinSystem.residue:
           resCode = getResidueCode(spinSystem.residue)
-	  residueText = '%d%s' % (spinSystem.residue.seqCode,resCode)
-	
+      residueText = '%d%s' % (spinSystem.residue.seqCode,resCode)
+    
         elif spinSystem.residueProbs:
           resTexts = []
           resSeqs = []
@@ -1069,30 +1069,30 @@ class SpinSystemTypingPopup(BasePopup):
           else:
             residueText = '/'.join(resTexts)
           
-	elif spinSystem.ccpCode:
-	  getResidueCode(spinSystem) 
-	
-	shifts = []
-	if self.shiftList:
-	  for resonance in spinSystem.resonances:
+    elif spinSystem.ccpCode:
+      getResidueCode(spinSystem) 
+    
+    shifts = []
+    if self.shiftList:
+      for resonance in spinSystem.resonances:
             if resonance.isotopeCode in self.isotopes:
-	      shift = resonance.findFirstShift(parentList = self.shiftList)
+          shift = resonance.findFirstShift(parentList = self.shiftList)
               if shift:
-	        shifts.append('%.2f' % shift.value)
-	    
-	shifts.sort()
-	
-	shiftsText = ' '.join(shifts)
-	
-	data = []
-	data.append(spinSystem.serial)
-	data.append(residueText)
-	data.append(includeText)
-	data.append(scoreText)
-	data.append(typesText)
-	data.append(shiftsText)
-	
-	objectList.append(spinSystem)
+            shifts.append('%.2f' % shift.value)
+        
+    shifts.sort()
+    
+    shiftsText = ' '.join(shifts)
+    
+    data = []
+    data.append(spinSystem.serial)
+    data.append(residueText)
+    data.append(includeText)
+    data.append(scoreText)
+    data.append(typesText)
+    data.append(shiftsText)
+    
+    objectList.append(spinSystem)
         textMatrix.append(data)
         
 
@@ -1108,9 +1108,9 @@ class SpinSystemTypingPopup(BasePopup):
         for chain in molSystem.sortedChains():
           if chain.molecule.molType in ('protein',None):
             # None moltype may be mixed, including protein component
-	    text = '%s:%s' % (molSystem.code, chain.code)
+        text = '%s:%s' % (molSystem.code, chain.code)
             chains.append( [text, chain] )
-	
+    
     return chains
 
 
@@ -1165,10 +1165,10 @@ class SpinSystemTypingPopup(BasePopup):
         ss.sstTypes = []
         ss.ssScore  = None
         for ccpCode in typeScores[ss].keys():
-	  if ccpCode and typeScores[ss][ccpCode] > threshold:
-	    if ccpCode not in ss.sstTypes:
-	      ss.sstTypes.append(ccpCode)
-	
+      if ccpCode and typeScores[ss][ccpCode] > threshold:
+        if ccpCode not in ss.sstTypes:
+          ss.sstTypes.append(ccpCode)
+    
         if len(ss.sstTypes) == 1:
           ss.ssScore = typeScores[ss][ss.sstTypes[0]]
         

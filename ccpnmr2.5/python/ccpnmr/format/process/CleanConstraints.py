@@ -103,7 +103,7 @@ class CleanConstraints:
   
   def cleanDihedralConstraintList(self,constraintList):
   
-    print "Cleaning dihedral constraint list '%s'." % constraintList.name        
+    print("Cleaning dihedral constraint list '%s'." % constraintList.name)
 
     constraints = []
     constraintRefs = []
@@ -156,7 +156,7 @@ class CleanConstraints:
                   
               if not atomsConnected:
                 
-                print "  Deleting dihedral constraint %s (no connection via atoms %s,%s)" % (constraint.serial,chemAtom.name,nextChemAtom.name)
+                print("  Deleting dihedral constraint %s (no connection via atoms %s,%s)" % (constraint.serial,chemAtom.name,nextChemAtom.name))
 
                 constraint.delete()
                 constraintDeleted = 1
@@ -192,7 +192,7 @@ class CleanConstraints:
             items += "[%s,%s,%s,%s]," % (res1.name,res2.name,res3.name,res4.name)
           items = items[:-1]
           
-          print "  Constraint %s (items %s) is duplicate of %s - deleted" % (constraintRefs[j].serial,items,constraintRefs[i].serial)
+          print("  Constraint %s (items %s) is duplicate of %s - deleted" % (constraintRefs[j].serial,items,constraintRefs[i].serial))
 
           #
           # Check if items are the same (ONLY checking upper, lower!), copy over if not
@@ -215,7 +215,7 @@ class CleanConstraints:
                 keywds[attribute] = getattr(otherDihedralItem,attribute)
               
               Nmr.DihedralConstraintItem(constraintRefs[i],**keywds)
-              print "  Copied item with values %s" % (str(keywds))
+              print("  Copied item with values %s" % (str(keywds)))
           
           #
           # Delete after copying information
@@ -232,7 +232,7 @@ class CleanConstraints:
 
   def cleanDistanceConstraintList(self,constraintList):
   
-    print "Cleaning distance constraint list '%s'." % constraintList.name        
+    print("Cleaning distance constraint list '%s'." % constraintList.name)
 
     constraints = []
     constraintRefs = []
@@ -256,12 +256,12 @@ class CleanConstraints:
         #
         
         if resonances[0] == resonances[1]:
-          print "  Deleting constraint item (between same resonance)"
+          print("  Deleting constraint item (between same resonance)")
           item.delete()
           continue
         
         elif resonances[0].resonanceSet and resonances[0].resonanceSet == resonances[1].resonanceSet:
-          print "  Deleting constraint item (between same resonanceSets)"
+          print("  Deleting constraint item (between same resonanceSets)")
           # This item can be deleted because ambiguity present on resonanceSet level -
           # need not be repeated on constraint level!
           item.delete()
@@ -295,7 +295,7 @@ class CleanConstraints:
                 
                 if refChemAtom1 == refChemAtom0:
                 
-                  print "  Deleting constraint item (connected via atom %s)" % (refChemAtom0.name)
+                  print("  Deleting constraint item (connected via atom %s)" % (refChemAtom0.name))
 
                   item.delete()
                   itemDeleted = 1
@@ -327,7 +327,7 @@ class CleanConstraints:
       #
       
       if not constraint.items:
-        print "  Deleting constraint %d (no items left)" % constraint.serial
+        print("  Deleting constraint %d (no items left)" % constraint.serial)
         constraint.delete()    
         constraints.pop(-1)
         constraintRefs.pop(-1)
@@ -364,7 +364,7 @@ class CleanConstraints:
             if getattr(constraintRefs[i],attribute) and getattr(constraintRefs[j],attribute):
               setattr(constraintRefs[i],attribute,min(getattr(constraintRefs[i],attribute),getattr(constraintRefs[j],attribute)))
 
-          print "  Constraint %s (items %s) is duplicate of %s - deleted" % (constraintRefs[j].serial,items,constraintRefs[i].serial)
+          print("  Constraint %s (items %s) is duplicate of %s - deleted" % (constraintRefs[j].serial,items,constraintRefs[i].serial))
           constraintRefs[j].delete()
           constraints.pop(j)
           constraintRefs.pop(j)

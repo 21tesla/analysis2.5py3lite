@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter
+import tkinter
 
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.BooleanPulldownMenu import BooleanPulldownMenu

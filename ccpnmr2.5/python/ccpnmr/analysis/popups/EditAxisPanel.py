@@ -359,7 +359,7 @@ class EditAxisPanelPopup(BasePopup):
     axisType = self.getAxisType()
     try:
       axisType.region = self.regionEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting region', e.error_msg, parent=self)
 
   def getDecimal(self, axisType):
@@ -371,7 +371,7 @@ class EditAxisPanelPopup(BasePopup):
     axisType = self.getAxisType()
     try:
       axisType.numDecimals = self.decimalEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting number of decimals', e.error_msg, parent=self)
 
   def getPeakSize(self, axisType):
@@ -383,7 +383,7 @@ class EditAxisPanelPopup(BasePopup):
     axisType = self.getAxisType()
     try:
       axisType.peakSize = self.peakSizeEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting peak size', e.error_msg, parent=self)
 
   def addUnit(self, axisType):

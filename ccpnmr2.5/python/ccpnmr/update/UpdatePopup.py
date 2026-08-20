@@ -40,7 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 import sys
-import Tkinter
+import tkinter
 
 from memops.gui.BasePopup       import BasePopup
 from memops.gui.ScrolledMatrix  import ScrolledMatrix
@@ -250,7 +250,7 @@ class UpdatePopup(BasePopup, UpdateAgent):
       
       for fileUpdate in self.server.fileUpdates:
         
-		
+        
         if fileUpdate.getIsUpToDate():
           continue
           

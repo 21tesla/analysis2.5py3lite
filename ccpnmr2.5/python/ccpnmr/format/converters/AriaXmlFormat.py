@@ -120,9 +120,9 @@ class AriaXmlFormat:
       
       ccpNmrConv.readSequence(molecule.sequence_filename,
                               molecule.name,
-	          molecule.type,
-	          segID,
-	          molecule.first_residue_number)
+              molecule.type,
+              segID,
+              molecule.first_residue_number)
     
     #
     # Spectra
@@ -147,8 +147,8 @@ class AriaXmlFormat:
       
       peakListDimOrder = [spectrum.cross_peaks.proton1,
                           spectrum.cross_peaks.proton2,
-	                         spectrum.cross_peaks.hetero1,
-	                         spectrum.cross_peaks.hetero2]
+                             spectrum.cross_peaks.hetero1,
+                             spectrum.cross_peaks.hetero2]
                           
                         
       # TODO TODO Should the names not directly reflect the ones from the data model?!?! Better...  
@@ -156,15 +156,15 @@ class AriaXmlFormat:
       refExperiment = getRefExpFromOldExpType(ccpNmrConv.ccpnProject,spectrum.type)
       
       if not refExperiment:
-        print "  Error unknown experiment type %s... not created." % spectrum.type
+        print("  Error unknown experiment type %s... not created." % spectrum.type)
 
       peakLists = ccpNmrConv.readPeakList(spectrum.cross_peaks.filename,
                                          refExperiment,
   	                                      spectrum.name,
   	                                      peakListDimOrder)
-					 
+                     
       self.tagAriaInput(peakLists[0])
-	              
+                  
       if spectrum.cross_peaks_assignments.filename:
         ccpNmrConv.readPeakListAssignments(spectrum.cross_peaks_assignments.filename)
 
@@ -183,15 +183,15 @@ class AriaXmlFormat:
     subBlocks = {'project': ['name','filename','naming_system'],
     
                  'molecular_system': ['name',
-	                 {'molecule': ['name','type','first_residue_number','sequence_filename','sequence_format']}
+                     {'molecule': ['name','type','first_residue_number','sequence_filename','sequence_format']}
                                     ],
-	                
+                    
                  'spectrum': ['name',
                               'type',
-	          'data_files_format',
-	          {'chemical_shifts': ['filename']},
-	          {'cross_peaks': ['filename','proton1','proton2','hetero1','hetero2']},
-	          {'cross_peaks_assignments': ['filename']}
+              'data_files_format',
+              {'chemical_shifts': ['filename']},
+              {'cross_peaks': ['filename','proton1','proton2','hetero1','hetero2']},
+              {'cross_peaks_assignments': ['filename']}
                              ]
                 }
     
@@ -244,7 +244,7 @@ class AriaXmlFormat:
     
   def exitError(self,attrName):
   
-    print "Invalid conversion xml file: need %s information" % (attrName)
+    print("Invalid conversion xml file: need %s information" % (attrName))
     sys.exit()
 
 
@@ -255,7 +255,7 @@ if __name__ == '__main__':
 
   ccpnProject = ariaXmlFormat.ccpNmrConv.ccpnProject
   
-  print ccpnProject
+  print(ccpnProject)
   
   #To write...
   #ariaXmlFormat.writeXmlFile()

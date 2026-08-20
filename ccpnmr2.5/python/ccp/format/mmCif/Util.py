@@ -52,7 +52,7 @@ class DataDictionary_mmCIF( ContentHandler, ErrorHandler ):
     return False
 
   def error( self, line, msg ) :
-    print "mmCIF parse error in line", line, ":", msg
+    print("mmCIF parse error in line", line, ":", msg)
     return True
     
   def getPdbCode(self):
@@ -125,7 +125,7 @@ class DataDictionary_mmCIF( ContentHandler, ErrorHandler ):
             if entityId == curEntityId:
               seqCode = returnInt(self.dataContent[mainName]['num'][j])
               resLabel = self.dataContent[mainName]['mon_id'][j]
-              print  "     ", seqCode, resLabel
+              print("     ", seqCode, resLabel)
           """
 
         mainName = '_pdbx_nonpoly_scheme'

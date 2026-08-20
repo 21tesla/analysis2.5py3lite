@@ -62,7 +62,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -168,7 +168,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.ExpBlueprint.BlueprintComponent.__init__"
+        print("ERROR in ccp.lims.ExpBlueprint.BlueprintComponent.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -214,10 +214,10 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2791,7 +2791,7 @@ class BlueprintDbRef(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.ExpBlueprint.BlueprintDbRef.__init__"
+        print("ERROR in ccp.lims.ExpBlueprint.BlueprintDbRef.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2837,10 +2837,10 @@ class BlueprintDbRef(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3621,7 +3621,7 @@ class BlueprintStatus(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.ExpBlueprint.BlueprintStatus.__init__"
+        print("ERROR in ccp.lims.ExpBlueprint.BlueprintStatus.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3667,10 +3667,10 @@ class BlueprintStatus(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4647,7 +4647,7 @@ of wish targets and non-polymer molecules.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.ExpBlueprint.ExpBlueprint.__init__"
+        print("ERROR in ccp.lims.ExpBlueprint.ExpBlueprint.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4699,10 +4699,10 @@ of wish targets and non-polymer molecules.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7806,7 +7806,7 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.ExpBlueprint.ExpBlueprintStore.__init__"
+        print("ERROR in ccp.lims.ExpBlueprint.ExpBlueprintStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7865,10 +7865,10 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

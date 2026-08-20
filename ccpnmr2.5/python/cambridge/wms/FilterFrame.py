@@ -5,7 +5,7 @@ from SharedBeanService_services import *
 from WSString import *
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs

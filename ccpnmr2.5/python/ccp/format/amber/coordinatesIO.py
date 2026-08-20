@@ -83,13 +83,13 @@ class AmberCoordinateFile(AmberGenericFile):
     """
     
     if verbose:
-      print "  Reading %s coordinate file %s..." % (self.format,self.name)
+      print("  Reading %s coordinate file %s..." % (self.format,self.name))
 
     #
     # Read file
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lines = fin.readlines()
     fin.close()
     

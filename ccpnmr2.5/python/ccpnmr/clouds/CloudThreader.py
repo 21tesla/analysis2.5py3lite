@@ -36,7 +36,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import cPickle
+import pickle
 from os.path import exists, isfile, isdir
 from os import listdir, path
 from math import sqrt, log, exp
@@ -129,9 +129,9 @@ def searchPosterior(project, residues, spinSystems, clouds, nSteps=3000, graph=N
     for atom in residue.atoms:
       residue.atomDict[atom.name] = atom
 
-  print "Generating intial assignment"
+  print("Generating intial assignment")
   typeScores, assignment0 = getInitialAssignment(residues, spinSystems, preserveAssign, graph=graph)
-  print "Reading distance distributions"
+  print("Reading distance distributions")
   intra, inter = getDistDistributions()
 
   p0 = generatePosterior(typeScores, residues, assignment0, clouds, intra, inter, 0, preserveAssign)
@@ -150,7 +150,7 @@ def searchPosterior(project, residues, spinSystems, clouds, nSteps=3000, graph=N
   if graph:
     updateGraph(graph, chain.residues, assignment0, 0)
 
-  print "Generate posterior"
+  print("Generate posterior")
   for i in range(nSteps):
 
     """if i < 20:
@@ -169,7 +169,7 @@ def searchPosterior(project, residues, spinSystems, clouds, nSteps=3000, graph=N
     assignment = swapSpinSystem(typeScores, assignment0, clouds, inter, n, i)  
     p = generatePosterior(typeScores, residues, assignment, clouds, intra, inter, i, preserveAssign)
 
-    print i, n , p, p0
+    print(i, n , p, p0)
     success = 0
     if p > p0:
       success = 1
@@ -181,13 +181,13 @@ def searchPosterior(project, residues, spinSystems, clouds, nSteps=3000, graph=N
       if i > 500:
         e = exp(delta*-5e8)
         if e > r:
-          print e, r
+          print(e, r)
           success = 1
    
       
     if success: 
       p0 = p
-      print p0
+      print(p0)
       assignment0 = assignment
       
       if graph:
@@ -232,13 +232,13 @@ def searchPosterior(project, residues, spinSystems, clouds, nSteps=3000, graph=N
             foundCodes += '-'
             typed += '-'
 
-        print i, p, p0
-        print 'Found: %d' % found
-        print scores
-        print foundCodes
-        print typed
-        print sequence
-        print assign
+        print(i, p, p0)
+        print('Found: %d' % found)
+        print(scores)
+        print(foundCodes)
+        print(typed)
+        print(sequence)
+        print(assign)
     
     if progressBar and (i % q == 0):
       progressBar.increment()
@@ -285,7 +285,7 @@ def printResidueScores(typeScores, residues, assignment, clouds, interDistrib):
     spinSystem = assignment[residue]
     l = getResidueLikelihood(residue, spinSystem, assignment, clouds, interDistrib) or 0.0
     s = getSpinSystemScore(typeScores, residue, spinSystem) or 0.0
-    print "%d %s %f %f" % (residue.seqCode,residue.ccpCode, s, l)
+    print("%d %s %f %f" % (residue.seqCode,residue.ccpCode, s, l))
  
  
 def generatePosterior(typeScores, residues, assignment, clouds, intra, inter, i, preserveAssign=0):
@@ -412,10 +412,10 @@ def getResidueLikelihood(residue1, spinSystem1, assignment, clouds, interDistrib
   
   if N == 0:
     if v:
-      print "barf"
-      print r2
-      print coords1
-      print coords2
+      print("barf")
+      print(r2)
+      print(coords1)
+      print(coords2)
       
     
     residue1.likelihood = -10.0
@@ -424,10 +424,10 @@ def getResidueLikelihood(residue1, spinSystem1, assignment, clouds, interDistrib
   out = p/float(N)  
   
   if v:
-    print "ok", out
-    print r2
-    print coords1
-    print coords2
+    print("ok", out)
+    print(r2)
+    print(coords1)
+    print(coords2)
   
   residue1.likelihood = out 
   return out
@@ -525,13 +525,13 @@ def swapSpinSystem(typeScores, assignment, clouds, interDistrib, n, iteration):
 
 def getInitialAssignment(residues, spinSystems, preserveAssign, graph=None, progressBar=None):
 
-  print "Gen initial assignment"
+  print("Gen initial assignment")
   chain      = residues[0].chain
   shiftList = chain.root.findFirstNmrMeasurementList(className='ShiftList')
   codeList   = {}
   typeScores = {}
   for ss in spinSystems:
-    print '  ', ss
+    print('  ', ss)
     scores = getSpinSystemChainProbabilities(ss, chain, dshiftList)
     
     typeScores[ss] = {}
@@ -583,11 +583,11 @@ def fitSideChains(scores, assignment, clouds, threshold, shiftList=None):
   
   # Search with likelihood from clouds
   
-  print 'Calculating distance distributions'
+  print('Calculating distance distributions')
   
   intraDistrib = readIntraDistribution('intraDistribs001.txt')
   
-  print 'Monte Carlo...'
+  print('Monte Carlo...')
 
   # Get only the good assignments
   assign = {}
@@ -673,7 +673,7 @@ def fitSideChain(shifts, residue, clouds, distrib, useAssignNames=False):
   J       = 0  
   i       = 0
   
-  print "Fitting residue %d %s" % (residue.seqCode, residue.ccpCode)
+  print("Fitting residue %d %s" % (residue.seqCode, residue.ccpCode))
   #print atomNames0
   
   while passes < (len(atomNames0)*len(atomNames0)):
@@ -750,10 +750,10 @@ def fitSideChain(shifts, residue, clouds, distrib, useAssignNames=False):
         
         if atomNames4 and (atomName not in atomNames4):
           #print i, best
-          print 'Error %5.5s %3.3f - %s' % (atomName, shift.value, makeResonanceGuiName(resonance))
+          print('Error %5.5s %3.3f - %s' % (atomName, shift.value, makeResonanceGuiName(resonance)))
           for atom4 in residue.atoms:
             if not atom4.chemAtom.waterExchangeable:
-              print '     %3.3f %5.5s %.3f' % (shift.value, atom4.atomSet.name, atomScores[shift][atom4.atomSet.name] or -1000.0)
+              print('     %3.3f %5.5s %.3f' % (shift.value, atom4.atomSet.name, atomScores[shift][atom4.atomSet.name] or -1000.0))
  
   return bestM
 
@@ -816,12 +816,12 @@ def getDistDistributions(dataDirName='/home/tjs234/ccpn/recoord/', intraFileName
 
 def makeStructureDictFromXml(path, fileName):
 
-  print "Reading %s" % fileName
+  print("Reading %s" % fileName)
   project = XmlIO.loadProject(fileName, showWarning=showWarning)
 
   molSystem = project.findFirstMolSystem()
   structure = molSystem.findFirstStructureEnsemble()
-  print "Got structure %s" % structure
+  print("Got structure %s" % structure)
 
   model = structure.findFirstModel()
 

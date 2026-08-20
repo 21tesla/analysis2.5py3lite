@@ -234,7 +234,7 @@ def getChemCompOrCoordXmlFile(repository,fileSearchString,fileSearchPath,classNa
         shutil.copy(filePath,saveFilePath)
         result = saveFilePath
     
-        print "  %s file %s copied to %s..." % (className,fileName,savePath)
+        print("  %s file %s copied to %s..." % (className,fileName,savePath))
       
       else:
         result = filePath
@@ -546,16 +546,16 @@ def downloadChemCompInfoFromCcpForge(repository, molType, ccpCode, sourceName=No
               fout.write(data)
               fout.close()
 
-              print ("Downloaded %s %s%s, %s from server %s, written to file %s!"
+              print("Downloaded %s %s%s, %s from server %s, written to file %s!"
                      % (fileType,sourceText,molType,ccpCode,ccpForgeDownloadUrl,chemCompFile))
               result = chemCompFile
 
-            except IOError, e:
+            except OSError as e:
               showError("Cannot write file",
                         "Cannot write %s XML file %s%s, %s: %s"
                         % (fileType,sourceText,molType,ccpCode,str(e)))
   
-        except IOError, e:
+        except OSError as e:
           showError("Cannot read file", "Cannot read %s %s%s, %s: %s" 
                     % (fileType,sourceText,molType,ccpCode,str(e)))
       
@@ -564,12 +564,12 @@ def downloadChemCompInfoFromCcpForge(repository, molType, ccpCode, sourceName=No
         showError("Cannot find file", "Cannot find %s XML file %s%s, %s." 
                   % (fileType,sourceText,molType,ccpCode))
       
-    except IOError, e:
+    except OSError as e:
       showError("Cannot read directory", 
                 "Cannot read directory information for %s%s, %s: %s" 
                 % (sourceText,molType,ccpCode,str(e)))
 
-  except IOError, e:
+  except OSError as e:
     showError("No connection", 
               "Cannot connect to download server %s, or file does not exist...: %s " 
               % (ccpForgeDownloadUrl,str(e)))
@@ -715,7 +715,7 @@ def getDataStoringFromFilepath(memopsRoot, fullFilePath, preferDataUrls=None,
   
   if dataUrl is None:
   
-    urlPath = uniIo.normalisePath((fullFilePath[:-len(filePath)]))
+    urlPath = uniIo.normalisePath(fullFilePath[:-len(filePath)])
     dataLocationStore = memopsRoot.currentDataLocationStore
     dataUrl = dataLocationStore.newDataUrl(
                                    url=Implementation.Url(path=urlPath))
@@ -842,19 +842,19 @@ def changeDataStoreUrl(dataStore, newPath):
 
 
 def _fetchUrlData(urlLocation):
-  """Fetch data by inserting unverified certificate into urllib2
+  """Fetch data by inserting unverified certificate into urllib.request
     getProxies not tested
   """
-  import urllib2
+  import urllib.request
   import ssl
 
   context = ssl._create_unverified_context()
 
-  proxy_support = urllib2.ProxyHandler(urllib2.getproxies())
-  opener = urllib2.build_opener(proxy_support)
-  urllib2.install_opener(opener)
+  proxy_support = urllib.request.ProxyHandler(urllib.request.getproxies())
+  opener = urllib.request.build_opener(proxy_support)
+  urllib.request.install_opener(opener)
 
-  request = urllib2.urlopen(urlLocation, context=context, timeout=3.0)
+  request = urllib.request.urlopen(urlLocation, context=context, timeout=3.0)
 
   return request
 
@@ -875,8 +875,8 @@ if __name__ == '__main__':
 
   STRINGLEN = 300
 
-  print "\n~~~~~~~~~~~~~~~~~~~~\n>>> raw github URLLIB2 request - from Path T"
-  import urllib2
+  print("\n~~~~~~~~~~~~~~~~~~~~\n>>> raw github URLLIB2 request - from Path T")
+  import urllib.request
   import ssl
 
   context = ssl._create_unverified_context()
@@ -884,24 +884,24 @@ if __name__ == '__main__':
   #                                      cafile=None,
   #                                      capath=None)
 
-  proxy_support = urllib2.ProxyHandler(urllib2.getproxies())
-  opener = urllib2.build_opener(proxy_support)
-  urllib2.install_opener(opener)
+  proxy_support = urllib.request.ProxyHandler(urllib.request.getproxies())
+  opener = urllib.request.build_opener(proxy_support)
+  urllib.request.install_opener(opener)
 
   try:
-    request = urllib2.urlopen("https://raw.githubusercontent.com/VuisterLab/CcpNmr-ChemComps/master/data/pdbe/chemComp/archive/ChemComp/other/T/other%2BTho%2Bmsd_ccpnRef_2007-12-11-10-19-31_00014.xml",
+    request = urllib.request.urlopen("https://raw.githubusercontent.com/VuisterLab/CcpNmr-ChemComps/master/data/pdbe/chemComp/archive/ChemComp/other/T/other%2BTho%2Bmsd_ccpnRef_2007-12-11-10-19-31_00014.xml",
                        context=context,
                        timeout=3.0)
 
   except Exception as es:
-    print str(es)
+    print(str(es))
 
   else:
     data = StringIO.StringIO(request.read())
     request.close()
     if data and data.buf:
       data = data.buf
-      print data[:min(STRINGLEN, len(data))]
+      print(data[:min(STRINGLEN, len(data))])
 
   ccpForgeIndexUrl = 'https://raw.githubusercontent.com/VuisterLab/CcpNmr-ChemComps/master/index/index.csv'
   try:
@@ -910,7 +910,7 @@ if __name__ == '__main__':
     request.close()
     csvString = StringIO.StringIO(ccIndex)
     df = pd.read_csv(csvString)
-    print "fetchHttpResponse - ", df[:1]
+    print("fetchHttpResponse - ", df[:1])
 
   except Exception as es:
     print(str(es))
@@ -920,7 +920,7 @@ if __name__ == '__main__':
     ccIndex = _readDataFromRequest(request)
     csvString = StringIO.StringIO(ccIndex)
     df = pd.read_csv(csvString)
-    print "_fetchUrlData - ", df[:1]
+    print("_fetchUrlData - ", df[:1])
 
   except Exception as es:
     print(str(es))

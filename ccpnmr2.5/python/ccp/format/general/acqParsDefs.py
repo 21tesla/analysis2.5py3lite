@@ -134,7 +134,7 @@ class GenericAcqParData(FormatFile):
         # Check if already a frequency with this nucleus: is an error!
         # TODO: can make SpectrometerReference values lists to accomodate all values...
         if specRefs.has_key(nucleus) > 0:
-          print "  ERROR: %s has two transmitters channels with nucleus %s. Second one ignored." % (self.fileDir,nucleus)
+          print("  ERROR: %s has two transmitters channels with nucleus %s. Second one ignored." % (self.fileDir,nucleus))
           continue
 
         specFreq = pars[specFreqCode].values[0]
@@ -144,7 +144,7 @@ class GenericAcqParData(FormatFile):
         # Additional check: specFreq can be ~150 MHz, specFreqOffset ~ -50000000 Hz (so baseFreq ~ 200MHz)
         # Resetting to normal values this way... 
         if int(baseFreq/10) != int(specFreq/10):       
-          print "  Error: Exp %s bad referencing: baseFreq %.3f, specFreq %.3f. Reset specFreq to baseFreq" % (self.fileDir,baseFreq,specFreq)
+          print("  Error: Exp %s bad referencing: baseFreq %.3f, specFreq %.3f. Reset specFreq to baseFreq" % (self.fileDir,baseFreq,specFreq))
           specFreq = baseFreq
 
         specRefs[nucleus] = SpectrometerReference(specFreq,baseFreq)
@@ -174,7 +174,7 @@ class GenericAcqParData(FormatFile):
       npointsFreq = getUpperPowerTwo(npoints) * 2 # Make this default to the next power of two - better for FT
 
     else:
-      print "  WARNING: %s has only %d number of points for FID" % (self.fileDir,npoints)
+      print("  WARNING: %s has only %d number of points for FID" % (self.fileDir,npoints))
       npointsFreq = 2
 
     valppointFreq = (1 / valppoint) / npointsFreq

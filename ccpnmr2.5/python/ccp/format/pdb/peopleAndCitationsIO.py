@@ -108,7 +108,7 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
           if len(firstBits) > 1:
             authorBits[0] = firstBits[-1]
             authorBits[-1] = ' '.join(firstBits[:-1])
-            print "  Warning: fixed author name string %s!" % author
+            print("  Warning: fixed author name string %s!" % author)
         
         for i in range(len(authorBits)-1):
           authorBits[i] = authorBits[i].strip()
@@ -116,11 +116,11 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
         # Possible that family-type name has . in it, apparently.
         while (1):
           if len(authorBits) == 1:
-            print "  Warning: setting family name as '%s'" % authorBits[-1]
+            print("  Warning: setting family name as '%s'" % authorBits[-1])
             break
           if ' ' in authorBits[-2]:
             authorBits[-1] = authorBits.pop(-2) + '.' + authorBits[-1]
-            print "  Warning: setting family name as '%s'" % authorBits[-1]
+            print("  Warning: setting family name as '%s'" % authorBits[-1])
           else:
             break
           
@@ -253,7 +253,7 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
               if len(firstBits) > 1:
                 authorBits[0] = firstBits[-1]
                 authorBits[-1] = ' '.join(firstBits[:-1])
-                print "  Warning: fixed author name string %s!" % author
+                print("  Warning: fixed author name string %s!" % author)
             
             for i in range(len(authorBits)-1):
               authorBits[i] = authorBits[i].strip()
@@ -261,12 +261,12 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
             # Possible that family-type name has . in it, apparently.
             while (1):
               if len(authorBits) == 1:
-                print "  Warning: setting family name as '%s'" % authorBits[-1]
+                print("  Warning: setting family name as '%s'" % authorBits[-1])
                 break
 
               if ' ' in authorBits[-2]:
                 authorBits[-1] = authorBits.pop(-2) + '.' + authorBits[-1]
-                print "  Warning: setting family name as '%s'" % authorBits[-1]
+                print("  Warning: setting family name as '%s'" % authorBits[-1])
               else:
                 break
 
@@ -288,7 +288,7 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
                   person = tPerson
               if not person:
                 if len(personsFound) > 1:
-                  print "  Warning: picking first person from found list as default (no full initial match)" 
+                  print("  Warning: picking first person from found list as default (no full initial match)")
                 person = personsFound[0]
 
             # Create new person if no match...

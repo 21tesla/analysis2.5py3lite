@@ -167,11 +167,11 @@ if (__name__ == '__main__'):
 
   def usage(msg):
 
-    print 'Error: %s' % msg
-    print 'Arguments: <pipeDataFileTemplate> <azaraDataFile> [ <blockSize> <azaraParFile> ]'
-    print '     For example: myPipeData%03d.ft myAzaraData.spc'
-    print '              or: myPipeData%03d.ft myAzaraData.spc 16384'
-    print '              or: myPipeData%03d.ft myAzaraData.spc 4096 myAzaraParFile.par'
+    print('Error: %s' % msg)
+    print('Arguments: <pipeDataFileTemplate> <azaraDataFile> [ <blockSize> <azaraParFile> ]')
+    print('     For example: myPipeData%03d.ft myAzaraData.spc')
+    print('              or: myPipeData%03d.ft myAzaraData.spc 16384')
+    print('              or: myPipeData%03d.ft myAzaraData.spc 4096 myAzaraParFile.par')
     os._exit(1)
 
   nargs = len(sys.argv)

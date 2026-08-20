@@ -317,7 +317,7 @@ def setPartnerChains(haddockPartner, chains):
     for chain in chains:
         if molType is None: molType = chain.molecule.molType
         elif molType != chain.molecule.molType:
-            print 'CCPN-HADDOCK setPartnerChains failed: Chains not of same type'
+            print('CCPN-HADDOCK setPartnerChains failed: Chains not of same type')
             return
 
     for chain in chains:
@@ -359,7 +359,7 @@ def setPartnerChains(haddockPartner, chains):
             hSeqId += 1
 
 
-class evalWcPairing(object):
+class evalWcPairing:
 
     """Description: Class to evaluate Watson-Crick hydrogen bonding between
                     bases in regular RNA or DNA structures. WC-pairs are

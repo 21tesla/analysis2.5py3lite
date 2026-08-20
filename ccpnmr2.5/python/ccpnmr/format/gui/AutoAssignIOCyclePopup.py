@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter, time
+import tkinter, time
 
 from memops.api import Implementation
 
@@ -385,7 +385,7 @@ class AutoAssignIOCyclePopup(BasePopup):
             residue = seqCodeToResidue[seqCode]
           else:
             # THIS SHOULD NEVER HAPPEN!
-            print "  Error: no match for seqCode %d while re-importing project." % seqCode
+            print("  Error: no match for seqCode %d while re-importing project." % seqCode)
             continue
           
           #

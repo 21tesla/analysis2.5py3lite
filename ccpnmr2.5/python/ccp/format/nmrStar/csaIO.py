@@ -196,4 +196,4 @@ if __name__ == "__main__":
 
     for csaFile in nmrStarFile.csaFiles:
       for csa in csaFile.csaValues:
-        print csa.Id, csa.seqCode, csa.resLabel, csa.atomName, csa.value, csa.valueError
+        print(csa.Id, csa.seqCode, csa.resLabel, csa.atomName, csa.value, csa.valueError)

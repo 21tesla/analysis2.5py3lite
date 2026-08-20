@@ -839,7 +839,7 @@ class CalcDistConstraintsPopup(BasePopup):
     
       resonances = spectrum.topObject.sortedResonances()
       
-      print "making ADCs"
+      print("making ADCs")
       adcList    = makeNoeAdcs(resonances, spectrum,
                                self.constraintSet
                                ,allowedAtomTypes=['H',])
@@ -905,7 +905,7 @@ class CalcDistConstraintsPopup(BasePopup):
       for chain in self.molSystem.sortedChains():
         if chain.residues:
           chains.append(chain)
-	
+    
     return chains
 
   def setResChain(self, null):
@@ -1005,7 +1005,7 @@ class CalcDistConstraintsPopup(BasePopup):
     if self.spectrum:
       for isotope in getSpectrumIsotopes(self.spectrum):
         if isotope not in isotopes:
-	  isotopes.append(isotope)
+      isotopes.append(isotope)
     
     return isotopes
 
@@ -1091,7 +1091,7 @@ class CalcDistConstraintsPopup(BasePopup):
         
         self.residueRanges = [ResidueRowObject(dataDims,chain,startRes,endRes) for (dataDims,chain,startRes,endRes) in residueRanges]
         self.setSpectrumResidueRanges()
-	  
+      
     else:
       
       # check existing
@@ -1129,7 +1129,7 @@ class CalcDistConstraintsPopup(BasePopup):
       
       # store changes  
       self.setSpectrumResidueRanges()
-	
+    
     
     return self.residueRanges
 
@@ -1178,12 +1178,12 @@ class CalcDistConstraintsPopup(BasePopup):
           for dataDim in self.spectrum.sortedDataDims():
             expDimRefs = dataDim.expDim.expDimRefs
             if expDimRefs:
-	      name = self.getDataDimName(dataDim)
-	      isotopes =self.getDataDimIsotopes(dataDim)
-	      tol = getAnalysisDataDim(dataDim).noeTolerance
+          name = self.getDataDimName(dataDim)
+          isotopes =self.getDataDimIsotopes(dataDim)
+          tol = getAnalysisDataDim(dataDim).noeTolerance
               tolerances.append( [ [name,dataDim],tol,1,tol] )
                 
-	  self.spectrum.shiftMatchTolerances = tolerances
+      self.spectrum.shiftMatchTolerances = tolerances
         self.tolerances = [ToleranceRowObject(dataDimInfo,minTol,multiplier,maxTol) for (dataDimInfo,minTol,multiplier,maxTol) in tolerances]
 
     else:
@@ -1419,7 +1419,7 @@ class CalcDistConstraintsPopup(BasePopup):
       if dataDims.count(dataDim) < 2:
         msg = 'Cannot delete range. There must be at least one for each dimension'
         showWarning('Warning',msg, parent=self)
-	return
+    return
       
       self.chemShiftRanges.remove(self.chemShiftRange)
       self.chemShiftRange = []
@@ -1465,7 +1465,7 @@ class CalcDistConstraintsPopup(BasePopup):
       for obj in self.tolerances:
         (name, dataDim) = obj.dataDimInfo
         tolerances.append( [dataDim, obj.minTol, obj.maxTol, obj.multiplier] )
-	
+    
       self.setMinPeakMerit()
       minMerit        = self.minPeakMerit
       scale           = self.noeFrame.getScale()
@@ -1569,7 +1569,7 @@ class CalcDistConstraintsPopup(BasePopup):
         datum.append( residueRange.endRes ) # end residue
         
         residueRanges.append( datum )
-	
+    
       self.setMinPeakMerit()
       minMerit = self.minPeakMerit
       scale    = self.noeFrame.getScale()
@@ -1825,9 +1825,9 @@ class CalcDistConstraintsPopup(BasePopup):
           for dataDim in spectrum.sortedDataDims():
             expDimRefs = dataDim.expDim.expDimRefs
             if expDimRefs:
-	      name = self.getDataDimName(dataDim)
-	      isotopes = self.getDataDimIsotopes(dataDim)
-	      tol = getAnalysisDataDim(dataDim).noeTolerance
+          name = self.getDataDimName(dataDim)
+          isotopes = self.getDataDimIsotopes(dataDim)
+          tol = getAnalysisDataDim(dataDim).noeTolerance
               tolerances.append( [ [name,dataDim],tol,1,tol] )
         
         tolCopy = []

@@ -95,9 +95,9 @@ class MarsChemShiftFile(MarsGenericFile):
   def read(self, headerCols = None, verbose = 0):
     
     if verbose == 1:
-      print "Reading %s chemical shift list %s" % (self.format,self.name)
+      print("Reading %s chemical shift list %s" % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     line = fin.readline()
     
@@ -176,7 +176,7 @@ class MarsChemShiftFile(MarsGenericFile):
   def write(self,verbose = 0):
     
     if verbose == 1:
-      print "Writing %s chemical shift list %s" % (self.format,self.name)
+      print("Writing %s chemical shift list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
     

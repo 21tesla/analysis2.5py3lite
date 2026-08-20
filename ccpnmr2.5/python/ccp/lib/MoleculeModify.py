@@ -92,7 +92,7 @@ def makeMolecule(project, molType, sequence, molName=None, startNum=1, isCyclic=
 
   try:
     addMolResidues(molecule, molType, sequence, startNum, isCyclic)
-  except ApiError, e:
+  except ApiError as e:
     try:
       molecule.delete()
     except:
@@ -155,7 +155,7 @@ def makeLinearSequence(molecule, sequence, seqCodeStart=1, isCyclic=False):
   """
   
   if len(sequence) < 2:
-    raise ApiError("Sequence %s too short for function" % `sequence`)
+    raise ApiError("Sequence %s too short for function" % str(sequence))
   
   # set up
   project = molecule.root
@@ -276,7 +276,7 @@ def makeLinearSequence(molecule, sequence, seqCodeStart=1, isCyclic=False):
     molecule.__dict__['isModified'] = True
  
     """
-  except Exception, e:
+  except Exception as e:
     # clean up 
     try:
       for molResLink in molResLinks:

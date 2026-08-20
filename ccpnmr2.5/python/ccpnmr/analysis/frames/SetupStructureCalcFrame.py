@@ -107,7 +107,7 @@ def getObjectKeyString(object, delimiter='|'):
     keyType = type(key)
     if keyType is type([]):
       keys[i] = delimiter.join([str(k) for k in key])
-    elif keyType is not type(''):
+    elif keyType is not str:
       keys[i] = str(key)
   
   return delimiter.join(keys)
@@ -255,13 +255,13 @@ class SetupStructureCalcFrame(Frame):
       names = [sl.name or str(sl.serial) for sl in shiftLists]
       index = shiftLists.index(shiftList)
         
-    print "getShiftList", names, index
+    print("getShiftList", names, index)
 
     self.shiftListPulldown.setup(names,index)
 
   def setShiftList(self, index, name=None):
   
-    print "setShiftList", index, name
+    print("setShiftList", index, name)
   
     if not name:
       index = self.shiftListPulldown.getSelectedIndex()

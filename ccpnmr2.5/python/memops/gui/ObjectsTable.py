@@ -59,7 +59,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # The widget classes must allow creation with only parent widget
 # as an argument, and also must have set and get functions.
 
-import Tkinter
+import tkinter
 
 
 from memops.gui.ButtonList import ButtonList

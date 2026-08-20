@@ -232,7 +232,7 @@ class AtomToResName:
         
       if nmrAtoms and len(nmrAtoms) < len(self.nmrAtoms):
         if self.verbose:
-          print "  Stereo assigned prochiral %s" % resName
+          print("  Stereo assigned prochiral %s" % resName)
         self.stereoAtoms[resName] = nmrAtoms
 
     if chemAtomSets:
@@ -660,17 +660,17 @@ class linkResonances(TopShared):
     # Print message...
     #
     
-    print
-    print drawBox("Starting linkResonances")
-    print
+    print()
+    print(drawBox("Starting linkResonances"))
+    print()
 
     #
     # Print message...
     #
     
-    print
-    print drawBox("Stage 1: Determining input format and setting up reference data",indent = "  ")
-    print
+    print()
+    print(drawBox("Stage 1: Determining input format and setting up reference data",indent = "  "))
+    print()
     
     #
     # Set molSystem: handling only one at a time!
@@ -712,9 +712,9 @@ class linkResonances(TopShared):
     # Print message...
     #
     
-    print
-    print drawBox("Stage 2: Determining chain/residue mapping between format data and CCPN data",indent = "  ")
-    print
+    print()
+    print(drawBox("Stage 2: Determining chain/residue mapping between format data and CCPN data",indent = "  "))
+    print()
 
     #
     # Determine the links between the chains reported for the resonances and the
@@ -729,9 +729,9 @@ class linkResonances(TopShared):
     # Print message...
     #
    
-    print
-    print drawBox("Stage 3: Determining atom naming system and creating mapping",indent = "  ")
-    print
+    print()
+    print(drawBox("Stage 3: Determining atom naming system and creating mapping",indent = "  "))
+    print()
 
     #
     # Set up resonance groups for resonances without any atom name
@@ -774,9 +774,9 @@ class linkResonances(TopShared):
     # Print message...
     #
    
-    print
-    print drawBox("Stage 4: Assigning resonances (created from format data) to atoms (CCPN data)",indent = "  ")
-    print
+    print()
+    print(drawBox("Stage 4: Assigning resonances (created from format data) to atoms (CCPN data)",indent = "  "))
+    print()
 
     #
     # Link resonances to atoms
@@ -799,7 +799,7 @@ class linkResonances(TopShared):
 
       if mandatory and not keywds.has_key(keyword):
         
-        print "  Error: mandatory linkResonances keyword '%s' missing! Cannot continue." % (keyword)
+        print("  Error: mandatory linkResonances keyword '%s' missing! Cannot continue." % (keyword))
         returnStatus = False
         break
           
@@ -814,7 +814,7 @@ class linkResonances(TopShared):
 
     if keywds and verbose:
       for keywd in keywds.keys():
-        print "  Warning: keyword '%s' with value '%s' not recognized." % (keywd,keywds[keywd])
+        print("  Warning: keyword '%s' with value '%s' not recognized." % (keywd,keywds[keywd]))
       
     return returnStatus
 
@@ -850,7 +850,7 @@ class linkResonances(TopShared):
       
           singleProchiralStatus = resStatusMapping.isSingleProchiral
           if self.verbose:
-            print "  Set single prochiral status for '%s' to %d from mapping." % (resName,singleProchiralStatus)
+            print("  Set single prochiral status for '%s' to %d from mapping." % (resName,singleProchiralStatus))
 
 
       if singleProchiralStatus == None:
@@ -881,11 +881,11 @@ class linkResonances(TopShared):
 
       if singleProchiralStatus == 0:
  
-        print "  Adding resonance for prochiral atom/group %s (from residue %s %d, resonance %s)..." % (otherAtomName,ccpCode,seqCode,self.resonance.name)
+        print("  Adding resonance for prochiral atom/group %s (from residue %s %d, resonance %s)..." % (otherAtomName,ccpCode,seqCode,self.resonance.name))
  
       elif singleProchiralStatus == 1:
 
-        print "  Setting resonance %s (%s %d) to non-stereospecifically assigned..." % (self.resonance.name,ccpCode,seqCode)
+        print("  Setting resonance %s (%s %d) to non-stereospecifically assigned..." % (self.resonance.name,ccpCode,seqCode))
 
     return singleProchiralStatus
 
@@ -919,7 +919,7 @@ class linkResonances(TopShared):
           singleResonanceStatus = resStatusMapping.isSinglePossEquiv
           
           if self.verbose:
-            print "  Set single possible equivalent status for '%s' to %d from mapping." % (resName,singleResonanceStatus)
+            print("  Set single possible equivalent status for '%s' to %d from mapping." % (resName,singleResonanceStatus))
 
       if singleResonanceStatus == None:
 
@@ -946,7 +946,7 @@ class linkResonances(TopShared):
  
     if self.verbose and singleResonanceStatus == 0:
  
-      print "  Changing status to equivalent for aromatic/amide atom %s (from residue %s %d)..." % (otherAtomName,ccpCode,seqCode)
+      print("  Changing status to equivalent for aromatic/amide atom %s (from residue %s %d)..." % (otherAtomName,ccpCode,seqCode))
  
     return singleResonanceStatus
 
@@ -1025,11 +1025,11 @@ class linkResonances(TopShared):
         if formatsFound[format] == len(resonances):
           if not self.format:
             if self.verbose:
-              print "  Selecting format %s for atom name translation." % format
+              print("  Selecting format %s for atom name translation." % format)
             self.format = format
           elif self.verbose:
             # TODO: need Multiple selection really but ignored for now
-            print "  WARNING: format %s also fully matches!" % format
+            print("  WARNING: format %s also fully matches!" % format)
       
       if not self.format:
         matchValues = formatsFound.values()
@@ -1039,10 +1039,10 @@ class linkResonances(TopShared):
           if formatsFound[format] == matchValues[-1]:
             if not self.format:
               if self.verbose:
-                print "  Selecting format %s for atom name translation - has highest match." % format
+                print("  Selecting format %s for atom name translation - has highest match." % format)
               self.format = format
             elif self.verbose:
-              print "  Warning: format %s also has highest match!" % format
+              print("  Warning: format %s also has highest match!" % format)
       
   def setupRefData(self):
  
@@ -1146,7 +1146,7 @@ class linkResonances(TopShared):
                 self.resUnassignedNames[newResName].append(resonance)
                 
                 if self.verbose:
-                  print "  Mapped specific name '%s' to '%s'..." % (resName,newResName)
+                  print("  Mapped specific name '%s' to '%s'..." % (resName,newResName))
                 
                 resNames.insert(resNameIndex,newResName)
         
@@ -1194,7 +1194,7 @@ class linkResonances(TopShared):
               #       atomName...
               
               if self.verbose:
-                print "  Error: Can't handle resonance name '%s'... ignored" % resName
+                print("  Error: Can't handle resonance name '%s'... ignored" % resName)
               
             # Delete name again... bit wasteful but unlikely to happen anyway
             self.resUnassignedNames[resName].remove(resonance)
@@ -1228,7 +1228,7 @@ class linkResonances(TopShared):
     if self.missingAtomNames and not self.nmrConstraintStore:
       
       if self.verbose:
-        print 'Creating resonance groups for resonances with no atom names...'
+        print('Creating resonance groups for resonances with no atom names...')
         
       skippedResonances = 0
     
@@ -1400,7 +1400,7 @@ class linkResonances(TopShared):
 
       else:
         if self.verbose:
-          print "  No valid resonances connected to residue... ignoring naming system selection"
+          print("  No valid resonances connected to residue... ignoring naming system selection")
         namingSystemName = 'IUPAC'
 
 
@@ -1409,8 +1409,8 @@ class linkResonances(TopShared):
         self.namingSystemName = namingSystemName # TODO: is this correct?!
 
         if self.verbose:
-          print "  Naming system %s selected" % namingSystemName
-          print
+          print("  Naming system %s selected" % namingSystemName)
+          print()
 
       else:
         self.status = False
@@ -1531,7 +1531,7 @@ class linkResonances(TopShared):
     
       if not self.formatChainCodeDict.has_key(chainCode):
         if verbose:
-          print "  Warning: ignoring file resonance '%s'... chainCode not mapped" % resName
+          print("  Warning: ignoring file resonance '%s'... chainCode not mapped" % resName)
         return 0
 
       else:
@@ -1603,7 +1603,7 @@ class linkResonances(TopShared):
               if not resNameText:
                 resNameText = ','.join([getResNameText(res) for res in self.resUnassignedNames[self.resName]])
             
-              print "  Error: ignoring file resonance '%s'... it is linked to a residue that is listed as not valid." % resNameText
+              print("  Error: ignoring file resonance '%s'... it is linked to a residue that is listed as not valid." % resNameText)
             
             return 0
             
@@ -1617,7 +1617,7 @@ class linkResonances(TopShared):
         if not resNameText:
           resNameText = ','.join([getResNameText(res) for res in self.resUnassignedNames[self.resName]])
       
-        print "  Error: ignoring file resonance '%s'... no matching residue in data model" % resNameText
+        print("  Error: ignoring file resonance '%s'... no matching residue in data model" % resNameText)
       
       self.seqCode = ''
       self.seqInsertCode = None
@@ -1632,7 +1632,7 @@ class linkResonances(TopShared):
       #
       
       if verbose:
-        print "  Warning: resonance '%s' gives multiple residue matches - ignoring." % resName
+        print("  Warning: resonance '%s' gives multiple residue matches - ignoring." % resName)
 
       self.seqCode = ''
       self.seqInsertCode = None
@@ -1846,12 +1846,12 @@ class linkResonances(TopShared):
             resNameText = 'new'
 
           if self.verbose:
-            print "  Warning: using name %s for %s - %s to %s resName %s." % (newAtomName,self.resName,actionText,resNameText,newResName)
+            print("  Warning: using name %s for %s - %s to %s resName %s." % (newAtomName,self.resName,actionText,resNameText,newResName))
 
       else:
 
         if self.verbose:
-          print "  Warning: not linking resonance '%s'." % (self.resName)
+          print("  Warning: not linking resonance '%s'." % (self.resName))
 
         #
         # TODO: add error message for nmrStar? Or just leave... will show up as not linked anyway.
@@ -1906,7 +1906,7 @@ class linkResonances(TopShared):
             self.nmrRes.newAtom(name = self.atomName)
             self.chemCompVar = self.nmrRes.chemCompVar
             
-            print "  Warning: reset protonation state from %s to %s for %s (%s,%d) based on format atom name %s!" % (origDesc,newDesc,self.ccpCode,self.chain.code,self.nmrRes.seqId,self.atomName)
+            print("  Warning: reset protonation state from %s to %s for %s (%s,%d) based on format atom name %s!" % (origDesc,newDesc,self.ccpCode,self.chain.code,self.nmrRes.seqId,self.atomName))
       
       #
       # Check whether the current naming system has any names for this particular chemCompVar
@@ -1928,7 +1928,7 @@ class linkResonances(TopShared):
             tempNamingSystem = self.chemComp.findFirstNamingSystem(name = tempNamingSystemName)
             if tempNamingSystem and self.hasAtomSysNames(tempNamingSystem):
               self.ccNamingSystems[self.chemComp] = tempNamingSystem
-              print "  Warning: using local naming system %s for %s because no %s atom names available!" % (tempNamingSystemName,self.chemComp.ccpCode,self.namingSystemName)
+              print("  Warning: using local naming system %s for %s because no %s atom names available!" % (tempNamingSystemName,self.chemComp.ccpCode,self.namingSystemName))
               break
        
       elif self.ccNamingSystems[self.chemComp].name != self.namingSystemName:
@@ -1989,7 +1989,7 @@ class linkResonances(TopShared):
           chemAtomSysNames = self.getAtomSysNames(tryAtomName,self.namingSystemName,self.chemCompVar)
 
           if chemAtomSysNames:            
-            print "  Warning: reset atom name %s to %s for residue %s - is single atom." % (self.atomName,tryAtomName,self.resName)
+            print("  Warning: reset atom name %s to %s for residue %s - is single atom." % (self.atomName,tryAtomName,self.resName))
       
       """
       #
@@ -2005,7 +2005,7 @@ class linkResonances(TopShared):
             chemAtomSysNames = self.getAtomSysNames(self.atomName, tempNamingSystemName, self.chemCompVar)
             
             if chemAtomSysNames:
-              print "  Warning: using naming system %s to set atom name %s" % (tempNamingSystemName,self.atomName)
+              print("  Warning: using naming system %s to set atom name %s" % (tempNamingSystemName,self.atomName))
               break
       """
       
@@ -2041,11 +2041,11 @@ class linkResonances(TopShared):
             self.chemAtoms = chemAtomSet.sortedChemAtoms()
       
       if not chemAtomSysNames and not foundChemAtom:
-        print "  Error: No matches at all for resonance name %s (%s)" % (resName,self.resName),
+        print("  Error: No matches at all for resonance name %s (%s)" % (resName,self.resName),)
         if self.nmrRes:
-          print " - ccpCode %s" % self.nmrRes.ccpCode
+          print(" - ccpCode %s" % self.nmrRes.ccpCode)
         else:
-          print
+          print()
         
       #
       # If no chemAtomSysName or following chemAtom match found,
@@ -2185,13 +2185,13 @@ class linkResonances(TopShared):
         if comparisonStatus == 0:
         
           if self.verbose:
-            print "  Error: Partial subset detected. Is illegal!"
+            print("  Error: Partial subset detected. Is illegal!")
           
         elif comparisonStatus == 1:
           
           if self.verbose:
-            print "  Warning: Full subset detected for %s. Added to full set %s." % (str(subSet.resNameList),
-                                                                                     str(fullSet.resNameList))
+            print("  Warning: Full subset detected for %s. Added to full set %s." % (str(subSet.resNameList),
+                                                                                     str(fullSet.resNameList)))
 
           #
           # This situation is principle possible for prochirals (some stereo assigned, some not)
@@ -2306,7 +2306,7 @@ class linkResonances(TopShared):
                   if chemAtomSysName == atomName:
                   
                     if self.verbose:
-                      print "  Found equivalent atom group name match for %s - collapsing info on %s" % (resName,atomSetResName)
+                      print("  Found equivalent atom group name match for %s - collapsing info on %s" % (resName,atomSetResName))
                     
                     #
                     # Copy associated info
@@ -2333,20 +2333,20 @@ class linkResonances(TopShared):
     set = 0
     for atomToResName in self.atomToResNameList:
       
-      print set,len(atomToResName.nmrAtoms)
+      print(set,len(atomToResName.nmrAtoms))
       
       for resName in atomToResName.resNameList:
         
-        print "   ",resName,
+        print("   ",resName,)
         
         chemAtomSets = atomToResName.chemAtomSets[resName]
       
         if chemAtomSets:
           for chemAtomSet in chemAtomSets:
         
-            print chemAtomSet.name,
+            print(chemAtomSet.name,)
           
-        print
+        print()
       
             
       set += 1
@@ -2434,9 +2434,9 @@ class linkResonances(TopShared):
           printResidueInfo = True
           
         if printResidueInfo:
-          print
-          print drawBox("Assignments for residue %d, chain '%s' (%s, code %s)" % (self.nmrRes.seqId,self.nmrRes.chain.code,self.nmrRes.ccpCode,self.nmrRes.seqCode), indent = "  ")
-          print
+          print()
+          print(drawBox("Assignments for residue %d, chain '%s' (%s, code %s)" % (self.nmrRes.seqId,self.nmrRes.chain.code,self.nmrRes.ccpCode,self.nmrRes.seqCode), indent = "  "))
+          print()
               
       #
       # Check if any resonance matches the current self.atomsFound
@@ -2553,7 +2553,7 @@ class linkResonances(TopShared):
             if not self.linkToExistingResonances(nmrAtoms,atomSets,atomToResName.resNameList,resRequired = 2):
 
               if self.verbose:
-                print "  Set %s as %s %s prochiral (with multi group)" % (resNameText,prochiralType,stereoStatusText)
+                print("  Set %s as %s %s prochiral (with multi group)" % (resNameText,prochiralType,stereoStatusText))
               otherResonance = self.setProchiralGroup(atomSets)
 
             if otherChemAtomSets:
@@ -2565,7 +2565,7 @@ class linkResonances(TopShared):
               #
 
               if self.verbose:
-                print "    Resetting existing resonances..."
+                print("    Resetting existing resonances...")
 
               for nmrAtom in nmrAtoms:
 
@@ -2619,7 +2619,7 @@ class linkResonances(TopShared):
               interaction.destroy()
               
               if not resNameGroups:
-                print "   Error: Not grouping resonances with name %s because automatic grouping failed or no popup allowed." % (otherChemAtomSets)
+                print("   Error: Not grouping resonances with name %s because automatic grouping failed or no popup allowed." % (otherChemAtomSets))
 
               #
               # Have to group resonances and reset otherChemAtomSets, use first name as reference...
@@ -2640,7 +2640,7 @@ class linkResonances(TopShared):
                     resonance = self.joinResonanceFromResNames([resName],isotopeCode)
 
                     if self.verbose:
-                      print "  Warning: Collapsing group resonances for %s to %s" % (resName,refResName)
+                      print("  Warning: Collapsing group resonances for %s to %s" % (resName,refResName))
 
                     copyResonanceInfo(resonance,refResonance,nmrShiftSelect = self.nmrShiftSelect,deleteOldInfo = 1,toResName = refResName,verbose = self.verboseCopy)
 
@@ -2673,13 +2673,13 @@ class linkResonances(TopShared):
 
                 if not self.linkToExistingResonances(nmrAtoms,atomSets,[resNames[0]],resRequired = 2,otherResonance = otherResonance,otherResNames = [resNames[1]]):
                   if self.verbose:
-                    print "  Set %s as %s prochiral, non-stereo, two resonances." % (resNameText,prochiralType)
+                    print("  Set %s as %s prochiral, non-stereo, two resonances." % (resNameText,prochiralType))
                   self.setProchiralGroup(atomSets, otherResonance = otherResonance)
 
               else:
 
                 if self.verbose:
-                  print "  Linking up single stereo assigned resonances..."
+                  print("  Linking up single stereo assigned resonances...")
 
                 #
                 # Resonances already exist: just link them up
@@ -2712,7 +2712,7 @@ class linkResonances(TopShared):
 
                   if not self.linkToExistingResonances(nmrAtoms,atomSets,[resName],resRequired = 1):
                     if self.verbose:
-                      print "  Set %s as %s prochiral, stereo, two resonances." % (resName,prochiralType)
+                      print("  Set %s as %s prochiral, stereo, two resonances." % (resName,prochiralType))
 
                     atomSet = nmrAtoms[0].atomSet
                     resonanceSet = self.resonanceSetClass(self.resonanceParent,resonances = [self.resonance], atomSets = [atomSet])
@@ -2750,13 +2750,13 @@ class linkResonances(TopShared):
                   if not singleProchiralStatus:
 
                     if self.verbose:
-                      print "  Set %s as %s prochiral, non-stereo, one resonance (copied)." % (resNameText,prochiralType)
+                      print("  Set %s as %s prochiral, non-stereo, one resonance (copied)." % (resNameText,prochiralType))
                     self.setProchiralGroup(atomSets)
 
                   else:
 
                     if self.verbose:
-                      print "  Set %s as %s prochiral, non-stereo, one resonance (kept single)." % (resNameText,prochiralType)
+                      print("  Set %s as %s prochiral, non-stereo, one resonance (kept single)." % (resNameText,prochiralType))
 
                     resonanceSet = self.resonanceSetClass(self.resonanceParent,resonances = [self.resonance], atomSets = atomSets)
                     resonanceName = createNonStereoName(atomSets[0].name,'a')
@@ -2769,7 +2769,7 @@ class linkResonances(TopShared):
                 #
 
                 if self.verbose:
-                  print "  Linking up single stereo assigned resonance..."
+                  print("  Linking up single stereo assigned resonance...")
 
                 nmrAtoms = atomToResName.stereoAtoms[resName]
 
@@ -2794,7 +2794,7 @@ class linkResonances(TopShared):
             if not self.linkToExistingResonances(nmrAtoms,None,atomToResName.resNameList,resRequired = 1):
 
               if self.verbose:
-                print "  Set %s as %s prochiral (stereo)" % (resNameText,prochiralType)
+                print("  Set %s as %s prochiral (stereo)" % (resNameText,prochiralType))
 
               self.createResonanceAtomLink(atomName,nmrAtoms)
               setCcpNmrResonanceName(self.resonance,nmrAtoms[0],atomName = atomName)
@@ -2835,7 +2835,7 @@ class linkResonances(TopShared):
             if not self.linkToExistingResonances(nmrAtoms,None,atomToResName.resNameList,resRequired = 1):
 
               if self.verbose:
-                print "  Set %s as multi group" % resNameText
+                print("  Set %s as multi group" % resNameText)
 
               self.createResonanceAtomLink(atomName,nmrAtomGroup)
               setCcpNmrResonanceName(self.resonance,nmrAtomGroup[0],atomName = atomName)
@@ -2917,7 +2917,7 @@ class linkResonances(TopShared):
                       del(atomToResName.singleAtoms[resName])
 
                       if self.verbose:
-                        print "  Reset status of resonance %s" % resName
+                        print("  Reset status of resonance %s" % resName)
 
 
             #
@@ -2956,7 +2956,7 @@ class linkResonances(TopShared):
 
                 if not self.linkToExistingResonances(nmrAtoms,atomSets,[refResName],resRequired = 2):
                   if self.verbose:
-                    print "  Set %s as grouped amide." % resNameText
+                    print("  Set %s as grouped amide." % resNameText)
                   otherResonance = self.resonanceClass(self.resonanceParent,isotopeCode = isotopeCode)
                   copyResonanceInfo(self.resonance,otherResonance,nmrShiftSelect = self.nmrShiftSelect,copyTrack = True,verbose = self.verboseCopy)
                   resonanceSet = self.resonanceSetClass(self.resonanceParent,resonances = [self.resonance,otherResonance], atomSets = atomSets)
@@ -3097,7 +3097,7 @@ class linkResonances(TopShared):
                       singleAtomResName = ccpName
 
                     if self.verbose:
-                      print "  %s '%s' as single aromatic/amide atom" % (setCode,singleAtomResName)
+                      print("  %s '%s' as single aromatic/amide atom" % (setCode,singleAtomResName))
 
                   #
                   # Keep track
@@ -3308,7 +3308,7 @@ class linkResonances(TopShared):
                       if not self.linkToExistingResonances([nmrAtom],[atomSet],[resonance.name],resRequired = 1):
 
                         if self.verbose:
-                          print "  Forced %s as single atom (atomSet already present)" % resNameText
+                          print("  Forced %s as single atom (atomSet already present)" % resNameText)
 
                         self.createResonanceAtomLink(atomName,[nmrAtom])
                         setCcpNmrResonanceName(self.resonance,nmrAtom,atomName = atomName)
@@ -3326,7 +3326,7 @@ class linkResonances(TopShared):
                       refResName = ccpName
 
                     if self.verbose:
-                      print "  %s %s as grouped aromatic/amide atoms" % (setCode,refResName)
+                      print("  %s %s as grouped aromatic/amide atoms" % (setCode,refResName))
 
                     resonanceList.append(self.resonance)
 
@@ -3335,7 +3335,7 @@ class linkResonances(TopShared):
                       resonance = self.joinResonanceFromResNames([resName],isotopeCode)
 
                       if self.verbose:
-                        print "  Warning: Collapsing grouped aromatic/amide resonances for %s to %s" % (resName,refResName)
+                        print("  Warning: Collapsing grouped aromatic/amide resonances for %s to %s" % (resName,refResName))
 
                       copyResonanceInfo(resonance,self.resonance,nmrShiftSelect = self.nmrShiftSelect,toResName = refResName,copyTrack = True,verbose = self.verboseCopy)
                       otherResonances.append([resonance,resName])
@@ -3365,7 +3365,7 @@ class linkResonances(TopShared):
               if not self.linkToExistingResonances(nmrAtoms,None,atomToResName.resNameList,resRequired = 1):
 
                 if self.verbose:
-                  print "  Set %s as single atom" % resNameText
+                  print("  Set %s as single atom" % resNameText)
 
                 self.createResonanceAtomLink(atomName,[nmrAtom])
                 setCcpNmrResonanceName(self.resonance,nmrAtom,atomName = atomName)
@@ -3386,7 +3386,7 @@ class linkResonances(TopShared):
 
         if not resSet:
           if len(resonanceList) > 1 and self.verbose:
-            print "ERROR: %s has unassigned resonance in list for printing - ignored" % resNameText
+            print("ERROR: %s has unassigned resonance in list for printing - ignored" % resNameText)
           continue
       
         resonances = list(resSet.sortedResonances())
@@ -3483,13 +3483,13 @@ class linkResonances(TopShared):
 
               outText[i] = outText[i][:-1] + "' atom(s)"
 
-          print
+          print()
 
           for i in range(0,len(outText)):
             if len(resonances) > i or len(atomSets) > i:
-              print outText[i]
+              print(outText[i])
 
-          print
+          print()
 
     self.numResonancesLinked += len(allLinkedResonances)
  
@@ -3553,7 +3553,7 @@ class linkResonances(TopShared):
           oldResName = getResNameText(resonance)
 
           if self.verbose:
-            print "  Warning: Collapsing resonances for %s to %s" % (oldResName,refResName)
+            print("  Warning: Collapsing resonances for %s to %s" % (oldResName,refResName))
           copyResonanceInfo(resonance,refResonance,nmrShiftSelect = self.nmrShiftSelect,deleteOldInfo = 1,toResName = refResName,verbose = self.verboseCopy)
           
           self.deleteResonance(resonance,[resName])
@@ -3596,7 +3596,7 @@ class linkResonances(TopShared):
           #
           
           if self.verbose:
-            print "  Copying information from %s to existing single resonance..." % (resNameText)
+            print("  Copying information from %s to existing single resonance..." % (resNameText))
           copyResonanceInfo(resonance,existingResonance,nmrShiftSelect = self.nmrShiftSelect,toResName = str(self.existingResonances.resNames[0]),verbose = self.verboseCopy)
             
           #
@@ -3615,7 +3615,7 @@ class linkResonances(TopShared):
           if resRequired == 1:
             
             if self.verbose:
-              print "    Deleting resonance %s..." % (resNameText)
+              print("    Deleting resonance %s..." % (resNameText))
             self.deleteResonance(resonance,resNames)
             self.resonance = existingResonance
             self.addToExtendResonanceList(existingResonance)          # For output at end of script...
@@ -3627,7 +3627,7 @@ class linkResonances(TopShared):
           elif resRequired == 2:
             
             if self.verbose:
-              print "    Linking to same resonanceSet..."
+              print("    Linking to same resonanceSet...")
             resonance.resonanceSet = existingResonance.resonanceSet
             
 
@@ -3668,7 +3668,7 @@ class linkResonances(TopShared):
             #
           
             if self.verbose:
-              print "  Copying information from %s to two existing resonances..." % (resNameText)
+              print("  Copying information from %s to two existing resonances..." % (resNameText))
 
             for i in range(0,len(self.existingResonances.resonances)):
               existingResonance = self.existingResonances.resonances[i]
@@ -3707,7 +3707,7 @@ class linkResonances(TopShared):
               selectedResonances = self.selectResonances(resNames,multi = multi)
               
             if not selectedResonances:
-              print "  Error: no resonance selected... aborting this step."
+              print("  Error: no resonance selected... aborting this step.")
               return False
             
             for selectedResonance in selectedResonances:
@@ -3722,7 +3722,7 @@ class linkResonances(TopShared):
         else:
           
           if self.verbose:
-            print "  Error: can only handle relinking to one or two resonances."
+            print("  Error: can only handle relinking to one or two resonances.")
           return False
           
           # TODO: or do a selection anyway? But could get messy...
@@ -3772,7 +3772,7 @@ class linkResonances(TopShared):
                   addText = " (no original names available)"
                 else:
                   addText = " to %s" % self.existingResonances.resNames[0]
-                print "    Warning: special case - autoconnecting resonances %s%s." % (str(resNamesList),addText)
+                print("    Warning: special case - autoconnecting resonances %s%s." % (str(resNamesList),addText))
 
             elif len(existingResNames) == 2:
 
@@ -3813,7 +3813,7 @@ class linkResonances(TopShared):
               if sameResNames == 2:
                 setConnection = True
                 if self.verbose:
-                  print "    Warning: special case - autoconnecting resonances %s with same double name." % (str(resNamesList))
+                  print("    Warning: special case - autoconnecting resonances %s with same double name." % (str(resNamesList)))
 
               elif len(matchResNameList) == 2 and matchResNameList[0] != matchResNameList[1]:
                 if matchResNameList[1] < matchResNameList[0]:
@@ -3821,7 +3821,7 @@ class linkResonances(TopShared):
 
                 setConnection = True
                 if self.verbose:
-                  print "    Warning: special case - autoconnecting resonances %s to resonances with matching atomName index." % (str(resNamesList))
+                  print("    Warning: special case - autoconnecting resonances %s to resonances with matching atomName index." % (str(resNamesList)))
 
             if setConnection:           
               for i in range(0,len(self.existingResonances.resonances)):
@@ -3860,7 +3860,7 @@ class linkResonances(TopShared):
               setConnection = True
 
               if self.verbose:
-                print "    Warning: special case - autoconnecting resonances %s (no existing resNames, creating one new resonance to existing resonanceSet)." % (str(resNamesList))
+                print("    Warning: special case - autoconnecting resonances %s (no existing resNames, creating one new resonance to existing resonanceSet)." % (str(resNamesList)))
 
             elif len(existingResNames) == 1:
 
@@ -3894,7 +3894,7 @@ class linkResonances(TopShared):
                   resNamesList.reverse()
 
               if self.verbose:
-                print "    Warning: special case - autoconnecting resonances %s (trying to match to existing resNames, creating one new resonance to existing resonanceSet)." % (str(resNamesList))
+                print("    Warning: special case - autoconnecting resonances %s (trying to match to existing resNames, creating one new resonance to existing resonanceSet)." % (str(resNamesList)))
 
             if setConnection:   
 
@@ -3948,7 +3948,7 @@ class linkResonances(TopShared):
               resNamesList.reverse()
           
             if self.verbose:
-              print "    Warning: special case - autoconnecting resonances %s (using atom names of stereospecific existing resonances to connect)." % (str(resNamesList))
+              print("    Warning: special case - autoconnecting resonances %s (using atom names of stereospecific existing resonances to connect)." % (str(resNamesList)))
 
             for i in range(0,len(self.existingResonances.resonances)):
               existingResonance = self.existingResonances.resonances[i]
@@ -3988,7 +3988,7 @@ class linkResonances(TopShared):
           
           else:
             if self.verbose:
-              print "  Error: no resonances selected."
+              print("  Error: no resonances selected.")
             return False
              
         return True
@@ -4028,7 +4028,7 @@ class linkResonances(TopShared):
         selectedResonanceNames = list(resLinkMapping.selectResonanceNames)
         
         if self.verbose:
-          print "  Autoselected resonances '%s' for '%s'" % (str(selectedResonanceNames),resName)
+          print("  Autoselected resonances '%s' for '%s'" % (str(selectedResonanceNames),resName))
       
         for i in range(0,len(self.existingResonances.resonances)):
         
@@ -4066,7 +4066,7 @@ class linkResonances(TopShared):
       
       else:
         tResNames = [ern for ern in self.existingResonances.resNames]
-        print "  ERROR: no resonances selected from list %s because no user interaction allowed." % str(tResNames)
+        print("  ERROR: no resonances selected from list %s because no user interaction allowed." % str(tResNames))
       
     
     return selectedResonances
@@ -4079,7 +4079,7 @@ class linkResonances(TopShared):
     if not resonance.isDeleted:
       resonance.delete()
     elif self.verbose:
-      print "  Warning: attempt to delete already deleted %s %s..." % (resonance.className,getResNameText(resonance))
+      print("  Warning: attempt to delete already deleted %s %s..." % (resonance.className,getResNameText(resonance)))
 
   def deleteUnassignedResonance(self,resonance,resName):
     
@@ -4174,12 +4174,12 @@ class linkResonances(TopShared):
         
     if self.atomsFound == self.chemAtoms:
       if self.verbose:
-        print "No match with real atoms for chemAtoms %s (%s,%s)" % (str(chemAtomNames),self.seqCode,self.nmrRes.molResidue.ccpCode)
+        print("No match with real atoms for chemAtoms %s (%s,%s)" % (str(chemAtomNames),self.seqCode,self.nmrRes.molResidue.ccpCode))
       return 0
       
     elif self.chemAtoms:
       if self.verbose:
-        print "Error: ChemAtoms  %s do not match real atoms (%s,%s)." % (str(chemAtomNames),self.seqCode,self.nmrRes.molResidue.ccpCode)
+        print("Error: ChemAtoms  %s do not match real atoms (%s,%s)." % (str(chemAtomNames),self.seqCode,self.nmrRes.molResidue.ccpCode))
       return 0
       
     else:
@@ -4323,7 +4323,7 @@ class linkResonances(TopShared):
       if self.atomName:
       
         if self.verbose:
-          print "  Mapping resonance '%s' to atomName %s" % (self.resName,self.atomName)
+          print("  Mapping resonance '%s' to atomName %s" % (self.resName,self.atomName))
         self.namingSystemName = 'IUPAC'
         return True
         
@@ -4334,7 +4334,7 @@ class linkResonances(TopShared):
         #
         
         if self.verbose:
-          print "  Ignoring resonance '%s' - will not be linked" % self.resName
+          print("  Ignoring resonance '%s' - will not be linked" % self.resName)
         return False
 
     else:
@@ -4361,7 +4361,7 @@ class linkResonances(TopShared):
 
     if self.propagateMapping == None:
       if self.verbose:
-        print "Can't link resonance name: %s (chemAtom selection dismissed)" % self.resName
+        print("Can't link resonance name: %s (chemAtom selection dismissed)" % self.resName)
       return 0
     
     elif chemAtomOrSets:
@@ -4413,7 +4413,7 @@ class linkResonances(TopShared):
 
       self.nameMapping.namingSystem = self.namingSystemName
       if self.verbose:
-        print "  Warning: set namingSystem for nameMapping from 'Unknown' to %s." % self.namingSystemName
+        print("  Warning: set namingSystem for nameMapping from 'Unknown' to %s." % self.namingSystemName)
       
     else:
       
@@ -4442,7 +4442,7 @@ class linkResonances(TopShared):
 
         if molSystemCode != self.molSystem.code:
           if self.verbose:
-            print "  Warning: molSystem code %s in mapping does not match current molSystem." % molSystemCode
+            print("  Warning: molSystem code %s in mapping does not match current molSystem." % molSystemCode)
 
         tempMapChains = self.molSystem.sortedChains()
         
@@ -4461,7 +4461,7 @@ class linkResonances(TopShared):
       else:
       
         if self.verbose:
-          print "  Error: incomplete mapping - ignored."
+          print("  Error: incomplete mapping - ignored.")
         continue
       
 
@@ -4486,7 +4486,7 @@ class linkResonances(TopShared):
       if not mapChains:
         
         if self.verbose:
-          print "  Error: no chains left to map to - ignored"
+          print("  Error: no chains left to map to - ignored")
         continue
 
 
@@ -4558,13 +4558,13 @@ class linkResonances(TopShared):
           
             if mappingData and mappingData.value != atomMappingName:
               if self.verbose:
-                print "  Warning: propagating mapping to %s (previous mapping to atomName %s overwritten)." % (tempResName,mappingData.value)
+                print("  Warning: propagating mapping to %s (previous mapping to atomName %s overwritten)." % (tempResName,mappingData.value))
               mappingData.value = atomMappingName
               continue
           
             elif not mappingData:
               if self.verbose:
-                print "  Autoset mapping: resonance '%s' to atomName %s" % (resName,atomMappingName)
+                print("  Autoset mapping: resonance '%s' to atomName %s" % (resName,atomMappingName))
               mappingData = Implementation.AppDataString(application = self.format, keyword = ccpNmrMapping_kw, value = atomMappingName)
               tempResonance.addApplicationData(mappingData)
 
@@ -4621,10 +4621,10 @@ class linkResonances(TopShared):
 
     if atomMappingName:
       if self.verbose:
-        print "  New mapping: resonance '%s' to atomName %s" % (resName,atomMappingName)
+        print("  New mapping: resonance '%s' to atomName %s" % (resName,atomMappingName))
     else:
       if self.verbose:
-        print "  New mapping: resonance '%s' will not be linked." % (resName)
+        print("  New mapping: resonance '%s' will not be linked." % (resName))
     
     #
     # Propagate only in this chain, in all similar molecules, or in the molSystem?
@@ -4771,7 +4771,7 @@ class linkResonances(TopShared):
           
           if mappingData and mappingData.value != atomMappingName:
             if self.verbose:
-              print "  Warning: propagating mapping to %s (previous mapping to atomName %s overwritten)." % (tempResName,mappingData.value)
+              print("  Warning: propagating mapping to %s (previous mapping to atomName %s overwritten)." % (tempResName,mappingData.value))
             tempResonance.removeApplicationData(mappingData)
             mappingData = None
           
@@ -4861,8 +4861,8 @@ class linkResonances(TopShared):
         atomNames.append(chemAtomSysName.atomName)
       
       if self.verbose:
-        print "  Error: no match for chemAtomSysName %s, atom(s) %s! (molType %s, ccpCode %s)" % (
-      
+        print("  Error: no match for chemAtomSysName %s, atom(s) %s! (molType %s, ccpCode %s)" % (
+)
                                                   chemAtomSysName.sysName,
                                                   str(atomNames),
                                                   chemAtomSysName.namingSystem.chemComp.molType,
@@ -4873,8 +4873,8 @@ class linkResonances(TopShared):
     if len(validChemAtomSysNames) > 1:
     
       if self.verbose:
-        print "  Warning: Multiple matches for search on atom name %s (molType %s, ccpCode %s). Picked first valid atom" % (
-      
+        print("  Warning: Multiple matches for search on atom name %s (molType %s, ccpCode %s). Picked first valid atom" % (
+)
                                                   self.atomName,
                                                   chemAtomSysName.namingSystem.chemComp.molType,
                                                   ccpCode),
@@ -4884,13 +4884,13 @@ class linkResonances(TopShared):
         if isinstance(chemAtomOrSet,ChemComp.ChemAtomSet):
           
           if self.verbose:
-            print  "set %s." % chemAtomSysName.atomName
+            print("set %s." % chemAtomSysName.atomName)
           validChemAtomSysName = (chemAtomSysName,chemAtomOrSet,'chemAtomSet')
           break
 
       if len(validChemAtomSysNames) > 1:
         if self.verbose:
-          print "%s." % validChemAtomSysNames[0][0].atomName
+          print("%s." % validChemAtomSysNames[0][0].atomName)
         validChemAtomSysName = validChemAtomSysNames[0]
 
     else:
@@ -4970,7 +4970,7 @@ class linkResonances(TopShared):
           if len(chemAtoms) != len(chemAtomList) and self.makeMethylsEquivalent:
             
             if self.verbose:
-              print "  Adding missing equivalent chemAtoms for %s: %s." % (ccpCode,self.resName)
+              print("  Adding missing equivalent chemAtoms for %s: %s." % (ccpCode,self.resName))
 
             chemAtoms = chemAtomList
             
@@ -4996,7 +4996,7 @@ class linkResonances(TopShared):
               #
 
               if self.verbose:
-                print "  Setting prochiral chemAtomSets for %s: %s." % (ccpCode,self.resName)
+                print("  Setting prochiral chemAtomSets for %s: %s." % (ccpCode,self.resName))
 
               (chemAtoms,chemAtomSets) = self.setDeepProchiral(deepChemAtomSet)
 
@@ -5089,8 +5089,8 @@ class linkResonances(TopShared):
     else:
 
       if self.verbose:
-        print "      Merging shift values %.3f and %.3f for resonance %s." % (shiftValue,otherShiftValue,toResName)
-        print
+        print("      Merging shift values %.3f and %.3f for resonance %s." % (shiftValue,otherShiftValue,toResName))
+        print()
 
       newShiftValue = (otherShiftValue + shiftValue) / 2
     
@@ -5212,7 +5212,7 @@ class linkResonances(TopShared):
           if mapResNamesDict.has_key(matchName):
             
             if self.verbose:
-              print " Copying '%s' to '%s'..." % (origResName,matchName)
+              print(" Copying '%s' to '%s'..." % (origResName,matchName))
             matchResonances = mapResNamesDict[matchName]
             
             for origResonance in origResonances:
@@ -5222,7 +5222,7 @@ class linkResonances(TopShared):
           else:
             
             if self.verbose:
-              print " Creating '%s' from '%s'..." % (matchName,origResName)
+              print(" Creating '%s' from '%s'..." % (matchName,origResName))
 
             for origResonance in origResonances:
               matchResonance = self.resonanceClass(self.resonanceParent,isotopeCode = origResonance.isotopeCode)

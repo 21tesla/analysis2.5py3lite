@@ -121,7 +121,7 @@ def _connectedShiftMeasurements(expMeasurement):
 
   atomSites = expMeasurement.atomSites
   if len(atomSites) != 1:
-    print ("WARNING%s Shift must have single AtomSite, has: %s"
+    print("WARNING%s Shift must have single AtomSite, has: %s"
            % (expMeasurement.nmrExpPrototype.name, [x.name for x in atomSites]))
     if not atomSites:
       return result

@@ -15,10 +15,10 @@ __author__ = "Wim Vranken <wim@ebi.ac.uk> Jurgen Doreleijers <jurgenfd@gmail.com
 
 def convert(projectName, inputDir, outputFile, excludeSaveFrames = ('general_distance_constraints',) ):
 
-    print "projectName: %s" % projectName
-    print "inputDir: %s" % inputDir
-    print "outputFile: %s" % outputFile
-    print "excludeSaveFrames: %s" % excludeSaveFrames
+    print("projectName: %s" % projectName)
+    print("inputDir: %s" % inputDir)
+    print("outputFile: %s" % outputFile)
+    print("excludeSaveFrames: %s" % excludeSaveFrames)
     ccpnPath = os.path.join(inputDir, projectName)
     ccpnProject = loadProject(ccpnPath)
 
@@ -31,19 +31,19 @@ def convert(projectName, inputDir, outputFile, excludeSaveFrames = ('general_dis
 
     nmrEntry.structureGenerations = nmrProject.sortedStructureGenerations()
     if nmrEntry.structureGenerations:
-        print "Using structureGenerations from nmrProject"
+        print("Using structureGenerations from nmrProject")
     else:
         ncs = ccpnProject.findFirstNmrConstraintStore()
         sG = None
         if not ncs:
-            print "Failed to find any NmrConstraintStore from project"
+            print("Failed to find any NmrConstraintStore from project")
         else:
             sG = ncs.findFirstStructureGeneration()
         if sG:
             nmrEntry.addStructureGeneration( sG )
-            print "Using structureGenerations from nmrProject"
+            print("Using structureGenerations from nmrProject")
         else:
-            print "Failed to find nmrEntry.structureGenerations from nmrProject or nmrConstraintStore; creating a new one."
+            print("Failed to find nmrEntry.structureGenerations from nmrProject or nmrConstraintStore; creating a new one.")
             strucGen = nmrProject.newStructureGeneration()
             nmrEntry.addStructureGeneration(strucGen)
         # end if
@@ -55,10 +55,10 @@ def convert(projectName, inputDir, outputFile, excludeSaveFrames = ('general_dis
     except AttributeError: # ccpn trunk fixed misspelled function
         nmrEntry.structureAnalyses = nmrProject.sortedStructureAnalyses()
     if not nmrEntry.structureAnalyses:
-        print "Failed to find nmrEntry.structureAnalyses"
+        print("Failed to find nmrEntry.structureAnalyses")
     nmrEntry.measurementLists = nmrProject.sortedMeasurementLists()
     if not nmrEntry.measurementLists:
-        print "Failed to find nmrEntry.measurementLists"
+        print("Failed to find nmrEntry.measurementLists")
 
     # Hack to hook up coordinates, hopefully correctly (Wim 30/04/2009)
     if nmrEntry.structureGenerations:
@@ -69,7 +69,7 @@ def convert(projectName, inputDir, outputFile, excludeSaveFrames = ('general_dis
                 break
             # end if
         # end for
-        print "hasStructureEnsemble: %s" % hasStructureEnsemble
+        print("hasStructureEnsemble: %s" % hasStructureEnsemble)
         # This will only work dependably if there is one structureGeneration, one structureEnsemble...
         # Take the one that was created last in any case, fingers crossed that they match up!
         if not hasStructureEnsemble and ccpnProject.structureEnsembles:

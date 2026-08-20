@@ -27,4 +27,4 @@ for file in fileList:
     tt = timetuple = time.localtime(fMtime)
     #dt = datetime.datetime(tt.tm_year, tt.tm_mon, tt.tm_mday)
 #    print '%04d-%02d-%02d,%s' % (tt.tm_year, tt.tm_mon, tt.tm_mday, file) # insist on CSV!
-    print '%04d-%02d-%02d' % (tt.tm_year, tt.tm_mon, tt.tm_mday)
+    print('%04d-%02d-%02d' % (tt.tm_year, tt.tm_mon, tt.tm_mday))

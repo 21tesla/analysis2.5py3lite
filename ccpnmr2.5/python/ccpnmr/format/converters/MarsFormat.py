@@ -102,7 +102,7 @@ class MarsFormat(DataFormat):
     #
   
     if self.verbose == 1:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.MonteProjectFile(fileName)
     self.file.read(verbose = verbose)
@@ -148,7 +148,7 @@ class MarsFormat(DataFormat):
   def createFullProject(self,fileName):
 
     if self.verbose == 1:
-      print "Writing %s project from file %s" % (self.formatLabel,fileName)
+      print("Writing %s project from file %s" % (self.formatLabel,fileName))
       
     self.file = self.projectIO.MarsProjectFile(fileName)
     

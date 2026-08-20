@@ -75,7 +75,7 @@ class TalosProjectFile(TalosGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading Talos project file %s" % self.name
+      print("Reading Talos project file %s" % self.name)
 
     #
     # Read the sequence from the project file
@@ -94,7 +94,7 @@ class TalosProjectFile(TalosGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing Talos project file %s" % self.name
+      print("Writing Talos project file %s" % self.name)
 
     fout = open(self.name,'w')
 

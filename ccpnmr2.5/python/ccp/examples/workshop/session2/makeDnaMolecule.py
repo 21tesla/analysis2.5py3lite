@@ -102,13 +102,13 @@ if __name__ == '__main__':
 
     makeLinearLink(molecule, molRes, pos, linking)
 
-  print 'Linear: [%s]' % molecule.isStdLinear, '\n'
+  print('Linear: [%s]' % molecule.isStdLinear, '\n')
 
-  print 'Molecule: [%s]' % molecule.name, '\n'
+  print('Molecule: [%s]' % molecule.name, '\n')
 
   for molRes in molecule.sortedMolResidues():
-    print 'MolResidue: [%s]' % molRes.ccpCode
+    print('MolResidue: [%s]' % molRes.ccpCode)
 
-  print
+  print()
 
   project.saveModified()

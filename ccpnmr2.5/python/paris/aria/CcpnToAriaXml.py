@@ -90,9 +90,9 @@ def checkAriaInstallation():
     try:
       __import__(module)
 
-    except ImportError, errMsg:
+    except ImportError as errMsg:
       failedModules.append(module)
-      print errMsg
+      print(errMsg)
 
   if failedModules:
     text = ', '.join(failedModules)
@@ -111,9 +111,9 @@ from ccp.util.NmrCalc import getObjBooleanParameter, getRunTextParameter, setRun
 
 # # # # # # #
 
-PARAM_ATTR_DICT = {type(1.0):'floatValue',
-                   type(1):'intValue',
-                   type(True):'booleanValue'}
+PARAM_ATTR_DICT = {float:'floatValue',
+                   int:'intValue',
+                   bool:'booleanValue'}
 
 FILTER_VIOL = 'FilterViol'
 KEEP_ASSIGN = 'KeepAssign'
@@ -224,7 +224,7 @@ def getObjectKeyString(object, delimiter='|'):
     keyType = type(key)
     if keyType is type([]):
       keys[i] = delimiter.join([str(k) for k in key])
-    elif keyType is not type(''):
+    elif keyType is not str:
       keys[i] = str(key)
 
   return delimiter.join(keys)
@@ -447,7 +447,7 @@ if __name__ == '__main__':
   nArgs = len(cmdArgs)
 
   if nArgs < 2:
-    print """
+    print("""
       CcpnToAriaXml requires at least two command line arguments:
         CCPN project directory
         Output ARIA XML file name
@@ -459,8 +459,7 @@ if __name__ == '__main__':
       Example:
 
       python CcpnToAriaXml.py /data/ccpnProjDir /home/me/AriaProj.xml /home/me/ariaRuns /temp
-      """
-
+      """)
     sys.exit(0)
 
   ccpnProjectDir, ariaProjectPath = cmdArgs[:2]
@@ -483,11 +482,11 @@ if __name__ == '__main__':
 
   try:
     ccpnProject = loadProject(ccpnProjectDir)
-  except Exception, err:
+  except Exception as err:
     raise Exception(FAIL + 'CCPN project failed to load. original error:' + err)
 
 
   makeAriaProject(ccpnProject, ariaProjectPath,
                   workingDir=workingDir, tempDir=tempDir)
 
-  print 'Done. Saved ARIA project to: %s' % ariaProjectPath
+  print('Done. Saved ARIA project to: %s' % ariaProjectPath)

@@ -77,7 +77,7 @@ class Repository:
 
     def import_project(self, proj_name, proj_ver, proj_dir, size = 100000):
 
-        print 'in import project with params ', proj_name, ', ', proj_dir
+        print('in import project with params ', proj_name, ', ', proj_dir)
 
         # These should be stored within this layer. They
         # should not come from an import but should be
@@ -96,7 +96,7 @@ class Repository:
         req1._arg2 = wsstr1.str
         projectExists = reponse1 = port.isExist(req1)
 
-        print 'in import project with initial response', reponse1._return
+        print('in import project with initial response', reponse1._return)
 
         # FIXME
         # need lots more logic here once we have decided on a standard        
@@ -115,7 +115,7 @@ class Repository:
                 file_list.append(os.path.join(root, filename))
 
 
-        print 'IMPORT PROJECT: FILES: ', file_list
+        print('IMPORT PROJECT: FILES: ', file_list)
 
         # going to upload in chunks
 
@@ -124,9 +124,9 @@ class Repository:
             # need to handle possible tailing '/'
             # should really do this be regex and catch any odd path mismatches
             local_path = file[len(proj_dir)+1:]
-            print 'copying ', file, ' to local path ', local_path
+            print('copying ', file, ' to local path ', local_path)
 
-            f = open(file, 'r')
+            f = open(file)
             f_str = f.read()
     
             size = 100000
@@ -152,8 +152,8 @@ class Repository:
                 
                 wsstr2 = WSString(h2)
 
-                print 'sending hash ', h2
-                print 'sending hash text ', wsstr2.str
+                print('sending hash ', h2)
+                print('sending hash text ', wsstr2.str)
 
                 req2._arg0 = 'org.pimslims.applet.server.CcpnFileBean'
                 req2._arg1 = 'appendChunk'
@@ -179,7 +179,7 @@ class Repository:
                    'location': '/home/jionides/work/CCPN/test_WMS_archive/jionides'}
             wsstr3 = WSString(hm3)
 
-            print "going to create new record ", hm3
+            print("going to create new record ", hm3)
 
             req3 = record()
             req3._arg0 = 'org.pimslims.applet.server.ProjectBean'
@@ -195,7 +195,7 @@ class Repository:
                    'creationTime' : '9 FEB 2008:19:09'}
             wsstr4 = WSString(hm4)
 
-            print "going to create new pv record ", hm4
+            print("going to create new pv record ", hm4)
 
             req4 = record()
             req4._arg0 = 'org.pimslims.applet.server.ProjectVersionBean'
@@ -207,7 +207,7 @@ class Repository:
 
     def export_project(self, projectName, versionTag, expDir):
 
-        print 'EXPORT_PROJECT ', projectName, ', ' ,versionTag
+        print('EXPORT_PROJECT ', projectName, ', ' ,versionTag)
 
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
@@ -233,11 +233,11 @@ class Repository:
         wsstr = WSString(resp1._return)
         ss = wsstr.getStruct()
         
-        print 'got array ', ss
+        print('got array ', ss)
         
         for strg in ss:
             
-            print 'trying to handle file ', strg
+            print('trying to handle file ', strg)
             
             hm2 = {'projectName': projectName,
                    'versionTag': versionTag,
@@ -246,8 +246,8 @@ class Repository:
                    'random' : 'test',
                    'raw' : False}
                 
-            print 'trying to handle file 2 ', strg
-            print 'trying to handle file 2 ', hm2
+            print('trying to handle file 2 ', strg)
+            print('trying to handle file 2 ', hm2)
                 
             req2 = getDocWithParams()
                 
@@ -265,12 +265,12 @@ class Repository:
             
             idx = local_file_path.rfind('/')
             local_dir = local_file_path[:idx]
-            print 'trying to create ', local_dir
+            print('trying to create ', local_dir)
 
             if (os.path.exists(local_dir) == 0):
                 os.makedirs(local_dir)
             
-            print 'writing to local area; ', local_file_path
+            print('writing to local area; ', local_file_path)
 
             f = open(local_file_path, 'w')
             f.write(resp2._return)

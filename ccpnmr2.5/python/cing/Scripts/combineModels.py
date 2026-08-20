@@ -7,8 +7,8 @@ files = argv[1:]
 
 model=1
 for f in files:
-    print "MODEL %8d" % model
+    print("MODEL %8d" % model)
     stdout.write(open(f).read())
-    print "ENDMDL"
+    print("ENDMDL")
     model += 1
 # end for

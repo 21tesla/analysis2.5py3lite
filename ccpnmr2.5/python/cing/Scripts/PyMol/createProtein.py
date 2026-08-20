@@ -42,7 +42,7 @@ def createTightTurns():
     for typeIdx in range(1,len(turnTypes)):
 #    for typeIdx in [2]:
         type, phi1, psi1, _omega, phi2, psi2, res0, res1, res2, res3 = turnTypes[typeIdx]
-        print "Doing tight turn %s" % type
+        print("Doing tight turn %s" % type)
         seqInfo = [
             [ res0, phiDefault, psiDefault ],
             [ res1, phi1, psi1 ],

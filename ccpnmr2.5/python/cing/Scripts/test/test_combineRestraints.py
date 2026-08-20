@@ -17,7 +17,7 @@ try:
     # A bit redundant with above line.
     from cing.Scripts.rotateLeucines import * #@UnusedWildImport Relies on Yasara as well.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % (YASARA_STR, getCallerFileName())
+    print("Got ImportWarning %-10s Skipping unit check %s." % (YASARA_STR, getCallerFileName()))
     raise SkipTest(YASARA_STR)
 # end try
 
@@ -32,7 +32,7 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join(cingDirTmp, getCallerName())
         mkdirs(cingDirTmpTest)
-        self.failIf(os.chdir(cingDirTmpTest), msg=
+        self.assertFalse(os.chdir(cingDirTmpTest), msg=
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         # Original project

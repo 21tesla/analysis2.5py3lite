@@ -135,7 +135,7 @@ class MMCIFSequenceFile(MMCIFFile):
         elif polymerType.count('polyribo'):
           molType = 'RNA'
         else:
-          print "  Warning: unknown mmCIF molecular type %s." % (polymerType)
+          print("  Warning: unknown mmCIF molecular type %s." % (polymerType))
           molType = None
                 
         for chainCode in chainCodes:
@@ -215,7 +215,7 @@ class MMCIFSequenceFile(MMCIFFile):
               break
           
           if isConnected:
-            print "Adding info to existing set of chains"
+            print("Adding info to existing set of chains")
             currentChainInfo = otherChainInfo
             break
             
@@ -321,8 +321,8 @@ class MMCIFSequenceFile(MMCIFFile):
           if self.seqElDict.has_key(seqKey):
             seqEl = (self.seqElDict[seqKey],atomName)
           else:
-            print seqKey, self.seqElDict.keys()
-            print "  Error: could not find sequence element for '%s.%s.%s' to set bond..." % (cifChainCode,cifSeqId,atomName)
+            print(seqKey, self.seqElDict.keys())
+            print("  Error: could not find sequence element for '%s.%s.%s' to set bond..." % (cifChainCode,cifSeqId,atomName))
             seqEl = None
             
           seqEls.append(seqEl)
@@ -406,7 +406,7 @@ class MMCIFSequenceFile(MMCIFFile):
           sequence.setSecondaryStructure(seqStrucTypeText,serial,specificInfo,seqEls)
 
         else:
-          print "  Warning: could not find chain code '%s' for setting secondary structure info." % chainCode
+          print("  Warning: could not find chain code '%s' for setting secondary structure info." % chainCode)
 
       """
          
@@ -432,7 +432,7 @@ class MMCIFSequenceFile(MMCIFFile):
   def addSequence(self,moleculeName,chainCode,moleculeType,alternateChainCodes=None):
   
     if chainCode in self.chainCodeToSequence.keys():
-      print "  Warning: trying alternate chain code for molecule %s - '%s' already exists..." % (moleculeName,chainCode)
+      print("  Warning: trying alternate chain code for molecule %s - '%s' already exists..." % (moleculeName,chainCode))
       
       if alternateChainCodes:
         for tmpChainCode in alternateChainCodes:
@@ -472,7 +472,7 @@ class MMCIFSequenceFile(MMCIFFile):
         elif mmCifMolType.lower().count('non-polymer'):
           molType = 'other'
         else:
-          print "  Warning: did not interpret mmCIF molecular type %s..." % mmCifMolType      
+          print("  Warning: did not interpret mmCIF molecular type %s..." % mmCifMolType)
       
     # Make sure this is not None
     if not insertionCode:

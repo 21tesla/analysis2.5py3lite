@@ -153,7 +153,7 @@ def createChemShifts(peakLists,guiParent = None, messageReporter = None, multiDi
             # Ignore this peakDim - many contribs possible and not wanted (?)
             #
           
-            print "  Warning: ignoring peakDim %d for peak %d... more than one resonance contribution" % (peakDim.dim,peak.serial)
+            print("  Warning: ignoring peakDim %d for peak %d... more than one resonance contribution" % (peakDim.dim,peak.serial))
             continue
           
         for peakDimContrib in peakDimContribs:
@@ -239,8 +239,8 @@ if __name__ == "__main__":
       if ds.peakLists:
         peakLists.extend(ds.sortedPeakLists())
 
-  print peakLists  
+  print(peakLists)
   shiftList = createChemShifts(peakLists)
-  print shiftList
-  print shiftList.measurements
+  print(shiftList)
+  print(shiftList.measurements)
   

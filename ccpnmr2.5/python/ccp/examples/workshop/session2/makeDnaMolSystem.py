@@ -38,17 +38,17 @@ if __name__ == '__main__':
 
   # Print some basic information about the chain and molecule.
 
-  print 'Code [%s], name [%s]' % (chain.code, chain.molecule.name)
+  print('Code [%s], name [%s]' % (chain.code, chain.molecule.name))
 
   # Navigate residues in this chain and print atom names.
 
   for res in chain.sortedResidues():
-    print 'Residue [%s], position [%s]' % (res.ccpCode, res.seqCode + 1)
-    print '  Atoms: ',
+    print('Residue [%s], position [%s]' % (res.ccpCode, res.seqCode + 1))
+    print('  Atoms: ',)
 
     for atom in res.sortedAtoms():
-      print atom.name,
-    print '\n'
+      print(atom.name,)
+    print('\n')
 
   # Hack to find the currentElementStore.
 

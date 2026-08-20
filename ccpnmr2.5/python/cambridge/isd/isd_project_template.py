@@ -774,13 +774,13 @@ if __name__ == '__main__':
 
     chain = simulation.posterior.get_polymer()
 
-    print 'Starting calculation...'
+    print('Starting calculation...')
 
     sampler = manager.create_sampler()
 
     initial_states = manager.prepare_initial_states(sampler)
 
-    print 'Calculation started.'
+    print('Calculation started.')
 
     sampler.generate_sequence(sim.replica.n_samples, initial_states)
 

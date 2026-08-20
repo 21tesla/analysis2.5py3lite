@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # creates scrolled frame with attribute frame which is used
 # from outside this code as the parent of the frame to be scrolled
 # this only works if the size of that frame is fixed at construction
-import Tkinter
+import tkinter
 from memops.gui.Frame import Frame
 
 class ScrolledFrame(Frame):
@@ -182,10 +182,10 @@ if (__name__ == '__main__'):
   import Util
 
   def config1(event):
-    print 'config1:', frame.winfo_width(), frame.winfo_height()
+    print('config1:', frame.winfo_width(), frame.winfo_height())
 
   def config2(event):
-    print 'config2:', frame2.winfo_width(), frame2.winfo_height()
+    print('config2:', frame2.winfo_width(), frame2.winfo_height())
 
   root = Tkinter.Tk()
 

@@ -232,7 +232,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
         if increments:
 
           if len(increments) < self.numDim - 1:
-            print "  Warning: not enough increments or decrements found to determine valuePerPoint."
+            print("  Warning: not enough increments or decrements found to determine valuePerPoint.")
 
           elif len(increments) > self.numDim - 1:
             stdIncrCount = 0
@@ -244,7 +244,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
               for incr in increments[:]:
                 if incr not in self.stdIncrements:
                   increments.pop(increments.index(incr))
-                  print "  Warning: removed increment or decrement %s in favour of standard ones." % incr
+                  print("  Warning: removed increment or decrement %s in favour of standard ones." % incr)
 
     self.process()
   
@@ -315,7 +315,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
           swhz = val
       self.sw[ii] = swhz
       if numPointsValid > npts:
-        print ("  WARNING: %s dim %s has greater number of valid points than actual ones" 
+        print("  WARNING: %s dim %s has greater number of valid points than actual ones" 
                % (self.fileDir, ii))
 
       # set approx referencing (starting value. Formula from Bruker manual)
@@ -380,7 +380,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
         pass
         
       else:
-        print "ERROR: Bruker AQ_mod %d not recognized. Using QSIM." % acqModeCode
+        print("ERROR: Bruker AQ_mod %d not recognized. Using QSIM." % acqModeCode)
       
 
     #
@@ -471,7 +471,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
     if (self.numDim == 3):
     
       if not hasattr(self.parFiles['acqu3s'],'parameters'):
-        print "  Illegal number of dimensions!! %s is not a 3d..." % self.fileDir
+        print("  Illegal number of dimensions!! %s is not a 3d..." % self.fileDir)
         return
 
       if not self.parFiles['acqu3s'].parameters.has_key('NUC1'):
@@ -481,7 +481,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
         # Assuming that L1, L2 give npts/2, getting as much info as possible from this...
         #
 
-        print "  Warning: no acqu3s file for Bruker 3D experiment."
+        print("  Warning: no acqu3s file for Bruker 3D experiment.")
 
         pointsProduct = self.parFiles['acqu2s'].parameters['TD'].values[0]
 
@@ -490,7 +490,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
 
         if pointsProduct == (npts1 * npts2 * 4):
         
-          print "           assuming L1,L2 give number of complex points."
+          print("           assuming L1,L2 give number of complex points.")
 
           # TODO: does it make sense to set this for acqu2/3?
           self.parFiles['acqu3s'].parameters['TD'] = BrukerPar('TD')
@@ -529,12 +529,12 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
 
         else:
         
-          print "           cannot handle current case. Contact author."
+          print("           cannot handle current case. Contact author.")
         
       
     elif (self.numDim > 3):
     
-      print "  ERROR: %s had more than 3 dims for acqu<n>s file order (cannot handle this)!" % (self.fileDir)
+      print("  ERROR: %s had more than 3 dims for acqu<n>s file order (cannot handle this)!" % (self.fileDir))
 
     #
     # Set increment numbers found in pulse program
@@ -543,7 +543,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
     refs['inc'] = [-1]
 
     if pulseProgram and self.numDim <= len(pulseProgram['increment']):
-      print "  Warning: %s number of incremented delays found does not match number of dimensions!" % (self.fileDir)
+      print("  Warning: %s number of incremented delays found does not match number of dimensions!" % (self.fileDir))
     
     for i in range(0,self.numDim-1):
       if pulseProgram and len(pulseProgram['increment']) > i:
@@ -560,7 +560,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
       tempInc = refs['inc'][1]
       refs['inc'][1] = refs['inc'][2]
       refs['inc'][2] = tempInc
-      print "  Warning: swapped increments for 3D based on AQSEQ setting %d!" % mainPars['AQSEQ'].values[0]
+      print("  Warning: swapped increments for 3D based on AQSEQ setting %d!" % mainPars['AQSEQ'].values[0])
     
     #
     # TODO: Check if acqu<n>s info corresponds to reported nucleus order - reset values if so.
@@ -658,7 +658,7 @@ class BrukerAcqParData(BrukerGenericFile,GenericAcqParData):
 
       if numPointsValid > numPoints:
 
-        print "  ERROR: %s has greater number of valid points than actual ones" % (self.fileDir)
+        print("  ERROR: %s has greater number of valid points than actual ones" % (self.fileDir))
 
       self.fidDimRefs[i] = FidDimReference(numPoints,numPointsValid,
                                            valuePerPoint,nucleus)

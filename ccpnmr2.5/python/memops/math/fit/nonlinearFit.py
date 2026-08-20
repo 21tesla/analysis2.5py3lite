@@ -155,7 +155,7 @@ if __name__ == '__main__':
   def printVec(msg, v):
 
     s = ', '.join(['%.3f' % w for w in v])
-    print '%s: %s' % (msg, s)
+    print('%s: %s' % (msg, s))
 
   import random
 
@@ -170,6 +170,6 @@ if __name__ == '__main__':
   printVec('a', a)
   printVec('yFit', yFit)
   e2 = sum([(y[i]-yFit[i])**2 for i in range(len(y))])
-  print 'chisq = %.3f' % chisq
-  print 'e2 = %.3f' % e2
+  print('chisq = %.3f' % chisq)
+  print('e2 = %.3f' % e2)
 

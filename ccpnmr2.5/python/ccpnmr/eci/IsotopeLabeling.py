@@ -40,7 +40,7 @@ def getStarIsotopeLabeling(refComp):
 
     if resLabFrac:
       if atomLabFlag:
-        print '  Warning: mixture of labelling types in molecule %s' % molecule.name
+        print('  Warning: mixture of labelling types in molecule %s' % molecule.name)
         break
 
       resLabFracFlag = True
@@ -50,7 +50,7 @@ def getStarIsotopeLabeling(refComp):
 
     else:
       if resLabFracFlag:
-        print '  Warning: mixture of labelling types in molecule %s' % molecule.name
+        print('  Warning: mixture of labelling types in molecule %s' % molecule.name)
         break
 
       atomLabFlag = True
@@ -130,7 +130,7 @@ def getStarIsotopeLabeling(refComp):
       if firstBmrbLabel:
 
         if firstBmrbLabel != bmrbLabel:
-          print '  Warning: multiple labels for this molecule %s' % molecule.name
+          print('  Warning: multiple labels for this molecule %s' % molecule.name)
           break
 
       else:
@@ -226,7 +226,7 @@ def makeUniformLabels(resLabel, atomType, mass, percent):
                    'H': 'hydrogen'}
 
   if mass != isotopeMasses[atomType]:
-    print '  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType])
+    print('  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType]))
     return
 
   if not percent:
@@ -235,7 +235,7 @@ def makeUniformLabels(resLabel, atomType, mass, percent):
     weight = float(percent[:-1])/100.0
 
   if weight < 0 and weight > 1:
-    print '  Warning: degree of isotope labelling not in the correct range (0-100%)'
+    print('  Warning: degree of isotope labelling not in the correct range (0-100%)')
     return
 
 
@@ -259,7 +259,7 @@ def makeSpecAtomLabels(resLabel, atomType, mass, percent, specificAtom):
                    'H': 'hydrogen'}
 
   if mass != isotopeMasses[atomType]:
-    print '  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType])
+    print('  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType]))
     return
 
   if not percent:
@@ -268,7 +268,7 @@ def makeSpecAtomLabels(resLabel, atomType, mass, percent, specificAtom):
     weight = float(percent[:-1])/100.0
 
   if weight < 0 and weight > 1:
-    print '  Warning: degree of isotope labelling not in the correct range (0-100%)'
+    print('  Warning: degree of isotope labelling not in the correct range (0-100%)')
     return
 
   specAtomLabel2 = None

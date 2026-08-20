@@ -730,7 +730,7 @@ class EditWindowPopup(BasePopup):
     try:
       self.windowPane.spectrumWindow.name = name
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting window name', e.error_msg, parent=self)
 
   def selectWindow(self, window, row, col):
@@ -754,7 +754,7 @@ class EditWindowPopup(BasePopup):
     try:
       self.window.name = name
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting window name', e.error_msg, parent=self)
 
   def getAspectRatio(self, windowPane):
@@ -775,7 +775,7 @@ class EditWindowPopup(BasePopup):
       msg = 'Aspect ratio must be positive float'
       showError('Setting aspect ratio', msg, parent=self)
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting aspect ratio', e.error_msg, parent=self)
 
   def getSliceRange(self, windowPane):
@@ -796,7 +796,7 @@ class EditWindowPopup(BasePopup):
       msg = 'Slice range must be two floats with first less than second'
       showError('Setting slice range', msg, parent=self)
    
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting slice range', e.error_msg, parent=self)
 
   def toggleXSliceVisible(self, windowPane):
@@ -1220,7 +1220,7 @@ class EditWindowPopup(BasePopup):
       try:
         WindowBasic.setXAxisOffset(view, value)
       
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Setting x axis offset', e.error_msg, parent=self)
  
   def getValueAxisOffset(self, view):
@@ -1239,7 +1239,7 @@ class EditWindowPopup(BasePopup):
       try:
         WindowBasic.setValueAxisOffset(view, value)
       
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Setting y axis offset', e.error_msg, parent=self)
  
   def selectSpectrum(self, specWindowView, row, col):
@@ -1474,7 +1474,7 @@ class EditWindowPopup(BasePopup):
     try:
       group.name = name
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Changing group name', e.error_msg, parent=self)
 
   def setGroupState(self, group=None):
@@ -1513,7 +1513,7 @@ class EditWindowPopup(BasePopup):
       group.name = 'New Group %s' % group.serial
       self.windowGroupTable.selectObject(group)
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Window group creation error', e.error_msg, parent=self)
 
   def deleteGroup(self, *event):

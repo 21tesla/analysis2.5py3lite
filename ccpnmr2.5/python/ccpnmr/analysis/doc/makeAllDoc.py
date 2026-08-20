@@ -95,6 +95,6 @@ if __name__ == '__main__':
   cmd1 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysis/"
   cmd2 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysisEdge/"
   
-  print "To update in-program documentation website for stable issue:\n%s\n" % cmd1
-  print "To update in-program documentation website for leading-edge issue:\n%s\n" % cmd2
+  print("To update in-program documentation website for stable issue:\n%s\n" % cmd1)
+  print("To update in-program documentation website for leading-edge issue:\n%s\n" % cmd2)
   

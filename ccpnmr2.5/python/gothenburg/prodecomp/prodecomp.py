@@ -94,7 +94,7 @@ def prodecomp(Pmx, defs, intl, cmps, rglf, itrs):
         itmax = 30*n
         
         # outer loop to put variables into set to hold positive coefficients
-        z = zeros((n))
+        z = zeros(n)
         while logical_and(sometrue(Z),sometrue(w[ZZ.tolist()] > tol)):       
             wt = w[ZZ.tolist()].max(0)        
             t = where(w==wt)[0]        
@@ -123,7 +123,7 @@ def prodecomp(Pmx, defs, intl, cmps, rglf, itrs):
                 ij = where(logical_and((abs(x) < tol),(P!=0)))[1]            
                 put (Z, ij, ij.T+1)            
                 # P[ij]; ij has to be column vector to make the choice of elements in a column of P
-                put(P, ij, zeros((len(ij))).reshape(-1,1))                
+                put(P, ij, zeros(len(ij)).reshape(-1,1))                
                 PP = where(P != 0)[1] 
                 ZZ = where(Z!=0)[1] 
                 nzz = ZZ.shape    
@@ -361,7 +361,7 @@ def prodecomp(Pmx, defs, intl, cmps, rglf, itrs):
             
             # output time for each iteration
             elapsed_time = time.time()-start_time
-            print 'iteration', it, '->', elapsed_time, 'seconds'
+            print('iteration', it, '->', elapsed_time, 'seconds')
             # clean the memory
             M3, MTM, MTP = [[],[],[]]      
     

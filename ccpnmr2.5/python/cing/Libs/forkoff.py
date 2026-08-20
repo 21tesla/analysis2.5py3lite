@@ -164,7 +164,7 @@ class ForkOff:
                      type(func) == types.MethodType ) :
                 nTerror("given function not of types:")
                 nTmessage("(Function, BuiltinFunctionType, or MethodType) for job:")
-                print job
+                print(job)
                 nTmessage("In stead type is : %s", type(func))
                 return []
 
@@ -430,7 +430,7 @@ class Process:
 
         try:
             exit_pid, exit_status = os.waitpid(pid, options)
-        except OSError, info:
+        except OSError as info:
             if self.verbosity:
                 nTwarning("caught an OSError with info: %s" % info)
 
@@ -447,7 +447,7 @@ class Process:
 
         try:
             os.kill( pid, sig )
-        except OSError, info:
+        except OSError as info:
             if self.verbosity:
                 nTwarning("caught an OSError with info: %s" % info)
             return 0

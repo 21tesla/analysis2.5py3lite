@@ -67,10 +67,10 @@ try:
   from ccp.c import StructAtom
   from ccp.c import StructBond
   from ccp.c import StructStructure
-except Exception, e:
-  print 'Error, the ViewChemCompVar module will not work, something is wrong with the C code.'
-  print 'Exception:', e
-  print 'Will continue without viewing functionality'
+except Exception as e:
+  print('Error, the ViewChemCompVar module will not work, something is wrong with the C code.')
+  print('Exception:', e)
+  print('Will continue without viewing functionality')
   StructAtom = StructBond = StructStructure = TkHandler = None
   
 PROTEIN_BACKBONE = ('N','C','CA')

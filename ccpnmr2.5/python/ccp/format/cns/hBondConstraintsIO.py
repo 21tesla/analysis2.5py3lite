@@ -74,13 +74,13 @@ class CnsHBondConstraintFile(CnsDistanceConstraintFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading cns H bonds constraint list %s" % self.name
+      print("Reading cns H bonds constraint list %s" % self.name)
 
     return self.readGeneric(CnsHBondConstraint)
     
   def printWriteText(self):
   
-      print "Writing cns H bonds constraint list %s" % self.name
+      print("Writing cns H bonds constraint list %s" % self.name)
 
 class CnsHBondConstraint(CnsDistanceConstraint):
 
@@ -106,16 +106,16 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
   
     for constraint in constraintFile.constraints:
-      print constraint.Id, constraint.origId,
+      print(constraint.Id, constraint.origId,)
     
-      print constraint.targetDist, constraint.minusDist, constraint.plusDist,
+      print(constraint.targetDist, constraint.minusDist, constraint.plusDist,)
     
       for item in constraint.items:
         for member in item.members:
-          print member.seqCode, member.atomName,
-        print "|",
+          print(member.seqCode, member.atomName,)
+        print("|",)
       
-      print
+      print()
   
     constraintFile.name = 'local/hbond.testout'
   

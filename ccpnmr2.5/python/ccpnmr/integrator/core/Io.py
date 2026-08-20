@@ -89,7 +89,7 @@ def makeJsonDict(containerObj, direction='input'):
 
   """
 
-  print 'Prepring JSON dict'
+  print('Prepring JSON dict')
 
   result = {}
   result['RunParameter'] = paramDict = {}
@@ -295,7 +295,7 @@ def getNmrCalcRun(projectDir, nmrCalcRunId, pluginName=None):
         # we have a run that fits. Use it.
         # NB the output is NECESSARY.
         # It is used to transfer information to WMS Java
-        print "CCPN_new_calcId = '%s'" % intUtil.getNmrCalcIdentifier(newRun)
+        print("CCPN_new_calcId = '%s'" % intUtil.getNmrCalcIdentifier(newRun))
 
         return newRun
 
@@ -348,7 +348,7 @@ def loadProtocol(memopsRoot, jsonFile, interfaceName=None, overwrite=False):
   protocoldd = jsonObject['protocol']
   name = protocoldd['name']
 
-  print 'Loading new protocol: %s' % name
+  print('Loading new protocol: %s' % name)
 
   protocol = memopsRoot.findFirstWmsProtocol(name=name)
   if protocol is not None:
@@ -408,7 +408,7 @@ def loadProtocol(memopsRoot, jsonFile, interfaceName=None, overwrite=False):
 
     #
     for tabdd in interfacedd['tabs']:
-      print tabdd
+      print(tabdd)
       #if tabdd.get('io') != 'out':
       interfaceGroup = tabdd.get('name')
 
@@ -665,7 +665,7 @@ def setupRunInteractive(argServer, protocolName=None, nmrCalcRun=None):
   nmrCalcObj = None
 
   for ip in interface.sortedInterfaceParameters():
-    print ip, ip.protocolParameter.name
+    print(ip, ip.protocolParameter.name)
     if ip.isEditable:
 
       pp = ip.protocolParameter
@@ -766,7 +766,7 @@ def makeNmrCalcData(argServer, run, protocolParameter, ioRole='input',
     if molSystem is None:
       return
 
-    print 'Residue specification style: A:;B:-4,6,9,11-13,45-;C:'
+    print('Residue specification style: A:;B:-4,6,9,11-13,45-;C:')
     ss = ':;'.join(x.code for x in molSystem.sortedChains()) + ':'
     selector = argServer.askString("Residue selection", ss)
     if selector == ss:
@@ -796,7 +796,7 @@ def makeNmrCalcData(argServer, run, protocolParameter, ioRole='input',
     if molSystem is None:
       return
 
-    print 'Chain code style: A,B,D'
+    print('Chain code style: A,B,D')
     ss = ','.join(x.code for x in molSystem.sortedChains())
     selector = argServer.askString("Chain codes", ss)
     if selector == ss:
@@ -814,7 +814,7 @@ def makeNmrCalcData(argServer, run, protocolParameter, ioRole='input',
     structureEnsemble = argServer.getStructure()
     if peakList is structureEnsemble:
       return
-    print "Model number style: '-4,6,9,11-13,45-'"
+    print("Model number style: '-4,6,9,11-13,45-'")
     maxModels = max(x.serial for x in structureEnsemble.models)
     ss = '1-%d' % maxModels
     selector = argServer.askString("Model selection", ss)
@@ -833,7 +833,7 @@ def makeNmrCalcData(argServer, run, protocolParameter, ioRole='input',
   elif paramType == 'constraintLists':
     constraintStore = argServer.getConstraintSet()
     if constraintStore:
-      print "ConstraintList number style: '-4,6,9,11-13,45-'"
+      print("ConstraintList number style: '-4,6,9,11-13,45-'")
       ss = ','.join(str(x.serial) for x in constraintStore.sortedConstraintLists())
       selector = argServer.askString("Constraint list selection", ss)
       if selector == ss:
@@ -863,7 +863,7 @@ def writeDataFiles(nmrCalcRun, targetDir):
       targetDir: destination directory.
   """
 
-  print 'Writing data files to', targetDir
+  print('Writing data files to', targetDir)
 
   # initialise shared resonanceToAtoms mapping
   # resonanceToAtoms = None
@@ -906,7 +906,7 @@ def writeDataFiles(nmrCalcRun, targetDir):
     keywds.update(myKeywds)
     handler.writeSequence(filePath, chains=(chain,), **keywds)
 
-    print '### seq', fileName, fileFormat
+    print('### seq', fileName, fileFormat)
 
 
   # write shiftLists
@@ -966,12 +966,12 @@ def writeDataFiles(nmrCalcRun, targetDir):
                             measurementList=obj.measurementList,
                             **keywds)
 
-        print '### Done shift', fileName, fileFormat, 'presetResonanceMapping' in keywds
+        print('### Done shift', fileName, fileFormat, 'presetResonanceMapping' in keywds)
 
 
   # Write data sets
   for dataObj in nmrCalcRun.sortedData():
-    print dataObj.name
+    print(dataObj.name)
     if dataObj.name == 'noesyPeakList':
 
       # write actual peak list
@@ -979,7 +979,7 @@ def writeDataFiles(nmrCalcRun, targetDir):
       if xx is not None:
 
         fileFormat = xx.textValue
-        print fileFormat
+        print(fileFormat)
         fileName = dataObj.findFirstRunParameter(name='fileName').textValue
         filePath = uniIo.joinPath(targetDir, fileName)
         peakList = dataObj.peakList
@@ -999,17 +999,17 @@ def writeDataFiles(nmrCalcRun, targetDir):
         handler.writePeaks(filePath, peakLists=[peakList],
                            dataDimRefs=dataDimRefs, **keywds)
 
-        print '### Done peak', fileName, fileFormat
+        print('### Done peak', fileName, fileFormat)
 
     elif dataObj.name == 'constraintLists':
 
       # write actual constraint list
       xx = nmrCalcRun.findFirstRunParameter(name='restraintFormat')
-      print 'restraintFileObject', xx
+      print('restraintFileObject', xx)
       if xx is not None:
 
         fileFormat = xx.textValue
-        print 'restraintFileFormat', fileFormat
+        print('restraintFileFormat', fileFormat)
         fileNames = [x.textValue for x in dataObj.sortedRunParameters()
                      if x.name == 'fileName' and x.ioRole == 'input']
         for ii,constraintList in enumerate(dataObj.constraintLists):
@@ -1030,7 +1030,7 @@ def writeDataFiles(nmrCalcRun, targetDir):
 
 
 
-          print '### Done constraintList', fileName, fileFormat
+          print('### Done constraintList', fileName, fileFormat)
 
 
 def setupCalculation(nmrCalcRun, targetDir, protocolName=None,
@@ -1038,15 +1038,15 @@ def setupCalculation(nmrCalcRun, targetDir, protocolName=None,
   """ Set up NMR calculation
   """
 
-  print 'Writing input to:'
-  print targetDir
+  print('Writing input to:')
+  print(targetDir)
 
   if protocolName is None:
     protocolName = nmrCalcRun.wmsProtocolName
 
   if pluginModule is None:
     pluginModule = intUtil.getIntegratorPlugin(protocolName)
-  print ('Starting setupCalculation; protocol %s; plugin %s' #
+  print('Starting setupCalculation; protocol %s; plugin %s' #
          % (protocolName, pluginModule and pluginModule.__name__))
 
   # set env variable for passing
@@ -1079,9 +1079,9 @@ def setupMultiInteractive(argServer, protocolNames, prelimProtocolName,
     for ii,executeScript in enumerate(executeScripts):
       if executeScript:
         pid = subprocess.Popen(['python', executeScript]).pid
-        print 'CCPN executing %s process: %s' % (protocolNames[ii],pid)
+        print('CCPN executing %s process: %s' % (protocolNames[ii],pid))
       else:
-        print 'CCPN not executing %s - no script generated' % protocolName
+        print('CCPN not executing %s - no script generated' % protocolName)
 
 
 def runSingleInteractive(argServer, protocolName, prelimProtocolName=None,
@@ -1094,18 +1094,18 @@ def runSingleInteractive(argServer, protocolName, prelimProtocolName=None,
   if executeScript:
     process = subprocess.Popen(['python', executeScript])
     pid = process.pid
-    print 'CCPN executing %s process: %s' % (protocolName,pid)
+    print('CCPN executing %s process: %s' % (protocolName,pid))
     process.communicate()
 
     while process.returncode is not None:
-       print process.returncode
+       print(process.returncode)
        continue
     else:
       targetDir = nmrCalcDir(nmrCalcRun)
       project = argServer.getProject()
       convert(project,targetDir)
   else:
-     print 'CCPN not executing %s - no script generated' % protocolName
+     print('CCPN not executing %s - no script generated' % protocolName)
 
 
 def runCyana2Ccpn(argServer, protocolName, prelimProtocolName=None,
@@ -1125,7 +1125,7 @@ def runCyana2Ccpn(argServer, protocolName, prelimProtocolName=None,
       targetDir = nmrCalcDir(nmrCalcRun)
       importFromCyana(nmrCalcRun,targetDir)
     else:
-     print 'CCPN not executing %s - no script generated' % protocolName
+     print('CCPN not executing %s - no script generated' % protocolName)
 
 
 def setupCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None,
@@ -1159,10 +1159,10 @@ def runCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None,
         calculationData=(nmrCalcRun, targetDir)
 
       else:
-       print 'CCPN not executing %s - no script generated' % protocolName
+       print('CCPN not executing %s - no script generated' % protocolName)
     else:
       pass
-    print "calculationData",calculationData
+    print("calculationData",calculationData)
     return calculationData
 
 def setupPreviousCalculation(argServer, protocolName, prelimProtocolName=None,
@@ -1196,7 +1196,7 @@ def runPreviousCalculation(argServer, protocolName, prelimProtocolName=None,
       targetDir = nmrCalcDir(nmrCalcRun)
       importFromCyana(nmrCalcRun,targetDir)
     else:
-      print 'CCPN not executing %s - no script generated' % protocolName
+      print('CCPN not executing %s - no script generated' % protocolName)
 
 
 def importDataFromCyana(argServer):
@@ -1248,7 +1248,7 @@ def prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=None):
   targetDir = nmrCalcDir(nmrCalcRun)
   os.makedirs(targetDir)
   outfp = open(uniIo.joinPath(targetDir, setupLogFile),'w')
-  print 'Redirecting output to %s' % setupLogFile
+  print('Redirecting output to %s' % setupLogFile)
 
   try:
     sys.stdout = outfp
@@ -1268,10 +1268,10 @@ def prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=None):
   finally:
     sys.stdout = sys.__stdout__
     outfp.close()
-    print 'Done'
+    print('Done')
 
   nmrCalcRun.root.saveModified()
-  print "CCPN: Set up %s run in %s" % (protocolName,targetDir)
+  print("CCPN: Set up %s run in %s" % (protocolName,targetDir))
 
   # Prepare for local execution
   if hasattr(pluginModule.write, 'prepareLocalExecution'):
@@ -1282,7 +1282,7 @@ def prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=None):
                               protocolName=nmrCalcRun.wmsProtocolName)
 
   else:
-    print ("WARNING, function 'prepareLocalExecution' not found in %s"
+    print("WARNING, function 'prepareLocalExecution' not found in %s"
            % pluginModule.__path__)
 
 
@@ -1311,7 +1311,7 @@ if __name__ == '__main__':
   os.environ['CCPN_CURRENT_RUN'] = targetDir
 
   outfp = open(uniIo.joinPath(targetDir, logFile),'w')
-  print 'Redirecting output to:', logFile
+  print('Redirecting output to:', logFile)
   cyanatableFile = open(uniIo.joinPath(targetDir, 'cyanatable.txt'), 'w')
 
   # Execute commands
@@ -1319,9 +1319,9 @@ if __name__ == '__main__':
   try:
     os.chdir(targetDir)
 
-    print 'Calling calculation program:'
-    print '  ' + ' '.join(procargs)
-    print '  in ', targetDir
+    print('Calling calculation program:')
+    print('  ' + ' '.join(procargs))
+    print('  in ', targetDir)
     subprocess.call(procargs, cwd=targetDir, stdout=outfp, stderr=outfp)
     subprocess.call(procargs2, cwd=targetDir, stdout=cyanatableFile, stderr=outfp)
 
@@ -1330,8 +1330,8 @@ if __name__ == '__main__':
 
     outfp.close()
     os.chdir(targetDir)
-    print os.getcwd()
-    print 'Done calculation'
+    print(os.getcwd())
+    print('Done calculation')
 
 
     """ % (protocolName, targetDir, logFile, commandList, commandList2))
@@ -1350,7 +1350,7 @@ def doPrepareStdWmsRun(nmrCalcRun, pluginModule, targetDir=None):
   """ Prepare for Wms run, starting from command line args (sys.args)
   """
 
-  print '### doPrepareStdWmsRun', nmrCalcRun, pluginModule, targetDir
+  print('### doPrepareStdWmsRun', nmrCalcRun, pluginModule, targetDir)
 
   if targetDir is None:
     targetDir = nmrCalcDir(nmrCalcRun)
@@ -1360,7 +1360,7 @@ def doPrepareStdWmsRun(nmrCalcRun, pluginModule, targetDir=None):
 
   outfname = uniIo.joinPath(targetDir, setupLogFile)
   outfp = open(outfname,'w')
-  print 'Redirecting output to %s' % outfname
+  print('Redirecting output to %s' % outfname)
 
   try:
     sys.stdout = outfp
@@ -1380,7 +1380,7 @@ def doPrepareStdWmsRun(nmrCalcRun, pluginModule, targetDir=None):
   finally:
     sys.stdout = sys.__stdout__
     outfp.close()
-    print 'Done'
+    print('Done')
 
     return targetDir
 
@@ -1390,14 +1390,14 @@ def prepareStdWmsRun(pluginName, projectDir, nmrCalcRunId, targetDir=None):
   """ Prepare for Wms run, starting from command line args (sys.args)
   """
 
-  print '### prepareStdWmsRun', pluginName, projectDir, nmrCalcRunId
+  print('### prepareStdWmsRun', pluginName, projectDir, nmrCalcRunId)
 
   nmrCalcRun = getNmrCalcRun(projectDir, nmrCalcRunId, pluginName)
 
-  print '### got nmrCalcRun', nmrCalcRun
+  print('### got nmrCalcRun', nmrCalcRun)
 
   if nmrCalcRun is None:
-    print "No NmrCalcRun found. Aborting"
+    print("No NmrCalcRun found. Aborting")
 
   else:
     pluginModule = __import__(pluginName, globals(), locals(),
@@ -1550,7 +1550,7 @@ def mergeParallelRuns(calcId, projectFiles, targetDir=None):
   #
   project.saveModified()
 
-  print 'Finished Data Merge. Results are in ', result
+  print('Finished Data Merge. Results are in ', result)
   return result
 
 

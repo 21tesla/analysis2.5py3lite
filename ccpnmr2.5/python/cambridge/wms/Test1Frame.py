@@ -5,7 +5,7 @@ from SharedBeanService_services import *
 from WSString import *
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -182,7 +182,7 @@ class Test1Frame(Frame):
 
     self.task_id = self.basePopup.currentTask
 
-    print 'trying to render task with serial ', self.task_id 
+    print('trying to render task with serial ', self.task_id)
 
     if self.task_id == None:
 
@@ -213,7 +213,7 @@ class Test1Frame(Frame):
       wsstr_out1 = WSString(response1._return)
       hm_tv = wsstr_out1.getStructHM()
 
-      print 'RESULT ', hm_tv
+      print('RESULT ', hm_tv)
 
  
       self.task_rep_title.set('Task: ' + self.task_id)
@@ -305,7 +305,7 @@ class Test1Frame(Frame):
 
   def submit(self):
 
-    print 'submitting a process (set status to pending)'
+    print('submitting a process (set status to pending)')
 
     # get a port proxy instance
     # this should probably belong to the repository directly
@@ -323,7 +323,7 @@ class Test1Frame(Frame):
 
     wsstr_in = WSString(h2)
 
-    print 'trying to update status with ', h2, ', ', wsstr_in.str
+    print('trying to update status with ', h2, ', ', wsstr_in.str)
     request2._arg2 = wsstr_in.str
 
     response2=self.port.record(request2)

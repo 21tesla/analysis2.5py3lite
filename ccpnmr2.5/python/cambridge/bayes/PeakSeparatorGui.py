@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 PeakSeparatorGui.py
 
@@ -121,14 +120,14 @@ class PeakSeparatorGui(BasePopup):
                         location='+100+100', **kw)
 
     if not self.analysisProject:
-      print '&&& init: No analysis project found ...'
+      print('&&& init: No analysis project found ...')
     try:
       if parent.argumentServer:
         self.argServer = parent.argumentServer
       else:
-        print '&&& init: No argument server found...'
+        print('&&& init: No argument server found...')
     except:
-      print '&&& init: Test'
+      print('&&& init: Test')
 
   ###########################################################################
 
@@ -351,7 +350,7 @@ class PeakSeparatorGui(BasePopup):
   def updateFromRegion(self):
 
     if not self.params.peakList:
-      print '&&& update from region: Need a peak list'
+      print('&&& update from region: Need a peak list')
       return
 
     if (self.argServer.parent.currentRegion) == None:
@@ -372,7 +371,7 @@ class PeakSeparatorGui(BasePopup):
   def updateFromPeakList(self):
 
     if not self.params.peakList:
-      print '&&& update from peakList: Need a peak list'
+      print('&&& update from peakList: Need a peak list')
       return
 
     getPeakListParams(self.params)
@@ -393,7 +392,7 @@ class PeakSeparatorGui(BasePopup):
     self.applyChange()
 
     if not self.params.peakList:
-      print '&&& Peak list not yet set'
+      print('&&& Peak list not yet set')
     else:
       # SeparatePeakRoutine(self.params, self.params.peakList, routine='pymc' )
       SeparatePeakRoutine(self.params, self.params.peakList, routine='bayesys' )
@@ -405,7 +404,7 @@ class PeakSeparatorGui(BasePopup):
     self.applyChange()
 
     if not self.params.peakList:
-      print '&&& Peak list not yet set'
+      print('&&& Peak list not yet set')
     else:
       SeparatePeaksInPeakList( self.params )
 

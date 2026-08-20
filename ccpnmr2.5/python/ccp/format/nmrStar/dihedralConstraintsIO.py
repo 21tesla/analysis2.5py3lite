@@ -274,7 +274,7 @@ class NmrStarDihedralConstraint(GenericConstraint):
       elif len(resLabel) == 2 and resLabel[0] == 'D' and resLabel[1] in code1LetterToCcpCodeDict['DNA'].keys():
         molType = 'DNA'
       else:
-        print "    Unrecognized dihedral angle '%s' for residue label '%s' - ignoring..." % (self.name,resLabel)
+        print("    Unrecognized dihedral angle '%s' for residue label '%s' - ignoring..." % (self.name,resLabel))
         return
         
       for i in range(len(bioPolymerCodes[molType][0])):
@@ -305,7 +305,7 @@ class NmrStarDihedralConstraint(GenericConstraint):
         self.setAtomMember(self.nodes[-1],chainCode,curSeqCode,atom.name,curResLabel)
 
     else:
-      print "  Error: no reference angle found for name %s..." % self.name
+      print("  Error: no reference angle found for name %s..." % self.name)
       for i in range(4):
         curSeqCode = seqCode
         curResLabel = resLabel
@@ -377,13 +377,13 @@ if __name__ == "__main__":
       #print constraintFile.comments
       for constraint in constraintFile.constraints:
 
-        print constraint.Id, constraint.name, constraint.lowerAngle, constraint.upperAngle
+        print(constraint.Id, constraint.name, constraint.lowerAngle, constraint.upperAngle)
 
         if constraint.errors:
-          print constraint.errors
+          print(constraint.errors)
 
         for item in constraint.nodes:
           mlist = []
           for member in item.members:
             mlist.append([member.seqCode,member.seqInsertCode,member.atomName,member.resLabel])
-          print "   " + str(mlist)
+          print("   " + str(mlist))

@@ -214,12 +214,12 @@ def saveTemporaryChemCompOrCoord(chemCompOrCoord,testMode = True, isFresh = Fals
   sys.stdout = curStdOut
   #sys.stdout = sys.__stdout__
   
-  print
-  print "  *** CCPN save output ***"
+  print()
+  print("  *** CCPN save output ***")
   for text in textPipe.textArea:
     if text.strip():
-      print "    %s" % text.strip()
-  print
+      print("    %s" % text.strip())
+  print()
   
   # This was failing horribly in large runs, now fixed (Wim 2010/03/08)
   filePath = glob.glob(os.path.join(tempRepository.url.path,'ccp','molecule',className,"*%s*%s*.xml" % (chemCompOrCoord.molType,getCcpFileString(chemCompOrCoord.ccpCode))))[0]
@@ -250,14 +250,14 @@ def consolidateTemporaryChemCompOrCoord(chemCompOrCoord,filePath,existingFilePat
     
       # Only store in obsolete/ the files from the archive directory!!
       if not testMode:
-        print "  Moving to obsolete/ directory: %s" %  existingFilePath
+        print("  Moving to obsolete/ directory: %s" %  existingFilePath)
         obsoleteFilePath = getNewChemCompOrCoordFilePath(chemCompOrCoord, mode = 'obsolete')  
         shutil.move(existingFilePath,obsoleteFilePath)
        
       shutil.move(filePath,existingFilePath)
   
     else:
-      print "  Warning: Not overwriting existing file %s." % existingFilePath
+      print("  Warning: Not overwriting existing file %s." % existingFilePath)
       os.remove(filePath)
 
   else:
@@ -269,7 +269,7 @@ def consolidateTemporaryChemCompOrCoord(chemCompOrCoord,filePath,existingFilePat
   
     newFilePath = getNewChemCompOrCoordFilePath(chemCompOrCoord, mode = dirMode)
     
-    print "  Creating new file %s" % newFilePath
+    print("  Creating new file %s" % newFilePath)
     shutil.move(filePath,newFilePath)
     
     # Also create link in default directory, if necessary

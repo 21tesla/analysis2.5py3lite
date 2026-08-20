@@ -77,7 +77,7 @@ class ProntoSequenceFile(ProntoGenericFile):
 
   def read(self,verbose = 0):
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -87,7 +87,7 @@ class ProntoSequenceFile(ProntoGenericFile):
     if cols[0] == 'Spin' and cols[1] == 'system':
 
       if verbose == 1:
-        print "Reading Pronto sequence from chemical shift file %s" % self.name
+        print("Reading Pronto sequence from chemical shift file %s" % self.name)
 
       self.sequences.append(ProntoSequence())
       fin.close()
@@ -122,11 +122,11 @@ class ProntoSequenceFile(ProntoGenericFile):
 
     else:
     
-      print "File not recogized... aborting."
+      print("File not recogized... aborting.")
 
   def write(self,verbose = 0):
 
-    print "Pronto sequence writing not available - try writing chemical shift file"
+    print("Pronto sequence writing not available - try writing chemical shift file")
 
 #
 # Casting here for imports in ccpnmr.format.converters
@@ -159,6 +159,6 @@ if __name__ == "__main__":
   
     for seq in sequenceFile.sequences:
       for el in seq.elements:
-        print el.seqCode, el.code3Letter
+        print(el.seqCode, el.code3Letter)
       for ss in seq.spinSystems:
-        print ss.code
+        print(ss.code)

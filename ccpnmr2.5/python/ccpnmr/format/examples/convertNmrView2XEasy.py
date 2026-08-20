@@ -36,7 +36,7 @@ from ccpnmr.format.general.Util import createPpmFreqDataSource
 # Get Tkinter for popups
 #
 
-import Tkinter
+import tkinter
 
 #
 # General python stuff
@@ -203,11 +203,11 @@ if __name__ == "__main__":
   # Some data model navigation examples...
   #
     
-  print "Number of resonances: %d" % len(ccpnProject.currentNmrProject.resonances)
+  print("Number of resonances: %d" % len(ccpnProject.currentNmrProject.resonances))
   
   for nmrExp in ccpnProject.currentNmrProject.sortedExperiments():
-    print "Experiment %d: %s (%s) %d dims" % (nmrExp.serial, nmrExp.name, nmrExp.experimentType, nmrExp.numDim)
-    print "  Reference pathway: %s" % nmrExp.refExperiment.nmrExpPrototype.name
+    print("Experiment %d: %s (%s) %d dims" % (nmrExp.serial, nmrExp.name, nmrExp.experimentType, nmrExp.numDim))
+    print("  Reference pathway: %s" % nmrExp.refExperiment.nmrExpPrototype.name)
   
   #
   # Get all the sequence codes associated with resonances...
@@ -224,5 +224,5 @@ if __name__ == "__main__":
           seqCodes.append(seqCode)
 
   seqCodes.sort()
-  print "Residue sequence codes connected to resonances:\n"
-  print seqCodes
+  print("Residue sequence codes connected to resonances:\n")
+  print(seqCodes)

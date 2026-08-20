@@ -188,7 +188,7 @@ class AwkLike(_AwkLike):
                 ntu.nTerror('AwkLike: Failed to find file "%s"' % filename)
                 self.f = None
             else:
-                self.f = open(filename,'r')
+                self.f = open(filename)
         #end if
     #end def
 

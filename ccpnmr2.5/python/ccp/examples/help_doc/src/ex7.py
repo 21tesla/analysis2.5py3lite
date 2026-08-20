@@ -1,5 +1,5 @@
 import os
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import MemopsRoot
 
@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # Navigate the data model to get a list of atoms per constraint item.
     for distConst in constList.sortedConstraints():
 
-        print 'Constraint [%d]: [%.1f] - [%.1f]' % (
-            distConst.serial, distConst.lowerLimit, distConst.upperLimit)
+        print('Constraint [%d]: [%.1f] - [%.1f]' % (
+            distConst.serial, distConst.lowerLimit, distConst.upperLimit))
 
         for constItem in distConst.sortedItems():
 
@@ -102,6 +102,6 @@ if __name__ == '__main__':
 
                 atomList.append(resAtomString)
 
-            print '  [%s] - [%s]' % (atomList[0], atomList[1])
+            print('  [%s] - [%s]' % (atomList[0], atomList[1]))
 
-        print
+        print()

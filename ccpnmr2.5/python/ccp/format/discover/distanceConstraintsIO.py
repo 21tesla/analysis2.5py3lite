@@ -82,9 +82,9 @@ class DiscoverDistanceConstraintFile(DiscoverGenericFile):
 
     if verbose == 1:
     
-      print "Reading %s distance constraint list %s" % (self.format,self.name)
+      print("Reading %s distance constraint list %s" % (self.format,self.name))
     
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
  
     #
     # Start reading...
@@ -130,7 +130,7 @@ class DiscoverDistanceConstraintFile(DiscoverGenericFile):
 
     if verbose == 1:
  
-      print "Writing %s distance constraint list %s" % (self.format,self.name)
+      print("Writing %s distance constraint list %s" % (self.format,self.name))
     
     
     fout = open(self.name,'w')
@@ -218,16 +218,16 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
     
     for constraint in constraintFile.constraints:
-      print constraint.Id,
-      print constraint.upperDist, constraint.lowerDist, 
+      print(constraint.Id,)
+      print(constraint.upperDist, constraint.lowerDist,)
 
       #print constraint.peakNum, constraint.peakVol, constraint.ppms
       for item in constraint.items:
         for member in item.members:
-          print member.chainCode,member.seqCode, member.atomName,
-        print "|",
+          print(member.chainCode,member.seqCode, member.atomName,)
+        print("|",)
       
-      print
+      print()
      
     #constraintFile.name = 'local/testout'
 
@@ -248,8 +248,8 @@ if __name__ == "__main__":
       seqnum = i +1
       
       if sequence.has_key(seqnum):
-        print sequence[seqnum]
+        print(sequence[seqnum])
       else:
-        print "ALA"
+        print("ALA")
     """
         

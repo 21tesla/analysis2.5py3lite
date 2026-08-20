@@ -87,7 +87,7 @@ class ProdecompPopup(BasePopup):
     height = int(self.winfo_screenheight())
     self.geometry('%dx%d+%d+%d' % (width,height,0,0))
 
-    print frame.printOutDocString
+    print(frame.printOutDocString)
 
     self.update_idletasks()
 
@@ -961,13 +961,13 @@ class ProdecompFrame(Frame):
 
     if acqNames:
       if len(acqNames)!= 1:
-        print ('WARNING, inconsistent displayNames for acquisition dimension:',
-             tuple(acqNames))
+        print(('WARNING, inconsistent displayNames for acquisition dimension:',
+             tuple(acqNames)))
       acqName = acqNames.pop()
 
     if acqName in shapeNames:
-      print ('WARNING, acquisition display name % duplicates other shape:',
-           acqNames)
+      print(('WARNING, acquisition display name % duplicates other shape:',
+           acqNames))
 
     self.acqName = acqName
 
@@ -1093,11 +1093,11 @@ class ProdecompFrame(Frame):
       axisTypePairs = []
       for name in isotopes:
         axisType = analysisProject.findFirstAxisType(name=name)
-	axisTypePairs.append( (axisType, valueAxis) ) 
-	 
+    axisTypePairs.append( (axisType, valueAxis) ) 
+     
       window = createSpectrumWindow(analysisProject.root, 'Prodecomp',
                                     axisTypePairs, spectrum=None,
-				    ncols=1, nrows=1, regions=None)   
+                    ncols=1, nrows=1, regions=None)   
 
     self.update_idletasks()
     for i, windowPane in enumerate(window.sortedSpectrumWindowPanes()):
@@ -1719,7 +1719,7 @@ def getRefExperiment(experiments, acqName, shapeNames):
 
           refExpDimRef = xpDimRef.refExpDimRef
           if refExpDimRef is None:
-            print 'WARNING, %s has no refExpDimRef' % xpDimRef
+            print('WARNING, %s has no refExpDimRef' % xpDimRef)
             return None
 
           elif xpDimRef.displayName in nameSet:

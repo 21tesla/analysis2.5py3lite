@@ -1,5 +1,5 @@
 
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Label           import Label
@@ -12,7 +12,7 @@ class QueryDialogBox(Tkinter.Toplevel, Base):
 
   def __init__(self,parent,title='Dialog Box',prompt='Prompt',
               initialvalue=None, minvalue=None, maxvalue=None,
-              position=(50,50),returnType=type('a'),hide=0 ):
+              position=(50,50),returnType=str,hide=0 ):
   
     if parent is None:
       self.parent = Tkinter._default_root
@@ -100,7 +100,7 @@ class QueryDialogBox(Tkinter.Toplevel, Base):
   def getResponse(self):
   
     response = self.entry.get()
-    if self.returnType == type(1):
+    if self.returnType == int:
       try:
         response = int(response)
       except:
@@ -108,7 +108,7 @@ class QueryDialogBox(Tkinter.Toplevel, Base):
       
       response = self.checkValue(response)
         
-    elif self.returnType == type(1.0):
+    elif self.returnType == float:
       try:
         response = float(response)
       except:
@@ -116,7 +116,7 @@ class QueryDialogBox(Tkinter.Toplevel, Base):
 
       response = self.checkValue(response)
     
-    elif self.returnType == type('a'):
+    elif self.returnType == str:
       response = response.strip()
 
     else:
@@ -137,21 +137,21 @@ class QueryDialogBox(Tkinter.Toplevel, Base):
     return value
 
 def askInteger(title, prompt, parent=None, **kw):
-  kw['returnType'] = type(1)
+  kw['returnType'] = int
   dialog = QueryDialogBox(parent, title, prompt, **kw)
   return dialog.response
 
 def askFloat(title, prompt, parent=None, **kw):
-  kw['returnType'] = type(1.0)
+  kw['returnType'] = float
   dialog = QueryDialogBox(parent, title, prompt, **kw)
   return dialog.response
 
 def askString(title, prompt, parent=None, **kw):
-  kw['returnType'] = type('a')
+  kw['returnType'] = str
   dialog = QueryDialogBox(parent, title, prompt, **kw)
   return dialog.response
 
 def askPassword(title, prompt, parent=None, **kw):
-  kw['returnType'] = type('a')
+  kw['returnType'] = str
   dialog = QueryDialogBox(parent, title, prompt, hide=1, **kw)
   return dialog.response

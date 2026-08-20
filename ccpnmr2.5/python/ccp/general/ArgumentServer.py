@@ -46,7 +46,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter
+import tkinter
 import re
 
 from memops.universal.Io import importModule
@@ -104,7 +104,7 @@ class ArgumentServer:
       fileName = popup.getFile()
       popup.destroy()
     else:
-      fileName = raw_input('Enter file name: ').strip()
+      fileName = input('Enter file name: ').strip()
 
     return fileName
 
@@ -118,7 +118,7 @@ class ArgumentServer:
       directory = popup.getDirectory(needFileSelected=False)
       popup.destroy()
     else:
-      directory = raw_input('Enter directory: ').strip()
+      directory = input('Enter directory: ').strip()
 
     return directory
 
@@ -617,9 +617,9 @@ class ArgumentServer:
       return
     inputVals = re.split(',',stringInput)
     
-    print 'inputVals', inputVals
-    print 'labels', labels
-    print 'keyNames', keyNames
+    print('inputVals', inputVals)
+    print('labels', labels)
+    print('keyNames', keyNames)
     
     # select object
     for ii,obj in enumerate(objects):

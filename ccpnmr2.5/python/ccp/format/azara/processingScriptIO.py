@@ -87,7 +87,7 @@ class AzaraProcessingScriptFile(AzaraGenericFile):
       return self.dataValues[dim][index].value
 
     except:
-      print "  Error: azara data reference index %d, dim %d not found." % (index,dim)
+      print("  Error: azara data reference index %d, dim %d not found." % (index,dim))
 
   def setDataValue(self,expDimIndex,dataRef,value):
     dataRefIndex = self.dataRefs.index(dataRef)
@@ -96,7 +96,7 @@ class AzaraProcessingScriptFile(AzaraGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing azara processing script file %s" % self.name
+      print("Writing azara processing script file %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -150,7 +150,7 @@ class AzaraProcessingScriptFile(AzaraGenericFile):
     fout.close()
 
     if verbose == 1:
-      print self.scriptName + " finished..."
+      print(self.scriptName + " finished...")
 
 class AzaraProcessingScript:
 
@@ -164,7 +164,7 @@ class AzaraProcessingScript:
   def setValue(self,value):
   
     if value == None:
-      print "Warning: no value for Azara dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index])
+      print("Warning: no value for Azara dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index]))
       value = 0
 
     self.value = value
@@ -175,5 +175,5 @@ class AzaraProcessingScript:
     
 if __name__ == "__main__":
 
-  print "No test available"
+  print("No test available")
   

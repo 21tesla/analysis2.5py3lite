@@ -41,7 +41,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 
-import Tkinter
+import tkinter
 
 from memops.universal.Io import getTopDirectory
 
@@ -94,7 +94,7 @@ class WindowPopup(BasePopup):
   swap spectrum data axes that have the *same* kind of isotope then this can be
   done without having to make a new window; the mapping of spectra into windows
   can be adjusted via the "Spectrum & Peak List Mappings" section of the main
-  `Windows`_ option.
+  str(Windows)_ option.
 
   There are three basic components to a spectrum window popup: there is the
   main graphical spectrum display with axes and scrollbars, which may be
@@ -119,12 +119,12 @@ class WindowPopup(BasePopup):
   i.e. a 2D spectrum can be displayed in the X-Y plane of a 3D window. Spectra
   may be prevented from appearing within this toolbar, to avoid overcrowding,
   by changing the "Spectrum In Toolbar" column within the "Spectrum & Peak List
-  Mappings" section of the main `Windows`_ option.
+  Mappings" section of the main str(Windows)_ option.
 
   Spectra may also be toggled on an off using keyboard shortcuts, which are set
-  in the main `Spectra`_ display options. Also, the order in which spectra
+  in the main str(Spectra)_ display options. Also, the order in which spectra
   are drawn is reflected in the order that they appear in the top panel;
-  this is set via the "Rank" of the `Spectra`_ display options.
+  this is set via the "Rank" of the str(Spectra)_ display options.
 
   *Contours*
 
@@ -389,8 +389,8 @@ class WindowPopup(BasePopup):
   window.
 
   .. _`Center coordinates`: GetCenterCoordsPopup.html
-  .. _`Windows`: EditWindowPopup.html
-  .. _`Spectra`: EditSpectrumPopup.html
+  .. _str(Windows): EditWindowPopup.html
+  .. _str(Spectra): EditSpectrumPopup.html
   .. _`Spectrum Contour Levels`: EditContourLevelsPopup.html
   .. _`Peak Lists`: EditPeakListsPopup.html
   .. _`Window Menu`: ../menu/WindowMenus.html
@@ -847,7 +847,7 @@ class WindowPopup(BasePopup):
         else:
           color = '#808080'
           analysisSpectrum.posColors = [color,]
-          print 'Warning %s missing positive color scheme' % analysisSpectrum
+          print('Warning %s missing positive color scheme' % analysisSpectrum)
 
         spectra.append( spectrum )
         colors.append( color )

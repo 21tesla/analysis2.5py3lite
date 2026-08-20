@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import string, sys, os, time
 
-import Tkinter
+import tkinter
 
 #
 # Import ccpn stuff
@@ -186,7 +186,7 @@ class FormatConverter(BasePopup):
     self.importFormats.sort()
     self.exportFormats.sort()
     self.importExportFormats.sort()
-	 	         
+     	         
     BasePopup.__init__(self, parent=root, title='FormatConverter', location=initLocation, *args, **keywds)
 
   def body(self, master):
@@ -404,7 +404,7 @@ class FormatConverter(BasePopup):
                                     'Create chemical shifts from peaklist(s)',
                                     'Group chemical shifts for deposition',
                                     'Write resonance->atom mapping file',
-	                                   'Write BMRB chem shift deposition',
+                                       'Write BMRB chem shift deposition',
                                     'Clean up application data in project',
                                     'Clean up resonance application data',
                                     ]
@@ -792,10 +792,10 @@ class FormatConverter(BasePopup):
     try:
       self.project.saveModified()
       return True
-    except IOError, e:
+    except (OSError, e):
       showError('Saving file', str(e))
       return False
-    except ApiError, e:
+    except ApiError as e:
       showError('Saving file', str(e))
       return False
 

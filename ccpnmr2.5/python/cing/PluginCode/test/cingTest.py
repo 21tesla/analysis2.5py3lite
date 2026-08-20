@@ -44,4 +44,4 @@ protocol.loadPDB(string=pdb)
 
 cingp = createProjectFromXplorMemory()
 
-print len(cingp['molecule']['A'].allAtoms())
+print(len(cingp['molecule']['A'].allAtoms()))

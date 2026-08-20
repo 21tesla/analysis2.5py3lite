@@ -38,7 +38,7 @@ class AllChecks(TestCase):
             os.chdir(cingDirTmpTest)
             # does it matter to import it just now?
             project = Project( entryId )
-            self.failIf( project.removeFromDisk())
+            self.assertFalse( project.removeFromDisk())
             project = Project.open( entryId, status='new' )
             self.assertTrue( project.initPDB( pdbFile=pdbFilePath, convention=IUPAC, allowNonStandardResidue=True ))
             self.assertTrue( project.save() )

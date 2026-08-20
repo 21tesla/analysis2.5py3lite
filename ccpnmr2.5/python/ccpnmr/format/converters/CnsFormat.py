@@ -140,7 +140,7 @@ class CnsFormat(DataFormat):
       for filterAtomName in self.filterAtomNames.strip().split(','):
         filterAtomNameList.append(filterAtomName.strip())
 
-      print "  Warning: filtering RDC restraint list on atom names %s" % str(filterAtomNameList)
+      print("  Warning: filtering RDC restraint list on atom names %s" % str(filterAtomNameList))
       self.filterAtomNames = filterAtomNameList
 
   def setupJCouplingConstraintItems(self):
@@ -215,7 +215,7 @@ class CnsFormat(DataFormat):
       
       # TODO THIS should be done better. Based on peak list or something... .
       if len(peaks) > 1:
-        print "  Warning: multiple peaks available for constraint - picking first available."
+        print("  Warning: multiple peaks available for constraint - picking first available.")
       
       peak = peaks[0]
       
@@ -239,7 +239,7 @@ class CnsFormat(DataFormat):
           if len(ppms) < 2:
             ppms.append(peakDim.value)
           else:
-            print "  Warning: more than 2 valid dimensions for creating ppm values for constraint list."
+            print("  Warning: more than 2 valid dimensions for creating ppm values for constraint list.")
 
       self.rawConstraint.ppms = ppms
           
@@ -328,7 +328,7 @@ class CnsFormat(DataFormat):
           
       if upperLimit < lowerLimit:
       
-        print "  Warning: upper limit lower than lower limit... cannot be handled."
+        print("  Warning: upper limit lower than lower limit... cannot be handled.")
         return
         
       else:

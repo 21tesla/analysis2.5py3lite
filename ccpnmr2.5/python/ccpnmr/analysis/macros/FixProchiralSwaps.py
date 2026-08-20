@@ -51,7 +51,7 @@ def fixProchiralSwapsMacro(argServer):
   while (swaps and n < 10):
     swaps = fixProchiralSwaps(project, sdt)
     n += 1
-    print 'Iteration %d swaps: %d' % (n, swaps)
+    print('Iteration %d swaps: %d' % (n, swaps))
 
 def fixProchiralSwaps(project, sdt=0.04):
   # Threshold shift SD for action

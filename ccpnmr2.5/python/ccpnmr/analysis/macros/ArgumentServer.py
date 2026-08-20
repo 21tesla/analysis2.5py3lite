@@ -57,7 +57,7 @@ class ArgumentServer(GenArgumentServer):
     if not peaks:
       self.messageReporter.showWarning('Warning','No peaks currently selected')
       if not self.inGui:
-        print 'Need to define %s.currentPeaks\n' % self.parent
+        print('Need to define %s.currentPeaks\n' % self.parent)
     
     return peaks
   

@@ -95,8 +95,8 @@ from ccpnmr.analysis.core.MoleculeBasic import greekSortAtomNames
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from ccpnmr.analysis.popups.IsotopeSchemeEditor import getSortedIsotopes
 
-UNICODE_SUPERSCRIPT = {'0':u'\u2070','1':u'\u00B9','2':u'\u00B2','3':u'\u00B3','4':u'\u2074',
-                       '5':u'\u2075','6':u'\u2076','7':u'\u2077','8':u'\u2078','9':u'\u2079'}
+UNICODE_SUPERSCRIPT = {'0':'\u2070','1':'\u00B9','2':'\u00B2','3':'\u00B3','4':'\u2074',
+                       '5':'\u2075','6':'\u2076','7':'\u2077','8':'\u2078','9':'\u2079'}
 
 
 ORD_0 = ord('A')-1
@@ -771,7 +771,7 @@ class EditMolLabellingPopup(BasePopup):
     isotopeCodes = []
     for code, isotope in  getSortedIsotopes(self.project, element):
       massNumber = isotope.massNumber
-      superscript = u''
+      superscript = ''
       
       for digit in str(massNumber):
         superscript += UNICODE_SUPERSCRIPT[digit]

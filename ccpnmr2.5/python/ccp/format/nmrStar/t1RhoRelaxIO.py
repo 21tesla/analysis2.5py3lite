@@ -213,4 +213,4 @@ if __name__ == "__main__":
 
     for t1RhoRelaxFile in nmrStarFile.t1RhoRelaxFiles:
       for t1RhoRelax in t1RhoRelaxFile.t1RhoRelaxValues:
-        print t1RhoRelax.Id, t1RhoRelax.seqCode, t1RhoRelax.resLabel, t1RhoRelax.atomName, t1RhoRelax.value, t1RhoRelax.valueError, t1RhoRelax.rexValue, t1RhoRelax.rexValueError
+        print(t1RhoRelax.Id, t1RhoRelax.seqCode, t1RhoRelax.resLabel, t1RhoRelax.atomName, t1RhoRelax.value, t1RhoRelax.valueError, t1RhoRelax.rexValue, t1RhoRelax.rexValueError)

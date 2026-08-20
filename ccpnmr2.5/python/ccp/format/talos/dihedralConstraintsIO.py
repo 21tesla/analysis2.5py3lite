@@ -95,7 +95,7 @@ class TalosDihedralConstraintFile(TalosGenericFile):
 
   def printInfo(self,action):
     
-    print "%s %s dihedral constraint list %s" % (action,self.format,self.name)
+    print("%s %s dihedral constraint list %s" % (action,self.format,self.name))
 
   def setVarsLine(self,varsDict):
     

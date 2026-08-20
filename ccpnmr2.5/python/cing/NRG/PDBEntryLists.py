@@ -12,7 +12,7 @@ from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.NRG.nrgCingRdb import getPdbIdList
 from cing.NRG.settings import matchBmrbPdbDir
 import urllib
-import urllib2
+import urllib.request
 
 urlDB2 = "http://restraintsgrid.bmrb.wisc.edu/servlet_data/viavia/mr_mysql_backup/"
 #urlDB2 = "http://restraintsgrid.bmrb.wisc.edu/servlet_data/viavia/mr_mysql_backupAn_2009-08-03/"
@@ -194,11 +194,11 @@ def getPdbEntries(onlyNmr=False, mustHaveExperimentalNmrData=False, onlySolidSta
             inputFile = os.path.join(dir_name, 'RESTqueryPDB.xml')
 
     rpcUrl = 'http://www.rcsb.org/pdb/rest/search'
-    queryText = open(inputFile, 'r').read()
+    queryText = open(inputFile).read()
 #    nTdebug("queryText:\n%s" % queryText)
 #    nTdebug("querying...")
-    req = urllib2.Request(url=rpcUrl, data=queryText)
-    f = urllib2.urlopen(req)
+    req = urllib.request.Request(url=rpcUrl, data=queryText)
+    f = urllib.request.urlopen(req)
     result = []
     for _i, record in enumerate(f.readlines()):
         entry_code = record.rstrip().lower()

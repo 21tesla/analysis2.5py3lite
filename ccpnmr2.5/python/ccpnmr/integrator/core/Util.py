@@ -678,7 +678,7 @@ def getNmrCalcStore(memopsRoot, nmrProjectName=None, nmrCalcStoreName=None):
   """
   """
 
-  print '### Util getNmrCalcStore', nmrProjectName, nmrCalcStoreName
+  print('### Util getNmrCalcStore', nmrProjectName, nmrCalcStoreName)
 
   result = None
 
@@ -704,7 +704,7 @@ def getNmrCalcStore(memopsRoot, nmrProjectName=None, nmrCalcStoreName=None):
                                               nmrProjectName=nmrProjectName)
   if result is None:
     # Nothing found - make a new one
-    print '### ALARM making newNmrCalcStore', nmrProjectName, nmrCalcStoreName or 'CCPNauto'
+    print('### ALARM making newNmrCalcStore', nmrProjectName, nmrCalcStoreName or 'CCPNauto')
     result = memopsRoot.newNmrCalcStore(nmrProjectName=nmrProjectName,
                                         name=nmrCalcStoreName or 'CCPNauto')
   #
@@ -747,14 +747,14 @@ def makeNmrCalc(memopsRoot, jsonObject):
   # Make Data and associated parameters
   try:
     run.root.override = True
-    print '### Override On', run.root
+    print('### Override On', run.root)
 
     for classTag in sorted(runDataTags):
       tags = runDataTags[classTag]
       if tags:
         generator = getattr(run,classGenerators[classTag])
         for dd in jsonObject.get(classTag, ()):
-          print '### Data', run.root.override, run.root, [(x,dd[x]) for x in tags if x in dd]
+          print('### Data', run.root.override, run.root, [(x,dd[x]) for x in tags if x in dd])
           parent = generator(**dict((x,dd[x]) for x in tags if x in dd))
           parent.checkValid()
           for tag in dd:
@@ -768,13 +768,13 @@ def makeNmrCalc(memopsRoot, jsonObject):
     raise
 
   finally:
-    print '### Override Off'
+    print('### Override Off')
     run.root.override = False
 
   # Make RunParameters
   tags = nonDataTags['RunParameter']
   for dd in jsonObject.get('RunParameter', ()):
-    print '### RunParameter', [(x,dd[x]) for x in tags if x in dd]
+    print('### RunParameter', [(x,dd[x]) for x in tags if x in dd])
     par = run.newRunParameter(**dict((x,dd[x]) for x in tags if x in dd))
     dataSerial = dd.get('dataSerial')
     if dataSerial:
@@ -1033,7 +1033,7 @@ def adaptNmrCalcRun(nmrCalcRun):
       nmrCalcRun: NmrCalc.Run
   """
 
-  print 'Starting Util.adaptNmrCalcRun'
+  print('Starting Util.adaptNmrCalcRun')
 
   project = nmrCalcRun.root
   nmrProject = nmrCalcRun.nmrCalcStore.nmrProject
@@ -1043,22 +1043,22 @@ def adaptNmrCalcRun(nmrCalcRun):
     shiftFormat = None
   else:
     shiftFormat = xx.textValue
-    print '### shiftFormat', shiftFormat
+    print('### shiftFormat', shiftFormat)
     shiftFileSuffix = getFileFormatData(shiftFormat, 'shift')['shiftExt']
   xx = nmrCalcRun.findFirstRunParameter(name='peakFormat')
-  print xx
+  print(xx)
   if xx is None:
     peakFormat = None
   else:
     peakFormat = xx.textValue
-    print '### peakFormat', peakFormat
+    print('### peakFormat', peakFormat)
     peakFileSuffix = getFileFormatData(peakFormat, 'peak')['peakExt']
   xx = nmrCalcRun.findFirstRunParameter(name='restraintFormat')
   if xx is None:
     restraintFormat = None
   else:
     restraintFormat = xx.textValue
-    print '### restraintFormat', restraintFormat
+    print('### restraintFormat', restraintFormat)
 
   # Get ConstraintStores
   constraintStoreSerials = set(x.constraintStoreSerial
@@ -1070,7 +1070,7 @@ def adaptNmrCalcRun(nmrCalcRun):
     mainConstraintStore = project.findFirstNmrConstraintStore(serial=max(constraintStoreSerials))
     # make sure FixedResonances are mapped to resonances(set FixedResonance.resonanceSerial)
     linkFixedResonancesToResonances(mainConstraintStore)
-    print '### validating for constraintStore: ', mainConstraintStore.serial
+    print('### validating for constraintStore: ', mainConstraintStore.serial)
     validateFixedAssignments(mainConstraintStore, nmrProject)
 
   else:
@@ -1212,7 +1212,7 @@ def validateFixedAssignments(constraintStore, nmrProject):
             raise Exception ('WARNING, incompatibility, assignment %s for %s differs from %s'
                  % (fres.name, fres, res.name))
         else:
-          print ('WARNING, incompatibility, extra assignment %s for %s'
+          print('WARNING, incompatibility, extra assignment %s for %s'
                  % (fres.name, fres))
     if not fatoms:
       unAssigned[fres.resonanceSerial] = fres
@@ -1312,7 +1312,7 @@ def getResonanceAtomMap (namingSystemName, nmrConstraintStore, shiftListObj=None
       vv = val[0]
       ss =   '%s.%s.%s - %s' % (vv.chain.code, vv.seqId, vv.atomName or '',
                                 vv.atomSetName or '')
-      print ("WARNING, no resonance match for FixedResonance %s, (%s) - Skipping"
+      print("WARNING, no resonance match for FixedResonance %s, (%s) - Skipping"
              % (fres.serial, ss))
     else:
       fresMap[fres] = res
@@ -1363,7 +1363,7 @@ def compressAssignments(resToAtoms, shiftValueList=None, tolerance=None):
 
   else:
     shiftValueList = None
-    print 'Warning, compressing shift resonance mapping without shift input:'
+    print('Warning, compressing shift resonance mapping without shift input:')
 
 
   # make reverse mapping
@@ -1463,7 +1463,7 @@ def setRunParametersFromConfig(nmrCalcRun, confDict, ioRole='input'):
 
       runPar.code = code
 
-      print '### runParam ', name, code, dd['value']
+      print('### runParam ', name, code, dd['value'])
 
       valueAttr = paramTypeMap[paramType]
       setattr(runPar, valueAttr, dd['value'])

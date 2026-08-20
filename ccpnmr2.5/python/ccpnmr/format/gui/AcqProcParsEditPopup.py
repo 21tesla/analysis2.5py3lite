@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter, string, os
+import tkinter, string, os
 
 from memops.universal.Util import returnInt
 from memops.universal.Util import returnFloat
@@ -462,7 +462,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
       appData = dataSource.findFirstApplicationData(application = self.applicationName, keyword = self.scriptName, value = True)
 
       if not fromFormat and appData:
-        print "  Warning: %s datasource already exists..." % toFormat
+        print("  Warning: %s datasource already exists..." % toFormat)
         return
         
       if appData:
@@ -500,7 +500,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
       elif self.freqDataDims.keys():
         refFormat = self.freqDataDims.keys()[0]
       else:
-        print "  Error: no valid reference information for setting up %s datasource" % toFormat
+        print("  Error: no valid reference information for setting up %s datasource" % toFormat)
         refFormat = None
 
     else:
@@ -513,7 +513,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
       refDims = None
     
     if createNew:
-      print "  Creating %s dataSource based on %s..." % (toFormat,refFormat)
+      print("  Creating %s dataSource based on %s..." % (toFormat,refFormat))
 
       #
       # Setup new dataSource
@@ -523,12 +523,12 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
 
     elif initialized:
 
-      print "  Copying %s dataSource information to %s..." % (refFormat,toFormat)
+      print("  Copying %s dataSource information to %s..." % (refFormat,toFormat))
       dsFreq = exp.findFirstDataSource(name = toFormat)
 
     else:
     
-      print "  Updating %s dataSource..." % (toFormat)
+      print("  Updating %s dataSource..." % (toFormat))
       dsFreq = exp.findFirstDataSource(name = toFormat)
 
 
@@ -1269,7 +1269,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
         rowName = 'row%d' % row
         
     if not rowName:
-      print "  Error in cycling reference frequency: header name wrong"
+      print("  Error in cycling reference frequency: header name wrong")
       return
 
     for dim in range(0,self.experiment.numDim):
@@ -1369,7 +1369,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
           rowName = 'row%d' % row
         
       if not rowName:
-        print "  Error in window function buttons: header name wrong"
+        print("  Error in window function buttons: header name wrong")
         return
         
       for dim in range(0,self.experiment.numDim):
@@ -1524,7 +1524,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
         for row in range(0,len(parList)):
           rowName = 'row%d' % row
           # Set values in data model
-          print dir(self.objects[parsListKey][dim])
+          print(dir(self.objects[parsListKey][dim]))
           value = getattr(self.objects[parsListKey][dim],rowName)
           parList[row][3](dim,value)
 

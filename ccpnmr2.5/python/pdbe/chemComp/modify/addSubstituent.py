@@ -73,7 +73,7 @@ class CreateCcpnObject:
       if type(linkResult) in (type(set()),type(frozenset()),type(tuple())):
         for linkedObject in linkResult:
           if not substToBaseDict.has_key(linkedObject):
-            print "  Warning: aborting %s creation - %s object does not exist." % (self.className,linkedObject)
+            print("  Warning: aborting %s creation - %s object does not exist." % (self.className,linkedObject))
             useLink = False
             break
           else:
@@ -81,14 +81,14 @@ class CreateCcpnObject:
 
       elif linkResult:
         if not substToBaseDict.has_key(linkResult):
-          print "  Warning: aborting %s creation - %s object does not exist." % (self.className,linkResult)
+          print("  Warning: aborting %s creation - %s object does not exist." % (self.className,linkResult))
           useLink = False
           break
         else:
           linkedObjects = substToBaseDict[linkResult]
 
       else:
-        print "  Warning: no result for link %s, CCPN object %s!" % (linkName,self.ccpnObject)
+        print("  Warning: no result for link %s, CCPN object %s!" % (linkName,self.ccpnObject))
         continue
 
       if not useLink:
@@ -106,7 +106,7 @@ class CreateCcpnObject:
     self.newCcpnObject = creator(**self.creationKeywds)
     
     objectKeyString = self.newObjectKeyString(self.newCcpnObject)
-    print "  Added %s%s from %s unit..." % (self.className,objectKeyString,unitText)
+    print("  Added %s%s from %s unit..." % (self.className,objectKeyString,unitText))
     
     return self.newCcpnObject
 
@@ -172,7 +172,7 @@ class CreateChemAtomOrSet(CreateCcpnObject):
     if not checkChemAtomOrSet:
       checkChemAtomOrSet = baseUnit.findFirstChemAtomSet(**self.creationKeywds)
       if checkChemAtomOrSet:
-        print "  Error: %s %s, subType %d already exists!!!" % (self.className,checkChemAtomOrSet.name,checkChemAtomOrSet.subType)
+        print("  Error: %s %s, subType %d already exists!!!" % (self.className,checkChemAtomOrSet.name,checkChemAtomOrSet.subType))
         return True
     
     return False
@@ -237,7 +237,7 @@ def deleteVoidChemCompVar(chemCompVar,changeAttrName,atomName,baseUnit,baseUnitC
         # Only rename existing if doesn't exist yet!
         if not baseUnit.findFirstChemCompVar(**searchDict):
                    
-          print "  Renaming %s for chemCompVar%s %s,%s to %s" % (changeAttrName,addText,chemCompVar.linking,chemCompVar.descriptor,changeAttr)
+          print("  Renaming %s for chemCompVar%s %s,%s to %s" % (changeAttrName,addText,chemCompVar.linking,chemCompVar.descriptor,changeAttr))
 
           # Also clean up links to any linkAtoms previously involved
           if deleteLinkAtoms:
@@ -245,7 +245,7 @@ def deleteVoidChemCompVar(chemCompVar,changeAttrName,atomName,baseUnit,baseUnitC
             for linkAtom in (linkEnd.boundLinkAtom,linkEnd.remoteLinkAtom):
               if linkAtom:
                 chemCompVar.removeChemAtom(linkAtom)
-                print "    - removed linkAtom '%s' based on removed %s %s." % (linkAtom.name,attrElementValue,changeAttrName)
+                print("    - removed linkAtom '%s' based on removed %s %s." % (linkAtom.name,attrElementValue,changeAttrName))
                 
                 if chemCompVarCoord:
                   cccLinkAtom = chemCompVarCoord.findFirstChemAtomCoord(name = linkAtom.name, subType = linkAtom.subType)
@@ -273,7 +273,7 @@ def deleteVoidChemCompVar(chemCompVar,changeAttrName,atomName,baseUnit,baseUnitC
           if chemCompVarCoord:
             chemCompVarCoord.delete()
 
-          print "  Removed chemCompVar%s %s,%s based on %s atom %s." % (addText,chemCompVar.linking,chemCompVar.descriptor,atomName,actionType)
+          print("  Removed chemCompVar%s %s,%s based on %s atom %s." % (addText,chemCompVar.linking,chemCompVar.descriptor,atomName,actionType))
           
 
 def deleteLinkEnd(chemComp,atomName,actionType = 'removal'):
@@ -283,7 +283,7 @@ def deleteLinkEnd(chemComp,atomName,actionType = 'removal'):
   if linkEnd:
     linkEnd.delete()
     linkEnd.boundLinkAtom.delete()
-    print "  Removed linkEnd %s based on %s atom %s." % (atomName,atomName,actionType)
+    print("  Removed linkEnd %s based on %s atom %s." % (atomName,atomName,actionType))
 
 def getAtomOrigCoords(rawChemComp,chemAtomName):
 
@@ -296,7 +296,7 @@ def getAtomOrigCoords(rawChemComp,chemAtomName):
       break
 
   if not coords:
-    print "  Warning: no coordinate for atom name %s." % (coordSystem,chemAtomName)
+    print("  Warning: no coordinate for atom name %s." % (coordSystem,chemAtomName))
     
   return coords
 
@@ -322,7 +322,7 @@ def copyBaseToModifiedFile(project,newBaseUnit,origBaseUnit,testMode,repository,
   # Get the template (original) base unit file location
   #
   
-  print origBaseUnit, testMode
+  print(origBaseUnit, testMode)
   
   origFilePath = findChemCompOrCoordFilePath(origBaseUnit, testMode = testMode)
 
@@ -383,7 +383,7 @@ def copyBaseToModifiedFile(project,newBaseUnit,origBaseUnit,testMode,repository,
     if replace:
       os.remove(newFilePath)
     else:
-      print "  Modified chemComp already exists - aborting..."
+      print("  Modified chemComp already exists - aborting...")
       return False
   
   #
@@ -585,8 +585,8 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
     finally:
       project.override = False
       
-    print "Setting base GlycoCT code to:\n\n%s\n" % newBaseGlycoCtCode
-    print
+    print("Setting base GlycoCT code to:\n\n%s\n" % newBaseGlycoCtCode)
+    print()
 
   #
   # Set naming system
@@ -597,7 +597,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
     namingSystem = baseUnit.findFirstNamingSystem(name = namingSystemName)
     if not namingSystem:
       namingSystem = baseUnit.newNamingSystem(name = namingSystemName)
-      print "Created new naming system %s" % namingSystemName
+      print("Created new naming system %s" % namingSystemName)
   
   #
   # Add substituent info, remove atoms from base unit
@@ -621,9 +621,9 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
     newBondType = substituentInfo[substituent]['bondType']
     newStereochem = substituentInfo[substituent]['stereochem']
     
-    print
-    print drawBox("Creating link between base atom %s to substituent %s" % (baseBindingAtomName,substituent))
-    print
+    print()
+    print(drawBox("Creating link between base atom %s to substituent %s" % (baseBindingAtomName,substituent)))
+    print()
     
     #
     # 1. Set the substUnitIndex - this is the identifier that is added to the substituents
@@ -685,7 +685,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
           removeBaseAtomCoord.delete()
 
         removeBaseAtom.delete()
-        print "  Removed atom %s, subType %d from base unit..." % (removeBaseAtomName,removeBaseAtom.subType)
+        print("  Removed atom %s, subType %d from base unit..." % (removeBaseAtomName,removeBaseAtom.subType))
         
         for namingSystem in baseUnit.namingSystems:
           for asn in namingSystem.atomSysNames:
@@ -871,8 +871,8 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
               cccv.addChemAtomCoord(substChemAtomCoord)
         
         
-      print "  Connected new substituent chemAtom %s,%s to base unit atom %s,%s, and included in relevant chemCompVars" % (
-      
+      print("  Connected new substituent chemAtom %s,%s to base unit atom %s,%s, and included in relevant chemCompVars" % (
+)
                         baseSubstBindingAtom.name,
                         baseSubstBindingAtom.subType,
                         baseBindingAtom.name,
@@ -906,7 +906,7 @@ if __name__ == '__main__':
 
   from pdbe.chemComp.Constants import testChemCompDataDir
 
-  print "Creating in test directory!"
+  print("Creating in test directory!")
   chemCompSaveDir = testChemCompDataDir
 
   #

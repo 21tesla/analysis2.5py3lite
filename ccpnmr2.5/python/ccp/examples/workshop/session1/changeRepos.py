@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
   project = loadProject('topObjectTest')
 
-  print 'Project: [%s]\n' % project
+  print('Project: [%s]\n' % project)
 
   # Find the right repository that contains the project data.
 
@@ -52,13 +52,13 @@ if __name__ == '__main__':
 
   # Print the location of all project repositories.
 
-  print 'Repositories:\n%s' % (
+  print('Repositories:\n%s' % (
     '\n'.join(repos.name + ': ' + repos.url.path
-              for repos in project.sortedRepositories() ) )
+              for repos in project.sortedRepositories() ) ))
 
   carbDataPath = uniIo.normalisePath(os.path.join(os.path.abspath('..'), 'data'))
 
-  print '\nLocation of local carbohydrate ChemComps: [%s]' % carbDataPath
+  print('\nLocation of local carbohydrate ChemComps: [%s]' % carbDataPath)
 
   carbDataUrl = Url(path = carbDataPath)
 

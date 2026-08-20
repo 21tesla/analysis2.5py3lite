@@ -82,7 +82,7 @@ class AmberGenericFile(FormatFile):
     # Start reading...
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lines = fin.readlines()
     fin.close()
     

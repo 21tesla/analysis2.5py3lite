@@ -41,7 +41,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import string
 
-import Tkinter
+import tkinter
 
 
 from ccpnmr.api import Analysis

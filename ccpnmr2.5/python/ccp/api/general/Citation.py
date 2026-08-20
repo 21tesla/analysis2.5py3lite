@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -8388,7 +8388,7 @@ class CitationStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.Citation.CitationStore.__init__"
+        print("ERROR in ccp.general.Citation.CitationStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8447,10 +8447,10 @@ class CitationStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9499,7 +9499,7 @@ class JournalCitation(Citation):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.Citation.JournalCitation.__init__"
+        print("ERROR in ccp.general.Citation.JournalCitation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9545,10 +9545,10 @@ class JournalCitation(Citation):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12234,7 +12234,7 @@ class ThesisCitation(Citation):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.Citation.ThesisCitation.__init__"
+        print("ERROR in ccp.general.Citation.ThesisCitation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12280,10 +12280,10 @@ class ThesisCitation(Citation):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -14604,7 +14604,7 @@ class ConferenceCitation(Citation):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.Citation.ConferenceCitation.__init__"
+        print("ERROR in ccp.general.Citation.ConferenceCitation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -14650,10 +14650,10 @@ class ConferenceCitation(Citation):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -17388,7 +17388,7 @@ class BookCitation(Citation):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.general.Citation.BookCitation.__init__"
+        print("ERROR in ccp.general.Citation.BookCitation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -17434,10 +17434,10 @@ class BookCitation(Citation):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

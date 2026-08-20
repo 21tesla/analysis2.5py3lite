@@ -1157,7 +1157,7 @@ class EditSpectrumPopup(BasePopup):
       for spec in spectra:
         if spec.isDeleted:
           data = (spec.experiment.name, spec.name)
-          print 'WARNING: Experiment %s spectrum %s already deleted...' % data
+          print('WARNING: Experiment %s spectrum %s already deleted...' % data)
           continue
         
         dataStores.add(spec.dataStore)
@@ -1444,7 +1444,7 @@ class EditSpectrumPopup(BasePopup):
       
     except Implementation.ApiError:
       analysisSpec.posColors = ['#808080',]
-      print 'Warning %s missing positive color scheme' % analysisSpec
+      print('Warning %s missing positive color scheme' % analysisSpec)
       
     self.posColorPulldown.setup(names, schemes, index, colors)
 
@@ -1467,7 +1467,7 @@ class EditSpectrumPopup(BasePopup):
       
     except Exception:
       analysisSpec.negColors = ['#808080',]
-      print 'Warning %s missing negative color scheme' % analysisSpec
+      print('Warning %s missing negative color scheme' % analysisSpec)
       
     self.negColorPulldown.setup(names, schemes, index, colors)
 
@@ -2080,7 +2080,7 @@ class EditSpectrumPopup(BasePopup):
       oldIsotopeCodes = self.dataDimRef.expDimRef.isotopeCodes
       self.dataDimRef.expDimRef.isotopeCodes = (isotopeCode,)
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting isotope codes', e.error_msg, parent=self)
     
     # reset SF if changing isotope
@@ -2118,13 +2118,13 @@ class EditSpectrumPopup(BasePopup):
 
     try:
       dataDimRef.expDimRef.sf = self.sfEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting spectrometer frequency', e.error_msg, parent=self)
 
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getSw(self, dataDimRef):
@@ -2158,13 +2158,13 @@ class EditSpectrumPopup(BasePopup):
       else:
         dataDimRef.localValuePerPoint = hzPerPoint
         
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting value per point', e.error_msg, parent=self)
     
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getRefppm(self, dataDimRef):
@@ -2184,13 +2184,13 @@ class EditSpectrumPopup(BasePopup):
 
     try:
       dataDimRef.refValue = self.refppmEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting reference value', e.error_msg, parent=self)
 
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getRefpt(self, dataDimRef):
@@ -2210,13 +2210,13 @@ class EditSpectrumPopup(BasePopup):
 
     try:
       dataDimRef.refPoint = self.refptEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting reference point', e.error_msg, parent=self)
 
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getOrigNpts(self, dataDimRef):
@@ -2237,13 +2237,13 @@ class EditSpectrumPopup(BasePopup):
 
     try:
       dataDim.numPointsOrig = self.origNptsEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting original number of points', e.error_msg, parent=self)
 
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getPointOffset(self, dataDimRef):
@@ -2264,13 +2264,13 @@ class EditSpectrumPopup(BasePopup):
 
     try:
       dataDim.pointOffset = self.pointOffsetEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting point offset', e.error_msg, parent=self)
 
     if shiftPeaks:
       try:
         shiftDataDimRef(dataDimRef, oldReference)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Shifting peaks', e.error_msg, parent=self)
 
   def getMinFreq(self, dataDimRef):
@@ -2283,7 +2283,7 @@ class EditSpectrumPopup(BasePopup):
     try:
       dataDimRef.expDimRef.minAliasedFreq = self.minFreqEntry.get()
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting min aliased frequency', e.error_msg, parent=self)
 
   def getMaxFreq(self, dataDimRef):
@@ -2296,7 +2296,7 @@ class EditSpectrumPopup(BasePopup):
     try:
       dataDimRef.expDimRef.maxAliasedFreq = self.maxFreqEntry.get()
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting max aliased frequency', e.error_msg, parent=self)
 
   # below is only called if isModal, in which case ok function calls this
@@ -2525,7 +2525,7 @@ class EditSpectrumPopup(BasePopup):
     npoints = self.npointsEntry.get()
     try:
       dataDim.numPoints = npoints
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting number of points', e.error_msg, parent=self)
 
   def getBlockSize(self, dataDim):
@@ -2558,7 +2558,7 @@ class EditSpectrumPopup(BasePopup):
       
       try:
         dataStore.blockSizes = blockSizes
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Setting block size', e.error_msg, parent=self)
 
   def checkFileExists(self):

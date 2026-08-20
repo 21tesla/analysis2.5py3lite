@@ -77,16 +77,16 @@ if __name__ == '__main__':
     # Now we can navigate the system. All the reference info on bonds, angles,
     # etc can also be obtained. Refer to the CCPN data model documentation to
     # see which attributes and links you can access from here.
-    print 'Code [%s], name [%s]' % (chainA.code, chainA.molecule.name)
-    print 'Code [%s], name [%s]' % (chainB.code, chainB.molecule.name)
+    print('Code [%s], name [%s]' % (chainA.code, chainA.molecule.name))
+    print('Code [%s], name [%s]' % (chainB.code, chainB.molecule.name))
 
     for res in chainA.sortedResidues():
-        print 'Residue [%s], position [%s]' % (res.ccpCode, res.seqCode + 1)
-        print '  Atoms: ',
+        print('Residue [%s], position [%s]' % (res.ccpCode, res.seqCode + 1))
+        print('  Atoms: ',)
 
         for atom in res.sortedAtoms():
-            print atom.name,
-        print '\n'
+            print(atom.name,)
+        print('\n')
 
     # Check if whole project is valid using a class method. The first line
     # is a hack from earlier APIs, which should not be necessary eventually,

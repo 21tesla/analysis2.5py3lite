@@ -52,10 +52,10 @@ def restraintOverview(entryNames, extractDir=None):
         convertType = checkRestraintTypes(checkDir, entryName)
       
       elif ll:
-        print entryName, 'ERROR, multifiles', ll
+        print(entryName, 'ERROR, multifiles', ll)
       
       else:
-        print entryName, 'NONE'
+        print(entryName, 'NONE')
 
 def checkRestraintTypes(restraintDir, entryName=None):
   """ count restraints of differnet types and return restraint reader type
@@ -88,7 +88,7 @@ def checkRestraintTypes(restraintDir, entryName=None):
   for tt in reversed(sorted(ll)):
     ss += "%s %s; " % (tt[1], tt[2])
   
-  print ss 
+  print(ss)
 
 
 def makeOverview(resultData, fieldOrder):
@@ -185,7 +185,7 @@ def forAllEntries(calcData, func, entries=()):
   else:
     dicts = [x for x in calcData.values() if not x.get('isOriginal')]
   
-  print 'Executing %s %s times' % (func.__name__, len(dicts))
+  print('Executing %s %s times' % (func.__name__, len(dicts)))
   for dd in dicts:
     func(dd)
   
@@ -246,7 +246,7 @@ def makeCcpnProject(entryName):
     #entryName = casdUtil.getEntryName(info)
     orgName = entryName.split('_')[0] + '_Org'
     
-    print 'Starting', entryName
+    print('Starting', entryName)
     
     logFileHandle = casdUtil.createLogFile(entryName, 'extractEntry')
   
@@ -292,7 +292,7 @@ def makeCcpnProject(entryName):
         restraintFiles = os.listdir(tmprestr)
       else:
         restraintFiles = ()
-        print 'WARNING, %s no restraints found at %s' % (entryName, src)
+        print('WARNING, %s no restraints found at %s' % (entryName, src))
  
       # read in data
       
@@ -319,16 +319,16 @@ def makeCcpnProject(entryName):
         
         if True:
         #if fcw is None:
-	      #Always use dataIo version
+          #Always use dataIo version
           # dataIo version
           ensemble = StructureIo.getStructureFromFiles(
                                  ccpnProject.findFirstMolSystem(), pdbPaths)
                                              
           if ensemble is None:
-            print '### Skipping %s, no structures loaded' % entryName
+            print('### Skipping %s, no structures loaded' % entryName)
             
           else:
-            print '### num files, ensemble', len(pdbPaths), ensemble.ensembleId
+            print('### num files, ensemble', len(pdbPaths), ensemble.ensembleId)
             casdRun.newStructureEnsembleData(name=entryName, 
                                              structureEnsemble=ensemble)
         
@@ -336,11 +336,11 @@ def makeCcpnProject(entryName):
           # FormatConverter version
           #fileInfo = fcw.determineFileInfo(pdbPaths[0])
           if len(pdbPaths) != 1:
-            print 'WARNING %s pdb files, only one read. TBD FIX' % len(pdbPaths)
+            print('WARNING %s pdb files, only one read. TBD FIX' % len(pdbPaths))
           dataType = 'coordinates'
           formatName = 'pseudoPdb'
           pdbPath = pdbPaths[0]
-          print 'Reading structure file', dataType, formatName, pdbPath
+          print('Reading structure file', dataType, formatName, pdbPath)
           fcw.readFile(dataType, formatName, pdbPath)
             
           
@@ -349,7 +349,7 @@ def makeCcpnProject(entryName):
           #           3) How to get hold of the new ensemble for putting in NmrCalc
         
       else:
-        print '### Skipping %s, no structure file' % entryName
+        print('### Skipping %s, no structure file' % entryName)
         
     
       # Make NmrCalc object for shift list
@@ -360,7 +360,7 @@ def makeCcpnProject(entryName):
         casdRun.newMeasurementListData(name='Shiftlist', 
                                        measurementList=shiftLists.pop())
       else:
-        print 'WARNING. %s shift lists found, should be s' % len(shiftLists)
+        print('WARNING. %s shift lists found, should be s' % len(shiftLists))
     
       # Restraints reading 
       if restraintFiles:
@@ -379,14 +379,14 @@ def makeCcpnProject(entryName):
             dataType = fileInfo.get('dataType')
             formatName = fileInfo.get('formatName')
             if dataType is None or formatName is None:
-              print 'Skipping unidentified restraint file', dataType, formatName,  rfile
+              print('Skipping unidentified restraint file', dataType, formatName,  rfile)
             
             elif dataType not in ('distanceConstraints', 'dihedralConstraints',
                                   'rdcConstraints',):
-              print 'Skipping wrong type of restraint file', dataType, formatName,  rfile
+              print('Skipping wrong type of restraint file', dataType, formatName,  rfile)
               
             else:
-              print 'Reading restraint file', dataType, formatName, rfile
+              print('Reading restraint file', dataType, formatName, rfile)
               fcw.readFile(dataType, formatName, rpath)
               if fcw.conversionSuccess:
                 print ("Successful restraint file read:\n%s" % fcw.conversionInfo)
@@ -400,7 +400,7 @@ def makeCcpnProject(entryName):
 
         
         # linkResonances
-        print '### linking resonances'
+        print('### linking resonances')
         linkingInfo = fcw.linkAllResonancesToAtoms()
 
     finally:
@@ -414,12 +414,12 @@ def makeCcpnProject(entryName):
     genIo.packageProject(ccpnProject, ccpnOutputDir)
     shutil.rmtree(ccpnOutputDir)
     ccpnOutputPath = ccpnOutputDir + '.tgz'
-    print 'SUCCESS, %s saved to %s' % (entryName, ccpnOutputPath)
+    print('SUCCESS, %s saved to %s' % (entryName, ccpnOutputPath))
     
     return ccpnOutputPath
   
   except:
-    print 'ERROR for %s' % (entryName)
+    print('ERROR for %s' % (entryName))
     traceback.print_exc(file=sys.stdout)
   
   finally:
@@ -436,7 +436,7 @@ def extractResults(infoDict):
   target = infoDict['Target']
   entry = infoDict['EntryID']
   dataId = '%s %s' % (target, entry)
-  print '### ', dataId
+  print('### ', dataId)
   
   targetDir = os.path.join(casdNmrDir, 'results', target, str(entry))
   structDir = os.path.join(targetDir, 'structures')
@@ -454,8 +454,8 @@ def extractResults(infoDict):
   ll = [x for x in os.listdir(loadDir)]
   ll2 = [x for x in ll if not x.endswith('.pdb')]
   if ll2:
-    print ('### WARNING, %s non-pdb structure data: %s' %
-           (dataId, ll2))
+    print(('### WARNING, %s non-pdb structure data: %s' %
+           (dataId, ll2)))
   if not ll or len(ll2) == len(ll):
     print ('### WARNING, %s NO pdb structure data' % dataId)
     
@@ -504,7 +504,7 @@ def makeCcpnProject(info):
     projId = '%s_%s' % (target,entry)
     
     if entry in casdConstants.skipEntries:
-      print '### Skipping %s, marked to ignore' % projId
+      print('### Skipping %s, marked to ignore' % projId)
       return
  
     # Temporary - must be improved later
@@ -540,12 +540,12 @@ def makeCcpnProject(info):
       pdbPaths = [os.path.join(structureDir,x) for x in pdbFiles]
       StructureIo.getStructureFromFiles(ccpnProject.findFirstMolSystem(), pdbPaths)
       
-      print '### num files, ensembles', len(pdbPaths), len(ccpnProject.structureEnsembles)
+      print('### num files, ensembles', len(pdbPaths), len(ccpnProject.structureEnsembles))
       x = ccpnProject.findFirstStructureEnsemble()
-      print '### num structures: %s' % (x and len(x.models))
+      print('### num structures: %s' % (x and len(x.models)))
  
     else:
-      print '### Skipping %s, no structure files' % projId
+      print('### Skipping %s, no structure files' % projId)
       return
  
     # rename and package project
@@ -560,13 +560,13 @@ def makeCcpnProject(info):
     #genIo.saveProject(ccpnProject, ccpnOutputPath, newProjectName=projId,
     #                  removeExisting=True, checkValid=True,
     #                  changeDataLocations=True)
-    print 'SUCCESS, %s %s saved to %s' % (projId, info['Program'], 
-                                          ccpnOutputPath)
+    print('SUCCESS, %s %s saved to %s' % (projId, info['Program'], 
+                                          ccpnOutputPath))
     
     return ccpnOutputPath
     
   except:
-    print 'ERROR for %s %s' % (projId, info['Program'])
+    print('ERROR for %s %s' % (projId, info['Program']))
     traceback.print_exc(file=sys.stdout)
     '''
 '''
@@ -641,7 +641,7 @@ def oldToNewData(info):
     if len(ll) == 1:
       shutil.copy(os.path.join(useDir,ll[0]), newdirs['restraints'])
     else:
-      print 'ERROR, found %s restraint files for ' % len(ll), entryName
+      print('ERROR, found %s restraint files for ' % len(ll), entryName)
     
     # get pdb file
     pdbCode = info['PDBcode'].lower()
@@ -650,7 +650,7 @@ def oldToNewData(info):
     if len(ll) == 1:
       shutil.copy(os.path.join(useDir,ll[0]), newdirs['structures'])
     else:
-      print 'ERROR, found %s restraint files for ' % len(l), entryName
+      print('ERROR, found %s restraint files for ' % len(l), entryName)
   
   
   else:
@@ -677,7 +677,7 @@ def oldToNewData(info):
     for ff in files:
       shutil.copy(os.path.join(oldDataDir,ff), newdirs['superseded'])
   
-  print '### Copied', entryName, target
+  print('### Copied', entryName, target)
   '''
 
 

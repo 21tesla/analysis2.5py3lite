@@ -57,7 +57,7 @@ def getBlockFile(spectrum, mem_cache, writeable = False):
   fileName = getDataSourceFileName(spectrum)
   if (not fileName or (not writeable and not os.path.exists(fileName))):
     msg = 'Warning: spectrum (%s, %s): data file %s not accessible'
-    print msg % (spectrum.experiment.name, spectrum.name, fileName)
+    print(msg % (spectrum.experiment.name, spectrum.name, fileName))
     block_file = None
 
   else:
@@ -105,8 +105,8 @@ def getBlockFile(spectrum, mem_cache, writeable = False):
                              points, blockSize, dimWrapped, mem_cache,
                              dataStore.nByte, isBigEndian, isPadded,
                              dataStore.headerSize, isInteger, writeable)
-        except BlockFile.error, e:
-          print 'Warning, BlockFile error:', e
+        except BlockFile.error as e:
+          print('Warning, BlockFile error:', e)
           block_file = None
     
     else:
@@ -132,7 +132,7 @@ def getShapeBlockFile(spectrum):
   if ((not fileName or not os.path.exists(fileName)) and 
       (spectrum.numDim > 1 or not valuesList)):
     msg = 'Warning: spectrum (%s, %s): data file %s not accessible'
-    print msg % (spectrum.experiment.name, spectrum.name, fileName)
+    print(msg % (spectrum.experiment.name, spectrum.name, fileName))
 
   else:
 
@@ -165,7 +165,7 @@ def getShapeBlockFile(spectrum):
       try:
         block_file = BlockFile.ShapeBlockFile(fileName, ndim,
                              points, blockSize, dimWrapped, shapeFile)
-      except BlockFile.error, e:
-        print 'Warning, BlockFile error:', e
+      except BlockFile.error as e:
+        print('Warning, BlockFile error:', e)
 
   return block_file

@@ -216,7 +216,7 @@ class EditPeakPopup(BasePopup):
         volume = volumeIntensity.value
       else:
         volume = 0.0
-	
+    
       for i in range(self.numDims):
         peakDim = dims[i]
         dataDimRef = peakDim.dataDimRef

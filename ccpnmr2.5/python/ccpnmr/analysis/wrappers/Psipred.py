@@ -57,7 +57,7 @@ def testCcpnPsipred(argServer):
 
   ssDict = psipredCcpn(chain)
   
-  print ssDict
+  print(ssDict)
   
 def psipredCcpn(chain, smooth=1, alphaBias=1.0, betaBias=1.0):
   """Descrn: Get the secondary structure predictions for the residues
@@ -150,9 +150,9 @@ def psipred(seqFile, psipredDir, prefix,
 
   os.system('%s %s > %s' % (seq2mtx, seqFile, matrixFile))
 
-  print "PSIPRED: Predicting secondary structure based on single sequence ..."
+  print("PSIPRED: Predicting secondary structure based on single sequence ...")
 
-  print "PSIPRED: Pass1 ..."
+  print("PSIPRED: Pass1 ...")
   
   psipred = osPath.join(execDir, 'psipred')
  
@@ -169,7 +169,7 @@ def psipred(seqFile, psipredDir, prefix,
   data = (psipred, matrixFile, dat1, dat2, dat3, ssFile)
   os.system('%s %s %s %s %s > %s' % data)
 
-  print "PSIPRED: Pass2 ..."
+  print("PSIPRED: Pass2 ...")
   
   datP2 = osPath.join(dataDir, 'weights_p2.dat')
   psipass2 = osPath.join(execDir, 'psipass2')
@@ -183,6 +183,6 @@ def psipred(seqFile, psipredDir, prefix,
 
   # more ...
 
-  print 'PSIPRED: Done'
+  print('PSIPRED: Done')
 
   return ssP2file, horizFile

@@ -70,7 +70,7 @@ class STARLexer:
     
     def yylex( self ) :
         if self._in == None :
-            print "Input file not open"
+            print("Input file not open")
             sys.exit( 1 )
         self._text = ""
 
@@ -181,7 +181,7 @@ class STARLexer:
                     self._yystate = self.YYSEMI
                     self._buffer = self._buffer[1:]
                     if self._verbose : 
-                        print "entering YYSEMI, buffer:", self._buffer, "len =", len( self._buffer )
+                        print("entering YYSEMI, buffer:", self._buffer, "len =", len( self._buffer ))
                     if not self._buffer.endswith( "\n" ) : 
                         self._buffer = self._buffer + "\n" # re-add if it was stripped
                     continue
@@ -221,7 +221,7 @@ def main() :
     rc = None
     while rc != l.FILEEND :
         rc = l.yylex()
-        print "RC =", rc, ":", l.getText()
+        print("RC =", rc, ":", l.getText())
 #
 #
 #

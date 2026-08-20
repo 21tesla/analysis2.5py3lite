@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import datetime
 import os
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath
 

@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 def printData(data, fileName):
 
-  print "Writing %s" % fileName
+  print("Writing %s" % fileName)
   file = open(fileName, 'w')
   file.write( getDataString(data) )
   file.write('\n')
@@ -104,7 +104,7 @@ def pickNoePeakList(peakList, shiftList=None):
     shiftList = project.currentNmrProject.findFirstMeasurementList(className='ShiftList')
     
   if not shiftList:
-    print "No shift list"
+    print("No shift list")
     return  
   
   peaks = []
@@ -132,10 +132,10 @@ def getNoeMatrixFromPeaks(noePeaks, resonances, noesyPeakLists, mixingTimes, rat
     i += 1
   
   if len(hDims) != 2:
-    print "Abort: Peaks must have two 1H dimensions"
+    print("Abort: Peaks must have two 1H dimensions")
     return
   
-  print "Setup on-the-fly attributes"
+  print("Setup on-the-fly attributes")
   for peak in noePeaks:
     peakDims  = peak.sortedPeakDims()
     peak.ppm1 = peakDims[hDims[0]].value
@@ -146,7 +146,7 @@ def getNoeMatrixFromPeaks(noePeaks, resonances, noesyPeakLists, mixingTimes, rat
     if peakIntensity:
       peak.vol = peakIntensity.value
     else:
-      print "Abort: Peak %s missing %s" % (peak, intensityType) 
+      print("Abort: Peak %s missing %s" % (peak, intensityType))
       return
 
   if len(spectrum.dataDims) == 2:
@@ -161,38 +161,38 @@ def getNoeMatrixFromPeaks(noePeaks, resonances, noesyPeakLists, mixingTimes, rat
  
     #printData(diagonalPeaksList, 'Check_diagonalPeaksList.txt')
 
-    print "Get excitation profile"
+    print("Get excitation profile")
     profile  = getExcitationProfile(spectrum)
     #printData(profile, 'Check_profile.txt')
 
-    print "Correct diagonal for excitation"
+    print("Correct diagonal for excitation")
     diagonal = correctDiagonalExcitation(diagonalPeaksList, profile)
     #printData(diagonal, 'Check_diagonal.txt')
     
-    print "Normalise NOE peaks (%d)" % len(noePeaks)
+    print("Normalise NOE peaks (%d)" % len(noePeaks))
     noePeaks = normaliseNoePeaks(noePeaks, diagonal, mixingTimes)
     #printData(noePeaks, 'Check_normaliseNoePeaks.txt')
 
-    print "Correct NOEs for excitation"
+    print("Correct NOEs for excitation")
     noePeaks = correctExcitationProfile(profile, noePeaks)
     #printData(noePeaks, 'Check_correctExcitationProfile.txt')
 
-    print "Filter NOE peaks"
+    print("Filter NOE peaks")
     noePeaks = filterPeaks(noePeaks, diagonalThreshold=0.04, removeUnassigned=1, minimumVolume=None, excludeRegions=None)
     #printData(noePeaks, 'Check_filterPeaks.txt')
 
-    print "Generate symmetry weightings"
+    print("Generate symmetry weightings")
     weights  = generateSymmetryWeights(spectrum)
     #printData(weights, 'Check_SymmetryWeights.txt')
 
-    print "Symmetrise peaks"
+    print("Symmetrise peaks")
     noePeaks = symmetrisePeaks(noePeaks, weights, checkDuplicates=0, verbose=0)
     #printData(noePeaks, 'Check_symmetrisePeaks.txt')
 
   else:
     noePeaks = correct3dNoePeaks(noePeaks, analysis)
 
-  print "Generate NOE matrix"
+  print("Generate NOE matrix")
   N = len(resonances)
 
   # setup resonance names for typing: HN, H, CH3 etc
@@ -244,7 +244,7 @@ def getNoeMatrixFromPeaks(noePeaks, resonances, noesyPeakLists, mixingTimes, rat
   #    matrix[a][b] /= vMax
  
   #printData(matrix, 'Check_matrix.txt')
-  print "Done"
+  print("Done")
   return matrix
 
 
@@ -309,7 +309,7 @@ def correctDiagonalExcitation(diagonalPeaksList, excitationProfile, intensityTyp
           break
      
       if correct is None: 
-        print 'Peak %s ppm value %f not in excitation profile ranges' % (peak, ppm)
+        print('Peak %s ppm value %f not in excitation profile ranges' % (peak, ppm))
         continue
 
       intensities.append( [peakDims[0].value, peakDims[1].value, intensity/correct] )
@@ -355,7 +355,7 @@ def getExcitationProfile(spectrum, nSteps=100, isWatergate=0, weightingFactor=1.
   baseFreq  = dataDimRef.expDimRef.baseFrequency
   specFreq  = dataDimRef.expDimRef.sf
   
-  print  "Generating excitation profile for %s:%s (%f-%f) ppm" % (spectrum.experiment.name,spectrum.name,ppm0,ppm1)
+  print("Generating excitation profile for %s:%s (%f-%f) ppm" % (spectrum.experiment.name,spectrum.name,ppm0,ppm1))
   
   excitationProfile = []
   
@@ -367,7 +367,7 @@ def getExcitationProfile(spectrum, nSteps=100, isWatergate=0, weightingFactor=1.
     # 5/11/20 Rasmus added check for baseFreq is None
     O1  = (specFreq - baseFreq) * 1000.0
     O1p = O1/baseFreq
-    d19 = raw_input("Enter d19 in seconds:")
+    d19 = input("Enter d19 in seconds:")
     
     dist_nextnullHz  = 1.0/(2*d19);
     dist_nextnullppm = dist_nextnullHz/baseFreq
@@ -379,7 +379,7 @@ def getExcitationProfile(spectrum, nSteps=100, isWatergate=0, weightingFactor=1.
    
   else:
     if not isWatergate:
-      print "No Watergate - equal weighting for all peaks"
+      print("No Watergate - equal weighting for all peaks")
     for i in range(nSteps):
       excitationProfile[i][2] = weightingFactor
 
@@ -394,7 +394,7 @@ def moment(data):
 
   n = len(data)
   if n<=1:
-    print  "n must be at least 2 in moment\n"
+    print("n must be at least 2 in moment\n")
 
   n = float(n)
 
@@ -430,7 +430,7 @@ def moment(data):
     curt  = curt/(n*var*var)-3.0
 
   else:
-    print  "No skew/kurtosis when variance = 0 (in moment)\n"
+    print("No skew/kurtosis when variance = 0 (in moment)\n")
 
   return (ave, adev, sdev, var, skew, curt)
 
@@ -496,8 +496,8 @@ def normaliseNoePeaks(noePeaks, diagonalIntensities, mixingTimes):
    
   rA0_ave,rA0_adev,rA0_sdev,rA0_var,rA0_skew,rA0_curt = moment(A0)
 
-  print  "A0_ave  = %f" % rA0_ave
-  print  "A0_sdev = %f" % rA0_sdev
+  print("A0_ave  = %f" % rA0_ave)
+  print("A0_sdev = %f" % rA0_sdev)
 
   average_slope = 0
   for x in slope:
@@ -505,7 +505,7 @@ def normaliseNoePeaks(noePeaks, diagonalIntensities, mixingTimes):
     
   average_slope /= float(N)
 
-  print  "exponential constant = %f " % average_slope 
+  print("exponential constant = %f " % average_slope)
 
   max_cutoff = rA0_ave+rA0_sdev
   min_cutoff = rA0_ave-rA0_sdev
@@ -583,14 +583,14 @@ def correctExcitationProfile(excitationProfile, noePeaks, verbose=0):
       if (peak.ppm1<=upper) and (peak.ppm1>=lower):
         if (peak.vol>=volThresh) and (factor>=exciteThresh):
           if verbose:
-            print  "volume modified by the excitation profile\n"
-            print  "unmodified volume = %f\n" % peak.vol
-            print  "weighting factor = %f\n" % factor
+            print("volume modified by the excitation profile\n")
+            print("unmodified volume = %f\n" % peak.vol)
+            print("weighting factor = %f\n" % factor)
 
           peak.vol = peak.vol/factor
 
           if verbose:
-            print  "modified volume = %f\n" % peak.vol
+            print("modified volume = %f\n" % peak.vol)
                         
         break
   
@@ -622,12 +622,12 @@ def generateSymmetryWeights(spectrum, nSteps=100, isWatergate=0, weightingFactor
   
     weights.append(w)
   
-  print "  StepWidth", stepWidth    
+  print("  StepWidth", stepWidth)
 
   if isWatergate:
     O1  = (specFreq - baseFreq) * 1000.0
     O1p = O1/baseFreq
-    d19 = raw_input("Enter d19 in seconds:")
+    d19 = input("Enter d19 in seconds:")
 
     dist_nextnullHz=1/(2*d19);
     dist_nextnullppm=dist_nextnullHz/baseFreq
@@ -701,19 +701,19 @@ def symmetrisePeaks(peaks, symmetryWeights, checkDuplicates=0, verbose=0):
         for peak1 in similarAssigned[peak0]: 
           resonances1 = peakResonances.get(peak1) # peak might not be in our list
           if resonances1 and (resonances1 == resonances0):
-            print  "Warning: Duplicate assignments for peaks %s and %s" % (peak0,peak1)
-            print resonances1, resonances0
+            print("Warning: Duplicate assignments for peaks %s and %s" % (peak0,peak1))
+            print(resonances1, resonances0)
 
   outPeaks = {}
   W        = len(symmetryWeights)
   nSym     = 0
   
-  print "  Symmetrising", len(peaks)
+  print("  Symmetrising", len(peaks))
   for i in range(len(peaks)-1):
     peak0 = peaks[i]
     
     if i and ( i%100 == 0):
-      print "    ", i
+      print("    ", i)
     
     resonances0 = peakResonances[peak0]
     if not resonances0:
@@ -730,21 +730,21 @@ def symmetrisePeaks(peaks, symmetryWeights, checkDuplicates=0, verbose=0):
 
         if outPeaks.get(peak0):
           if verbose:
-            print "Warning: Peak %s already symmetric to another peak" % peak0
+            print("Warning: Peak %s already symmetric to another peak" % peak0)
           continue
           
         if outPeaks.get(peak1):
           if verbose:
-            print "Warning: Peak %s already symmetric to another peak" % peak1
+            print("Warning: Peak %s already symmetric to another peak" % peak1)
           continue
         
         nSym += 1;
         
         if verbose:
-          print "Found %d symmetric peaks" % nSym
+          print("Found %d symmetric peaks" % nSym)
           s0 = '.'.join( [ pd.annotation for pd in peak0.peakDims ] )
           s1 = '.'.join( [ pd.annotation for pd in peak1.peakDims ] )
-          print "Peaks %s (%s) - %s (%s)" % (peak0, s0, peak1, s1)
+          print("Peaks %s (%s) - %s (%s)" % (peak0, s0, peak1, s1))
         
         
         factorIJ = None
@@ -761,7 +761,7 @@ def symmetrisePeaks(peaks, symmetryWeights, checkDuplicates=0, verbose=0):
           break
            
         if not factorIJ:
-          print  "Peak %s at %f,%f does not match symmetry weights matrix" % (peak0, peak0.ppm1, peak0.ppm2)  
+          print("Peak %s at %f,%f does not match symmetry weights matrix" % (peak0, peak0.ppm1, peak0.ppm2))
           continue
 
         factorJI = None
@@ -778,7 +778,7 @@ def symmetrisePeaks(peaks, symmetryWeights, checkDuplicates=0, verbose=0):
           break
             
         if not factorJI:
-          print  "Peak %s at %f,%f does not match symmetry weights matrix" % (peak1, peak1.ppm1, peak1.ppm2)  
+          print("Peak %s at %f,%f does not match symmetry weights matrix" % (peak1, peak1.ppm1, peak1.ppm2))
           continue
             
         

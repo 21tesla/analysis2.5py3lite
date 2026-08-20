@@ -62,7 +62,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -166,7 +166,7 @@ could groups targets that are not related by their properties.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Target.Project.__init__"
+        print("ERROR in ccp.lims.Target.Project.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -212,10 +212,10 @@ could groups targets that are not related by their properties.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2397,7 +2397,7 @@ class Target(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Target.Target.__init__"
+        print("ERROR in ccp.lims.Target.Target.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2447,10 +2447,10 @@ class Target(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8499,7 +8499,7 @@ protein family.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Target.TargetGroup.__init__"
+        print("ERROR in ccp.lims.Target.TargetGroup.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8542,10 +8542,10 @@ protein family.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -11904,7 +11904,7 @@ class TargetStatus(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Target.TargetStatus.__init__"
+        print("ERROR in ccp.lims.Target.TargetStatus.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -11950,10 +11950,10 @@ class TargetStatus(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12761,7 +12761,7 @@ class TargetStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Target.TargetStore.__init__"
+        print("ERROR in ccp.lims.Target.TargetStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12821,10 +12821,10 @@ class TargetStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

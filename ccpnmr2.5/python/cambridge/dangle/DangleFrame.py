@@ -56,7 +56,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END================================
 """
 
-import Tkinter, os
+import tkinter, os
 
 from memops.gui.Label               import Label
 from memops.gui.Frame               import Frame
@@ -394,8 +394,8 @@ class DangleFrame(Frame):
         res_name = residue.ccpCode
         res_num  = residue.seqId
         fopen.write('\n\t\t%5s\t%s\t%-4s\t%.3f' % (res_num, res_name, at_name, value))
-	
-	numShift += 1
+    
+    numShift += 1
     
     fopen.write('\n\t</cs_data>\n')
     fopen.write('</entry>\n')
@@ -446,7 +446,7 @@ class DangleFrame(Frame):
     else:
       self.dangleChain = dangleStore.newDangleChain(chain=chain, shiftList=shiftList)
    
-	
+    
     #dangleStore.packageLocator.repositories[0].url.dataLocation = '/home/msc51/ccpn/NexusTestGI'
     #dangleStore.packageName = 'cambridge.dangle'
     
@@ -597,8 +597,8 @@ class DangleFrame(Frame):
         omega = None
       else:
         omega = float(omega)
-	if omega == 180:
-	  omega = 179.9
+    if omega == 180:
+      omega = 179.9
       if (phiUpper == 'None'):
         phiUpper = None
       else:
@@ -628,7 +628,7 @@ class DangleFrame(Frame):
         dangleResidue = self.dangleChain.newDangleResidue(phiPsiLikelihoodMatrix=gleMatrix, residue=residue)
       else:
         dangleResidue.phiPsiLikelihoodMatrix = gleMatrix
-	
+    
       dangleResidue.numIslands = numIsland  
       dangleResidue.phiValue   = phi
       dangleResidue.phiUpper   = phiUpper
@@ -668,7 +668,7 @@ class DangleFrame(Frame):
       for i in range(36):
         y = i * binSize
         v = int(lines[x+y].strip())  
-	matrix.append(v)
+    matrix.append(v)
     
     maxVal = float(max(matrix))
     for i in range(len(matrix)):
@@ -799,7 +799,7 @@ class DangleFrame(Frame):
         else:
           # make new resonance
           if not atom.chemAtom:
-            print 'no chem atom'
+            print('no chem atom')
             
           ic = atom.chemAtom.elementSymbol
           if (ic == 'C'):
@@ -828,13 +828,13 @@ class DangleFrame(Frame):
                                                 upperLimit =dangleResidue.phiUpper,
                                                 lowerLimit =dangleResidue.phiLower)
         cnt += 1
-	
+    
       if psi is not None:
         psiConstraint.newDihedralConstraintItem(targetValue=psi,
                                                 upperLimit =dangleResidue.psiUpper,
                                                 lowerLimit =dangleResidue.psiLower)
         cnt += 1
-	
+    
     showInfo('Success', 'DANGLE has generated %d dihedral restraints.' % cnt, parent=self)
       
 
@@ -960,7 +960,7 @@ class DangleFrame(Frame):
       else:                                 # bright green circles
         self.plot.updateObjects(phiPsiAccList=phiPsiAccept,
                                 objectList=plotObjects,
-			        colors=colors)
+                    colors=colors)
     
     
   def getPhiPsi(self, residue, model=None):
@@ -1092,7 +1092,7 @@ class DangleFrame(Frame):
         
       else:
         colorMatrix.append(GOOD_COLORS)
-	
+    
     self.predictionMatrix.update(textMatrix=textMatrix,
                                  objectList=objectList,
                                  colorMatrix=colorMatrix)
@@ -1164,7 +1164,7 @@ class DangleFrame(Frame):
   def checkDangleStore(self):
 
     if not self.dangleStore:
-	
+    
       N = len(self.project.dangleStores) + 1
       name = askString('Request','Dangle Run Name:','Run%d' % N,parent=self)
       if not name:
@@ -1308,7 +1308,7 @@ class DangleFrame(Frame):
   
     ccpCodes = ['Ala','Cys','Asp','Glu','Phe','Gly','His','Ile','Lys','Leu',
                 'Met','Asn','Gln','Arg','Ser','Thr','Val','Trp','Tyr','Pro']
-		
+        
     atomNames = ['HA','CA','CB','C','N']
     
     molType = 'protein'
@@ -1317,10 +1317,10 @@ class DangleFrame(Frame):
       for atomName in atomNames:
       
         chemAtomNmrRef  = getChemAtomNmrRef(self.project, atomName, ccpCode, molType)
-	mean = chemAtomNmrRef.meanValue
-	sd   = chemAtomNmrRef.stdDev
-	
-	print '%5s%5s   %.3f   %.3f' % (ccpCode, atomName, mean, sd)
+    mean = chemAtomNmrRef.meanValue
+    sd   = chemAtomNmrRef.stdDev
+    
+    print('%5s%5s   %.3f   %.3f' % (ccpCode, atomName, mean, sd))
 
 
 

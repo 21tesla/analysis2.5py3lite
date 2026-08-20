@@ -147,7 +147,7 @@ class NmrStarGenericFile(FormatFile):
 
     if self.version not in ['2.1.1','3.0','3.1']:
 
-      print "  Cannot parse nmrStar distance constraints for version %s" % self.version
+      print("  Cannot parse nmrStar distance constraints for version %s" % self.version)
       return False
       
     return True
@@ -1614,7 +1614,7 @@ class NmrStarFile(NmrStarGenericFile):
 
     else:
     
-      print "ERROR UNRECOGNIZED VERSION '%s'" % (str(self.version))
+      print("ERROR UNRECOGNIZED VERSION '%s'" % (str(self.version)))
 
   def getConstraintCommentLoop(self,preTag = 'Dist_'):
   
@@ -1753,7 +1753,7 @@ class NmrStarFile(NmrStarGenericFile):
     keywds = {}
   
     if not self.sfDict.has_key(saveFrameName):
-      print "  Warning: saveframe name %s not in reference data!" % (saveFrameName)
+      print("  Warning: saveframe name %s not in reference data!" % (saveFrameName))
       
 
     else:
@@ -1802,20 +1802,20 @@ class NmrStarFile(NmrStarGenericFile):
           cyanaLibUsed = 1
 
     if not self.files:
-      print "  No %s data found in nmrStar file %s" % (self.saveFrameName,self.name)
+      print("  No %s data found in nmrStar file %s" % (self.saveFrameName,self.name))
 
     if cyanaLibUsed:
-      print "Using CYANA library - courtesy of Peter Guentert."
+      print("Using CYANA library - courtesy of Peter Guentert.")
 
   def readGeneric(self, verbose = 0):
 
     origNmrStarFile = nmrStar.File(verbosity = 2, filename = self.name)
 
-    print "Python nmrStar reader courtesy of Jurgen Doreleijers (BMRB) - with modifications added."
+    print("Python nmrStar reader courtesy of Jurgen Doreleijers (BMRB) - with modifications added.")
 
     # Read star file in one gulp
     if origNmrStarFile.read(text = self.text):
-      print "  Error reading nmrStar file %s" % self.name
+      print("  Error reading nmrStar file %s" % self.name)
       return
       
     #
@@ -1931,13 +1931,13 @@ class NmrStarFile(NmrStarGenericFile):
   
     if versionHits['3.1'] > versionHits['2.1.1'] and self.version not in ('3.0','3.1'):
      
-      print "  Warning: setting nmrStar version to 3.1 for reading."
+      print("  Warning: setting nmrStar version to 3.1 for reading.")
       self.version = '3.1'
       self.setComponents()
          
     elif versionHits['2.1.1'] > versionHits['3.1'] and self.version != '2.1.1':
      
-      print "  Warning: setting nmrStar version to 2.1.1 for reading."
+      print("  Warning: setting nmrStar version to 2.1.1 for reading.")
       self.version = '2.1.1'
       self.setComponents()
       
@@ -2035,7 +2035,7 @@ class NmrStarFile(NmrStarGenericFile):
     # Jurgen credits
     #
     
-    print "Python nmrStar writer courtesy of Jurgen Doreleijers (BMRB) - with modifications added."
+    print("Python nmrStar writer courtesy of Jurgen Doreleijers (BMRB) - with modifications added.")
 
     #
     # Write out the saveframes, use ordered list...
@@ -2078,7 +2078,7 @@ class NmrStarFile(NmrStarGenericFile):
         
           if not table.tagNames:
             if verbose:
-              print "  ERROR: nmrStar output for table %s... no tags available" % tableName
+              print("  ERROR: nmrStar output for table %s... no tags available" % tableName)
             continue
 
           outputSaveFrame.tagtables.append(nmrStar.TagTable(free = None,tagnames = [], tagvalues = []))
@@ -2095,7 +2095,7 @@ class NmrStarFile(NmrStarGenericFile):
                 break
 
             if not valFlag and verbose:
-              print '  Warning: tag %s is always None.' % tagName
+              print('  Warning: tag %s is always None.' % tagName)
 
           for tagName in table.tagNames:
             outputTagTable.tagnames.append(tagName)
@@ -2123,7 +2123,7 @@ class NmrStarFile(NmrStarGenericFile):
     #
     
     if outputNmrStarFile.write():
-      print "  Error writing nmrStar file %s" % self.name
+      print("  Error writing nmrStar file %s" % self.name)
       return 0
 
     else:
@@ -2282,26 +2282,26 @@ if __name__ == "__main__":
     
     for key in nmrStarFile.sfs.keys():
     
-      print key
+      print(key)
 
       for Sf in nmrStarFile.sfs[key]:
 
         for tagName in Sf.tags.keys():
 
-          print tagName, Sf.tags[tagName]
-          print tagName, Sf.tagErrors[tagName]
+          print(tagName, Sf.tags[tagName])
+          print(tagName, Sf.tagErrors[tagName])
 
         for tableName in Sf.tables.keys():
 
-          print tableName
+          print(tableName)
 
           for tagName in Sf.tables[tableName].tags.keys():
 
-            print "  ", tagName #,Sf.tables[tableName].tags[tagName]
+            print("  ", tagName #,Sf.tables[tableName].tags[tagName])
             
             for error in Sf.tables[tableName].tagErrors[tagName]:
               if error:
-                print error
+                print(error)
 
     #nmrStarFile.name = 'local/fulltest.star'
     #nmrStarFile.writeGeneric()

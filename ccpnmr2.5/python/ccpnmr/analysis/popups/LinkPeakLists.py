@@ -40,7 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import cPickle
+import pickle
 
 from ccpnmr.analysis.core.AssignmentAdvanced import pickAssignSpecFromRoot, assignSpecNonRootResonances
 
@@ -530,13 +530,13 @@ class LinkPeakListsPopup(BasePopup):
         for spectrum in experiment.dataSources:
           if len(spectrum.dataDims) != 2:
             if experiment.refExperiment:
-	      if experiment.refExperiment.name not in ('H[N[CO]]','H[N[co[CA]]]'):
-	        continue
-	    else:
+          if experiment.refExperiment.name not in ('H[N[CO]]','H[N[co[CA]]]'):
+            continue
+        else:
               continue
         
           for peakList in spectrum.peakLists:
-	    data = (experiment.name,spectrum.name,peakList.serial)
+        data = (experiment.name,spectrum.name,peakList.serial)
             peakLists.append(['%s:%s:%d' % data, peakList])
     
     peakLists.sort()

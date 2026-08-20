@@ -340,7 +340,7 @@ if __name__ == "__main__":
     procParData = BrukerProcessingParData(os.path.join(indir,'procs'),help.tags)
     procParData.get(verbose = 1)
     
-    print procParData.aPars
-    print procParData.fPars
+    print(procParData.aPars)
+    print(procParData.fPars)
     
-			
+            

@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 import os
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath, splitPath, normalisePath
 
@@ -99,5 +99,5 @@ class SaveProjectPopup(BasePopup):
     try:
       return getattr(self.__dict__['save_frame'], name)
     except:
-      raise AttributeError, "%s instance has no attribute '%s'" % (self.__class__.__name__, name)
+      raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
 

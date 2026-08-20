@@ -5,7 +5,7 @@ from SharedBeanService_services import *
 from WSString import *
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -254,7 +254,7 @@ class RepositoryFrame(Frame):
 
     for hm in ss:
 
-      print 'handling ', hm, ', ', hm['status'].__str__()
+      print('handling ', hm, ', ', hm['status'].__str__())
       #if hm['status'].__str__() == 'AVAILABLE':
       icon='text-x-generic'
       #else:
@@ -268,7 +268,7 @@ class RepositoryFrame(Frame):
 
   def set_refresh(self, text):
 
-    print 'setting refresh ', text
+    print('setting refresh ', text)
 
     if text == 'on':
       self.autoRefresh = True
@@ -279,7 +279,7 @@ class RepositoryFrame(Frame):
   def refresh(self):
 
     if self.autoRefresh:
-      print 'refreshing frame ', time.time()
+      print('refreshing frame ', time.time())
       self.drawFrame()
       
     self.after(5000, self.refresh)
@@ -308,13 +308,13 @@ class RepositoryFrame(Frame):
     # we really need to traverse the tree a lot more carefully
 
     pv = node.object.__str__()
-    print 'GOTO PROJECT ', pv, ', ', node, ', ', node.object
+    print('GOTO PROJECT ', pv, ', ', node, ', ', node.object)
     pat = re.compile('::')
     matcher = pat.search(pv, 0)
     name = pv[0:matcher.start()]
     versionTag = pv[matcher.end():]
 
-    print 'GOTO PROJECT ', name, ', ', versionTag
+    print('GOTO PROJECT ', name, ', ', versionTag)
     
     
     #versionTag = node.object.__str__()
@@ -355,13 +355,13 @@ class RepositoryFrame(Frame):
     new_project_dir = fileSelectPopup.getDirectory()
     self.basePopup.repList.current_import_dir = new_project_dir
     
-    print 'in import project with directory', new_project_dir
+    print('in import project with directory', new_project_dir)
 
     idx = new_project_dir.rfind('/')
     new_project_name = new_project_dir[idx+1:]
     
 
-    print 'in import project with project', new_project_name
+    print('in import project with project', new_project_name)
 
     # FIXME
 
@@ -456,11 +456,11 @@ class RepositoryFrame(Frame):
       objects.append(strg)
       callbacks.append(self.openLink)
 
-    print 'UPDATE ', ss
-    print 'UPDATE ', len(ss)
+    print('UPDATE ', ss)
+    print('UPDATE ', len(ss))
 
     if len(ss) > 0:
-      print 'UPDATE: updating '
+      print('UPDATE: updating ')
       self.repTree.update(parents, objects, texts, icons, callbacks)
     
 

@@ -80,9 +80,9 @@ if (__name__ == '__main__'):
   def func():
 
     v = entry1.get()
-    print type(v), v
+    print(type(v), v)
     v = entry2.get()
-    print type(v), v
+    print(type(v), v)
 
   root = Tkinter.Tk()
  

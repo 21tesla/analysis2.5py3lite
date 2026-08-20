@@ -155,7 +155,7 @@ class CcpNmrFormat(DataFormat):
           self.resLabels.append(assignSearch.group(3))
           
         else:
-          print "   No decomposition possible for %s assignment" 
+          print("   No decomposition possible for %s assignment")
 
   def getPresetChainMapping(self,chainList):
     # TODO: should be able to handle multiple!

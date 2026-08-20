@@ -17,7 +17,7 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         entryId = "1brv" # Small much studied PDB NMR entry
@@ -30,7 +30,7 @@ class AllChecks(TestCase):
 
         # does it matter to import it just now?
         project = Project( entryId )
-        self.failIf( project.removeFromDisk())
+        self.assertFalse( project.removeFromDisk())
         project = Project.open( entryId, status='new' )
         project.initPDB( pdbFile=pdbFilePath, convention = IUPAC )
 
@@ -57,7 +57,7 @@ class AllChecks(TestCase):
         pdbFileName = "pdb"+entryId+".ent"
         fn = os.path.join( pdbDirectory, pdbFileName)
 
-        self.failIf( os.chdir(cingDirTmp), msg=
+        self.assertFalse( os.chdir(cingDirTmp), msg=
             "Failed to change to directory for temporary test files: "+cingDirTmp)
         self.assertFalse(printSequenceFromPdbFile(fn))
 

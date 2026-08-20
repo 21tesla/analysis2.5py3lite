@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Frame import Frame
@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
     global color_chooser
 
-    print 'color:', color_chooser.getColor()
+    print('color:', color_chooser.getColor())
     sys.exit(0)
 
   root = Tkinter.Tk()

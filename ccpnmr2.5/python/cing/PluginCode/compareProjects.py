@@ -540,9 +540,9 @@ def printResidueScores( projects ):
 
     n = len(projects)
 
-    print dots20*(n+1)
-    print '    Residues'
-    print dots20*(n+1)
+    print(dots20*(n+1))
+    print('    Residues')
+    print(dots20*(n+1))
     p0 = projects[0]
     for res in p0.molecule.allResidues():
         printf('%s %s %s\n',  '-'*5, res, '-'*5 )
@@ -559,7 +559,7 @@ def printResidueScores( projects ):
                 printf('%-20s%-10s\n', p.name, 'Not found')
             #end if
         #end for
-        print
+        print()
     #end for
 #end def
 
@@ -870,7 +870,7 @@ def radiusOfGiration( molecule, ranges=None, model=0 ):
     a = a*(3.0/n)
 
     w, v = LA.eig(a)
-    print w,v
+    print(w,v)
     return NTlist(*map(math.sqrt, w))
 #end def
 

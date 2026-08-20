@@ -154,7 +154,7 @@ class PippFormat(DataFormat):
         self.getSinglePeakResName(self.rawPeak.assign[self.rawPeakDimIndex])
         
       except:
-        print "  Problems handling %s assignment name %s... ignored." % (self.format,self.rawPeak.assign[self.rawPeakDimIndex])
+        print("  Problems handling %s assignment name %s... ignored." % (self.format,self.rawPeak.assign[self.rawPeakDimIndex]))
 
   def getSinglePeakResName(self,assignName):
   

@@ -87,7 +87,7 @@ class CnsCoordinateFile(CnsGenericFile):
     # Read coordinates and other info
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -153,7 +153,7 @@ class CnsCoordinateFile(CnsGenericFile):
   def write(self,endStatement = 'END',verbose = False,writeString=False):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     # Provision for writing out a string...
     if writeString:
@@ -268,10 +268,10 @@ if __name__ == "__main__":
   for mc in cnsFile.modelCoordinates:
   
     for coo in cnsFile.modelCoordinates[mc]:
-      print coo.serial, coo.resName, coo.chainId
+      print(coo.serial, coo.resName, coo.chainId)
       
   for chain in cnsFile.chains:
-    print chain, chain.chainId
+    print(chain, chain.chainId)
 
   cnsFile.name = 'local/test.coord'  
   cnsFile.write()

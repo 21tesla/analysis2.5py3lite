@@ -702,7 +702,7 @@ class CyanaParser(dict):
                 #end if
             #end if
         #end while
-        print len(result),'>>', result
+        print(len(result),'>>', result)
         return result
     #end def
 
@@ -749,7 +749,7 @@ problem resides in the multiple assignments that alters format
                 header[fieldNames[line.NR-2]] = line[1:]
             elif (line.NR == len(fieldNames)+2): # field names line
                 header[ 'fields' ] = line[1:]
-                print 'header>', header
+                print('header>', header)
 
             # 'regular' lines with data
             elif (not line.isComment('#') and line.NF > 0):
@@ -806,7 +806,7 @@ problem resides in the multiple assignments that alters format
                 error = False
                 cur = 2 # skip two fields
                 for _i in range(X_AXIS, dimension):
-                    print _i
+                    print(_i)
 #                     aIndex = line.int( cur )
 #                     if aIndex == None:
                 #        return None
@@ -887,78 +887,78 @@ problem resides in the multiple assignments that alters format
 
                 if line.NF <= dimension+6:
                 	# Ambiguous assignment for this peak
-									ambiguous = True
+                                    ambiguous = True
 # 									print line
-									for i in range(dimension):
-											aIndex = line.int(i+1)
-											if aIndex == 0:
-													resonances.append( None )
-											else:
-												if not aIndex in self._protDict:
-															ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
-																					 aIndex, line.NR, line[0]
-																				 )
-															error = True
-															break
-												else:
-															resonances.append(self._protDict[ aIndex].resonance)
-												#end if
-											#end if
-									#end for
+                                    for i in range(dimension):
+                                            aIndex = line.int(i+1)
+                                            if aIndex == 0:
+                                                    resonances.append( None )
+                                            else:
+                                                if not aIndex in self._protDict:
+                                                            ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
+                                                                                     aIndex, line.NR, line[0]
+                                                                                 )
+                                                            error = True
+                                                            break
+                                                else:
+                                                            resonances.append(self._protDict[ aIndex].resonance)
+                                                #end if
+                                            #end if
+                                    #end for
 
                 else:
-									cur = 1
+                                    cur = 1
 
-									# preserve the Xeasy peak id
-									peakId = line.int( cur )
-									if (peakId == None):
-											return None
-									cur += 1
+                                    # preserve the Xeasy peak id
+                                    peakId = line.int( cur )
+                                    if (peakId == None):
+                                            return None
+                                    cur += 1
 
-									peakpos = []
-									for _i in range(X_AXIS, dimension):
-											p = line.float( cur )
-											if (p == None):
-													return None
-											peakpos.append( p )
-											cur += 1
-									#end for
+                                    peakpos = []
+                                    for _i in range(X_AXIS, dimension):
+                                            p = line.float( cur )
+                                            if (p == None):
+                                                    return None
+                                            peakpos.append( p )
+                                            cur += 1
+                                    #end for
 
-									cur += 2 # skip two fields
-									height = line.float( cur )
-									if height == None:
-											return None
-									cur += 1
-									heightError = line.float( cur )
-									if heightError == None:
-											return None
-									cur += 1
+                                    cur += 2 # skip two fields
+                                    height = line.float( cur )
+                                    if height == None:
+                                            return None
+                                    cur += 1
+                                    heightError = line.float( cur )
+                                    if heightError == None:
+                                            return None
+                                    cur += 1
 
-									resonances = []
-									error = False
-									cur += 2 # skip two fields
-									for _i in range(X_AXIS, dimension):
-											aIndex = line.int( cur )
-											if aIndex == None:
-													return None
-											cur += 1
-											# index 0 means unassigned according to Xeasy convention
-											if aIndex == 0:
-													resonances.append( None )
-											else:
-													if not aIndex in self._protDict:
-															ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
-																					 aIndex, line.NR, line[0]
-																				 )
-															error = True
+                                    resonances = []
+                                    error = False
+                                    cur += 2 # skip two fields
+                                    for _i in range(X_AXIS, dimension):
+                                            aIndex = line.int( cur )
+                                            if aIndex == None:
+                                                    return None
+                                            cur += 1
+                                            # index 0 means unassigned according to Xeasy convention
+                                            if aIndex == 0:
+                                                    resonances.append( None )
+                                            else:
+                                                    if not aIndex in self._protDict:
+                                                            ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
+                                                                                     aIndex, line.NR, line[0]
+                                                                                 )
+                                                            error = True
 
-															break
-													else:
-															resonances.append(self._protDict[ aIndex].resonance)
-													#end if
-											#end if
-									#end for
-								#endif
+                                                            break
+                                                    else:
+                                                            resonances.append(self._protDict[ aIndex].resonance)
+                                                    #end if
+                                            #end if
+                                    #end for
+                                #endif
 
                 if not error:
                 	if not ambiguous:

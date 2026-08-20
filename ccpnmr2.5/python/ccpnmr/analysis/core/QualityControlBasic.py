@@ -513,7 +513,7 @@ def analyseNoeAssignments(molSystem, peakLists=None):
     
     if not dataDims:
       experiment = peakList.dataSource.experiment
-      print "Something is wrong with ExpTransfer setup for experiment %s" % (experiment.name)
+      print("Something is wrong with ExpTransfer setup for experiment %s" % (experiment.name))
       continue
     
     dims = set([dd.dim for dd in dataDims])

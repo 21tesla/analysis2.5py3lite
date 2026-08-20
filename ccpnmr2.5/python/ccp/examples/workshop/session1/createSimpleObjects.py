@@ -54,4 +54,4 @@ if __name__ == '__main__':
 
   # Print some info about the person and his citation.
 
-  print 'Person: [%s]; Journal [%s]' % (person.familyName, person_citation.title)
+  print('Person: [%s]; Journal [%s]' % (person.familyName, person_citation.title))

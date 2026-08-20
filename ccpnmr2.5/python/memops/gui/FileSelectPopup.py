@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 
-import Tkinter
+import tkinter
 
 
 from memops.gui.BasePopup import BasePopup
@@ -150,7 +150,7 @@ class FileSelectPopup(BasePopup):
     try:
       return getattr(self.__dict__['file_select'], name)
     except:
-      raise AttributeError, "%s instance has no attribute '%s'" % (self.__class__.__name__, name)
+      raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
 
 if __name__ == '__main__':
 
@@ -166,9 +166,9 @@ if __name__ == '__main__':
 
   popup = FileSelectPopup(root, file_types, dismiss_text='Cancel',
                           extra_dismiss_text='Skip')
-  print 'file = "' +  str(popup.getFile()) + '"'
+  print('file = "' +  str(popup.getFile()) + '"')
   popup.destroy()
 
   popup = FileSelectPopup(root, show_file=False)
-  print 'file = "' +  popup.getFile() + '"'
+  print('file = "' +  popup.getFile() + '"')
   popup.destroy()

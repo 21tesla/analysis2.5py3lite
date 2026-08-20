@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Color import getIntRgb
@@ -156,7 +156,7 @@ if __name__ == '__main__':
   root = Tkinter.Tk()
   
   def click():
-    print "Clicked"
+    print("Clicked")
     root.destroy()
   
   #b = Button(root, text='+ - + -\n- + - +\n+ - + -\n- + - +', command=click)

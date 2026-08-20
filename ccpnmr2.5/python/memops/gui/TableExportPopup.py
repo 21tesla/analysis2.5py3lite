@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 
-import Tkinter
+import tkinter
 
 
 from memops.gui.BasePopup import BasePopup
@@ -164,7 +164,7 @@ class TableExportPopup(BasePopup):
 
     try:
       fp = open(file, 'w')
-    except IOError, e:
+    except (OSError, e):
       showError('File error', str(e))
       return False
 

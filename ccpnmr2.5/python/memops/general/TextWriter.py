@@ -10,7 +10,7 @@ from memops.general import TextWriter_py_2_1
 
 settings = TextWriter_py_2_1.settings
 
-class TextWriter(TextWriter_py_2_1.TextWriter_py_2_1, object):
+class TextWriter(TextWriter_py_2_1.TextWriter_py_2_1):
   """
   """
 
@@ -23,7 +23,7 @@ class TextWriter(TextWriter_py_2_1.TextWriter_py_2_1, object):
       if not hasattr(self, tag):
         raise MemopsError(" TextWriter lacks mandatory %s attribute" % tag)
     
-    super(TextWriter, self).__init__()
+    super().__init__()
       
     # special parameters: optional with default values
     if self.rootFileName is None:

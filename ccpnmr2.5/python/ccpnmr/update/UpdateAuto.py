@@ -53,7 +53,7 @@ def updateAuto(serverLocation=UPDATE_SERVER_LOCATION,
       if server.fileUpdates:
         updateAgent.installNewUpdates()  
       else:
-        print 'No updates'
+        print('No updates')
     
 if __name__ == '__main__':
   import os

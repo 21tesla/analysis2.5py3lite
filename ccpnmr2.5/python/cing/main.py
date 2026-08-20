@@ -167,9 +167,9 @@ def pformat( obj ):
 #%%^$&*$($()
 #    print '>>', obj
     if hasattr(obj,'format'):
-        print obj.format()
+        print(obj.format())
     else:
-        print obj
+        print(obj)
     #end if
 #end def
 
@@ -182,9 +182,9 @@ def pformatall( obj, *args, **kwds ):
 #%%^$&*$($()
 #    print '>>', obj
     if hasattr(obj,'formatAll'):
-        print obj.formatAll(*args, **kwds)
+        print(obj.formatAll(*args, **kwds))
     else:
-        print formatall(obj)
+        print(formatall(obj))
     #end if
 #end def
 
@@ -403,7 +403,7 @@ def doPylintOverall(pylintFileName='pylint.txt'):
     for name in nameList:
         mod_name = pathToModuleName( name )
         if mod_name in excludedModuleList:
-            print "Skipping module:  " + mod_name
+            print("Skipping module:  " + mod_name)
             return
         pylintOutputFileName = os.path.join( pylintDir, mod_name + '.log')        
         if not os.path.exists( pylintDir ):
@@ -469,7 +469,7 @@ def testByName(name, excludedModuleList):
     tailPathStr = name[lenCingPythonDirStr + 1: - 3]
     mod_name = '.'.join(tailPathStr.split('/'))
     if mod_name in excludedModuleList:
-        print "Skipping module:  " + mod_name
+        print("Skipping module:  " + mod_name)
         return
 
     try:
@@ -478,11 +478,11 @@ def testByName(name, excludedModuleList):
         testVerbosity = 2
         unittest.TextTestRunner(verbosity=testVerbosity).run(suite) #@UndefinedVariable
         nTmessage('\n\n\n')
-    except ImportWarning, extraInfo:
+    except ImportWarning as extraInfo:
         nTmessage("Skipping test report of an optional compound (please recode to use SkipTest): %s" % extraInfo)
-    except SkipTest, extraInfo:
+    except SkipTest as extraInfo:
         nTmessage("Skipping test report of an optional compound: %s" % extraInfo)    
-    except ImportError, extraInfo:
+    except ImportError as extraInfo:
         nTmessage("Skipping test report of an optional module: %s" % mod_name)
 
     # Exit with timer info anywho. After this CING should exit so the tweak shouldn't break anything.
@@ -502,7 +502,7 @@ def doPylintByName(name, excludedModuleList):
     'Code check an individual module, return True on error or None for success.'
     mod_name = pathToModuleName( name )
     if mod_name in excludedModuleList:
-        print "Skipping module:  " + mod_name
+        print("Skipping module:  " + mod_name)
         return
     cmd = ' --rcfile ../.pylintrc --report=no ' + mod_name
     pylintDir = os.path.join( cingDirTmp, 'pylint' )
@@ -857,7 +857,7 @@ def main():
     #------------------------------------------------------------------------------------
     if options.doc:
         parser.print_help(file=sys.stdout)
-        print __doc__
+        print(__doc__)
         sys.exit(0)
     #end if
 
@@ -878,11 +878,11 @@ def main():
     # Full documentation
     #------------------------------------------------------------------------------------
     if options.docdoc:
-        print '=============================================================================='
+        print('==============================================================================')
         parser.print_help(file=sys.stdout)
-        print __doc__
+        print(__doc__)
 
-        print Project.__doc__
+        print(Project.__doc__)
         for p in plugins.values():
             nTmessage('-------------------------------------------------------------------------------' +
                        'Plugin %s\n' +
@@ -891,7 +891,7 @@ def main():
                      )
         #end for
 
-        print Molecule.__doc__
+        print(Molecule.__doc__)
         sys.exit(0)
     #end if
 

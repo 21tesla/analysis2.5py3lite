@@ -88,7 +88,7 @@ class CharmmCoordinateFile(CharmmGenericFile):
     # Read coordinates and other info
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -159,7 +159,7 @@ class CharmmCoordinateFile(CharmmGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -229,10 +229,10 @@ if __name__ == "__main__":
   for mc in charmmFile.modelCoordinates:
   
     for coo in charmmFile.modelCoordinates[mc]:
-      print coo.serial, coo.resName, coo.chainId
+      print(coo.serial, coo.resName, coo.chainId)
       
   for chain in charmmFile.chains:
-    print chain, chain.chainId
+    print(chain, chain.chainId)
 
   charmmFile.name = 'local/test.coord'  
   charmmFile.write()

@@ -169,10 +169,10 @@ class ExternalParams:
       self.init()
       self.parseFile()
       self.checkValid()
-    except ApiError, e:
+    except ApiError as e:
       raise ApiError('%s: make sure you selected correct file for %s format' % (e.error_msg, self.format))
     """
-    except Exception, e:
+    except Exception as e:
       raise ApiError('%s: make sure you selected correct file for %s format' % (e, self.format))
     """
 
@@ -397,13 +397,13 @@ class ExternalParams:
             expDimRef = expDim.findFirstExpDimRef()
             if (self.nuc[n]):
               if expDimRef.isotopeCodes != (self.nuc[n],):
-                print ('Warning: in dim %d experiment has isotopeCodes %s, spectrum has %s, must be the same'
+                print('Warning: in dim %d experiment has isotopeCodes %s, spectrum has %s, must be the same'
                        % (n+1, expDimRef.isotopeCodes, (self.nuc[n],)))
               if (abs(expDimRef.sf-self.sf[n]) > 1.0e-2):
-                print ('Warning: inconsistent sf in dim %d: %3.2f vs %3.2f' 
+                print('Warning: inconsistent sf in dim %d: %3.2f vs %3.2f' 
                        % (n+1, expDimRef.sf, self.sf[n]))
             elif expDimRef.isotopeCodes:
-              print ('Warning: in dim %d experiment has isotopeCodes %s, spectrum has no nuc set' 
+              print('Warning: in dim %d experiment has isotopeCodes %s, spectrum has no nuc set' 
                      % (n+1, expDimRef.isotopeCodes))
           else:
             # NBNB TBD new code - may not work for all cases
@@ -421,16 +421,16 @@ class ExternalParams:
               if expDimRef is None:
                 if expDimRefs:
                   expDimRef = expDimRefs[0]
-                  print ('Warning: in dim %d no ExpDimRef fits sf %s' 
-                         % (n+1, self.nuc[n]), expDimRef.sf, self.sf[n])
+                  print(('Warning: in dim %d no ExpDimRef fits sf %s' 
+                         % (n+1, self.nuc[n]), expDimRef.sf, self.sf[n]))
                   
                 else:
                   expDimRef = expDim.findFirstExpDimRef()
-                  print ('Warning: in dim %d no ExpDimRef fits nucleus %s' 
-                         % (n+1, self.nuc[n]), expDimRef.sf, self.sf[n])
+                  print(('Warning: in dim %d no ExpDimRef fits nucleus %s' 
+                         % (n+1, self.nuc[n]), expDimRef.sf, self.sf[n]))
             else:
               expDimRef = expDim.findFirstExpDimRef()
-              print (
+              print(
                'Warning: in dim %d spectrum has no nuc set' % (n+1)
               )
 

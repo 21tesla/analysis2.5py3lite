@@ -38,7 +38,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import cPickle
+import pickle
 
 from math import sqrt
 
@@ -358,7 +358,7 @@ class LinkNoeResonancesPopup(BasePopup):
     
     div = LabelDivider(frame, text='Possible Assignments', grid=(0,0))
     tipText = 'Indicates the equivalent NOE distance of the peak, using the combined assignment contributions and assuming an intensity^(-1/6) summation'
-    label = Label(frame, text=u'\u03A3NOE dist: ',
+    label = Label(frame, text='\u03A3NOE dist: ',
                   grid=(0,1), tipText=tipText)
     self.noeSumLabel = Label(frame, text='', grid=(0,2), tipText=tipText)
     
@@ -366,8 +366,8 @@ class LinkNoeResonancesPopup(BasePopup):
     frameB.grid_rowconfigure(row, weight=1)
     headingList = ['#',
                    'Reson\nF1','Reson\nF2','Reson\nF3','Reson\nF4',
-                   'Dist.',u'Tol. Weighted\nCombined \u0394',
-                   u'\u0394F1',u'\u0394F2',u'\u0394F3',u'\u0394F4','Contrib\nFrac.'
+                   'Dist.','Tol. Weighted\nCombined \u0394',
+                   '\u0394F1','\u0394F2','\u0394F3','\u0394F4','Contrib\nFrac.'
                    'Shift\nF1','Shift\nF2','Shift\nF3','Shift\nF4',]
     self.assignMatrix = ScrolledMatrix(frameB, headingList=headingList,
                                        multiSelect=True, grid=(row,0),
@@ -1102,8 +1102,8 @@ class LinkNoeResonancesPopup(BasePopup):
     dimRange = range(numDim)
     headingList  = ['#']
     headingList += ['Assign\nF%d: %s' % (i+1,self.isotopes[i]) for i in dimRange]
-    headingList += ['Dist',u'Tol. Weighted\nCombined \u0394',]
-    headingList += [u'\u0394F%d' % (i+1) for i in dimRange]
+    headingList += ['Dist','Tol. Weighted\nCombined \u0394',]
+    headingList += ['\u0394F%d' % (i+1) for i in dimRange]
     headingList += ['Contrib\nFrac',]
     headingList += ['Shift\nF%d' % (i+1) for i in dimRange]
   

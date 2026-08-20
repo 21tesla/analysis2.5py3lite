@@ -74,7 +74,7 @@ class Mol2ChemCompFile(Mol2GenericFile):
       self.infoDict = mol2File.infoDict
     
     if verbose == 1:
-      print "Getting chemComp information."
+      print("Getting chemComp information.")
     
     totalAtoms = len(self.infoDict['ATOM'])
     totalBonds = len(self.infoDict['BOND'])
@@ -118,7 +118,7 @@ class Mol2ChemCompFile(Mol2GenericFile):
         for attrType in ('chain','chainSubType'):
           attrName = substInfo['chain']
           if verbose:
-            print "  Warning: no atoms found for substructure name '%s' - trying %s name '%s'" % (substName,attrType,attrName)
+            print("  Warning: no atoms found for substructure name '%s' - trying %s name '%s'" % (substName,attrType,attrName))
           (substAtoms,atomNames,atomIds) = self.findSubstAtoms(totalAtoms,rootAtomId,attrName)
           
           if substAtoms:
@@ -160,7 +160,7 @@ class Mol2ChemCompFile(Mol2GenericFile):
             break
 
       if onlyNameMatch:
-        print "  Warning: %s substructure %s appears with different atom names and/or bond types." % (self.format,substName)
+        print("  Warning: %s substructure %s appears with different atom names and/or bond types." % (self.format,substName))
           
       if not chemComp:
         chemComp = Mol2ChemComp(self,substName,atomNames,bondTypes,substInfo)
@@ -188,14 +188,14 @@ class Mol2ChemCompFile(Mol2GenericFile):
   def write(self,verbose = 0):
     
     if verbose == 1:
-      print "Writing chemComp information to %s file %s." % (self.format,self.name)
+      print("Writing chemComp information to %s file %s." % (self.format,self.name))
     
     #
     # Only write one chemComp at a time...
     #
     
     if len(self.chemComps) > 1:
-      print "  Warning: can only write out one chemComp at a time (multiple ones given)."
+      print("  Warning: can only write out one chemComp at a time (multiple ones given).")
     
     chemComp = self.chemComps[0]
     

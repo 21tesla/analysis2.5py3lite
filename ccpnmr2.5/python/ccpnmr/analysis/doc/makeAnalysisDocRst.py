@@ -61,7 +61,7 @@ headingDecoration = {
 }
 
 # looks like Tkinter.Canvas is used sometimes instead of memops.gui.Canvas
-from Tkinter import Canvas, Radiobutton
+from tkinter import Canvas, Radiobutton
 
 from memops.universal.Io import getPythonDirectory
 
@@ -99,9 +99,9 @@ from ccpnmr.analysis.frames.ResonanceFrame import ResonanceFrame
 from ccpnmr.analysis.popups.WindowPopup import WindowPopup
 
 unknownName = '???'
-UNICODE = type(u'')
-FLOAT = type(0.0)
-INT = type(1)
+UNICODE = str
+FLOAT = float
+INT = int
 MISSING = '*Documentation missing*'
 EDITABLE = ' *(Editable)*'
 
@@ -283,7 +283,7 @@ def getWidgetText(widget):
       if type(text) == type(()):
         text = ' '.join(text)
       text = text.strip()
-    except Exception, e:
+    except Exception as e:
       text = ''
 
     if hasattr(widget, 'text'):
@@ -312,7 +312,7 @@ def getWidgetText(widget):
           text = getWidgetText(widget.label)
         elif isinstance(widget, LabelDivider) and hasattr(widget, 'label'):
           text = getWidgetText(widget.label)
-          print "QQQ"
+          print("QQQ")
         elif isinstance(widget, ScrolledMatrix):
           text = guessScrolledMatrixText(widget)
   
@@ -738,13 +738,13 @@ def makeAnalysisPopupDoc(top):
       moduleDict[moduleName].append(popup)
 
   for moduleName in sorted(moduleDict.keys()):
-    print 'working on module %s' % moduleName
-    print moduleDict[moduleName]
+    print('working on module %s' % moduleName)
+    print(moduleDict[moduleName])
     for popup in moduleDict[moduleName]:
       ###if not isinstance(popup, WindowPopup):
       makePopupDoc(popup)
 
-  print "makeAnalysisPopupDoc ALL DONE"
+  print("makeAnalysisPopupDoc ALL DONE")
 
 def menuItemHasEntry(menu_item):
 
@@ -810,9 +810,9 @@ def makeAnalysisWindowMenuDoc(top):
         makeMenuDoc(fp, menu)
     endFile(fp)
 
-    print "makeAnalysisWindowMenuDoc ALL DONE"
+    print("makeAnalysisWindowMenuDoc ALL DONE")
   else:
-    print 'cannot do window menus because no window'
+    print('cannot do window menus because no window')
 
 def makeAnalysisDoc(top):
 

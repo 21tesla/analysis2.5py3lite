@@ -114,7 +114,7 @@ def returnStarString(value,strip = 0, length = None):
     origValue = value
     value = value[:length]
     if len(origValue) > length:
-      print "  Warning: shortened value '%s' to '%s' for NMR-STAR export!" % (origValue,value)
+      print("  Warning: shortened value '%s' to '%s' for NMR-STAR export!" % (origValue,value))
 
   if value in ('.','?') or not value:
     return None

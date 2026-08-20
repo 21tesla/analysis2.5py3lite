@@ -26,8 +26,8 @@ def getInt(field, msg, line, n):
 
   try:
     value = int(field)
-  except ValueError, e:
-    raise IOError('line number %d: field "%s" = %s is not an integer:\n  %s' % (n, msg, field, line))
+  except ValueError as e:
+    raise OSError('line number %d: field "%s" = %s is not an integer:\n  %s' % (n, msg, field, line))
 
   return value
 
@@ -35,8 +35,8 @@ def getFloat(field, msg, line, n):
 
   try:
     value = float(field)
-  except ValueError, e:
-    raise IOError('line number %d: field "%s" = %s is not a real number:\n  %s' % (n, msg, field, line))
+  except ValueError as e:
+    raise OSError('line number %d: field "%s" = %s is not a real number:\n  %s' % (n, msg, field, line))
 
   return value
 
@@ -55,7 +55,7 @@ def parseProcparFile(procparFile):
   params = {}
   params['procparFile'] = procparFile
 
-  fp = open(procparFile, 'rU')
+  fp = open(procparFile)
 
   try:
 
@@ -80,7 +80,7 @@ def parseProcparFile(procparFile):
 
       fields = line1.split()
       if len(fields) != 11:
-        raise IOError('line number %d: need 11 fields, have %d:\n  %s' % (n, len(fields), line1))
+        raise OSError('line number %d: need 11 fields, have %d:\n  %s' % (n, len(fields), line1))
 
       parname = fields[0]
       subtype = getInt(fields[1], 'subtype', line1, n)
@@ -88,30 +88,30 @@ def parseProcparFile(procparFile):
       active = getInt(fields[9], 'active', line1, n)
 
       if params.has_key(parname):
-        raise IOError('line number %d: name = %s is a repeat:\n  %s' % (n, parname, line1))
+        raise OSError('line number %d: name = %s is a repeat:\n  %s' % (n, parname, line1))
 
       if subtype not in range(8):
-        raise IOError('line number %d: subtype = %d, must be in range 0-7:\n  %s' % (n, subtype, line1))
+        raise OSError('line number %d: subtype = %d, must be in range 0-7:\n  %s' % (n, subtype, line1))
 
       if basictype not in range(3):
-        raise IOError('line number %d: basictype = %d, must be in range 0-2:\n  %s' % (n, basictype, line1))
+        raise OSError('line number %d: basictype = %d, must be in range 0-2:\n  %s' % (n, basictype, line1))
 
       if basictype == 0:
-        raise IOError('line number %d: basictype = %d, do not know how to deal with case 0:\n  %s' % (n, basictype, line1))
+        raise OSError('line number %d: basictype = %d, do not know how to deal with case 0:\n  %s' % (n, basictype, line1))
 
       if active not in (0, 1):
-        raise IOError('line number %d: active = %d, must be 0 or 1:\n  %s' % (n, active, line1))
+        raise OSError('line number %d: active = %d, must be 0 or 1:\n  %s' % (n, active, line1))
 
       line2 = fp.readline().rstrip()
       n += 1
       fields = line2.split()
       if len(fields) < 2:
-        raise IOError('line number %d: need at least 2 fields, have %d:\n  %s' % (n, len(fields), line2))
+        raise OSError('line number %d: need at least 2 fields, have %d:\n  %s' % (n, len(fields), line2))
       value_len = getInt(fields[0], 'value_len', line2, n)
  
       if basictype == 1:  # (real)
         if len(fields) != (1+value_len):
-          raise IOError('line number %d: need %d fields, have %d:\n  %s' % (n, 1+value_len, len(fields), line2))
+          raise OSError('line number %d: need %d fields, have %d:\n  %s' % (n, 1+value_len, len(fields), line2))
         if value_len == 1:
           for getVal in (getInt, getFloat):
             try:
@@ -308,7 +308,7 @@ def readDataFileHeader(dataFile):
     fp.close()
 
   if len(header) != VNMR_FILE_HEADER_SIZE:
-    raise IOError('dataFile is of size %d < %d, which is header size' % (len(header), VNMR_FILE_HEADER_SIZE))
+    raise OSError('dataFile is of size %d < %d, which is header size' % (len(header), VNMR_FILE_HEADER_SIZE))
 
   x = array.array('i')  # integer
   y = array.array('H')  # unsigned short
@@ -376,7 +376,7 @@ def readDataBlockHeader(dataFileParams, block=0):
   firstBlock = dataFileParams['firstBlock']
 
   if block < 0 or block >= nblocks:
-    raise IOError('block = %d, must be in range 0 to %d' % (block, nblocks-1))
+    raise OSError('block = %d, must be in range 0 to %d' % (block, nblocks-1))
 
   block += firstBlock
 
@@ -398,10 +398,10 @@ def readDataBlockHeader(dataFileParams, block=0):
     fp.close()
 
   if len(header) != VNMR_BLOCK_HEADER_SIZE:
-    raise IOError('header for block %d only read as size %d, expecting %d' % (block, len(header), VNMR_BLOCK_HEADER_SIZE))
+    raise OSError('header for block %d only read as size %d, expecting %d' % (block, len(header), VNMR_BLOCK_HEADER_SIZE))
 
   if header1 and len(header1) != VNMR_BLOCK_HEADER_SIZE:
-    raise IOError('header1 for block %d only read as size %d, expecting %d' % (block, len(header1), VNMR_BLOCK_HEADER_SIZE))
+    raise OSError('header1 for block %d only read as size %d, expecting %d' % (block, len(header1), VNMR_BLOCK_HEADER_SIZE))
 
   x = array.array('i')  # integer
   y = array.array('H')  # unsigned short
@@ -452,7 +452,7 @@ if __name__ == '__main__':
 
   import sys
   if len(sys.argv) not in (3, 4):
-    print 'must specify Varian procpar and data files and optionally block'
+    print('must specify Varian procpar and data files and optionally block')
     sys.exit()
 
   if len(sys.argv) == 4:

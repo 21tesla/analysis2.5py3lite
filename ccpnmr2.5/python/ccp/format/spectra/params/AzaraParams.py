@@ -21,7 +21,7 @@ class AzaraParams(ExternalParams):
     try:
       procParData = AzaraProcessingParsFile(self.parFile)
       procParData.read()
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
 
     aPars = procParData.aPars
@@ -30,7 +30,7 @@ class AzaraParams(ExternalParams):
     # correct for FID data - 
     if set(self.block) == set((None,)):
       # assume that data without block information are unblocked and FID
-      print 'No blocking found - setting to Unblocked FID data'
+      print('No blocking found - setting to Unblocked FID data')
       npts = self.npts[0]
       for ii in range(self.ndim):
         self.block[ii] = npts
@@ -85,7 +85,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: required argument: <parFile>'
+    print('Error: required argument: <parFile>')
     sys.exit(1)
 
   parFile = sys.argv[1]

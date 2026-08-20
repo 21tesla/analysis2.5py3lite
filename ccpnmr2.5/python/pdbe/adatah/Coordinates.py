@@ -64,7 +64,7 @@ class CoordinateHandler:
 
     self.formatObjectDict[formatName].readCoordinates(fileList, molSystem = self.molSystem, strucGen = self.strucGen, linkAtoms = False, minimalPrompts = 1, **keywds)
   
-    print "  Read %d files from %s in %s format..." % (len(fileList),coordFileDir,formatName)
+    print("  Read %d files from %s in %s format..." % (len(fileList),coordFileDir,formatName))
 
   def checkCoordinateAtomConsistency(self):
 

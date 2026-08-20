@@ -116,11 +116,11 @@ class NmrViewProcessingParsFile(NmrViewGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s processing parameters file %s" % (self.format,self.name)
+      print("Reading %s processing parameters file %s" % (self.format,self.name))
 
     try:
-      fin = open(self.name, 'rU')
-    except IOError, e:
+      fin = open(self.name)
+    except OSError as e:
       raise str(e)
 
     lines = fin.readlines()
@@ -264,4 +264,4 @@ if __name__ == "__main__":
 
     procParFile.read(verbose = 1)
     
-    print procParFile.fPars
+    print(procParFile.fPars)

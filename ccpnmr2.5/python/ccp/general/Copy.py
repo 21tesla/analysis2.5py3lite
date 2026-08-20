@@ -117,12 +117,12 @@ def copyAttributeInfo(fromInstance,toInstance,overWrite = 1,verbose = True):
         # Value already set and can't be added in toInstance... print warning
         if toInstanceAttrValue != None:
           if verbose:
-            print "    Warning: can't relink attribute/role %s value %s: already set" % (attrName,fromInstanceAttrValue)
+            print("    Warning: can't relink attribute/role %s value %s: already set" % (attrName,fromInstanceAttrValue))
         
         else:
           setattr(toInstance,attrName,fromInstanceAttrValue)
           if verbose:
-            print "    Copied attribute %s (now %s, was %s)." % (attrName,fromInstanceAttrValue,toInstanceAttrValue)
+            print("    Copied attribute %s (now %s, was %s)." % (attrName,fromInstanceAttrValue,toInstanceAttrValue))
           
       # Is a list - just add the value (if not already present!)
       else:
@@ -131,7 +131,7 @@ def copyAttributeInfo(fromInstance,toInstance,overWrite = 1,verbose = True):
             toInstanceAttrValue += (fromInstanceAttrValueElement,)
             setattr(toInstance,attrName,toInstanceAttrValue)
             if verbose:
-              print "    Added %s to attribute %s." % (fromInstanceAttrValueElement,attrName)
+              print("    Added %s to attribute %s." % (fromInstanceAttrValueElement,attrName))
 
 def getAttributeParameterDict(instance):
 
@@ -166,7 +166,7 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
 
   if fromRes.className != toRes.className or fromRes.className not in ['Resonance','FixedResonance']:
     if verbose:
-      print "  Error: CopyResonanceInfo only for resonances. Aborting."
+      print("  Error: CopyResonanceInfo only for resonances. Aborting.")
     return
   
   copyAttributeInfo(fromRes,toRes,verbose = verbose)
@@ -256,7 +256,7 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
         isChild = 1
       
       if verbose:
-        print "    Copying %s..." % linkName
+        print("    Copying %s..." % linkName)
 
       #
       # Loop over all linked classes for this linkName
@@ -288,7 +288,7 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
         if isChild == 1:
           if linkedClassName[0:7] != 'AppData':
             if verbose:
-              print "      Can currently only handle applicationData children, not %s!" % linkedClassName
+              print("      Can currently only handle applicationData children, not %s!" % linkedClassName)
             continue
             
           parameters = getAttributeParameterDict(linkedClass)
@@ -302,8 +302,8 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
               
             except:
               if verbose:
-                print "      Problems copying %s:" % linkedClassName
-                print "        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
+                print("      Problems copying %s:" % linkedClassName)
+                print("        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1])
               
           else:
             # TODO: should really only check if key attributes are the same...
@@ -349,8 +349,8 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
               # TODO: user interaction to pick 'correct' shift?
               #
               if verbose:
-                print "      Problems creating new class %s:" % linkedClassName
-                print "        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
+                print("      Problems creating new class %s:" % linkedClassName)
+                print("        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1])
               
               #
               # Exception for shifts: take average value of shifts and report!
@@ -425,8 +425,8 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
               newLinkedClass = linkedClass.__class__(linkedClassParent,resonances = resonanceList, **parameters)
             except:
               if verbose:
-                print "      Problems creating %s:" % linkedClass.className
-                print "        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
+                print("      Problems creating %s:" % linkedClass.className)
+                print("        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1])
               continue
 
             #
@@ -437,7 +437,7 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
             if linkedClassName == 'DihedralConstraint':
 
               if verbose:
-                print  "      Copying dihedralConstraintItems..."
+                print("      Copying dihedralConstraintItems...")
 
               for dihedralConstraintItem in linkedClass.items:
 
@@ -484,8 +484,8 @@ def copyResonanceInfo(fromRes,toRes,nmrShiftSelect = nmrShiftSelect,deleteOldInf
 
               except:
                 if verbose:
-                  print "      Problems copying %s:" % applData.className
-                  print "        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
+                  print("      Problems copying %s:" % applData.className)
+                  print("        %s" % traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1])
 
 
             #
@@ -653,12 +653,12 @@ def resetNmrConstraintStoreFile(newNmrConstraintStore,newConstraintsFile):
       if strucSearch:
         strucSearch = None
         cfileLines.pop(lineNum)
-        print line,
+        print(line,)
         line = cfileLines[lineNum]
         while not strucSearch:
           line = cfileLines[lineNum]
           strucSearch = strucPatt.search(line)
-          print line,
+          print(line,)
           cfileLines.pop(lineNum)
     """
     

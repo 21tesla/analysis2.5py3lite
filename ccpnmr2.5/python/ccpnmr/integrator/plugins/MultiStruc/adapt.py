@@ -72,23 +72,23 @@ if __name__ == '__main__':
     # set up input
     junk, projectDir, nmrCalcRunId, protocolName = sys.argv[:4]
     
-    print '### input : ', projectDir, nmrCalcRunId, protocolName
+    print('### input : ', projectDir, nmrCalcRunId, protocolName)
     
     masterRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId)
-    print '### masterRun', masterRun
+    print('### masterRun', masterRun)
     if masterRun is None:
       raise Exception("No NmrCalcRun found for %s, %s" 
                       % (projectDir, nmrCalcRunId))
     
     nmrCalcRun = intUtil.makeDerivedRun(masterRun)
-    print '### nmrCalcRun', nmrCalcRun
+    print('### nmrCalcRun', nmrCalcRun)
     
     try:
       pluginModule = intUtil.getIntegratorPlugin(protocolName)
       intUtil.setRunParametersFromConfig(nmrCalcRun, 
                                          pluginModule.Util.defaultConfiguration)
     except:
-      print 'WARNING, no python plugin found for %s' % protocolName
+      print('WARNING, no python plugin found for %s' % protocolName)
       
     nmrCalcRun.wmsProtocolName = protocolName
     
@@ -97,6 +97,6 @@ if __name__ == '__main__':
     nmrCalcRun.root.saveModified()
       
   else:
-    print "Usage: write projectDir NmrCalcRun.IDstring protocolName)"
+    print("Usage: write projectDir NmrCalcRun.IDstring protocolName)")
   
   

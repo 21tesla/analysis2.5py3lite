@@ -95,9 +95,9 @@ class PippChemShiftFile(PippGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s chemical shift list %s" % (self.format,self.name)
+      print("Reading %s chemical shift list %s" % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     
     experimentRead = 0
     shiftRead = 0
@@ -189,7 +189,7 @@ class PippChemShiftFile(PippGenericFile):
   def write(self,verbose = 0):
     
     if verbose == 1:
-      print "Writing %s chemical shift list %s" % (self.format,self.name)
+      print("Writing %s chemical shift list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
     

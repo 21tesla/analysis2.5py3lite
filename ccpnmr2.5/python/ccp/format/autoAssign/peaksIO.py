@@ -101,9 +101,9 @@ class AutoAssignPeakFile(AutoAssignGenericFile):
   def read(self,verbose = False):
 
     if verbose:
-      print "Reading AutoAssign peak list %s" % self.name
+      print("Reading AutoAssign peak list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     initialized = 0
 
     # Read the atom specs on second line
@@ -164,7 +164,7 @@ class AutoAssignPeakFile(AutoAssignGenericFile):
   def write(self, verbose = 0):
 
     if verbose == 1:
-      print "Writing AutoAssign peak list %s" % self.name
+      print("Writing AutoAssign peak list %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -241,7 +241,7 @@ if __name__ == "__main__":
     peakFile.read(verbose = 1)
 
     for rawPeak in peakFile.peaks:
-      print rawPeak.intensity
+      print(rawPeak.intensity)
 
     (path,fileName) = os.path.split(peakFile.name)
     peakFile.name = os.path.join('local',fileName)

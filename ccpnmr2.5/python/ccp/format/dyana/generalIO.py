@@ -105,7 +105,7 @@ class DyanaGenericDistanceConstraintFile(DyanaGenericFile):
 
   def readGenericFile(self,fileName,upper = 1):
 
-    fin = open(fileName, 'rU')
+    fin = open(fileName)
 
     self.restrNum = -1  # Or start at 0?
 
@@ -328,14 +328,14 @@ class DyanaGenericDistanceConstraintFile(DyanaGenericFile):
 
       if len(constraint.items) > 1 and self.noAmbiguous:
 
-        print "  Warning: old DYANA can't handle ambiguous restraints - left out items:"
+        print("  Warning: old DYANA can't handle ambiguous restraints - left out items:")
 
         for i in range(1,len(constraint.items)):
-          print "    ",i,
+          print("    ",i,)
           for j in  range(0,2):
             member = constraint.items[i].members[j]
             print ("%3d %-4s %-5s " % (member.seqCode,member.resLabel,member.atomName)),
-          print
+          print()
 
       else:
 

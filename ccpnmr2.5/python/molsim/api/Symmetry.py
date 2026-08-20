@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -164,7 +164,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.Symmetry.MolSystemSymmetrySet.__init__"
+        print("ERROR in molsim.Symmetry.MolSystemSymmetrySet.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -217,7 +217,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentMolSystemSymmetrySet') is None)):
+      if (notIsReading or root.__dict__.get('currentMolSystemSymmetrySet') is None):
         root.__dict__['currentMolSystemSymmetrySet'] = self
 
       if (notIsReading):
@@ -231,10 +231,10 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -254,11 +254,11 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     function* - should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -299,11 +299,11 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentMolSystemSymmetrySet'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     molSystem = dataDict.get('molSystem')
-    if ((molSystem is not None and not (molSystem in objsToBeDeleted))):
+    if (molSystem is not None and not (molSystem in objsToBeDeleted)):
       molSystemSymmetrySets = molSystem.__dict__.get('molSystemSymmetrySets')
       molSystemSymmetrySets.remove(self)
 
@@ -338,7 +338,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     CheckAllValid for molsim.Symmetry.MolSystemSymmetrySet
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -380,11 +380,11 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -611,7 +611,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -794,21 +794,21 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('symmetries').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('symmetries').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))
         if (key in directAttrs):
@@ -859,7 +859,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('symmetries').values()
@@ -871,7 +871,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('symmetries').get(objKey)
@@ -887,7 +887,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('symmetries').values()
@@ -895,7 +895,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))
         if (key in directAttrs):
@@ -1095,7 +1095,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     Get for molsim.Symmetry.MolSystemSymmetrySet.symmetries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('symmetries').values()
@@ -1173,7 +1173,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('details')
@@ -1209,7 +1209,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1242,7 +1242,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('molSystem')
@@ -1340,7 +1340,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('name')
@@ -1376,7 +1376,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1412,7 +1412,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('symmetrySetId')
@@ -1454,7 +1454,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     Sorted for molsim.Symmetry.MolSystemSymmetrySet.symmetries
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('symmetries')
@@ -1608,7 +1608,7 @@ class Segment(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.Symmetry.Segment.__init__"
+        print("ERROR in molsim.Symmetry.Segment.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1651,10 +1651,10 @@ class Segment(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1675,7 +1675,7 @@ class Segment(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -1696,7 +1696,7 @@ class Segment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     symmetry = dataDict.get('symmetry')
@@ -1763,7 +1763,7 @@ class Segment(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -1849,7 +1849,7 @@ class Segment(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -1975,7 +1975,7 @@ class Segment(memops.api.Implementation.DataObject):
       result = list()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
         if (key in directAttrs):
@@ -2035,7 +2035,7 @@ class Segment(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
         if (key in directAttrs):
@@ -2483,7 +2483,7 @@ a multichain MolSystem.
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -2510,7 +2510,7 @@ a multichain MolSystem.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.Symmetry.Symmetry.__init__"
+        print("ERROR in molsim.Symmetry.Symmetry.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2556,10 +2556,10 @@ a multichain MolSystem.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2580,7 +2580,7 @@ a multichain MolSystem.
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -2620,7 +2620,7 @@ a multichain MolSystem.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     for haddockRun in dataDict.get('haddockRuns'):
@@ -2721,7 +2721,7 @@ a multichain MolSystem.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2772,7 +2772,7 @@ a multichain MolSystem.
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2883,7 +2883,7 @@ a multichain MolSystem.
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3052,7 +3052,7 @@ a multichain MolSystem.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
         if (key in directAttrs):
@@ -3107,7 +3107,7 @@ a multichain MolSystem.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'access', 'symmetry',))
         if (key in directAttrs):
@@ -3181,7 +3181,7 @@ a multichain MolSystem.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
         if (key in directAttrs):
@@ -3263,7 +3263,7 @@ a multichain MolSystem.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'access', 'symmetry',))
         if (key in directAttrs):
@@ -3560,7 +3560,7 @@ a multichain MolSystem.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3687,7 +3687,7 @@ a multichain MolSystem.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3757,7 +3757,7 @@ a multichain MolSystem.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3896,7 +3896,7 @@ a multichain MolSystem.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       

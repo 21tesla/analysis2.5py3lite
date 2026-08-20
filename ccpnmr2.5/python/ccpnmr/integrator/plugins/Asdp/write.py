@@ -185,6 +185,6 @@ if __name__ == '__main__':
     nmrCalcRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId, pluginName)
       
   else:
-    print "Usage: write projectDir NmrCalcRun.IDstring"
+    print("Usage: write projectDir NmrCalcRun.IDstring")
   
   

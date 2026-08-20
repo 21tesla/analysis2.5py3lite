@@ -251,4 +251,4 @@ if __name__ == "__main__":
 
     for jCouplingFile in nmrStarFile.jCouplingFiles:
       for jCoupling in jCouplingFile.jCouplingValues:
-        print jCoupling.Id, jCoupling.seqCode1, jCoupling.resLabel1, jCoupling.atomName1, jCoupling.seqCode2, jCoupling.resLabel2, jCoupling.atomName2, jCoupling.value, jCoupling.valueError
+        print(jCoupling.Id, jCoupling.seqCode1, jCoupling.resLabel1, jCoupling.atomName1, jCoupling.seqCode2, jCoupling.resLabel2, jCoupling.atomName2, jCoupling.value, jCoupling.valueError)

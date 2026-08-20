@@ -178,7 +178,7 @@ def refreshPeakAnnotations(argServer=None, project=None):
 def test(argServer=None):
 
   answer = argServer.getCurrentPeak()
-  print "Current peak is %s" % answer
+  print("Current peak is %s" % answer)
 
 def initialiseHSQC(argServer=None, spectrum=None):
 
@@ -372,7 +372,7 @@ def pickAssignSpecFromRoot(argServer, rootPeakList=None, targetPeakList=None):
           for contrib in peakDim.peakDimContribs:
             assignResToDim(peakDim2, contrib.resonance, doWarning=0)
                 
-    print 'Root peak %d of %d' % (c,M)
+    print('Root peak %d of %d' % (c,M))
     
   if argServer:
     name = '%s:%s' % (targetPeakList.dataSource.experiment.name,targetPeakList.dataSource.name)
@@ -460,7 +460,7 @@ def assignPeaksAutomatic(argServer, ambiguous=True, peaks=None,
     
     hasMultiple = bool([ll for ll in resonances if len(ll) > 1])
     
-    print ambiguous, hasMultiple, resonances, [ll for ll in resonances if len(ll) > 1]
+    print(ambiguous, hasMultiple, resonances, [ll for ll in resonances if len(ll) > 1])
     
     if ambiguous or not hasMultiple:
       for ii,peakDim in enumerate(peak.sortedPeakDims()):

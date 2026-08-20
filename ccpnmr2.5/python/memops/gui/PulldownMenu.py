@@ -64,7 +64,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import types
 
-import Tkinter
+import tkinter
 
 
 from memops.gui.Canvas import Canvas
@@ -549,10 +549,10 @@ if __name__ == '__main__':
   popup_select = None
 
   def callback(n, text):
-    print 'callback: n =', n, 'text =', text
+    print('callback: n =', n, 'text =', text)
 
   def callback2(inds, text):
-    print 'callback2: inds =', inds, 'text =', text
+    print('callback2: inds =', inds, 'text =', text)
 
   def add():
     global n, popup_select
@@ -563,12 +563,12 @@ if __name__ == '__main__':
   def getSelected():
     global popup_select
     selected = popup_select.getSelected()
-    print 'getSelected', selected
+    print('getSelected', selected)
 
   def getSelectedInd():
     global popup_select
     selected = popup_select.getSelectedIndex()
-    print 'getSelectedInd', selected
+    print('getSelectedInd', selected)
 
   def remove():
     global popup_select

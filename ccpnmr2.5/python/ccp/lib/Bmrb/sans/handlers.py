@@ -11,12 +11,12 @@
 #
 class ErrorHandler :
     def fatalError( self, line, msg ) :
-        print "critical parse error in line", line, ":", msg
+        print("critical parse error in line", line, ":", msg)
     def error( self, line, msg ) :
-        print "parse error in line", line, ":", msg
+        print("parse error in line", line, ":", msg)
         return True
     def warning( self, line, msg ) :
-        print "parser warning in line", line, ":", msg
+        print("parser warning in line", line, ":", msg)
         return True
 
 #

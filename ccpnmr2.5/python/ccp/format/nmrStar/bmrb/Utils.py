@@ -48,12 +48,12 @@ A fast transposing algorithm from the python mailing list
 """
 def transpose ( matrix ):
     if len( matrix ) < 1:
-        print 'ERROR: trying to transpose an empty matrix'
+        print('ERROR: trying to transpose an empty matrix')
         return 1
     elif len( matrix ) == 1:
         if len(matrix[0]) == 0:
-            print 'ERROR: trying to transpose an empty matrix, shape would be lost'
-            print 'ERROR: [[]] would become []'
+            print('ERROR: trying to transpose an empty matrix, shape would be lost')
+            print('ERROR: [[]] would become []')
             return 1
         else:
             return map( lambda y : (y,), matrix[0] )
@@ -65,4 +65,4 @@ def transpose ( matrix ):
 if __name__ == '__main__':
     if 1:
         m = [ [1,2], [3,4] ]
-        print m, 'is transposed:', transpose(m)
+        print(m, 'is transposed:', transpose(m))

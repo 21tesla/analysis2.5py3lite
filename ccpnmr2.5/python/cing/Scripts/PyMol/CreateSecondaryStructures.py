@@ -30,11 +30,11 @@ def createPeptide(seqInfo):
     editor.attach_amino_acid('pk1',seqInfo[1][0])
     # Creates residue ONE
     createSS('resi 2', sequence=seqInfo[0][0],terminal='N')
-    print "found sequence info for number of residues: ", len(seqInfo)
+    print("found sequence info for number of residues: ", len(seqInfo))
     for i in range(2,len(seqInfo) ):
         # resn is the residue number of the new residue
         resn = i + 1
-        print "Adding residue: ", resn,   seqInfo[i][0]
+        print("Adding residue: ", resn,   seqInfo[i][0])
         # Note that the previous residue is numbered i.
         resi = 'resi '+repr(i)
         createSS(resi, sequence=seqInfo[i][0])
@@ -61,7 +61,7 @@ def createSS(sel, sequence='ALA',repeat=1,terminal='C'):
     # Loop and build new residues
     for i in range(1,repeat+1):
         for s in seq:
-            print "residue[%i]: %s %s" % (i,s,terminal)
+            print("residue[%i]: %s %s" % (i,s,terminal))
             editor.attach_amino_acid('pk1',s)
 
     # Remove extra OXT carboxylate atom (OXT1, OXT2 ?) .. fix as needed
@@ -89,14 +89,14 @@ def set_phipsi(sel,phi,psi):
 #                print "rdef_prev: [%s]" % rdef_prev
 #                print "rdef     : [%s]" % rdef
                 if at.resn == "PRO":
-                    print "Skipping setting phi for PRO"
+                    print("Skipping setting phi for PRO")
                 else:
                     old_phi = cmd.get_dihedral(rdef_prev+' and name C',rdef+' and name N', rdef+' and name CA',rdef+' and name C')
                     cmd.set_dihedral(          rdef_prev+' and name C',rdef+' and name N', rdef+' and name CA',rdef+' and name C',phi)
-                    print "Changed residue %4s %4s phi: from %6.1f to %6.1f" % (at.resn, at.resi, old_phi, float(phi))
+                    print("Changed residue %4s %4s phi: from %6.1f to %6.1f" % (at.resn, at.resi, old_phi, float(phi)))
             except:
 
-                print "Note skipping set of phi because of error; this is normal for a N-terminal residue"
+                print("Note skipping set of phi because of error; this is normal for a N-terminal residue")
             try:
                 rdef      = unit_select+'resi '+str(at.resi)
                 residue_def_next = unit_select+'resi '+str(int(at.resi)+1)
@@ -104,9 +104,9 @@ def set_phipsi(sel,phi,psi):
 #                print "residue_def_next: [%s]" % residue_def_next
                 old_psi = cmd.get_dihedral(rdef     +' and name N',rdef+' and name CA',rdef+' and name C', residue_def_next+' and name N')
                 cmd.set_dihedral(          rdef     +' and name N',rdef+' and name CA',rdef+' and name C', residue_def_next+' and name N',psi) # pylint: disable=C0301
-                print "Changed residue %4s %4s psi: from %6.1f to %6.1f" % (at.resn, at.resi, old_psi, float(psi))
+                print("Changed residue %4s %4s psi: from %6.1f to %6.1f" % (at.resn, at.resi, old_psi, float(psi)))
             except:
-                print "Note skipping set of psi; this is normal for a C terminal residue"
+                print("Note skipping set of psi; this is normal for a C terminal residue")
 
 def getTableFromCsvFile(urlLocation):
     result = []

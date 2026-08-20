@@ -150,7 +150,7 @@ def importFromCyana(nmrCalcRun, targetDir):
 
   pluginModule = intUtil.getIntegratorPlugin(ccpnConfig["CCPN.Run.wmsProtocolName"])
   pluginModule.read.read(nmrCalcRun, targetDir)
-  print "Import Complete"
+  print("Import Complete")
   return dataSources
 
 
@@ -182,7 +182,7 @@ def createAtomtoResonanceMap(nmrProject):
 
 def assignResonances(resonances, atomToResonanceMap,molSystem, ccpnShiftList, AnalysisProject, nmrConstraintStore):
 
-  print "assigning resonances"
+  print("assigning resonances")
   atomTupleDict = {}
   resonanceDict = {}
   fixedResonanceDict = {}
@@ -260,7 +260,7 @@ def assignResonances(resonances, atomToResonanceMap,molSystem, ccpnShiftList, An
   return {"resonanceDict":resonanceDict, "fixedResonanceDict":fixedResonanceDict,
             "cingFixedResonanceDict":cingFixedResonanceDict}
 
-  print "Resonances assigned"
+  print("Resonances assigned")
 
 
 def pickPeaksFromCing(cingPeakList, peakList, resonanceDict):
@@ -295,12 +295,12 @@ def pickPeaksFromCing(cingPeakList, peakList, resonanceDict):
           if res is not None:
             assignResToDim(peakDim, res)
 
-  print "Peaks Picked"
+  print("Peaks Picked")
 
 def loadPdb(filename, molSystem):
   structure = getStructureFromFile(molSystem, filename, doWarnings=False)
   makeStructureGeneration(structure)
-  print "Structures loaded"
+  print("Structures loaded")
 
 def loadDistanceRestraints(cingRestraintList, nmrProject, nmrCalcRun, nmrConstraintStore,
                            fixedResonanceDict, cingFixedResonanceDict,molSystem, AnalysisProject):
@@ -358,7 +358,7 @@ def loadDistanceRestraints(cingRestraintList, nmrProject, nmrCalcRun, nmrConstra
     nmrCalcRun.newConstraintStoreData(name=name, ioRole='output',constraintStoreSerial=nmrConstraintStore.serial)
 
 
-  print "Distance restraints assigned"
+  print("Distance restraints assigned")
 
 
 def loadViolatedDistanceRestraints(cingRestraintList, nmrProject, nmrCalcRun, nmrConstraintStore,
@@ -423,7 +423,7 @@ def loadViolatedDistanceRestraints(cingRestraintList, nmrProject, nmrCalcRun, nm
 
     nmrCalcRun.newConstraintStoreData(name=name, ioRole='output',constraintStoreSerial=nmrConstraintStore.serial)
 
-  print "Violations assigned"
+  print("Violations assigned")
 
   return violatedPeaks
 
@@ -458,7 +458,7 @@ def loadDihedralRestraints(cingRestraintList, nmrConstraintStore, nmrCalcRun, ci
                                         constraintStoreSerial=nmrConstraintStore.serial)
 
 
-  print "Dihedral restraints assigned"
+  print("Dihedral restraints assigned")
 
 
 def loadRdcRestraints(cingRestraintList, nmrConstraintStore, cingFixedResonanceDict, molSystem):
@@ -487,7 +487,7 @@ def loadRdcRestraints(cingRestraintList, nmrConstraintStore, cingFixedResonanceD
       rdcConstraint = rdcRestraintList.newRdcConstraint(resonances=fixedResonances)
       rdcConstraint.newRdcConstraintItem(targetValue=cingRestraint.value, error=cingRestraint.error)
 
-  print "RDC restraints assigned"
+  print("RDC restraints assigned")
 
 def loadChemShiftRestraints(cingRestraintList,originalProtFile,nmrConstraintStore,
                             atomToResonanceMap,fixedResonanceDict, molSystem):

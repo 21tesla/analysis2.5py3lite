@@ -124,7 +124,7 @@ class BrukerFormat(DataFormat):
     self.procParsFile.get(verbose = self.verbose)
 
     if self.verbose == 1:
-      print "Reading processing pars from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading processing pars from %s file %s" % (self.formatLabel,self.fileName))
   
   #
   #
@@ -180,21 +180,21 @@ class BrukerFormat(DataFormat):
 
         if self.matchNucleus(expDim2,nucleusDim3) and self.matchNucleus(expDim3,nucleusDim2):
           
-          print "  Warning: switched Bruker data acqu2s/3s info for experiment '%s'!" % (self.experiment.name)
+          print("  Warning: switched Bruker data acqu2s/3s info for experiment '%s'!" % (self.experiment.name))
           self.switchRefDims()
             
         elif self.matchNucleus(expDim2,nucleusDim2) and self.matchNucleus(expDim3,nucleusDim3):
           
           if self.verbose:
-            print "Bruker dimension order fits acqu<n>s files"
+            print("Bruker dimension order fits acqu<n>s files")
             
             
         else:
-          print "  Warning: %s experiment '%s' might have dimension order problems... isotopes do not fit acqu<n>s files" % (self.formatLabel,self.experiment.name)
+          print("  Warning: %s experiment '%s' might have dimension order problems... isotopes do not fit acqu<n>s files" % (self.formatLabel,self.experiment.name))
           
           if self.switchRefDimInfo:
             self.switchRefDims()
-            print "  Warning: default switch for Bruker data acqu2s/3s info for experiment '%s'!" % (self.experiment.name)
+            print("  Warning: default switch for Bruker data acqu2s/3s info for experiment '%s'!" % (self.experiment.name))
   
   def switchRefDims(self):
   
@@ -214,7 +214,7 @@ class BrukerFormat(DataFormat):
       
       if len(expDimRef.isotopeCodes) > 1:
       
-        print "  Multiple isotopes for same expDimRef. Picking first one."
+        print("  Multiple isotopes for same expDimRef. Picking first one.")
 
       isotope = expDimRef.isotopeCodes[0]
 

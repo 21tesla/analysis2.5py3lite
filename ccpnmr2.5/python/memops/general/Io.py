@@ -90,7 +90,7 @@ def checkFileAtPath(path):
     return False
 
   size = os.path.getsize(path)
-  fp = open(path, 'rU')
+  fp = open(path)
 
   ss = '<!--End of Memops Data-->'
   n = len(ss)
@@ -120,7 +120,7 @@ def createTopObjectFallback(topObject):
   backupLocation = location + '.bak'
   if not checkFileAtPath(location) and checkFileAtPath(backupLocation):
     # current file no good and current backup good so do not do backup
-    print 'File at location "%s" not complete so not backing up' % location
+    print('File at location "%s" not complete so not backing up' % location)
     return
 
   # copy rather than move because will need that much disk space in any case
@@ -174,7 +174,7 @@ def checkRemoveIfExists(path, removeExisting = False, showYesNo = None):
           removePath(path)
           return True
     else:
-      raise IOError('%s already exists' % path)
+      raise OSError('%s already exists' % path)
 
   return False
 
@@ -222,7 +222,7 @@ def saveProject(project, newPath = None, newProjectName = None, changeBackup = T
   # only want to change path for userData
   userData = project.findFirstRepository(name='userData')
   if not userData:
-    raise IOError('Problem: userData not found')
+    raise OSError('Problem: userData not found')
 
   oldPath = userData.url.path
   oldProjectName = project.name
@@ -446,7 +446,7 @@ def saveProject(project, newPath = None, newProjectName = None, changeBackup = T
         showWarning('Incomplete save', 'It looks like one or more files did not save completely, see console for list')
       print('It looks like one or more files did not save completely, you should check them:')
       for topObject in badTopObjects:
-        print
+        print()
         print('%s, path:' % topObject)
         print(xmlUtil.getTopObjectPath(topObject))
       return False
@@ -487,7 +487,7 @@ def renameProject(project, newProjectName):
     return
   
   else:
-    print '### renaming', project.name, newProjectName
+    print('### renaming', project.name, newProjectName)
   
     project.override = True # TBD: for now name is frozen so change this way
     try:
@@ -657,31 +657,31 @@ def loadProject(path, projectName=None, showWarning=None, askFile=None,
 
   # check if path exists and is directory
   if not os.path.exists(path):
-    raise IOError('path "%s" does not exist' % path)
+    raise OSError('path "%s" does not exist' % path)
   if not os.path.isdir(path):
-    raise IOError('path "%s" is not a directory' % path)
+    raise OSError('path "%s" is not a directory' % path)
 
   projectFile = xmlUtil.getProjectFile(path, projectName)
 
   if projectName:
     # projectName was specified so projectFile better exist
     if not os.path.exists(projectFile):
-      raise IOError('project file "%s" does not exist' % projectFile)
+      raise OSError('project file "%s" does not exist' % projectFile)
   else:
     # projectName was not specified so default projectFile might not exist
     if not os.path.exists(projectFile):
       projectFiles = xmlUtil.getPossibleProjectFiles(path)
 
       if len(projectFiles) == 0:
-        raise IOError('"%s" contains no project file' % path)
+        raise OSError('"%s" contains no project file' % path)
       elif len(projectFiles) == 1:
         projectFile = projectFiles[0]
       elif askFile:
         projectFile = askFile('Select project file', 'Select project file', initial_value=projectFiles[0])
         if not projectFile: # cancelled
-          raise IOError('Cancelled')
+          raise OSError('Cancelled')
       else:
-        raise IOError('"%s" contains %d project files, not sure which to use' % (path, len(projectFiles)))
+        raise OSError('"%s" contains %d project files, not sure which to use' % (path, len(projectFiles)))
 
     # TBD: should projectName be based on projectFile or on path???
     # the way it is set here do not need to change project.name

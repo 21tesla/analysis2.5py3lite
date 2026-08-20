@@ -34,23 +34,23 @@ class AllChecks(TestCase):
         self.assertFalse(a.getDeepByKeys('b','c',9))
         a.b.c=NTlist(1,2,3)
         self.assertFalse(a.getDeepByKeys('b','c',9)) # better not throw an error.
-        self.assertEquals('default value',
+        self.assertEqual('default value',
             a.getDeepByKeysOrDefault('default value',9)) # returns default
 
-        self.assertEquals(2,
+        self.assertEqual(2,
             a.getDeepByKeys('b','c',1)) # get the second element by key 1
 
     def testNTdict2(self):
         a = {}
         appendDeepByKeys(a, 1.23, 'b', 'c')
         strComplexObject = '%s' % a
-        self.assertEquals(strComplexObject, "{'b': {'c': [1.23]}}")
+        self.assertEqual(strComplexObject, "{'b': {'c': [1.23]}}")
         a = {'b':[10,[11],12]}
         strComplexObject = '%s' % a
-        self.assertEquals(strComplexObject, "{'b': [10, [11], 12]}")
+        self.assertEqual(strComplexObject, "{'b': [10, [11], 12]}")
         appendDeepByKeys(a, 13, 'b', 1)
         strComplexObject = '%s' % a
-        self.assertEquals(strComplexObject, "{'b': [10, [11, 13], 12]}")
+        self.assertEqual(strComplexObject, "{'b': [10, [11, 13], 12]}")
 
 
     def testnTmessage(self):
@@ -109,29 +109,29 @@ class AllChecks(TestCase):
 
     def testNTvalue(self):
         s = "%s"  % NTvalue(value=None,  error=None, fmt='%.3f (+- %.3f)')
-        self.assertEquals( s, '. (+- .)')
+        self.assertEqual( s, '. (+- .)')
         s = "%s"  % NTvalue(value=1.0,   error=None, fmt='%.3f (+- %.3f)')
-        self.assertEquals( s, '1.0 (+- .)')
+        self.assertEqual( s, '1.0 (+- .)')
         s = "%s"  % NTvalue(value=1.000, error=None, fmt='%.3f (+- %.3f)') 
         # still this mistake was not detected for a number:  -0.54700000000000004 (+- .) that's why the below extra tests.
-        self.assertEquals( s, '1.0 (+- .)')
+        self.assertEqual( s, '1.0 (+- .)')
         s = "%s"  % NTvalue(value=2.000, error=0.2,  fmt='%.3f (+- %.3f)')
-        self.assertEquals( s, '2.000 (+- 0.200)')
+        self.assertEqual( s, '2.000 (+- 0.200)')
         s = "%s"  % NTvalue(value=3000, error=300,   fmt='%.3f (+- %.3f)')
-        self.assertEquals( s, '3000.000 (+- 300.000)')
+        self.assertEqual( s, '3000.000 (+- 300.000)')
         s = "%s"  % NTvalue(value=3e7, error=3e6,    fmt='%.3e (+- %.3e)')
-        self.assertEquals( s, '3.000e+07 (+- 3.000e+06)')
+        self.assertEqual( s, '3.000e+07 (+- 3.000e+06)')
         s = "%s"  % NTvalue(value=0.75, error=None )
-        self.assertEquals( s, '0.75 (+- .)')
+        self.assertEqual( s, '0.75 (+- .)')
         s = "%s"  % NTvalue(value=0.75, error=None, fmt='%.2f (+- %.2f)' )
-        self.assertEquals( s, '0.75 (+- .)')
+        self.assertEqual( s, '0.75 (+- .)')
         s = "%s"  % NTvalue(value=0.75, error=NaN, fmt='%.2f (+- %.2f)' )
-        self.assertEquals( s, '0.75 (+- .)')
+        self.assertEqual( s, '0.75 (+- .)')
         fmt = '%.2f (+- %.2f)'
         fmt2 = '%.2f'
-        self.assertEquals(  "-0.55 (+- 1.23)", "%s"  % NTvalue(value=-0.5471, error=1.23, fmt=fmt, fmt2=fmt2 ))
-        self.assertEquals(  "-0.55 (+- .)",    "%s"  % NTvalue(value=-0.5471, error=None, fmt=fmt, fmt2=fmt2 ))
-        self.assertEquals(  ". (+- .)",        "%s"  % NTvalue(value=None,    error=None, fmt=fmt, fmt2=fmt2 ))
+        self.assertEqual(  "-0.55 (+- 1.23)", "%s"  % NTvalue(value=-0.5471, error=1.23, fmt=fmt, fmt2=fmt2 ))
+        self.assertEqual(  "-0.55 (+- .)",    "%s"  % NTvalue(value=-0.5471, error=None, fmt=fmt, fmt2=fmt2 ))
+        self.assertEqual(  ". (+- .)",        "%s"  % NTvalue(value=None,    error=None, fmt=fmt, fmt2=fmt2 ))
 
     def testGetTextBetween(self):
 
@@ -140,7 +140,7 @@ class AllChecks(TestCase):
         end = 'f'
         expected = "bcdef"
         t = getTextBetween( s, start, end )
-        self.assertEquals( t, expected )
+        self.assertEqual( t, expected )
 
         # Some multi line stuff.
         s = """# 79 # Note: Summary report for users of a structure
@@ -206,12 +206,12 @@ quality indicators.
   Inside/Outside distribution    :   1.030
 """
         t = getTextBetween( s, start, end, endIncl=False )
-        self.assertEquals( t, expected )
+        self.assertEqual( t, expected )
 
 if __name__ == "__main__":
     cing.verbosity = verbosityNothing
     cing.verbosity = verbosityDebug
-#    cProfile.run('unittest.main()', 'fooprof')
+#    profile.run('unittest.main()', 'fooprof')
 #    p = pstats.Stats('fooprof')
 #    p.sort_stats('time').print_stats(10)
 #    p.sort_stats('cumulative').print_stats(40)

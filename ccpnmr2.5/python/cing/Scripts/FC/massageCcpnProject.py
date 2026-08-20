@@ -19,7 +19,7 @@ from cing.core.classes import Project
 from glob import glob
 from memops.general.Io import loadProject
 from memops.general.Io import saveProject
-import Tkinter
+import tkinter
 
 __author__ = "Wim Vranken <wim@ebi.ac.uk> Jurgen Doreleijers <jurgenfd@gmail.com>"
 
@@ -156,10 +156,10 @@ def processInputAndRun(): # TODO fix this code if usable.
             projectNameNew = sys.argv[3]
 #            if len(sys.argv) > 5:
 #                outputDir = sys.argv[4]
-    print "projectName: %s" % projectName
-    print "projectNameNew: %s" % projectNameNew
-    print "inputDir: %s" % inputDir
-    print "outputDir: %s" % outputDir
+    print("projectName: %s" % projectName)
+    print("projectNameNew: %s" % projectNameNew)
+    print("inputDir: %s" % inputDir)
+    print("outputDir: %s" % outputDir)
 
     if False:
         convert(projectName, inputDir, projectNameNew )

@@ -98,7 +98,7 @@ class CosmosFormat(DataFormat):
     self.projectType = projectType
 
     if self.verbose == 1:
-      print "Writing %s %s project from file %s" % (self.formatLabel,self.projectType,fileName)
+      print("Writing %s %s project from file %s" % (self.formatLabel,self.projectType,fileName))
    
     self.file = self.projectIO.CosmosProjectFile(fileName)
    

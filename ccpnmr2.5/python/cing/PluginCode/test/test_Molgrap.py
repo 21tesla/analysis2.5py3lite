@@ -19,7 +19,7 @@ import unittest
 try:
     from cing.PluginCode.molgrap import Molgrap #@UnusedImport Keep to indicate dep and proper handeling.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( MOLGRAP_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( MOLGRAP_STR, getCallerFileName() ))
     raise SkipTest(MOLGRAP_STR)
 # end try
 
@@ -42,7 +42,7 @@ class AllChecks(TestCase):
 
         # does it matter to import it just now?
         project = Project( entryId )
-        self.failIf( project.removeFromDisk())
+        self.assertFalse( project.removeFromDisk())
         project = Project.open( entryId, status='new' )
         cyanaFile = os.path.join(cingDirTestsData, "cyana", entryId + ".cyana.tgz")
         self.assertTrue(project.initCyana(cyanaFolder = cyanaFile))

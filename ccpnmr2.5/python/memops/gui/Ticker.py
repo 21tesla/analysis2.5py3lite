@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os, time, threading
 
-import Tkinter
+import tkinter
 
 from memops.gui.Label import Label
 from memops.gui.Canvas import Canvas

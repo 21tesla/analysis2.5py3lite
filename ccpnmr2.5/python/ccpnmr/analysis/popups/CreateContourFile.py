@@ -601,14 +601,14 @@ class CreateContourFilePopup(BasePopup):
     for i in range(ndim):
       try:
         (firstInt[i], lastInt[i]) = self.convertToPoints(spectrum, i, region[i])
-      except Exception, e:
+      except Exception as e:
         showError('Invalid region', str(e), parent=self)
 
     try:
       #print 'about to saveSpectrumContours', fullPath, xdim, ydim, levels, firstInt, lastInt
       saveSpectrumContours(spectrum, fullPath, xdim, ydim, levels, firstInt, lastInt,
                          mem_cache=self.parent.mem_cache)
-    except Exception, e:
+    except Exception as e:
       showError('Save error', str(e), parent=self)
       return
 

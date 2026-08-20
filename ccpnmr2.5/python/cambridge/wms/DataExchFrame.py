@@ -6,7 +6,7 @@ from WSString import *
 import os
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -189,11 +189,11 @@ class DataExchFrame(Frame):
       objects.append(strg)
       callbacks.append(None)
 
-    print 'UPDATE ', ss
-    print 'UPDATE ', len(ss)
+    print('UPDATE ', ss)
+    print('UPDATE ', len(ss))
 
     if len(ss) > 0:
-      print 'UPDATE: updating '
+      print('UPDATE: updating ')
       tree.update(parents, objects, texts, icons, callbacks)
     
 

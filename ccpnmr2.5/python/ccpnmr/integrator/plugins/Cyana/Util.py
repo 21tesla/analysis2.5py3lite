@@ -103,7 +103,7 @@ def cyanaNmrCalcRun(nmrCalcRun):
   }
   runParam = nmrCalcRun.findFirstRunParameter(name='calcMode')
   val = valueMap.get(runParam.textValue)
-  print val
+  print(val)
   if val is None:
     raise ValueError("Cyana calculation mode %s must be one of %s"
                      % (runParam.textValue, tuple(valueMap.keys())))

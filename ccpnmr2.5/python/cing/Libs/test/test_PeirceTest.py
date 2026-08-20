@@ -69,7 +69,7 @@ class AllChecks(TestCase):
             values.append(i)        
                 
         result = peirceTest.peirceTest( values )
-        self.failUnless(result)
+        self.assertTrue(result)
         v,obj = result
 #        print 'number of outliers at size: '+repr(n)+ ' =',len(obj)
         self.assertTrue(len(v) == n)
@@ -81,7 +81,7 @@ class AllChecks(TestCase):
                   46.5057394648, -36.3803547969, -48.513237809, 61.4695459467]
                 
         result = peirceTest.peirceTest( values )
-        self.failUnless(result)
+        self.assertTrue(result)
         v,obj = result
 #        print 'number of outliers at size: '+repr(n)+ ' =',len(obj)
         self.assertTrue(len(v) == 10)

@@ -186,15 +186,15 @@ loop_
        
     fout.write("%-6d   %-5d  %-4s    %-5s   %-5s   %-7.3f %-7.3f %d" % (
 
-	   counter,
-	   chemShift.seqCode,
-	   chemShift.resLabel,
-	   atomName,
-	   chemShift.atomType,
-	   chemShift.value,
-	   chemShift.valueError,
-	   chemShift.ambCode
-	)
+       counter,
+       chemShift.seqCode,
+       chemShift.resLabel,
+       atomName,
+       chemShift.atomType,
+       chemShift.value,
+       chemShift.valueError,
+       chemShift.ambCode
+    )
                   )
                   
     counter += 1

@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 
 
-import Tkinter
+import tkinter
 from memops.general import Implementation
 ApiError = Implementation.ApiError
 from memops.gui.Label import Label
@@ -226,7 +226,7 @@ class SelectObjectPopup(BasePopup):
     self.doUnregisters()
     try:
       self.parent.argumentVar.set(1)
-    except AttributeError, e:
+    except AttributeError as e:
       pass
       
     BasePopup.destroy(self)

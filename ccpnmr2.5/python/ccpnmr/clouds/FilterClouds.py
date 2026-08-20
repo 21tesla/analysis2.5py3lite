@@ -58,7 +58,7 @@ def alignClouds(clouds, names):
   
   for i in range(len(clouds)):
     pdbFileName = names[i]
-    print pdbFileName
+    print(pdbFileName)
     writeTypedPdbCloud(cloudsList[i], pdbFileName, resonances)
 
 def filterClouds(clouds, atomTypes=None):
@@ -86,7 +86,7 @@ def filterClouds(clouds, atomTypes=None):
     
     cloudsList.append(orderCloud)
       
-  print "Generating mean and aligning"
+  print("Generating mean and aligning")
   
   (meanCloud,cloudsList) = alignToMeanCloud(cloudsList)
   #minToMeanRmsd          = getMeanPairRmsd(meanCloud,[cloudsList[0],])

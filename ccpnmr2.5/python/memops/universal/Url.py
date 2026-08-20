@@ -60,7 +60,7 @@ def fetchUrl(url, values=None, headers=None, timeout=None):
 
     # import socket
     # import urllib
-    # import urllib2
+    # import urllib.request
     #
     # if not headers:
     #     headers = {}
@@ -80,8 +80,8 @@ def fetchUrl(url, values=None, headers=None, timeout=None):
     #         data = urllib.urlencode(data)
     #     else:
     #         data = None
-    #     request = urllib2.Request(url, data, headers)
-    #     response = urllib2.urlopen(request)
+    #     request = urllib.request.Request(url, data, headers)
+    #     response = urllib.request.urlopen(request)
     #     result = response.read()
     # finally:
     #     socket.setdefaulttimeout(oldTimeout)
@@ -96,7 +96,7 @@ def fetchUrl(url, values=None, headers=None, timeout=None):
 # Released subject to the BSD License
 # Please see http://www.voidspace.org.uk/documents/BSD-LICENSE.txt
 # Based on http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/146306
-# With inspiration from urllib2_file.py by Fabien Seisen, http://fabien.seisen.org/python/ (without his twiddly bits)
+# With inspiration from urllib.request_file.py by Fabien Seisen, http://fabien.seisen.org/python/ (without his twiddly bits)
 # It actually uses my upload script located at http://www.voidspace.xennos.com
 
 def uploadFiles(url, fileFields, fields=None, boundary=None):
@@ -111,7 +111,7 @@ def uploadFiles(url, fileFields, fields=None, boundary=None):
     import mimetypes
     import mimetools
     import os
-    import urllib2
+    import urllib.request
 
     if not fields:
         fields = ()
@@ -154,8 +154,8 @@ def uploadFiles(url, fileFields, fields=None, boundary=None):
         'Content-length': str(len(body)),
         }
 
-    request = urllib2.Request(url, body, headers)
-    handle = urllib2.urlopen(request)
+    request = urllib.request.Request(url, body, headers)
+    handle = urllib.request.urlopen(request)
     try:
         result = handle.read()
     finally:

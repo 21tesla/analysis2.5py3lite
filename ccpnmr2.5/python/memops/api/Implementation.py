@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -88,7 +88,7 @@ from memops.general.baseDataTypes import Long
 from memops.general.baseDataTypes import String
 
 ###############################################################################
-class ComplexDataType(object):
+class ComplexDataType:
   r"""Topmost Superclass of both classes and complex datatype objects. 
 Contains some implementation attributes
   """
@@ -398,7 +398,7 @@ class Url(MemopsDataTypeObject):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.Url.__init__"
+      print("ERROR in memops.Implementation.Url.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -1332,7 +1332,7 @@ class SymmTracelessMatrix(MemopsDataTypeObject):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.SymmTracelessMatrix.__init__"
+      print("ERROR in memops.Implementation.SymmTracelessMatrix.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -1925,7 +1925,7 @@ class AppDataDouble(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataDouble.__init__"
+      print("ERROR in memops.Implementation.AppDataDouble.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -2266,7 +2266,7 @@ class AppDataFloat(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataFloat.__init__"
+      print("ERROR in memops.Implementation.AppDataFloat.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -2607,7 +2607,7 @@ class AppDataLong(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataLong.__init__"
+      print("ERROR in memops.Implementation.AppDataLong.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -2936,7 +2936,7 @@ class AppDataInt(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataInt.__init__"
+      print("ERROR in memops.Implementation.AppDataInt.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -3265,7 +3265,7 @@ class AppDataBoolean(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataBoolean.__init__"
+      print("ERROR in memops.Implementation.AppDataBoolean.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -3586,7 +3586,7 @@ class AppDataString(ApplicationData):
           func(self, value)
       del dataDict['inConstructor']
     except:
-      print "ERROR in memops.Implementation.AppDataString.__init__"
+      print("ERROR in memops.Implementation.AppDataString.__init__")
       del dataDict['inConstructor']
       raise
 
@@ -4084,7 +4084,7 @@ class DataObject(MemopsObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     currentValues = dataDict.get('applicationData')
@@ -4117,7 +4117,7 @@ class DataObject(MemopsObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4201,21 +4201,21 @@ class DataObject(MemopsObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       currentValues = dataDict.get('applicationData')
       result = list(currentValues)
 
     else:
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       currentValues = dataDict.get('applicationData')
       result = list()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'keyword',))
         if (key in directAttrs):
@@ -4262,7 +4262,7 @@ class DataObject(MemopsObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       currentValues = dataDict.get('applicationData')
@@ -4272,14 +4272,14 @@ class DataObject(MemopsObject):
         result = None
 
     else:
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       currentValues = dataDict.get('applicationData')
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'keyword',))
         if (key in directAttrs):
@@ -4324,7 +4324,7 @@ class DataObject(MemopsObject):
     Get for memops.Implementation.DataObject.access
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     result = dataDict.get('access')
@@ -4349,7 +4349,7 @@ class DataObject(MemopsObject):
     Get for memops.Implementation.DataObject.applicationData
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     tempVar = dataDict.get('applicationData')
@@ -4398,7 +4398,7 @@ class DataObject(MemopsObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     currentValues = dataDict.get('applicationData')
@@ -4437,7 +4437,7 @@ class DataObject(MemopsObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4465,7 +4465,7 @@ class DataObject(MemopsObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     currentValue = dataDict.get('access')
@@ -4549,7 +4549,7 @@ class DataObject(MemopsObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4577,7 +4577,7 @@ class DataObject(MemopsObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     currentValues = dataDict.get('applicationData')
@@ -4613,7 +4613,7 @@ class DataObject(MemopsObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4788,7 +4788,7 @@ operations are different in File and Db implementations
       result = list()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -4852,7 +4852,7 @@ operations are different in File and Db implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -5040,7 +5040,7 @@ operations are different in File and Db implementations
 
     # NB must be done by direct access
     if self.isLoaded or self.inConstructor or self.isReading:
-      print ("WARNING %s: cannot be loaded while isLoaded:%s, inConstructor:%s, isReading:%s"
+      print("WARNING %s: cannot be loaded while isLoaded:%s, inConstructor:%s, isReading:%s"
                            % (self, self.isLoaded, self.inConstructor, self.isReading))
       return
     
@@ -5203,7 +5203,7 @@ operations are different in File and Db implementations
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('createdBy')
@@ -5280,7 +5280,7 @@ operations are different in File and Db implementations
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('guid')
@@ -5329,7 +5329,7 @@ operations are different in File and Db implementations
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('isModifiable')
@@ -5370,7 +5370,7 @@ operations are different in File and Db implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5418,7 +5418,7 @@ operations are different in File and Db implementations
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('lastUnlockedBy')
@@ -5585,7 +5585,7 @@ Implementations
     topObject = self
     dataDict['topObject'] = topObject
     bb = attrlinks.get('isReading', False)
-    if ((bb is not None and bb)):
+    if (bb is not None and bb):
       del attrlinks['isReading']
       dataDict['isLoaded'] = False
       dataDict['isModified'] = False
@@ -5743,7 +5743,7 @@ Implementations
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.Implementation.MemopsRoot.__init__"
+        print("ERROR in memops.Implementation.MemopsRoot.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8505,7 +8505,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -8560,7 +8560,7 @@ Implementations
       result = list()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -8619,7 +8619,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -8678,7 +8678,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('bgColor', 'createdBy', 'fgColor', 'font', 'graphicsHandler', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'panView', 'sendBugReports', 'transientDialogs', 'transientWindows', 'twoCharShortcuts', 'useCrosshair', 'useGlobalShortcuts', 'userEmail', 'userName', 'userOrganisation', 'webBrowser', 'access', 'marksColor', 'memopsRoot', 'rulersColor',))
         if (key in directAttrs):
@@ -8737,7 +8737,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBackupFreq', 'contourToUnaliased', 'createdBy', 'details', 'globalContourScale', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'currentAnnotationSetting', 'currentPeakSetting', 'currentPrintSetting', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -8796,7 +8796,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBackupFreq', 'contourToUnaliased', 'createdBy', 'defaultSpectrumFileType', 'doAssignmentAnnotations', 'doAutoBackup', 'doChainAnnotations', 'doDetailAnnotations', 'doMeritAnnotations', 'doMinimalAnnotations', 'doMolSysAnnotations', 'doSpinSystemAnnotations', 'globalContourScale', 'guid', 'isModifiable', 'isThreadingAllowed', 'lastUnlockedBy', 'linkPeakListsData', 'linkSeqSpinSystemsData', 'maxMarks', 'maxRulers', 'meritAnnotationBad', 'meritAnnotationGood', 'meritAnnotationMediocre', 'name', 'peakDrawMethod', 'peakFindBuffer', 'peakFindDrop', 'peakFindHaveHigh', 'peakFindHaveLow', 'peakFindNonadjacent', 'peakFindScale', 'peakFindThickness', 'peakFindVolumeMethod', 'peakIntensityScale', 'peakPixelSize', 'peakVolumeScale', 'printWinFileName', 'printWinInColor', 'printWinOrientation', 'printWinOtherHeight', 'printWinOtherUnit', 'printWinOtherWidth', 'printWinOutputFormat', 'printWinPaperSize', 'printWinScaling', 'printWinShowsDateTime', 'printWinShowsFileName', 'printWinTickOutside', 'printWinTickPlacement', 'printWinTitle', 'spectrumFont', 'useBootstrap', 'access', 'activeWindowGroup', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -8855,7 +8855,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -8914,7 +8914,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -8973,7 +8973,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9032,7 +9032,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'sourceName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9091,7 +9091,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'sourceName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9150,7 +9150,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('baseGlycoCtCode', 'beilsteinCode', 'casRegCode', 'ccpCode', 'code3Letter', 'createdBy', 'details', 'guid', 'hasStdChirality', 'isModifiable', 'lastUnlockedBy', 'merckCode', 'molType', 'name', 'sigmaAldrichCode', 'stdChemCompCode', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9209,7 +9209,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9268,7 +9268,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9327,7 +9327,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'namingSystem', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9386,7 +9386,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9445,7 +9445,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('colorScheme', 'createdBy', 'dbLocation', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9504,7 +9504,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9563,7 +9563,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'fullName', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'url', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9622,7 +9622,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9681,7 +9681,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9740,7 +9740,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'workingDir', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9799,7 +9799,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9858,7 +9858,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9917,7 +9917,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('context', 'createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -9976,7 +9976,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10035,7 +10035,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'longName', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10094,7 +10094,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'helpUrl', 'isActive', 'isDefault', 'isModifiable', 'lastUnlockedBy', 'name', 'rank', 'shortcut', 'showWindowDepth', 'showWindowLabels', 'showWindowMidpoint', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10153,7 +10153,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10212,7 +10212,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10271,7 +10271,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'symmetrySetId', 'access', 'memopsRoot', 'molSystem',))
         if (key in directAttrs):
@@ -10330,7 +10330,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10389,7 +10389,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
         if (key in directAttrs):
@@ -10448,7 +10448,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10507,7 +10507,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'nmrProjectName', 'validationStoreName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10566,7 +10566,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'serial', 'access', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -10625,7 +10625,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10684,7 +10684,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('category', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'priority', 'serial', 'synonym', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10743,7 +10743,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'analysisProject', 'analysisProjectV3', 'memopsRoot',))
         if (key in directAttrs):
@@ -10802,7 +10802,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -10861,7 +10861,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
         if (key in directAttrs):
@@ -10916,7 +10916,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('targetName', 'memopsRoot',))
         if (key in directAttrs):
@@ -10975,7 +10975,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11034,7 +11034,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
         if (key in directAttrs):
@@ -11093,7 +11093,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11148,7 +11148,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -11207,7 +11207,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11266,7 +11266,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11325,7 +11325,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNamingSystem', 'createdBy', 'details', 'ensembleId', 'guid', 'isModifiable', 'lastUnlockedBy', 'resNamingSystem', 'softwareName', 'access', 'memopsRoot', 'molSystem', 'structureGeneration',))
         if (key in directAttrs):
@@ -11384,7 +11384,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11443,7 +11443,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11498,7 +11498,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11557,7 +11557,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
         if (key in directAttrs):
@@ -11616,7 +11616,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealProtocolCode', 'annealProtocolStoreName', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'softwareName', 'softwareVersion', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11675,7 +11675,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'serial', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11734,7 +11734,7 @@ Implementations
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11816,7 +11816,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -11874,7 +11874,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -11956,7 +11956,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12038,7 +12038,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('bgColor', 'createdBy', 'fgColor', 'font', 'graphicsHandler', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'panView', 'sendBugReports', 'transientDialogs', 'transientWindows', 'twoCharShortcuts', 'useCrosshair', 'useGlobalShortcuts', 'userEmail', 'userName', 'userOrganisation', 'webBrowser', 'access', 'marksColor', 'memopsRoot', 'rulersColor',))
         if (key in directAttrs):
@@ -12120,7 +12120,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBackupFreq', 'contourToUnaliased', 'createdBy', 'defaultSpectrumFileType', 'doAssignmentAnnotations', 'doAutoBackup', 'doChainAnnotations', 'doDetailAnnotations', 'doMeritAnnotations', 'doMinimalAnnotations', 'doMolSysAnnotations', 'doSpinSystemAnnotations', 'globalContourScale', 'guid', 'isModifiable', 'isThreadingAllowed', 'lastUnlockedBy', 'linkPeakListsData', 'linkSeqSpinSystemsData', 'maxMarks', 'maxRulers', 'meritAnnotationBad', 'meritAnnotationGood', 'meritAnnotationMediocre', 'name', 'peakDrawMethod', 'peakFindBuffer', 'peakFindDrop', 'peakFindHaveHigh', 'peakFindHaveLow', 'peakFindNonadjacent', 'peakFindScale', 'peakFindThickness', 'peakFindVolumeMethod', 'peakIntensityScale', 'peakPixelSize', 'peakVolumeScale', 'printWinFileName', 'printWinInColor', 'printWinOrientation', 'printWinOtherHeight', 'printWinOtherUnit', 'printWinOtherWidth', 'printWinOutputFormat', 'printWinPaperSize', 'printWinScaling', 'printWinShowsDateTime', 'printWinShowsFileName', 'printWinTickOutside', 'printWinTickPlacement', 'printWinTitle', 'spectrumFont', 'useBootstrap', 'access', 'activeWindowGroup', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -12202,7 +12202,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBackupFreq', 'contourToUnaliased', 'createdBy', 'details', 'globalContourScale', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'currentAnnotationSetting', 'currentPeakSetting', 'currentPrintSetting', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -12284,7 +12284,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12366,7 +12366,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12448,7 +12448,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12538,7 +12538,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('baseGlycoCtCode', 'beilsteinCode', 'casRegCode', 'ccpCode', 'code3Letter', 'createdBy', 'details', 'guid', 'hasStdChirality', 'isModifiable', 'lastUnlockedBy', 'merckCode', 'molType', 'name', 'sigmaAldrichCode', 'stdChemCompCode', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12631,7 +12631,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'sourceName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12724,7 +12724,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'sourceName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12806,7 +12806,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12888,7 +12888,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -12970,7 +12970,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'namingSystem', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13052,7 +13052,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13134,7 +13134,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('colorScheme', 'createdBy', 'dbLocation', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13216,7 +13216,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13298,7 +13298,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'fullName', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'url', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13380,7 +13380,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13462,7 +13462,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13544,7 +13544,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'workingDir', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13626,7 +13626,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13708,7 +13708,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13790,7 +13790,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('context', 'createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13872,7 +13872,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -13954,7 +13954,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'longName', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14036,7 +14036,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'helpUrl', 'isActive', 'isDefault', 'isModifiable', 'lastUnlockedBy', 'name', 'rank', 'shortcut', 'showWindowDepth', 'showWindowLabels', 'showWindowMidpoint', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14118,7 +14118,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14200,7 +14200,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14282,7 +14282,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14372,7 +14372,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'symmetrySetId', 'access', 'memopsRoot', 'molSystem',))
         if (key in directAttrs):
@@ -14454,7 +14454,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
         if (key in directAttrs):
@@ -14536,7 +14536,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14626,7 +14626,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'nmrProjectName', 'validationStoreName', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14708,7 +14708,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'serial', 'access', 'memopsRoot', 'nmrProject',))
         if (key in directAttrs):
@@ -14790,7 +14790,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14872,7 +14872,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('category', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'priority', 'serial', 'synonym', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -14954,7 +14954,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'analysisProject', 'analysisProjectV3', 'memopsRoot',))
         if (key in directAttrs):
@@ -15044,7 +15044,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'molType', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15126,7 +15126,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
         if (key in directAttrs):
@@ -15202,7 +15202,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('targetName', 'memopsRoot',))
         if (key in directAttrs):
@@ -15284,7 +15284,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15366,7 +15366,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
         if (key in directAttrs):
@@ -15448,7 +15448,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15524,7 +15524,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -15606,7 +15606,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15688,7 +15688,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15778,7 +15778,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNamingSystem', 'createdBy', 'details', 'ensembleId', 'guid', 'isModifiable', 'lastUnlockedBy', 'resNamingSystem', 'softwareName', 'access', 'memopsRoot', 'molSystem', 'structureGeneration',))
         if (key in directAttrs):
@@ -15860,7 +15860,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -15942,7 +15942,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -16000,7 +16000,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -16082,7 +16082,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
         if (key in directAttrs):
@@ -16164,7 +16164,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealProtocolCode', 'annealProtocolStoreName', 'createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'softwareName', 'softwareVersion', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -16246,7 +16246,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'serial', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -16328,7 +16328,7 @@ Implementations
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
         if (key in directAttrs):
@@ -18428,7 +18428,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18570,7 +18570,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18645,7 +18645,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18720,7 +18720,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18795,7 +18795,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18870,7 +18870,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -18945,7 +18945,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19020,7 +19020,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19095,7 +19095,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19170,7 +19170,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19245,7 +19245,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19320,7 +19320,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19395,7 +19395,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19470,7 +19470,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19545,7 +19545,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19620,7 +19620,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19695,7 +19695,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19770,7 +19770,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19845,7 +19845,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19920,7 +19920,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -19995,7 +19995,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20081,7 +20081,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20156,7 +20156,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20231,7 +20231,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20306,7 +20306,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20381,7 +20381,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20456,7 +20456,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20531,7 +20531,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20606,7 +20606,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20681,7 +20681,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20756,7 +20756,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20831,7 +20831,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20906,7 +20906,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -20981,7 +20981,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21056,7 +21056,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21131,7 +21131,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21206,7 +21206,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21281,7 +21281,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21356,7 +21356,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21431,7 +21431,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21506,7 +21506,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21581,7 +21581,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21656,7 +21656,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21731,7 +21731,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21806,7 +21806,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21881,7 +21881,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -21956,7 +21956,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22031,7 +22031,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22106,7 +22106,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22181,7 +22181,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22274,7 +22274,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22349,7 +22349,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22424,7 +22424,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22499,7 +22499,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22574,7 +22574,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22638,7 +22638,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -22839,7 +22839,7 @@ Implementations
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -24239,7 +24239,7 @@ class PackageLocator(ImplementationObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.Implementation.PackageLocator.__init__"
+        print("ERROR in memops.Implementation.PackageLocator.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -24274,10 +24274,10 @@ class PackageLocator(ImplementationObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -24398,7 +24398,7 @@ class PackageLocator(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -24645,7 +24645,7 @@ class PackageLocator(ImplementationObject):
       result = list()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -24703,7 +24703,7 @@ class PackageLocator(ImplementationObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('format', 'name', 'url', 'memopsRoot',))
         if (key in directAttrs):
@@ -24906,7 +24906,7 @@ class PackageLocator(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -25019,7 +25019,7 @@ class PackageLocator(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -25207,7 +25207,7 @@ class Repository(ImplementationObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.Implementation.Repository.__init__"
+        print("ERROR in memops.Implementation.Repository.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -25242,10 +25242,10 @@ class Repository(ImplementationObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -25387,7 +25387,7 @@ class Repository(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -25657,7 +25657,7 @@ class Repository(ImplementationObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('targetName', 'memopsRoot',))
         if (key in directAttrs):
@@ -25715,7 +25715,7 @@ class Repository(ImplementationObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('targetName', 'memopsRoot',))
         if (key in directAttrs):
@@ -25951,7 +25951,7 @@ class Repository(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -26029,7 +26029,7 @@ class Repository(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -26208,7 +26208,7 @@ class Repository(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -26273,7 +26273,7 @@ class Repository(ImplementationObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       

@@ -532,7 +532,7 @@ def getResName(chainCode,seqCode,atomName,seqInsertCode = '',spinSystemId = None
   
   if None in (chainCode,seqCode):
 
-    print "  Error creating resName: chainCode or seqCode element is None ('%s')" % (str((chainCode,seqCode)))
+    print("  Error creating resName: chainCode or seqCode element is None ('%s')" % (str((chainCode,seqCode))))
     resName = None
 
   else:
@@ -542,7 +542,7 @@ def getResName(chainCode,seqCode,atomName,seqInsertCode = '',spinSystemId = None
       if chainCode.count(tagSep):
         oldChainCode = chainCode
         chainCode = chainCode.replace(tagSep,'_')
-        print "  Warning: replacing illegal format chain code '%s' by '%s'." % (oldChainCode,chainCode)
+        print("  Warning: replacing illegal format chain code '%s' by '%s'." % (oldChainCode,chainCode))
 
     # This to handle interresidue constraints
     if atomName == None:
@@ -552,7 +552,7 @@ def getResName(chainCode,seqCode,atomName,seqInsertCode = '',spinSystemId = None
   
     # Check if it doesn't have any illegal chars
     if len(resName.split(tagSep)) > 3:
-      print "  Warning: string containing separator '%s' in '%s'" % (tagSep,resName)
+      print("  Warning: string containing separator '%s' in '%s'" % (tagSep,resName))
 
   return resName
   
@@ -569,7 +569,7 @@ def createNonStereoName(atomSetName,code):
     nonStereoName = atomSetName[:-2] + code + atomSetName[-1]
   
   else:
-    print "  Warning can't create non stereo name for %s" % atomSetName
+    print("  Warning can't create non stereo name for %s" % atomSetName)
     nonStereoName = atomSetName
   
   return nonStereoName
@@ -804,7 +804,7 @@ def setCcpNmrResonanceName(resonance,refAtom,atomName = None, forceChange = 0):
     if assignData:
       if assignData.value != resName:
         if forceChange == 0:
-          print "  Warning: couldn't set ccpNmr resonance name %s (name already set to %s)" % (resName,assignData.value)
+          print("  Warning: couldn't set ccpNmr resonance name %s (name already set to %s)" % (resName,assignData.value))
         else:
           assignData.delete()
           resonance.addApplicationData(Implementation.AppDataString( application = ccpNmr_kw, keyword = assign_kw, value = resName))
@@ -814,7 +814,7 @@ def setCcpNmrResonanceName(resonance,refAtom,atomName = None, forceChange = 0):
 
   else:
     if resonance.name != atomName:
-      print "  Warning: couldn't set ccpNmr name %s for resonance %s (name already set)" % (atomName,resonance.name)
+      print("  Warning: couldn't set ccpNmr name %s for resonance %s (name already set)" % (atomName,resonance.name))
       resName = resonance.name
       
   return resName
@@ -842,7 +842,7 @@ def getIsotopes(atomType):
   elif atomType.upper() == 'N':
     return ['15N']
   else:
-    print "  Unknown atomType %s!" % atomType
+    print("  Unknown atomType %s!" % atomType)
     return []
 
 def getNmrIsotope(proj,elementSymbol):
@@ -893,11 +893,11 @@ def getNmrIsotope(proj,elementSymbol):
     
     else:
     
-      print "  Element symbol %s has no nmr active isotopes" % elementSymbol
+      print("  Element symbol %s has no nmr active isotopes" % elementSymbol)
   
   else:
   
-    print "  Unknown element symbol %s." % elementSymbol
+    print("  Unknown element symbol %s." % elementSymbol)
 
   return isotopeCode
 
@@ -911,7 +911,7 @@ def getAtomCode(isotope):
   elif isotope.upper() == '15N':
     return ['n']
   else:
-    print "  Unknown isotope %s!" % isotope
+    print("  Unknown isotope %s!" % isotope)
     return []
  
 
@@ -1009,12 +1009,12 @@ def getNameInfo(resName, verbose = 1):
         atomName = atomName.upper()
     else:
       if verbose:
-        print "  Error: getNameInfo Can't decompose resonance name '%s'." % (resName) 
+        print("  Error: getNameInfo Can't decompose resonance name '%s'." % (resName))
       (chainCode,seqCode,spinSystemId,seqInsertCode,atomName) = (None,None,None,defaultSeqInsertCode,None)
     
   except:
     if verbose:
-      print "  Error: getNameInfo Can't decompose resonance name '%s'." % (resName) 
+      print("  Error: getNameInfo Can't decompose resonance name '%s'." % (resName))
     (chainCode,seqCode,spinSystemId,seqInsertCode,atomName) = (None,None,None,defaultSeqInsertCode,None)
     
   return (chainCode,seqCode,spinSystemId,seqInsertCode,atomName)
@@ -1050,7 +1050,7 @@ def getAtomSet(atomSetsAtomDict,atomName,atomsFound):
       
       if atomName != atomSet.name:
       
-        print " Atomset %s with same atoms and different name (%s) already exists." % (atomName,atomSet.name)
+        print(" Atomset %s with same atoms and different name (%s) already exists." % (atomName,atomSet.name))
       
       break
       
@@ -1477,7 +1477,7 @@ def setDataDimRefs(dsFreq):
       for isotopeCode in isotopeCodes:
         
         if otherFreqRefPpm.has_key(isotopeCode) and INDIRECT_FREQ_CONV.has_key(isotopeCode):
-          print "  No 1H expDimRef found, trying to use %s dimension for referencing." % isotopeCode
+          print("  No 1H expDimRef found, trying to use %s dimension for referencing." % isotopeCode)
           heteroFreqRefPpm = otherFreqRefPpm[isotopeCode]
           heteroFreq = otherFreqs[isotopeCode]
           heteroFreqRefZero = heteroFreq / (heteroFreqRefPpm / 1000000 + 1)
@@ -1485,7 +1485,7 @@ def setDataDimRefs(dsFreq):
           break
     
     if not protonFreqRefZero:
-      print "  No relevant expDimRef info found for referencing - aborting."
+      print("  No relevant expDimRef info found for referencing - aborting.")
       return
 
   else:

@@ -102,13 +102,13 @@ class CyanaFormat(DyanaFormat):
     self.sequenceFile.read()
 
     if self.verbose == 1:
-      print "Reading sequence from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading sequence from %s file %s" % (self.formatLabel,self.fileName))
 
   def createSequenceFile(self):
   
     # Not generic - passing in version
     if self.verbose == 1:
-      print "Writing sequence to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing sequence to %s file %s" % (self.formatLabel,self.fileName))
 
     self.sequenceFile = self.SequenceFileClass(self.fileName, version =  self.version)
 
@@ -121,7 +121,7 @@ class CyanaFormat(DyanaFormat):
   def getPeaks(self):
   
     if self.verbose == 1:
-      print "Reading peak list from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading peak list from %s file %s" % (self.formatLabel,self.fileName))
 
     # TODO HERE: have to figure out what to do if project file read...
    
@@ -144,7 +144,7 @@ class CyanaFormat(DyanaFormat):
       self.constraintFile.read(self.fileName)
 
       if self.verbose == 1:
-        print "Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
 
     except:
       errorMessage = traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
@@ -162,7 +162,7 @@ class CyanaFormat(DyanaFormat):
       self.constraintFile = self.ConstraintFileClass(self.fileName, version =  self.version, **addKeywords)
     
       if self.verbose == 1:
-        print "Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
         
       self.setSpecificConstraintFileWriteInfo()
 
@@ -322,6 +322,6 @@ class CyanaFormat(DyanaFormat):
           intensityTypes.append(intensity.intensityType)
     
     if self.integrationMethod not in intensityTypes and len(intensityTypes) == 1:
-      print "  Warning: resetting peak integration method to %s - no %s values available." % (intensityTypes[0],self.integrationMethod)
+      print("  Warning: resetting peak integration method to %s - no %s values available." % (intensityTypes[0],self.integrationMethod))
       self.integrationMethod = intensityTypes[0]
     

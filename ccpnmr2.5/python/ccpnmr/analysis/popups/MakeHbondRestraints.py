@@ -2178,7 +2178,7 @@ def getHelicalHbondSegments(molSystem, minHbonds=2):
           if not (2 < delta < 6):
             continue
         
-	  helixBonds.append([delta, posO, posH, atomO, atomH])
+      helixBonds.append([delta, posO, posH, atomO, atomH])
 
       if not helixBonds:
         continue
@@ -2186,24 +2186,24 @@ def getHelicalHbondSegments(molSystem, minHbonds=2):
       helixBonds.sort()
       for helixBond in helixBonds:
         if segments:
-	  lastSeg = segments[-1]
-	  delta1, posO1, posH1, atomO1, atomH1 = lastSeg
+      lastSeg = segments[-1]
+      delta1, posO1, posH1, atomO1, atomH1 = lastSeg
           delta2, posO2, posH2, atomO2, atomH2 = helixBond
   
           if delta1 != delta2:
-	    segments.append(helixBond)
-	  
-	  elif posO2 != posO1+1:
-	    segments.append(helixBond)
-	  
-	  else:
-	    lastSeg[2] = posH2
-	    lastSeg[4] = atomH2
-        
-	else:
-	  segments.append(helixBond)
+        segments.append(helixBond)
       
-	      
+      elif posO2 != posO1+1:
+        segments.append(helixBond)
+      
+      else:
+        lastSeg[2] = posH2
+        lastSeg[4] = atomH2
+        
+    else:
+      segments.append(helixBond)
+      
+          
   
       for delta, start, end, atomO, atomH in segments:
         if end-start >= delta+minHbonds-1:
@@ -2229,8 +2229,8 @@ def getPairedHbondSheets(molSystem):
       residues = list(fragment.residues)
       for i, residue in enumerate(residues):
         atomO = residue.findFirstAtom(name='O')
-	
-	atomH = atomPairs.get(atomO)
+    
+    atomH = atomPairs.get(atomO)
         if not (atomO and atomH):
           continue
 
@@ -2238,14 +2238,14 @@ def getPairedHbondSheets(molSystem):
         fragmentB = residueB.chainFragment
         if fragmentB.molType != PROTEIN_MOLTYPE:
           continue
-	
-	residuesB = list(fragmentB.residues)
-	posO = residues.index(residue)
+    
+    residuesB = list(fragmentB.residues)
+    posO = residues.index(residue)
         posH = residuesB.index(residueB)
   
         cluster = (fragment, fragmentB, posO, posH, atomO, atomH, None, None)
         clusters.append([cluster,])
-	
+    
   changes = 0
   while changes:
     changes = 0

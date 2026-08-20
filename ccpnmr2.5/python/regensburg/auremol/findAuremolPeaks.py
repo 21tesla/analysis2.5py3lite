@@ -72,7 +72,7 @@ def findAuremolPeaksThreshold(argServer = None, spectrum = None, mode = 1, useAu
 
   from Auremol import findPeaksThreshold
 
-  print 'Starting findAuremolPeaksThreshold'
+  print('Starting findAuremolPeaksThreshold')
 
   if not spectrum:
     spectrum = argServer.getSpectrum()
@@ -83,7 +83,7 @@ def findAuremolPeaksThreshold(argServer = None, spectrum = None, mode = 1, useAu
     if argServer:
       argServer.messageReporter.showError('No dataStore', errMsg)
     else:
-      print errMsg
+      print(errMsg)
     return None
 
   spectrumPath = dataStore.fullPath
@@ -94,13 +94,13 @@ def findAuremolPeaksThreshold(argServer = None, spectrum = None, mode = 1, useAu
 
   cPeakList = peakList.cPeakList
 
-  print 'About to call findPeaksThreshold'
+  print('About to call findPeaksThreshold')
   data = findPeaksThreshold(cPeakList, spectrumPath, mode, useAutoThreshold, threshold, seglevel)
 
-  print 'About to call setupPeaks'
+  print('About to call setupPeaks')
   setupPeaks(peakList, data)
 
-  print 'Ending findAuremolPeaksThreshold with %d peaks' % len(peakList.peaks)
+  print('Ending findAuremolPeaksThreshold with %d peaks' % len(peakList.peaks))
 
   return peakList
 
@@ -117,10 +117,10 @@ def findAuremolPeaksAdaptive(argServer = None, spectrum = None, mode = 1, number
     if argServer:
       argServer.messageReporter.showError('No dataStore', errMsg)
     else:
-      print errMsg
+      print(errMsg)
     return None
 
-  print 'Starting findAuremolPeaksAdaptive'
+  print('Starting findAuremolPeaksAdaptive')
 
   spectrumPath = dataStore.fullPath
 
@@ -130,13 +130,13 @@ def findAuremolPeaksAdaptive(argServer = None, spectrum = None, mode = 1, number
 
   cPeakList = peakList.cPeakList
 
-  print 'About to call findPeaksAdaptive'
+  print('About to call findPeaksAdaptive')
   data = findPeaksAdaptive(cPeakList, spectrumPath, mode, number, seglevel)
 
-  print 'About to call setupPeaks'
+  print('About to call setupPeaks')
   setupPeaks(peakList, data)
 
-  print 'Ending findAuremolPeaksAdaptive with %d peaks' % len(peakList.peaks)
+  print('Ending findAuremolPeaksAdaptive with %d peaks' % len(peakList.peaks))
 
   return peakList
 
@@ -147,7 +147,7 @@ if __name__ == '__main__':
   n = len(sys.argv)
 
   if n < 2:
-    print 'Correct arguments: projectdir [exptName [spectrumName]]'
+    print('Correct arguments: projectdir [exptName [spectrumName]]')
     sys.exit()
 
   projectDir = sys.argv[1]
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     exptName = sys.argv[2]
     expt = nmrProject.findFirstExperiment(name=exptName)
     if not expt:
-      print 'Warning: experiment "%s" not found, using first one'
+      print('Warning: experiment "%s" not found, using first one')
 
   if not expt:
     expt = nmrProject.findFirstExperiment()
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     spectrumName = sys.argv[3]
     spectrum = expt.findFirstDataSource(name=spectrumName)
     if not spectrum:
-      print 'Warning: spectrum "%s" not found, using first one'
+      print('Warning: spectrum "%s" not found, using first one')
 
   if not spectrum:
     spectrum = expt.findFirstDataSource()
@@ -187,5 +187,5 @@ if __name__ == '__main__':
 
   project.saveModified()
 
-  print 'Exiting script'
+  print('Exiting script')
 

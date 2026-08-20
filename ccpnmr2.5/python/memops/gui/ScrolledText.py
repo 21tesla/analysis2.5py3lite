@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.Frame import Frame
@@ -98,7 +98,7 @@ class ScrolledText(Frame):
     try:
       return getattr(self.__dict__['text_area'], name)
     except:
-      raise AttributeError, "ScrolledText instance has no attribute '%s'" % name
+      raise AttributeError("ScrolledText instance has no attribute '%s'" % name)
 
   def setState(self, state = Tkinter.NORMAL):
 
@@ -120,7 +120,7 @@ if (__name__ == '__main__'):
 
   def getText():
 
-    print 'getText:', text.getText()
+    print('getText:', text.getText())
 
   root = Tkinter.Tk()
 

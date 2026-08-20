@@ -19,7 +19,7 @@ import unittest
 try:
     from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try
 
@@ -116,7 +116,7 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         for entryId in AllChecks.entryList:
@@ -145,7 +145,7 @@ class AllChecks(TestCase):
                     if isNaN(valueDetermined) or isNaN(valueReference):
                         self.fail("Working on %s %s %s valueDetermined %s is not valueReference %s because only one of them isNaN" % (
                                 res, c, valueToCheck, valueDetermined, valueReference))
-                    self.assertAlmostEquals(valueReference, valueDetermined, 3)
+                    self.assertAlmostEqual(valueReference, valueDetermined, 3)
             self.assertTrue(project.save())
 #            project.close()
 #            del project

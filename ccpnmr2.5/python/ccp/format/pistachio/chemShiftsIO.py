@@ -88,12 +88,12 @@ class PistachioChemShiftFile(PistachioGenericFile):
     """
 
     if verbose == 1:
-      print "Reading %s chemical shift list %s" % (self.format,self.name)
+      print("Reading %s chemical shift list %s" % (self.format,self.name))
 
     lineErrors = []
     validLines = 0
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     line = fin.readline()
     
@@ -142,17 +142,17 @@ class PistachioChemShiftFile(PistachioGenericFile):
     
     if len(lineErrors) > min(5,validLines * 0.5):
       self.chemShifts = []
-      print "  Bad %s format lines:%s" % (self.format,self.newline)
+      print("  Bad %s format lines:%s" % (self.format,self.newline))
       for lineError in lineErrors:
-        print lineError
+        print(lineError)
 
   def write(self,verbose = 0):
     
-    print "NOT WORKING YET"
+    print("NOT WORKING YET")
     return
 
     if verbose == 1:
-      print "Writing %s chemical shift list %s" % (self.format,self.name)
+      print("Writing %s chemical shift list %s" % (self.format,self.name))
 
 
     fout = open(self.name,'w')

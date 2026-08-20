@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import types
 
-import Tkinter
+import tkinter
 
 from memops.universal.Util import checkListIsSet
 

@@ -419,7 +419,7 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
   dataDims = noesy.sortedDataDims()
   
   if not noesyPl.peaks:
-    print "Picking new NOE peaks"
+    print("Picking new NOE peaks")
     wholeRegion   = [[pnt2ppm(dd.numPointsOrig,func(dd)), pnt2ppm(0,func(dd))] 
                      for dd in dataDims]
     excludeRegion = [[0,dd.numPointsOrig] for dd in dataDims]
@@ -431,7 +431,7 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
     findPeaks(noesyPl, wholeRegion, argServer.parent, [1,1,1], )
 
   if not tocsyPl.peaks:
-    print "Picking new TOCSY peaks"
+    print("Picking new TOCSY peaks")
     wholeRegion   = [[pnt2ppm(dd.numPointsOrig,func(dd)), pnt2ppm(0,func(dd))] 
                      for dd in dataDims]
     excludeRegion = [[0,dd.numPointsOrig] for dd in dataDims]
@@ -454,7 +454,7 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
   ddr0 = ExperimentBasic.getPrimaryDataDimRef(dd0)
   ddr1 = ExperimentBasic.getPrimaryDataDimRef(dd1)
   
-  print "Initial NOESY filter"
+  print("Initial NOESY filter")
   amides = []
   
   allPeaks = list(noesyPl.peaks)
@@ -508,11 +508,11 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
     peak.ppmH = ppm0
     peak.ppmN = ppm2
 
-  print "Cluster %d amides" % len(amides)
+  print("Cluster %d amides" % len(amides))
   cluster = {}
   for i in range(len(amides)-1):
     if i and i % 100 == 0: 
-      print i
+      print(i)
     peak1, ppm0, ppm1 = amides[i]
     if cluster.get(peak1) is None:
       cluster[peak1] = [peak1]
@@ -538,7 +538,7 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
         for peak3 in cluster[peak2]:
           cluster[peak3] = cluster[peak1]
 
-  print "Remove isolated peaks"
+  print("Remove isolated peaks")
   clusters2 = {}
   for peak in cluster.keys():
     c = cluster[peak]
@@ -552,14 +552,14 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
 
   ss = {}
   centres = []
-  print "Check for overlapped clusters"
+  print("Check for overlapped clusters")
   for peaks in clusters:
   
     p = peaks[0]
-    print 'CLUSTER', p.ppmH, p.ppmN 
+    print('CLUSTER', p.ppmH, p.ppmN)
   
     for n in range(1):
-      print 'Iteration', n
+      print('Iteration', n)
       f =  0.30
       tolF = tol * f
 
@@ -606,7 +606,7 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
         cluster3[cluster2[peak]].append(peak)
 
       
-      print '  F %3f' % (f),
+      print('  F %3f' % (f),)
       for i in range(M):
         N = float(len(cluster3[i]))
         if N > 1.0:
@@ -622,13 +622,13 @@ def initialiseAmideExpts(argServer,hsqc=None, tocsy=None, noesy=None):
           
           centres.append( [hsqcPeak, aveH, aveN] )
           ss[hsqcPeak] = []
-          print len(cluster3[i]), 
+          print(len(cluster3[i]),)
           
-  print "Assign 15N HSQC"
+  print("Assign 15N HSQC")
   #assignAllNewResonances(peaks=nhsqcPl.peaks)
   #assignSpinSystemPerPeak(peaks=nhsqcPl.peaks)
   
-  print "Assign NOESY & TOCSY" 
+  print("Assign NOESY & TOCSY")
   for peak in allPeaks:
     minDist = tol
     best = centres[0][0]

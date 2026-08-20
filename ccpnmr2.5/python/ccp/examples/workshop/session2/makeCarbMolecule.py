@@ -47,7 +47,7 @@ def resetPackageLocators(project):
   carbDataPath = uniIo.normalisePath(os.path.join(os.path.abspath('..'), 
                                      'data'))
 
-  print 'Location of local carbohydrate ChemComps: [%s]' % carbDataPath
+  print('Location of local carbohydrate ChemComps: [%s]' % carbDataPath)
 
   carbDataUrl = Implementation.Url(path = carbDataPath)
 
@@ -131,27 +131,27 @@ if __name__ == '__main__':
 
   # Navigate the data model - molecules first.
 
-  print "\nMolecules:"
+  print("\nMolecules:")
 
   for mol in project.sortedMolecules():
-    print "  %s" % mol.name
+    print("  %s" % mol.name)
 
-  print
+  print()
 
   # MolSystem.
 
-  print "Molecular system: [%s] [%s]\n" % (molSystem.code, molSystem.name)
+  print("Molecular system: [%s] [%s]\n" % (molSystem.code, molSystem.name))
 
   # Chains, residues and linking info.
 
   for chain in molSystem.sortedChains():
 
-    print "Chain: [%s]\n" % chain.code
+    print("Chain: [%s]\n" % chain.code)
     molecule = chain.molecule
 
     for res in chain.sortedResidues():
 
-      print "Residue: [%s.%s]" % (res.ccpCode, res.seqCode)
+      print("Residue: [%s.%s]" % (res.ccpCode, res.seqCode))
       molRes = res.molResidue
 
       for mrle in molRes.molResLinkEnds:
@@ -162,9 +162,9 @@ if __name__ == '__main__':
         otherMolRes = otherMrle.parent
         otherRes = chain.findFirstResidue(molResidue = otherMolRes)
 
-        print "  Atom: [%s] linked to Residue: [%s.%s] Atom: [%s]" % (
-          mrle.linkCode, otherRes.ccpCode, otherRes.seqCode, otherMrle.linkCode)
+        print("  Atom: [%s] linked to Residue: [%s.%s] Atom: [%s]" % (
+          mrle.linkCode, otherRes.ccpCode, otherRes.seqCode, otherMrle.linkCode))
 
-      print
+      print()
 
   project.saveModified()

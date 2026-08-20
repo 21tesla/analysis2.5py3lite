@@ -13,7 +13,7 @@ if __name__ == '__main__':
   def printVec(msg, v):
 
     s = ', '.join(['%.3f' % w for w in v])
-    print '%s: %s' % (msg, s)
+    print('%s: %s' % (msg, s))
 
   noise = 0.1
   params = [1.8, 0.5]
@@ -27,6 +27,6 @@ if __name__ == '__main__':
   (params, chisq, ysFit, paramsDev) = calcFit(FitExp, xs, ys, noise=noise, devMethod='bootstrap')
   printVec('final_params', params)
   printVec('ysFit', ysFit)
-  print 'chisq: %.3f' % chisq
+  print('chisq: %.3f' % chisq)
   printVec('paramsDev', paramsDev)
 

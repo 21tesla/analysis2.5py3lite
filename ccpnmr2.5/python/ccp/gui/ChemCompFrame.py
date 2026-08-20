@@ -57,7 +57,7 @@ software development. Bioinformatics 21, 1678-1684.
 """
 import os, glob
 
-import Tkinter
+import tkinter
 
 
 from memops.universal.Io import joinPath

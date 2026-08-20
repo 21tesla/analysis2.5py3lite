@@ -39,7 +39,7 @@ if __name__ == '__main__':
     # Print it.
     entryAppData = nmrEntry.findFirstApplicationData()
 
-    print 'Application data: [%s]' % entryAppData
+    print('Application data: [%s]' % entryAppData)
 
     # Find it based on the application and keyword values.
     keywds2 = {'application': 'Fasta format',

@@ -222,7 +222,7 @@ class InitRootAssignmentsPopup(BasePopup):
                 'The average 15N position of the peaks in the pair',
                 'The 1H chemical shift of the first peak in the pair',
                 'The 1H chemical shift of the second peak in the pair']
-    headingList      = ['#','Confirmed?',u'15N\n\u0394ppm',
+    headingList      = ['#','Confirmed?','15N\n\u0394ppm',
                         'Peak 1','Peak 2',
                         'Shift N','Shift H1','Shift H2']
     self.amidePairMatrix = ScrolledMatrix(frame, headingList=headingList,

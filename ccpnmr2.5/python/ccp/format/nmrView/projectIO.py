@@ -100,7 +100,7 @@ class NmrViewStarFile(NmrViewGenericFile):
     #
 
     if origStarFile.read(nmrView_type = 1):
-      print "  Error reading nmrView star file %s" % self.name
+      print("  Error reading nmrView star file %s" % self.name)
       return
 
     for origSaveFrame in origStarFile.datanodes:
@@ -285,7 +285,7 @@ class NmrViewStarFile(NmrViewGenericFile):
 
       else:
 
-        print "  Currently can't handle nmrView star file saveframe category %s. Ignored." % saveFrameCat
+        print("  Currently can't handle nmrView star file saveframe category %s. Ignored." % saveFrameCat)
 
 
   def removeCurlyBraces(self,text):
@@ -320,12 +320,12 @@ if __name__ == "__main__":
     nmrViewStarFile.read(verbose = 1)
     
     for peakFile in nmrViewStarFile.peakFiles:
-      print peakFile.specNames
-      print peakFile.numDims
-      print peakFile.peaks[0].ppm
-      print peakFile.peaks[-1].ppm
+      print(peakFile.specNames)
+      print(peakFile.numDims)
+      print(peakFile.peaks[0].ppm)
+      print(peakFile.peaks[-1].ppm)
     
     for sequence in nmrViewStarFile.sequenceFile.sequences:
       for seqEl in sequence.elements:
   
-        print seqEl.seqCode, seqEl.code3Letter
+        print(seqEl.seqCode, seqEl.code3Letter)

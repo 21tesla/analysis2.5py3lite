@@ -20,7 +20,7 @@ class AllChecks(TestCase):
     def _test_storeCING2db(self): #DEFAULT disabled because it's a specific test for services not commonly used.
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         entry_code = '1brv'

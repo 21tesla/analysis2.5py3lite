@@ -49,7 +49,7 @@ def truncatePdbList():
     for code in entriesList:
         entryCode = code.strip()[0:4]
         if entryCode in obsEntriesList:
-            print 'removing', entryCode
+            print('removing', entryCode)
             continue
         codeList.append(code)
 

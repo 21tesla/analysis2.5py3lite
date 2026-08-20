@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # Print some basic information.
     personName = person.givenName + ' ' + person.familyName
     orgName    = person.findFirstPersonInGroup().group.organisation.name
-    print 'Person: [%s] is in Organisation [%s]' % (personName, orgName)
+    print('Person: [%s] is in Organisation [%s]' % (personName, orgName))
 
     # Set the person and group in the BMRB Entry.
     entry.addContactPerson(person)
@@ -62,5 +62,5 @@ if __name__ == '__main__':
 
     # Here, the authors link is an ordered tuple and not a set.
     authorName = primCit.authors[0].familyName
-    print 'Entry [%s] has a primary citation in [%s] authored by [%s]\n' % (
-        entryName, citAbbrev, authorName)
+    print('Entry [%s] has a primary citation in [%s] authored by [%s]\n' % (
+        entryName, citAbbrev, authorName))

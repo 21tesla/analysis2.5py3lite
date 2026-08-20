@@ -16,10 +16,6 @@ from memops.metamodel import Util as metaUtil
 MemopsError = MetaModel.MemopsError
 from memops.metamodel import ImpConstants
 from memops.metamodel.ModelPortal import ModelPortal
-
-True = not 0
-False = not True
-  
 mandatoryAttributes = ('modelPortal',)
 
 class ModelTraverse_py_2_1:

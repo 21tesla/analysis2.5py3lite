@@ -40,7 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import compileall
 import base64
-##import httplib
+##import http.client
 import os
 import py_compile
 import sys
@@ -49,7 +49,7 @@ import urllib
 import filecmp
 
 try:
-  import urllib2
+  import urllib.request
 except:
   pass
 
@@ -143,7 +143,7 @@ class UpdateAgent:
     if self.isGraphical:
       showWarning(title, message)
     else:
-      print 'CcpNmr UpdateAgent  - %s %s' % (title, message)
+      print('CcpNmr UpdateAgent  - %s %s' % (title, message))
   
   def testWriteAccess(self):
   
@@ -230,8 +230,8 @@ class UpdateAgent:
     compileDir = os.path.join(self.installRoot, 'c')
     try:
       os.chdir(compileDir)
-    except Exception, e:
-      print 'Error trying to cd into directory to compile C code; skipping, release will not be up-to-date:', e
+    except Exception as e:
+      print('Error trying to cd into directory to compile C code; skipping, release will not be up-to-date:', e)
       return
 
     cmds = []
@@ -253,8 +253,8 @@ class UpdateAgent:
       pythonDir = os.path.join(self.installRoot, 'python')
       try:
         os.chdir(pythonDir)
-      except Exception, e:
-        print 'Error trying to cd into directory to make links for C code; skipping, release may not be up-to-date:', e
+      except Exception as e:
+        print('Error trying to cd into directory to make links for C code; skipping, release may not be up-to-date:', e)
         return
 
       try:
@@ -309,7 +309,7 @@ class UpdateAgent:
           self.isGraphical = False
           self.installNewUpdates()
           for fileUpdate in self.server.getSelectedUpdates():
-            print 'Updated %s in %s' % (fileUpdate.fileName, fileUpdate.filePath)
+            print('Updated %s in %s' % (fileUpdate.fileName, fileUpdate.filePath))
           self.isGraphical = wasGraphical
         
         if hasattr(self, 'parent'):
@@ -402,7 +402,7 @@ class UpdateServer:
             with open(x.tempFile, 'rb') as fp:
               fileData = fp.read()
           except:
-            print 'error reading file, not unicode'
+            print('error reading file, not unicode')
             fileData = ''
           self._uploadFile('ccpn', passwd, 'https://www.ccpn.ac.uk/cgi-bin/updateadmin/uploadFile', fileData, self.identity[-1], x.storedAs)
           added += 1
@@ -415,8 +415,8 @@ class UpdateServer:
     try:
       with open(fileName, 'rb') as fp:
         fileData = fp.read()
-    except Exception, es:
-      print 'error reading file, not unicode', str(es)
+    except Exception as es:
+      print('error reading file, not unicode', str(es))
       fileData = ''
     self._uploadFile('ccpn', passwd, 'https://www.ccpn.ac.uk/cgi-bin/updateadmin/uploadFile', fileData, self.identity[-1], self.dataFile)
 
@@ -443,12 +443,12 @@ class UpdateServer:
       # 20190322:ED different script
       self.callHttpScript(passwd, 'uploadFile', data)
 
-    except Exception, e:
+    except Exception as e:
       self.parent.warningMessage('Server', 'Server exception: %s' % str(e))
 
   def deleteFile(self, passwd, serverFile):
 
-    print 'deleteFile', serverFile
+    print('deleteFile', serverFile)
 
 
   def callHttpScript(self, passwd, script, data):
@@ -456,14 +456,14 @@ class UpdateServer:
     auth = base64.encodestring(self.uid + ":" + passwd)[:-1]
     authheader = 'Basic %s' % auth
     uri = 'http://' + joinPath(self.location, 'cgi-bin', self.httpDir, script)
-    req = urllib2.Request(uri)
+    req = urllib.request.Request(uri)
     req.add_header("Authorization", authheader)
     req.add_data(data)
-    uu = urllib2.urlopen(req)
-    print uu.read()
+    uu = urllib.request.urlopen(req)
+    print(uu.read())
 
   # 20190322:ED context manager to override quote_plus with quote - to match new code
-  class _urlEncodeWithQuote(object):
+  class _urlEncodeWithQuote:
 
     def __init__(self):
       self.should_patch = True
@@ -520,21 +520,21 @@ class UpdateServer:
 
 
     try:
-      request = urllib2.Request(serverScript,
+      request = urllib.request.Request(serverScript,
                                 headers=headers,
                                 data=body
                                 )
-      response = urllib2.urlopen(request)
+      response = urllib.request.urlopen(request)
       result = response.read().decode('utf-8')
 
 
       if result.startswith(BAD_DOWNLOAD):
-        print 'Error reading from server.'
+        print('Error reading from server.')
       else:
         return result
 
-    except Exception, es:
-      print 'Error reading from server:', str(es)
+    except Exception as es:
+      print('Error reading from server:', str(es))
 
   # 20190322:ED new download method
   def _downloadFile(self, serverScript, serverDbRoot, fileName):
@@ -787,12 +787,12 @@ class FileUpdate:
     try:
       if path.isfile(self.installedFile):
         copyfile( self.installedFile, self.installedFile+'__old' )
-      print 'installing', self.installedFile
+      print('installing', self.installedFile)
       dirname = os.path.dirname(self.installedFile)
       if not os.path.exists(dirname):
         os.makedirs(dirname)
       copyfile( self.tempFile,self.installedFile )
-    except Exception, e:
+    except Exception as e:
       self.server.parent.warningMessage('Copy Fail','Could not update file %s: %s' % (self.installedFile, e))
       return
   
@@ -895,7 +895,7 @@ class ReleaseUpdate:
       if showOkCancel('Query','Can CCPN log your IP address for its statistics? No other information will be taken'):
         self.logDownload()
     else:
-      print 'CCPN is logging your IP address for its statistics. No other information will be taken'
+      print('CCPN is logging your IP address for its statistics. No other information will be taken')
       self.logDownload()
   
   def logDownload(self):
@@ -1007,14 +1007,14 @@ class ReleaseUpdate:
       renameDir = '%s_%s_%d' % (self.installDir, self.currentVersion, n)
       n = n + 1
 
-    print 'About to rename %s to %s' % (self.installDir, renameDir)
+    print('About to rename %s to %s' % (self.installDir, renameDir))
     os.rename(self.installDir, renameDir)
 
   def moveNewRelease(self):
 
     os.chdir(self.baseDir)
     dd = os.path.join(self.releaseDir, self.ccpnmrTopDir, self.ccpnmrCodeDir)
-    print 'About to rename %s to %s' % (dd, self.installDir)
+    print('About to rename %s to %s' % (dd, self.installDir))
     os.rename(dd, self.installDir)
 
   def compileAllPyCode(self):
@@ -1035,11 +1035,11 @@ class ReleaseUpdate:
       renameDir = '%s_%s_%d' % (baseDir, self.currentVersion, n)
       n = n + 1
 
-    print 'About to rename %s to %s' % (baseDir, renameDir)
+    print('About to rename %s to %s' % (baseDir, renameDir))
     os.rename(baseDir, renameDir)
 
     dd = os.path.join(renameDir, self.releaseDir, self.ccpnmrTopDir)
-    print 'About to rename %s to %s' % (dd, baseDir)
+    print('About to rename %s to %s' % (dd, baseDir))
     os.rename(dd, baseDir)
         
   def runConfigScript(self):

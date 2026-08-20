@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 import time
-import Tkinter
+import tkinter
 
 from memops.general.Implementation import ApiError
 from memops.general.Io import loadProject
@@ -182,17 +182,17 @@ class OpenProjectPopup(BasePopup):
 
     try:
       self.project = self.load_project(path)
-    except ApiError, e:
+    except ApiError as e:
       showError('Loading project', e.error_msg, self)
       self.enableOk()
       return False
 
-    except IOError, e:
+    except OSError as e:
       showError('Loading project', str(e), self)
       self.enableOk()
       return False
 
-    except Exception, e:
+    except Exception as e:
       showError('Loading project', str(e), self)
       self.enableOk()
       return False
@@ -222,5 +222,5 @@ if (__name__ == '__main__'):
 
   p = OpenProjectPopup(r, transient=True, modal=True)
   if (p.project):
-    print p.project.name
+    print(p.project.name)
   p.destroy()

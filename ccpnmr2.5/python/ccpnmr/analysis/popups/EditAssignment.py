@@ -1344,7 +1344,7 @@ class EditAssignmentPopup(BasePopup):
       
       if object.mappingType == 'ambiguous':
  	if not hasattr(object, 'subSets'):
-	  raise "Don't know what the ambiguous atomSetMapping represents: need to set atomSetMapping.subSets"
+      raise "Don't know what the ambiguous atomSetMapping represents: need to set atomSetMapping.subSets"
  	for subSet in object.subSets:
           if subSet.mappingType != 'nonstereo':
             atomSetMappings.append(subSet)
@@ -1360,9 +1360,9 @@ class EditAssignmentPopup(BasePopup):
             showWarning('Assignment failed', msg % (elementString,atomSetMapping.elementSymbol), parent=self)
             return
 
-	atomSets2 = list(atomSetMapping.atomSets)
+    atomSets2 = list(atomSetMapping.atomSets)
         
-	atomSets.append(atomSets2)
+    atomSets.append(atomSets2)
         mappings.append(atomSetMapping)
       
         if len(atomSetMapping.resonanceSerials)<1:
@@ -1431,8 +1431,8 @@ class EditAssignmentPopup(BasePopup):
           
             else:
               AssignmentBasic.mergeResonances(resonance, resonance2)
-              print 'NOTICE: Atom assignment %s existed in a different shift list for a different resonance.' % atomStr
-              print 'NOTICE: Resonance [%d] has been merged with resonance [%d].' % (resonance2.serial, resonance.serial)
+              print('NOTICE: Atom assignment %s existed in a different shift list for a different resonance.' % atomStr)
+              print('NOTICE: Resonance [%d] has been merged with resonance [%d].' % (resonance2.serial, resonance.serial))
           
           return
           

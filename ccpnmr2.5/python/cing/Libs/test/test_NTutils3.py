@@ -19,7 +19,7 @@ class AllChecks(TestCase):
     def testROGscore(self):
         entryId = 'test'
         project = Project(entryId)
-        self.failIf(project.removeFromDisk())
+        self.assertFalse(project.removeFromDisk())
         project = Project.open(entryId, status='new')
         molecule = Molecule(name='moleculeName')
         molecule.ensemble = Ensemble(molecule) # Needed for html.
@@ -44,9 +44,9 @@ class AllChecks(TestCase):
         a = Atom(resName='ALA', atomName='HN')
         a.criticize()
         self.assertTrue(a)
-        self.assertEquals(a.rogScore.colorLabel, COLOR_ORANGE)
-        self.assertEquals(a.rogScore.colorCommentList[0][0], COLOR_ORANGE)
-        self.assertEquals(a.rogScore.colorCommentList[0][1], ROGscore.ROG_COMMENT_NO_COOR)
+        self.assertEqual(a.rogScore.colorLabel, COLOR_ORANGE)
+        self.assertEqual(a.rogScore.colorCommentList[0][0], COLOR_ORANGE)
+        self.assertEqual(a.rogScore.colorCommentList[0][1], ROGscore.ROG_COMMENT_NO_COOR)
         lotr_remark = 'One ring to rule them all'
         preserved_remark = 'Preserved'
         nowHasEffect_remark = 'Now has effect'
@@ -56,9 +56,9 @@ class AllChecks(TestCase):
         a.rogScore.setMaxColor(COLOR_ORANGE, nowHasEffect_remark )
         a.rogScore.setMaxColor(COLOR_RED, preserved_remark)
         a.rogScore.setMaxColor(COLOR_ORANGE, nowHasEffectToo_remark)
-        self.assertEquals(len(a.rogScore.colorCommentList), 5)
-        self.assertEquals(a.rogScore.colorCommentList[0][1], ROGscore.ROG_COMMENT_NO_COOR)
-        self.assertEquals(a.rogScore.colorCommentList[1][1], nowHasEffect_remark)
+        self.assertEqual(len(a.rogScore.colorCommentList), 5)
+        self.assertEqual(a.rogScore.colorCommentList[0][1], ROGscore.ROG_COMMENT_NO_COOR)
+        self.assertEqual(a.rogScore.colorCommentList[1][1], nowHasEffect_remark)
 
         myhtml = HTMLfile('testROGscore.html', project, 'A Test')
         myhtml.main("a main")
@@ -75,7 +75,7 @@ class AllChecks(TestCase):
         for i in range(len(byteList)):
             r = bytesToFormattedString(byteList[i])
     #        self.assertEqual( r, expectedResults[i] )
-            self.assertEquals(r, expectedResults[i])
+            self.assertEqual(r, expectedResults[i])
 
 #    def _testQuoteForJson(self):
 #        inList = [ "a", "a b", "a'b" ]
@@ -95,9 +95,9 @@ class AllChecks(TestCase):
         expectedExtension = [   '',                 '',                      '',                       '.pdb',     '' ]
         for i in range(len(pathList)):
             (directory, basename, extension) = nTpath(pathList[i])
-            self.assertEquals(directory, expectedDirectory[i])
-            self.assertEquals(basename, expectedBasename[i])
-            self.assertEquals(extension, expectedExtension[i])
+            self.assertEqual(directory, expectedDirectory[i])
+            self.assertEqual(basename, expectedBasename[i])
+            self.assertEqual(extension, expectedExtension[i])
 
     def testMsgHoL(self):
         msgHol = MsgHoL()

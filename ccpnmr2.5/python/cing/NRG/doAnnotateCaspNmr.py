@@ -12,7 +12,7 @@ from memops.general.Io import loadProject
 from memops.general.Io import saveProject
 from shutil import copytree
 from shutil import rmtree
-import Tkinter
+import tkinter
 import tarfile
 
 
@@ -54,17 +54,17 @@ def annotateEntry(entryCodeNew, *extraArgList):
 #        minimalPrompts = True
 #        verbose = False
 
-    print 'allowPopups                                                                                   ', allowPopups
-    print 'isInteractive                                                                                 ', isInteractive
-    print 'minimalPrompts                                                                                ', minimalPrompts
-    print 'verbose                                                                                       ', verbose
-    print 'sourceIsOrgProject                      (or new CCPN file)                                    ', sourceIsOrgProject
-    print 'checkOrgProject                                                                               ', checkOrgProject
-    print 'replaceCoordinates                                                                            ', replaceCoordinates
-    print 'replaceRestraints                                                                             ', replaceRestraints
-    print 'doSwapCheck                                                                                   ', doSwapCheck
-    print 'doSaveProject                                                                                 ', doSaveProject
-    print 'doExport                                                                                      ', doExport
+    print('allowPopups                                                                                   ', allowPopups)
+    print('isInteractive                                                                                 ', isInteractive)
+    print('minimalPrompts                                                                                ', minimalPrompts)
+    print('verbose                                                                                       ', verbose)
+    print('sourceIsOrgProject                      (or new CCPN file)                                    ', sourceIsOrgProject)
+    print('checkOrgProject                                                                               ', checkOrgProject)
+    print('replaceCoordinates                                                                            ', replaceCoordinates)
+    print('replaceRestraints                                                                             ', replaceRestraints)
+    print('doSwapCheck                                                                                   ', doSwapCheck)
+    print('doSaveProject                                                                                 ', doSaveProject)
+    print('doExport                                                                                      ', doExport)
 
     guiRoot = None
     if allowPopups:

@@ -77,7 +77,7 @@ class VarianAcqParHelp(VarianGenericFile):
     
     fileLocation = os.path.join(getTopDirectory(),'data','ccp','varian','parhelp.txt')
   
-    fin = open(fileLocation, 'rU')
+    fin = open(fileLocation)
     line = fin.readline()
 
     while line:
@@ -86,7 +86,7 @@ class VarianAcqParHelp(VarianGenericFile):
         cols = line.split()
         if len(cols) < 3 or cols[1] != '=':
 
-          print "Error parsing following line:" + self.newline + line + self.newline
+          print("Error parsing following line:" + self.newline + line + self.newline)
 
         else:
           # Sort out tag
@@ -103,4 +103,4 @@ if __name__ == '__main__':
 
   aqhelp = VarianAcqParHelp('help')
   
-  print aqhelp.tags
+  print(aqhelp.tags)

@@ -77,9 +77,9 @@ class TargetedAcquisitionChemShiftFile(TargetedAcquisitionGenericFile):
   def read(self, verbose = 0):
 
     if verbose == 1:
-      print "Reading %s chemical shift list %s" % (self.format, self.name)
+      print("Reading %s chemical shift list %s" % (self.format, self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     atomCols = []
 
@@ -102,7 +102,7 @@ class TargetedAcquisitionChemShiftFile(TargetedAcquisitionGenericFile):
             seqCode = returnInt(seqCode1Or1LetterAndCodeSearch.group(2))
 
             if not self.seqCodes or (seqCode, resCode) not in self.seqCodes:
-              print 'New residue %i,%s' % (seqCode, resCode)
+              print('New residue %i,%s' % (seqCode, resCode))
               self.seqCodes.append((seqCode, resCode))
 
             for colNum in range(3, len(cols)):
@@ -172,7 +172,7 @@ class TargetedAcquisitionChemShiftFile(TargetedAcquisitionGenericFile):
 
   def write(self, verbose = 0):
 
-    print "Not relevant"
+    print("Not relevant")
 
 class TargetedAcquisitionChemShift:
 

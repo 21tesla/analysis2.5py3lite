@@ -184,9 +184,9 @@ class XMLContentHandler(ContentHandler):
             return
 
         e = self.load_from_element(name, self.current)
-	
+    
         self.current = self.elements.pop()
-	
+    
         try:
             value = getattr(self.current, name)
             try:
@@ -311,6 +311,6 @@ class XMLReader(BaseReader):
             failed = 1
 
         if failed:
-            raise XMLReaderError, 'XML document misformatted.'
+            raise XMLReaderError('XML document misformatted.')
 
         return document

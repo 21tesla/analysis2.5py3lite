@@ -72,7 +72,7 @@ class TalosSequenceFile(TalosGenericFile):
 
   def printInfo(self,action):
     
-    print "%s %s sequence file %s" % (action,self.format,self.name)
+    print("%s %s sequence file %s" % (action,self.format,self.name))
 
   def handleDataLine(self,line):
   
@@ -107,7 +107,7 @@ class TalosSequenceFile(TalosGenericFile):
       self.seqCodeModifier = returnInt(cols[2])
 
     else:
-      print "  Warning: unknown data type %s for %s %s import." % (cols[1],self.format,self.name)
+      print("  Warning: unknown data type %s for %s %s import." % (cols[1],self.format,self.name))
 
 
   def writeDataLines(self,fout):

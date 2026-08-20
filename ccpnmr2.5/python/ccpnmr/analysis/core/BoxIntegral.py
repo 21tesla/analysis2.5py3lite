@@ -200,7 +200,7 @@ if __name__ == '__main__':
 
     ndim = len(dims)
     if (ndim == 1):
-      print mat
+      print(mat)
     elif (ndim == 2):
       for i in range(dims[1]):
         for j in range(dims[0]):
@@ -225,13 +225,13 @@ if __name__ == '__main__':
   boxSize = [5, 5]
   center = [2, 2]
 
-  print 'values before:'
+  print('values before:')
   printMat(values, boxSize)
   s = truncatedBoxIntegral(values, boxSize, center)
-  print 'values after:'
+  print('values after:')
   printMat(values, boxSize)
-  print 'integral = ', s
-  print
+  print('integral = ', s)
+  print()
 
   values = [ \
     2, 3, 1,
@@ -243,13 +243,13 @@ if __name__ == '__main__':
   boxSize = [3, 5]
   center = [1, 2]
 
-  print 'values before:'
+  print('values before:')
   printMat(values, boxSize)
   s = truncatedBoxIntegral(values, boxSize, center)
-  print 'values after:'
+  print('values after:')
   printMat(values, boxSize)
-  print 'integral = ', s
-  print
+  print('integral = ', s)
+  print()
 
   mat1d = [ 1, 2, 3, 2, 1 ]
   center1d = [ 2 ]
@@ -265,13 +265,13 @@ if __name__ == '__main__':
 
   for (mat, center, boxSize) in ((mat1d, center1d, boxSize1d), (mat2d, center2d, boxSize2d), (mat3d, center3d, boxSize3d)):
     dims = boxSize
-    print 'values before:'
+    print('values before:')
     printMat(mat, dims)
     s = truncatedBoxIntegral(mat, boxSize, center)
-    print 'values after:'
+    print('values after:')
     printMat(mat, dims)
-    print 'integral = ', s
-    print
+    print('integral = ', s)
+    print()
 
   values = [ \
     1, 1, 1, 1, 1, 1, 1,
@@ -289,21 +289,21 @@ if __name__ == '__main__':
   boxSize2 = [7, 7]
   center2  = [3, 3]    
   
-  print 'values before:'
+  print('values before:')
   printMat(values, boxSize) 
   s = truncatedBoxIntegral(values, boxSize, center)
-  print 'values after:'
+  print('values after:')
   printMat(values, boxSize)    
-  print 'integral = ', s
-  print
+  print('integral = ', s)
+  print()
   
-  print 'values before:'
+  print('values before:')
   printMat(values2, boxSize2) 
   s = truncatedBoxIntegral(values2, boxSize2, center2)
-  print 'values after:'
+  print('values after:')
   printMat(values2, boxSize2)    
-  print 'integral = ', s
-  print  
+  print('integral = ', s)
+  print()
     
   values = [ \
     1, 1, 1, 1, 1,
@@ -321,29 +321,29 @@ if __name__ == '__main__':
   boxSize2 = [7,5]
   center2 = [3,2]
   
-  print 'values before:'
+  print('values before:')
   printMat(values, boxSize) 
   s = truncatedBoxIntegral(values, boxSize, center)
-  print 'values after:'
+  print('values after:')
   printMat(values, boxSize)
-  print 'integral = ', s
-  print
+  print('integral = ', s)
+  print()
   
-  print 'values before:'
+  print('values before:')
   printMat(values2, boxSize2) 
   s2 = truncatedBoxIntegral(values2, boxSize2, center2)
-  print 'values after:'
+  print('values after:')
   printMat(values2, boxSize2)
-  print 'integral = ', s2
-  print  
+  print('integral = ', s2)
+  print()
   
   values = [1, 2, 3, 2, 3, 4, 5, 4, 3, 2, 6, 5, 4, 7, 3, 2, 1]
   boxSize = [17]
   center  = [6]
-  print 'values before:'
+  print('values before:')
   printMat(values, boxSize)
   s = truncatedBoxIntegral(values, boxSize, center)
-  print 'values after:'
+  print('values after:')
   printMat(values, boxSize)     
-  print 'integral = ', s
-  print
+  print('integral = ', s)
+  print()

@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -127,7 +127,7 @@ class Project(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -156,7 +156,7 @@ class Project(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.Wms.Project.__init__"
+        print("ERROR in cambridge.Wms.Project.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -195,10 +195,10 @@ class Project(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -219,7 +219,7 @@ class Project(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -252,7 +252,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsSegment = dataDict.get('wmsSegment')
@@ -310,7 +310,7 @@ class Project(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -463,7 +463,7 @@ class Project(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -618,7 +618,7 @@ class Project(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationTime', 'status', 'summary', 'versionTag', 'access', 'createdByTask', 'project',))
         if (key in directAttrs):
@@ -673,7 +673,7 @@ class Project(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'path', 'serial', 'access', 'project',))
         if (key in directAttrs):
@@ -749,7 +749,7 @@ class Project(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationTime', 'status', 'summary', 'versionTag', 'access', 'createdByTask', 'project',))
         if (key in directAttrs):
@@ -823,7 +823,7 @@ class Project(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'path', 'serial', 'access', 'project',))
         if (key in directAttrs):
@@ -1135,7 +1135,7 @@ class Project(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1201,7 +1201,7 @@ class Project(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1391,7 +1391,7 @@ class Project(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1472,7 +1472,7 @@ class Project(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1649,7 +1649,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.Wms.ProjectVersion.__init__"
+        print("ERROR in cambridge.Wms.ProjectVersion.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1684,10 +1684,10 @@ class ProjectVersion(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1708,7 +1708,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -1729,11 +1729,11 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     createdByTask = dataDict.get('createdByTask')
-    if ((createdByTask is not None and not (createdByTask in objsToBeDeleted))):
+    if (createdByTask is not None and not (createdByTask in objsToBeDeleted)):
       createdByTask.__dict__['generatedVersion'] = None
 
     for outputTask in dataDict.get('outputTasks'):
@@ -1821,7 +1821,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1869,7 +1869,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2011,7 +2011,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -2164,7 +2164,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
         if (key in directAttrs):
@@ -2224,7 +2224,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
         if (key in directAttrs):
@@ -2495,7 +2495,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2590,7 +2590,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2657,7 +2657,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2752,7 +2752,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2833,7 +2833,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2914,7 +2914,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3136,7 +3136,7 @@ class RawFile(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.Wms.RawFile.__init__"
+        print("ERROR in cambridge.Wms.RawFile.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3182,10 +3182,10 @@ class RawFile(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3206,7 +3206,7 @@ class RawFile(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -3227,7 +3227,7 @@ class RawFile(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     project = dataDict.get('project')
@@ -3278,7 +3278,7 @@ class RawFile(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -3394,7 +3394,7 @@ class RawFile(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3716,7 +3716,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3782,7 +3782,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3861,7 +3861,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4034,7 +4034,7 @@ data.
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -4067,7 +4067,7 @@ data.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.Wms.Task.__init__"
+        print("ERROR in cambridge.Wms.Task.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4113,10 +4113,10 @@ data.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4137,7 +4137,7 @@ data.
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -4157,15 +4157,15 @@ data.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     generatedVersion = dataDict.get('generatedVersion')
-    if ((generatedVersion is not None and not (generatedVersion in objsToBeDeleted))):
+    if (generatedVersion is not None and not (generatedVersion in objsToBeDeleted)):
       generatedVersion.__dict__['createdByTask'] = None
 
     inputVersion = dataDict.get('inputVersion')
-    if ((inputVersion is not None and not (inputVersion in objsToBeDeleted))):
+    if (inputVersion is not None and not (inputVersion in objsToBeDeleted)):
       outputTasks = inputVersion.__dict__.get('outputTasks')
       outputTasks.remove(self)
 
@@ -4217,7 +4217,7 @@ data.
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -4464,7 +4464,7 @@ data.
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -4927,7 +4927,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4989,7 +4989,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5073,7 +5073,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5161,7 +5161,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5284,7 +5284,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5365,7 +5365,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5446,7 +5446,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5527,7 +5527,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5666,7 +5666,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5747,7 +5747,7 @@ data.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5939,7 +5939,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.Wms.WmsSegment.__init__"
+        print("ERROR in cambridge.Wms.WmsSegment.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5984,7 +5984,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentWmsSegment') is None)):
+      if (notIsReading or root.__dict__.get('currentWmsSegment') is None):
         root.__dict__['currentWmsSegment'] = self
 
       if (notIsReading):
@@ -5998,10 +5998,10 @@ class WmsSegment(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6021,11 +6021,11 @@ class WmsSegment(memops.api.Implementation.TopObject):
     should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -6067,7 +6067,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsSegment'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
@@ -6094,7 +6094,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     CheckAllValid for cambridge.Wms.WmsSegment
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -6132,11 +6132,11 @@ class WmsSegment(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -6345,7 +6345,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -6514,21 +6514,21 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projects').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projects').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'name', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'access', 'wmsSegment',))
         if (key in directAttrs):
@@ -6575,21 +6575,21 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('tasks').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('tasks').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
         if (key in directAttrs):
@@ -6640,7 +6640,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('projects').values()
@@ -6652,7 +6652,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('name')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('projects').get(objKey)
@@ -6668,7 +6668,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('projects').values()
@@ -6676,7 +6676,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'name', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'access', 'wmsSegment',))
         if (key in directAttrs):
@@ -6723,7 +6723,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('tasks').values()
@@ -6735,7 +6735,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('tasks').get(objKey)
@@ -6751,7 +6751,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('tasks').values()
@@ -6759,7 +6759,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
         if (key in directAttrs):
@@ -6930,7 +6930,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     Get for cambridge.Wms.WmsSegment.projects
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('projects').values()
@@ -6946,7 +6946,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     Get for cambridge.Wms.WmsSegment.tasks
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('tasks').values()
@@ -7022,7 +7022,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('details')
@@ -7058,7 +7058,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7111,7 +7111,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('name')
@@ -7153,7 +7153,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     Sorted for cambridge.Wms.WmsSegment.projects
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('projects')
@@ -7168,7 +7168,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     Sorted for cambridge.Wms.WmsSegment.tasks
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('tasks')

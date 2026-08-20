@@ -73,7 +73,7 @@ args:      %s""" % (self.realm, self.pool,self.timeout,self.token,self.url,self.
             return
         if realm :
             if not self.realm:
-                print "ERROR: Failed to find realm and previous method disappeared."
+                print("ERROR: Failed to find realm and previous method disappeared.")
                 return
 #                self.realm = self.getrealm()
             self.check(self.realm,"realm")
@@ -236,13 +236,13 @@ def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "",
             ["realm=","pool=","token=","timeout=","url="])
-    except getopt.GetoptError, err:
+    except getopt.GetoptError as err:
         # print help information and exit:
-        print str(err) # will print something like "option -a not recognized"
+        print(str(err) # will print something like "option -a not recognized")
         usage()
         sys.exit(2)
 
-    print "DEBUG: opts %s" % opts
+    print("DEBUG: opts %s" % opts)
     for opt, a in opts:
         if opt == "--realm":
             cmd.realm = a

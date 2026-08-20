@@ -299,7 +299,7 @@ class PrintWindowPopup(BasePopup):
 
   def open(self):
     # NOTE:ED - subclass the open so that the window pulldown gets updated on subsequent open events
-    super(PrintWindowPopup, self).open()
+    super().open()
     self.updateWindows()
 
   def administerNotifiers(self, notifyFunc):
@@ -494,7 +494,7 @@ class PrintWindowPopup(BasePopup):
       msg = 'Saved to file "%s"' % printFrame.file_name                        
       showInfo('Success', msg, parent=self)
       
-    except IOError, e:
+    except (OSError, e):
       showError('IO Error', str(e), parent=self)
 
     if isOverrideSpectrumSelected:

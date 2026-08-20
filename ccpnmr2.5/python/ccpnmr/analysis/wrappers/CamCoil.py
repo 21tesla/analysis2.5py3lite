@@ -98,7 +98,7 @@ if __name__ == '__main__':
   import sys
 
   if len(sys.argv) != 2:
-    print 'need to specify project directory'
+    print('need to specify project directory')
     sys.exit()
 
   projectDir = sys.argv[1]
@@ -114,5 +114,5 @@ if __name__ == '__main__':
     for atom in residue.sortedAtoms():
       value = atomShiftDict.get(atom)
       if value is not None:
-        print '%s\t%s\t%s\t%s' % (residue.seqCode, residue.ccpCode, atom.name, value)
+        print('%s\t%s\t%s\t%s' % (residue.seqCode, residue.ccpCode, atom.name, value))
 

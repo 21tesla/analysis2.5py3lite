@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 import sys
-import Tkinter
+import tkinter
 
 from memops.api                    import Implementation
 
@@ -545,11 +545,11 @@ class ApplicationPopup(BasePopup):
     self.setUsername(None)
     self.repList = RepositoryList()
 
-    print 'in logout ', self.repList
-    print '#########################'
+    print('in logout ', self.repList)
+    print('#########################')
 
-    print self.tabbedFrame.frames[0].__dict__
-    print '#########################'
+    print(self.tabbedFrame.frames[0].__dict__)
+    print('#########################')
 
     if self.frameShortcuts.has_key('Repository'):
       self.frameShortcuts['Repository'].drawFrame()
@@ -703,7 +703,7 @@ class ApplicationPopup(BasePopup):
 
     self.username = name
 
-    print 'set username ', self.username
+    print('set username ', self.username)
 
   # jmci FIXME
 
@@ -797,7 +797,7 @@ class ApplicationPopup(BasePopup):
 
     self.repList = repList
 
-    print 'in readconfig '
+    print('in readconfig ')
 
     self.setRepository(rep1)
 
@@ -851,9 +851,9 @@ class ApplicationPopup(BasePopup):
     try:
       saveProject(self.project, createFallback=True)
 
-      print 'successfully saved project'
+      print('successfully saved project')
       return True
-    except IOError, e:
+    except OSError as e:
       showError('Saving file', str(e), parent=self)
       return False
 
@@ -977,7 +977,7 @@ def launchApplication(projectDir=None):
               initial_value, parent=top, extra_dismiss_text='Skip')
     try:
       project = loadProject(path=projectDir, showWarning=showWarning, askDir=askdir, askFile=askfile)
-    except ApiError, e:
+    except ApiError as e:
       showError('Reading project', e.error_msg, parent=top)
  
   top.update_idletasks()

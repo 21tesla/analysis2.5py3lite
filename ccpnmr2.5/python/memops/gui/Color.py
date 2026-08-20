@@ -328,11 +328,11 @@ if __name__ == '__main__':
 
   c = Color('red2', '#FF0000')
 
-  print c.hex, c.rgb()
+  print(c.hex, c.rgb())
 
   c = Color('my_color', '#5419B8')
 
-  print c.hex, c.rgb()
+  print(c.hex, c.rgb())
 
   for c in standardColors:
-    print c.name, c.hex, c.rgb(), c.hsb()
+    print(c.name, c.hex, c.rgb(), c.hsb())

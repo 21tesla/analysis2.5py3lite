@@ -585,9 +585,9 @@ class DataFileImportFrame(Frame):
       self.updateDepositionImportLabel(shiftList=shiftList)
 
       if not shiftList in self.entry.measurementLists:
-        print shiftList
+        print(shiftList)
         self.entry.addMeasurementList(shiftList)
-        print self.entry.measurementLists
+        print(self.entry.measurementLists)
 
     self.updateAll()
 

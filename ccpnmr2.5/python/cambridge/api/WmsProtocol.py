@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -151,7 +151,7 @@ class EnumValue(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.EnumValue.__init__"
+        print("ERROR in cambridge.WmsProtocol.EnumValue.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -197,10 +197,10 @@ class EnumValue(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -221,7 +221,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -242,7 +242,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     interfaceParameter = dataDict.get('interfaceParameter')
@@ -293,7 +293,7 @@ class EnumValue(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -396,7 +396,7 @@ class EnumValue(memops.api.Implementation.DataObject):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -708,7 +708,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -828,7 +828,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1054,7 +1054,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1129,7 +1129,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1210,7 +1210,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1285,7 +1285,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1360,7 +1360,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1494,7 +1494,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.ProtocolAccess.__init__"
+        print("ERROR in cambridge.WmsProtocol.ProtocolAccess.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1540,10 +1540,10 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1564,7 +1564,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -1585,7 +1585,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     protocolService = dataDict.get('protocolService')
@@ -1636,7 +1636,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -1785,7 +1785,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -2145,7 +2145,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2226,7 +2226,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2370,7 +2370,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2488,7 +2488,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -2516,7 +2516,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.ProtocolInterface.__init__"
+        print("ERROR in cambridge.WmsProtocol.ProtocolInterface.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2556,10 +2556,10 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2580,7 +2580,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -2613,7 +2613,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsProtocol = dataDict.get('wmsProtocol')
@@ -2671,7 +2671,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2807,7 +2807,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -2942,7 +2942,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'interfaceGroup', 'label', 'row', 'rowspan', 'serial', 'access', 'protocolInterface',))
         if (key in directAttrs):
@@ -2997,7 +2997,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
         if (key in directAttrs):
@@ -3073,7 +3073,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'interfaceGroup', 'label', 'row', 'rowspan', 'serial', 'access', 'protocolInterface',))
         if (key in directAttrs):
@@ -3148,7 +3148,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
         if (key in directAttrs):
@@ -3444,7 +3444,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3506,7 +3506,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3659,7 +3659,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3804,7 +3804,7 @@ run, and set it in NmrCalc.
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -3837,7 +3837,7 @@ run, and set it in NmrCalc.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.ProtocolParameter.__init__"
+        print("ERROR in cambridge.WmsProtocol.ProtocolParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3883,10 +3883,10 @@ run, and set it in NmrCalc.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3907,7 +3907,7 @@ run, and set it in NmrCalc.
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -3934,11 +3934,11 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     container = dataDict.get('container')
-    if ((container is not None and not (container in objsToBeDeleted))):
+    if (container is not None and not (container in objsToBeDeleted)):
       content = container.__dict__.get('content')
       content.remove(self)
 
@@ -4061,7 +4061,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4119,7 +4119,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4167,7 +4167,7 @@ run, and set it in NmrCalc.
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -4368,7 +4368,7 @@ run, and set it in NmrCalc.
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -4627,7 +4627,7 @@ run, and set it in NmrCalc.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
         if (key in directAttrs):
@@ -4682,7 +4682,7 @@ run, and set it in NmrCalc.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
         if (key in directAttrs):
@@ -4742,7 +4742,7 @@ run, and set it in NmrCalc.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
         if (key in directAttrs):
@@ -4801,7 +4801,7 @@ run, and set it in NmrCalc.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
         if (key in directAttrs):
@@ -5108,7 +5108,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5172,7 +5172,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5264,7 +5264,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5383,7 +5383,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5512,7 +5512,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5575,7 +5575,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5644,7 +5644,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5746,7 +5746,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5817,7 +5817,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5892,7 +5892,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5973,7 +5973,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6059,7 +6059,7 @@ run, and set it in NmrCalc.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6290,7 +6290,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -6319,7 +6319,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.ProtocolService.__init__"
+        print("ERROR in cambridge.WmsProtocol.ProtocolService.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6369,10 +6369,10 @@ class ProtocolService(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6393,7 +6393,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -6420,7 +6420,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     wmsProtocol = dataDict.get('wmsProtocol')
@@ -6474,7 +6474,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -6644,7 +6644,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -6755,7 +6755,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('localUserName', 'password', 'serial', 'userName', 'access', 'protocolService',))
         if (key in directAttrs):
@@ -6831,7 +6831,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('localUserName', 'password', 'serial', 'userName', 'access', 'protocolService',))
         if (key in directAttrs):
@@ -7134,7 +7134,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7196,7 +7196,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7277,7 +7277,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7416,7 +7416,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7477,7 +7477,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7658,7 +7658,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.WmsProtocol.__init__"
+        print("ERROR in cambridge.WmsProtocol.WmsProtocol.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7704,7 +7704,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentWmsProtocol') is None)):
+      if (notIsReading or root.__dict__.get('currentWmsProtocol') is None):
         root.__dict__['currentWmsProtocol'] = self
 
       if (notIsReading):
@@ -7718,10 +7718,10 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7741,11 +7741,11 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     function* - should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -7793,7 +7793,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsProtocol'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
@@ -7821,7 +7821,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     CheckAllValid for cambridge.WmsProtocol.WmsProtocol
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -7863,7 +7863,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
@@ -7925,7 +7925,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
            + ": %s" % (value,)
           )
 
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -8192,7 +8192,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -8417,21 +8417,21 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolInterfaces').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolInterfaces').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'info', 'name', 'title', 'access', 'wmsProtocol',))
         if (key in directAttrs):
@@ -8478,21 +8478,21 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolParameters').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolParameters').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
         if (key in directAttrs):
@@ -8539,21 +8539,21 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolServices').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolServices').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('login', 'result', 'run', 'serial', 'status', 'url', 'access', 'wmsProtocol',))
         if (key in directAttrs):
@@ -8604,7 +8604,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolInterfaces').values()
@@ -8616,7 +8616,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('name')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('protocolInterfaces').get(objKey)
@@ -8632,7 +8632,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('protocolInterfaces').values()
@@ -8640,7 +8640,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'info', 'name', 'title', 'access', 'wmsProtocol',))
         if (key in directAttrs):
@@ -8687,7 +8687,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolParameters').values()
@@ -8699,7 +8699,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('protocolParameters').get(objKey)
@@ -8715,7 +8715,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('protocolParameters').values()
@@ -8723,7 +8723,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
         if (key in directAttrs):
@@ -8770,7 +8770,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('protocolServices').values()
@@ -8782,7 +8782,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('serial')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('protocolServices').get(objKey)
@@ -8798,7 +8798,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('protocolServices').values()
@@ -8806,7 +8806,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('login', 'result', 'run', 'serial', 'status', 'url', 'access', 'wmsProtocol',))
         if (key in directAttrs):
@@ -9001,7 +9001,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Get for cambridge.WmsProtocol.WmsProtocol.protocolInterfaces
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('protocolInterfaces').values()
@@ -9013,7 +9013,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Get for cambridge.WmsProtocol.WmsProtocol.protocolParameters
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('protocolParameters').values()
@@ -9025,7 +9025,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Get for cambridge.WmsProtocol.WmsProtocol.protocolServices
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('protocolServices').values()
@@ -9126,7 +9126,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = self.getAnnealProtocol()
@@ -9206,7 +9206,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('annealProtocolCode')
@@ -9242,7 +9242,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9290,7 +9290,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('annealProtocolStoreName')
@@ -9326,7 +9326,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9372,7 +9372,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('details')
@@ -9408,7 +9408,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9461,7 +9461,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('name')
@@ -9512,7 +9512,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = self.getSoftware()
@@ -9588,7 +9588,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('softwareName')
@@ -9624,7 +9624,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9672,7 +9672,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('softwareVersion')
@@ -9708,7 +9708,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9727,7 +9727,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsProtocol.WmsProtocol.protocolInterfaces
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('protocolInterfaces')
@@ -9742,7 +9742,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsProtocol.WmsProtocol.protocolParameters
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('protocolParameters')
@@ -9757,7 +9757,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     Sorted for cambridge.WmsProtocol.WmsProtocol.protocolServices
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('protocolServices')
@@ -9949,7 +9949,7 @@ class InterfaceParameter(InterfaceObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.InterfaceParameter.__init__"
+        print("ERROR in cambridge.WmsProtocol.InterfaceParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9999,10 +9999,10 @@ class InterfaceParameter(InterfaceObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10023,7 +10023,7 @@ class InterfaceParameter(InterfaceObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -10050,11 +10050,11 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     protocolParameter = dataDict.get('protocolParameter')
-    if ((protocolParameter is not None and not (protocolParameter in objsToBeDeleted))):
+    if (protocolParameter is not None and not (protocolParameter in objsToBeDeleted)):
       interfaceParameters = protocolParameter.__dict__.get('interfaceParameters')
       interfaceParameters.remove(self)
 
@@ -10116,7 +10116,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -10167,7 +10167,7 @@ class InterfaceParameter(InterfaceObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -10380,7 +10380,7 @@ class InterfaceParameter(InterfaceObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -10588,7 +10588,7 @@ class InterfaceParameter(InterfaceObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'value', 'access', 'interfaceParameter',))
         if (key in directAttrs):
@@ -10664,7 +10664,7 @@ class InterfaceParameter(InterfaceObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'value', 'access', 'interfaceParameter',))
         if (key in directAttrs):
@@ -10964,7 +10964,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11042,7 +11042,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11119,7 +11119,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11186,7 +11186,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11251,7 +11251,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11332,7 +11332,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11424,7 +11424,7 @@ class InterfaceParameter(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11668,7 +11668,7 @@ class InterfaceLabel(InterfaceObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in cambridge.WmsProtocol.InterfaceLabel.__init__"
+        print("ERROR in cambridge.WmsProtocol.InterfaceLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -11714,10 +11714,10 @@ class InterfaceLabel(InterfaceObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -11738,7 +11738,7 @@ class InterfaceLabel(InterfaceObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -11759,7 +11759,7 @@ class InterfaceLabel(InterfaceObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     protocolInterface = dataDict.get('protocolInterface')
@@ -11810,7 +11810,7 @@ class InterfaceLabel(InterfaceObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -11999,7 +11999,7 @@ class InterfaceLabel(InterfaceObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -12352,7 +12352,7 @@ class InterfaceLabel(InterfaceObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       

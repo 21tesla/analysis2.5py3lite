@@ -342,13 +342,13 @@ class NmrDrawFormat(DataFormat):
       for peakDimContrib in peakDimContribs:
       
         if isinstance(peakDimContrib,Nmr.PeakDimContribN):
-          print "   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored."
+          print("   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored.")
           continue
      
         # get resonanceToAtoms
         ll = self.resonanceToAtoms.get(peakDimContrib.resonance)
         if ll is None:
-          print ("  Can't handle resonance %s for peak %d" 
+          print("  Can't handle resonance %s for peak %d" 
                  % (getResNameText(peakDimContrib.resonance), 
                  self.peak.serial))
         else:

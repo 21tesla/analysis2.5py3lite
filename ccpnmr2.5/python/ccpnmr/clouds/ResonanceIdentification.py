@@ -144,11 +144,11 @@ def getBacusAssignments(projectName, shiftList, peakLists, is2dBacus=0):
       if '1H' in peakDim.dataDimRef.expDimRef.isotopeCodes:
         contrib = assignResToDim(peakDim, resonance=rs[j])
         if contrib is None:
-          print "Assignment failed for peak %s" % peak
+          print("Assignment failed for peak %s" % peak)
           #print '  ' + peak, peakDim, i, i1, i2
-          print '  Position:', [p.value for p in peak.peakDims]
-          print '  Resonance 1 index:%s object:%s shifts:%f' % (r1, rs[0], rs[0].findFirstShift().value)
-          print '  Resonance 2 index:%s object:%s shifts:%f' % (r2, rs[1], rs[1].findFirstShift().value)
+          print('  Position:', [p.value for p in peak.peakDims])
+          print('  Resonance 1 index:%s object:%s shifts:%f' % (r1, rs[0], rs[0].findFirstShift().value))
+          print('  Resonance 2 index:%s object:%s shifts:%f' % (r2, rs[1], rs[1].findFirstShift().value))
         j += 1
     
     
@@ -181,7 +181,7 @@ def findClosestPeak(peaks, resonances):
   if bestI is not None:
     bestPeak = peaks.pop(bestI)
   else:
-    print "Fail", len(peaks), shifts
+    print("Fail", len(peaks), shifts)
     
   return bestPeak
 
@@ -192,14 +192,14 @@ def run3dBacus(fileRoot,shiftList,cNoesy=None,nNoesy=None):
 
   peakLists = []
 
-  print "Make input"
+  print("Make input")
   makeBacusInput(fileRoot,cNoesy,nNoesy,shiftList)
   
-  print "Run BACUS 3d"
+  print("Run BACUS 3d")
   runBacus(fileRoot)
   
   if nNoesy:
-    print "Clear 15N NOESY"
+    print("Clear 15N NOESY")
     nNoesyListNew = copyPeakListNew(nNoesy, nNoesy.dataSource)
     peakLists.append(nNoesyListNew)
     for peak in nNoesyListNew.peaks:
@@ -207,14 +207,14 @@ def run3dBacus(fileRoot,shiftList,cNoesy=None,nNoesy=None):
         clearPeakDim(peakDim)
 
   if cNoesy:
-    print "Clear 13C NOESY"
+    print("Clear 13C NOESY")
     cNoesyListNew = copyPeakListNew(cNoesy, cNoesy.dataSource)
     peakLists.append(cNoesyListNew)
     for peak in cNoesyListNew.peaks:
       for peakDim in peak.peakDims:
         clearPeakDim(peakDim)
 
-  print "Make assignments"
+  print("Make assignments")
   resonances = getBacusAssignments(fileRoot, shiftList, peakLists)
  
 
@@ -383,7 +383,7 @@ def writePeakListFile(peakList, fileName, intensityType='height'):
 
       peakIntensity = peak.findFirstPeakIntensity(intensityType=intensityType)
       if not peakIntensity:
-        print "Missing intensity", peak
+        print("Missing intensity", peak)
         continue
  
       line = '%4d %s     %9.3e\n' % (i+1,' '.join(ppms),peakIntensity.value)
@@ -490,7 +490,7 @@ SPAN modules
 def makeCosyTocyConnections(name=None):
 
   if name is None:
-    name = raw_input('input file name (5 letters): ')[:5]
+    name = input('input file name (5 letters): ')[:5]
   
   resonances = getResonancesFromFile(name)
   
@@ -644,7 +644,7 @@ def readSpiSpinSystems(project, fileName):
 
   spinSystems = []
   shiftList = project.newShiftList()
-  file = open(fileName, 'r')
+  file = open(fileName)
   
   line = file.readline()
   while line:
@@ -1003,7 +1003,7 @@ def identify3dSideChains(pseudoMolSystem, tocsy3dPeaks, hnhaPeaks, pseudoSpinSys
       rootPseudoSS  = tPseudoSS.possiblePseudoSS[0][1]
       rootPseudoRes = tPseudoSS.possiblePseudoSS[0][2]
       if doneRoots.get(rootPseudoSS):
-        print "Dplicate root match in identify3dSideChains"
+        print("Dplicate root match in identify3dSideChains")
         continue      
       pseudoMolSystem.mergePseudoResons(rootPseudoRes[0],tPseudoSS.resonances[0])
       pseudoMolSystem.mergePseudoResons(rootPseudoRes[1],tPseudoSS.resonances[1])
@@ -1485,14 +1485,14 @@ def makeNoeAdcs(resonances, spec, constraintHead, diagExclusion=0.4, water=4.92,
   hTol = 0.02
   allowedAtomTypes= None
   from ccpnmr.analysis.core.ExperimentBasic import getNoiseEstimate
-  print "Make DCL"
+  print("Make DCL")
   distConstraintList  = constraintHead.newDistanceConstraintList()
 
   shiftList = spec.experiment.shiftList
   getValue = spec.block_file.getValue
   analysisSpec = spec.analysisSpectrum
   noise = 0.5 * min(analysisSpec.posLevels) * analysisSpec.analysisProject.globalContourScale
-  print "Estimated Noise", noise
+  print("Estimated Noise", noise)
   
   atomTypes = []
   residues = []
@@ -1637,7 +1637,7 @@ def getCloudsResonanceList(argServer, hsqcPeakList=None, tocsy3dPeakList=None, n
   for resonance in amides:
     resonance.name = 'HN'
     if not checkDict.get(resonance.serial):
-      print "Discarded resonance", getResonanceAtomTuple(resonance)
+      print("Discarded resonance", getResonanceAtomTuple(resonance))
       amides.remove(resonance)
 
   for resonance in otherNonAromatic:
@@ -1781,7 +1781,7 @@ def pickAssignSpecFrom2dRoot(argServer=None, rootPeakList=None, targetPeakList=N
         if len(peakDim.peakDimContribs) <1:
           assignResToDim(peakDim, resonance)
     
-    print 'Spin system %d of %d' % (c,M)
+    print('Spin system %d of %d' % (c,M))
     
   if argServer:
     name = '%s:%s' % (targetPeakList.dataSource.experiment.name,targetPeakList.dataSource.name)
@@ -2035,5 +2035,5 @@ def getNumMethyls(argServer, chain=None):
           if chemAtomSet.findFirstChemAtom().elementSymbol == 'H':
             numMethyls += 1
            
-  print 'Number of methyls is %s' % (numMethyls)
+  print('Number of methyls is %s' % (numMethyls))
   return numMethyls

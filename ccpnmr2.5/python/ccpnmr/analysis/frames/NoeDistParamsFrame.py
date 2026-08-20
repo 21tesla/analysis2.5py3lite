@@ -57,7 +57,7 @@ from ccpnmr.analysis.core.Util import getAnalysisPeakList, setSpectrumNoeDistanc
 noeDistanceFunctions = ['intensity^-1/6','intensity^-1/4',
                         'intensity^-1/3','Distance bins']
 
-ANGSTROM = u'\u00C5'
+ANGSTROM = '\u00C5'
 
 class RowObject:
   

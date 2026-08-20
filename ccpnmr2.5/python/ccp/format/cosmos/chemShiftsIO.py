@@ -82,7 +82,7 @@ class CosmosChemShiftFile(CosmosGenericFile):
   def write(self, useSerial=True, verbose=False, use_fout=None): #, useResLabel=False
 
     if verbose == 1:
-      print "Writing %s chemical shift list %s" % (self.format,self.name)
+      print("Writing %s chemical shift list %s" % (self.format,self.name))
                  
     #
     # Store chem shifts lines in list for writing

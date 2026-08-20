@@ -89,7 +89,7 @@ class CnsJCouplingConstraintFile(CnsGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading cns j coupling constraint list %s" % self.name
+      print("Reading cns j coupling constraint list %s" % self.name)
 
     return self.readGeneric(CnsJCouplingConstraint)
 
@@ -104,7 +104,7 @@ class CnsJCouplingConstraintFile(CnsGenericFile):
     # ...
 
     if verbose == 1:
-      print "Writing cns j coupling constraint list %s" % self.name
+      print("Writing cns j coupling constraint list %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -141,9 +141,9 @@ class CnsJCouplingConstraintFile(CnsGenericFile):
           fout.write("%s %s%sresid %-4d and name %-4s%s" % (startSpace,
                                         	'(',
                                         	segIdString,
-			member.seqCode,
-			member.atomName,
-			')'))
+            member.seqCode,
+            member.atomName,
+            ')'))
           if j == 1:
             fout.write(self.newline)
 
@@ -215,16 +215,16 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
 
     for constraint in constraintFile.constraints:
-      print constraint.Id, constraint.origId,
+      print(constraint.Id, constraint.origId,)
 
-      print constraint.value, constraint.error,
+      print(constraint.value, constraint.error,)
 
       for item in constraint.items:
         for member in item.members:
-          print member.seqCode, member.atomName,
-        print "|",
+          print(member.seqCode, member.atomName,)
+        print("|",)
 
-      print
+      print()
 
     constraintFile.name = 'local/jcoup.testout'
 

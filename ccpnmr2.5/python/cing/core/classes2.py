@@ -9,7 +9,7 @@ from cing.PluginCode.required.reqVasco import * #@UnusedWildImport
 from cing.core.ROGscore import ROGscore
 
 # pylint: disable=R0903
-class ProjectListMember():
+class ProjectListMember:
     """An element of ProjectList always has certain attributes to add.
     """
     def __init__(self):

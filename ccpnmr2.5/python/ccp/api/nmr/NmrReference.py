@@ -63,7 +63,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -168,7 +168,7 @@ i+1-refPoint).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.ChemAtomNmrDistrib.__init__"
+        print("ERROR in ccp.nmr.NmrReference.ChemAtomNmrDistrib.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -214,10 +214,10 @@ i+1-refPoint).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2561,7 +2561,7 @@ the meanValue or the randomCoilValue attribute must be set.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.ChemAtomNmrRef.__init__"
+        print("ERROR in ccp.nmr.NmrReference.ChemAtomNmrRef.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2607,10 +2607,10 @@ the meanValue or the randomCoilValue attribute must be set.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5382,7 +5382,7 @@ in Xxx.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.ChemAtomShiftCorr.__init__"
+        print("ERROR in ccp.nmr.NmrReference.ChemAtomShiftCorr.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5428,10 +5428,10 @@ in Xxx.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6380,7 +6380,7 @@ source.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.ChemCompNmrRef.__init__"
+        print("ERROR in ccp.nmr.NmrReference.ChemCompNmrRef.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6420,10 +6420,10 @@ source.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7677,7 +7677,7 @@ relevant Vars
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.ChemCompVarNmrRef.__init__"
+        print("ERROR in ccp.nmr.NmrReference.ChemCompVarNmrRef.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7720,10 +7720,10 @@ relevant Vars
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9117,7 +9117,7 @@ handle, holding information about where the actual data are stored.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.nmr.NmrReference.NmrReferenceStore.__init__"
+        print("ERROR in ccp.nmr.NmrReference.NmrReferenceStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9180,10 +9180,10 @@ handle, holding information about where the actual data are stored.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

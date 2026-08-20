@@ -63,7 +63,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -160,7 +160,7 @@ name strings in an external format
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.AtomMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.AtomMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -206,10 +206,10 @@ name strings in an external format
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1619,7 +1619,7 @@ description in the external format.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.ChainMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.ChainMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1665,10 +1665,10 @@ description in the external format.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2901,7 +2901,7 @@ class MoleculeMapping(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.MoleculeMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.MoleculeMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2947,10 +2947,10 @@ class MoleculeMapping(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3772,7 +3772,7 @@ data model. It is used by the FormatConverter software.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.NameMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.NameMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3826,10 +3826,10 @@ data model. It is used by the FormatConverter software.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5654,7 +5654,7 @@ class NameMappingStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.NameMappingStore.__init__"
+        print("ERROR in ccpnmr.NameMapping.NameMappingStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5713,10 +5713,10 @@ class NameMappingStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6712,7 +6712,7 @@ has to be copied to other resonances (using their external format name).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.ResonanceLinkMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.ResonanceLinkMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6758,10 +6758,10 @@ has to be copied to other resonances (using their external format name).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7712,7 +7712,7 @@ same data again.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.NameMapping.ResonanceStatusMapping.__init__"
+        print("ERROR in ccpnmr.NameMapping.ResonanceStatusMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7758,10 +7758,10 @@ same data again.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

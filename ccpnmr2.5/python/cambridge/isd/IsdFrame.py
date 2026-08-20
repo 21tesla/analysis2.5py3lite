@@ -1,5 +1,5 @@
 import os, sys, string
-import Tkinter
+import tkinter
 
 from memops.gui.Button          import Button
 from memops.gui.ButtonList      import ButtonList
@@ -367,7 +367,7 @@ class IsdFrame(Frame):
                        parent=self):
         return False
 
-      print 'DEBUG!!! cmdStop is being called from closeProject'
+      print('DEBUG!!! cmdStop is being called from closeProject')
       if not self.cmdStop():
         return False
 
@@ -525,10 +525,10 @@ class IsdFrame(Frame):
 
       try:
         saveProject(self.ccpnProject, createFallback=True)
-        print 'Successfully saved project'
+        print('Successfully saved project')
 
-      except IOError, msg:
-        print 'ERROR:', msg
+      except OSError as msg:
+        print('ERROR:', msg)
         showError('Saving file', str(msg), parent=self)
         return False
 
@@ -641,8 +641,8 @@ class IsdFrame(Frame):
                    % self.sim.working_path):
         try:
           os.makedirs(os.path.expanduser(self.sim.working_path))
-        except Exception, msg:
-          print 'ERROR:', msg
+        except Exception as msg:
+          print('ERROR:', msg)
           showError('Creating working path..',
                     'Could not create "%s".' % self.sim.working_path,
                     parent=self)
@@ -718,7 +718,7 @@ class IsdFrame(Frame):
     try:
       from Isd import setup
 
-    except ImportError, msg:
+    except ImportError as msg:
       Label(self, text='Cannot import ISD modules: Check installation and ISD_ROOT environment variable', grid=(1,0))
       Label(self, text='Reported error: "%s"' % msg, grid=(2,0))
       if str(msg) == 'No module named _isd':
@@ -737,8 +737,8 @@ class IsdFrame(Frame):
     try:
       ns = get_nameserver(nshost)
 
-    except Exception, msg:
-      print 'ERROR: Nameserver was not found on %s' % nshost
+    except Exception as msg:
+      print('ERROR: Nameserver was not found on %s' % nshost)
 
       showWarning('Failure', 'PyRO nameserver is not found. Please start the nameserver first '+\
                   'with pyro-ns script.')
@@ -770,8 +770,8 @@ class IsdFrame(Frame):
       R.render()
       R.write_pdf()
 
-    except Exception, msg:
-      print 'ERROR: Exception occurred when generating a report, ', msg
+    except Exception as msg:
+      print('ERROR: Exception occurred when generating a report, ', msg)
       raise
 
     self.busylock.release()
@@ -805,8 +805,8 @@ class IsdFrame(Frame):
     try:
       self.__create()
 
-    except Exception, msg:
-      print 'ERROR: Exception occurred when creating a simulation, ', msg
+    except Exception as msg:
+      print('ERROR: Exception occurred when creating a simulation, ', msg)
       raise
 
     self.busylock.release()
@@ -826,7 +826,7 @@ class IsdFrame(Frame):
 
       ## generate samples
 
-      print 'Starting calculation...'
+      print('Starting calculation...')
 
       self.grid = self.manager.create_grid(self.debug)
       self.sampler = self.manager.create_sampler(self.grid, self.debug)
@@ -835,10 +835,10 @@ class IsdFrame(Frame):
 
       self.sampler.generate_sequence(self.sim.replica.n_samples, initial_states)
 
-      print 'Calculation started.'
+      print('Calculation started.')
 
-    except Exception, msg:
-      print 'ERROR: Exception occurred when starting a simulation, ', msg
+    except Exception as msg:
+      print('ERROR: Exception occurred when starting a simulation, ', msg)
       raise
 
     self.busylock.release()
@@ -869,7 +869,7 @@ Results are written to %s'''
       args = (len(self.sampler.history['energies'])+1, len(self.sampler[0]),
               len(self.sampler), self.sim.working_path)
 
-      print info % args
+      print(info % args)
       showInfo( 'ISD simulation info', info % args )
 
     else:
@@ -892,7 +892,7 @@ Results are written to %s'''
       args = (len(history['energies'])+1, len(history['states']),
               self.sim.working_path)
 
-      print info % args
+      print(info % args)
       showInfo( 'ISD simulation info', info % args )
 
   def cmdShow(self):
@@ -908,7 +908,7 @@ Results are written to %s'''
       chain.show()
 
     else:
-      print 'Show: No samples available yet.'
+      print('Show: No samples available yet.')
 
   def cmdEnergies(self):
 
@@ -916,7 +916,7 @@ Results are written to %s'''
       return
 
     if not len(self.sampler.history['energies']):
-      print 'Show: No samples available yet.'
+      print('Show: No samples available yet.')
       return
 
     from Isd.gnuplot import plot
@@ -940,13 +940,13 @@ Results are written to %s'''
     r = self.sampler.rates()
 
     if not len(r)>0:
-      print 'Not enough samples yet.'
+      print('Not enough samples yet.')
       return
 
     if index is None:
       plot(r)
     else:
-      print 'Rate of exchange for replica %d: %.2f' % (index, r[index])
+      print('Rate of exchange for replica %d: %.2f' % (index, r[index]))
 
   def cmdSchedule(self):
 
@@ -960,8 +960,8 @@ Results are written to %s'''
     L = [h.replica_parameters['lambda'] for h in hs]
     Q = [h.replica_parameters['q'] for h in hs]
 
-    print 'Lambda: \n', L
-    print 'Q: \n', Q
+    print('Lambda: \n', L)
+    print('Q: \n', Q)
 
     plot(L)
     plot(Q)
@@ -1808,7 +1808,7 @@ Results are written to %s'''
       values = self.listExportResidues(text)
 
     except Exception:
-      print 'ERROR:', msg
+      print('ERROR:', msg)
       showError('Wrong input format',
                 'Specify export residues by enumerating their numbers separated by commas and hyphens, e.g. 1,3,10-20',
                 parent=self)
@@ -1908,8 +1908,8 @@ Results are written to %s'''
     try:
       values = self.listHostList(text)
 
-    except Exception, msg:
-      print 'ERROR:', msg
+    except Exception as msg:
+      print('ERROR:', msg)
       showError('Wrong input format',
                 'Specify host list by their names or IP addresses '+\
                 'separated by commas. Number of processes on each host '+\
@@ -1936,8 +1936,8 @@ Results are written to %s'''
     if self.sampler:
       if self.sampler.ishalted() and \
              (not self.busylock.locked() and not self.halted.isSet()):
-        print 'Simulation complete.'
-        print 'DEBUG!!! cmdStop is being called from simulationComplete'
+        print('Simulation complete.')
+        print('DEBUG!!! cmdStop is being called from simulationComplete')
         self.cmdStop(force = True)
         self.updateAll()
         return
@@ -2610,7 +2610,7 @@ def cleanup(simulation, sampler):
         sleep(t_delta)
         t += t_delta
 
-    print
+    print()
 
     ## halt grid
 
@@ -2624,7 +2624,7 @@ def cleanup(simulation, sampler):
         sleep(t_delta)
         t += t_delta
 
-    print
+    print()
 
     if g.ishalted():
-      print 'ISD simulation is stopped!'
+      print('ISD simulation is stopped!')

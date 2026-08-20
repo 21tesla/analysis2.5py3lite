@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter
+import tkinter
 
 from memops.gui.BasePopup             import BasePopup  
 from memops.gui.ButtonList            import ButtonList
@@ -169,8 +169,8 @@ class PopupTemplate(BasePopup):
     label.grid(row=row, column=0, sticky=Tkinter.E)
 
     labels   = ['Bool','Int','Float','String']
-    objects  = [type(0),type(1),type(1.0),type('a')]
-    selected = [type('a')]
+    objects  = [int,int,float,str]
+    selected = [str]
     self.partitionedSelector= PartitionedSelector(mainFrame, labels=labels,
                                                   objects=objects,
                                                   colors = ['red','yellow','green','#000080'],

@@ -37,7 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 import os
-import Tkinter
+import tkinter
 
 from memops.api import Implementation
 from ccp.api.nmr import Nmr
@@ -379,9 +379,9 @@ class MidgePopup(BasePopup):
  
         allowedAtomTypes= adcDict[self.adcAtomTypes]
  
-        print "Making ADCs"
+        print("Making ADCs")
         self.antiDistConstraintList = makeNoeAdcs(resonances[:],self.noesyPeakList.dataSource,constraintHead,allowedAtomTypes=allowedAtomTypes)
-        print "Done ADCs"
+        print("Done ADCs")
  
     
       if self.structure:

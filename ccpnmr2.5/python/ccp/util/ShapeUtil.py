@@ -23,7 +23,7 @@ def getShapeFile(spectrum):
   fileName = getDataSourceFileName(spectrum)
   if not fileName or not os.path.exists(fileName):
     msg = 'Warning: spectrum (%s, %s): data file %s not accessible'
-    print msg % (spectrum.experiment.name, spectrum.name, fileName)
+    print(msg % (spectrum.experiment.name, spectrum.name, fileName))
     return None
 
 
@@ -55,7 +55,7 @@ def getShapeFile(spectrum):
             shapeData.append((a, size, offset, values))
 
     if ncomp != len(componentList):
-      print ('Warning: in %s, ncomp = %d, but found %d components' 
+      print('Warning: in %s, ncomp = %d, but found %d components' 
              % (fileName, ncomp, componentList))
 
     sizeList.sort()
@@ -66,7 +66,7 @@ def getShapeFile(spectrum):
     cmin = componentList[0][0]
     cmax = componentList[-1][0]
     if cmax - cmin + 1 != ncomp:
-      print 'Warning: in %s, components are not numbered consecutively' % fileName
+      print('Warning: in %s, components are not numbered consecutively' % fileName)
 
     aDict = {}
     points = []
@@ -90,19 +90,19 @@ def getShapeFile(spectrum):
           if size == 0:
             size = points[aa]
           if len(values) !=size:
-            raise IOError('in %s: comp = %d, a = %d, size = %d but found %d values' % (fileName, c, a, size, len(values)))
+            raise OSError('in %s: comp = %d, a = %d, size = %d but found %d values' % (fileName, c, a, size, len(values)))
           if shapeDim is None:
             adim = 0
           else:
             adim = aa
           shapeFile.setShapeData(comp, aa, offset, values)
 
-  except Exception, e:
-    print 'Warning: in %s had exception: %s' % (fileName, e)
+  except Exception as e:
+    print('Warning: in %s had exception: %s' % (fileName, e))
     shapeFile = None
 
-  except ShapeFile.error, e:
-    print 'Warning: in %s had ShapeFile error: %s' % (fileName, e)
+  except ShapeFile.error as e:
+    print('Warning: in %s had ShapeFile error: %s' % (fileName, e))
     shapeFile = None
 
   return shapeFile
@@ -124,12 +124,12 @@ def get1dShapeFile(spectrum, valuesList):
       dim = offset = 0
       shapeFile.setShapeData(comp, dim, offset, valuesList[comp])
 
-  except Exception, e:
-    print 'Warning: in %s:%s had exception: %s' % (spectrum.experiment.name, spectrum.name, e)
+  except Exception as e:
+    print('Warning: in %s:%s had exception: %s' % (spectrum.experiment.name, spectrum.name, e))
     shapeFile = None
 
-  except ShapeFile.error, e:
-    print 'Warning: in %s:%s had ShapeFile error: %s' % (spectrum.experiment.name, spectrum.name, e)
+  except ShapeFile.error as e:
+    print('Warning: in %s:%s had ShapeFile error: %s' % (spectrum.experiment.name, spectrum.name, e))
     shapeFile = None
 
   return shapeFile
@@ -173,7 +173,7 @@ if __name__ == '__main__':
   import sys
 
   if len(sys.argv) != 2:
-    print 'need to specify shapeFile'
+    print('need to specify shapeFile')
     sys.exit()
 
   fileName = sys.argv[1]

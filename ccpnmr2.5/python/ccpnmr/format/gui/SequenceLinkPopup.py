@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 import string, copy
 
@@ -322,7 +322,7 @@ class SequenceLinkPopup(TemporaryBasePopup):
         seqIndexes = range(0,len(origSequenceList))
 
       for seqIndex in seqIndexes:
-        if type(seqIndex) == type(''):
+        if type(seqIndex) == str:
           seqTexts.append(seqIndex)
         else:
           ccHead = origSequenceList[seqIndex][1]

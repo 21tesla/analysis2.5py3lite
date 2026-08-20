@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 PeakSeparatorRegion.py
 
@@ -48,7 +47,7 @@ def getRegionParams(params, argServer=None, HEIGHT_MULTIPLIER=2.5):
       showWarning( 'Peak Separator', 'The spectrum you are picking is not visible in the current window. Have you selected the correct peak list?')
 
   else:
-    print '&&& getRegionParams: No arg server'
+    print('&&& getRegionParams: No arg server')
     return
 
   # make sure that dragged region and peak list match!

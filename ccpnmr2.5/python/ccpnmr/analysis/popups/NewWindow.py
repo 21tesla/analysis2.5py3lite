@@ -241,10 +241,10 @@ class NewWindowPopup(BasePopup):
 
     self.scrolledMatrix = ScrolledMatrix(guiFrame,
                           headingList=headingList,
-			  editWidgets=editWidgets,
+              editWidgets=editWidgets,
                           editGetCallbacks=editGetCallbacks,
                           editSetCallbacks=editSetCallbacks,
-			  multiSelect=True, grid=(row,0),
+              multiSelect=True, grid=(row,0),
                           gridSpan=(1,4), tipTexts=tipTexts)
 
     row += 1
@@ -470,10 +470,10 @@ class NewWindowPopup(BasePopup):
       textMatrix.append(datum)
       objectList.append(spectrum)
       colorMatrix.append(colours)
-	 
+     
     self.scrolledMatrix.update(objectList=objectList,
                                textMatrix=textMatrix,
-			       colorMatrix=colorMatrix)
+                   colorMatrix=colorMatrix)
 
     self.waiting = False
 

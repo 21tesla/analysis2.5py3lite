@@ -252,7 +252,7 @@ class AlignNeedlemanWunsch:
           j -= 1
         else:
           #should never get here..
-          print 'ERROR'
+          print('ERROR')
           i=0
           j=0
           aseq1='ERROR';aseq2='ERROR';seq1='ERROR';seq2='ERROR'
@@ -309,7 +309,7 @@ class AlignNeedlemanWunsch:
   
     if depth == 30:
       if self.verbosity:
-        print "  ERROR: recursive loop problem. Aborting at depth 30."
+        print("  ERROR: recursive loop problem. Aborting at depth 30.")
       return []
       
   #and then to recursivly find all paths 
@@ -357,14 +357,14 @@ class AlignNeedlemanWunsch:
     
     if verbosity > 1:
 
-      print ''
-      print '# Using:  match='+repr(self.match)+'; mismatch='+repr(self.mismatch)+'; gap='+repr(self.gap)              
-      print self.seq1
-      print self.seq2
-      print '# We get e.g.:'
-      print self.aseq1
-      print self.aseq2
-      print ''
+      print('')
+      print('# Using:  match='+repr(self.match)+'; mismatch='+repr(self.mismatch)+'; gap='+repr(self.gap))
+      print(self.seq1)
+      print(self.seq2)
+      print('# We get e.g.:')
+      print(self.aseq1)
+      print(self.aseq2)
+      print('')
       
     gaps=0
     mms=0
@@ -381,19 +381,19 @@ class AlignNeedlemanWunsch:
           mms+=1
 
     if verbosity > 0:
-      print self.aseq1
-      print self.aseq2
-      print ''
-      print ms,' matches; ',mms,' mismatches; ',gaps,' gaps.' 
-      print '# With a score of'
-      print self.align[self.rows-2][self.cols-2],'/',min(len(self.seq1),len(self.seq2))
+      print(self.aseq1)
+      print(self.aseq2)
+      print('')
+      print(ms,' matches; ',mms,' mismatches; ',gaps,' gaps.')
+      print('# With a score of')
+      print(self.align[self.rows-2][self.cols-2],'/',min(len(self.seq1),len(self.seq2)))
 
-      print 'Optimal alignment is ',len(self.tracks),' times degenerate:'
-      print ''
+      print('Optimal alignment is ',len(self.tracks),' times degenerate:')
+      print('')
       for i in range(len(self.tracks)):
-        print i+1,'.'
-        print baseqs1[i]
-        print baseqs2[i]
+        print(i+1,'.')
+        print(baseqs1[i])
+        print(baseqs2[i])
 
   def getBestMatchInfo(self,verbosity = 0):
   
@@ -439,9 +439,9 @@ class AlignNeedlemanWunsch:
           mismatches+=1
 
     if verbosity > 0:
-      print self.aseq1
-      print self.aseq2
-      print ''
+      print(self.aseq1)
+      print(self.aseq2)
+      print('')
     
     
     if self.align is not None:
@@ -682,11 +682,11 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
       
       if resonanceDict.has_key(newResName):
         newResonance = resonanceDict[newResName]
-        print "  Using existing resonance %s..." % newResName
+        print("  Using existing resonance %s..." % newResName)
 
       else:
 
-        print "  Creating new resonance %s..." % newResName
+        print("  Creating new resonance %s..." % newResName)
 
         newResonance = nmrConstraintStore.newFixedResonance(isotopeCode = resonance.isotopeCode)
         resonanceDict[newResName] = newResonance
@@ -716,11 +716,11 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
   # Loop over the 'new' chain codes...
   #
   
-  print
-  print "########################## "
-  print "# Duplicating resonances # "
-  print "########################## "
-  print
+  print()
+  print("########################## ")
+  print("# Duplicating resonances # ")
+  print("########################## ")
+  print()
   
   for i in range(1,len(mappingDict[chain])):
 
@@ -732,12 +732,12 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
 
     for constraint in copyConstraints:
     
-      print "  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial)
-      print "    Resonances %s" % ', '.join([getResNameText(res) for res in constraint.resonances])
+      print("  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial))
+      print("    Resonances %s" % ', '.join([getResNameText(res) for res in constraint.resonances]))
 
       (newResonances, oldToNewResonanceDict) = getMappedResonances(constraint,resonanceMappingDict,newChainCode)
       
-      print "            to %s" % ', '.join([getResNameText(res) for res in newResonances])
+      print("            to %s" % ', '.join([getResNameText(res) for res in newResonances]))
 
       newConstr = constraint.__class__(constraint.parent,resonances = newResonances)
       copyAttributeInfo(constraint,newConstr)
@@ -747,7 +747,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
         newConstrItem = constrItem.__class__(newConstr, upperLimit = 1.0, lowerLimit = 0.0)
         copyAttributeInfo(constrItem,newConstrItem)
       
-      print
+      print()
 
     #
     # ..and the constraints from the relevant constraintItems...
@@ -755,7 +755,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
 
     for constraint in copyConstraintItemsList:
    
-      print "  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial)
+      print("  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial))
 
       newConstr = constraint.__class__(constraint.parent)
       copyAttributeInfo(constraint,newConstr)
@@ -764,7 +764,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
         newConstr.weight = constraint.weight
 
       for constrItem in constraint.sortedItems():
-        print "    Copying item with resonances %s" %  ', '.join([getResNameText(res) for res in constrItem.resonances])
+        print("    Copying item with resonances %s" %  ', '.join([getResNameText(res) for res in constrItem.resonances]))
       
         if constrItem in copyConstraintItems[constraint]:
 
@@ -776,7 +776,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
           oldToNewResonanceDict = {}
 
       
-        print "                              to %s" % ', '.join([getResNameText(res) for res in newResonances])
+        print("                              to %s" % ', '.join([getResNameText(res) for res in newResonances]))
 
         newConstrItem = constrItem.__class__(newConstr,resonances = newResonances)
 
@@ -789,9 +789,9 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
  
         copyAttributeInfo(constrItem,newConstrItem)
       
-      print
+      print()
 
-  print "###################### "
-  print "# End of duplication # "
-  print "###################### "
-  print
+  print("###################### ")
+  print("# End of duplication # ")
+  print("###################### ")
+  print()

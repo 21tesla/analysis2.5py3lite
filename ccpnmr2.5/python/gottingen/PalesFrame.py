@@ -313,14 +313,14 @@ class GenericDataMatrix(ScrolledMatrix):
     editSetCallbacks = [None, self.setValue, None]
     
     ScrolledMatrix.__init__(self, parent, headingList=headingList,
-		            justifyList=justifyList,
-		            editWidgets=editWidgets,
-		            editGetCallbacks=editGetCallbacks, 
-		            editSetCallbacks=editSetCallbacks,
+                    justifyList=justifyList,
+                    editWidgets=editWidgets,
+                    editGetCallbacks=editGetCallbacks, 
+                    editSetCallbacks=editSetCallbacks,
                             initialRows=initialRows,
-		            multiSelect=False,
-		            passSelfToCallback=True,
-		            callback=self.selectRowObj,)
+                    multiSelect=False,
+                    passSelfToCallback=True,
+                    callback=self.selectRowObj,)
     
     # Generic widgets
     self.stringEntry  = Entry(parent, returnCallback=self.setValue)
@@ -362,7 +362,7 @@ class GenericDataMatrix(ScrolledMatrix):
     run = self.run
     paramList = self.paramList
     
-    print '### updateGeneric', run, paramList
+    print('### updateGeneric', run, paramList)
     
     self.enumerations.clear()
     if not run or not paramList:
@@ -592,7 +592,7 @@ class GenericDataMatrix(ScrolledMatrix):
                      **kwArgs):
     
     
-    print '### setupRunObject', run, name, code, parType, default, description
+    print('### setupRunObject', run, name, code, parType, default, description)
     
     names = []
     values = []
@@ -608,7 +608,7 @@ class GenericDataMatrix(ScrolledMatrix):
     
     info = self.parInfoMap.get(parType)
     if info is None:
-      print '### WARNING parameter type not implemented: ', parType
+      print('### WARNING parameter type not implemented: ', parType)
       return
     
     entry, getter, setter, dataType = info
@@ -992,7 +992,7 @@ class PalesFrame(Frame):
     """ Create objects for known parameters
     """
     
-    print '### initialiseRun', self.run and runIsEditable(self.run)
+    print('### initialiseRun', self.run and runIsEditable(self.run))
     
     run = self.run
     if run is None or not runIsEditable(run):
@@ -1036,7 +1036,7 @@ class PalesFrame(Frame):
     return 'NBNB TBD'
   
   def changeRun(self, run):
-    print '### changeRun', self.run, run
+    print('### changeRun', self.run, run)
     
     if run and (run is not self.run):
       self.run = run
@@ -1054,7 +1054,7 @@ class PalesFrame(Frame):
         self.updateAfter()
      
   def updateRunsAfter(self, obj=None): 
-    print '### updateRunsAfter', obj,  self.waiting
+    print('### updateRunsAfter', obj,  self.waiting)
       
     if self.waiting:
       return
@@ -1064,7 +1064,7 @@ class PalesFrame(Frame):
       self.after_idle(self.updateRuns)    
   
   def updateRunDataAfter(self, obj=None):
-    print '### updateRunDataAfter', obj
+    print('### updateRunDataAfter', obj)
     
     if obj is None:
       run = None
@@ -1075,7 +1075,7 @@ class PalesFrame(Frame):
   def updateRunAfter(self, run=None):    
     """ update all if run is curent run, otherwise update run pulldown only
     """
-    print '### updateRunAfter', run,  self.waiting
+    print('### updateRunAfter', run,  self.waiting)
       
     if self.waiting:
       return
@@ -1104,7 +1104,7 @@ class PalesFrame(Frame):
     """ Update run pulldown only
     """
     
-    print '### updateRuns', run
+    print('### updateRuns', run)
   
     names = []
     index = 0
@@ -1135,13 +1135,13 @@ class PalesFrame(Frame):
     if run is not self.run:
       self.changeRun(run)      
     
-    print '###', names, runs, index
+    print('###', names, runs, index)
     
     self.runPulldown.setup(names, runs, index) 
     self.waiting = False    
  
   def update(self, obj=None):
-    print '### update', self.run
+    print('### update', self.run)
     
     
     self.updateRuns(obj)

@@ -981,7 +981,7 @@ class CopyAssignmentsPopup(BasePopup):
         else:
           j = None
 
-	dimMapping[dataDim1.dim-1] = j 
+    dimMapping[dataDim1.dim-1] = j 
 
       """
       # TBD: this only works if have one SampledDataDim and is a bit of a hack
@@ -1185,7 +1185,7 @@ class CopyAssignmentsPopup(BasePopup):
             if arePeaksAssignedSame(peak, targetPeak):
               # NB arePeaksAssignedSame returns true only if assignments
               # match exactly for common dims
-	      barf = True
+          barf = True
               break
         
         if barf:
@@ -1195,10 +1195,10 @@ class CopyAssignmentsPopup(BasePopup):
           if bestDist is None:
             # effect of restrict being true is that peaks with no
             # match are excluded
-	    continue
+        continue
           elif bestDist > 1.0:
             #this should never be true for getPeakMatches output
-	    continue
+        continue
   
         datum = []
         datum.append(peak.serial)

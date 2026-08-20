@@ -541,7 +541,7 @@ def getBoundResonances(resonance, recalculate=False, contribs=None, doWarning=Fa
             for resonance2 in resonanceSet2.resonances:
               if resonance2 is resonance: # should not happen
                 if resonance not in funnyResonances:
-                  print 'WARNING: in getBoundResonances(): resonance %d tried to be linked to itself' % resonance.serial
+                  print('WARNING: in getBoundResonances(): resonance %d tried to be linked to itself' % resonance.serial)
                   funnyResonances.add(resonance)
               elif usePaired:
                 pairResonances.add(resonance2)
@@ -1267,7 +1267,7 @@ def initResonance(resonance, doMerge=True):
     element    = atom.chemAtom.elementSymbol
     if resonance.isotopeCode[-len(element):] != element:
       msg = 'Resonance %d isotope-assignment mismatch: Resetting isotope' 
-      print msg % resonance.serial
+      print(msg % resonance.serial)
       
       resonance.isotopeCode = DEFAULT_ISOTOPES.get(element, 'unknown')
       getBoundResonances(resonance, recalculate=True, contribs=None)   
@@ -1298,7 +1298,7 @@ def initResonance(resonance, doMerge=True):
           #elif spinSystem.residue:
             try:  # 27 Nov 2017: make it a bit less dramatic
               assignSpinSystemResidue(spinSystem,residue)
-            except Implementation.ApiError, e:
+            except Implementation.ApiError as e:
               pass # this can happen when have mixed molType in spinSystem, so just give up
                            
       else:
@@ -2745,7 +2745,7 @@ def assignResToDim(peakDim, resonance=None, contrib=None,
       if resonance.isotopeCode != 'unknown':
         msg = 'Attempt to link %s resonance to %s dimension'
         #raise Exception(msg % (resonance.isotopeCode, isotopeCode))
-        print msg % (resonance.isotopeCode, isotopeCode)
+        print(msg % (resonance.isotopeCode, isotopeCode))
         return
 
     #resonance.isotopeCode = isotopeCode
@@ -3057,10 +3057,10 @@ def setQuickShiftList(shift):
     # remove old key
     try:
       quickShiftDict[oldKey].remove(shift)
-    except ValueError, e:
-      print 'Warning: Quick shift index value failure', e
-    except KeyError, e:
-      print 'Warning: Quick shift index key failure', e
+    except ValueError as e:
+      print('Warning: Quick shift index value failure', e)
+    except KeyError as e:
+      print('Warning: Quick shift index key failure', e)
 
   if quickShiftDict.get(key) is None:
     quickShiftDict[key] = []
@@ -4379,7 +4379,7 @@ def makeSeqSpinSystemLink(spinSystemA, spinSystemB, delta=1):
     idB = '%d %s' % (residueB.seqCode, residueB.ccpCode)
     residueC = residueB.chain.findFirstResidue(seqId = residueB.seqId - delta)
     if not residueC:
-      print 'Impossible spin system link attempted: %s to i - %d' % (idB,delta)
+      print('Impossible spin system link attempted: %s to i - %d' % (idB,delta))
     else:
       assignSpinSystemResidue(spinSystemA, residueC, warnMerge=False) 
     

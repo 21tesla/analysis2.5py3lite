@@ -93,7 +93,7 @@ def majorUpgradeToCurrent(oldRoot, oldVersionStr, newName=None, newDir=None,
   return upgrader.majorUpgrade(doSave=doSave)
 
 
-class DataUpgrader(object):
+class DataUpgrader:
   """class to handle backwards and forwards compatibility for data
   
   NB currently handles only compatibility to whichever version is current
@@ -379,13 +379,13 @@ class DataUpgrader(object):
     # print diagnostics
     nObjs = len(delayObjects)
     if nObjs == 1:
-      print ("""\nFinished mapping reference objects
-  %s:
+      print(("""\nFinished mapping reference objects
+  %s:)
   %s had unmappable keys""" % (topObjString, delayObjects[0]))
     elif nObjs:
       ll = list(set(x.qualifiedName for x in delayObjects))
-      print ("""\nFinished mapping reference objects
-  %s:
+      print(("""\nFinished mapping reference objects
+  %s:)
   %s objects of classes %s had unmappable keys""" % (topObjString, nObjs, ll))
   
   
@@ -640,7 +640,7 @@ def removeElementName(guid, globalMapping, newElementsByGuid):
         # Could be (is?) abstract multi-inheritance class
         pass
       else:
-        print 'WARNING, no previous map found for %s (%s)' % (useObj, guid)
+        print('WARNING, no previous map found for %s (%s)' % (useObj, guid))
     else:
       del globalMapping['loadMaps'][oldMap['tag']]
   

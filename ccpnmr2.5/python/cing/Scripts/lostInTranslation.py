@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # the above just reminds to the fact that the properties files are all utf-8 encoded.
 # Note that eclipse stores the utf-8 nature of resources in:
 # .settings/org.eclipse.core.resources.prefs
@@ -7,7 +6,7 @@ from glob import glob
 import codecs
 
 
-class LostInTranslation():
+class LostInTranslation:
     """Find the missing phrases in each language iCing tries to support"""
 
     def __init__(self):
@@ -45,9 +44,9 @@ class LostInTranslation():
                     continue
                 value = propBaseMap[key]
                 # All that's written needs to be unicode.
-                nf.write( u"%-20s = " % key )
+                nf.write( "%-20s = " % key )
                 nf.write( value ) # might be utf-8
-                nf.write( u"\n" ) # might be utf-8
+                nf.write( "\n" ) # might be utf-8
 #                nTmessage("Lost: " + key)
             nf.close()
 

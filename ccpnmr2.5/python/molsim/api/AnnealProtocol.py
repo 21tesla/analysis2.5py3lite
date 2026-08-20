@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -126,7 +126,7 @@ general terms.
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['application'] = None
@@ -157,7 +157,7 @@ general terms.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.AnnealProtocol.__init__"
+        print("ERROR in molsim.AnnealProtocol.AnnealProtocol.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -205,10 +205,10 @@ general terms.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -229,7 +229,7 @@ general terms.
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -275,7 +275,7 @@ general terms.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     for haddockRun in dataDict.get('haddockRuns'):
@@ -399,7 +399,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -490,7 +490,7 @@ general terms.
          + ": %s" % (value,)
         )
 
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -674,7 +674,7 @@ general terms.
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -892,7 +892,7 @@ general terms.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('finalTemp', 'function', 'initialTemp', 'name', 'numSteps', 'numSubSteps', 'serial', 'timeStep', 'timeStepScaling', 'access', 'annealProtocol',))
         if (key in directAttrs):
@@ -949,7 +949,7 @@ general terms.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'serial', 'access', 'annealProtocol',))
         if (key in directAttrs):
@@ -1018,7 +1018,7 @@ general terms.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
         if (key in directAttrs):
@@ -1073,7 +1073,7 @@ general terms.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
         if (key in directAttrs):
@@ -1147,7 +1147,7 @@ general terms.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('finalTemp', 'function', 'initialTemp', 'name', 'numSteps', 'numSubSteps', 'serial', 'timeStep', 'timeStepScaling', 'access', 'annealProtocol',))
         if (key in directAttrs):
@@ -1223,7 +1223,7 @@ general terms.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'serial', 'access', 'annealProtocol',))
         if (key in directAttrs):
@@ -1295,7 +1295,7 @@ general terms.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
         if (key in directAttrs):
@@ -1353,7 +1353,7 @@ general terms.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
         if (key in directAttrs):
@@ -1715,7 +1715,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -1874,7 +1874,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2016,7 +2016,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2145,7 +2145,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2226,7 +2226,7 @@ general terms.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2581,7 +2581,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.AnnealProtocolStore.__init__"
+        print("ERROR in molsim.AnnealProtocol.AnnealProtocolStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2622,7 +2622,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentAnnealProtocolStore') is None)):
+      if (notIsReading or root.__dict__.get('currentAnnealProtocolStore') is None):
         root.__dict__['currentAnnealProtocolStore'] = self
 
       if (notIsReading):
@@ -2636,10 +2636,10 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2659,11 +2659,11 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     function* - should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -2705,7 +2705,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentAnnealProtocolStore'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
@@ -2732,7 +2732,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     CheckAllValid for molsim.AnnealProtocol.AnnealProtocolStore
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -2770,11 +2770,11 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2960,7 +2960,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3126,21 +3126,21 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('annealProtocols').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('annealProtocols').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'applicationVersion', 'code', 'details', 'methodStoreName', 'name', 'access', 'annealProtocolStore',))
         if (key in directAttrs):
@@ -3189,21 +3189,21 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('refPotentialTerms').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('refPotentialTerms').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'code', 'details', 'index', 'name', 'access', 'annealProtocolStore',))
         if (key in directAttrs):
@@ -3252,7 +3252,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('annealProtocols').values()
@@ -3272,7 +3272,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           objKey = tuple(ll)
 
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('annealProtocols').get(objKey)
@@ -3288,7 +3288,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('annealProtocols').values()
@@ -3296,7 +3296,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'applicationVersion', 'code', 'details', 'methodStoreName', 'name', 'access', 'annealProtocolStore',))
         if (key in directAttrs):
@@ -3346,7 +3346,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('refPotentialTerms').values()
@@ -3369,7 +3369,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
             objKey = tuple(ll)
 
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('refPotentialTerms').get(objKey)
@@ -3385,7 +3385,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('refPotentialTerms').values()
@@ -3393,7 +3393,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'code', 'details', 'index', 'name', 'access', 'annealProtocolStore',))
         if (key in directAttrs):
@@ -3451,7 +3451,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     Get for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('annealProtocols').values()
@@ -3570,7 +3570,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     Get for molsim.AnnealProtocol.AnnealProtocolStore.refPotentialTerms
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('refPotentialTerms').values()
@@ -3659,7 +3659,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('name')
@@ -3701,7 +3701,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     Sorted for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('annealProtocols')
@@ -3716,7 +3716,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     Sorted for molsim.AnnealProtocol.AnnealProtocolStore.refPotentialTerms
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('refPotentialTerms')
@@ -3870,7 +3870,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.AnnealStage.__init__"
+        print("ERROR in molsim.AnnealProtocol.AnnealStage.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3916,10 +3916,10 @@ class AnnealStage(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3940,7 +3940,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -3967,7 +3967,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     annealProtocol = dataDict.get('annealProtocol')
@@ -4036,7 +4036,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4084,7 +4084,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -4357,7 +4357,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
           )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -4491,7 +4491,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -4551,7 +4551,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -4876,7 +4876,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4963,7 +4963,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5049,7 +5049,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5123,7 +5123,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5199,7 +5199,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5280,7 +5280,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5355,7 +5355,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5425,7 +5425,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5517,7 +5517,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5651,7 +5651,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5727,7 +5727,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5910,7 +5910,7 @@ refPotentialTerms
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.EnergyTerm.__init__"
+        print("ERROR in molsim.AnnealProtocol.EnergyTerm.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5956,10 +5956,10 @@ refPotentialTerms
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5980,7 +5980,7 @@ refPotentialTerms
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -6020,7 +6020,7 @@ refPotentialTerms
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     for haddockEnergyTerm in dataDict.get('haddockEnergyTerms'):
@@ -6137,7 +6137,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6188,7 +6188,7 @@ refPotentialTerms
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -6333,7 +6333,7 @@ refPotentialTerms
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -6513,7 +6513,7 @@ refPotentialTerms
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
         if (key in directAttrs):
@@ -6568,7 +6568,7 @@ refPotentialTerms
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealEnergyTermSerial', 'code', 'constraintStoreSerial', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
         if (key in directAttrs):
@@ -6623,7 +6623,7 @@ refPotentialTerms
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -6697,7 +6697,7 @@ refPotentialTerms
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
         if (key in directAttrs):
@@ -6755,7 +6755,7 @@ refPotentialTerms
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealEnergyTermSerial', 'code', 'constraintStoreSerial', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
         if (key in directAttrs):
@@ -6837,7 +6837,7 @@ refPotentialTerms
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -7156,7 +7156,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7248,7 +7248,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7323,7 +7323,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7453,7 +7453,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7534,7 +7534,7 @@ refPotentialTerms
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -7789,7 +7789,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.PotentialScale.__init__"
+        print("ERROR in molsim.AnnealProtocol.PotentialScale.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7832,10 +7832,10 @@ class PotentialScale(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7856,7 +7856,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -7877,16 +7877,16 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     annealStage = dataDict.get('annealStage')
-    if ((annealStage is not None and not (annealStage in objsToBeDeleted))):
+    if (annealStage is not None and not (annealStage in objsToBeDeleted)):
       potentialScales = annealStage.__dict__.get('potentialScales')
       potentialScales.remove(self)
 
     refPotentialTerm = dataDict.get('refPotentialTerm')
-    if ((refPotentialTerm is not None and not (refPotentialTerm in objsToBeDeleted))):
+    if (refPotentialTerm is not None and not (refPotentialTerm in objsToBeDeleted)):
       potentialScales = refPotentialTerm.__dict__.get('potentialScales')
       potentialScales.remove(self)
 
@@ -7964,7 +7964,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -8020,7 +8020,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -8190,7 +8190,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -8610,7 +8610,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -8842,7 +8842,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -8928,7 +8928,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9002,7 +9002,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9083,7 +9083,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9175,7 +9175,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -9307,7 +9307,7 @@ interpretation generally requires reference to the application.
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['application'] = 'general'
@@ -9336,7 +9336,7 @@ interpretation generally requires reference to the application.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.RefPotentialTerm.__init__"
+        print("ERROR in molsim.AnnealProtocol.RefPotentialTerm.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9382,10 +9382,10 @@ interpretation generally requires reference to the application.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9406,7 +9406,7 @@ interpretation generally requires reference to the application.
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -9439,7 +9439,7 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     annealProtocolStore = dataDict.get('annealProtocolStore')
@@ -9543,7 +9543,7 @@ interpretation generally requires reference to the application.
          + ": %s" % (value,)
         )
 
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -9687,7 +9687,7 @@ interpretation generally requires reference to the application.
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -9839,7 +9839,7 @@ interpretation generally requires reference to the application.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -9894,7 +9894,7 @@ interpretation generally requires reference to the application.
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'value', 'access', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -9954,7 +9954,7 @@ interpretation generally requires reference to the application.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -10028,7 +10028,7 @@ interpretation generally requires reference to the application.
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'value', 'access', 'refPotentialTerm',))
         if (key in directAttrs):
@@ -10484,7 +10484,7 @@ interpretation generally requires reference to the application.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -10621,7 +10621,7 @@ interpretation generally requires reference to the application.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -10723,7 +10723,7 @@ interpretation generally requires reference to the application.
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -10898,7 +10898,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in molsim.AnnealProtocol.RefTermParameter.__init__"
+        print("ERROR in molsim.AnnealProtocol.RefTermParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10933,10 +10933,10 @@ class RefTermParameter(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10957,7 +10957,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     objsToBeDeleted.add(self)
-    if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+    if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
       dataDict.get('topObject').load()
 
     access = dataDict.get('access')
@@ -10978,7 +10978,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     refPotentialTerm = dataDict.get('refPotentialTerm')
@@ -11029,7 +11029,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -11173,7 +11173,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -11575,7 +11575,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11656,7 +11656,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -11731,7 +11731,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       

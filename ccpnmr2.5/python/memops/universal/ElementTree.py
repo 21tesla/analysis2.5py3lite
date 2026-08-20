@@ -6,7 +6,7 @@ try:
   from lxml import etree as ElementTree
 except ImportError:
   try:
-    import xml.etree.cElementTree as ElementTree # in python >=2.5
+    import xml.etree.ElementTree as ElementTree # in python >=2.5
   except ImportError:
     try:
       from  xml.etree import ElementTree # in python >=2.5

@@ -55,9 +55,6 @@ software development. Bioinformatics 21, 1678-1684.
 """
 
 # Special constants
-True =  not 0
-False =  not 1
-
 trueString = 'True'
 falseString = 'False'
 

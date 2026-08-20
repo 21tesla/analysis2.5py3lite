@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter
+import tkinter
 
 from memops.general import Implementation
 
@@ -1083,10 +1083,10 @@ class BrowseAtomsPopup(BasePopup):
           if not hasattr(atomSetMapping, 'subSets'):
             atomSetMapping.subSets = []
             for otherMapping in atomSetMappings:
-	      if len(otherMapping.atomSetSerials) == 1:
+          if len(otherMapping.atomSetSerials) == 1:
                 if list(otherMapping.atomSetSerials)[0] in atomSetMapping.atomSetSerials:
                   atomSetMapping.subSets.append(otherMapping)
-		  
+          
       chemAtoms = residue.molResidue.chemCompVar.chemAtoms
       for chemAtom in chemAtoms:
         if chemAtom.className == 'ChemAtom':

@@ -36,7 +36,7 @@ class AllChecks(TestCase):
         # important to switch to temp space before starting to generate files for the project.
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         ## Test takes 5 seconds to run.
         ## Initializing f will also initialize an instance of class Process

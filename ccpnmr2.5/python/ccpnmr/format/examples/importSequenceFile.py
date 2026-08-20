@@ -27,7 +27,7 @@ from memops.api import Implementation
 # Get Tkinter for popups
 #
 
-import Tkinter
+import tkinter
 
 # 
 # Get FastaFormat class for format conversion
@@ -140,16 +140,16 @@ if __name__ == "__main__":
   # Testing to see if all is there...
   #
   
-  print
-  print "Project object:", ccpnProject
-  print "List of MolSystem objects:", ccpnProject.sortedMolSystems()
-  print "List of Molecule objects:", ccpnProject.sortedMolecules()
+  print()
+  print("Project object:", ccpnProject)
+  print("List of MolSystem objects:", ccpnProject.sortedMolSystems())
+  print("List of Molecule objects:", ccpnProject.sortedMolecules())
   
   # Select first available molecule
   mol = ccpnProject.findFirstMolecule()
 
-  print "MolType of first molecule:", mol.molType
-  print
+  print("MolType of first molecule:", mol.molType)
+  print()
   
   #
   # Save the project

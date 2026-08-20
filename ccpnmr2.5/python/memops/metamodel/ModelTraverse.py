@@ -15,14 +15,14 @@ from memops.metamodel.ModelPortal import ModelPortal
 from memops.metamodel import MetaModel
 MemopsError = MetaModel.MemopsError
 
-class ModelTraverse(ModelTraverse_py_2_1.ModelTraverse_py_2_1, object):
+class ModelTraverse(ModelTraverse_py_2_1.ModelTraverse_py_2_1):
 
   def __init__(self):
     """Constructor - sets up for future processing
     """
 
     # class needed within ObjectDomain (version 2.1)  
-    super(ModelTraverse, self).__init__()
+    super().__init__()
     
     for tag in ModelTraverse_py_2_1.mandatoryAttributes:
       if not hasattr(self, tag):

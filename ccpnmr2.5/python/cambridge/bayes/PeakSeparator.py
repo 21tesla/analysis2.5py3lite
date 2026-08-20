@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 PeakSeparator.py
 
@@ -21,7 +20,7 @@ from memops.gui.MessageReporter             import showError, showWarning
 try:
   from cambridge.c                          import BayesPeakSeparator
 except ImportError:
-  print 'Error, cannot import BayesPeakSeparator - peak separation will not work.'
+  print('Error, cannot import BayesPeakSeparator - peak separation will not work.')
 
 from cambridge.bayes.kmeans import kMeans
 
@@ -73,7 +72,7 @@ def getPeaksFromResults( results, verbose=False ):
       peak += [ c[:,i].mean() for i in range( len(c[0]) ) ]
       peaks.append( peak )
 
-      print 'peak %2d height %f stdev %f ' % (n, c[:,2].mean(), c[:,2].std())
+      print('peak %2d height %f stdev %f ' % (n, c[:,2].mean(), c[:,2].std()))
       open( 'note.csv', 'a' ).write( '%d, %d, %f, %f\n' % ( n, npeaks, c[:,2].mean(), c[:,2].std()) )
 
     return peaks
@@ -86,7 +85,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
   fail = False
   for key in params.ClibKeys:
     if params.__dict__[key] == None:
-      print '&&& C Library parameter %s not set, aborting.' % ( key )
+      print('&&& C Library parameter %s not set, aborting.' % ( key ))
       fail = True
 
   if fail: return
@@ -100,7 +99,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
   #   print key, params.__dict__[key]
 
   if params.maxHeight <= params.minHeight:
-    print '&&& Peak Separator height mismatch - please report to CCPN'
+    print('&&& Peak Separator height mismatch - please report to CCPN')
     return
 
   if routine == 'bayesys':
@@ -124,21 +123,21 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
     try:
       from PeakSeparatorPyMC import PeakSeparatorPyMC
     except ImportError:
-      print 'Error, cannot import PeakSeparatorPyMC - PyMC peak separation will not work.'
+      print('Error, cannot import PeakSeparatorPyMC - PyMC peak separation will not work.')
       return
 
     if params.maxHeight <= params.minHeight:
-      print '&&& Peak Separator height mismatch - please report to CCPN'
+      print('&&& Peak Separator height mismatch - please report to CCPN')
       return
 
     if params.Ndim != 2:
-      print '&&& Peak Separator PyMC only in two dims currently'
+      print('&&& Peak Separator PyMC only in two dims currently')
       return
 
     results = PeakSeparatorPyMC( params )
 
   if (results == None) or (len(results) == 0):
-    print '&&& SeparatePeakRoutine: failed.', results
+    print('&&& SeparatePeakRoutine: failed.', results)
     return 1
 
   shapeDict = { 3:'Gaussian', 4:'Lorentzian', 5:'Other' }
@@ -181,7 +180,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
         cluster_peak_volume            *= sigma[i] * math.pi
 
       else:
-        print '&&& Write code to integrate this shape: %d' % (params.peakShape)
+        print('&&& Write code to integrate this shape: %d' % (params.peakShape))
 
     # plane dim for pseudo 3d Analysis data (titrations / time lapse etc)
     if sampledData:
@@ -307,7 +306,7 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
   """ Given a peak list (params.peakList) repick all peaks into a new list """
 
   if not params.peakList:
-    print '&&& No Peak List set'
+    print('&&& No Peak List set')
     return
 
   peakList = params.peakList
@@ -339,12 +338,12 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
 
     regionsList.append( region )
 
-  print '\nRepick Peak List - Found %6d regions' % (len(regionsList))
+  print('\nRepick Peak List - Found %6d regions' % (len(regionsList)))
 
   # remove all but unique regions
   regionsList = list(set(regionsList))
 
-  print 'of which %6d are unique' % (len(regionsList))
+  print('of which %6d are unique' % (len(regionsList)))
 
   repickList = []
 
@@ -375,7 +374,7 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
     peaksInRegion = searchPeaks( [peakList], searchPpmRegion )
 
     if len( peaksInRegion ) == 0:
-      print '&&& Attempted repicking of region with no peaks! ', peaksInRegion
+      print('&&& Attempted repicking of region with no peaks! ', peaksInRegion)
       continue
 
     repickList.append( [region, ppmRegion, peaksInRegion] )
@@ -390,7 +389,7 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
   # re-pick into the new peak list based on regions from before
   for ii, repick in enumerate(repickList):
 
-    print 'Repicking region %3d of %3d' % (ii+1, len(repickList))
+    print('Repicking region %3d of %3d' % (ii+1, len(repickList)))
 
     region    = repick[0]
     ppmRegion = repick[1]
@@ -403,7 +402,7 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
       first[-1] -= 1
 
     if npeaks == 0:
-      print '&&& Zero peaks found in region, skipping'
+      print('&&& Zero peaks found in region, skipping')
       continue
 
     # these values (may) differ for each run
@@ -432,4 +431,4 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
 
 
 if __name__ == '__main__':
-  print 'PeakSeparator - This should be run from inside '
+  print('PeakSeparator - This should be run from inside ')

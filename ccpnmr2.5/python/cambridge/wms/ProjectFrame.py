@@ -5,7 +5,7 @@ from SharedBeanService_services import *
 from WSString import *
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -201,7 +201,7 @@ class ProjectFrame(Frame):
         self.projectName = self.repository.currentProjectName
         self.versionTag = self.repository.currentVersionTag
     
-    print 'in drawFrame ', self.repository, self.projectName, self.versionTag
+    print('in drawFrame ', self.repository, self.projectName, self.versionTag)
 
     
     if self.projectName == None:
@@ -313,7 +313,7 @@ class ProjectFrame(Frame):
       matrix = [];
       objs = [];
 
-      print 'PROJECT: ', vers
+      print('PROJECT: ', vers)
 
       for ver in vers:
 
@@ -368,7 +368,7 @@ class ProjectFrame(Frame):
 
     if (col == 1):
       pv = obj['versionTag']
-      print 'PROJECT -> PROJECT (DIRECT) ', pv
+      print('PROJECT -> PROJECT (DIRECT) ', pv)
       self.repository.currentVersionTag = pv.__str__()
 
       self.drawFrame()
@@ -377,7 +377,7 @@ class ProjectFrame(Frame):
       task = obj['createdByTask']
       taskSerial = task['serial']
       
-      print 'PROJECT -> TASK ', taskSerial
+      print('PROJECT -> TASK ', taskSerial)
 
       self.basePopup.currentTask = taskSerial.__str__()    
 
@@ -408,7 +408,7 @@ class ProjectFrame(Frame):
       pvp = pv['project']
       parentName = pvp['name']
       
-      print 'PROJECT -> PROJECT (SOURCE) ', parentVersion
+      print('PROJECT -> PROJECT (SOURCE) ', parentVersion)
 
       self.repository.currentVersionTag = parentVersion.__str__()
       self.repository.currentProjectName = parentName.__str__()
@@ -526,11 +526,11 @@ class ProjectFrame(Frame):
     wsstr = WSString(resp1._return)
     ss = wsstr.getStruct()
 
-    print 'got array ', ss
+    print('got array ', ss)
 
     for strg in ss:
 
-      print 'trying to handle file ', strg
+      print('trying to handle file ', strg)
 
       hm2 = {'projectName': name,
              'versionTag': versionTag,
@@ -539,8 +539,8 @@ class ProjectFrame(Frame):
              'random' : 'test',
              'raw' : False}
       
-      print 'trying to handle file 2 ', strg
-      print 'trying to handle file 2 ', hm2
+      print('trying to handle file 2 ', strg)
+      print('trying to handle file 2 ', hm2)
 
       req2 = getDocWithParams()
       
@@ -557,10 +557,10 @@ class ProjectFrame(Frame):
 
       idx = local_file_path.rfind('/')
       local_dir = local_file_path[:idx]
-      print 'trying to create ', local_dir
+      print('trying to create ', local_dir)
       os.makedirs(local_dir)
 
-      print 'writing to local area; ', local_file_path
+      print('writing to local area; ', local_file_path)
 
       f = open(local_file_path, 'w')
       f.write(resp2._return)

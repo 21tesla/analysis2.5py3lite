@@ -88,24 +88,24 @@ class AuremolPeakFile(AuremolFile):
     
     	'EXPERIMENT':             ('specNames',None),
       'DIMENSION':              ('numDims',returnInt),
-	    'MIXINGTIME_SEC':         ('mixingTime',returnFloat),
-	    'AQUISITIONDELAY':        (None,None),
-	    'RESOLUTION_W%d':         ('spectrumInfo.numPoints',returnInt),
-	    'RESONANCEFREQUENCY_%d':  ('spectrumInfo.sfs',returnFloat),
-	    'SPECTRAL_WIDTH_HZ_%d':   ('spectrumInfo.swsHz',returnFloat),
-	    'SPECTRAL_WIDTH_PPM_%d':  ('spectrumInfo.swsPpm',returnFloat),
-	    'OFFSET_PPM_%d':          ('spectrumInfo.offsets',returnFloat),
-	    'FILTER_%d':              ('spectrumInfo.filters',None),
-	    'LINEBROAD_HZ_%d':        ('spectrumInfo.linebroadeningHz',returnFloat),
-	    'AQ_MODE_%d':             ('spectrumInfo.acqMode',None),
-	    'SEQUENCE':               ('sequence',self.returnSequence)
+        'MIXINGTIME_SEC':         ('mixingTime',returnFloat),
+        'AQUISITIONDELAY':        (None,None),
+        'RESOLUTION_W%d':         ('spectrumInfo.numPoints',returnInt),
+        'RESONANCEFREQUENCY_%d':  ('spectrumInfo.sfs',returnFloat),
+        'SPECTRAL_WIDTH_HZ_%d':   ('spectrumInfo.swsHz',returnFloat),
+        'SPECTRAL_WIDTH_PPM_%d':  ('spectrumInfo.swsPpm',returnFloat),
+        'OFFSET_PPM_%d':          ('spectrumInfo.offsets',returnFloat),
+        'FILTER_%d':              ('spectrumInfo.filters',None),
+        'LINEBROAD_HZ_%d':        ('spectrumInfo.linebroadeningHz',returnFloat),
+        'AQ_MODE_%d':             ('spectrumInfo.acqMode',None),
+        'SEQUENCE':               ('sequence',self.returnSequence)
       
       }
 
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s peak list %s" % (self.format,self.name)
+      print("Reading %s peak list %s" % (self.format,self.name))
 
     #
     # Read info and other info
@@ -116,7 +116,7 @@ class AuremolPeakFile(AuremolFile):
     
     peakNum = 1
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -157,7 +157,7 @@ class AuremolPeakFile(AuremolFile):
           (mapping,returnFunc) = self.headerPars[parameterKey]
           
           if not mapping and cols[1] != '*':
-            print "  Warning: not handling parameter %s, but has value '%s'!" % (parameter,cols[1])
+            print("  Warning: not handling parameter %s, but has value '%s'!" % (parameter,cols[1]))
             
           elif mapping:
             

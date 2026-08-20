@@ -76,7 +76,7 @@ class CnsSequenceFile(CnsGenericFile):
     # First check if sequence from sequence or coordinate file...
     #
     
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lines = fin.readlines()
     fin.close()
     

@@ -71,7 +71,7 @@ class UcsfParams(ExternalParams):
 
     try:
       fp = open(self.dataFile, 'rb')
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
 
     s = fp.read(ucsf_file_header)
@@ -125,7 +125,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: correct syntax: <script> <UCSF_file>'
+    print('Error: correct syntax: <script> <UCSF_file>')
     sys.exit(1)
 
   ucsf_file = sys.argv[1]

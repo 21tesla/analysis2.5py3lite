@@ -184,11 +184,11 @@ def findChemAtomOrSetSysName(namingSystem, chemAtomOrSet, warnAtomId=None,
     
     if warnAtomId:
       if namingSystem:
-        print ("  Warning: no %s atomSysName available for '%s', trying IUPAC."
-               % (namingSystem.name, warnAtomId))
+        print(("  Warning: no %s atomSysName available for '%s', trying IUPAC."
+               % (namingSystem.name, warnAtomId)))
       else:
-        print ("  Warning: no namingSystem found for '%s', trying IUPAC."
-               % warnAtomId)
+        print(("  Warning: no namingSystem found for '%s', trying IUPAC."
+               % warnAtomId))
 
     ns = chemAtomOrSet.chemComp.findFirstNamingSystem(name='IUPAC')
     if ns:
@@ -390,7 +390,7 @@ def getDescriptorElementMatches(chemCompVars,descriptorElements,verbose = False)
       chemCompVars = matchingChemCompVars
     elif verbose:
       chemComp = chemCompVars[0].chemComp
-      print "  Error: could not select chemCompVars from (%s,%s) with descriptor elements %s." % (chemComp.molType,chemComp.ccpCode,getDescriptorFromDict(descriptorElements))
+      print("  Error: could not select chemCompVars from (%s,%s) with descriptor elements %s." % (chemComp.molType,chemComp.ccpCode,getDescriptorFromDict(descriptorElements)))
 
   return chemCompVars
 
@@ -445,7 +445,7 @@ def createMoleculeTorsionDict(molSystem):
               molResLink = molResLinkEnd.molResLink
 
               if not molResLink:
-                print "  Warning: could not create torsion information for %s.%s.%s - no linking to %s residue." % (molecule.name,molRes.seqCode,chemTorsion.name,linkCode)
+                print("  Warning: could not create torsion information for %s.%s.%s - no linking to %s residue." % (molecule.name,molRes.seqCode,chemTorsion.name,linkCode))
                 continue
 
               molResLink_LinkEnds = molResLink.sortedMolResLinkEnds()
@@ -531,7 +531,7 @@ def getTorsions(structureGeneration,moleculeTorsions = None):
                     torsCoords.append(None)
 
                 if None in torsCoords:
-                  print "  Error: unable to calculate torsion angle %s (molSys '%s', chain '%s', seqCode %s)" % (torsionName,molSys.name,chain.code,residue.seqCode)
+                  print("  Error: unable to calculate torsion angle %s (molSys '%s', chain '%s', seqCode %s)" % (torsionName,molSys.name,chain.code,residue.seqCode))
                   continue
 
                 torsionAngle = calcTorsionAngleDegrees(torsCoords[0],torsCoords[1],torsCoords[2],torsCoords[3])
@@ -539,7 +539,7 @@ def getTorsions(structureGeneration,moleculeTorsions = None):
                 if not torsionAngles[structure][chain][residue].has_key(torsionName):
                   torsionAngles[structure][chain][residue][torsionName] = torsionAngle
                 else:
-                  print "  Error: duplicate torsion angle %s (molSys '%s', chain '%s', seqCode %s). Set value %.2f, also found value %.2f." % (torsionName,molSys.name,chain.code,residue.seqCode,torsionAngles[structure][chain][residue][torsionName],torsionAngle)
+                  print("  Error: duplicate torsion angle %s (molSys '%s', chain '%s', seqCode %s). Set value %.2f, also found value %.2f." % (torsionName,molSys.name,chain.code,residue.seqCode,torsionAngles[structure][chain][residue][torsionName],torsionAngle))
 
   return torsionAngles                
                 
@@ -672,7 +672,7 @@ class ReferenceShifts:
   def getMeanShiftValue(self,molResidue,sourceName,calcType,atomName):
 
     if sourceName not in self.sourceDict:
-      print "  Error: unknown source %s!" % sourceName
+      print("  Error: unknown source %s!" % sourceName)
       return
 
     shiftValue = None
@@ -687,7 +687,7 @@ class ReferenceShifts:
       if chemAtomShifts:
 
         if len(chemAtomShifts) > 1:
-          print "  Error: multiple reference shifts available... using first one."
+          print("  Error: multiple reference shifts available... using first one.")
 
         chemAtomShift = chemAtomShifts[0]
 
@@ -755,7 +755,7 @@ def getAtomPatterns(chemAtomList):
           atomPattern = re.compile("^" + chemAtomName[0:-1] + "\d$")
           atomPatterns[atomPattern] = [chemAtom]
         except:
-          print "ERROR: bad atom name '%s'" % chemAtomName
+          print("ERROR: bad atom name '%s'" % chemAtomName)
           #raise
 
   return atomPatterns
@@ -781,7 +781,7 @@ class MakeAtomSets:
 
     if verbose:
       from memops.universal.Util import drawBox
-      print drawBox("Creating atom sets",indent = "  ")
+      print(drawBox("Creating atom sets",indent = "  "))
 
     self.chemComp = chemComp
     self.namingSystem = namingSystem
@@ -796,17 +796,17 @@ class MakeAtomSets:
       self.setChemCompVar(chemCompVar)
     
     for errorMessage in self.errorMessages:
-      print errorMessage
-    print
+      print(errorMessage)
+    print()
 
 
     if self.atomsCreated:
       self.atomsCreated.sort()
-      print "    Created chemAtoms: %s" % str(self.atomsCreated)
+      print("    Created chemAtoms: %s" % str(self.atomsCreated))
         
     if self.atomSetsCreated:
       self.atomSetsCreated.sort()
-      print "    Created chemAtomSets: %s" % str(self.atomSetsCreated)
+      print("    Created chemAtomSets: %s" % str(self.atomSetsCreated))
 
   def setChemCompVar(self,chemCompVar):
 
@@ -999,7 +999,7 @@ class MakeAtomSets:
           chemAtomSetName = chemAtomTuple[0].elementSymbol + chemAtomCentralName[1:] + '*'
           
           if chemCompVar.chemComp.findFirstChemAtom(name = chemAtomSetName):
-            print "      ERROR: Unable to create ChemAtomSet, atom with name '%s' already exists!" % chemAtomSetName
+            print("      ERROR: Unable to create ChemAtomSet, atom with name '%s' already exists!" % chemAtomSetName)
             continue
 
           isProchiral = False
@@ -1017,14 +1017,14 @@ class MakeAtomSets:
               pass
 
             else:
-              print "  Error invalid number of connecting bonds (%d) to central atom %s" % (numConnect,chemAtomCentral.name)
+              print("  Error invalid number of connecting bonds (%d) to central atom %s" % (numConnect,chemAtomCentral.name))
 
           elif len(chemAtomTuple) == 3:
             # Equivalent set
             isEquivalent = True
 
           else:
-            print "  Error invalid number of matched protons."
+            print("  Error invalid number of matched protons.")
             isEquivalent = False
 
           #
@@ -1042,7 +1042,7 @@ class MakeAtomSets:
                 isSubSet = True
               
               if not isSubSet:
-                print "    ERROR: invalid new chemAtomSet being created, %s not a subset of %s - cowardly refusing this." % ([ca.name for ca in chemAtomTuple],[ca.name for ca in existingChemAtomSet.sortedChemAtoms()])
+                print("    ERROR: invalid new chemAtomSet being created, %s not a subset of %s - cowardly refusing this." % ([ca.name for ca in chemAtomTuple],[ca.name for ca in existingChemAtomSet.sortedChemAtoms()]))
                 continue
 
             #print "      NEW CAS %s:" % chemAtomSetName, chemCompVar.linking, chemCompVar.descriptor, ', '.join(["%s.%d" % (ca.name,ca.subType) for ca in chemAtomTuple])
@@ -1291,7 +1291,7 @@ class MakeAtomSets:
                     #print "      NEW CAS (2) %s:" % chemAtomSetName, chemCompVar.linking, chemCompVar.descriptor, ', '.join(["%s.%d" % (cas.name,cas.subType) for cas in chemAtomProtonSets])
 
                     if chemAtomSet and not chemAtomSet.chemAtoms and len(chemAtomSet.chemAtomSets) < len(chemAtomProtonSets):
-                      print "  Warning: deleting chemAtomSet %s with less atomSets (%d) than new chemAtomSet (%d)" % (chemAtomSetName,len(chemAtomSet.chemAtomSets),len(chemAtomProtonSets))
+                      print("  Warning: deleting chemAtomSet %s with less atomSets (%d) than new chemAtomSet (%d)" % (chemAtomSetName,len(chemAtomSet.chemAtomSets),len(chemAtomProtonSets)))
                       chemAtomSet.delete()
 
                       if len(chemAtomProtonSets) > 2:
@@ -1325,7 +1325,7 @@ class MakeAtomSets:
                             self.setAlternateSysName(alternateNamingSystem,chemAtomList,keywds)
 
                       else:
-                        print "  Warning: invalid prochiral center %s! Has %d protons... not created." % (chemAtomSetName,len(chemAtomProtonSets))
+                        print("  Warning: invalid prochiral center %s! Has %d protons... not created." % (chemAtomSetName,len(chemAtomProtonSets)))
 
                     else:
                       pass
@@ -1393,7 +1393,7 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
   ccvs = getDescriptorElementMatches(allCcvs,newDict)
 
   if ccvs != allCcvs:
-    print "  Exiting: chemCompVars already exist with '%s'" % (getDescriptorFromDict(newDict))
+    print("  Exiting: chemCompVars already exist with '%s'" % (getDescriptorFromDict(newDict)))
     sys.exit()
 
   #
@@ -1404,7 +1404,7 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
     ca = chemComp.findFirstChemAtom(name = removeAtomName)
     if not ca:
       removeAtomNames.pop(removeAtomNames.index(removeAtomName))
-      print "  Removing chemAtom %s from 'remove' list - does not exist." % removeAtomName
+      print("  Removing chemAtom %s from 'remove' list - does not exist." % removeAtomName)
 
   boundChemAtomNames = {}
   linkEnd = None
@@ -1415,7 +1415,7 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
       linkingChemAtom = chemComp.findFirstChemAtom(name = atomName)
 
       if not linkingChemAtom:
-        print "  Removing chemAtom %s - does not exist." % atomName
+        print("  Removing chemAtom %s - does not exist." % atomName)
         newDict[ndkey].pop(newDict[ndkey].index(atomName))
 
       else:
@@ -1443,12 +1443,12 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
         boundChemAtom = linkingChemAtom
         boundLinkAtom = getLinkAtom(boundChemAtom)
         linkEnd = ChemComp.LinkEnd(chemComp,linkCode = linkedAtomName, boundChemAtom = boundChemAtom, boundLinkAtom = boundLinkAtom)
-        print "   Made linkEnd %s" % linkedAtomName
+        print("   Made linkEnd %s" % linkedAtomName)
 
 
 
   if not newDict:
-    print "  Exiting: no linking elements left...  ."
+    print("  Exiting: no linking elements left...  .")
     sys.exit()
 
   #
@@ -1623,15 +1623,15 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
 
   ignoredCcvList.sort()
 
-  print "Ignored ccv with linking, descriptor:"
+  print("Ignored ccv with linking, descriptor:")
   for lct in ignoredCcvList:
-    print "   %s" % lct
+    print("   %s" % lct)
 
   linkCodeTexts = ccvBaseList.keys()
   linkCodeTexts.sort()
 
-  print
-  print "Creating ccv with linking, descriptor based on original:"
+  print()
+  print("Creating ccv with linking, descriptor based on original:")
   for lct in linkCodeTexts:
     linkDict = ccvBaseList[lct][0]['linking']
     descDict = ccvBaseList[lct][0]['descriptor']
@@ -1643,10 +1643,10 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
 
     descriptor = getDescriptorFromDict(descDict)
 
-    print "   '%s','%s' (based on %s)" % (linking,descriptor,lct)
+    print("   '%s','%s' (based on %s)" % (linking,descriptor,lct))
 
     for infoText in ccvBaseList[lct][1]:
-      print "     %s" % infoText
+      print("     %s" % infoText)
 
   #
   # Then make them
@@ -1681,7 +1681,7 @@ def createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms,saveChemCo
   if chemComp.isModified:
 
     chemComp.checkAllValid(complete = True)
-    print "  Modified & valid..."
+    print("  Modified & valid...")
 
     if saveChemComp and messageReporter.showYesNo('Confirm','Do you really want to create these new chemComps?'):
 
@@ -1795,7 +1795,7 @@ def getResAtomObjectMapping(resonances,chainCodeFilter=None):
         #
 
         if curResidue != residue:
-          print "  ERROR two residues to same resonance!"
+          print("  ERROR two residues to same resonance!")
           atomList = []
           break
 
@@ -2011,7 +2011,7 @@ def parseBrukerSummary(fileName, **kw):
   try:
     fp = open(fileName)
   except:
-    print "Could not read file", fileName
+    print("Could not read file", fileName)
     raise
   
   tagcolon = re.compile("\s+(\w+):\s+")  # Regular Expression for tag expression:

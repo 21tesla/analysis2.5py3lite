@@ -122,9 +122,9 @@ class SparkyPeakFile(SparkyGenericFile):
     ndim = 0
 
     if verbose == 1:
-      print "Reading sparky peak list %s" % self.name
+      print("Reading sparky peak list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     #
     # Start reading, look for header line
@@ -207,10 +207,10 @@ class SparkyPeakFile(SparkyGenericFile):
         #
 
         if numHeaderCols != len(cols):
-          print "  Unrecognized column headers: can't read sparky file... "
-          print dataColCodes
-          print dataColNum
-          print dataColLengths
+          print("  Unrecognized column headers: can't read sparky file... ")
+          print(dataColCodes)
+          print(dataColNum)
+          print(dataColLengths)
 
           return
 
@@ -264,7 +264,7 @@ class SparkyPeakFile(SparkyGenericFile):
               # If problems, still try to read in essential bits (all until 'ndim' column)
               #
 
-              print "  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,
+              print("  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,)
 
               for i in range(len(dataColCodes)):            
 
@@ -291,12 +291,12 @@ class SparkyPeakFile(SparkyGenericFile):
                   break
 
               if obligColumnFound != -1:
-                print "  Can't read... "
+                print("  Can't read... ")
                 line = fin.readline()
                 continue
               else:
-                print "  Reading first %d columns only." % dataColCodesLen
-                print
+                print("  Reading first %d columns only." % dataColCodesLen)
+                print()
 
             values = {}
 
@@ -336,7 +336,7 @@ class SparkyPeakFile(SparkyGenericFile):
   def write(self, verbose = 0):
 
     if verbose == 1:
-      print "Writing Sparky peak list %s" % self.name
+      print("Writing Sparky peak list %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -411,7 +411,7 @@ class SparkyPeak:
 
   def setValue(self,valueKey,values):
     
-    if len(values) == 1 and type(values[0]) == type(''):
+    if len(values) == 1 and type(values[0]) == str:
 
       value = values[0]
       
@@ -449,7 +449,7 @@ class SparkyPeak:
             self.volumeMethod = 'Unknown method'
           else:
             self.volumeMethod = 'Unknown method'
-            print "  Error: unknown volume method %s in sparky peaks file (please define)." % volumeMethod
+            print("  Error: unknown volume method %s in sparky peaks file (please define)." % volumeMethod)
 
     elif len(values) >= 1:
     
@@ -464,7 +464,7 @@ class SparkyPeak:
         
     else:
     
-      print "  Warning: empty data field for Sparky peak file."
+      print("  Warning: empty data field for Sparky peak file.")
       pass
 
   def getVolumeMethodCode(self):

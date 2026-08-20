@@ -1,5 +1,5 @@
 import os, glob
-import Tkinter
+import tkinter
 
 # Another way to import the whole of the Implementation package.
 from memops.api import Implementation
@@ -67,8 +67,8 @@ if __name__ == '__main__':
         pdbObj.writeCoordinates(pdbFile,
                                 structures = strucList,
                                 minimalPrompts = 1)
-    except Exception, exc:
-        print "Can't write coordinates [%s]" % exc
+    except Exception as exc:
+        print("Can't write coordinates [%s]" % exc)
 
     # Save the CCPN project as XML files using the method saveModified().
     project.saveModified()

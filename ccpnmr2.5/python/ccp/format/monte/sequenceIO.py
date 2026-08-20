@@ -76,14 +76,14 @@ class MonteSequenceFile(MonteGenericFile):
   def read(self,verbose = False):
 
     if verbose:
-      print "Reading %s sequence file %s" % (self.format,self.name)
+      print("Reading %s sequence file %s" % (self.format,self.name))
 
     self.sequences.append(MonteSequence())
 
     seqCode = 1
     badCodes = 0
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -129,10 +129,10 @@ class MonteSequenceFile(MonteGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s sequence file %s" % (self.format,self.name)
+      print("Writing %s sequence file %s" % (self.format,self.name))
 
     if len(self.sequences) > 1:
-      print "Warning: multiple sequences - writing to same file."        
+      print("Warning: multiple sequences - writing to same file.")
 
     fout = open(self.name,'w')
     

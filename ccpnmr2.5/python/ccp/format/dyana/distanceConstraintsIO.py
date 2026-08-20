@@ -76,7 +76,7 @@ class DyanaDistanceConstraintFile(DyanaGenericDistanceConstraintFile):
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
         
-      print "Reading %s distance constraint list %s" % (self.format,fileText)
+      print("Reading %s distance constraint list %s" % (self.format,fileText))
 
     self.readGeneric(DyanaDistanceConstraint)
 
@@ -88,7 +88,7 @@ class DyanaDistanceConstraintFile(DyanaGenericDistanceConstraintFile):
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
 
-      print "Writing %s distance constraint list %s" % (self.format,fileText)
+      print("Writing %s distance constraint list %s" % (self.format,fileText))
     
     #
     # DIANA/DYANA always unambiguous...

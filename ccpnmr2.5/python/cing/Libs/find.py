@@ -20,4 +20,4 @@ def find2(pattern, startdir=os.curdir):
 if __name__ == '__main__':
     namepattern, startd = sys.argv[1], sys.argv[2]
     for name in find2(namepattern, startdir=startd):
-        print name
+        print(name)

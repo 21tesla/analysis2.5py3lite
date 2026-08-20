@@ -114,7 +114,7 @@ def determineShape(value):
   # NB, uses 0th element to get lengths
   """
   result = []
-  while not isinstance(value, basestring) and not hasattr(value, 'keys'):
+  while not isinstance(value, str) and not hasattr(value, 'keys'):
     try:
       length = len(value) 
       value = value[0]

@@ -204,7 +204,7 @@ class PyRpfPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='ew')
     frame.grid_columnconfigure(2, weight=1)
 
-    label = Label(frame, text=u'Distance Threshold (\u00C5)')
+    label = Label(frame, text='Distance Threshold (\u00C5)')
     label.grid(row=0,column=0, sticky='w')
     self.distanceEntry = FloatEntry(frame, text=str(DEFAULT_DISTANCE_THRESHOLD), width=8)
     self.distanceEntry.grid(row=0,column=1, sticky='w')
@@ -548,10 +548,10 @@ class PyRpfPopup(BasePopup):
 
       dimMapping = getDataDimAxisMapping(spectrum, self.window)
       boundDims  = getOnebondDataDims(spectrum)
-      print "boundDims: %s" % boundDims
+      print("boundDims: %s" % boundDims)
       shiftPairs = []
       for shift in shifts:
-        print "looking at shift: %s" % shift
+        print("looking at shift: %s" % shift)
         bound = getBoundResonances(shift.resonance) or []
 
         shiftX = None
@@ -571,8 +571,8 @@ class PyRpfPopup(BasePopup):
 
       # Map bound shifts to bound dataDims
       for dataDim1, dataDim2 in boundDims:
-        print "looking at dataDim1: %s" % dataDim1
-        print "looking at dataDim2: %s" % dataDim2
+        print("looking at dataDim1: %s" % dataDim1)
+        print("looking at dataDim2: %s" % dataDim2)
         dataDimRef1 = getPrimaryDataDimRef(dataDim1)
         dataDimRef2 = getPrimaryDataDimRef(dataDim2)
 
@@ -1226,7 +1226,7 @@ def calcRPF(ensembles, peakLists, tolerances,
 
     # Check num of N & C dims makes sense
     if not contexts:
-      print 'Peak list %s has unusable axes' % peakList
+      print('Peak list %s has unusable axes' % peakList)
       continue
 
     # Which heteroatoms are required to be
@@ -1241,7 +1241,7 @@ def calcRPF(ensembles, peakLists, tolerances,
   # Collect ambiguous peak-resonance assignments
 
   t0 = time.time()
-  print  "Getting resonance-resonance possible peak assignments within tolerances"
+  print("Getting resonance-resonance possible peak assignments within tolerances")
   resonancePeaks = {}
   peakPossibilities = {}
   unexplainedPeaksDict = {}
@@ -1250,7 +1250,7 @@ def calcRPF(ensembles, peakLists, tolerances,
   for i, peakList in enumerate(peakLists):
     spec = peakList.dataSource
     pId = '%s:%s:%d' % (spec.experiment.name, spec.name, peakList.serial)
-    print 'Peak List %s' % pId
+    print('Peak List %s' % pId)
 
     if progressBar:
       progressBar.text = 'Searching %s \npeaks for possible assignments' % pId
@@ -1266,9 +1266,9 @@ def calcRPF(ensembles, peakLists, tolerances,
     peakPossibilities[peakList] = peakData
     unexplainedPeaksDict[peakList] = unexplained
 
-  print "  Time taken:", time.time() - t0
+  print("  Time taken:", time.time() - t0)
 
-  print "Getting resonance-resonance NOE distances"
+  print("Getting resonance-resonance NOE distances")
 
   resonanceDists = {}
 
@@ -1283,16 +1283,16 @@ def calcRPF(ensembles, peakLists, tolerances,
       progressBar.set(0)
       progressBar.update()
 
-    print "Ensemble", ensemble.ensembleId
+    print("Ensemble", ensemble.ensembleId)
     resonanceDists[ensemble] = getProtonDistsConn(ensemble,
                                                   heteroAtomContexts,
                                                   distThreshold,
                                                   progressBar)
 
-    print "  Time taken:", time.time() - t0
+    print("  Time taken:", time.time() - t0)
 
   t0 = time.time()
-  print  "Calculating scores and making CCPN validation objects"
+  print("Calculating scores and making CCPN validation objects")
 
   # List for CCPN validation objects
   validationResults = []
@@ -1813,7 +1813,7 @@ def calcRPF(ensembles, peakLists, tolerances,
         storeResidueRpfValidation(validStore, residue, recall,
                                   precision, fMeasure, dpScore)
 
-  print "  Time taken:", time.time() - t0
+  print("  Time taken:", time.time() - t0)
 
   return validationResults
 
@@ -1826,7 +1826,7 @@ def countsToRpf(truePos, falseNeg, truePosNoe, falsePosNoe, verbose=False):
   """
 
   if verbose:
-    print "countsToRpf", falseNeg, truePos, truePosNoe, falsePosNoe
+    print("countsToRpf", falseNeg, truePos, truePosNoe, falsePosNoe)
 
   if not truePos:
     return 0.0, 0.0, 0.0
@@ -1879,9 +1879,9 @@ def calcDpScore(fMeasure, truePos, falseNeg, truePosNoe, falsePosNoe, verbose=Fa
 
 
   if verbose:
-    print " Free  %.3f, %.3f, %.3f" % (rFree,  pFree, fFree)
-    print " Ideal %.3f, %.3f, %.3f" % (rIdeal, pIdeal, fIdeal)
-    print " Query %.3f, %.3f, %.3f" % (rQuery, pQuery, fQuery)
+    print(" Free  %.3f, %.3f, %.3f" % (rFree,  pFree, fFree))
+    print(" Ideal %.3f, %.3f, %.3f" % (rIdeal, pIdeal, fIdeal))
+    print(" Query %.3f, %.3f, %.3f" % (rQuery, pQuery, fQuery))
 
   if not fIdeal-fFree:
     return 0.0
@@ -2588,7 +2588,7 @@ def getAmbigNoeConn(peakLists, toleranceList, diagonalTolerance=0.1,
         ppm2 = peakDim2.value
 
         if peakDim1.value is None:
-          print "Peak %s does not have a peakDim1.value" % peak
+          print("Peak %s does not have a peakDim1.value" % peak)
           continue
 
         # Check if ppm values similar

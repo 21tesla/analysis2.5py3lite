@@ -83,9 +83,9 @@ class FelixPeakFile(FelixGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading Felix peak list %s" % self.name
+      print("Reading Felix peak list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     
     #
     # Use file name for spectrum name... and remove any suffix
@@ -148,7 +148,7 @@ class FelixPeakFile(FelixGenericFile):
   def write(self, verbose = 0):
 
     if verbose == 1:
-      print "Writing Felix peak list %s" % self.name
+      print("Writing Felix peak list %s" % self.name)
 
     #fout = open(self.name,'w')
 
@@ -197,4 +197,4 @@ if __name__ == "__main__":
 
     
     for rawPeak in peakFile.peaks:
-      print rawPeak.column1, rawPeak.column2, rawPeak.column3, rawPeak.column4
+      print(rawPeak.column1, rawPeak.column2, rawPeak.column3, rawPeak.column4)

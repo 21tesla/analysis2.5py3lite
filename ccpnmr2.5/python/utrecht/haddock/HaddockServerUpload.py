@@ -80,7 +80,7 @@ Citing:          If you are using this software for academic purposes, we
               Proteins: Struc. Funct. & Bioinformatic 69, 726-733.    
 =========================================================================
 """
-import httplib, urlparse, urllib, sys, os
+import http.client, urlparse, urllib, sys, os
 
 from memops.gui.Button          import Button
 from memops.gui.LabeledEntry    import LabeledEntry
@@ -154,7 +154,7 @@ class HaddockServerUpload(BasePopup):
 
         BasePopup.destroy(self)    
 
-class ServerUpload(object):
+class ServerUpload:
 
     """Class for automatic upload of a HADDOCK webserver parameter file.
        Input: filestring - a compatible parameter file as string
@@ -216,12 +216,12 @@ class ServerUpload(object):
         urlparts = urlparse.urlsplit(self.url)
         host = urlparts[1]
         selector = urlparts[2]    
-        http = httplib.HTTPConnection(host)
+        http = http.client.HTTPConnection(host)
         headers = {'User-Agent':'anonymous', 'Content-Type':content_type}
         http.request('POST', selector, body, headers)
         res = http.getresponse() 
         response = res.read()
         
         print("HADDOCK server response:")
-        print response
+        print(response)
 

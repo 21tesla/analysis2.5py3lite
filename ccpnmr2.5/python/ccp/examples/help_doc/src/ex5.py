@@ -2,7 +2,7 @@
 import os
 
 # Get Tkinter for popups.
-import Tkinter
+import tkinter
 
 # Read the whole of the Implementation package.
 import memops.api.Implementation as Implementation
@@ -31,14 +31,14 @@ if __name__ == '__main__':
     fastaObj.readSequence(seqFile, minimalPrompts = 1)
 
     # Check to see if molSystem and molecule objects are in the CCPN project.
-    print '\nProject object: [%s]' % project
-    print "'list' of MolSystem objects: [%s]" % project.sortedMolSystems()
-    print "'list' of Molecule objects: [%s]" % project.sortedMolecules()
+    print('\nProject object: [%s]' % project)
+    print("'list' of MolSystem objects: [%s]" % project.sortedMolSystems())
+    print("'list' of Molecule objects: [%s]" % project.sortedMolecules())
 
     # Select first available molecule.
     molecule = project.findFirstMolecule()
-    print 'Molecule type of first molecule: [%s]' % molecule.molType
+    print('Molecule type of first molecule: [%s]' % molecule.molType)
 
     # Check that the residues have also been made.
     res1Type = molecule.findFirstMolResidue(seqCode = 1).ccpCode
-    print 'Residue 1 type: [%s]\n' % res1Type
+    print('Residue 1 type: [%s]\n' % res1Type)

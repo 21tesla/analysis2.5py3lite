@@ -137,14 +137,14 @@ class AnsigPeakFile(AnsigGenericFile):
   def checkValid(self):
   
     if self.npeaks != len(self.peaks):
-      print "    Warning: number of Ansig peaks reported and read does not match!"
+      print("    Warning: number of Ansig peaks reported and read does not match!")
 
 
   def read(self, verbose = False):
  
     # Format is in fortran fixed column widths!
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read first line
     line = fin.readline()
@@ -165,12 +165,12 @@ class AnsigPeakFile(AnsigGenericFile):
   def readExported(self, verbose = False):
 
     if verbose:
-      print "  Reading %s as export file." % self.name
+      print("  Reading %s as export file." % self.name)
 
     # Code mainly taken from Rasmus' readAnsig.py script
     # Format is in fortran fixed column widths!
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read first line
     line = fin.readline()
@@ -283,12 +283,12 @@ class AnsigPeakFile(AnsigGenericFile):
   def readStorage(self, verbose = False):
 
     if verbose:
-      print "  Reading %s as storage file." % self.name
+      print("  Reading %s as storage file." % self.name)
 
     # Code mainly taken from Rasmus' readAnsig.py script
     # Format is in fortran fixed column widths!
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read first line
     line = fin.readline()
@@ -307,7 +307,7 @@ class AnsigPeakFile(AnsigGenericFile):
     line = fin.readline()
 
     # Check line length - different formats available
-    print len(line)
+    print(len(line))
     if len(line) == 131:
       formatType = 'short'
     elif len(line) == 143:
@@ -377,7 +377,7 @@ class AnsigPeakFile(AnsigGenericFile):
   def write(self, verbose = False):
 
     if verbose:
-      print "Writing nmrView peak list %s" % self.name
+      print("Writing nmrView peak list %s" % self.name)
 
     # Only writing to exported format supported
 

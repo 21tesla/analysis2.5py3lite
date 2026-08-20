@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     text.append(s)
     s = s + 10
 
-    print 'text = ' + text.getText()
+    print('text = ' + text.getText())
 
   def setText():
 
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     text.setText(s)
     s = s + 10
 
-    print 'text = ' + text.getText()
+    print('text = ' + text.getText())
 
   def clearText():
 

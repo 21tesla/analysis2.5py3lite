@@ -19,7 +19,7 @@ import os
 
 # Get Tkinter for popups.
 
-import Tkinter
+import tkinter
 
 import memops.api.Implementation as Implementation
 
@@ -53,20 +53,20 @@ if __name__ == '__main__':
 
   # Check to see if molSystem and molecule objects are in the CCPN project.
 
-  print '\nProject object: [%s]' % project
+  print('\nProject object: [%s]' % project)
 
-  print "\n'list' of MolSystem objects: [%s]" % project.sortedMolSystems()
+  print("\n'list' of MolSystem objects: [%s]" % project.sortedMolSystems())
 
-  print "\n'list' of Molecule objects: [%s]" % project.sortedMolecules()
+  print("\n'list' of Molecule objects: [%s]" % project.sortedMolecules())
 
   # Select first available molecule.
 
   molecule = project.findFirstMolecule()
 
-  print '\nMolecule type of first molecule: [%s]' % molecule.molType
+  print('\nMolecule type of first molecule: [%s]' % molecule.molType)
 
   # Check that the residues have also been made.
 
   res1Type = molecule.findFirstMolResidue(seqCode = 1).ccpCode
 
-  print '\nResidue 1 type: [%s]\n' % res1Type
+  print('\nResidue 1 type: [%s]\n' % res1Type)

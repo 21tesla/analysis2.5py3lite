@@ -187,7 +187,7 @@ class PdbSequenceFile(PdbGenericFile):
               fakeModelCoordinates[modelKey][chainId].append(FakeModelCoordinate(chainId,resName,seqCode,insertionCode))
 
       except:
-        print "  Warning: trying to use remark 465 for missing residue info, but failed."
+        print("  Warning: trying to use remark 465 for missing residue info, but failed.")
             
     # TODO: Missing coordinate info is in remark '470'!!
 
@@ -318,11 +318,11 @@ class PdbSequenceFile(PdbGenericFile):
     
     """ 
     for chainId in chainIds:
-      print "CHAIN '%s'" % chainId
+      print("CHAIN '%s'" % chainId)
       for curChain in chainIdInfo[chainId]:
-        print curChain[0]
-        print curChain[1]
-        print curChain[2]
+        print(curChain[0])
+        print(curChain[1])
+        print(curChain[2])
     
     """ 
     
@@ -339,8 +339,8 @@ class PdbSequenceFile(PdbGenericFile):
       chainId = pdbChain.chainId
       
       if not chainIdInfo.has_key(chainId):
-        print "  Error: unrecognized %s code '%s' for polymer... ignored." % (self.format,chainId)
-        print chainIdInfo.keys()
+        print("  Error: unrecognized %s code '%s' for polymer... ignored." % (self.format,chainId))
+        print(chainIdInfo.keys())
         continue
 
       self.sequences.append(PdbSequence(molName = pdbChain.molName))
@@ -391,7 +391,7 @@ class PdbSequenceFile(PdbGenericFile):
               if not matchChainString.count(resNamesString):
                 resNames.reverse()
               else:
-                print "WARNING: reversing residue names. Sequence reversed in PDB file!"
+                print("WARNING: reversing residue names. Sequence reversed in PDB file!")
           
           #
           # Also need to check if there's het residues in the matchchain...
@@ -578,7 +578,7 @@ class PdbSequenceFile(PdbGenericFile):
       #
       
       if not pdbSeq:
-        print "  Error: no sequence match found in %s coordinates for chain %s!" % (self.format,chainId)
+        print("  Error: no sequence match found in %s coordinates for chain %s!" % (self.format,chainId))
         continue
       
       #print pdbChain
@@ -678,7 +678,7 @@ class PdbSequenceFile(PdbGenericFile):
             break
 
         if addedHetGroup:       
-          print "  Warning: adding HET residue %s in position %d (index %d) of chain %s!" % (code3Letter,seqCode,len(currentSequence.elements),currentSequence.chainCode)
+          print("  Warning: adding HET residue %s in position %d (index %d) of chain %s!" % (code3Letter,seqCode,len(currentSequence.elements),currentSequence.chainCode))
 
         #
         # Add this element
@@ -989,7 +989,7 @@ class PdbSequenceFile(PdbGenericFile):
             
           elif not ignoreResNames or not pdbHetGroup.Id in ignoreResNames:
           
-            print "  Error: could not find sequence elements for hetGroup '%s'! Not included in sequence..." % pdbHetGroup.Id
+            print("  Error: could not find sequence elements for hetGroup '%s'! Not included in sequence..." % pdbHetGroup.Id)
 
     #
     # Set the bonds on the sequence element level!
@@ -1003,7 +1003,7 @@ class PdbSequenceFile(PdbGenericFile):
             if coordToSeq.has_key(pdbCoord):
               seqEl = coordToSeq[pdbCoord]
             else:
-              print "  Error: could not find sequence element for coordinate %d ('%s.%d.%s') to set bond..." % (pdbCoord.serial,pdbCoord.chainId,pdbCoord.seqCode,pdbCoord.atomName)
+              print("  Error: could not find sequence element for coordinate %d ('%s.%d.%s') to set bond..." % (pdbCoord.serial,pdbCoord.chainId,pdbCoord.seqCode,pdbCoord.atomName))
               seqEl = None
             seqEls.append(seqEl)
           
@@ -1060,7 +1060,7 @@ class PdbSequenceFile(PdbGenericFile):
           sequence.setSecondaryStructure(seqStrucTypeText,serial,specificInfo,seqEls)
 
         else:
-          print "  Warning: could not find chain code '%s' for setting secondary structure info." % chainCode
+          print("  Warning: could not find chain code '%s' for setting secondary structure info." % chainCode)
 
     #
     # Clean up...
@@ -1070,7 +1070,7 @@ class PdbSequenceFile(PdbGenericFile):
       sequence = self.sequences[i]
       if not sequence.elements:
         self.sequences.pop(i)
-        print "Removed empty sequence '%s', '%s'" % (sequence.molName, sequence.chainCode)
+        print("Removed empty sequence '%s', '%s'" % (sequence.molName, sequence.chainCode))
 
 
   def createNewChain(self,pdbCoordinate,chainIdInfo,oldChainId,location):

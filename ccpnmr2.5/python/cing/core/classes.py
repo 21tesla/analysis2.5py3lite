@@ -3,7 +3,7 @@ Implementation of the CING API's main classes.
 Split into 3 for better performance.
 """
 
-from ConfigParser import ConfigParser
+from configparser import configparser
 from cing import cingPythonCingDir
 from cing import cingRoot
 from cing import issueListUrl

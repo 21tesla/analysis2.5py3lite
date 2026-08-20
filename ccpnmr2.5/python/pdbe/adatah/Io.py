@@ -35,7 +35,7 @@ def getDataFromHttp(urlLocation):
     r1.close()
   else:
     data = None
-    print "URL %s returned code %d" % (urlLocation, code)
+    print("URL %s returned code %d" % (urlLocation, code))
 
   return data
 
@@ -63,7 +63,7 @@ def getReferenceTextFileFromHttp(urlLocation,localFilePath, refText = "", isGzip
   
   if os.path.exists(stampedLocalFilePath):
 
-    print "Using up-to-date local %s file..." % refText
+    print("Using up-to-date local %s file..." % refText)
   
   else:
     
@@ -110,7 +110,7 @@ def getReferenceTextFileFromHttp(urlLocation,localFilePath, refText = "", isGzip
       else:
         addText = ''
         
-      print "Downloaded up-to-date file for %s, saved locally%s..." % (refText,addText)
+      print("Downloaded up-to-date file for %s, saved locally%s..." % (refText,addText))
       
       # Unpack
       if isGzipped:
@@ -121,10 +121,10 @@ def getReferenceTextFileFromHttp(urlLocation,localFilePath, refText = "", isGzip
       if lastStampedLocalFilePath:
         stampedLocalFilePath = lastStampedLocalFilePath
         lastDayStamp = localFile[len(baseName):]
-        print "Download failed for %s, using file stamped on day %s" % (refText,lastDayStamp)
+        print("Download failed for %s, using file stamped on day %s" % (refText,lastDayStamp))
       
       else:
-        print "Error: could not get reference data for %s!" % refText
+        print("Error: could not get reference data for %s!" % refText)
         return None
 
   #
@@ -164,21 +164,21 @@ def post_multipart(host, selector, fields, files):
   content_type, body = encode_multipart_formdata(fields, files)
   
   """
-  # TODO replace by urllib2!?!? See http://docs.python.org/library/urllib2.html
-  import urllib2
-  print url
-  request = urllib2.Request(url)
+  # TODO replace by urllib.request!?!? See http://docs.python.org/library/urllib.request.html
+  import urllib.request
+  print(url)
+  request = urllib.request.Request(url)
   request.add_header('content-type', content_type)
   request.add_header('content-length', str(len(body)))
   request.add_data(body)
   
-  urlHandle = urllib2.urlopen(request)
+  urlHandle = urllib.request.urlopen(request)
   
   return urlHandle.geturl()
   
   """
-  import httplib
-  h = httplib.HTTP(host)
+  import http.client
+  h = http.client.HTTP(host)
   h.putrequest('POST', selector)
   h.putheader('content-type', content_type)
   h.putheader('content-length', str(len(body)))
@@ -191,7 +191,7 @@ def encode_multipart_formdata(fields, files):
   """
   fields is a sequence of (name, value) elements for regular form fields.
   files is a sequence of (name, filename, value) elements for data to be uploaded as files
-  Return (content_type, body) ready for httplib.HTTP instance
+  Return (content_type, body) ready for http.client.HTTP instance
   """
   BOUNDARY = '----------ThIs_Is_tHe_bouNdaRY_$'
   CRLF = '\r\n'
@@ -241,9 +241,9 @@ Code below from http://peerit.blogspot.com/2007/07/multipartposthandler-doesnt-w
 # 7/26/07 Slightly modified by Brian Schneider  
 
 import urllib
-import urllib2
+import urllib.request
 import mimetools, mimetypes
-from cStringIO import StringIO
+from io import StringIO
 
 class Callable:
     def __init__(self, anycallable):
@@ -253,8 +253,8 @@ class Callable:
 #  assigning a sequence.
 doseq = 1
 
-class MultipartPostHandler(urllib2.BaseHandler):
-    handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
+class MultipartPostHandler(urllib.request.BaseHandler):
+    handler_order = urllib.request.HTTPHandler.handler_order - 10 # needs to run first
 
     def http_request(self, request):
         data = request.get_data()
@@ -269,7 +269,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                          v_vars.append((key, value))
             except TypeError:
                 systype, value, traceback = sys.exc_info()
-                raise TypeError, "not a valid non-string sequence or mapping object", traceback
+                raise TypeError("not a valid non-string sequence or mapping object", traceback)
 
             if len(v_files) == 0:
                 data = urllib.urlencode(v_vars, doseq)
@@ -279,7 +279,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
-                    print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
+                    print("Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data'))
                 request.add_unredirected_header('Content-Type', contenttype)
 
             request.add_data(data)

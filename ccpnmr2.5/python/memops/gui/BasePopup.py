@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import time
 
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Button import Button
@@ -445,7 +445,7 @@ class BasePopup(Tkinter.Toplevel, Base):
     except:
       pass
 
-    raise AttributeError, "%s instance has no attribute '%s'" % (self.__class__.__name__, name)
+    raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
 
   def body(self, master):
     pass # this method should be overridden by subclass
@@ -535,7 +535,7 @@ if (__name__ == '__main__'):
 
     global popup, root
     popup = TestPopup(root)
-    print popup.result
+    print(popup.result)
 
   def lift():
 

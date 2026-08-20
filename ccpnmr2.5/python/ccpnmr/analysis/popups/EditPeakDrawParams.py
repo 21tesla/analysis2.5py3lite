@@ -450,7 +450,7 @@ class EditPeakDrawParamsPopup(BasePopup):
     axisType = self.getAxisType()
     try:
       axisType.peakSize = self.peakSizeEntry.get()
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting peak size', e.error_msg, parent=self)
 
   def getAxisType(self):

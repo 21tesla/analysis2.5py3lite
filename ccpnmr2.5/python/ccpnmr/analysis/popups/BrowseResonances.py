@@ -1367,7 +1367,7 @@ class BrowseResonancesPopup(BasePopup):
     
     for func in ('setCcpCode', 'addResonance', 'setName',
                  'removeResonance', 'setResonances',
-		 'addAtomSet', 'delete'):
+         'addAtomSet', 'delete'):
       notifyFunc(self.updateAfter, 'ccp.nmr.Nmr.ResonanceGroup', func)
 
     for func in ('setDetails', 'setIsotopeCode', 'setName', 'setResonanceGroup',
@@ -1745,9 +1745,9 @@ class ResonanceInfoPopup(BasePopup):
   default this is even, but imprecise or ambiguous peak dimensions are often
   down-weighted and precise ones are up-weighted. The spectrum dimension
   weightings are set via the "Tolerances" tab, "Shift Weighting" column of main
-  `Spectra`_ option. 
+  str(Spectra)_ option. 
 
-  .. _`Spectra`: EditSpectrumPopup.html
+  .. _str(Spectra): EditSpectrumPopup.html
     
   """
 

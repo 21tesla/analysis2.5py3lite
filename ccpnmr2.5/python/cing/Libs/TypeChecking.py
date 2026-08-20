@@ -34,17 +34,17 @@ ARRAY = 'ARRAY'
 NONE = 'NONE'
 BOOL = 'BOOL'
 
-TYPES = {type(0.): FLOAT,
-         type(0): INT,
-         type(''): STRING,
-         type(u''): UNICODE,
+TYPES = {float: FLOAT,
+         int: INT,
+         str: STRING,
+         str: UNICODE,
          type({}): DICT,
          type([]): LIST,
          type(()): TUPLE,
          type(_zeros(0)): ARRAY,
          type(None): NONE,
-         type(True): BOOL,
-         type(False): BOOL}
+         bool: BOOL,
+         bool: BOOL}
 
 for python_type, my_type in TYPES.items():
     TYPES[my_type] = python_type
@@ -88,7 +88,7 @@ class TypeChecker:
 
             else:
                 s = 'is_type: internal error.'
-                raise StandardError, s
+                raise StandardError(s)
 
     def check_type(self, token, *names):
 
@@ -121,14 +121,14 @@ class TypeChecker:
 
             msg = descr % (filename, lineno, func_name, types, token_name)
 
-            raise TypeError, msg
+            raise TypeError(msg)
 
     def check_elements(self, seq, t):
 
         try:
             map(lambda e, t = t, s = self: s.check_type(e, t), seq)
-        except TypeError, s:
-            raise TypeError, s
+        except TypeError as s:
+            raise TypeError(s)
 
     def __call__(self, x, *names):
         if self.active:

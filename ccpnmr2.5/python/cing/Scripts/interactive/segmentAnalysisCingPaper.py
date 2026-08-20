@@ -86,7 +86,7 @@ def run():
     
     for rowIdx in range(r.sizeRows()):
         if rowIdx >= 200000:
-            print "Stopping early."
+            print("Stopping early.")
             break
         # end if
         nentries += 1
@@ -116,18 +116,18 @@ def run():
         # end for
     # end for    
     
-    print "nentries:                %s" % nentries
-    print "nchains:                 %s" % nchains
-    print "nsegments:               %s" % nsegments
-    print "nresidues:               %s" % nresidues
-    print "chainsPerEntry:          %s" % (nsegments / float(nchains))
-    print "segmentsPerEntry:        %s" % (nsegments / float(nentries))
-    print "segmentsPerChain:        %s" % (nsegments / float(nchains))
-    print "residuesPerEntry:        %s" % (nresidues / float(nentries))
-    print "residuesPerChain:        %s" % (nresidues / float(nchains))
-    print "residuesPerSegments:     %s" % (nresidues / float(nsegments))
-    print "residuesMin:             %s" % nresiduesMin
-    print "residuesMinEntry:        %s" % nresiduesMinEntry
+    print("nentries:                %s" % nentries)
+    print("nchains:                 %s" % nchains)
+    print("nsegments:               %s" % nsegments)
+    print("nresidues:               %s" % nresidues)
+    print("chainsPerEntry:          %s" % (nsegments / float(nchains)))
+    print("segmentsPerEntry:        %s" % (nsegments / float(nentries)))
+    print("segmentsPerChain:        %s" % (nsegments / float(nchains)))
+    print("residuesPerEntry:        %s" % (nresidues / float(nentries)))
+    print("residuesPerChain:        %s" % (nresidues / float(nchains)))
+    print("residuesPerSegments:     %s" % (nresidues / float(nsegments)))
+    print("residuesMin:             %s" % nresiduesMin)
+    print("residuesMinEntry:        %s" % nresiduesMinEntry)
 # end def
 
 if __name__ == '__main__':

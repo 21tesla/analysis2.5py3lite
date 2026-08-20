@@ -82,7 +82,7 @@ class PalesRdcConstraintFile(PalesGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s rdc constraint list %s" % (self.format,self.name)
+      print("Reading %s rdc constraint list %s" % (self.format,self.name))
 
     rdcId = 0
     chainCode = self.defaultMolCode
@@ -117,7 +117,7 @@ class PalesRdcConstraintFile(PalesGenericFile):
 
         self.constraints.append(PalesRdcConstraint(rdcId))
         self.constraints[-1].setRdcData(cols[6], cols[7], cols[8])
-	# next line reads residue type, but I don't think the molecule, chain etc. gets created - sequence must be loaded from elsewhere
+    # next line reads residue type, but I don't think the molecule, chain etc. gets created - sequence must be loaded from elsewhere
         self.constraints[-1].setAtomMembers(chainCode,cols[0],cols[1],cols[2],cols[3],cols[4],cols[5])
 
       line = fin.readline()
@@ -137,7 +137,7 @@ class PalesRdcConstraintFile(PalesGenericFile):
     # ...
 
     if verbose == 1:
-      print "Writing %s rdc constraint list %s" % (self.format,self.name)
+      print("Writing %s rdc constraint list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -155,9 +155,9 @@ class PalesRdcConstraintFile(PalesGenericFile):
         for member in item.members:
           atomName = member.atomName
           seqCode = member.seqCode
-	  resLabel = member.resLabel
+      resLabel = member.resLabel
 
-	  fout.write("%5d%6s%6s" % (seqCode,resLabel,atomName))
+      fout.write("%5d%6s%6s" % (seqCode,resLabel,atomName))
         
         if constraint.error:
           error = constraint.error
@@ -190,20 +190,20 @@ class PalesRdcConstraintFile(PalesGenericFile):
       firstEl = chunk*chunkSize
       lastEl  = ((chunk+1)*chunkSize)
       if (chunk == (numChunks - 1)):
-	#in this case lastEl is set to the end of the string (i.e. the character after the last letter we want)
-	lastEl = len(oneLetterSequence)
+    #in this case lastEl is set to the end of the string (i.e. the character after the last letter we want)
+    lastEl = len(oneLetterSequence)
       # seq is of type ccp.api.molecule.Molecule.Molecule.seqString which is a String so slice it
       # slicing gives sequence from firstEl up to charater before lastEl
       seqChunk = oneLetterSequence[firstEl:lastEl]
       i = 0
       seqString = ""
       for seqEl in seqChunk:
-	if ((i % 10) == 0):
-	  # space every 10 characters
-	  seqString += " "
+    if ((i % 10) == 0):
+      # space every 10 characters
+      seqString += " "
 
-	seqString += seqEl
-	i+=1
+    seqString += seqEl
+    i+=1
 
       fout.write("DATA SEQUENCE %s" % seqString)
       fout.write(self.newline)
@@ -248,18 +248,18 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
 
     for constraint in constraintFile.constraints:
-      print constraint.Id,
+      print(constraint.Id,)
 
-      print constraint.value, constraint.error,
+      print(constraint.value, constraint.error,)
 
       for item in constraint.items:
         for member in item.members:
 
-          print member.seqCode, member.resLabel, member.atomName,
+          print(member.seqCode, member.resLabel, member.atomName,)
 
-        print "|",
+        print("|",)
 
-      print
+      print()
     
     constraintFile.name = '../../../reference/ccpNmr/pales/rdc.testout'
 

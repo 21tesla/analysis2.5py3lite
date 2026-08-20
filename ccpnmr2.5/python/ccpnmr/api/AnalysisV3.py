@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -160,7 +160,7 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisDataDim.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisDataDim.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -195,10 +195,10 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1785,7 +1785,7 @@ class AnalysisLayout(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisLayout.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisLayout.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1820,10 +1820,10 @@ class AnalysisLayout(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5700,7 +5700,7 @@ objects
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisPanel.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisPanel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5735,10 +5735,10 @@ objects
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9655,7 +9655,7 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisPeakList.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisPeakList.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9690,10 +9690,10 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -11272,7 +11272,7 @@ class AnalysisProjectV3(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisProjectV3.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisProjectV3.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -11333,10 +11333,10 @@ class AnalysisProjectV3(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -14535,7 +14535,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnalysisSpectrum.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnalysisSpectrum.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -14574,10 +14574,10 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -18316,7 +18316,7 @@ class AnnotationSetting(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AnnotationSetting.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AnnotationSetting.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -18362,10 +18362,10 @@ class AnnotationSetting(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -20137,7 +20137,7 @@ this is a program-specific part of the model.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AtomSetMapping.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AtomSetMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -20192,10 +20192,10 @@ this is a program-specific part of the model.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -22359,7 +22359,7 @@ class AxisMapping(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.AxisMapping.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.AxisMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -22394,10 +22394,10 @@ class AxisMapping(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -23112,7 +23112,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.ChainMapping.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.ChainMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -23155,10 +23155,10 @@ class ChainMapping(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -24091,7 +24091,7 @@ class PeakListView(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.PeakListView.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.PeakListView.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -24126,10 +24126,10 @@ class PeakListView(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -24906,7 +24906,7 @@ class PeakSetting(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.PeakSetting.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.PeakSetting.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -24952,10 +24952,10 @@ class PeakSetting(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -26947,7 +26947,7 @@ class PrintSetting(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.PrintSetting.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.PrintSetting.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -26993,10 +26993,10 @@ class PrintSetting(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -29560,7 +29560,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.ResidueMapping.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.ResidueMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -29595,10 +29595,10 @@ class ResidueMapping(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -30365,7 +30365,7 @@ class SpectrumMapping(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.SpectrumMapping.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.SpectrumMapping.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -30400,10 +30400,10 @@ class SpectrumMapping(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -31444,7 +31444,7 @@ class SpectrumView(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.SpectrumView.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.SpectrumView.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -31479,10 +31479,10 @@ class SpectrumView(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -32647,7 +32647,7 @@ class StoredContour(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisV3.StoredContour.__init__"
+        print("ERROR in ccpnmr.AnalysisV3.StoredContour.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -32693,10 +32693,10 @@ class StoredContour(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

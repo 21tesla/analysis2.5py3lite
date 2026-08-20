@@ -61,10 +61,10 @@ try:
   from memops.c.FitMethod import bootstrapData
   from memops.c.FitMethod import runFit
   from memops.c.FitMethod import error as FitMethodError
-except Exception, e:
-  print 'Error, the DataAnalysisBasic module fitting functionality will not work, something is wrong with the C code.'
-  print 'Exception:', e
-  print 'Will continue without Analysis C fitting functionality'
+except Exception as e:
+  print('Error, the DataAnalysisBasic module fitting functionality will not work, something is wrong with the C code.')
+  print('Exception:', e)
+  print('Will continue without Analysis C fitting functionality')
 
 class DataFitting:
   """
@@ -136,14 +136,14 @@ class DataFitting:
           return True
         else:
           return False
-      except Exception, e:
+      except Exception as e:
         #showWarning('Function fit failure', e, parent=self.guiParent)
-        print e
+        print(e)
         raise
        
     else:
       #showWarning('Function fit failure',error, parent=self.guiParent)
-      print error
+      print(error)
       raise Exception(error)
 
     return False
@@ -356,7 +356,7 @@ def makeRatesList(rateType, experimentOrSeries, specificType, peakGroups, values
         continue
     
     if resonanceCheck.get(resonance):
-      print "Warning: Resonance %s repeated in peak groups for %s list" % (resonance,rateType)
+      print("Warning: Resonance %s repeated in peak groups for %s list" % (resonance,rateType))
       continue
     
     peaks = [p for p in peakGroups[i] if not p.isDeleted]  
@@ -493,9 +493,9 @@ def pairHnHaPeaks(peakList, residueRanges=None):
       if (atomN.name == 'N') and (atomH.name == 'H'):
         if atomHx.name == 'H':
           amides[residue] = peak
-	
-	elif atomHx.name == 'HA':
-	  alphas[residue] = peak
+    
+    elif atomHx.name == 'HA':
+      alphas[residue] = peak
 
   for residue in amides.keys():
     if alphas.get(residue) is not None:
@@ -592,7 +592,7 @@ def getPeakSampledDimIntensities(peaks, experiment, intensityType='volume'):
       yWidths[i] = getSpectrumNoise(okPeaks[i].peakList.dataSource)
   
   if missing > 0:
-    print "Warning: %d peak intensities (type %s) missing" % (missing,intensityType)
+    print("Warning: %d peak intensities (type %s) missing" % (missing,intensityType))
       
   return (xData,yData, xWidths, yWidths, refIntensity)
 
@@ -934,7 +934,7 @@ def getPeakSeriesIntensities(peaks, expSeries, intensityType='volume', sampleCon
       yWidths[i] = getSpectrumNoise(okPeaks[i].peakList.dataSource)
   
   if missing > 0:
-    print "Warning: %d peak intensities (type %s) missing" % (missing,intensityType)
+    print("Warning: %d peak intensities (type %s) missing" % (missing,intensityType))
       
   return (xData, yData, xWidths, yWidths)
   
@@ -1046,7 +1046,7 @@ def functionFitData(dataFitting, numIterations=1000):
       (params, paramsDev, yFit, chiSq) = bootstrapData(method,nIter,noise,x,y)
     else:
       (params, paramsDev, yFit, chiSq) = fitData(method,nIter,noise,x,y,xW,yW)
-  except FitMethodError, e:
+  except FitMethodError as e:
     msg  = 'Problem with fitting: method = %s, nIter = %s, '
     msg += 'noise = %s, x = %s, y = %s, xW = %s, yW = %s: %s'
     raise ApiError(msg % (method, nIter, noise, x, y, xW, yW, e))
@@ -1134,7 +1134,7 @@ def getPeakMatchRegion(peak, tolerances):
 \n.. describe:: Output\n\nList or (Float, Float)
   """
 
-  print 'Warning: Deprecated use of DataAnalysisBasic getPeakMatchRegion()\n Use PeakBasic getPeakMatchRegion() instead'
+  print('Warning: Deprecated use of DataAnalysisBasic getPeakMatchRegion()\n Use PeakBasic getPeakMatchRegion() instead')
   from ccpnmr.analysis.core.PeakBasic import getPeakMatchRegion
   return getPeakMatchRegion(peak, tolerances)
 
@@ -1145,7 +1145,7 @@ def getClosestPeak(peak,peaks,tolerances):
 \n.. describe:: Output\n\nNmr.Peak
   """
 
-  print 'Warning: Deprecated use of DataAnalysisBasic getClosestPeak()\n Use PeakBasic getClosestPeak() instead'
+  print('Warning: Deprecated use of DataAnalysisBasic getClosestPeak()\n Use PeakBasic getClosestPeak() instead')
   from ccpnmr.analysis.core.PeakBasic import getClosestPeak
   return getClosestPeak(peak,peaks,tolerances)
 
@@ -1156,7 +1156,7 @@ def getOverlapScore(peakA,peakB,tolerances):
 \n.. describe:: Output\n\nFloat
   """
    
-  print 'Warning: Deprecated use of DataAnalysisBasic getOverlapScore()\n Use PeakBasic getPeaksOverlapScore() instead'
+  print('Warning: Deprecated use of DataAnalysisBasic getOverlapScore()\n Use PeakBasic getPeaksOverlapScore() instead')
   from ccpnmr.analysis.core.PeakBasic import getPeaksOverlapScore
   return getPeaksOverlapScore(peakA,peakB,tolerances)
 

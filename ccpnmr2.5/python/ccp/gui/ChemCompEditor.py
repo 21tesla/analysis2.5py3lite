@@ -57,7 +57,7 @@ software development. Bioinformatics 21, 1678-1684.
 """
 import os, string, time
 
-import Tkinter
+import tkinter
 
 
 from memops.universal.Io import joinPath
@@ -178,7 +178,7 @@ def setCcpnObjectValue(guiParent,ccpnObject,metaAttrOrRole,value,widget,updateAf
               else:
                 ccpnObject.checkAllValid()
                 
-          except Implementation.ApiError, e:
+          except Implementation.ApiError as e:
             ccpnObject.__dict__[attrName] = origValue
             showError('Cannot set non-changeable value', e.error_msg, parent = guiParent)
 
@@ -191,14 +191,14 @@ def setCcpnObjectValue(guiParent,ccpnObject,metaAttrOrRole,value,widget,updateAf
           if checkValid:
             ccpnObject.checkAllValid()
             
-        except Implementation.ApiError, e:
+        except Implementation.ApiError as e:
           setattr(ccpnObject,attrName,origValue)
           showError('Problems setting value', e.error_msg, parent = guiParent)
     
     if value != origValue:
       updateAfterSet()
 
-  except Implementation.ApiError, e:
+  except Implementation.ApiError as e:
     showError('Setting value', e.error_msg, parent = guiParent)
 
 
@@ -456,7 +456,7 @@ class MultiWidget:
       elif dataType.typeCode == 'String':
         pass
         
-      elif type(value) in [type([]),type('',)]:
+      elif type(value) in [type([]),str]:
         pass
       
       else:
@@ -825,7 +825,7 @@ class CcpnAttributeEditPopup(BasePopup):
             if attrIndex < len(value):
               value = value[attrIndex]
 
-              if value and type(value) != type(''):
+              if value and type(value) != str:
                 (keyNum,upLinks,downLinks,allKeys) = value.keyPath
                 currentKeys = allKeys[-1]
                 value = makeObjectKey(value,currentKeys)
@@ -843,7 +843,7 @@ class CcpnAttributeEditPopup(BasePopup):
         else:
           value = getattr(self.ccpnObject,attrName)
 
-          if value and type(value) not in [type(1),type(1.1),type([]),type(('',)),type('')]:
+          if value and type(value) not in [int,float,type([]),type(('',)),str]:
             (keyNum,upLinks,downLinks,allKeys) = value.keyPath
             currentKeys = allKeys[-1]
             value = makeObjectKey(value,currentKeys)
@@ -1068,7 +1068,7 @@ class CreateCcpnObject(CcpnAttributeEditPopup):
         ccpnObject.delete()
         raise
     
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError(message, e.error_msg, parent = self)
     
     
@@ -1108,9 +1108,9 @@ class ChemCompEditPopup(CcpnAttributeEditPopup):
       # TODO CHANGE THIS
       #refUrl = getUrl(self.ccpnObject.root,'localTest',os.path.join(os.getcwd(),'local'))
       #self.ccpnObject.chemCompHead.contentStorage.url = refUrl
-      print
-      print " WARNING NOT WORKING!"
-      print
+      print()
+      print(" WARNING NOT WORKING!")
+      print()
     
     self.popups = {}
     
@@ -1231,7 +1231,7 @@ class ChemCompEditPopup(CcpnAttributeEditPopup):
       self.ccpnObject.checkAllValid(complete = True)
       isValid = True
       showInfo('All valid','All valid',parent = self)
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Error in validity check', e.error_msg, parent = self)
     
     return isValid

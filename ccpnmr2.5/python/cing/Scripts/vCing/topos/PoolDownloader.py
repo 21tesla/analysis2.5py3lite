@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import getopt
-import httplib #@UnusedImport
+import http.client #@UnusedImport
 import os
 import re
 import sys
 import time
-import urllib2
+import urllib.request
 from sgmllib import SGMLParser
 
 __author__="Jan Bot"
@@ -75,10 +75,10 @@ class PoolParser(SGMLParser):
                 self.token[self.state] = data
 
 # pylint: disable=R0903
-class TokenDownloader(object):
+class TokenDownloader:
     """Class which downloads the tokens gathered by the PoolParser."""
     def __init__(self, url, tokens, outdir, timeout, useStamp):
-        print outdir
+        print(outdir)
         self.url = url
         self.tokens = tokens
         self.outdir = outdir
@@ -99,7 +99,7 @@ class TokenDownloader(object):
                 path = start + '_' + token['created'] + '.' + end
 
             lsock = open(path, 'w')
-            rsock = urllib2.urlopen(self.url + '/' + token['name'])
+            rsock = urllib.request.urlopen(self.url + '/' + token['name'])
             lsock.write(rsock.read())
             rsock.close()
             lsock.close()
@@ -138,7 +138,7 @@ output pools, use:
 python PoolDownloader.py -m -b http://topos.grid.sara.nl/4/pools/test_output_
                          -n 3 -t 0.5 -d /tmp/ --update
     """
-    print s
+    print(s)
 
 def removePool(pool):
     """Removes the provided token pool."""
@@ -148,8 +148,8 @@ def removePool(pool):
     c.perform()
 
 def downloadPool(pool, outdir, timeout, update,  useStamp):
-    print pool
-    sock = urllib2.urlopen(pool)
+    print(pool)
+    sock = urllib.request.urlopen(pool)
     parser = PoolParser()
     parser.feed(sock.read())
     parser.close()
@@ -177,7 +177,7 @@ def downloadPool(pool, outdir, timeout, update,  useStamp):
             tokens = [token for token in tokens
                     if not token['originalname'] in localfiles]
 
-    print len(tokens), " tokens to download from pool: ", pool
+    print(len(tokens), " tokens to download from pool: ", pool)
     downloader = TokenDownloader(pool, tokens, outdir, timeout, useStamp)
     downloader.download()
 
@@ -229,7 +229,7 @@ if __name__ == "__main__":
             try:
                 import pycurl
             except ImportError:
-                print "Remove pool option only available when pycurl has been installed."
+                print("Remove pool option only available when pycurl has been installed.")
                 exit(5)
             remove_pool = True
         elif opt in ('-v',  '--rstart'):
@@ -250,19 +250,19 @@ if __name__ == "__main__":
     # needed params are supplied
     if multi or poolBase or poolRange or rstart > -1 or rstop > -1:
         if(not poolRange and rstart == -1 and rstop == -1):
-            print "No range parameter specified."
+            print("No range parameter specified.")
             exit(6)
         elif(not rstart == -1 and rstop == -1):
-            print "Missing pool range stop argument."
+            print("Missing pool range stop argument.")
             exit(6)
         elif(rstart == -1 and not rstop == -1):
-            print "Missing pool range start argument."
+            print("Missing pool range start argument.")
             exit(6)
         elif(not rstart == -1 and not rstop == -1):
             poolRange = range(rstart,  rstop + 1)
 
         if not poolBase:
-            print "Please specify the poolBase."
+            print("Please specify the poolBase.")
             exit(7)
         pools = [poolBase + str(x) + "/tokens" for x in poolRange]
         for pool in pools:
@@ -273,7 +273,7 @@ if __name__ == "__main__":
 
     else:
         if pool == '':
-            print "Please specify the ToPoS pool."
+            print("Please specify the ToPoS pool.")
             exit(4)
         downloadPool(pool, outdir, timeout, update, useStamp)
 

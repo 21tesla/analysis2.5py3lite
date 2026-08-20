@@ -119,7 +119,7 @@ class DyanaFormat(DataFormat):
       self.constraintFile.read()
 
       if self.verbose:
-        print "Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
 
     except:
 
@@ -138,7 +138,7 @@ class DyanaFormat(DataFormat):
       self.constraintFile = self.ConstraintFileClass(self.fileName, **addKeywords)
     
       if self.verbose:
-        print "Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
       
       self.setSpecificConstraintFileWriteInfo()
   
@@ -255,7 +255,7 @@ class DyanaFormat(DataFormat):
       (chainCode,seqCode,spinSystemId,seqInsertCode,atomName) = getNameInfo(self.resSetNames[i])
 
       if atomName == allResidueAtoms_kw:
-        print "  Error: not handling residue level constraints for %s." % self.format
+        print("  Error: not handling residue level constraints for %s." % self.format)
         continue
       
       self.rawConstraintItem.members.append(self.rawConstraintItemMemberClass(chainCode,seqCode,resLabel,atomName))
@@ -300,7 +300,7 @@ class DyanaFormat(DataFormat):
     
     if not self.moleculeTorsions.has_key(molecule):
       if self.verbose:
-        print "  Error: unknown molecule '%s'!" % (molecule.name)    
+        print("  Error: unknown molecule '%s'!" % (molecule.name))
       return
     
     #
@@ -341,14 +341,14 @@ class DyanaFormat(DataFormat):
     
     if not residue:
       if self.verbose:
-        print "  Error: could not identify residue with seqId %d in chain '%s'!" % (seqId,chain.code)
+        print("  Error: could not identify residue with seqId %d in chain '%s'!" % (seqId,chain.code))
       return
     
     molRes = residue.molResidue
     
     if not molRes or not self.moleculeTorsions[molecule].has_key(molRes):
       if self.verbose:
-        print "  Error: no molresidue for residue with seqId %d in chain '%s'!" % (seqId,chain.code)
+        print("  Error: no molresidue for residue with seqId %d in chain '%s'!" % (seqId,chain.code))
       return
     
     #
@@ -510,15 +510,15 @@ class DyanaFormat(DataFormat):
         if torsionSysName:
           self.rawConstraint.name = torsionSysName.sysName
         elif self.verbose:
-          print "  Error: could not find a %s sysName for %s, angle name %s" % (self.namingSystemName,molRes.ccpCode,torsion.name)
+          print("  Error: could not find a %s sysName for %s, angle name %s" % (self.namingSystemName,molRes.ccpCode,torsion.name))
       elif self.verbose:
-        print "  Error: could not find a %s naming system for chemComp %s" % (self.namingSystemName,molRes.ccpCode)
+        print("  Error: could not find a %s naming system for chemComp %s" % (self.namingSystemName,molRes.ccpCode))
     else:
       if self.verbose:
         if None not in chemAtoms:
-          print "  Error: could not define a torsion angle name for %s, atoms %s-%s-%s-%s." % (molRes.ccpCode,chemAtoms[0].name,chemAtoms[1].name,chemAtoms[2].name,chemAtoms[3].name)
+          print("  Error: could not define a torsion angle name for %s, atoms %s-%s-%s-%s." % (molRes.ccpCode,chemAtoms[0].name,chemAtoms[1].name,chemAtoms[2].name,chemAtoms[3].name))
         else:
-          print "  Error: could not define a torsion angle name for %s because of missing chemAtoms" % (molRes.ccpCode)
+          print("  Error: could not define a torsion angle name for %s because of missing chemAtoms" % (molRes.ccpCode))
     
   def setRawRdcConstraint(self):
   

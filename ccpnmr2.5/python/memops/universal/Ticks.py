@@ -387,8 +387,8 @@ class Ticks:
     n0 = int(ceil((s0+w)/delta))
     n1 = int(floor((s1-w)/delta))
  
-#    ticks = [ n * delta for n in xrange(n0, n1+1) ]
-    ticks = map(lambda x: x*delta,  xrange(n0, n1+1))
+#    ticks = [ n * delta for n in range(n0, n1+1) ]
+    ticks = map(lambda x: x*delta,  range(n0, n1+1))
  
     return ticks
  
@@ -398,18 +398,18 @@ if (__name__ == '__main__'):
 
     def drawLine(self, x0, y0, x1, y1):
 
-      print 'drawLine', x0, y0, x1, y1
+      print('drawLine', x0, y0, x1, y1)
 
     def drawText(self, text, x, y, a, b):
 
-      print 'drawText', text, x, y, a, b
+      print('drawText', text, x, y, a, b)
 
   t = TestTicks(width = 200.0, height = 20.0, isHorizontal = True,
                 region = (4.6, 12.3), doRuleLines = False, haveYInversion = False)
 
-  print 'minorTicks', t.minorTicks
-  print 'majorTicks', t.majorTicks
-  print 'majorFormat', t.majorFormat
-  print 'minorLines', t.minorLines
-  print 'majorLines', t.majorLines
-  print 'majorTexts', t.majorTexts
+  print('minorTicks', t.minorTicks)
+  print('majorTicks', t.majorTicks)
+  print('majorFormat', t.majorFormat)
+  print('minorLines', t.minorLines)
+  print('majorLines', t.majorLines)
+  print('majorTexts', t.majorTexts)

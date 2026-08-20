@@ -83,7 +83,7 @@ class AnsigProjectFile(AnsigGenericFile):
   def read(self,readSpectra = True, verbose = 0):
 
     if verbose == 1:
-      print "Reading %s project file %s" % (self.format,self.name)
+      print("Reading %s project file %s" % (self.format,self.name))
       
     #
     # Initialize
@@ -95,7 +95,7 @@ class AnsigProjectFile(AnsigGenericFile):
     # Read file...
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -160,7 +160,7 @@ class AnsigSpectraFile(AnsigGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s spectra file %s" % (self.format,self.name)
+      print("Reading %s spectra file %s" % (self.format,self.name))
       
     #
     # Initialize
@@ -173,7 +173,7 @@ class AnsigSpectraFile(AnsigGenericFile):
     # Read file...
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -251,10 +251,10 @@ class AnsigSpectraFile(AnsigGenericFile):
           pass
          
         else:
-          print "Warning: did not handle inside tag %s" % line
+          print("Warning: did not handle inside tag %s" % line)
        
       else:
-        print "Warning: did not handle %s" % line
+        print("Warning: did not handle %s" % line)
         
       line = fin.readline()
 
@@ -290,7 +290,7 @@ if __name__ == "__main__":
 
     projectFile.read(verbose = 1)
     
-    print projectFile.directories
-    print projectFile.files
-    print projectFile.spectraFile.spectra
-    print projectFile.spectraFile.binaryFormat
+    print(projectFile.directories)
+    print(projectFile.files)
+    print(projectFile.spectraFile.spectra)
+    print(projectFile.spectraFile.binaryFormat)

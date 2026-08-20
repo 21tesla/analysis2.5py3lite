@@ -62,7 +62,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -168,7 +168,7 @@ values are associated with an Experiment.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.ParameterDefinition.__init__"
+        print("ERROR in ccp.lims.Protocol.ParameterDefinition.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -214,10 +214,10 @@ values are associated with an Experiment.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2725,7 +2725,7 @@ class Procedure(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.Procedure.__init__"
+        print("ERROR in ccp.lims.Protocol.Procedure.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2775,10 +2775,10 @@ class Procedure(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4770,7 +4770,7 @@ that contain steps.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.Protocol.__init__"
+        print("ERROR in ccp.lims.Protocol.Protocol.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4823,10 +4823,10 @@ that contain steps.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8265,7 +8265,7 @@ class ProtocolStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.ProtocolStore.__init__"
+        print("ERROR in ccp.lims.Protocol.ProtocolStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8324,10 +8324,10 @@ class ProtocolStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9333,7 +9333,7 @@ InputSampleDef.sampleCategory is null).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.RefInputSample.__init__"
+        print("ERROR in ccp.lims.Protocol.RefInputSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9379,10 +9379,10 @@ InputSampleDef.sampleCategory is null).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12287,7 +12287,7 @@ OutputSampleDef.sampleCategory is null).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.RefOutputSample.__init__"
+        print("ERROR in ccp.lims.Protocol.RefOutputSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12333,10 +12333,10 @@ OutputSampleDef.sampleCategory is null).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -14148,7 +14148,7 @@ certain time (duration).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.Step.__init__"
+        print("ERROR in ccp.lims.Protocol.Step.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -14194,10 +14194,10 @@ certain time (duration).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -16651,7 +16651,7 @@ class CentrifugationStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.CentrifugationStep.__init__"
+        print("ERROR in ccp.lims.Protocol.CentrifugationStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -16697,10 +16697,10 @@ class CentrifugationStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -18106,7 +18106,7 @@ class FiltrationStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.FiltrationStep.__init__"
+        print("ERROR in ccp.lims.Protocol.FiltrationStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -18152,10 +18152,10 @@ class FiltrationStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -19603,7 +19603,7 @@ class PressStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.PressStep.__init__"
+        print("ERROR in ccp.lims.Protocol.PressStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -19649,10 +19649,10 @@ class PressStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -20865,7 +20865,7 @@ class WaitStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.WaitStep.__init__"
+        print("ERROR in ccp.lims.Protocol.WaitStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -20911,10 +20911,10 @@ class WaitStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -22027,7 +22027,7 @@ class AddStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.AddStep.__init__"
+        print("ERROR in ccp.lims.Protocol.AddStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -22073,10 +22073,10 @@ class AddStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -23292,7 +23292,7 @@ class FlowStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.FlowStep.__init__"
+        print("ERROR in ccp.lims.Protocol.FlowStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -23338,10 +23338,10 @@ class FlowStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -24900,7 +24900,7 @@ class SonicationStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.SonicationStep.__init__"
+        print("ERROR in ccp.lims.Protocol.SonicationStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -24946,10 +24946,10 @@ class SonicationStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -26273,7 +26273,7 @@ class TemperatureStep(Step):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Protocol.TemperatureStep.__init__"
+        print("ERROR in ccp.lims.Protocol.TemperatureStep.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -26319,10 +26319,10 @@ class TemperatureStep(Step):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

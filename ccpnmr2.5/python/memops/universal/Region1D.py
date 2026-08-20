@@ -195,28 +195,28 @@ class Region1D:
     try:
       n = int(key)
     except:
-      raise TypeError, 'sequence index must be integer'
+      raise TypeError('sequence index must be integer')
 
     if (n == 0):
       return self.t0
     elif (n == 1):
       return self.t1
 
-    raise IndexError, 'list index out of range'
+    raise IndexError('list index out of range')
 
   def __setitem__(self, key, value):
 
     try:
       n = int(key)
     except:
-      raise TypeError, 'sequence index must be integer'
+      raise TypeError('sequence index must be integer')
 
     if (n == 0):
       self.t0 = float(value)
     elif (n == 1):
       self.t1 = float(value)
     else:
-      raise IndexError, 'list index out of range'
+      raise IndexError('list index out of range')
 
   def __repr__(self):
 

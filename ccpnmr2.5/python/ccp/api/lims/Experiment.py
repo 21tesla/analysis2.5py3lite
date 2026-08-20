@@ -62,7 +62,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -181,7 +181,7 @@ class Experiment(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.Experiment.__init__"
+        print("ERROR in ccp.lims.Experiment.Experiment.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -233,10 +233,10 @@ class Experiment(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5132,7 +5132,7 @@ class ExperimentGroup(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.ExperimentGroup.__init__"
+        print("ERROR in ccp.lims.Experiment.ExperimentGroup.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5178,10 +5178,10 @@ class ExperimentGroup(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6667,7 +6667,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.ExperimentStore.__init__"
+        print("ERROR in ccp.lims.Experiment.ExperimentStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6727,10 +6727,10 @@ class ExperimentStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7945,7 +7945,7 @@ one input sample in several experiments.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.InputSample.__init__"
+        print("ERROR in ccp.lims.Experiment.InputSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7991,10 +7991,10 @@ one input sample in several experiments.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9393,7 +9393,7 @@ Experiment.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.OutputSample.__init__"
+        print("ERROR in ccp.lims.Experiment.OutputSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9439,10 +9439,10 @@ Experiment.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10851,7 +10851,7 @@ class Parameter(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.Parameter.__init__"
+        print("ERROR in ccp.lims.Experiment.Parameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10897,10 +10897,10 @@ class Parameter(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12064,7 +12064,7 @@ class ImportSample(Experiment):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Experiment.ImportSample.__init__"
+        print("ERROR in ccp.lims.Experiment.ImportSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12116,10 +12116,10 @@ class ImportSample(Experiment):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

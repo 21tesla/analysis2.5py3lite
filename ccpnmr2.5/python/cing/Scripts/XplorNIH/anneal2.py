@@ -36,7 +36,7 @@ import protocol
 #pname = '1brv'
 pname = 'H2_2Ca'
 
-print "Starting cing.Scrips.XplorNIH/anneal2 on project: %s" % pname
+print("Starting cing.Scrips.XplorNIH/anneal2 on project: %s" % pname)
 # pylint: disable=E0601
 xplor = xplor #@UndefinedVariable
 xplor.requireVersion("2.24")
@@ -44,7 +44,7 @@ xplor.requireVersion("2.24")
 expectedInputFileList = ('%s.seq %s_dis.tbl %s_dis.tbl' % ( pname, pname, pname )).split()
 for fn in expectedInputFileList:
     if not os.path.exists(fn):
-        print "Failed to find input: %s" % fn
+        print("Failed to find input: %s" % fn)
         os._exit(1)
 #
 # slow cooling protocol in torsion angle space for protein G. Uses

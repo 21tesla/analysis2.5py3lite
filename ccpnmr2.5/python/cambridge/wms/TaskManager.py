@@ -114,10 +114,10 @@ class TaskManager(Thread):
 
             if self.active:
                 # first check the existing processes to see how they are doing
-                print 'checking slave processes', self._slaves
+                print('checking slave processes', self._slaves)
                 self._check_slaves()
 
-                print 'topping up slave array ', self._slaves
+                print('topping up slave array ', self._slaves)
                 # then use up any spare resources on new one
                 if (self.active and len(self._slaves) < self._MAX_SLAVE_TASKS):
                     self._allocate_slaves()
@@ -147,8 +147,8 @@ class TaskManager(Thread):
 
         for slave in self._slaves:
 
-            print 'checking slave ', slave
-            print 'DICT ', slave.__dict__
+            print('checking slave ', slave)
+            print('DICT ', slave.__dict__)
             
 
             if slave.isComplete:
@@ -177,7 +177,7 @@ class TaskManager(Thread):
         
     def _allocate_slaves(self):
 
-        print "allocating tasks ", time.time()
+        print("allocating tasks ", time.time())
 
         # get the tasks
 
@@ -208,8 +208,8 @@ class TaskManager(Thread):
         wsstr1 = WSString(response1._return)
         ss1 = wsstr1.getStruct()
 
-        print 'got raw array ', ss1
-        print 'setting up jobs ', self._slaves, ', ', self._MAX_SLAVE_TASKS
+        print('got raw array ', ss1)
+        print('setting up jobs ', self._slaves, ', ', self._MAX_SLAVE_TASKS)
 
         # FIXME
         # this is a HORRIBLE hack. We clearly need to track the repository for
@@ -218,20 +218,20 @@ class TaskManager(Thread):
         i = 0
         while len(self._slaves) < self._MAX_SLAVE_TASKS and i < len(ss1):
             
-            print 'calling ', ss1[i]['status'], ' on task ',  ss1[i]['serial'],'(', ss1[i]['type'], ')'
-            print 'monitoring length ', len(self._slaves)
+            print('calling ', ss1[i]['status'], ' on task ',  ss1[i]['serial'],'(', ss1[i]['type'], ')')
+            print('monitoring length ', len(self._slaves))
 
             # Constructor needs to depend on type
             slave = TestTask1Manager(int(ss1[i]['serial'].__str__()), ss1[i]['status'].__str__(), repository)
-            print 'created new slave process ', slave
+            print('created new slave process ', slave)
             slave.start()
             self._slaves.append(slave)
 
-            print 'monitoring final length ', len(self._slaves), ', ', len(ss1)
+            print('monitoring final length ', len(self._slaves), ', ', len(ss1))
             # finally, increment i 
             i += 1
 
-            print 'monitoring final contents ', self._slaves
+            print('monitoring final contents ', self._slaves)
 
 
     

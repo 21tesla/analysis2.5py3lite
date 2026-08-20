@@ -23,7 +23,7 @@ class AllChecks(TestCase):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         entryListFileName = "entry_list_todo.csv"
         entry_list_todo = [ 0,1,2,3,4,5,6,7,8,9 ]
@@ -48,7 +48,7 @@ class AllChecks(TestCase):
     def test_DoFunctionOnEntryList(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         entryListFileName = 'entryListFileName.csv'
         writeTextToFile(entryListFileName, '\n'.join('0.1 0.2'.split()))

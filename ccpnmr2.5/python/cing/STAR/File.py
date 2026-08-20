@@ -52,11 +52,11 @@ class File (Lister):
         if recursive:
             for datanode in self.datanodes:
                 if datanode.check_integrity(recursive = 1):
-                    print "ERROR: integrity check failed for Saveframe"
+                    print("ERROR: integrity check failed for Saveframe")
                     return 1
         if self.verbosity >= 9:
-            print 'Checked integrity of File    (%2s datanodes,  recurs.=%s)  : OK [%s]' % (
-                len(self.datanodes), recursive, self.title)
+            print('Checked integrity of File    (%2s datanodes,  recurs.=%s)  : OK [%s]' % (
+                len(self.datanodes), recursive, self.title))
 
     def star_text(self, flavor = None):
         "Returns the STAR text representation"
@@ -84,7 +84,7 @@ class File (Lister):
 #        print "DEBUG: Current directory", os.listdir(os.curdir)
         text = open(self.filename, 'r').read()
         if self.parse(text=text, nmrView_type = nmrView_type):
-            print "ERROR: couldn't parse file"
+            print("ERROR: couldn't parse file")
             return 1
 
         return 0
@@ -121,8 +121,8 @@ class File (Lister):
         ## TITLE
         match_data_tag = re.search(r'\s*data_(\S+)\s+', text, 0)
         if not match_data_tag:
-            print "ERROR: found no 'data_title' string in "
-            print "ERROR: file's text (first 100 chars):[%s] " % text[0:100]
+            print("ERROR: found no 'data_title' string in ")
+            print("ERROR: file's text (first 100 chars):[%s] " % text[0:100])
             return 1
         self.title = match_data_tag.group(1)
         pos = match_data_tag.end()
@@ -139,8 +139,8 @@ class File (Lister):
         ## Only break when parsed to the eof
         while pos < text_length:
             if self.verbosity >= 9:
-                print 'Parse text from position:%s : [%s]' % (
-                    pos, text[pos:pos+10])
+                print('Parse text from position:%s : [%s]' % (
+                    pos, text[pos:pos+10]))
 
             match_save_begin_nws = pattern_save_begin_nws.search(text, pos, pos+len('save_1'))
             if match_save_begin_nws:
@@ -165,30 +165,30 @@ class File (Lister):
             ## Just checking
             if not (next_sf_begin or next_sf_end or next_free_tt or next_loop_tt):
                 nTerror(' No new item found in data_nodes_parse.')
-                print 'Items looked for are a begin or end of a saveframe, or'
-                print 'a begin of a tagtable(free or looped).'
-                print
-                print "At text (before pos=" , pos , "):"
+                print('Items looked for are a begin or end of a saveframe, or')
+                print('a begin of a tagtable(free or looped).')
+                print()
+                print("At text (before pos=" , pos , "):")
                 start = pos-70
                 if start < 0:
                     start = 0
-                print "[" + text[start:pos] + "]"
-                print "At text (starting pos=" , pos , "):"
-                print "[" + text[pos:pos+70]+ "]"
+                print("[" + text[start:pos] + "]")
+                print("At text (starting pos=" , pos , "):")
+                print("[" + text[pos:pos+70]+ "]")
                 return None
 
             ## SAVE FRAME BEGIN
             if next_sf_begin:
                 if sf_open:
-                    print "ERROR: Found the beginning of a saveframe but"
-                    print "ERROR: saveframe before is still open(not closed;-)"
+                    print("ERROR: Found the beginning of a saveframe but")
+                    print("ERROR: saveframe before is still open(not closed;-)")
                     return None
                 match_save_begin = pattern_save_begin.search(text, pos)
                 if not match_save_begin:
-                    print "ERROR: Code error (no second match on sf begin)"
+                    print("ERROR: Code error (no second match on sf begin)")
                     return None
                 if match_save_begin.start() != pos:
-                    print "ERROR: Code error (wrong second match on sf begin)"
+                    print("ERROR: Code error (wrong second match on sf begin)")
                     return None
                 self.datanodes.append(SaveFrame(tagtables    = [])) # Need resetting ?
                 self.datanodes[-1].title = match_save_begin.group(1)
@@ -200,15 +200,15 @@ class File (Lister):
             ## SAVE FRAME END
             if next_sf_end:
                 if not sf_open:
-                    print "ERROR: Found the end of a saveframe but"
-                    print "ERROR: saveframe was not open"
+                    print("ERROR: Found the end of a saveframe but")
+                    print("ERROR: saveframe was not open")
                     return None
                 match_save_end = pattern_save_end.search(text, pos)
                 if not match_save_end:
-                    print "ERROR: Code error (no second match on sf end)"
+                    print("ERROR: Code error (no second match on sf end)")
                     return None
                 if match_save_end.start() != pos:
-                    print "ERROR: Code error (wrong second match on sf end)"
+                    print("ERROR: Code error (wrong second match on sf end)")
                     return None
                 sf_open     = None
                 next_sf_end = None
@@ -231,7 +231,7 @@ class File (Lister):
                     nTerror(' Code error, no second match on tagtable_loop')
                     return None
                 if match_tagtable_loop.start() != pos:
-                    print "ERROR: Code error (wrong second match on tagtable_loop)"
+                    print("ERROR: Code error (wrong second match on tagtable_loop)")
                     return None
                 pos = match_tagtable_loop.end()
 
@@ -249,17 +249,17 @@ class File (Lister):
             pos = tt.parse(text=text, pos=pos)
 
             if pos ==  None:
-                print "ERROR: In parsing tagtable"
+                print("ERROR: In parsing tagtable")
                 return None
             if self.verbosity >=9:
-                print 'Parsed tagtable up to pos: [%s]' % pos
+                print('Parsed tagtable up to pos: [%s]' % pos)
 
         if self.verbosity > 2:
-            print 'DEBUG Parsed: [%s] datanodes (top level count only)' % \
+            print('DEBUG Parsed: [%s] datanodes (top level count only)' % \)
                   len(self.datanodes)
 
         if self.check_integrity(recursive = 0):
-            print "ERROR: integrity not ok"
+            print("ERROR: integrity not ok")
             return 1
 
         # Save some memory
@@ -292,7 +292,7 @@ class File (Lister):
         for str in matchStrList:
             m = re.compile(str)
             if m is None:
-                print "ERROR: failed to compile pattern: ", str
+                print("ERROR: failed to compile pattern: ", str)
                 return 1
 #            print "Appended: ", str
             matchList.append( m )
@@ -348,7 +348,7 @@ class File (Lister):
         """
 
         if self.verbosity >= 9:
-            print "Attempting to reformat STAR file using external program if available"
+            print("Attempting to reformat STAR file using external program if available")
 
         if os.name != 'posix':
             nTwarning('No external program available on non-posix systems for reformatting STAR files')
@@ -368,7 +368,7 @@ class File (Lister):
         ##  be None.
         status = pipe.close()
         if self.verbosity >= 9:
-            print "Got status:", status
+            print("Got status:", status)
 
         ## Success
         if (status == None):
@@ -378,7 +378,7 @@ class File (Lister):
                 nTerror(' Could not open the file for writing %s' % self.filename)
                 return 1
             if self.verbosity >= 9:
-                print "Reformatted STAR file:", self.filename
+                print("Reformatted STAR file:", self.filename)
             return 0
         else:
             if self.verbosity :

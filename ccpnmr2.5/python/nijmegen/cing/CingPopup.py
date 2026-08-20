@@ -107,4 +107,4 @@ class CingPopup(BasePopup):
      
 if __name__ == '__main__':
 
-  print "Run testCingPopup() as a CcpNmr Analysis macro"
+  print("Run testCingPopup() as a CcpNmr Analysis macro")

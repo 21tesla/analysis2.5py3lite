@@ -34,7 +34,7 @@ class RDCRestraint(Restraint):
         self.__CLASS__ = RDC_LEVEL
 
         self.atomPairs = NTlist()
-        print self.atomPairs()
+        print(self.atomPairs())
 
     def appendPair(self, pair):
         """ pair is a (atom1,atom2) tuple

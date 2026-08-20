@@ -86,13 +86,13 @@ class AuremolCoordinateFile(AuremolFile):
     oldSegId = ''
 
     if verbose == 1:
-      print "Reading %s coordinate file %s" % (self.format,self.name)
+      print("Reading %s coordinate file %s" % (self.format,self.name))
 
     #
     # Read coordinates and other info
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -155,7 +155,7 @@ class AuremolCoordinateFile(AuremolFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 

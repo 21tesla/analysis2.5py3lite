@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 import string
 
@@ -437,7 +437,7 @@ class ProchiralStatusPopup(TemporaryBasePopup):
             else:
               stereoText = "stereospecific to non-stereospecific."
               
-            print "  Warning: Changed '%s.%d' prochiral resonances for atoms %s from %s" % (ccpCode,seqCode,atomText,stereoText)
+            print("  Warning: Changed '%s.%d' prochiral resonances for atoms %s from %s" % (ccpCode,seqCode,atomText,stereoText))
             self.chainResonancesDict[self.resParent][chain][i][1] = False
             self.chainResonancesDict[self.resParent][chain][i][2] = False
             
@@ -476,7 +476,7 @@ class ProchiralStatusPopup(TemporaryBasePopup):
               
               
           elif stereoStatus and resChanged:
-            print "  Warning: Changed resonance assignment for '%s.%d' stereospecifically assigned atoms %s." % (ccpCode,seqCode,atomText)
+            print("  Warning: Changed resonance assignment for '%s.%d' stereospecifically assigned atoms %s." % (ccpCode,seqCode,atomText))
             self.chainResonancesDict[self.resParent][chain][i][2] = False
             
             resonanceSets = []

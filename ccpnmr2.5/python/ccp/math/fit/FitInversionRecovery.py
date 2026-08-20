@@ -62,13 +62,13 @@ if __name__ == '__main__':
   noise = 0.03
   xs = [0.1*x for x in range(1,10)]
   ys = [fit.getValue(x, params) + noise*(2*random.random()-1) for x in xs]
-  print 'Ain = %.2f, Bin = %.2f' % params
-  print 'xs:', ','.join(['%.3f' % x for x in xs])
-  print 'ys:', ','.join(['%.3f' % y for y in ys])
+  print('Ain = %.2f, Bin = %.2f' % params)
+  print('xs:', ','.join(['%.3f' % x for x in xs]))
+  print('ys:', ','.join(['%.3f' % y for y in ys]))
 
   (params, chisq, ysFit) = fit.calcFit(xs, ys, noise=noise)
 
-  print 'ysFit:', ','.join(['%.3f' % y for y in ysFit])
-  print 'Afit = %.2f, Bfit = %.2f' % tuple(params)
-  print 'chisq = %.2f' % chisq
+  print('ysFit:', ','.join(['%.3f' % y for y in ysFit]))
+  print('Afit = %.2f, Bfit = %.2f' % tuple(params))
+  print('chisq = %.2f' % chisq)
 

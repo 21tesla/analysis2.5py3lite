@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -580,7 +580,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.LabeledMixture.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.LabeledMixture.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -626,10 +626,10 @@ class LabeledMixture(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2696,7 +2696,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.LabeledMolecule.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.LabeledMolecule.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2760,10 +2760,10 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4006,7 +4006,7 @@ class MolLabel(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.MolLabel.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.MolLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4052,10 +4052,10 @@ class MolLabel(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5453,7 +5453,7 @@ LabeledMixture (association class).
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.MolLabelFraction.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.MolLabelFraction.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5488,10 +5488,10 @@ LabeledMixture (association class).
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6191,7 +6191,7 @@ ResLabelFractions.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.ResLabel.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.ResLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6230,10 +6230,10 @@ ResLabelFractions.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -7199,7 +7199,7 @@ class ResLabelFraction(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.ResLabelFraction.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.ResLabelFraction.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -7242,10 +7242,10 @@ class ResLabelFraction(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8272,7 +8272,7 @@ residue, except those attached to any SingleAtomLabel object.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.UniformAtomLabel.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.UniformAtomLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8318,10 +8318,10 @@ residue, except those attached to any SingleAtomLabel object.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8949,7 +8949,7 @@ and ResLabelFraction records present for the same residue ID(s)
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.LabeledMolecule.SingleAtomLabel.__init__"
+        print("ERROR in ccp.molecule.LabeledMolecule.SingleAtomLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8995,10 +8995,10 @@ and ResLabelFraction records present for the same residue ID(s)
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

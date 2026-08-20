@@ -164,7 +164,7 @@ def getFullEntryNameListForTarget(target, programHoH):
     """
     targetList = programHoH.keys()
     targetList.sort()
-    print targetList
+    print(targetList)
     if target not in targetList:
         nTerror("Failed to find target %s in list %s" % (target, str(targetList)))
         return None
@@ -182,7 +182,7 @@ def getFullEntryNameListForTarget(target, programHoH):
 def printCingUrls(programHoH):
     targetList = programHoH.keys()
     targetList.sort()
-    print targetList
+    print(targetList)
     for target in targetList:
         mapByLab = programHoH[target]
         labList = mapByLab.keys()
@@ -195,8 +195,8 @@ def printCingUrls(programHoH):
                     continue
             entryCode = target + labId
             ch23 = entryCode[1:3]
-            print "http://nmr.cmbi.ru.nl/CASP-NMR-CING/data/%s/%s/%s.cing" % (
-                    ch23, entryCode, entryCode                )
+            print("http://nmr.cmbi.ru.nl/CASP-NMR-CING/data/%s/%s/%s.cing" % (
+                    ch23, entryCode, entryCode                ))
 
 predList = """
 TS001 TS002 TS014 TS018 TS026 TS028 TS037 TS039 TS047 TS055 TS056 TS063 TS077

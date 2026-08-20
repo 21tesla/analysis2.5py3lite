@@ -9,15 +9,15 @@ from pdbe.chemComp.modify.addSubstituent import addSubstituentToBaseUnit
 if __name__ == '__main__':
    
   if '-create' in sys.argv:
-    print "Warning: creating new sugar in edit/ directory!"
+    print("Warning: creating new sugar in edit/ directory!")
     testMode = False
   else:
-    print "Creating in test directory!"
+    print("Creating in test directory!")
     testMode = True
  
   
   if '-replace' in sys.argv:
-    print "Warning: replacing existing chemComps!"
+    print("Warning: replacing existing chemComps!")
     # TODO should really separate base and subst generation, seems to get mixed up...
     replace = True
   else:

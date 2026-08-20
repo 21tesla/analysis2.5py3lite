@@ -41,7 +41,7 @@ nTdebug("numBins: %s" % numBins)
 wiskLoL = boxplot(dataAll, positions=bins, widths=widths, sym='b+')
 #scatter(x, y, s=0.1) # Plot of the data and the fit
 xlim(xmin=dateMin, xmax=dateMax)
-print 'wiskLoL: %s' % wiskLoL
+print('wiskLoL: %s' % wiskLoL)
 #ylim(0,10)
 savefig('/Users/jd/tmp/cingTmp/boxplot.png')
 

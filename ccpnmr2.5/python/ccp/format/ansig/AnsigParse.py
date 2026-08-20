@@ -12,7 +12,7 @@ class AnsigParseException(Exception):
 def parseAnsigFile(fileName, callback, keywordDict,
                    directoryDict, canDefineDirectory=False):
 
-  fp = open(fileName, 'rU')
+  fp = open(fileName)
   lines = fp.readlines()
   fp.close()
 
@@ -140,8 +140,8 @@ def parseAnsigFile(fileName, callback, keywordDict,
       if not remValues:
         contentIndex += 1
 
-  except AnsigParseException, e:
-    raise IOError('In file "%s", line number %d: %s:\n  %s' % (fileName, lineNumber, str(e), line))
+  except AnsigParseException as e:
+    raise OSError('In file "%s", line number %d: %s:\n  %s' % (fileName, lineNumber, str(e), line))
 
 def substituteDirectory(values, directoryDict):
 
@@ -165,12 +165,12 @@ def convertTypes(values, types):
     if typ == ANSIG_INT:
       try:
         value = int(value.strip())
-      except ValueError, e:
+      except ValueError as e:
         raise AnsigParseException('value "%s" not an integer' % value)
     elif typ == ANSIG_FLOAT:
       try:
         value = float(value.strip())
-      except ValueError, e:
+      except ValueError as e:
         raise AnsigParseException('value "%s" not a real' % value)
     newvalues.append(value)
 
@@ -189,7 +189,7 @@ if __name__ == '__main__':
   import sys
 
   if len(sys.argv) != 2:
-    print 'need argument: ansig ctr file'
+    print('need argument: ansig ctr file')
     sys.exit()
 
   fileName = sys.argv[1]
@@ -199,7 +199,7 @@ if __name__ == '__main__':
   directoryDict = {}
 
   def callback(key, values, comment):
-    print 'callback: key = %s: values = %s: comment = %s' % (key, values, comment)
+    print('callback: key = %s: values = %s: comment = %s' % (key, values, comment))
     if key == 'control':
       controlKeywords = ('help_dir', 'html_viewer', 'dictionary', 'gr_translate', 'sequence',
               'spectra', 'crosspeaks', 'backup', 'initialize', 'exit', 'binaryformat', 'font')

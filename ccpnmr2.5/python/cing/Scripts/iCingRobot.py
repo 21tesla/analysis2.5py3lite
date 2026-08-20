@@ -5,7 +5,7 @@
 from cing import cingDirTestsData
 from cing.Libs.NTutils import * #@UnusedWildImport
 import mimetools
-import urllib2
+import urllib.request
 
 FORM_ACCESS_KEY = "AccessKey"
 FORM_USER_ID = "UserId"
@@ -63,7 +63,7 @@ def sendRequest(url, fields, files):
                   'Content-Length': str(len(bodyData))
                   }
 
-    request = urllib2.Request(url, bodyData, headerDict)
+    request = urllib.request.Request(url, bodyData, headerDict)
     response = urlOpen(request)
 
     if not response:
@@ -82,10 +82,10 @@ def sendRequest(url, fields, files):
 
 def urlOpen(request):
     try:
-        response = urllib2.urlopen(request)
-    except urllib2.URLError, e:
+        response = urllib.request.urlopen(request)
+    except urllib.request.URLError as e:
         if hasattr(e, 'reason'):
-            if isinstance(request, urllib2.Request):
+            if isinstance(request, urllib.request.Request):
                 url = request.get_full_url()
             else:
                 url = request
@@ -118,7 +118,7 @@ def _processResponse(text):
             key , value = data
             dataDict[key] = value
         else:
-            print "Trouble",  pair
+            print("Trouble",  pair)
     return dataDict
 
 #########################################################################################
@@ -220,12 +220,12 @@ def iCingRobot():
         if not result:
             nTerror("Failed to save file to server")
         else:
-            print "result of save request: %s" % result
+            print("result of save request: %s" % result)
             urls = getResultUrls(credentials, entryId, DEFAULT_URL)
-            print "Base URL", urls[0]
-            print "Results URL:", urls[1]
-            print "Log URL:", urls[2]
-            print "Zip URL:", urls[3]
+            print("Base URL", urls[0])
+            print("Results URL:", urls[1])
+            print("Log URL:", urls[2])
+            print("Zip URL:", urls[3])
 
 
 ##############################################################################################################
@@ -233,23 +233,23 @@ def iCingRobot():
 
     if doRun:
         data = credentials + [(FORM_ACTION,FORM_ACTION_RUN),]
-        print  sendRequest(rpcUrl, data, files)
+        print(sendRequest(rpcUrl, data, files))
 
     if doStatus:
         data = credentials + [(FORM_ACTION,FORM_ACTION_STATUS),]
-        print  sendRequest(rpcUrl, data, files)
+        print(sendRequest(rpcUrl, data, files))
 
     if doLog:
         data = credentials + [(FORM_ACTION,FORM_ACTION_LOG),]
-        print  sendRequest(rpcUrl, data, files)
+        print(sendRequest(rpcUrl, data, files))
 
     if doPname:
         data = credentials + [(FORM_ACTION,FORM_ACTION_PROJECT_NAME),]
-        print  sendRequest(rpcUrl, data, files)
+        print(sendRequest(rpcUrl, data, files))
 
     if doPurge:
         data = credentials + [(FORM_ACTION,FORM_ACTION_PURGE),]
-        print  sendRequest(rpcUrl, data, files)
+        print(sendRequest(rpcUrl, data, files))
 
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug

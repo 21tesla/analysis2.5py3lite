@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
   def printVec(msg, v):
     s = ', '.join(['%.3f' % w for w in v])
-    print '%s: %s' % (msg, s)
+    print('%s: %s' % (msg, s))
 
   a = 1.4
   b = 2.3
@@ -100,5 +100,5 @@ if __name__ == '__main__':
   (params, chisq, ysFit) = linearFit(xs, ys)
   printVec('params', params)
   printVec('ysFit', ysFit)
-  print 'chisq = %.3f' % chisq
+  print('chisq = %.3f' % chisq)
 

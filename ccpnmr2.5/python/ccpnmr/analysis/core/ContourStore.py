@@ -65,9 +65,9 @@ def saveViewContours(view, fileName, levels, firstInt, lastInt, isBigEndian = No
 
   try:
     saveContours(spectrum, view.contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
-  except ContourFile.error, e:
+  except ContourFile.error as e:
     raise Exception(str(e))
-  except StoreHandler.error, e:
+  except StoreHandler.error as e:
     raise Exception(str(e))
 
 # saveSpectrumContours for use when you want to contour specified region
@@ -96,9 +96,9 @@ def saveSpectrumContours(spectrum, fileName, xdim, ydim, levels,
     contourFile = ContourFile.ContourFile(xdim-1, ydim-1, block_file, mem_cache)
 
     saveContours(spectrum, contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
-  except ContourFile.error, e:
+  except ContourFile.error as e:
     raise Exception(str(e))
-  except StoreHandler.error, e:
+  except StoreHandler.error as e:
     raise Exception(str(e))
 
 # saveContours internal, called by both saveViewContours and saveSpectrumContours
@@ -179,12 +179,12 @@ def createStoredContour(spectrum, fileName, xdim, ydim):
 
   analysisSpectrum = spectrum.analysisSpectrum
   if not analysisSpectrum:
-    print 'Warning: analysisSpectrum not set for', spectrum
+    print('Warning: analysisSpectrum not set for', spectrum)
     return
 
   contourDir = analysisSpectrum.contourDir
   if not contourDir:
-    print 'Warning: contourDir not set for', analysisSpectrum
+    print('Warning: contourDir not set for', analysisSpectrum)
     return
 
   path = contourDir.dataLocation

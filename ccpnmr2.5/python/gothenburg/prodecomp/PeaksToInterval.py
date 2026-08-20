@@ -22,16 +22,16 @@ def ccpnPeaksToInterval(peakList, iHalfRange=2.5, shiftScale=10, peakShapeModel=
   spectrum = peakList.dataSource
   
   if spectrum.numDim != 2:
-    print 'ccpnPeaksToInterval failed'
-    print 'Input peak list was not from a 2-D experiment'
+    print('ccpnPeaksToInterval failed')
+    print('Input peak list was not from a 2-D experiment')
     return []
   
   dataDims = spectrum.sortedDataDims()
   expDimRefs = [dd.expDim.findFirstExpDimRef() for dd in dataDims]
   
   if None in expDimRefs:
-    print 'ccpnPeaksToInterval failed'
-    print "Input peak list's experiment is missing dimension references"
+    print('ccpnPeaksToInterval failed')
+    print("Input peak list's experiment is missing dimension references")
     return []
     
 
@@ -42,8 +42,8 @@ def ccpnPeaksToInterval(peakList, iHalfRange=2.5, shiftScale=10, peakShapeModel=
     hDim = 1
     nDim = 0
   else:
-    print 'ccpnPeaksToInterval failed'
-    print 'Input peak list had no acquisition dimension'
+    print('ccpnPeaksToInterval failed')
+    print('Input peak list had no acquisition dimension')
     return []
 
   # MB set manually !

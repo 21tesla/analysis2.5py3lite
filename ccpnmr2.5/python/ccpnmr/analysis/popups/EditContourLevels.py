@@ -608,7 +608,7 @@ class EditContourLevelsPopup(BasePopup):
       analysisSpectrum.posLevels = posLevels
       analysisSpectrum.negLevels = negLevels
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Contour levels error', e.error_msg,  parent=self)
 
   def applyManual(self, *extra):
@@ -626,7 +626,7 @@ class EditContourLevelsPopup(BasePopup):
       analysisSpectrum.posLevels = posLevels
       analysisSpectrum.negLevels = negLevels
       
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Apply error', e.error_msg,  parent=self)
 
   def applyAuto(self, *extra):
@@ -662,5 +662,5 @@ class EditContourLevelsPopup(BasePopup):
       
       self.setContourLevels()
       self.doUpdateForm = True
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Levels error', e.error_msg,  parent=self)

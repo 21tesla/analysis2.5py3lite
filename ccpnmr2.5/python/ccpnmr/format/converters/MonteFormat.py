@@ -89,7 +89,7 @@ class MonteFormat(DataFormat):
     #
   
     if self.verbose == 1:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.MonteProjectFile(fileName)
     self.file.read(verbose = verbose)

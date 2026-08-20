@@ -108,9 +108,9 @@ class PippPeakFile(PippGenericFile):
     dimTranslate = []
 
     if verbose == 1:
-      print "Reading %s peak list %s" % (self.format,self.name)
+      print("Reading %s peak list %s" % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for lines starting with DATA, FORMAT and VARS
     line = fin.readline()
@@ -212,7 +212,7 @@ class PippPeakFile(PippGenericFile):
               colIndex += 1
 
           if len(cols) != defColsLen:
-            print "  Warning: ignoring following line in %s peak file (columns don't match):\n%s" % (self.format,line)
+            print("  Warning: ignoring following line in %s peak file (columns don't match):\n%s" % (self.format,line))
             pass
 
           else:
@@ -287,7 +287,7 @@ class PippPeakFile(PippGenericFile):
       if prefPpmInd[0] not in self.finalMapping:
         self.finalMapping.append(prefPpmInd[0])
       else:
-        print "  Error: mapping for assignment could not be determined!"
+        print("  Error: mapping for assignment could not be determined!")
         self.finalMapping = None
     
     #
@@ -364,4 +364,4 @@ if __name__ == "__main__":
     peakFile.read(verbose = 1)
     
     for rawPeak in peakFile.peaks:
-      print rawPeak.num, rawPeak.assign, rawPeak.intensity
+      print(rawPeak.num, rawPeak.assign, rawPeak.intensity)

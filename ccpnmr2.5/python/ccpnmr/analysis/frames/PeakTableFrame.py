@@ -433,7 +433,7 @@ class PeakTableFrame(Frame):
     if self.peak and location:
       try:
         index = self.scrolledMatrix.currentObjects.index(self.peak)
-      except ValueError, e:
+      except ValueError as e:
         # this happens if self.peak is not on list
         # that should not be the case but sometimes is
         return

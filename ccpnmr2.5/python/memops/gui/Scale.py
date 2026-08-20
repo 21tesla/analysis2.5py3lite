@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Color import getIntRgb
@@ -141,7 +141,7 @@ if (__name__ == '__main__'):
   root = Tkinter.Tk()
  
   def func(args):
-    print args
+    print(args)
  
   scale = Scale(root, orient=Tkinter.HORIZONTAL, value=50.0,
                 from_=1.0, to=99, oddNumbers=True, command=func,

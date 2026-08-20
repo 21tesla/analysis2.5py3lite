@@ -328,7 +328,7 @@ def chmod(path,mods):
         try:
             os.chmod(path,mods)
         except:
-            print "Could not change permissions for ",path
+            print("Could not change permissions for ",path)
 
 # DELETE AN ENTIRE DIRECTORY INCLUDING ALL THE FILES
 # ==================================================
@@ -393,7 +393,7 @@ def updatedir(srcpath,dstdir,contentchecked=1,recursive=0,obsoleted=0,mod=None,e
 # ZIP A FILE
 # ==========
 def zip(filename):
-    print "Deflating",filename
+    print("Deflating",filename)
     zipfilename=filename+".zip"
     zip=zipfile.ZipFile(zipfilename,"w",zipfile.ZIP_DEFLATED)
     zip.write(filename,os.path.basename(filename))
@@ -527,7 +527,7 @@ class Tailer(object):
         self.seek_end()
         end_pos = self.file.tell()
 
-        for _i in xrange(lines):
+        for _i in range(lines):
             if not self.seek_line():
                 break
 
@@ -543,7 +543,7 @@ class Tailer(object):
         """
         self.seek(0)
 
-        for _i in xrange(lines):
+        for _i in range(lines):
             if not self.seek_line_forward():
                 break
 
@@ -654,21 +654,21 @@ def _main(filepath, options):
             if options.lines > 0:
                 if options.head:
                     if options.follow:
-                        print >>sys.stderr, 'Cannot follow from top of file.'
+                        print(>>sys.stderr, 'Cannot follow from top of file.')
                         sys.exit(1)
                     lines = tailer.head(options.lines)
                 else:
                     lines = tailer.tail(options.lines)
 
                 for line in lines:
-                    print line
+                    print(line)
             elif options.follow:
                 # Seek to the end so we can follow
                 tailer.seek_end()
 
             if options.follow:
                 for line in tailer.follow(delay=options.sleep):
-                    print line
+                    print(line)
         except KeyboardInterrupt:
             # Escape silently
             pass
@@ -724,7 +724,7 @@ def mkdirs(dst):
 
     try:
         os.mkdir(dst, 0777)
-    except OSError, e:
+    except OSError as e:
         # be happy if someone already created the path
         if e.errno != EEXIST:
             raise
@@ -732,7 +732,7 @@ def mkdirs(dst):
 def removeEmptyFiles( theDir ):
     for fn in glob(theDir):
         if os.path.getsize(fn) == 0:
-            print "Removing empty file."
+            print("Removing empty file.")
             os.unlink(fn)
 
 def getNewestFileFromList( fnList ):
@@ -742,13 +742,13 @@ def getNewestFileFromList( fnList ):
     """
     # thanks to http://www.daniweb.com/code/snippet216688.html for the example.
     if not fnList:
-        print "WARNING: In getNewestFileFromList got no valid input: %s" % fnList
+        print("WARNING: In getNewestFileFromList got no valid input: %s" % fnList)
         return False
 
     date_file_list = []
     for fileName in fnList:
         if not os.path.exists(fileName):
-            print "WARNING: Skipping missing fileName %s" % fileName
+            print("WARNING: Skipping missing fileName %s" % fileName)
             continue
         # retrieves the stats for the current fileName as a tuple
         # (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime)

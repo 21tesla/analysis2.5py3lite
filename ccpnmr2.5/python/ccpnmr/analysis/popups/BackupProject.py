@@ -41,7 +41,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import Url
 
@@ -117,8 +117,8 @@ class BackupProjectPopup(BasePopup):
     tipText = 'Enter the name of the directory into which project backups will be made' 
     self.dir_entry = Entry(guiFrame, text=text, tipText=tipText,
                            width=40, returnCallback=self.applyAuto,
-			   grid=(row, 1), gridSpan=(1,2), sticky='ew')
-			   
+               grid=(row, 1), gridSpan=(1,2), sticky='ew')
+               
     row += 1
     label = Label(guiFrame, text='Auto-backup:', grid=(row, 0))
     if self.analysisProject.doAutoBackup:
@@ -130,7 +130,7 @@ class BackupProjectPopup(BasePopup):
                 'Toggle the timed automatic backup off']  
     self.on_off_buttons = RadioButtons(guiFrame, entries=self.on_off_entries,
                                        tipTexts=tipTexts, select_callback=self.applyAuto,
-				        selected_index=ind, grid=(row,1))
+                        selected_index=ind, grid=(row,1))
  
     row +=1
     tipText = 'The number of minutes to wait before automatic project backups'

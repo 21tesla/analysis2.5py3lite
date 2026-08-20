@@ -73,7 +73,7 @@ class NmrStarHandler:
   
   def setBmrbNmrStarMapping(self,bmrbNmrStarFile):
   
-    print "# Matching NMR-STAR file to molSystem... "
+    print("# Matching NMR-STAR file to molSystem... ")
       
     #
     # Get started with the import...
@@ -122,7 +122,7 @@ class NmrStarHandler:
             if not sequenceInfo[molCode].has_key(seqCode):
               sequenceInfo[molCode][seqCode] = resLabel
             elif sequenceInfo[molCode][seqCode] != resLabel:
-              print "  ERROR: mismatch in resLabel for molCode %s, seqCode %d (is %s and %s)! Check this!!" % (molCode,seqCode,resLabel,sequenceInfo[molCode][seqCode])
+              print("  ERROR: mismatch in resLabel for molCode %s, seqCode %d (is %s and %s)! Check this!!" % (molCode,seqCode,resLabel,sequenceInfo[molCode][seqCode]))
 
     resLabelList = {}
 
@@ -142,7 +142,7 @@ class NmrStarHandler:
             resLabel = sequenceInfo[molCode][seqCode]
             if resLabel and len(resLabel) > 3:
               resLabel = resLabel[:3]
-              print "  Warning: truncating BMRB code '%s' to '%s'!" % (sequenceInfo[molCode][seqCode],resLabel)
+              print("  Warning: truncating BMRB code '%s' to '%s'!" % (sequenceInfo[molCode][seqCode],resLabel))
 
           resLabelList[molCode].append((resLabel,seqCode))
 
@@ -150,7 +150,7 @@ class NmrStarHandler:
         del(resLabelList[molCode])
 
     if not resLabelList:
-      print "\n*** No residue label list created for NMR-STAR file, no mapping possible ***\n" 
+      print("\n*** No residue label list created for NMR-STAR file, no mapping possible ***\n")
       return
     
     #
@@ -231,9 +231,9 @@ class NmrStarHandler:
           
             if mismatchedResidues:
               self.presets['linkResonances']['keywds']['ignoreResidues'] = mismatchedResidues
-              print "\n*** Ignoring %d residues that do not match between PDB and BMRB files ***\n" % len(mismatchedResidues)
+              print("\n*** Ignoring %d residues that do not match between PDB and BMRB files ***\n" % len(mismatchedResidues))
               
-          print "  Exiting mapping..."
+          print("  Exiting mapping...")
           return True
 
     else:
@@ -292,7 +292,7 @@ class NmrStarHandler:
           seqOffset += addOffset
           forceChainMappings.append((pdbChainCode,bmrbChainCode,resIndex,seqOffset))
               
-      print "\n*** Chain mappings set by alignment information ***\n"
+      print("\n*** Chain mappings set by alignment information ***\n")
 
     #
     # If no mappings given, try to find a match
@@ -424,14 +424,14 @@ class NmrStarHandler:
         
     
       self.presets['linkResonances']['keywds']['forceChainMappings'] = forceChainMappings
-      print "\n*** Setting chain mapping automatically to: %s ***\n" % str(forceChainMappings)
+      print("\n*** Setting chain mapping automatically to: %s ***\n" % str(forceChainMappings))
 
       if noMatches:
       
         residueList = []
         
         for (chainCode,molCode) in noMatches.keys():
-          print "      WARNING: Mismatches in sequence mapping between CCPN chain '%s' and BMRB chain '%s':" % (chainCode,molCode)
+          print("      WARNING: Mismatches in sequence mapping between CCPN chain '%s' and BMRB chain '%s':" % (chainCode,molCode))
 
           for (residue,resLabelInfo) in noMatches[(chainCode,molCode)]:
             if residue:
@@ -440,22 +440,22 @@ class NmrStarHandler:
             else:
               residueInfo = "None"
 
-            print "          - %s  <-> %d.%s" % (residueInfo,resLabelInfo[1],resLabelInfo[0].capitalize())
+            print("          - %s  <-> %d.%s" % (residueInfo,resLabelInfo[1],resLabelInfo[0].capitalize()))
 
-          print
-        print
+          print()
+        print()
         
         # Also ignore residues that do not match.
         if residueList:
           self.presets['linkResonances']['keywds']['ignoreResidues'] = residueList
-          print "\n*** Ignoring residues that do not match between PDB and BMRB files ***\n"
+          print("\n*** Ignoring residues that do not match between PDB and BMRB files ***\n")
 
       returnValue = True
 
     else:
-      print "\n*** Automatic chain mapping did not work ***\n"
-      print "DEBUG INFO:"
-      print resLabelList
+      print("\n*** Automatic chain mapping did not work ***\n")
+      print("DEBUG INFO:")
+      print(resLabelList)
       
       returnValue = False
       

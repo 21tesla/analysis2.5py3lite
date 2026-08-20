@@ -96,7 +96,7 @@ class AmberFormat(DataFormat):
       self.constraintFile.read(coordFile=self.coordFile,verbose=self.verbose)
 
       if self.verbose:
-        print "Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
 
     except:
 

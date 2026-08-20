@@ -135,7 +135,7 @@ def importFullStarProjects(starFileName, projectName, inputDir='.', outputDir='.
 
 
 def importStarChemicalShifts(ccpnProject, inputDir, guiRoot, allowPopups=1, minimalPrompts=0, verbose=1, **presets):
-    print "JFD: now in importStarChemicalShifts"
+    print("JFD: now in importStarChemicalShifts")
 
 
 #    formatCns = CnsFormat(ccpnProject, guiRoot, verbose=verbose, minimalPrompts=minimalPrompts, allowPopups=allowPopups, **presets)
@@ -158,7 +158,7 @@ def importStarChemicalShifts(ccpnProject, inputDir, guiRoot, allowPopups=1, mini
         ccpnShiftListOfList.append(shiftList)
         # Find and print this shiftList in the CCPN data model. Just to check lookup.
         shiftList = ccpnProject.currentNmrProject.findFirstMeasurementList(className = 'ShiftList')
-        print 'ShiftList: [%s]' % shiftList
+        print('ShiftList: [%s]' % shiftList)
 
 
     keywds = getDeepByKeysOrDefault(presets, {}, READ_SHIFTS, KEYWORDS)

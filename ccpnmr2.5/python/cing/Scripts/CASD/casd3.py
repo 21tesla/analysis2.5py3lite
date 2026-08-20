@@ -245,7 +245,7 @@ class Entry( NTdict ):
     def readProject(self):
         path = self.path()
         if not path.exists():
-            print 'Error Entry.readProject: file %s does not exist' % path
+            print('Error Entry.readProject: file %s does not exist' % path)
             return None
         nTmessage( '==> reading project from %s', path )
         self.project = cing.Project.open(path,'old')
@@ -255,7 +255,7 @@ class Entry( NTdict ):
     def readSummary(self, fix=False):
         path = self.path(self.entryName, 'Cing', 'CingSummaryDict.xml')
         if not path.exists():
-            print 'Error Entry.readSummary: file %s does not exist' % path
+            print('Error Entry.readSummary: file %s does not exist' % path)
             return None
         nTmessage( '==> reading summary from %s', path )
         self.cingSummary = xML2obj(path)
@@ -263,7 +263,7 @@ class Entry( NTdict ):
         if fix:
             rog = NTlist( 0, 0, 0 ) # Counts for red, orange, green.
             for resname, rogScore in self.cingSummary.CING_residueROG:
-                print resname, rogScore
+                print(resname, rogScore)
                 if rogScore.isRed():
                     rog[0] += 1
                 elif rogScore.isOrange():
@@ -272,7 +272,7 @@ class Entry( NTdict ):
                     rog[2] += 1
             #end for
             total = reduce(lambda x, y: x+y+0.0, rog) # total expressed as a float because of 0.0
-            print rog, total
+            print(rog, total)
             for i, _x in enumerate(rog): 
                 rog[i] = rog[i]*100.0/total
             self.cingSummary.cing_red    = round(rog[0],1)
@@ -431,7 +431,7 @@ class ResultsList(NTlist):
         tmp = []
         for entry in self:
             tmp.append(entry)
-        print '==> Saving %d entries to %s' % (len(tmp), path)
+        print('==> Saving %d entries to %s' % (len(tmp), path))
         obj2XML(tmp, path=path)
     #end def
     
@@ -472,15 +472,15 @@ methods:    %s
     #end def
     
     def printAll(self, target=None):
-        print self.format()
+        print(self.format())
         if target == None:
             targets = self.targets
         else:
             targets = [target]
         for t in targets:
-            print "===============", t, "==============="
+            print("===============", t, "===============")
             for entry in self.byTarget[t]:
-                print entry.format()
+                print(entry.format())
     #end def
     
     def calculatePairWiseRmsd( self, entry1, entry2, ranges ):
@@ -574,11 +574,11 @@ methods:    %s
         if e1.project == None:
             e1.readProject()
         ranges = e1.project.molecule.rangesByCv()
-        print '%s: %s' % (e1, ranges)
+        print('%s: %s' % (e1, ranges))
         
         for e in self.byTarget[target][1:]:
             mol,res,atms = getFitted(e,ranges)
-            print  '%s: %d-%d' % (e, atms[0].residue.resNum, atms[-1].residue.resNum)
+            print('%s: %d-%d' % (e, atms[0].residue.resNum, atms[-1].residue.resNum))
     #end def
     
     def getValues(self, target, par):
@@ -637,7 +637,7 @@ methods:    %s
             
             _tmp,e1.rmsd,entry.rmsd,entry.rmsdToTarget = self.calculatePairWiseRmsd(e1, entry, e1.ranges)
         #endif
-        print '==> %s rmsdToTarget: %s ranges: %s' % (entry, entry.rmsdToTarget, entry.ranges)
+        print('==> %s rmsdToTarget: %s ranges: %s' % (entry, entry.rmsdToTarget, entry.ranges))
         return False
     #end def
 #end class
@@ -705,7 +705,7 @@ header = """
 #======================================================================================================
 """ % (cingVersion)
 
-print header
+print(header)
 
 init = False
 if init:
@@ -713,10 +713,10 @@ if init:
     results.readCingSummaries()
     results.save()
 else:
-    print '==> Restoring results'
+    print('==> Restoring results')
     results = ResultsList.restore()
 
-print results.format()
+print(results.format())
 
 t=-1
 if t>=0:

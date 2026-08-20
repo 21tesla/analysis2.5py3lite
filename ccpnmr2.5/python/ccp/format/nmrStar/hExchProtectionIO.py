@@ -200,4 +200,4 @@ if __name__ == "__main__":
 
     for hExchProtectionFile in nmrStarFile.hExchProtectionFiles:
       for hExchProtection in hExchProtectionFile.hExchProtectionValues:
-        print hExchProtection.Id, hExchProtection.seqCode, hExchProtection.resLabel, hExchProtection.atomName, hExchProtection.value, hExchProtection.valueError
+        print(hExchProtection.Id, hExchProtection.seqCode, hExchProtection.resLabel, hExchProtection.atomName, hExchProtection.value, hExchProtection.valueError)

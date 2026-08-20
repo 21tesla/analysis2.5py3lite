@@ -78,7 +78,7 @@ def tesMars(argServer):
   chain = p.findFirstMolSystem().findFirstChain()
   shiftList = p.currentNmrProject.findFirstMeasurementList(className='ShiftList', serial=2)
 
-  print runMars(shiftList, chain)
+  print(runMars(shiftList, chain))
   
 def runMars(shiftList, chain, fragSize=5,
             cutoffCO=0.25, cutoffCA=0.2,
@@ -94,11 +94,11 @@ def runMars(shiftList, chain, fragSize=5,
 
   
   if not shiftList:
-    print 'MARS cannot run - no shift list selected'
+    print('MARS cannot run - no shift list selected')
     return
     
   if not chain:
-    print 'MARS cannot run - no chain selected'
+    print('MARS cannot run - no chain selected')
     return
     
   marsDir, configFile = writeMarsInput(shiftList, chain, fragSize,
@@ -283,7 +283,7 @@ def writeMarsInput(shiftList, chain, fragSize=5, cutoffCO=0.25, cutoffCA=0.2,
                  if x not in prevSpinSystems]
     if prevInSeq:
       if len(prevInSeq) > 1:
-        print 'WARNING, spin system %s has more than one i-1 pseudo-neighbour'
+        print('WARNING, spin system %s has more than one i-1 pseudo-neighbour')
       prevSpinSystem = prevInSeq[0]
     
       for resonance in prevSpinSystem.resonances:
@@ -361,7 +361,7 @@ def writeMarsInput(shiftList, chain, fragSize=5, cutoffCO=0.25, cutoffCA=0.2,
                  if x in prevSpinSystems]
       if prevInSeq:
         if len(prevInSeq) > 1:
-          print 'WARNING, spin system %s has more than one i-1 pseudo-neighbour'
+          print('WARNING, spin system %s has more than one i-1 pseudo-neighbour')
         prevSpinSystem = prevInSeq[0]
       
         line = '%d\t%d\n' % (spinSystem.serial, prevSpinSystem.serial)

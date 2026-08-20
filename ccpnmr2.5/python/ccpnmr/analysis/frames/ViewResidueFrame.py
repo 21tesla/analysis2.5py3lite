@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter, math
+import tkinter, math
 
 from memops.gui.CheckButton          import CheckButton
 from memops.gui.Frame                import Frame

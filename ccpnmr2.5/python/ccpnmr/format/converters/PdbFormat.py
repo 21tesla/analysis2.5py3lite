@@ -128,7 +128,7 @@ class PdbFormat(DataFormat):
     self.peopleAndCitationsFile.read()
 
     if self.verbose == 1:
-      print "Reading people and citation info from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading people and citation info from %s file %s" % (self.formatLabel,self.fileName))
 
   #
   # Code different from DataFormat
@@ -140,7 +140,7 @@ class PdbFormat(DataFormat):
     self.headerFile.readHeader()
 
     if self.verbose == 1:
-      print "Reading header info from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading header info from %s file %s" % (self.formatLabel,self.fileName))
 
   def forceNonEmptyChainCode(self):
     

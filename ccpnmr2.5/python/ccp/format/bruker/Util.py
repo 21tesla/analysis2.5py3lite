@@ -77,32 +77,32 @@ def testNameParsing(dirPath):
     #print fname, dd['matches'], dd['names'], dd['unused']
   
   # print result
-  print '\nSKIPPED:'
+  print('\nSKIPPED:')
   for dd in skipped:
-    print '    - ', dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused') 
+    print('    - ', dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused'))
 
-  print '\nNO MATCH:'
+  print('\nNO MATCH:')
   for dd in notmatched:
-    print '    - ', dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused') 
+    print('    - ', dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused'))
 
   unused = []
   for xmap in parseInfo['expNameMaps']:
     ll = matchByMap[id(xmap)]
     prototypes = [(x.get('name'), x.get('isReversed')) for x in xmap['expPrototypes']]
     if ll:
-      print '\nMATCH:', xmap.get('namesStartWith'), xmap.get('hasnames'), xmap.get('hasprefixes')
-      print '      ', prototypes
+      print('\nMATCH:', xmap.get('namesStartWith'), xmap.get('hasnames'), xmap.get('hasprefixes'))
+      print('      ', prototypes)
       for dd in ll:
         if dd.get('unused'):
           ss = ' NB - '
         else:
           ss = '    - '
           
-        print ss, dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused')
+        print(ss, dd['fname'], dd.get('usenames'), dd.get('prefixes'), dd.get('unused'))
           
   for xmap in unused:
-    print '\nUNUSED', xmap.get('namesStartWith'), xmap.get('hasnames'), xmap.get('hasprefixes') 
-    print '      ', [(x.get('name'), x.get('isReversed')) for x in xmap['expPrototypes']]
+    print('\nUNUSED', xmap.get('namesStartWith'), xmap.get('hasnames'), xmap.get('hasprefixes'))
+    print('      ', [(x.get('name'), x.get('isReversed')) for x in xmap['expPrototypes']])
 
   
 def matchName(fname, useInfo, specialCases):
@@ -316,8 +316,8 @@ class ParseBrukerExpNames:
   
     getAminoAcids = False
 
-    print "%s:" % brukerExpName
-    print
+    print("%s:" % brukerExpName)
+    print()
 
     #
     # First get main components, by largest string first
@@ -334,7 +334,7 @@ class ParseBrukerExpNames:
         stdExpNameSearch = stdExpName
 
       if getattr(brukerExpName,funcName)(stdExpNameSearch):
-        print "  Main component: %s (%s)" % (stdExpNameSearch,self.stdExpNameDict[stdExpName])
+        print("  Main component: %s (%s)" % (stdExpNameSearch,self.stdExpNameDict[stdExpName]))
         brukerExpName = brukerExpName.replace(stdExpNameSearch,'*' * len(stdExpNameSearch))
         hasMainComponent = True
         
@@ -342,7 +342,7 @@ class ParseBrukerExpNames:
           getAminoAcids = True
     
     if not hasMainComponent:
-      print "  MAIN COMPONENT MISSING!"
+      print("  MAIN COMPONENT MISSING!")
           
     #
     # Get amino acids, if necessary. Assume these are between _, first _xxx_ block is amino acid one.
@@ -354,12 +354,12 @@ class ParseBrukerExpNames:
 
       for code3Letter in code1LetterToCcpCodeDict['protein'].values() + ['Trpe']:
         if aaNameComp.count(code3Letter.upper()):
-          print "    Bruker info: targeted at %s amino acid." % code3Letter
+          print("    Bruker info: targeted at %s amino acid." % code3Letter)
           aaNameComp = aaNameComp.replace(code3Letter.upper(),'*' * len(code3Letter))
 
       for code1Letter in code1LetterToCcpCodeDict['protein'].keys():
         if aaNameComp.count(code1Letter.upper()):
-          print "    Bruker info: targeted at %s amino acid." % code1LetterToCcpCodeDict['protein'][code1Letter]
+          print("    Bruker info: targeted at %s amino acid." % code1LetterToCcpCodeDict['protein'][code1Letter])
           aaNameComp = aaNameComp.replace(code1Letter.upper(),'*')
 
       brukerExpName = brukerExpName.replace(nameComps[1],aaNameComp.lower())
@@ -386,7 +386,7 @@ class ParseBrukerExpNames:
           if brukerExpName[strInd-len(brukerCode)+1:strInd+1].count(brukerCode):
             rIndex = brukerExpName.rfind(brukerCode)
             brukerExpName = brukerExpName[:rIndex] + brukerExpName[rIndex:].replace(brukerCode,'*' * len(brukerCode))
-            print "    Bruker info: %s (%s)" % (brukerCode,self.brukerCodeDict[brukerCode])
+            print("    Bruker info: %s (%s)" % (brukerCode,self.brukerCodeDict[brukerCode]))
     
     #
     # Remove .1, .2 type stuff
@@ -419,14 +419,14 @@ class ParseBrukerExpNames:
       isIntra = True
    
     if isIntra:
-      print "    Bruker info: intra experiment."
+      print("    Bruker info: intra experiment.")
             
     #
     # Print out name if anything not recognized...
     #
     
     if len(brukerExpName) != brukerExpName.count('*'):
-      print
-      print "  Remaining unparsed name: %s" % brukerExpName
+      print()
+      print("  Remaining unparsed name: %s" % brukerExpName)
 
     print 

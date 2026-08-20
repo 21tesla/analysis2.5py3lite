@@ -114,7 +114,7 @@ class ReadPdb:
     self.ccpnProject = MemopsRoot(name=self.entryName) # NEW
 
     if DEBUG:
-      print 'NEW PROJECT: [%s]' % self.ccpnProject
+      print('NEW PROJECT: [%s]' % self.ccpnProject)
 
 
   def setNmrProject(self):
@@ -137,7 +137,7 @@ class ReadPdb:
       self.nmrConstraintStore = self.ccpnProject.newNmrConstraintStore(nmrProject=self.nmrProject) # NEW
 
       if DEBUG:
-        print 'NEW NMR_CONST_STORE: [%s]' % self.nmrConstraintStore
+        print('NEW NMR_CONST_STORE: [%s]' % self.nmrConstraintStore)
 
     self.strucGen = self.nmrProject.findFirstStructureGeneration()
 
@@ -149,7 +149,7 @@ class ReadPdb:
                                                              nmrConstraintStore=self.nmrConstraintStore) # NEW
 
       if DEBUG:
-        print 'NEW STRUC_GEN: [%s]' % self.strucGen
+        print('NEW STRUC_GEN: [%s]' % self.strucGen)
 
 
   def setCcpnEntry(self):
@@ -157,12 +157,12 @@ class ReadPdb:
     self.nmrEntryStore = self.ccpnProject.newNmrEntryStore(name=self.entryName) # NEW
 
     if DEBUG:
-      print 'NEW NMR_ENTRY_STORE: [%s]' % self.nmrEntryStore
+      print('NEW NMR_ENTRY_STORE: [%s]' % self.nmrEntryStore)
 
     self.ccpnEntry = self.nmrEntryStore.newEntry(name=self.entryName) # NEW
 
     if DEBUG:
-      print 'NEW NMR_ENTRY: [%s]' % self.ccpnEntry
+      print('NEW NMR_ENTRY: [%s]' % self.ccpnEntry)
 
 
   def setCcpnStores(self):
@@ -213,7 +213,7 @@ class ReadPdb:
     self.molSystem = self.ccpnProject.newMolSystem(code=self.entryName) # NEW
 
     if DEBUG:
-      print 'NEW MOL_SYSTEM: [%s]' % self.molSystem
+      print('NEW MOL_SYSTEM: [%s]' % self.molSystem)
 
 
   def readPdb(self, tkObj=None):
@@ -247,12 +247,12 @@ class ReadPdb:
                                 numIdenticalChains=numIdenticalChains) # NEW
 
     if DEBUG:
-      print 'INP MOL_SYSTEM: [%s]' % self.molSystem
+      print('INP MOL_SYSTEM: [%s]' % self.molSystem)
 
     self.pdbFormat.readPeopleAndCitations(self.pdbFile, doNotMakeCcpnObjects=True, verbose=True, minimalPrompts=True)
 
     if DEBUG:
-      print 'INP PEOP_CIT (PDB_FORMAT): [%s]' % self.pdbFormat
+      print('INP PEOP_CIT (PDB_FORMAT): [%s]' % self.pdbFormat)
 
     self.pdbDataFile = self.pdbFormat.peopleAndCitationsFile.pdbFile
 
@@ -262,7 +262,7 @@ class ReadPdb:
     self.ccpnEntry.molSystem = self.molSystem # SET
 
     if DEBUG:
-      print 'SET MOL_SYSTEM: [%s] [%s]' % (self.ccpnEntry.molSystem, self.ccpnEntry)
+      print('SET MOL_SYSTEM: [%s] [%s]' % (self.ccpnEntry.molSystem, self.ccpnEntry))
 
 
   def convert(self):
@@ -289,7 +289,7 @@ class ReadPdb:
     self.ccpnEntry.setTitle(self.pdbTitle) # CHANGE
 
     if DEBUG:
-      print 'SET TITLE: [%s] [%s]' % (self.ccpnEntry, self.pdbTitle)
+      print('SET TITLE: [%s] [%s]' % (self.ccpnEntry, self.pdbTitle))
 
     if self.pdbDataFile.headerVars.has_key('Keywds'):
       kywds = [ kwd.strip() for kwd in self.pdbDataFile.headerVars['Keywds'].split(',') ]
@@ -298,7 +298,7 @@ class ReadPdb:
         self.ccpnEntry.addKeyword(kywd) # ADD
 
         if DEBUG:
-          print 'ADD KEYWD: [%s] [%s]' % (self.ccpnEntry, kywd)
+          print('ADD KEYWD: [%s] [%s]' % (self.ccpnEntry, kywd))
 
 
   def setMolInfo(self):
@@ -332,7 +332,7 @@ class ReadPdb:
       chain = self.molSystem.findFirstChain(code=chainCode)
 
       if not chain:
-        print "Error: no chain found for code '%s'. No source/expression information set." % chainCode
+        print("Error: no chain found for code '%s'. No source/expression information set." % chainCode)
         continue
 
       chainCodeFind = chainCode
@@ -352,7 +352,7 @@ class ReadPdb:
           msn = molecule.newMoleculeSysName(name=ecNumStr, namingSystem='EC') # NEW
 
           if DEBUG:
-            print 'NEW: MOL_SYS_NAME: [%s] [%s]' % (molecule, msn)
+            print('NEW: MOL_SYS_NAME: [%s] [%s]' % (molecule, msn))
 
       if hasattr(pdbChain, 'mutation') and pdbChain.mutation:
         searchObj = self.mutationPatt.search(pdbChain.mutation)
@@ -370,7 +370,7 @@ class ReadPdb:
         molecule.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD MUT: [%s] [%s]' % (molecule, mutation)
+          print('ADD MUT: [%s] [%s]' % (molecule, mutation))
 
       if hasattr(pdbChain, 'fragment') and pdbChain.fragment:
         keywds = {'application': self.format,
@@ -381,7 +381,7 @@ class ReadPdb:
         molecule.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD FRAG: [%s] [%s]' % (molecule, pdbChain.fragment)
+          print('ADD FRAG: [%s] [%s]' % (molecule, pdbChain.fragment))
 
       if len(sourceInfo) >= chainNum:
 
@@ -409,12 +409,12 @@ class ReadPdb:
       naturalSource = self.ccpnProject.currentTaxonomy.newNaturalSource(**keywds) # NEW
 
       if DEBUG:
-        print 'NEW NAT_SRC: [%s]' % naturalSource
+        print('NEW NAT_SRC: [%s]' % naturalSource)
 
       molecule.setNaturalSource(naturalSource) # SET
 
       if DEBUG:
-        print 'SET NAT_SRC: [%s] [%s]' % (molecule, naturalSource)
+        print('SET NAT_SRC: [%s] [%s]' % (molecule, naturalSource))
 
 
       syn = sourceInfo[chainNum-1].get('SYNTHETIC')
@@ -430,7 +430,7 @@ class ReadPdb:
         entryMol = self.ccpnEntry.newEntryMolecule(molecule=molecule, productionMethod=prodMeth) # NEW
 
         if DEBUG:
-          print 'NEW ENTRY_MOL: [%s] [%s]' % (self.ccpnEntry, entryMol)
+          print('NEW ENTRY_MOL: [%s] [%s]' % (self.ccpnEntry, entryMol))
 
       experimentalSource = None
 
@@ -475,12 +475,12 @@ class ReadPdb:
         experimentalSource = self.ccpnProject.currentTaxonomy.newNaturalSource(**keywds2) # NEW
 
         if DEBUG:
-          print 'NEW EXP_SRC: [%s]' % experimentalSource
+          print('NEW EXP_SRC: [%s]' % experimentalSource)
 
       entryMol.setExperimentalSource(experimentalSource) # SET
 
       if DEBUG:
-        print 'SET EXP_SRC: [%s] [%s]' % (entryMol, experimentalSource)
+        print('SET EXP_SRC: [%s] [%s]' % (entryMol, experimentalSource))
 
 
   def setMolecules(self):
@@ -531,7 +531,7 @@ class ReadPdb:
             database = self.ccpnProject.newDatabase(name=dbName) # NEW
 
             if DEBUG:
-              print 'NEW DATABASE: [%s]' % database
+              print('NEW DATABASE: [%s]' % database)
 
       if not database and dbName and dbName != '' and dbName.lower() != 'n/a' and dbName[0:3] != 'XXX':
         database = self.ccpnProject.findFirstDatabase(name=dbName)
@@ -539,13 +539,13 @@ class ReadPdb:
           database = self.ccpnProject.newDatabase(name=dbName)
 
           if DEBUG:
-            print 'NEW DATABASE: [%s]' % database
+            print('NEW DATABASE: [%s]' % database)
 
       if not database:
         database = self.ccpnProject.currentDatabase
 
         if DEBUG:
-          print 'CUR DATABASE: [%s]' % database
+          print('CUR DATABASE: [%s]' % database)
 
       if dbCode != 'n/a' and database:
         keywds = {}
@@ -553,7 +553,7 @@ class ReadPdb:
         myEntry = database.newEntry(name=dbCode) # NEW
 
         if DEBUG:
-          print 'NEW DB_ENTRY: [%s] [%s]' % (database, myEntry)
+          print('NEW DB_ENTRY: [%s] [%s]' % (database, myEntry))
 
           if dbId != '':
             myEntry.code = dbId
@@ -587,7 +587,7 @@ class ReadPdb:
           alignment = molecule.newAlignment(dbRef=myEntry, **keywds) # NEW
 
           if DEBUG:
-            print 'NEW ALN: [%s]' % alignment
+            print('NEW ALN: [%s]' % alignment)
 
 
   def setStructInfo(self):
@@ -603,7 +603,7 @@ class ReadPdb:
 
     keywds = {}
 
-    print "Trying to automap coordinate atoms."
+    print("Trying to automap coordinate atoms.")
 
     forceChainMappings = matchCoordAtomsToMolSys(coords, self.molSystem, test=0)
 
@@ -620,13 +620,13 @@ class ReadPdb:
     self.pdbFormat.readCoordinates(self.pdbFile, molSystem=self.molSystem, strucGen=self.strucGen, **keywds) # NEW
 
     if DEBUG:
-      print 'INP STRUC_GEN: [%s]' % self.strucGen
+      print('INP STRUC_GEN: [%s]' % self.strucGen)
 
     if not self.ccpnEntry in self.strucGen.sortedEntries():
       self.strucGen.addEntry(self.ccpnEntry) # ADD
 
       if DEBUG:
-        print 'ADD STRUC_GEN: [%s] [%s]' % (self.ccpnEntry, self.strucGen)
+        print('ADD STRUC_GEN: [%s] [%s]' % (self.ccpnEntry, self.strucGen))
 
 
   def setPeopleAndCitationInfo(self):
@@ -652,7 +652,7 @@ class ReadPdb:
         self.ccpnEntry.addAuthor(author) # ADD
 
         if DEBUG:
-          print 'ADD AUTHOR: [%s] [%s]' % (self.ccpnEntry, author)
+          print('ADD AUTHOR: [%s] [%s]' % (self.ccpnEntry, author))
 
     pdbCitations = self.pdbFormat.peopleAndCitationsFile.citations
 
@@ -737,7 +737,7 @@ class ReadPdb:
           keywds['volume'] = citation.volume
 
         if DEBUG:
-          print 'SETTING AS journal'
+          print('SETTING AS journal')
 
       elif citation.type == 'book':
 
@@ -749,7 +749,7 @@ class ReadPdb:
           keywds['volume'] = citation.volume
 
         if DEBUG:
-          print 'SETTING AS book'
+          print('SETTING AS book')
 
       elif citation.type == 'thesis':
 
@@ -759,29 +759,29 @@ class ReadPdb:
         keywds['institution'] = citation.publisher
 
         if DEBUG:
-          print 'SETTING AS thesis'
+          print('SETTING AS thesis')
 
       else:
 
         if DEBUG:
-          print 'DEFAULTING to journal'
+          print('DEFAULTING to journal')
 
       ccpnCitation = getattr(Citation,citType)(self.ccpnProject.currentCitationStore, **keywds) # NEW
 
       if DEBUG:
-        print 'NEW CIT: [%s]' % ccpnCitation
+        print('NEW CIT: [%s]' % ccpnCitation)
 
       if citation.isPrimary:
         self.ccpnEntry.setPrimaryCitation(ccpnCitation) # SET
 
         if DEBUG:
-          print 'SET PRIM_CIT: [%s] [%s]' % (self.ccpnEntry, ccpnCitation)
+          print('SET PRIM_CIT: [%s] [%s]' % (self.ccpnEntry, ccpnCitation))
 
       else:
         self.ccpnEntry.addOtherCitation(ccpnCitation) # ADD
 
         if DEBUG:
-          print 'ADD OTHER_CIT: [%s] [%s]' % (self.ccpnEntry, ccpnCitation)
+          print('ADD OTHER_CIT: [%s] [%s]' % (self.ccpnEntry, ccpnCitation))
 
 
   def setNmrExperiments(self):
@@ -797,7 +797,7 @@ class ReadPdb:
     sampleCategory = classification.newSampleCategory(name=sampleCategoryName) # NEW
 
     if DEBUG:
-      print 'NEW SAMP_CAT: [%s] [%s]' % (classification, sampleCategory)
+      print('NEW SAMP_CAT: [%s] [%s]' % (classification, sampleCategory))
 
     nmrType = 'solutionNMR' # TODO: We can get this from the PDB file I think.
     
@@ -898,7 +898,7 @@ class ReadPdb:
         sample = self.ccpnProject.currentSampleStore.newSample(sampleCategories=[sampleCategory], **keywds) # NEW - already in the project?
 
         if DEBUG:
-          print 'NEW SAMPLE: [%s]' % sample
+          print('NEW SAMPLE: [%s]' % sample)
 
       appData = sample.findFirstApplicationData(application=self.format,keyword='solventSys')
 
@@ -912,7 +912,7 @@ class ReadPdb:
         sample.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD SOLV: [%s] [%s]' % (sample, solventSys)
+          print('ADD SOLV: [%s] [%s]' % (sample, solventSys))
 
       if len(expInfo['expTemp']) > i:
         temp = expInfo['expTemp'][i]
@@ -950,7 +950,7 @@ class ReadPdb:
         sampleConditionSet = self.nmrProject.newSampleConditionSet(name=scsName, details=details) # NEW
 
         if DEBUG:
-          print 'NEW SCS: [%s]' % sampleConditionSet
+          print('NEW SCS: [%s]' % sampleConditionSet)
 
         for (valueName, value, defaultUnit) in ( ('pH', str(ph), 'pH'),
                                                  ('pressure', str(pressure), 'atm'),
@@ -984,7 +984,7 @@ class ReadPdb:
             newSamCond = sampleConditionSet.newSampleCondition(condition=valueName, value=value, unit=unit) # NEW
 
             if DEBUG:
-              print 'NEW SC: [%s] [%s]' % (sampleConditionSet, newSamCond)
+              print('NEW SC: [%s] [%s]' % (sampleConditionSet, newSamCond))
 
         """
         for scs in self.nmrProject.sortedSampleConditionSets():
@@ -1034,7 +1034,7 @@ class ReadPdb:
         manufacturer = self.ccpnProject.currentAffiliationStore.newOrganisation(name=manufacturerName) # NEW
 
         if DEBUG:
-          print 'NEW SPEC_MANU: [%s]' % manufacturer
+          print('NEW SPEC_MANU: [%s]' % manufacturer)
 
       searchObj = self.fieldPatt.search(str(specField) )
 
@@ -1065,7 +1065,7 @@ class ReadPdb:
         spectrometer = self.ccpnProject.currentInstrumentStore.newNmrSpectrometer(**keywds) # NEW
 
         if DEBUG:
-          print 'NEW SPEC: [%s]' % spectrometer
+          print('NEW SPEC: [%s]' % spectrometer)
 
       if len(expInfo['nmrExpts']) <= i:
         continue
@@ -1147,7 +1147,7 @@ class ReadPdb:
           nmrExp = self.nmrProject.newExperiment(**keywds) # NEW
 
           if DEBUG:
-            print 'NEW EXPT: [%s]' % nmrExp
+            print('NEW EXPT: [%s]' % nmrExp)
 
           scNewSamFlag = True
 
@@ -1155,25 +1155,25 @@ class ReadPdb:
           nmrExp.addMolSystem(self.molSystem) # ADD
 
           if DEBUG:
-            print 'ADD MOL_SYS: [%s] [%s]' % (nmrExp, self.molSystem)
+            print('ADD MOL_SYS: [%s] [%s]' % (nmrExp, self.molSystem))
 
         if not self.ccpnEntry in nmrExp.sortedEntries():
           nmrExp.addEntry(self.ccpnEntry) # ADD
 
           if DEBUG:
-            print 'ADD NMR_ENTRY: [%s] [%s]' % (nmrExp, self.ccpnEntry)
+            print('ADD NMR_ENTRY: [%s] [%s]' % (nmrExp, self.ccpnEntry))
 
         if sample and scNewSamFlag and not nmrExp in sample.sortedNmrExperiments():
           sample.addNmrExperiment(nmrExp) # ADD
 
           if DEBUG:
-            print 'ADD SAMPLE: [%s] [%s]' % (nmrExp, sample)
+            print('ADD SAMPLE: [%s] [%s]' % (nmrExp, sample))
 
         if sampleConditionSet and not nmrExp in sampleConditionSet.sortedExperiments():
           sampleConditionSet.addExperiment(nmrExp) # ADD
 
           if DEBUG:
-            print 'ADD SCS: [%s] [%s]' % (nmrExp, sampleConditionSet)
+            print('ADD SCS: [%s] [%s]' % (nmrExp, sampleConditionSet))
 
         scsName = ''
         if nmrExp.sampleConditionSet:
@@ -1195,7 +1195,7 @@ class ReadPdb:
         self.strucGen.addEntry(self.ccpnEntry) # ADD
 
         if DEBUG:
-          print 'ADD STRUC_GEN: [%s] [%s]' % (self.ccpnEntry, self.strucGen)
+          print('ADD STRUC_GEN: [%s] [%s]' % (self.ccpnEntry, self.strucGen))
 
       confBest = None
 
@@ -1212,7 +1212,7 @@ class ReadPdb:
         strEns.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD REPR: [%s] [%s]' % (strEns, confBest)
+          print('ADD REPR: [%s] [%s]' % (strEns, confBest))
 
       confSel = None
 
@@ -1229,7 +1229,7 @@ class ReadPdb:
         strEns.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD CRITERIA: [%s] [%s]' % (strEns, confSel)
+          print('ADD CRITERIA: [%s] [%s]' % (strEns, confSel))
 
       confCalc = None
 
@@ -1246,7 +1246,7 @@ class ReadPdb:
         strEns.addApplicationData(appData)
 
         if DEBUG:
-          print 'ADD CALC: [%s] [%s]' % (strEns, confCalc)
+          print('ADD CALC: [%s] [%s]' % (strEns, confCalc))
 
     softwareList = expInfo['softType']
     methodName = expInfo['methType']
@@ -1284,13 +1284,13 @@ class ReadPdb:
           self.ccpnEntry.addSoftware(software) # ADD
 
           if DEBUG:
-            print 'ADD SOFTWARE: [%s] [%s]' % (self.ccpnEntry, software)
+            print('ADD SOFTWARE: [%s] [%s]' % (self.ccpnEntry, software))
 
         if self.strucGen and not self.strucGen.method and method:
           self.strucGen.setMethod(method) # SET
 
           if DEBUG:
-            print 'SET METHOD: [%s] [%s]' % (self.strucGen, method)
+            print('SET METHOD: [%s] [%s]' % (self.strucGen, method))
 
     for i in range(len(softwareStrings) ):
       softwareName = softwareStrings[i]
@@ -1302,7 +1302,7 @@ class ReadPdb:
           self.ccpnEntry.addSoftware(software) # ADD
 
           if DEBUG:
-            print 'ADD SOFTWARE: [%s] [%s]' % (self.ccpnEntry, software)
+            print('ADD SOFTWARE: [%s] [%s]' % (self.ccpnEntry, software))
 
 
   def setMolComponents(self):
@@ -1336,7 +1336,7 @@ class ReadPdb:
             molComp = self.ccpnProject.currentRefSampleComponentStore.newMolComponent(name=molName + ':' + sample.name, details=molName) # NEW
 
             if DEBUG:
-              print 'NEW MOL_COMP: [%s]' % molComp
+              print('NEW MOL_COMP: [%s]' % molComp)
 
           natSrc = None
 
@@ -1347,13 +1347,13 @@ class ReadPdb:
             molComp.setNaturalSource(natSrc) # SET
 
             if DEBUG:
-              print 'SET NAT_SRC: [%s] [%s]' % (molComp, natSrc)
+              print('SET NAT_SRC: [%s] [%s]' % (molComp, natSrc))
 
           if molComp not in molecule.sortedMolComponents():
             molecule.addMolComponent(molComp) # ADD
 
             if DEBUG:
-              print 'ADD MOL MOL_COMP: [%s] [%s]' % (molecule, molComp)
+              print('ADD MOL MOL_COMP: [%s] [%s]' % (molecule, molComp))
 
 
   def parseRefineLines(self,remarks):
@@ -1372,7 +1372,7 @@ class ReadPdb:
       lineNum = 0
 
       if refineLines[lineNum] != refineString:
-        print "  Error: No refinement information in header"
+        print("  Error: No refinement information in header")
 
       lineNum += 1
 
@@ -1478,7 +1478,7 @@ class ReadPdb:
       fieldCount = 0
 
       if expDetLines[lineNum] != expString:
-        print "  Error: No experimental details in header"
+        print("  Error: No experimental details in header")
 
       lineNum += 1
 
@@ -1561,7 +1561,7 @@ class ReadPdb:
       software = self.ccpnProject.currentMethodStore.newSoftware(name=softName, version=versNum) # NEW
 
       if DEBUG:
-        print 'NEW SOFTWARE: [%s]' % software
+        print('NEW SOFTWARE: [%s]' % software)
 
     method = None
 
@@ -1572,7 +1572,7 @@ class ReadPdb:
         method = self.ccpnProject.currentMethodStore.newMethod(name=methodName, software=software) # NEW
 
         if DEBUG:
-          print 'NEW METHOD: [%s]' % method
+          print('NEW METHOD: [%s]' % method)
 
     if authors:
       software.vendorName = authors
@@ -1596,7 +1596,7 @@ class ReadPdb:
     person = self.findVaguePerson(familyName,authorComps[0])
 
     if DEBUG:
-      print 'FOUND PERSON: [%s]' % person
+      print('FOUND PERSON: [%s]' % person)
 
     if person:
 
@@ -1604,7 +1604,7 @@ class ReadPdb:
         person.setGivenName(authorComps[0])
 
         if DEBUG:
-          print 'SET PERSON NAME: [%s] [%s]' % (person, authorComps[0])
+          print('SET PERSON NAME: [%s] [%s]' % (person, authorComps[0]))
 
     elif makePerson:
 
@@ -1619,7 +1619,7 @@ class ReadPdb:
       person = self.ccpnProject.currentAffiliationStore.newPerson(**keywds) # NEW
 
       if DEBUG:
-        print 'NEW PERSON: [%s]' % person
+        print('NEW PERSON: [%s]' % person)
 
     return person
 
@@ -1652,7 +1652,7 @@ class ReadPdb:
         store = getattr(memopsRoot, 'new'+className)(name=defaultName)
 
         if DEBUG:
-          print 'NEW STORE: [%s] [%s] [%s]' % (className, store, defaultName)
+          print('NEW STORE: [%s] [%s] [%s]' % (className, store, defaultName))
 
     else:
       store = getattr(memopsRoot, 'findFirst'+className)(name=name)
@@ -1661,7 +1661,7 @@ class ReadPdb:
         store = getattr(memopsRoot, 'new'+className)(name=name)
 
         if DEBUG:
-          print 'NEW STORE: [%s] [%s] [%s]' % (className, store, name)
+          print('NEW STORE: [%s] [%s] [%s]' % (className, store, name))
 
     return store
 
@@ -1678,7 +1678,7 @@ class ReadPdb:
         store = getattr(memopsRoot, 'new'+className)(namingSystem=defaultNamingSystem)
 
         if DEBUG:
-          print 'NEW STORE: [%s] [%s] [%s]' % (className, store, defaultNamingSystem)
+          print('NEW STORE: [%s] [%s] [%s]' % (className, store, defaultNamingSystem))
 
     else:
       store = getattr(memopsRoot, 'findFirst'+className)(namingSystem=namingSystem)
@@ -1687,7 +1687,7 @@ class ReadPdb:
         store = getattr(memopsRoot, 'new'+className)(namingSystem=namingSystem)
 
         if DEBUG:
-          print 'NEW STORE: [%s] [%s] [%s]' % (className, store, namingSystem)
+          print('NEW STORE: [%s] [%s] [%s]' % (className, store, namingSystem))
 
     return store
 

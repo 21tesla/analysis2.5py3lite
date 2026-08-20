@@ -107,7 +107,7 @@ class AnsigFormat(DataFormat):
   def getFullProject(self,fileName,peakFile = None,peakKeyWdList = None, sequenceKeyWds = None):
   
     if self.verbose == 1:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.AnsigProjectFile(fileName)
     self.file.read()
@@ -173,7 +173,7 @@ class AnsigFormat(DataFormat):
               aliasing[dim] = self.file.spectraFile.ppmRange[nucleus]
         
         if not self.fileExists(parFile, verbose = False):
-          print "  Warning: parameter file %s does not exist - reading skipped" % parFile
+          print("  Warning: parameter file %s does not exist - reading skipped" % parFile)
           continue
             
         dataSource = azaraFormat.readProcPars(fileName = parFile, expName = specName, aliasing = aliasing, minimalPrompts = self.minimalPrompts)
@@ -361,7 +361,7 @@ class AnsigFormat(DataFormat):
     if self.writeAssignments and peakDimContribs:
       
       if isinstance(peakDimContribs[0],Nmr.PeakDimContribN):
-        print "   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored."
+        print("   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored.")
         return
         
       atomSetIds = []
@@ -383,7 +383,7 @@ class AnsigFormat(DataFormat):
           if self.useOriginalResNames:
           
             if len(self.resonanceToAtoms[resonance]) > 1:
-              print "   Warning: Only first original resName taken for peak %d." % self.peak.serial
+              print("   Warning: Only first original resName taken for peak %d." % self.peak.serial)
 
             resonanceToAtom = self.resonanceToAtoms[resonance][0]
 
@@ -428,12 +428,12 @@ class AnsigFormat(DataFormat):
         
         
         if len(atomIds) > 1:
-          print "   Warning: Multiple assignment possibilities for peak %d - only first used." % self.peak.serial
+          print("   Warning: Multiple assignment possibilities for peak %d - only first used." % self.peak.serial)
 
         
       else:
       
-        print "    Warning: no atom link for resonance %s" % getResNameText(resonance)
+        print("    Warning: no atom link for resonance %s" % getResNameText(resonance))
 
       #
       # Use chain and seqcode mapping

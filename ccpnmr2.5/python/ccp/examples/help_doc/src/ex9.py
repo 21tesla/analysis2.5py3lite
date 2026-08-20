@@ -1,5 +1,5 @@
 import os
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import MemopsRoot
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     peakList = \
   entry.sortedExperiments()[0].sortedDataSources()[0].sortedPeakLists()[0]
 
-    print 'Peak list: [%s]' % peakList
+    print('Peak list: [%s]' % peakList)
 
     # Directory and file to save the NMR-STAR file in.
     curDir     = os.path.abspath('../data')

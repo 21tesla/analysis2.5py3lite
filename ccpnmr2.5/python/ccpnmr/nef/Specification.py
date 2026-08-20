@@ -47,7 +47,7 @@ def getCcpnSpecification(filePath):
     return converter.convertToNef()
 
 
-class CifDicConverter(object):
+class CifDicConverter:
     """Converts mmcif .dic file, with program-specific additions datablocks
     into a single NEF data structure, containing:
 
@@ -101,7 +101,7 @@ class CifDicConverter(object):
         try:
             print('{}{}'.format(INFOPREFIX, ' '.join([str(arg) for arg in args])))
         except Exception as es:
-            print('{}>>> Error during logging: {}'.format(INFOPREFIX, str(es)))
+            print(f'{INFOPREFIX}>>> Error during logging: {str(es)}')
 
     def convertToNef(self):
         """Convert RCSB .cif file into a nef specification summary file
@@ -366,7 +366,7 @@ def transferLoop(genericContainer, saveFrame, inputTags):
 
             return loop
     else:
-        raise ValueError("tags have more than on prefix: %s" % sorted((set1)))
+        raise ValueError("tags have more than on prefix: %s" % sorted(set1))
     #
     return None
 

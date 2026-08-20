@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -2141,7 +2141,7 @@ class ActionLink(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.ActionLink.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.ActionLink.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2187,10 +2187,10 @@ class ActionLink(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3188,7 +3188,7 @@ class ActionLinkParameter(ccp.api.general.Template.MultiTypeValue):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.ActionLinkParameter.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.ActionLinkParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3223,10 +3223,10 @@ class ActionLinkParameter(ccp.api.general.Template.MultiTypeValue):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4003,7 +4003,7 @@ class AxisGroup(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.AxisGroup.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.AxisGroup.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4049,10 +4049,10 @@ class AxisGroup(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5034,7 +5034,7 @@ class Layout(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.Layout.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.Layout.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5097,10 +5097,10 @@ class Layout(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8703,7 +8703,7 @@ class LayoutParameter(ccp.api.general.Template.MultiTypeValue):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.LayoutParameter.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.LayoutParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8738,10 +8738,10 @@ class LayoutParameter(ccp.api.general.Template.MultiTypeValue):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9510,7 +9510,7 @@ class Mark(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.Mark.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.Mark.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9560,10 +9560,10 @@ class Mark(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10755,7 +10755,7 @@ class PanelAxis(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.PanelAxis.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.PanelAxis.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10790,10 +10790,10 @@ class PanelAxis(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -11732,7 +11732,7 @@ class PanelGroupParameter(ccp.api.general.Template.MultiTypeValue):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.PanelGroupParameter.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.PanelGroupParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -11767,10 +11767,10 @@ class PanelGroupParameter(ccp.api.general.Template.MultiTypeValue):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12543,7 +12543,7 @@ class PanelParameter(ccp.api.general.Template.MultiTypeValue):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.PanelParameter.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.PanelParameter.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12578,10 +12578,10 @@ class PanelParameter(ccp.api.general.Template.MultiTypeValue):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -13357,7 +13357,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.WindowPanelGroup.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.WindowPanelGroup.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -13403,10 +13403,10 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -14972,7 +14972,7 @@ class MarkDim(AbstractMarking):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.MarkDim.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.MarkDim.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -15018,10 +15018,10 @@ class MarkDim(AbstractMarking):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -15734,7 +15734,7 @@ class Ruler(AbstractMarking):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.Ruler.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.Ruler.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -15780,10 +15780,10 @@ class Ruler(AbstractMarking):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -16828,7 +16828,7 @@ class ModulePanel(AbstractPanel):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.ModulePanel.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.ModulePanel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -16878,10 +16878,10 @@ class ModulePanel(AbstractPanel):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -19252,7 +19252,7 @@ class WindowPanelNd(WindowPanel):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.WindowPanelNd.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.WindowPanelNd.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -19302,10 +19302,10 @@ class WindowPanelNd(WindowPanel):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -20582,7 +20582,7 @@ class WindowPanel1d(WindowPanel):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccpnmr.AnalysisLayout.WindowPanel1d.__init__"
+        print("ERROR in ccpnmr.AnalysisLayout.WindowPanel1d.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -20632,10 +20632,10 @@ class WindowPanel1d(WindowPanel):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

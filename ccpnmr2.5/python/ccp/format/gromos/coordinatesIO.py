@@ -110,7 +110,7 @@ Fortran format
     """
 
     if verbose:
-      print "Reading %s coordinate file %s" % (self.format,self.name)
+      print("Reading %s coordinate file %s" % (self.format,self.name))
       
     if not ignoreResNames:
       ignoreResNames = ('SOL',)
@@ -122,7 +122,7 @@ Fortran format
     currentChainCode = None
     oldResNum = None
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lines = fin.readlines()
     fin.close()
     
@@ -175,7 +175,7 @@ Fortran format
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 

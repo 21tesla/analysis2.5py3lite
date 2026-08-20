@@ -87,7 +87,7 @@ def shiftx(structure, atomType=None):
     for coordChain in structure.sortedCoordChains():
       chain = coordChain.chain
   
-      print 'CCPN SHIFTX executing for chain %s' % chain.code
+      print('CCPN SHIFTX executing for chain %s' % chain.code)
   
       cmd = '%s 1%s %s %s' % (exeFile, chain.code, pdbFile, outFile)
   
@@ -124,18 +124,18 @@ def shiftx(structure, atomType=None):
    
             if seqCode not in shiftData:
               shiftData[seqCode] = shiftDict = {}
-	    else:
-	      shiftDict = shiftData[seqCode]  
+        else:
+          shiftDict = shiftData[seqCode]  
    
             for i, atomName in enumerate(atomNames):
               if atomName not in shiftDict:
                 shiftDict[atomName] = []
-	      
-	      shiftDict[atomName].append(float(data[i+2]))
+          
+          shiftDict[atomName].append(float(data[i+2]))
   
 
   for chain in chainDict:
-    print 'CCPN SHIFTX filling shift list for chain %s' % chain.code
+    print('CCPN SHIFTX filling shift list for chain %s' % chain.code)
     shiftData = chainDict[chain]
 
     if shiftData:
@@ -189,10 +189,10 @@ def shiftx(structure, atomType=None):
   	    assignAtomsToRes([atomSet,], resonance)
   
   	  if shiftList.findFirstMeasurement(resonance=resonance):
-            print residue.seqCode, residue.ccpCode, atom.name
+            print(residue.seqCode, residue.ccpCode, atom.name)
           else:  
   	    shift = shiftList.newShift(value=ppm, resonance=resonance)
   
-  print 'CCPN SHIFTX done'
+  print('CCPN SHIFTX done')
 
   return shiftList

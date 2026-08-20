@@ -175,12 +175,12 @@ if __name__ == '__main__':
     
     nmrCalcRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId)
     if nmrCalcRun is None:
-      print "No NmrCalcRun found. Aborting"
+      print("No NmrCalcRun found. Aborting")
     else:
       read(nmrCalcRun, dataDir)
       nmrCalcRun.root.saveModified()
     
   else:
-    print "Usage: read projectDir NmrCalcRun.IDstring CyanaDataDir"
+    print("Usage: read projectDir NmrCalcRun.IDstring CyanaDataDir")
   
   

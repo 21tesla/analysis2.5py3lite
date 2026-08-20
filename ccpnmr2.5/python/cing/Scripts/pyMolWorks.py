@@ -6,7 +6,7 @@ From http://pymolwiki.org/index.php/Launching_From_a_Script
 import __main__
 import sys
 import time
-import urllib2
+import urllib.request
 
 
 try:
@@ -14,7 +14,7 @@ try:
     import pymol #@UnresolvedImport
     from pymol import cmd #@UnresolvedImport
 except:
-    print "Failed to import pymol; python will stack dump next:"
+    print("Failed to import pymol; python will stack dump next:")
 
 # Tell PyMOL we don't want any GUI features.
 __main__.pymol_argv = [ 'pymol', '-Gi' ]
@@ -31,12 +31,12 @@ cmd.spectrum()
 
 try:
     pdbCode = '1brv'
-    pdbFile = urllib2.urlopen('file:///Users/jd/workspace35/cing/Tests/data/pdb/'+
+    pdbFile = urllib.request.urlopen('file:///Users/jd/workspace35/cing/Tests/data/pdb/'+
          pdbCode + '/pdb' +
          pdbCode + '.ent')
     cmd.read_pdbstr(pdbFile.read(), pdbCode)
 except:
-    print "Unexpected error:", sys.exc_info()[0]
+    print("Unexpected error:", sys.exc_info()[0])
 
 time.sleep(5)
 #cmd.quit()

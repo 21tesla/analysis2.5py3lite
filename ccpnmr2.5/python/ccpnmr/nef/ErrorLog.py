@@ -53,7 +53,7 @@ NEFERROR_READATTRIBUTE = -16
 NEFERROR_BADKEYS = -17
 
 
-class ErrorLog():
+class ErrorLog:
     """
     A class to facilitate Logging of errors to stderr.
 

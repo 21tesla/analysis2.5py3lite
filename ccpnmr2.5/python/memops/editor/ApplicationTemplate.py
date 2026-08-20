@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 import sys
-import Tkinter
+import tkinter
 
 from memops.api                    import Implementation
 from ccp.api.nmr import Nmr
@@ -371,10 +371,10 @@ class ApplicationPopup(BasePopup):
     try:
       self.copyModifiedStorages()
       self.project.saveModified()
-      print 'Successfully saved project'
+      print('Successfully saved project')
       return True
       
-    except IOError, e:
+    except OSError as e:
       showError('Saving file', str(e))
       return False
 
@@ -461,7 +461,7 @@ def launchApplication(filename=None):
     try:
       project = loadProject(path=file, showWarning=showWarning, askDir=askdir,
                             askFile=askfile)
-    except ApiError, e:
+    except ApiError as e:
       showError('Reading project', e.error_msg)
  
   top.update_idletasks()

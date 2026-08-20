@@ -272,7 +272,7 @@ class NmrStarSequenceFile(NmrStarGenericFile):
               sequenceElementData[0][0].setBond(bondType,sequenceElementData[0][1],sequenceElementData[1][0],sequenceElementData[1][1])
               sequenceElementData[1][0].setBond(bondType,sequenceElementData[1][1],sequenceElementData[0][0],sequenceElementData[0][1])
             else:
-              print "  Warning: could not set bond information from NMR-STAR file, information missing."
+              print("  Warning: could not set bond information from NMR-STAR file, information missing.")
 
         
         tableName = '_Assembly_db_link'
@@ -604,14 +604,13 @@ class NmrStarSequence:
             self.elements[-1].residueType = ccpMapping[2][0] # This is usually not there!
     
     """
-    print "SEQUENCE"  
+    print("SEQUENCE")
     for seqEl in self.elements:
-      print seqEl.seqCode,
+      print(seqEl.seqCode,)
       if hasattr(seqEl, 'insertionCode'):
-        print seqEl.insertionCode
+        print(seqEl.insertionCode)
       else:
-        print
-    """
+        print("""
 
     #
     # Get molecule database links.
@@ -657,7 +656,7 @@ class NmrStarSequence:
     return molName[:65]
 
 class NmrStarSequenceElement:
-  """
+  """)
   Information for an element in the sequence (residue)
   """
   def __init__(self,sequenceTableTags,i,tableTagNames):
@@ -689,7 +688,7 @@ class NmrStarSequenceElement:
     
     if not (bondedSeqEl,bondedAtomName) in self.bonds[bondType][atomName]:
       self.bonds[bondType][atomName].append((bondedSeqEl,bondedAtomName))
-      print "  Found %s bond from %s.%s - %s.%s" % (bondType,self.seqCode,atomName,bondedSeqEl.seqCode,bondedAtomName)
+      print("  Found %s bond from %s.%s - %s.%s" % (bondType,self.seqCode,atomName,bondedSeqEl.seqCode,bondedAtomName))
 
 # TODO - move these to projectIO or generalIO - it complained earlier due to circular references I think?
 

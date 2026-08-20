@@ -80,7 +80,7 @@ class Region2D:
     try:
       n = int(key)
     except:
-      raise TypeError, 'sequence index must be integer'
+      raise TypeError('sequence index must be integer')
 
     if (n == 0):
       return self.x_region[0]
@@ -91,5 +91,5 @@ class Region2D:
     elif (n == 3):
       return self.y_region[1]
 
-    raise IndexError, 'list index out of range'
+    raise IndexError('list index out of range')
 

@@ -40,7 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import Tkinter
+import tkinter
 
 from math import sqrt
 

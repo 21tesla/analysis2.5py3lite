@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 # Creates a system of embedded frames, each with a selectable toggle tab at the top
 
-import Tkinter
+import tkinter
 
 from memops.gui.Color import hexRepr
 from memops.gui.Canvas import Canvas

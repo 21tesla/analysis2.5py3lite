@@ -118,7 +118,7 @@ class ValidationExercises(Lister):
             try:
                 resource = urllib.urlopen(url_links)
                 reader = csv.reader(resource)
-            except IOError:
+            except OSError:
                 nTerror("couldn't open url for reader: " + url_links)
                 return 0
 
@@ -134,7 +134,7 @@ class ValidationExercises(Lister):
                         self.matches_one2many[     bmrb_code ] = pdb_code
                         self.matches_one2many_inv[ pdb_code  ] = bmrb_code
             # Never know when the connection is finally empty.
-            except IOError:
+            except OSError:
                 pass
 
             if url_links == url_many2one:
@@ -285,7 +285,7 @@ class ValidationExercises(Lister):
         example_str_template = '<td><a href="' + self.cing_link_template + '"><img SRC="' +\
             cingImage + '" border=0 width="200" ></a><BR>%S</td>'
         file_name = os.path.join (self.base_dir, self.data_dir_local, "index.html")
-        file_content = open(file_name, 'r').read()
+        file_content = open(file_name).read()
         old_string = r"<!-- INSERT NEW DATE HERE -->"
         new_string = time.asctime()
         file_content = string.replace(file_content, old_string, new_string)

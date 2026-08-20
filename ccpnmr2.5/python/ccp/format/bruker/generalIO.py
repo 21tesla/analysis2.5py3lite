@@ -91,7 +91,7 @@ class BrukerParFile(BrukerGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading Bruker acquisition parameters file %s" % self.name
+      print("Reading Bruker acquisition parameters file %s" % self.name)
     
     # For reading: based on ##
     # If value between <> or non-numeric characters (except point): is string
@@ -99,7 +99,7 @@ class BrukerParFile(BrukerGenericFile):
     #                   integer if no '.'
     #                   (data type doesn't matter for python comparisons (5 == 5.0))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
     
     while line:
@@ -146,7 +146,7 @@ class BrukerParFile(BrukerGenericFile):
 
             # Report error if valueMin not zero!!
             if listStart != 0:
-              print "Error: Bruker array starts at non-zero for %s!" % parname
+              print("Error: Bruker array starts at non-zero for %s!" % parname)
 
             # Start parsing list values here. If they were behind the right bracket,
             # the string containing them is the current line.
@@ -157,7 +157,7 @@ class BrukerParFile(BrukerGenericFile):
             while 1 == 1:
               # Always check if this line doesn't have '##'
               if self.patt[self.format + 'StartDoubleHash'].search(line):
-                print "Parsing error:%s" % line + self.newline
+                print("Parsing error:%s" % line + self.newline)
               cols = line.split()
               values.extend(returnFloats(cols))
               valueCount += len(cols)
@@ -173,7 +173,7 @@ class BrukerParFile(BrukerGenericFile):
               line = fin.readline()
               # Always check if this line doesn't have '##'
               if self.patt[self.format + 'StartDoubleHash'].search(line):
-                print "Parsing error:%s" % line
+                print("Parsing error:%s" % line)
               line = line.rstrip()
               valuestring += line
             valuestring = self.patt[self.format + 'SharpBracketEither'].sub('',valuestring)
@@ -209,7 +209,7 @@ class BrukerParFile(BrukerGenericFile):
           (headerKeywd,headerValue) = line.strip().split("=")
           self.headerDict[headerKeywd[2:].strip()] = headerValue.strip()
         else:
-          print "Error: undefined basic data line:%s" % line + self.newline
+          print("Error: undefined basic data line:%s" % line + self.newline)
 
       line=fin.readline()
 
@@ -222,7 +222,7 @@ class BrukerPar:
   def addValues(self,valueLen,values):
     # Add value
     if valueLen != len(values):
-      print "Error: given valueLen does not match number of values (%s)" % self.name
+      print("Error: given valueLen does not match number of values (%s)" % self.name)
       self.valueLen = len(values)
     else:
       # Number of values for this parameter
@@ -243,7 +243,7 @@ class BrukerPar:
 
     else:
       if verbose > 1:
-        print "Parameter %s: no help string found." % self.name
+        print("Parameter %s: no help string found." % self.name)
       self.help = ''
 
 def getMatrixFilePath(inputPath, numDim):

@@ -388,7 +388,7 @@ class OpenSpectrumPopup(BasePopup):
                 s = 'big'
               else:
                 s = 'little'
-              print 'WARNING: swapped endianess of spectrum to %s endian' % s
+              print('WARNING: swapped endianess of spectrum to %s endian' % s)
     #
     del self.okExpSet
     
@@ -494,7 +494,7 @@ class OpenSpectrumPopup(BasePopup):
     # set up internal Analysis data
     for spectrum in spectra:
       self.parent.finishInitSpectrum(spectrum)
-      print 'finished opening spectrum', spectrum.experiment.name, spectrum.name
+      print('finished opening spectrum', spectrum.experiment.name, spectrum.name)
 
   def chooseFiles(self, forceUpdate=False, *file):
   
@@ -806,7 +806,7 @@ class OpenSpectrumPopup(BasePopup):
     clazz = params_class_dict[format]
     try:
       params = clazz(file, extraData=extraData)
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Reading params file', 'Fatal error: ' + e.error_msg, 
                 parent=self)
       return None
@@ -845,7 +845,7 @@ class OpenSpectrumPopup(BasePopup):
         experiment = Nmr.Experiment(self.nmrProject, name=exptName, 
                                     numDim=params.ndim, shiftList=shiftList)
           
-      except Implementation.ApiError, experiment:
+      except Implementation.ApiError as experiment:
         showError('Experiment', experiment.error_msg, parent=self)
         return None
     
@@ -861,7 +861,7 @@ class OpenSpectrumPopup(BasePopup):
     try:
       spectrum = params.createDataSource(experiment, specName)
       
-    except Implementation.ApiError, exc:
+    except Implementation.ApiError as exc:
       showError('Spectrum', exc.error_msg, parent=self)
       raise
       return None
@@ -930,6 +930,6 @@ class OpenSpectrumPopup(BasePopup):
           experiment.pulProgName = pulProgName
           experiment.pulProgType = params.pulProgType
     
-    print 'Spectrum successfully opened'
+    print('Spectrum successfully opened')
 
     return spectrum

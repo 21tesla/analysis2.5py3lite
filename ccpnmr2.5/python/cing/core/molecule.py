@@ -272,7 +272,7 @@ def selectFitAtoms( fitResidues, backboneOnly=True, includeProtons = False ):
             if len(a.coordinates) != modelCount:
                 #nTdebug("Rejecting atom: coordinate count wrong: %s" % len(a.coordinates))
                 continue
-            if ( (not includeProtons and a.isProton()) ):
+            if ( not includeProtons and a.isProton() ):
                 continue
             if backboneOnly and a.isSidechain():
                 continue
@@ -484,7 +484,7 @@ class Molecule( NTtree, ResidueList ):
         one that can be used without quotes. If the value is a space it is hard to
         pass this to some programs; such as SHIFTX. A space would also be
         making it impossible to CING to use e.g.:
-        print project.molecule.A.GLU77.procheck.CHI1[0]
+        print(project.molecule.A.GLU77.procheck.CHI1[0])
         where A stands for chain id A.
         - The letters A-Z are often used already which will cause name space
         collisions. It is important to choose an id that will most likely not be
@@ -1358,7 +1358,7 @@ class Molecule( NTtree, ResidueList ):
         See unit test in test_molecule.py
         """
         #if type(ranges) != str:
-        if not isinstance(ranges, basestring):
+        if not isinstance(ranges, str):
             nTerror('Error Molecule._rangesStr2list: ranges type [%s] should have been a string' % type(ranges) )
             return None
 
@@ -1462,7 +1462,7 @@ class Molecule( NTtree, ResidueList ):
         if ranges == None or len(ranges) == 0:
             return self.allResidues()
 
-        if isinstance(ranges, basestring):
+        if isinstance(ranges, str):
         #if type(ranges) == str:
             return self._rangesStr2list(ranges)
 
@@ -1795,7 +1795,7 @@ class Molecule( NTtree, ResidueList ):
         #end if
         # compatibility
         if self.content.version < 0.92:
-            fileObject = open(sequenceFile, 'r')
+            fileObject = open(sequenceFile)
             for line in fileObject:
                 exec(line)
             #end for
@@ -1845,7 +1845,7 @@ class Molecule( NTtree, ResidueList ):
 
         #execfile( fileName )
         # 25 Sep 2007: Explicit coding, less memory, better:
-        file = open(fileName, 'r')
+        file = open(fileName)
         for line in file:
             exec(line)
         #end for
@@ -2228,7 +2228,7 @@ class Molecule( NTtree, ResidueList ):
         #end if
         #execfile(fileName);
         # 25 Sep 2007: Explicit coding, less memory, better:
-        file = open(fileName, 'r')
+        file = open(fileName)
         for line in file:
             exec(line)
         #end for
@@ -2658,7 +2658,7 @@ Return an Molecule instance or None on error
                 nTerror('Molecule.initialize: File "%s" not found\n', path)
                 return None
             #end if
-            f = open( path, mode = 'r' )
+            f = open( path )
             sequenceS = f.read()
             f.close()
         #end if
@@ -3519,7 +3519,7 @@ Return an Molecule instance or None on error
         a = a*(3.0/n)
 
         w, v = LA.eig(a)
-        print w,v
+        print(w,v)
         return NTlist(*map(math.sqrt, w))
     #end def
 #end class

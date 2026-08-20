@@ -208,8 +208,8 @@ def cmapWithAlpha(z,palette,minAlpha=.5, maxAlpha=1., underAlpha=0., overAlpha=1
 
     diffAlpha = maxAlpha - minAlpha
     tmp = palette(z)
-    for i in xrange(z.shape[0]):
-        for j in xrange(z.shape[1]):
+    for i in range(z.shape[0]):
+        for j in range(z.shape[1]):
             # Generate the transparency (alpha mixing)
             v = z[i,j]
             if v < 0.:

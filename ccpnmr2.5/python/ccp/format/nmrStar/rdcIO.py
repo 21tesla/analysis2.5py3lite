@@ -252,4 +252,4 @@ if __name__ == "__main__":
 
     for rdcFile in nmrStarFile.rdcFiles:
       for rdc in rdcFile.rdcValues:
-        print rdc.Id, rdc.seqCode1, rdc.resLabel1, rdc.atomName1, rdc.seqCode2, rdc.resLabel2, rdc.atomName2, rdc.value, rdc.valueError
+        print(rdc.Id, rdc.seqCode1, rdc.resLabel1, rdc.atomName1, rdc.seqCode2, rdc.resLabel2, rdc.atomName2, rdc.value, rdc.valueError)

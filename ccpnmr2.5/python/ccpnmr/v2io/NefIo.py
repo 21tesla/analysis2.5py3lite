@@ -24,10 +24,6 @@ loadProject(nefFilePath, projectName=None, pdbFileType='pdb', *pdbFilePaths):
 
 # NB must be Python 2.7 and 3.x compatible
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -154,7 +150,7 @@ def loadNefFile(path, memopsRoot=None, overwriteExisting=False):
     return memopsRoot
 
 
-class CcpnNefReader():
+class CcpnNefReader:
     # Importer functions - used for converting saveframes and loops
     importers = {}
 
@@ -198,7 +194,7 @@ class CcpnNefReader():
 
     def _getSaveFramesInOrder(self, dataBlock):
         """Get saveframes in fixed reading order as OrderedDict(category:[saveframe,])"""
-        result = OD(((x, []) for x in saveFrameReadingOrder))
+        result = OD((x, []) for x in saveFrameReadingOrder)
         result['other'] = otherFrames = []
         for saveFrameName, saveFrame in dataBlock.items():
             sf_category = saveFrame.get('sf_category')
@@ -803,7 +799,7 @@ class CcpnNefReader():
             else:
                 ll = spectrumName.rsplit('`', 2)
                 if len(ll) == 3:
-                    # name is of form abc`xyz`
+                    # name is of form abcstr(xyz)
                     try:
                         peakListParams['serial'] = int(ll[1])
                     except ValueError:
@@ -844,9 +840,9 @@ class CcpnNefReader():
                 else:
                     experimentParams['refExperiment'] = refExperiment
 
-            if u'name' in experimentParams:
+            if 'name' in experimentParams:
                 # NOTE:ED - small fix for name sometimes being decoded as an int
-                experimentParams[u'name'] = str(experimentParams[u'name'])
+                experimentParams['name'] = str(experimentParams['name'])
             nmrExperiment = nmrProject.newExperiment(**experimentParams)
             dataSource = nmrExperiment.newDataSource(**dataSourceParams)
 
@@ -1703,7 +1699,7 @@ def makeNefAxisCodes(isotopeCodes, dimensionIds, acquisitionAxisIndex, transferD
     NB generated e.g. H_1 instead of H1, as per V2 convention."""
 
     nuclei = [commonUtil.splitIntFromChars(x)[1] for x in isotopeCodes]
-    dimensionToNucleus = dict((zip(dimensionIds, nuclei)))
+    dimensionToNucleus = dict(zip(dimensionIds, nuclei))
     dimensionToAxisCode = dimensionToNucleus.copy()
 
     oneBondConnections = {}

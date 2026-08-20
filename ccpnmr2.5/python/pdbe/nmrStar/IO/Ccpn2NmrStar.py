@@ -168,7 +168,7 @@ def mailErrorAndExit(errValue, errString):
 
 def mailUploadInfo(logFile):
 
-  fp = open(logFile, 'r')
+  fp = open(logFile)
   msg = MIMEText(fp.read() )
   fp.close()
 
@@ -205,11 +205,11 @@ if __name__ == '__main__':
 
   (ccpnProjectDir, nmrStarFileName, xeasyFileName, pdbFileName, cnsFileName, logFile) = sys.argv[1:]
 
-  print 'Trying %s' % (ccpnProjectDir)
+  print('Trying %s' % (ccpnProjectDir))
 
   sys.stdout = open(logFile, 'w')
 
-  print 'Args: %s\n' % sys.argv[1:]
+  print('Args: %s\n' % sys.argv[1:])
 
   project = loadProject(ccpnProjectDir)
 
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         #break
 
     if not ccpnEntry:
-      print 'Please select the relevant Entry for this deposition.\n'
+      print('Please select the relevant Entry for this deposition.\n')
       ccpnEntry = ccpnEntries[0]
 
     if not ccpnEntry:
@@ -272,7 +272,7 @@ if __name__ == '__main__':
       mailErrorAndExit(errValue, errString)
 
   if ccpnEntry:
-    print '\nDoing Ccpn2NmrStar for entry: %s' % ccpnEntry.name
+    print('\nDoing Ccpn2NmrStar for entry: %s' % ccpnEntry.name)
 
     #sys.__stdout__.write('NAME: [%s]\n' % ccpnEntry.name)
 
@@ -289,7 +289,7 @@ if __name__ == '__main__':
       #  writePeakList(xeasyObj, xeasyPeakFileName, peakList)
 
     else:
-      print 'No chemical shifts.\n'
+      print('No chemical shifts.\n')
 
     strucGen = getStructureGeneration(ccpnEntry)
 
@@ -302,7 +302,7 @@ if __name__ == '__main__':
         writeStructures(pdbObj, pdbFileName, structures)
 
       else:
-        print 'No structures.\n'
+        print('No structures.\n')
 
       distConstraintList = getDistConstrainList(strucGen)
 
@@ -312,10 +312,10 @@ if __name__ == '__main__':
         writeRestraints(cnsObj, cnsFileName, distConstraintList)
 
       else:
-        print 'No distance restraints.\n'
+        print('No distance restraints.\n')
 
     else:
-      print 'Cannot find a structureGeneration.\n'
+      print('Cannot find a structureGeneration.\n')
 
     writeNmrStarFile(ccpnEntry, nmrStarFileName, nmrStarVersion = '3.0')
 

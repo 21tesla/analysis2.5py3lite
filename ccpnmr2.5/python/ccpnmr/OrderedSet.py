@@ -105,23 +105,23 @@ class FrozenOrderedSet(collections.MutableSet):
 
     def add(self, value):
         """Add an element."""
-        raise NotImplementedError('Operation not allowed on {}'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
 
     def discard(self, value):
         """Remove an element."""
-        raise NotImplementedError('Operation not allowed on {}'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
 
     def remove(self, value):
         """Remove an element."""
-        raise NotImplementedError('Operation not allowed on {}'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
 
     def pop(self, last=True):
         """Return the popped value."""
-        raise NotImplementedError('Operation not allowed on {}'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
 
     def clear(self):
         """Clear the OrderedSet."""
-        raise NotImplementedError('Operation not allowed on {}'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
 
     def _frozenAdd(self, key):
         """Add elements during initial creation, frozen at all other times"""
@@ -164,34 +164,34 @@ class FrozenOrderedSet(collections.MutableSet):
 if __name__ == '__main__':
     s = OrderedSet('abracadaba')
     t = OrderedSet('simsalabim')
-    print('OR - {}'.format(s | t))
-    print('AND - {}'.format(s & t))
-    print('MINUS - {}'.format(s - t))
-    print('SAME - {}'.format(s==t))
+    print(f'OR - {s | t}')
+    print(f'AND - {s & t}')
+    print(f'MINUS - {s - t}')
+    print(f'SAME - {s==t}')
 
-    print('SET s - {}'.format(s))
+    print(f'SET s - {s}')
     s.pop()
-    print('POP - {}'.format(s))
+    print(f'POP - {s}')
     s.pop(last=False)
-    print('POP - {}'.format(s))
+    print(f'POP - {s}')
 
     s = OrderedSet('abracadaba')
     t = FrozenOrderedSet('simsalabim')
-    print('OR - {}'.format(s | t))
-    print('AND - {}'.format(s & t))
-    print('MINUS - {}'.format(s - t))
+    print(f'OR - {s | t}')
+    print(f'AND - {s & t}')
+    print(f'MINUS - {s - t}')
 
-    print('SET s - {}'.format(s))
+    print(f'SET s - {s}')
     s.pop()
-    print('POP - {}'.format(s))
+    print(f'POP - {s}')
 
-    print('SET t - {}'.format(s))
+    print(f'SET t - {s}')
     try:
         t |= 'Z'
     except Exception as es:
         print(str(es))
-    print('SET t - {}'.format(s))
-    print('SAME - {}'.format(s==t))
+    print(f'SET t - {s}')
+    print(f'SAME - {s==t}')
     t = FrozenOrderedSet('abrac')
-    print('SAME - {}'.format(s==t))
-    print('SAME - {}'.format(t==s))
+    print(f'SAME - {s==t}')
+    print(f'SAME - {t==s}')

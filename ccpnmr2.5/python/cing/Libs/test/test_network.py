@@ -34,7 +34,7 @@ class AllChecks(TestCase):
     
     def _test_get_local_ip_address(self):
         ip = get_local_ip_address()
-        print 'IP is: %s' % ip
+        print('IP is: %s' % ip)
         self.assertTrue( ip )
     # end def
 # end class

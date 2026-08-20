@@ -136,7 +136,7 @@ class ConvertCasdNmrToCcpn(ScriptHandler,FcWorkFlow):
     if not os.path.isdir(self.dataDir):
       os.makedirs(self.dataDir)
     
-    print "Converting CASD-NMR project %s..." % self.identifier
+    print("Converting CASD-NMR project %s..." % self.identifier)
     
     # Create log file(s)
     self.createLogFiles()
@@ -156,7 +156,7 @@ class ConvertCasdNmrToCcpn(ScriptHandler,FcWorkFlow):
     #
     # Get CASD-NMR data
     #
-    print '### import', self.identifier
+    print('### import', self.identifier)
     
     self.tmpdir = tempfile.mkdtemp(dir=casdConstants.topTmpDir)
     try:
@@ -233,7 +233,7 @@ class ConvertCasdNmrToCcpn(ScriptHandler,FcWorkFlow):
     
     casdFile = self.getInputFile('restraints')
         
-    print "  Unpacking CASD-NMR project in %s..." % self.unpackDir
+    print("  Unpacking CASD-NMR project in %s..." % self.unpackDir)
 
     if casdFile.count(".zip"):
       textOutput = self.unpackZipFile(casdFile, unpackDir=self.unpackDir, excludeFiles=self.excludeArchiveFiles, extractFiles=self.extractArchiveFiles)
@@ -263,7 +263,7 @@ class ConvertCasdNmrToCcpn(ScriptHandler,FcWorkFlow):
       filePath = os.path.join(self.importDir,fileName)
       
       if not formatName:
-        print "Determining format for %s file %s..." % (informationType,filePath)
+        print("Determining format for %s file %s..." % (informationType,filePath))
         self.fcGetFormatNameSuggestion(informationType,filePath)
       
       #
@@ -1011,7 +1011,7 @@ if __name__ == '__main__':
     try:
       converter.fcImportAllData()
     except:
-      print 'ERROR importing %s' % entryName
+      print('ERROR importing %s' % entryName)
       traceback.print_exc(file=sys.stdout)
   
   

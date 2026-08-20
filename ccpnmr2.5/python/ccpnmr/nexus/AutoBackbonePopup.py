@@ -23,7 +23,7 @@ for further information, please contact :
 ===========================REFERENCE END===============================
 
 """
-import Tkinter, os
+import tkinter, os
 from os.path import isdir
 
 try:
@@ -754,7 +754,7 @@ class AutoBackbonePopup(BasePopup):
    
     else:
       self.assignments[residue] = None
-				
+                
   def clearSelected(self):
         
     for residue in self.assignmentMatrix.currentObjects:
@@ -827,7 +827,7 @@ class AutoBackbonePopup(BasePopup):
       for spinSystemB in residue.resonanceGroups:
         if spinSystemB in spinSystems:
           spinSystem = spinSystemB
-	  break
+      break
 
       if not spinSystem:
         spinSystem = self.assignments.get(residue)
@@ -1026,8 +1026,8 @@ class AutoBackbonePopup(BasePopup):
         assignSpinSystemResidue(pSpinSystem, pResidue)
 
      	for ss in pResidue.resonanceGroups:
-	  if ss is not pSpinSystem:
-	    self.mergeResonances(pSpinSystem, ss)
+      if ss is not pSpinSystem:
+        self.mergeResonances(pSpinSystem, ss)
      	    mergeSpinSystems(pSpinSystem, ss)
 
       pSpinSystem = None
@@ -1052,21 +1052,21 @@ class AutoBackbonePopup(BasePopup):
       
       if len(assignNames) == 1: # No ambiguity
         atomType = assignNames[0]
-	typeDict[atomType] = typeDict.get(atomType, []) + [resonance,]
+    typeDict[atomType] = typeDict.get(atomType, []) + [resonance,]
 
     for resonance in ss2.resonances:
       assignNames = resonance.assignNames
       
       if len(assignNames) == 1: # No ambiguity
         atomType = assignNames[0]
-	typeDict[atomType] = typeDict.get(atomType, []) + [resonance,]
+    typeDict[atomType] = typeDict.get(atomType, []) + [resonance,]
 
     for atomType in typeDict.keys():
       resonances = typeDict[atomType]
       
       while len(resonances) > 1:
         resonance1 = resonances[0]
-	resonance2 = resonances.pop()
+    resonance2 = resonances.pop()
         mergeResonances(resonance1, resonance2)
 
   def updateComparison(self, obj=None):
@@ -1809,10 +1809,10 @@ class AutoBackbonePopup(BasePopup):
     if obj:
       if obj.className == 'DataSource':
         refExperiment = obj.experiment.refExperiment
-	if not refExperiment:
-	  return
-	
-	if refExperiment not in self.allowedRefExps:
+    if not refExperiment:
+      return
+    
+    if refExperiment not in self.allowedRefExps:
           return
  
       elif obj.className == 'Experiment':

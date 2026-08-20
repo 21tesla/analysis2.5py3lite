@@ -114,10 +114,10 @@ class Tool:
 
     try:
       self.ccpnProject = loadProject(dirPath)
-      print "Read existing CCPN project..."
+      print("Read existing CCPN project...")
       
     except:
-      print "Creating new CCPN project..."
+      print("Creating new CCPN project...")
       
       projectName = returnMemopsWord(projectName)
       self.ccpnProject = Implementation.MemopsRoot(name = projectName)
@@ -159,10 +159,10 @@ class Tool:
     
   def readSequence(self,fileName,
                         moleculeName,
-	    moleculeType,
-	    moleculeSegID,
-	    moleculeFirstResidueNumber):
-	    	    
+        moleculeType,
+        moleculeSegID,
+        moleculeFirstResidueNumber):
+        	    
     #
     # First do a simple check to see if molecule/chain already exists (with the relevant segID!)
     #
@@ -178,7 +178,7 @@ class Tool:
     
       chains = self.format.readSequence(fileName,
                                         molSystem = self.molSystem,
-		molName = moleculeName,
+        molName = moleculeName,
                                         seqCodeStart = moleculeFirstResidueNumber,
                                         chainCodes = [moleculeSegID],
                                         minimalPrompts = 1)
@@ -250,10 +250,10 @@ class Tool:
       
       self.peakLists = self.format.readPeaks(fileName,
                                             dataSource = self.dataSource,
-	                                    dataDimRefs = dataDimRefs,
-		                            specName = spectrumName,
-		                            peakList = self.peakList,
-	                                    minimalPrompts = 1)
+                                        dataDimRefs = dataDimRefs,
+                                    specName = spectrumName,
+                                    peakList = self.peakList,
+                                        minimalPrompts = 1)
     
     if self.experiment not in self.chemShiftList.experiments:
       self.chemShiftList.addExperiment(self.experiment)
@@ -270,7 +270,7 @@ class Tool:
     
       self.peakList = self.format.readPeakAssignments(fileName,
                                                       self.peakList)
-		              
+                      
       self.fileNameDict[fileName] = self.peakList
 
 
@@ -291,7 +291,7 @@ class Tool:
       
       self.chemShiftList = self.format.readShifts(fileName,
                                                   measurementListName = chemShiftListName,
-		                                                measurementList = self.chemShiftList,
+                                                        measurementList = self.chemShiftList,
  	                                                minimalPrompts = 1)
 
     return self.chemShiftList
@@ -366,9 +366,9 @@ if __name__ == '__main__':
 
   ccpnConv.readSequence(sequenceFileName,
                         moleculeName,
-	    moleculeType,
-	    moleculeSegID,
-	    moleculeFirstResidueNumber)
+        moleculeType,
+        moleculeSegID,
+        moleculeFirstResidueNumber)
 
   #
   # Define experiments/spectra/peaklists
@@ -424,7 +424,7 @@ if __name__ == '__main__':
   ccpnConv.readPeakList(peakListFileName,
                         spectrumType,
   	    spectrumName,
-	    peakListDimOrder)
+        peakListDimOrder)
 
 
   namingSystemName = 'auto'

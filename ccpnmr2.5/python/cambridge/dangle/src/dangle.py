@@ -75,8 +75,8 @@ class Dangle:
     self.input       = inputFile
     self.progressBar = progressBar
     
-    print 'DANGLE (version 1.1)'
-    print DANGLE_CITE
+    print('DANGLE (version 1.1)')
+    print(DANGLE_CITE)
   
     # 1. read config file for location of reference information  
     self.reference = Reference(os.path.dirname(location))
@@ -96,11 +96,11 @@ class Dangle:
     self.query.readShiftsFromXml(inputFile)
     
     # 3. compare with DB
-    print 'STEP1: Shift search'
+    print('STEP1: Shift search')
     self.topMatches = self.compareWithShiftDB()
 
     # 4. make preditions from scorograms
-    print 'STEP2: GLE generation'
+    print('STEP2: GLE generation')
     self.predictor   = Predictor(self.query, self.topMatches, self.reference, writePgm)
     self.predictions = self.predictor.predictPhiPsiFromDatabaseMatches(progressBar=self.progressBar)
    
@@ -234,11 +234,11 @@ class Dangle:
 if (__name__ == '__main__'):
   
   if (len(sys.argv) < 2)or('-help' in sys.argv):
-    print 'Usage     : python dangle.py inputShiftFile [-dir outputDir] [-cns] [-reject numOfIsland] [-angleOnly] [-ppm]'
-    print '-cns      : make a cns .tbl file for dihedral angle constraints'
-    print '-reject x : make no prediction for GLE with > x islands'
-    print '-angleOnly: only the prediction table (no GLE PGM files) will be generated'
-    print '-ppm      : write GLE in colored PPM format instead of grayscaled PGM format.'
+    print('Usage     : python dangle.py inputShiftFile [-dir outputDir] [-cns] [-reject numOfIsland] [-angleOnly] [-ppm]')
+    print('-cns      : make a cns .tbl file for dihedral angle constraints')
+    print('-reject x : make no prediction for GLE with > x islands')
+    print('-angleOnly: only the prediction table (no GLE PGM files) will be generated')
+    print('-ppm      : write GLE in colored PPM format instead of grayscaled PGM format.')
     sys.exit(0)
   
   location  = os.path.dirname(os.path.abspath(sys.argv[0]))  # directory of dangle.py
@@ -259,7 +259,7 @@ if (__name__ == '__main__'):
     if (index+1 < len(sys.argv)):
       reject = int(sys.argv[index+1])
       if (reject < 1):
-        print 'Error: Rejection threshold must be larger than 0.'
+        print('Error: Rejection threshold must be larger than 0.')
         sys.exit(0)
   if ('-angleOnly' in sys.argv):
     angleOnly = True

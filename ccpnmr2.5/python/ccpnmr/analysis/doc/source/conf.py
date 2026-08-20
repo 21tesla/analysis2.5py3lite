@@ -77,8 +77,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'CcpNmr Analysis'
-copyright = u'2010, Tim Stevens, Wayne Boucher CCPN/Univeristy of Cambridge'
+project = 'CcpNmr Analysis'
+copyright = '2010, Tim Stevens, Wayne Boucher CCPN/Univeristy of Cambridge'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -106,7 +106,7 @@ release = '2.3.0'
 # for source files.
 exclude_trees = []
 
-# The reST default role (used for this markup: `text`) to use for all documents.
+# The reST default role (used for this markup: str(text)) to use for all documents.
 #default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
@@ -213,8 +213,8 @@ latex_paper_size = 'a4'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'CcpNmrCore.tex', u'CcpNmr Analysis',
-   u'Tim Stevens, Wayne Boucher', 'manual'),
+  ('index', 'CcpNmrCore.tex', 'CcpNmr Analysis',
+   'Tim Stevens, Wayne Boucher', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

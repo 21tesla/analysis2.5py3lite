@@ -70,11 +70,11 @@ except ImportError:
 try:
   import ccpnmr.c.ContourStyle as ContourStyle
   import ccpnmr.c.ContourLevels as ContourLevels
-except Exception, e:
-  print 'Error, the WindowDraw module will not work, something is wrong with the C code.'
+except Exception as e:
+  print('Error, the WindowDraw module will not work, something is wrong with the C code.')
   ContourStyle = ContourLevels = None
-  print 'Exception:', e
-  print 'Will continue without Analysis window drawing functionality'
+  print('Exception:', e)
+  print('Will continue without Analysis window drawing functionality')
 
 no_peak_text = 'No peak text'
 
@@ -1016,7 +1016,7 @@ class WindowDraw:
         # this could be called if exiting program so check that ok
         if not hasattr(winPeakList, 'cWinPeakList'):
           return
-	
+    
       if self.isWinPeakListDrawn(winPeakList):
         if hasattr(winPeakList, 'printFont'):
           if winPeakList.printPeaks:

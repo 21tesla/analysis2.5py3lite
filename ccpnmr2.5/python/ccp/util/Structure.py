@@ -70,7 +70,7 @@ def alignCoordinates(coords0, coords1, weight=None, translate0=True, translate1=
     from numpy import array, cross, dot, outer, sqrt, sum, transpose
     from numpy.linalg import eig
   except:
-    print 'ERROR: cannot use alignCoordinates without numpy'
+    print('ERROR: cannot use alignCoordinates without numpy')
     raise
 
   coords0 = array(coords0)

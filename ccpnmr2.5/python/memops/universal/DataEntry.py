@@ -69,7 +69,7 @@ def askData(func_type, prompt, initial_value, min_value = None, max_value = None
   while (not done):
 
     done = 1 # true for most cases below, so set it here
-    answer = raw_input(prompt)
+    answer = input(prompt)
     answer = answer.strip()
     if (initial_value is not '' and not answer):
       answer = initial_value
@@ -79,13 +79,13 @@ def askData(func_type, prompt, initial_value, min_value = None, max_value = None
         try:
           answer = int(answer)
         except:
-          print 'Not an integer, please try again.'
+          print('Not an integer, please try again.')
           done = 0
       elif (func_type == 'float'):
         try:
           answer = float(answer)
         except:
-          print 'Not a floating point value, please try again.'
+          print('Not a floating point value, please try again.')
           done = 0
     else:
       answer = None
@@ -132,6 +132,6 @@ dataEntry = DataEntry()
 
 if (__name__ == '__main__'):
 
-  print dataEntry.askString('ask string title', 'ask string prompt')
-  print dataEntry.askInteger('ask integer title', 'ask integer prompt')
-  print dataEntry.askFloat('ask float title', 'ask float prompt')
+  print(dataEntry.askString('ask string title', 'ask string prompt'))
+  print(dataEntry.askInteger('ask integer title', 'ask integer prompt'))
+  print(dataEntry.askFloat('ask float title', 'ask float prompt'))

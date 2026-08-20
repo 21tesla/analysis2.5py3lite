@@ -60,7 +60,7 @@ class PDBRecord( NTdict ):
             try:
                 assert len(ln) <= (start - 1)
             except AssertionError:
-                print "[ASSERT] "+ln
+                print("[ASSERT] "+ln)
                 raise
 
             ## add spaces to the end if necessary
@@ -101,8 +101,8 @@ class PDBRecord( NTdict ):
             try:
                 assert type(s) == StringType
             except AssertionError:
-                print "### s",str(type(s)), str(s), ftype, field
-                print ln
+                print("### s",str(type(s)), str(s), ftype, field)
+                print(ln)
                 raise
 
             ## check for maximum length
@@ -1605,7 +1605,7 @@ class PDBFile(list):
         RecordProcessor(self, processor, filter_func)
 
 
-class RecordProcessor(object):
+class RecordProcessor:
     """Implements the PDBFile's record_processor algorithm.
     """
     def __init__(self, pdb_file, processor, filter_func = None):
@@ -1743,7 +1743,7 @@ if __name__ == "__main__":
     try:
         path = sys.argv[1]
     except IndexError:
-        print "usage: PDB.py <PDB file path>"
+        print("usage: PDB.py <PDB file path>")
         sys.exit(1)
 
     pdbfil = PDBFile( path)
@@ -1752,7 +1752,7 @@ if __name__ == "__main__":
     for record in pdbfil:
         if record._name.strip() == "ATOM":
 #	    pass
-            print '>%s<'% record.name
+            print('>%s<'% record.name)
             pass
 ### </testing>
 

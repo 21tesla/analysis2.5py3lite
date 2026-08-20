@@ -124,7 +124,7 @@ class DataTablesServer:
         try:
             self.dbh = psycopg2.connect(conn_string)            
             if 0: # Default: False
-                print "Content-Type: text/plain\n"
+                print("Content-Type: text/plain\n")
                 # conn.cursor will return a cursor object, you can use this query to perform queries
                 # note that in this example we pass a cursor_factory argument that will
                 # dictionary cursor so COLUMNS will be returned as a dictionary so we
@@ -141,16 +141,16 @@ class DataTablesServer:
                 # access the column by numeric index:
                 # even though we enabled columns by name I'm showing you this to
                 # show that you can still access columns by index and iterate over them.
-                print "Value: ", memory[0]
+                print("Value: ", memory[0])
 #    #             print the entire row 
-                print "Row:    ", memory
+                print("Row:    ", memory)
 #                return
             # end if            
         except:
             traceBackString = format_exc()
             if traceBackString == None:
                 traceBackString = 'No traceback error string available.'
-            print traceBackString
+            print(traceBackString)
             return
         # end try
         self.resultData = None
@@ -166,17 +166,17 @@ class DataTablesServer:
                                           
         
         if self.cgi.has_key('query_type') and self.cgi['query_type'].value == "normal":
-            print "Content-Type: text/plain\n"
+            print("Content-Type: text/plain\n")
 #            log( "DEBUG: Processing normal query.\n" )
             self.runQueries(usePaging=True)
             self.outputResult()
         else:
-            print "Content-Disposition: attachment; filename=NRG-CING_summary_selection.csv;\n"
+            print("Content-Disposition: attachment; filename=NRG-CING_summary_selection.csv;\n")
 #            log( "DEBUG: Processing download query.\n" )
 #            self.cgi['iDisplayLength'] = -1 # All filtered rows please
             self.runQueries(usePaging=False)
 #            log( "self.resultData: %s\n" % str(self.resultData) )
-            print toCsv( self.resultData )            
+            print(toCsv( self.resultData ))
             return
         # end def            
     # end def
@@ -185,7 +185,7 @@ class DataTablesServer:
         '''
         Redirect any which way the input.
         '''
-        print "Content-Type: text/html\n"
+        print("Content-Type: text/html\n")
         basicRedirectHtml = """<html><META HTTP-EQUIV="Refresh"
               CONTENT="0; URL=%s">
               </html>
@@ -222,7 +222,7 @@ class DataTablesServer:
         dbValue = self.cgi['database'].value
         if dbValue != 'pdb':
             log("ERROR: got a cgi database parameter but the value was not pdb but: %s\n" % str(dbValue))
-            print basicRedirectHtml % '../../NRG-CING/HTML/index.html'
+            print(basicRedirectHtml % '../../NRG-CING/HTML/index.html')
             return
         # end def
         pdb_id = ''
@@ -233,7 +233,7 @@ class DataTablesServer:
             old_string = r"<!-- INSERT MAIN HERE -->"
             new_string = invalidPdbHtmlMain % pdb_id
             file_content = string.replace(file_content, old_string, new_string )
-            print file_content
+            print(file_content)
             return
         # end def
         pdb_id = pdb_id.lower()
@@ -242,14 +242,14 @@ class DataTablesServer:
             old_string = r"<!-- INSERT MAIN HERE -->"
             new_string = absentPdbHtmlMain % { "pdb_id": pdb_id }
             file_content = string.replace(file_content, old_string, new_string )
-            print file_content
+            print(file_content)
             return
         # end def
         # All well here.
         ch23 = pdb_id[1:3]
         # Superfast redirect without inbetween page.
         refTag = "../../NRG-CING/data/" + ch23 + "/"+pdb_id+"/"+pdb_id+".cing/" + pdb_id + "/HTML/index.html"
-        print basicRedirectHtml % refTag
+        print(basicRedirectHtml % refTag)
         return
     # end def
         
@@ -339,7 +339,7 @@ class DataTablesServer:
         # end for
         output = output[:-1]
         output += '] }'        
-        print output
+        print(output)
     # end def
         
     def isPresentInDb( self, dbValue ):

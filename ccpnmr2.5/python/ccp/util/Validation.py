@@ -46,10 +46,10 @@ Development of a Software Pipeline. Accepted by Proteins (2004).
 
 """
 
-VALID_VALUE_TYPE_ATTRS = {type(0.0): 'floatValue',
-                          type(1): 'intValue',
-                          type('a'): 'textValue',
-                          type(True): 'booleanValue'} 
+VALID_VALUE_TYPE_ATTRS = {float: 'floatValue',
+                          int: 'intValue',
+                          str: 'textValue',
+                          bool: 'booleanValue'} 
 
 
 from ccp.util.Software import getSoftware

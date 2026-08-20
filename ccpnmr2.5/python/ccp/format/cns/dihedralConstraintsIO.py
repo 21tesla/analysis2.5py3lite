@@ -76,7 +76,7 @@ class CnsDihedralConstraintFile(CnsGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading cns dihedral constraint list %s" % self.name
+      print("Reading cns dihedral constraint list %s" % self.name)
 
     return self.readGeneric(CnsDihedralConstraint)
 
@@ -92,7 +92,7 @@ class CnsDihedralConstraintFile(CnsGenericFile):
     # ...
 
     if verbose == 1:
-      print "Writing cns dihedral constraint list %s" % self.name
+      print("Writing cns dihedral constraint list %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -101,7 +101,7 @@ class CnsDihedralConstraintFile(CnsGenericFile):
       fout.write(" ASSIGN ")
 
       if len(constraint.items) > 1:
-        print "  Warning: multiple items for CNS dihedral restraint - only using first one"
+        print("  Warning: multiple items for CNS dihedral restraint - only using first one")
 
       item = constraint.items[0] 
 

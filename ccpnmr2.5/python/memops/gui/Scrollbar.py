@@ -56,7 +56,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # but allows resizing with middle button
 # as well as usual scrolling with left button
 
-import Tkinter
+import tkinter
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Color import scaleColor, invertColor
@@ -687,7 +687,7 @@ if __name__ == '__main__':
   s = None
 
   def callback(lo, hi):
-    print 'callback', lo, hi
+    print('callback', lo, hi)
  
   def getText():
 

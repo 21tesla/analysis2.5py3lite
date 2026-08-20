@@ -91,9 +91,9 @@ class MMCIFFile(MMCIFGenericFile):
   def readGeneric(self, verbose=False):
   
     if verbose:
-      print "  Reading %s file %s..." % (self.format,self.name)
+      print("  Reading %s file %s..." % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lexer = STARLexer( fin)
     self.mmCif = DataDictionary_mmCIF()
     mmCifParser = parser( lexer, self.mmCif, self.mmCif)

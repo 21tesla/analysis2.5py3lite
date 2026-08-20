@@ -45,7 +45,7 @@ import shutil
 import sys
 import traceback
 
-import Tkinter
+import tkinter
 
 from ccp.general.Command import Command
 
@@ -179,11 +179,11 @@ try:
   
 except:
   HAVE_NUMPY = False
-  print ''
-  print 'WARNING: Python NumPy module not installed or accessible.'
-  print 'NumPy is required for CcpNmr automatic assignment and'
-  print 'peak separator routines.'
-  print ''
+  print('')
+  print('WARNING: Python NumPy module not installed or accessible.')
+  print('NumPy is required for CcpNmr automatic assignment and')
+  print('peak separator routines.')
+  print('')
 
 
 from ccpnmr.update.UpdatePopup import UpdatePopup
@@ -371,7 +371,7 @@ class AnalysisPopup(BasePopup, Analysis):
           if self.errorHandler.reportNeeded(formatedTb, *args):  
             popup = ReportErrorPopup(self, formatedTb, *args) 
       except:
-         print 'Automated report failed' 
+         print('Automated report failed')
     
     self._root().report_callback_exception_tk_native = self._root().report_callback_exception
     self._root().report_callback_exception = show_error
@@ -829,7 +829,7 @@ class AnalysisPopup(BasePopup, Analysis):
     self.menus[ProjectMenu] = menu
     self.menu_items[ProjectMenu] = ['New', 'Open Project', 'Open Spectra', 'Load Nef',
                                     'Save', 'Save As', 'Import', 'Close',
-				                    'Quit', 'Summary', 'Preferences', 'Register', 'Validate',
+                                    'Quit', 'Summary', 'Preferences', 'Register', 'Validate',
                                     'Backup', 'Archive', updateText, 'Help']
     
     # Menus that area active in absence of a project
@@ -1269,7 +1269,7 @@ class AnalysisPopup(BasePopup, Analysis):
                      image=self.iconTool, compound='left',
                      command=self.calcHeteroNoe,
                      tipText='A tool to quickly calculate heteronuclear NOE values by peak intensity comparison')
-    menu.add_command(label=u'3J H-H\u03B1 Coupling', shortcut='C', 
+    menu.add_command(label='3J H-H\u03B1 Coupling', shortcut='C', 
                      image=self.iconTool, compound='left',
                      command=self.calcHnHaCoupling,
                      tipText='A tool to extract amide H to alpha H 3J coupling and predict phi angles using HNHA experiments')
@@ -1298,7 +1298,7 @@ class AnalysisPopup(BasePopup, Analysis):
                                  'NMR Series',
                                  'Shift Differences',
                                  'Heteronuclear NOE',
-                                 u'3J H-H\u03B1 Coupling',
+                                 '3J H-H\u03B1 Coupling',
                                  'Follow Intensity Changes',
                                  'Follow Shift Changes',
                                  'PALES: Alignment and RDCs',
@@ -1416,7 +1416,7 @@ class AnalysisPopup(BasePopup, Analysis):
       if popup:
         del self.popups[old_popup_name]
       else:
-        print 'Warning: popup %s was expected to exist but did not, in popups list' % old_popup_name
+        print('Warning: popup %s was expected to exist but did not, in popups list' % old_popup_name)
       new_popup_name = self.getWindowPopupName(new_name)
       self.popups[new_popup_name] = popup
       
@@ -1683,7 +1683,7 @@ class AnalysisPopup(BasePopup, Analysis):
       
       try:
         Analysis.initProject(self, project)
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Project invalid', errText + e.error_msg, parent=self)
         self.curatePopupNotifiers(self.unregisterNotify)
         self.project = None
@@ -1768,7 +1768,7 @@ class AnalysisPopup(BasePopup, Analysis):
     if hasattr(analysisProfile, 'userName'):
       if isRegistered(analysisProfile):
         if not self.printedRegistration:
-          print 'Registered (%s, %s, %s)' % (analysisProfile.userName, analysisProfile.userOrganisation, analysisProfile.userEmail)
+          print('Registered (%s, %s, %s)' % (analysisProfile.userName, analysisProfile.userOrganisation, analysisProfile.userEmail))
           self.printedRegistration = True
         try:
           updateRegister(analysisProfile)
@@ -1931,7 +1931,7 @@ class AnalysisPopup(BasePopup, Analysis):
         self.initProject(project)
 
       except Exception as es:
-        print str(es)
+        print(str(es))
 
   # # NOTE:ED not needed
   # def importNefFile(self):
@@ -2282,16 +2282,16 @@ class AnalysisPopup(BasePopup, Analysis):
     for dataSource in dataSources:
       # self.finishInitSpectrum(dataSource)
       Analysis.finishInitSpectrum(self, dataSource)
-    print "DONE"
+    print("DONE")
 
   def runCyana2Ccpn(self):
 
     from ccpnmr.analysis.macros.MultiStructure  import runCyana2CcpnDialogue
     calculationData = runCyana2CcpnDialogue(self.argumentServer)
     yy = self.argumentServer.askYesNo("Import Calculation Results")
-    print 'calcData',calculationData
+    print('calcData',calculationData)
     if yy:
-      print calculationData
+      print(calculationData)
       self.importCyanaData(calculationData=calculationData)
 
 
@@ -2376,9 +2376,9 @@ class AnalysisPopup(BasePopup, Analysis):
   def meccano(self):
     try:
       from grenoble.meccano.MeccanoPopup import MeccanoPopup
-    except Exception, e:
+    except Exception as e:
       showWarning('Meccano exception', str(e), parent=self)
-      print e
+      print(e)
       return
       
     self.openPopup('meccano', MeccanoPopup)
@@ -2407,8 +2407,8 @@ class AnalysisPopup(BasePopup, Analysis):
           try:
             title = popup.getTitle()
             popup.setTitle(title)
-          except Exception, e:
-            print 'saveCallback exception', str(e)
+          except Exception as e:
+            print('saveCallback exception', str(e))
             continue
           except:
             continue
@@ -2612,8 +2612,8 @@ class AnalysisPopup(BasePopup, Analysis):
     try:
       geometry = popup.geometry()
       self.application.setValue(self.analysisProject, key, str(geometry))
-    except Exception, e:
-      print 'setPopupGeometry exception', str(e)
+    except Exception as e:
+      print('setPopupGeometry exception', str(e))
     except:
       pass
 
@@ -2647,8 +2647,8 @@ class AnalysisPopup(BasePopup, Analysis):
       popup = self.popups[key]
       try:
         state = popup.state()
-      except Exception, e:
-        print 'setPopupsOpen exception', str(e)
+      except Exception as e:
+        print('setPopupsOpen exception', str(e))
         continue
       except:
         continue
@@ -2663,8 +2663,8 @@ class AnalysisPopup(BasePopup, Analysis):
 
     try:
       self.application.setValue(self.analysisProject, key, value)
-    except Exception, e:
-      print 'setPopupsOpen setValue exception', str(e)
+    except Exception as e:
+      print('setPopupsOpen setValue exception', str(e))
 
   def saveFile(self):
 
@@ -2674,12 +2674,12 @@ class AnalysisPopup(BasePopup, Analysis):
     try:
       self.setSaveState()
       if saveProject(self.project, createFallback=True, showWarning=showWarning):
-        print 'successfully saved project'
+        print('successfully saved project')
         self.saveCallback()
         return True
       else:
         return False
-    except IOError, e:
+    except OSError as e:
       showError('Saving file', str(e), parent=self)
       return False
 

@@ -98,10 +98,10 @@ try:
   from ccpnmr.c.SliceFile import SliceFile
   from ccpnmr.c.WinPeakList import WinPeakList as CWinPeakList
 
-except Exception, e:
-  print 'Error, the Analysis module will not work, something is wrong with the C code.'
-  print 'Exception:', e
-  print 'Will continue without Analysis C functionality'
+except Exception as e:
+  print('Error, the Analysis module will not work, something is wrong with the C code.')
+  print('Exception:', e)
+  print('Will continue without Analysis C functionality')
   MemCache = StoreFile = ContourFile = StoredContourFile = CPeakList = CPeakCluster = SliceFile = CWinPeakList = None
 
 X_Y = set(['x', 'y'])
@@ -170,11 +170,11 @@ class Analysis:
   def printCommandLineInfo(self):
     
     version = Copyright.version
-    print self.versionInfo
+    print(self.versionInfo)
     if version.timestamp:
-      print 'Distribution created %s' % version.timestamp
+      print('Distribution created %s' % version.timestamp)
     
-    print analysisReference
+    print(analysisReference)
 
   def checkAxisPanels(self):
 
@@ -645,8 +645,8 @@ class Analysis:
     try:
       backupProject(self.project)
       
-    except Implementation.ApiError, e:
-      print 'Backup error %s: %s' % (time.ctime(time.time()), e.error_msg)
+    except Implementation.ApiError as e:
+      print('Backup error %s: %s' % (time.ctime(time.time()), e.error_msg))
 
   def setupPeakAnnotation(self, peak):
 
@@ -887,7 +887,7 @@ class Analysis:
           try:
             self.currentPeaks.remove(peak)
           except:
-            print 'C <-> Python peak mismatch. Selected C peak was not in currentPeaks.'
+            print('C <-> Python peak mismatch. Selected C peak was not in currentPeaks.')
 
       except:
         pass
@@ -1046,7 +1046,7 @@ class Analysis:
       else:
         for residue in chain.residues:
           msg = "Making Atom Sets and Mappings for residue %s %s %d"
-          print msg % (chain.code,residue.ccpCode,residue.seqCode)
+          print(msg % (chain.code,residue.ccpCode,residue.seqCode))
           residueMapping = getMapping(residue, aromaticsEquivalent=aromaticEquiv)
           atomSetMappings.extend( residueMapping.atomSetMappings )
 
@@ -1225,7 +1225,7 @@ class Analysis:
       except:
         fileName = getDataSourceFileName(spectrum)
         msg = 'Warning: spectrum "%s": data file "%s" cannot be opened'
-        print msg % (spectrum.name, fileName)
+        print(msg % (spectrum.name, fileName))
         self.deleteBlockFile(spectrum)
 
     if updateContourLevels:
@@ -1269,7 +1269,7 @@ class Analysis:
 
     try:
       storedContour.storeFile = self.initStoreFile(storedContour)
-    except StoreFile.error, e:
+    except StoreFile.error as e:
       fileName = storedContour.fullPath
       msg = 'Contour file "%s": %s: delete corresponding stored contour?'
       

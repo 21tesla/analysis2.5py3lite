@@ -86,7 +86,7 @@ class NmrPipeConversionFile(NmrPipeGenericFile):
       return self.dataValues[dim][index].value
 
     except:
-      print "  Error: nmrPipe data reference index %d, dim %d not found." % (index,dim)
+      print("  Error: nmrPipe data reference index %d, dim %d not found." % (index,dim))
 
     return None
 
@@ -97,7 +97,7 @@ class NmrPipeConversionFile(NmrPipeGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing nmrPipe conversion file %s" % self.name
+      print("Writing nmrPipe conversion file %s" % self.name)
 
 
     fout = open(self.name,'w')
@@ -150,7 +150,7 @@ class NmrPipeConversionFile(NmrPipeGenericFile):
     fout.close()
 
     if verbose == 1:
-      print self.scriptName + " finished..."
+      print(self.scriptName + " finished...")
 
 class NmrPipeConversion:
 
@@ -164,7 +164,7 @@ class NmrPipeConversion:
   def setValue(self,value):
   
     if value == None:
-      print "Warning: no value for NMRPipe dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index])
+      print("Warning: no value for NMRPipe dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index]))
       value = 0
 
     self.value = (self.parent.formats[self.index]) % (value)
@@ -175,5 +175,5 @@ class NmrPipeConversion:
     
 if __name__ == "__main__":
 
-  print "No test available"
+  print("No test available")
   

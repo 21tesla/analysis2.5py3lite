@@ -385,7 +385,7 @@ class ViewQualityReportsPopup(BasePopup):
                 'The number of peak dimensions the resonance is assigned to']
     headingList = ['#','Iso.','Resonance','Bound','BMRB\nMean',
                    'Random\nCoil','Type\nScore','Value','SD',
-                   u'Max Peak\n\u0394','Dim\nContribs']
+                   'Max Peak\n\u0394','Dim\nContribs']
     self.resonanceMatrix = ScrolledMatrix(frameC, headingList=headingList,
                                           multiSelect=True, callback=self.selectObject,
                                           tipTexts=tipTexts, grid=(1,0))
@@ -509,7 +509,7 @@ class ViewQualityReportsPopup(BasePopup):
   
   def showResonances(self):
   
-    if type(self.object) == type(''):
+    if type(self.object) == str:
       return
 
     resonances = set()
@@ -563,7 +563,7 @@ class ViewQualityReportsPopup(BasePopup):
 
     peaks = None
     object = self.object
-    if object and type(object) != type(''):
+    if object and type(object) != str:
     
       residues = []
     
@@ -946,7 +946,7 @@ class ViewQualityReportsPopup(BasePopup):
 
     if self.peakListD:
       for i in range(self.peakListD.dataSource.numDim):
-        headingList.append(u'F%d Max\nShift \u0394' % (i+1))
+        headingList.append('F%d Max\nShift \u0394' % (i+1))
         tip = "For dimension %d, the maximum difference between an assigned resonance's (averaged) chemical shift value and the peak position"
         tipTexts.append(tip % (i+1))
 

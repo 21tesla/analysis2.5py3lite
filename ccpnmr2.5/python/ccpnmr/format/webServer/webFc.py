@@ -30,7 +30,7 @@ Current security: one browser connects, user has to log in. This session will ke
 out (or 1 hour of inactivity).
 """
 
-class Convert(object):
+class Convert:
  
   #
   # Local configuration information - is used for all methods of Convert class. This basically
@@ -60,9 +60,9 @@ class Convert(object):
       regenerateThisPage()
     else:
       for key in keywords.keys():\
-        print key, keywords[key]
+        print(key, keywords[key])
       for arg in args:\
-        print arg
+        print(arg)
        #createThisPageFirstTime()
 
     # now use the keywords to render the updated page
@@ -127,7 +127,7 @@ class ConvertSession(Convert):
   #
 
 
-class Root(object):
+class Root:
   
   #
   # Authorisation controller, set up in auth

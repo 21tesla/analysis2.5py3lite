@@ -8,7 +8,7 @@ from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.forkoff import do_cmd
 from glob import glob
 from memops.api import Implementation
-import Tkinter
+import tkinter
 import shutil
 
 __author__     = cing.__author__ + "Wim Vranken <wim@ebi.ac.uk>"

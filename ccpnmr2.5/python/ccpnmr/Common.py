@@ -1,10 +1,6 @@
 """Miscellaneous common utilities
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -40,7 +36,7 @@ import random
 import sys
 import string
 import itertools
-from collections import Iterable
+from collections.abc import Iterable
 from . import Constants
 from collections import OrderedDict
 
@@ -541,7 +537,7 @@ def stringifier(*fields, **options):
     fieldFormats = []
     for field in fields:
         # String will be 'field1={_obj.field1}
-        fieldFormats.append('{0}={{_obj.{0}!r}}'.format(field))
+        fieldFormats.append(f'{field}={{_obj.{field}!r}}')
 
     formatString = '<{_obj.pid!s}| ' + ', '.join(fieldFormats) + '>'
 
@@ -676,7 +672,7 @@ class LocalFormatter(string.Formatter):
     """Overrides the string formatter to change the float formatting"""
 
     def __init__(self, overrideFloatFormat='.6g'):
-        super(LocalFormatter, self).__init__()
+        super().__init__()
         self.overrideFloatFormat = overrideFloatFormat
 
     def convert_field(self, value, conversion):
@@ -707,7 +703,7 @@ class LocalFormatter(string.Formatter):
                 # Likely we are in Python 2.
                 # As ascii behaves like Python 2 repr, this should be the correct workaround
                 return repr(value)
-        raise ValueError("Unknown conversion specifier {0!s}".format(conversion))
+        raise ValueError(f"Unknown conversion specifier {conversion!s}")
 
 
 stdLocalFormatter = LocalFormatter()

@@ -28,10 +28,6 @@ and other STAR variants satisfying the following requirements:
   as are the parts of tags before the first '.'
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -187,7 +183,7 @@ class NmrSaveFrame(GenericStarParser.SaveFrame):
     """SaveFrame (OrderedDict)for NMRSTAR/NEF object tree"""
 
     def __init__(self, name=None, category=None):
-        super(NmrSaveFrame, self).__init__(name=name)
+        super().__init__(name=name)
         self.category = category
 
     @property

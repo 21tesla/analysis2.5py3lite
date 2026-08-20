@@ -184,7 +184,7 @@ class CalcHnHaCouplingPopup(BasePopup):
     self.couplingData  = []
     self.windowPane = None
     
-    BasePopup.__init__(self, parent=parent, title=u'Data Analysis : 3J H-H\u03B1 Coupling', **kw)
+    BasePopup.__init__(self, parent=parent, title='Data Analysis : 3J H-H\u03B1 Coupling', **kw)
 
   def open(self):
   
@@ -286,7 +286,7 @@ class CalcHnHaCouplingPopup(BasePopup):
     self.followSelect.set(True)
 
     row += 1
-    div = LabelDivider(frameA, text=u'\u03A6 Dihedral Angle Prediction')
+    div = LabelDivider(frameA, text='\u03A6 Dihedral Angle Prediction')
     div.grid(row=row, column=0, sticky='ew')
     
     row += 1
@@ -361,9 +361,9 @@ class CalcHnHaCouplingPopup(BasePopup):
                 'Intensity of amide H diagonal peak',
                 'Intensity of alpha H crosspeak']
     headingList = ['Root Spin\nSystem','Use?',
-                   u'3J[H,H\u03B1]',u'Error\n3J[H,H\u03B1]',
-                   u'\u0394\u03B4H\u03B1',u'\u03A6\nAngles',
-                   'Intensity\nRatio','Amide\nIntensity',u'\u03B1\nIntensity']
+                   '3J[H,H\u03B1]','Error\n3J[H,H\u03B1]',
+                   '\u0394\u03B4H\u03B1','\u03A6\nAngles',
+                   'Intensity\nRatio','Amide\nIntensity','\u03B1\nIntensity']
     editSetCallbacks = [None] * 8
     editGetCallbacks = [None] * 8
     editWidgets      = [None] * 8

@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -150,7 +150,7 @@ class AtomLabel(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemCompLabel.AtomLabel.__init__"
+        print("ERROR in ccp.molecule.ChemCompLabel.AtomLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -196,10 +196,10 @@ class AtomLabel(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1229,7 +1229,7 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemCompLabel.ChemCompLabel.__init__"
+        print("ERROR in ccp.molecule.ChemCompLabel.ChemCompLabel.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1276,10 +1276,10 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2182,7 +2182,7 @@ uncorrelated isotope distribution on its atoms.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemCompLabel.Isotopomer.__init__"
+        print("ERROR in ccp.molecule.ChemCompLabel.Isotopomer.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2228,10 +2228,10 @@ uncorrelated isotope distribution on its atoms.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3122,7 +3122,7 @@ same source or are generally used together.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemCompLabel.LabelingScheme.__init__"
+        print("ERROR in ccp.molecule.ChemCompLabel.LabelingScheme.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3177,10 +3177,10 @@ same source or are generally used together.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

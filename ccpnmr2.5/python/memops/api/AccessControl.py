@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -161,7 +161,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.AccessControl.AccessControlStore.__init__"
+        print("ERROR in memops.AccessControl.AccessControlStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -202,7 +202,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       if (notOverride):
         self.checkValid()
 
-      if ((notIsReading or root.__dict__.get('currentAccessControlStore') is None)):
+      if (notIsReading or root.__dict__.get('currentAccessControlStore') is None):
         root.__dict__['currentAccessControlStore'] = self
 
       if (notIsReading):
@@ -216,10 +216,10 @@ class AccessControlStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -239,7 +239,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     function* - should be called only by API delete function.
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     objsToBeDeleted.add(self)
@@ -283,7 +283,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentAccessControlStore'] = None
 
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
@@ -311,7 +311,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     CheckAllValid for memops.AccessControl.AccessControlStore
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     self.checkValid(complete)
@@ -353,11 +353,11 @@ class AccessControlStore(memops.api.Implementation.TopObject):
            + ": %s" % (self,)
           )
 
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -543,7 +543,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -721,21 +721,21 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('accessObjects').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('accessObjects').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('description', 'name', 'access', 'accessControlStore', 'dataObject',))
         if (key in directAttrs):
@@ -786,21 +786,21 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('userGroups').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('userGroups').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -847,21 +847,21 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('users').values()
       result = set(currentValues)
 
     else:
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('users').values()
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -908,7 +908,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('accessObjects').values()
@@ -920,7 +920,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('name')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('accessObjects').get(objKey)
@@ -936,7 +936,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('accessObjects').values()
@@ -944,7 +944,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('description', 'name', 'access', 'accessControlStore', 'dataObject',))
         if (key in directAttrs):
@@ -995,7 +995,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('users').values()
@@ -1007,7 +1007,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('name')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('users').get(objKey)
@@ -1023,7 +1023,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('users').values()
@@ -1031,7 +1031,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -1078,7 +1078,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     nConditions = len(conditions)
     if (nConditions == 0):
-      if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
         self.load()
 
       currentValues = dataDict.get('userGroups').values()
@@ -1090,7 +1090,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     else:
       objKey = conditions.get('name')
       if (objKey is not None):
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         result = dataDict.get('userGroups').get(objKey)
@@ -1106,7 +1106,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
           currentValues.add(result)
 
       else:
-        if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
           self.load()
 
         currentValues = dataDict.get('userGroups').values()
@@ -1114,7 +1114,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -1168,7 +1168,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Get for memops.AccessControl.AccessControlStore.accessObjects
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('accessObjects').values()
@@ -1295,7 +1295,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Get for memops.AccessControl.AccessControlStore.userGroups
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('userGroups').values()
@@ -1307,7 +1307,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Get for memops.AccessControl.AccessControlStore.users
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     tempVar = dataDict.get('users').values()
@@ -1398,7 +1398,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
       )
 
     topObject = dataDict.get('topObject')
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     currentValue = dataDict.get('name')
@@ -1440,7 +1440,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Sorted for memops.AccessControl.AccessControlStore.accessObjects
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('accessObjects')
@@ -1455,7 +1455,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Sorted for memops.AccessControl.AccessControlStore.userGroups
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('userGroups')
@@ -1470,7 +1470,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
     Sorted for memops.AccessControl.AccessControlStore.users
     """
     dataDict = self.__dict__
-    if (not ((dataDict.get('isLoaded') or dataDict.get('isReading')))):
+    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
       self.load()
 
     sortdd = dataDict.get('users')
@@ -1597,7 +1597,7 @@ class AccessObject(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -1623,7 +1623,7 @@ class AccessObject(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.AccessControl.AccessObject.__init__"
+        print("ERROR in memops.AccessControl.AccessObject.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -1658,10 +1658,10 @@ class AccessObject(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -1706,11 +1706,11 @@ class AccessObject(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     dataObject = dataDict.get('dataObject')
-    if ((dataObject is not None and not (dataObject in objsToBeDeleted))):
+    if (dataObject is not None and not (dataObject in objsToBeDeleted)):
       dataObject.__dict__['access'] = None
 
     accessControlStore = dataDict.get('accessControlStore')
@@ -1764,7 +1764,7 @@ class AccessObject(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -1849,7 +1849,7 @@ class AccessObject(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -1976,7 +1976,7 @@ class AccessObject(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
         if (key in directAttrs):
@@ -2066,7 +2066,7 @@ class AccessObject(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
         if (key in directAttrs):
@@ -2381,7 +2381,7 @@ class AccessObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2443,7 +2443,7 @@ class AccessObject(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -2658,7 +2658,7 @@ class Permission(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.AccessControl.Permission.__init__"
+        print("ERROR in memops.AccessControl.Permission.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2707,10 +2707,10 @@ class Permission(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2744,11 +2744,11 @@ class Permission(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     userGroup = dataDict.get('userGroup')
-    if ((userGroup is not None and not (userGroup in objsToBeDeleted))):
+    if (userGroup is not None and not (userGroup in objsToBeDeleted)):
       permissions = userGroup.__dict__.get('permissions')
       permissions.remove(self)
 
@@ -2828,7 +2828,7 @@ class Permission(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -2966,7 +2966,7 @@ class Permission(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -3718,7 +3718,7 @@ class User(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -3746,7 +3746,7 @@ class User(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.AccessControl.User.__init__"
+        print("ERROR in memops.AccessControl.User.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3781,10 +3781,10 @@ class User(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3831,7 +3831,7 @@ class User(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     for ledGroup in dataDict.get('ledGroups'):
@@ -3840,7 +3840,7 @@ class User(memops.api.Implementation.DataObject):
         leaders.remove(self)
 
     person = dataDict.get('person')
-    if ((person is not None and not (person in objsToBeDeleted))):
+    if (person is not None and not (person in objsToBeDeleted)):
       users = person.__dict__.get('users')
       users.remove(self)
 
@@ -3926,7 +3926,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -3974,7 +3974,7 @@ class User(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -4066,7 +4066,7 @@ class User(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -4224,7 +4224,7 @@ class User(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -4279,7 +4279,7 @@ class User(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -4339,7 +4339,7 @@ class User(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -4397,7 +4397,7 @@ class User(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'accessControlStore',))
         if (key in directAttrs):
@@ -4672,7 +4672,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4748,7 +4748,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4840,7 +4840,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -4969,7 +4969,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5080,7 +5080,7 @@ class User(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5298,7 +5298,7 @@ class UserGroup(memops.api.Implementation.DataObject):
         )
 
     try:
-      if (not ((parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading')))):
+      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
         parent.load()
 
       dataDict['applicationData'] = list()
@@ -5324,7 +5324,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in memops.AccessControl.UserGroup.__init__"
+        print("ERROR in memops.AccessControl.UserGroup.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5359,10 +5359,10 @@ class UserGroup(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5402,7 +5402,7 @@ class UserGroup(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if ((access is not None and not (access in objsToBeDeleted))):
+    if (access is not None and not (access in objsToBeDeleted)):
       access.__dict__['dataObject'] = None
 
     for leader in dataDict.get('leaders'):
@@ -5487,7 +5487,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -5535,7 +5535,7 @@ class UserGroup(memops.api.Implementation.DataObject):
           )
 
       # check attributes
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       values = dataDict.get('applicationData')
@@ -5610,7 +5610,7 @@ class UserGroup(memops.api.Implementation.DataObject):
         )
 
       # check roles
-      if (not ((dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading')))):
+      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
         dataDict.get('topObject').load()
 
       value = dataDict.get('access')
@@ -5778,7 +5778,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -5833,7 +5833,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -5888,7 +5888,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = set()
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
         if (key in directAttrs):
@@ -5948,7 +5948,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -6006,7 +6006,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
         if (key in directAttrs):
@@ -6064,7 +6064,7 @@ class UserGroup(memops.api.Implementation.DataObject):
       result = None
       
       items = conditions.items()
-      if ((nConditions == 1)):
+      if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
         if (key in directAttrs):
@@ -6316,7 +6316,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6419,7 +6419,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6511,7 +6511,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       
@@ -6670,7 +6670,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
     # doNotifies
 
-    if ((notInConstructor and notOverride)):
+    if (notInConstructor and notOverride):
       
       _notifies = self.__class__._notifies
       

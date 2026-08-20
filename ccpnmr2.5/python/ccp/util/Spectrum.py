@@ -16,7 +16,7 @@ def createExperiment(nmrProject, name, numDim, sf, isotopeCodes):
   for n in range(numDim):
     ic = isotopeCodes[n]
     if ic:
-      if type(ic) == type(''):
+      if type(ic) == str:
         ic = (ic,)
       expDims[n].newExpDimRef(sf=sf[n], unit='ppm', isotopeCodes=ic)
 

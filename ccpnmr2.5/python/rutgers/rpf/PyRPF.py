@@ -284,7 +284,7 @@ class PyRpfPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='ew')
     frame.grid_columnconfigure(2, weight=1)
 
-    label = Label(frame, text=u'Distance Threshold (\u00C5)')
+    label = Label(frame, text='Distance Threshold (\u00C5)')
     label.grid(row=0,column=0, sticky='w')
     tipText = 'The distance threshold in the structure, below which resonance pairs are expected to result in a peak'
     self.distanceEntry = FloatEntry(frame, text=4.8, width=8, tipText=tipText)
@@ -1332,7 +1332,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
 
     # Check num of N & C dims makes sense
     if not contexts:
-      print 'Peak list %s has unusable axes' % peakList
+      print('Peak list %s has unusable axes' % peakList)
       continue
 
     # Which heteroatoms are required to be
@@ -1347,7 +1347,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
   # Collect ambiguous peak-resonance assignments
 
   t0 = time.time()
-  print  "Getting resonance-resonance possible peak assignments within tolerances"
+  print("Getting resonance-resonance possible peak assignments within tolerances")
   resonancePeaks = {}
   peakPossibilities = {}
   unexplainedPeaksDict = {}
@@ -1356,7 +1356,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
   for i, peakList in enumerate(peakLists):
     spec = peakList.dataSource
     pId = '%s:%s:%d' % (spec.experiment.name, spec.name, peakList.serial)
-    print 'Peak List %s' % pId
+    print('Peak List %s' % pId)
 
     if progressBar:
       progressBar.text = 'Searching %s \npeaks for possible assignments' % pId
@@ -1372,9 +1372,9 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
     peakPossibilities[peakList] = peakData
     unexplainedPeaksDict[peakList] = unexplained
 
-  print "  Time taken:", time.time() - t0
+  print("  Time taken:", time.time() - t0)
 
-  print "Getting resonance-resonance NOE distances"
+  print("Getting resonance-resonance NOE distances")
 
   resonanceDists = {}
 
@@ -1389,16 +1389,16 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
       progressBar.set(0)
       progressBar.update()
 
-    print "Ensemble", ensemble.ensembleId
+    print("Ensemble", ensemble.ensembleId)
     resonanceDists[ensemble] = getProtonDistsConn(ensemble,
                                                   heteroAtomContexts,
                                                   distThreshold,
                                                   progressBar)
 
-    print "  Time taken:", time.time() - t0
+    print("  Time taken:", time.time() - t0)
 
   t0 = time.time()
-  print  "Calculating scores and making CCPN validation objects"
+  print("Calculating scores and making CCPN validation objects")
 
   # List for CCPN validation objects
   validationResults = []
@@ -1919,7 +1919,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
         storeResidueRpfValidation(validStore, residue, recall,
                                   precision, fMeasure, dpScore)
 
-  print "  Time taken:", time.time() - t0
+  print("  Time taken:", time.time() - t0)
 
   return validationResults
 
@@ -1932,7 +1932,7 @@ def countsToRpf(truePos, falseNeg, truePosNoe, falsePosNoe, verbose=False):
   """
 
   if verbose:
-    print "countsToRpf", falseNeg, truePos, truePosNoe, falsePosNoe
+    print("countsToRpf", falseNeg, truePos, truePosNoe, falsePosNoe)
 
   if not truePos:
     return 0.0, 0.0, 0.0
@@ -1985,9 +1985,9 @@ def calcDpScore(fMeasure, truePos, falseNeg, truePosNoe, falsePosNoe, verbose=Fa
 
 
   if verbose:
-    print " Free  %.3f, %.3f, %.3f" % (rFree,  pFree, fFree)
-    print " Ideal %.3f, %.3f, %.3f" % (rIdeal, pIdeal, fIdeal)
-    print " Query %.3f, %.3f, %.3f" % (rQuery, pQuery, fQuery)
+    print(" Free  %.3f, %.3f, %.3f" % (rFree,  pFree, fFree))
+    print(" Ideal %.3f, %.3f, %.3f" % (rIdeal, pIdeal, fIdeal))
+    print(" Query %.3f, %.3f, %.3f" % (rQuery, pQuery, fQuery))
 
   if not fIdeal-fFree:
     return 0.0
@@ -2694,7 +2694,7 @@ def getAmbigNoeConn(peakLists, toleranceList, diagonalTolerance=0.1,
         ppm2 = peakDim2.value
 
         if peakDim1.value is None:
-          print "Peak %s does not have a peakDim1.value" % peak
+          print("Peak %s does not have a peakDim1.value" % peak)
           continue
 
         # Check if ppm values similar

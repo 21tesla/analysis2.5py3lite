@@ -1,6 +1,6 @@
 import os
 import sys
-import Tkinter
+import tkinter
 
 from memops.api                    import Implementation
 
@@ -609,9 +609,9 @@ The standalone version of CcpNmr Entry Completion Interface (ECI).  With it, you
     try:
       saveProject(self.project, createFallback=True)
 
-      print 'successfully saved project'
+      print('successfully saved project')
       return True
-    except IOError, e:
+    except OSError as e:
       showError('Saving file', str(e), parent=self)
       return False
 
@@ -716,7 +716,7 @@ def launchApplication(projectDir=None):
       if userRepos not in chemCompPackLoc.repositories:
         chemCompPackLoc.addRepository(userRepos)
 
-    except ApiError, e:
+    except ApiError as e:
       showError('Reading project', e.error_msg, parent=top)
  
   top.update_idletasks()

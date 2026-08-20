@@ -85,9 +85,9 @@ class ProntoPeakFile(ProntoGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading Pronto peak list %s" % self.name
+      print("Reading Pronto peak list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read the atom specs on second line
     line = fin.readline()
@@ -169,7 +169,7 @@ class ProntoPeakFile(ProntoGenericFile):
   def write(self, verbose = 0):
 
     if verbose == 1:
-      print "Writing Pronto peak list %s" % self.name
+      print("Writing Pronto peak list %s" % self.name)
 
     #fout = open(self.name,'w')
 
@@ -218,4 +218,4 @@ if __name__ == "__main__":
 
     
     for rawPeak in peakFile.peaks:
-      print rawPeak.intensity
+      print(rawPeak.intensity)

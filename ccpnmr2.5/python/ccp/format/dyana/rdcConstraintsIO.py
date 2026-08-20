@@ -82,10 +82,10 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
 
   def read(self, verbose=False):
 
-    print "Using CYANA library - courtesy of Peter Guentert."
+    print("Using CYANA library - courtesy of Peter Guentert.")
 
     if verbose:
-      print "Reading %s rdc constraint list %s" % (self.format,self.name)
+      print("Reading %s rdc constraint list %s" % (self.format,self.name))
 
     rdcId = 0
     chainCode = self.defaultMolCode
@@ -94,7 +94,7 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
     # Read the file
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -150,7 +150,7 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
 
   def write(self, singleAtom=False, verbose=False):
 
-    print "Using CYANA library - courtesy of Peter Guentert."
+    print("Using CYANA library - courtesy of Peter Guentert.")
 
     #
     # Output format is (example following):
@@ -161,7 +161,7 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
     # ...
 
     if verbose:
-      print "Writing %s rdc constraint list %s" % (self.format,self.name)
+      print("Writing %s rdc constraint list %s" % (self.format,self.name))
     
     #
     # Open output file
@@ -205,7 +205,7 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
             seqCode = member.seqCode
 
         if not resLabel:
-          print "  Error: cannot write RDC constraint (no resLabel)."
+          print("  Error: cannot write RDC constraint (no resLabel).")
 
         else:
           protonName = constraint.getProtonName(resLabel,atomNames)
@@ -214,8 +214,8 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
 
             fout.write("%4d %-4s %-5s %-7.2f" % (seqCode,
                                                  resLabel,
-	  	                                           protonName,
-		                                             constraint.value))
+      	                                           protonName,
+                                                     constraint.value))
                                                  
             if constraint.error:
               fout.write("%6.2f" % (constraint.error))
@@ -230,8 +230,8 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
           for member in item.members:
             fout.write("  %4d  %-4s %-5s  " % (member.seqCode,
                                               member.resLabel,
-	  	                                        member.atomName,
-		                                          ))
+      	                                        member.atomName,
+                                                  ))
                                            
         fout.write("   %8.3f %7.3f %8.3f" % (constraint.value,constraint.error,constraint.energyCst))
           
@@ -268,7 +268,7 @@ class DyanaRdcConstraint:
     if refAtom:
 
       if refAtom.bondedAtomSerials.count(0) != 3:
-        print "  Error: invalid single atom %s (%s %s, chain '%s'). No or multiple bonded atoms" % (refAtomName,resLabel,seqCode,chainCode)
+        print("  Error: invalid single atom %s (%s %s, chain '%s'). No or multiple bonded atoms" % (refAtomName,resLabel,seqCode,chainCode))
       
       else:
       
@@ -283,7 +283,7 @@ class DyanaRdcConstraint:
     
     else:
       
-      print "  Error: cannot write RDC restraint, atom %s for residue %s not found." % (refAtomName,resLabel)
+      print("  Error: cannot write RDC restraint, atom %s for residue %s not found." % (refAtomName,resLabel))
 
   def setAtomMembersDouble(self,chainCode,residueInfo1,residueInfo2):
     

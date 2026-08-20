@@ -77,7 +77,7 @@ class BrukerParHelp(BrukerGenericFile):
     
     fileLocation = os.path.join(getTopDirectory(),'data','ccp','bruker','parhelp.txt')
 
-    fin = open(fileLocation, 'rU')
+    fin = open(fileLocation)
     line = fin.readline()
 
     while line:
@@ -85,7 +85,7 @@ class BrukerParHelp(BrukerGenericFile):
       if not (self.patt['emptyline'].search(line) or self.patt['hash'].search(line)):
         cols = line.split()
         if len(cols) < 3 or cols[1] != '=':
-          print "Error parsing following line:" + self.newline + line + self.newline
+          print("Error parsing following line:" + self.newline + line + self.newline)
         else:
           # Sort out tag
           tag = cols[0]
@@ -110,4 +110,4 @@ if __name__ == '__main__':
 
   aqhelp = BrukerParHelp('help')
   
-  print aqhelp.tags
+  print(aqhelp.tags)

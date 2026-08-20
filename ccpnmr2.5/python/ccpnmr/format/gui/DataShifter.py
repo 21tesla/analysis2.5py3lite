@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter
+import tkinter
 
 import sys, traceback
 
@@ -195,7 +195,7 @@ class CopyObjectData:
       if copyOrderDict.has_key(self.objectClassName):
         self.copyObject()
       else:
-        print "No copy information available for %s... aborting." % self.objectClassName
+        print("No copy information available for %s... aborting." % self.objectClassName)
       
   def copyObject(self):
          
@@ -380,7 +380,7 @@ class CopyPerson(CopyAffiliationStoreData):
       if toCurrentPersonInGroup:
         self.toObject.currentPersonInGroup = toCurrentPersonInGroup
       else:
-        print "  Warning: could not copy current group for Person."
+        print("  Warning: could not copy current group for Person.")
 
 class CopyDataSource(CopyNmrProjectData):
 
@@ -571,9 +571,9 @@ def createInProject(ccpnObject,toProject,copyOrder,createdObjectDict,toProjectRe
     if not newObject:
       newObject = copyObject(ccpnObject,toProject,createdObjectDict,postponedLinkDict,metaInfo,toProjectResInfo,postponedObjects,dialogInfo,toLinkedObjectData,ignorePresets = ignorePresets, verbose = verbose, ignoreAttrs = ignoreAttrs)
       if verbose:
-        print "  Copied during createInProject:", newObject
+        print("  Copied during createInProject:", newObject)
     elif verbose:
-      print "  Mapped during createInProject:", newObject
+      print("  Mapped during createInProject:", newObject)
     
   else:
     newObject = None
@@ -610,7 +610,7 @@ def createInProject(ccpnObject,toProject,copyOrder,createdObjectDict,toProjectRe
             # Single attribute (e.g. strucGen.nmrConstraintStore)
             newCcpnObjects.append(getattr(tempCcpnObject,ccpnObjectStrings[i]))
           except:
-            print "Warning: object %s does not have attribute/link %s... ignored." % (tempCcpnObject.className,ccpnObjectStrings[i])
+            print("Warning: object %s does not have attribute/link %s... ignored." % (tempCcpnObject.className,ccpnObjectStrings[i]))
 
       ccpnObjects = newCcpnObjects[:]
 
@@ -682,7 +682,7 @@ def createInProject(ccpnObject,toProject,copyOrder,createdObjectDict,toProjectRe
         linkedMetaInfo = getMetaInfo(fromCcpnObject)
         linkedLinkName = linkedMetaInfo[0].parentRole.otherRole.name
         if verbose:
-          print "  Setting postponed %s object in createInProject." % linkedMetaInfo[0].name
+          print("  Setting postponed %s object in createInProject." % linkedMetaInfo[0].name)
         toCcpnObject = mapObject(fromCcpnObject,toProject,createdObjectDict,linkedLinkName,linkedMetaInfo, dialogInfo,toLinkedObjectData, verbose = verbose)
         
         if not toCcpnObject:
@@ -705,7 +705,7 @@ def createInProject(ccpnObject,toProject,copyOrder,createdObjectDict,toProjectRe
             if currentToLinkValue != toLinkValue:
               setattr(toCcpnObject,linkName,toLinkValue)
               if verbose:
-                print "  Link set in createInProject:", linkName, toLinkValue
+                print("  Link set in createInProject:", linkName, toLinkValue)
             del(postponedLinkDict[fromCcpnObject][linkName])
 
         else:
@@ -730,14 +730,14 @@ def createInProject(ccpnObject,toProject,copyOrder,createdObjectDict,toProjectRe
               # TODO: add items from nonMatchingLinkValues if there is a match!?!
               setattr(toCcpnObject,linkName,toLinkValue)
               if verbose:
-                print linkName, toLinkValue
+                print(linkName, toLinkValue)
             del(postponedLinkDict[fromCcpnObject][linkName])
 
       if not postponedLinkDict[fromCcpnObject]:
         del(postponedLinkDict[fromCcpnObject])
 
   if verbose:
-    print "  Postponed during createInProject: %s" % str(postponedLinkDict)
+    print("  Postponed during createInProject: %s" % str(postponedLinkDict))
 
   return newObject
             
@@ -920,7 +920,7 @@ def setPresetLinks(metaRole,otherObjects,toProject,keywds,createdObjectDict,toPr
           refIndex = createdObjectDict[resClassName]['fromObjects'].index(refObject)
           newObjects.append(createdObjectDict[resClassName]['toObjects'][refIndex])
           if verbose:
-            print "  Direct %s map: %s -> %s" % (resClassName,ccpnObject,newObject)
+            print("  Direct %s map: %s -> %s" % (resClassName,ccpnObject,newObject))
           resonanceFound = True
           break
         
@@ -1040,8 +1040,8 @@ def setPresetLinks(metaRole,otherObjects,toProject,keywds,createdObjectDict,toPr
                 # Only map if not mapped already!
                 if toResonance not in createdObjectDict[resonance.className]['toObjects']:
                   if verbose:
-                    print "  Atom based %s map: %s -> %s" % (resonance,resClassName,toResonance)
-                    print "    ",toAtomList
+                    print("  Atom based %s map: %s -> %s" % (resonance,resClassName,toResonance))
+                    print("    ",toAtomList)
                   addToCreatedObjectDict(createdObjectDict[resonance.className],resonance,toResonance)
                   break
           
@@ -1144,7 +1144,7 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
   #  debug = True
   
   if debug:
-    print " MO",setInfo, forceAttrOrRoles
+    print(" MO",setInfo, forceAttrOrRoles)
   
   objectMapped = None
   
@@ -1156,7 +1156,7 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
   keyNames = metaClass.keyNames
   
   if debug:
-    print metaClass.name
+    print(metaClass.name)
   
   #
   # Check if keyNames fit with metaInfo that was passed in (root out serials and such)
@@ -1203,8 +1203,8 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
       fromData.append((keyName,linkedData))
   
   if debug:
-    print keyNames
-    print fromData
+    print(keyNames)
+    print(fromData)
   
   #
   # Get the relevant parent object in toProject
@@ -1214,8 +1214,8 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
   toParent = getToProjectObject(fromParent,createdObjectDict)
   
   if debug:
-    print "FROM PARENT", fromParent
-    print "FOUND TO PARENT", toParent
+    print("FROM PARENT", fromParent)
+    print("FOUND TO PARENT", toParent)
   
   if not toParent and parentSearch:
   
@@ -1229,13 +1229,13 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
       # TODO TODO: is this supposed to be allowed to fail?!? The .parentRole?
       parentLinkName = parentMetaInfo[0].parentRole.otherRole.name
       if verbose or debug:
-        print "  mapObjects trying to find %s" % parentMetaInfo[0].name
+        print("  mapObjects trying to find %s" % parentMetaInfo[0].name)
       toParent = mapObject(ccpnObject.parent,toProject,createdObjectDict,parentLinkName,parentMetaInfo,dialogInfo, toLinkedObjectData,verbose = False, parentSearch = False)
 
   if toParent:
     
     if debug:
-      print " TO PARENT", toParent
+      print(" TO PARENT", toParent)
   
     #
     # Now compare...
@@ -1245,32 +1245,32 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
       linkName = metaInfo[0].parentRole.otherRole.name
       
     if debug:
-      print "  LINKNAME", linkName
+      print("  LINKNAME", linkName)
 
     for toLinkedObject in getattr(toParent,linkName):
     
       doBreak = False
       
       if debug:
-        print "   TO LINKED OBJECT", toLinkedObject
+        print("   TO LINKED OBJECT", toLinkedObject)
       
       # TODO: this is slightly dangerous, but shouldn't be changing info of existing objects, so is fine?
       if toLinkedObjectData.has_key((toParent,linkName,toLinkedObject)):
         toData = toLinkedObjectData[(toParent,linkName,toLinkedObject)]
         if debug:
-          print "     DIRECT TO DATA", toData
+          print("     DIRECT TO DATA", toData)
       
       else:
         toData = []
         if debug:
-          print "     INDIRECT TO DATA"
+          print("     INDIRECT TO DATA")
 
         for keyName in keyNames:
 
           linkedData = getattr(toLinkedObject,keyName)
           
           if debug:
-             print "          LINKED DATA",keyName,linkedData
+             print("          LINKED DATA",keyName,linkedData)
           
           if type(linkedData) in linkDataTypes:
             linkedData = list(linkedData)
@@ -1311,7 +1311,7 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
             doMapping = False
         
         if debug:
-          print "  DOING MAPPING: %s" % doMapping
+          print("  DOING MAPPING: %s" % doMapping)
         
         if doMapping:
           if not createdObjectDict.has_key(metaClass.name):
@@ -1328,7 +1328,7 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
     #
     
     if debug:
-        print "  OBJECT MAPPED %s and SETINFO %s" % (str(objectMapped),setInfo)
+        print("  OBJECT MAPPED %s and SETINFO %s" % (str(objectMapped),setInfo))
 
     if objectMapped and setInfo:
 
@@ -1368,9 +1368,9 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
                   if value.count(None) == len(value):
                     value = None
                 
-                elif type(value) not in (type(0.0),type(""),type(1),type(False)):
+                elif type(value) not in (float,str,int,bool):
                   
-                  print "  Error: unknown original data type %s - ignored." % type(value)
+                  print("  Error: unknown original data type %s - ignored." % type(value))
                   value = None
 
                 #
@@ -1380,17 +1380,17 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
                 if value != None:
                   
                   if debug:
-                    print "TRYING TO SET LINK",objectMapped,attrOrRoleName,value
+                    print("TRYING TO SET LINK",objectMapped,attrOrRoleName,value)
 
                   try:
                     setattr(objectMapped,attrOrRoleName,value)
                     if verbose:
-                      print "  mapObjects set %s.%s to '%s'" % (objectMapped.className,attrOrRoleName,str(value))
+                      print("  mapObjects set %s.%s to '%s'" % (objectMapped.className,attrOrRoleName,str(value)))
                   except:
-                    print "  Error: mapObjects cannot set %s for %s... API error '%s'" % (attrOrRoleName,objectMapped.className,traceback.format_exception_only(sys.exc_type,sys.exc_value))
+                    print("  Error: mapObjects cannot set %s for %s... API error '%s'" % (attrOrRoleName,objectMapped.className,traceback.format_exception_only(sys.exc_type,sys.exc_value)))
 
               else:
-                print "  Warning: mapObjects NOT setting %s.%s, is '%s'" % (objectMapped.className,attrOrRoleName,str(existingValue))
+                print("  Warning: mapObjects NOT setting %s.%s, is '%s'" % (objectMapped.className,attrOrRoleName,str(existingValue)))
     
   #
   # Return mapped object...
@@ -1398,9 +1398,9 @@ def mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo,dialogInf
   
   if verbose:
     if objectMapped:
-      print "  mapObjects mapped:", objectMapped
+      print("  mapObjects mapped:", objectMapped)
     else:
-      print "  WARNING: mapObjects could not map %s from original object %s." % (metaClass.name,ccpnObject)
+      print("  WARNING: mapObjects could not map %s from original object %s." % (metaClass.name,ccpnObject))
       #print keyNames
   
   return objectMapped
@@ -1504,7 +1504,7 @@ def copyObject(ccpnObject,toProject,createdObjectDict,postponedLinkDict,metaInfo
 
           if newObjects:
             if verbose:
-              print "  copyObject; original:'%s' to new:'%s'." % (str(otherObject),str(newObjects))
+              print("  copyObject; original:'%s' to new:'%s'." % (str(otherObject),str(newObjects)))
             if not createdObjectDict.has_key(otherMetaClassName):
               addClassToCreatedObjectDict(createdObjectDict,otherMetaClassName)
 
@@ -1588,7 +1588,7 @@ def copyObject(ccpnObject,toProject,createdObjectDict,postponedLinkDict,metaInfo
         newObject = createClass(newParent,**keywds)
 
         if verbose and newObject:
-          print "  copyObjects created copy:", newObject
+          print("  copyObjects created copy:", newObject)
 
       except:
         # Was it missed in the mapping? Try this...
@@ -1596,10 +1596,10 @@ def copyObject(ccpnObject,toProject,createdObjectDict,postponedLinkDict,metaInfo
         newObject = mapObject(ccpnObject,toProject,createdObjectDict,linkName,metaInfo, dialogInfo, toLinkedObjectData, verbose = verbose)
         
         if not newObject:
-          print "  ERROR: copyObjects could not create or map new %s..." % ccpnObject.className
-          print newParent
-          print keywds
-          print ccpnObject
+          print("  ERROR: copyObjects could not create or map new %s..." % ccpnObject.className)
+          print(newParent)
+          print(keywds)
+          print(ccpnObject)
           raise
 
       if not createdObjectDict.has_key(metaClass.name):
@@ -1608,8 +1608,8 @@ def copyObject(ccpnObject,toProject,createdObjectDict,postponedLinkDict,metaInfo
       addToCreatedObjectDict(createdObjectDict[metaClass.name],ccpnObject,newObject)
 
     else:
-      print "  ERROR: copyObjects could not create new %s... parent missing in other project." % ccpnObject.className
-      print objectParent
+      print("  ERROR: copyObjects could not create new %s... parent missing in other project." % ccpnObject.className)
+      print(objectParent)
     
   return newObject
 
@@ -1832,10 +1832,10 @@ class DataShifter(BasePopup):
           project.saveModified()
         except:
           showError("Project could not be saved","The project could not be saved. Sorry - try again from scratch.")
-          print traceback.format_exception_only(sys.exc_type,sys.exc_value)
+          print(traceback.format_exception_only(sys.exc_type,sys.exc_value))
       except:
         showError("Project not valid","The project is not valid and will not be saved. Sorry - try again from scratch.")
-        print traceback.format_exception_only(sys.exc_type,sys.exc_value)
+        print(traceback.format_exception_only(sys.exc_type,sys.exc_value))
    
   def doTest(self,projectId):
   
@@ -1843,9 +1843,9 @@ class DataShifter(BasePopup):
     
     if project:
       for repository in project.repositories:
-        print repository.name, repository.url
+        print(repository.name, repository.url)
         for packageLocator in repository.sortedStored():
-          print "     ", packageLocator.targetName
+          print("     ", packageLocator.targetName)
           
   def shiftData(self,buttonKeyword,toProjectNum):
   
@@ -1899,13 +1899,13 @@ class DataShifter(BasePopup):
               self.multiDialog.LinkResonancesSetup(self,toProject,nmrConstraintStore)
               resonanceParent.removeApplicationData(newResonancesFlag)
         
-        print "Checking new object validity - this might take a while."
+        print("Checking new object validity - this might take a while.")
         copyClass.toObject.checkAllValid(complete = True)
-        print "Checking done."
+        print("Checking done.")
         
       except:
         raise
-        print traceback.format_exception_only(sys.exc_type,sys.exc_value)
+        print(traceback.format_exception_only(sys.exc_type,sys.exc_value))
         showError("Could not copy","Copying resulted in a '%s'. See shell for details." % sys.exc_info()[0])
    
       self.updateProjectWidgets(toProjectId)
@@ -1997,7 +1997,7 @@ if __name__ == '__main__':
         project = loadProject(projDir)
         addKeywds["project%d" % (i+1)] = project
       except:
-        print "No project found in %s - not loading" % projDir
+        print("No project found in %s - not loading" % projDir)
 
   guiRoot = Tkinter.Tk()
   

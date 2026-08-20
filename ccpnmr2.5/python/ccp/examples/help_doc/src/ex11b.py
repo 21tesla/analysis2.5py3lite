@@ -1,5 +1,5 @@
 import os
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import MemopsRoot
 
@@ -85,13 +85,13 @@ if __name__ == '__main__':
       weight = 0.99
 
       keywds4a = {'elementName': 'C',
-                  'massNumber':  int(13),
+                  'massNumber':  13,
                   'weight':      weight}
 
       uniformAtomLabel1 = resLabel.newUniformAtomLabel(**keywds4a)
 
       keywds4b = {'elementName': 'C',
-                  'massNumber':  int(12),
+                  'massNumber':  12,
                   'weight':      1.00-weight}
 
       if weight != 1.00:
@@ -102,13 +102,13 @@ if __name__ == '__main__':
       weight = 0.98
 
       keywds5a = {'elementName': 'N',
-                  'massNumber':  int(15),
+                  'massNumber':  15,
                   'weight':      weight}
 
       uniformAtomLabel1 = resLabel.newUniformAtomLabel(**keywds5a)
 
       keywds5b = {'elementName': 'N',
-                  'massNumber':  int(14),
+                  'massNumber':  14,
                   'weight':      1.00-weight}
 
       if weight != 1.00:

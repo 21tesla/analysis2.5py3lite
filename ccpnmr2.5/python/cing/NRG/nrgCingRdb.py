@@ -72,7 +72,7 @@ if False:
     interactive(True)
 # end if
 
-class NrgCingRdb():
+class NrgCingRdb:
     def __init__(self,host='localhost', user=PDBJ_DB_USER_NAME, db=PDBJ_DB_NAME, schema=NRG_DB_SCHEMA):
         self.schema = schema
         if True: # block the NRG-CING stuff away from other schema
@@ -1119,8 +1119,8 @@ e.pdb_id = s1.pdb_id;
                     x = np.array(x)
     #                y = np.random.random(nr) * 10
                     y = np.array(y)
-                    print "x: %s" % x
-                    print "y: %s" % y
+                    print("x: %s" % x)
+                    print("y: %s" % y)
                     binned_valueList, numBins = bin_by(y, x, nbins=nbins, ymin=dateMin, ymax=dateMax)
                     bins = []
                     widths = []
@@ -1139,7 +1139,7 @@ e.pdb_id = s1.pdb_id;
                     sym = 'k.'
                     wiskLoL = boxplot(dataAll, positions=bins, widths=widths, sym=sym)
     #                scatter(x, y, s=0.1) # Plot of the data and the fit
-                    print 'wiskLoL: %s' % wiskLoL
+                    print('wiskLoL: %s' % wiskLoL)
                 # end if scatterOnly            
                 # When trending the limits are for the y-axis.
                 if xmin != None:
@@ -1569,7 +1569,7 @@ e.pdb_id = s1.pdb_id;
         result = m.execute(s).fetchall()
         nTdebug("ROG per entry calculated for number of entry rog scores: %s (roughly 3 times the number of entries)" % len(result))
         for row in result:
-            print row
+            print(row)
             k = row[0]
             if not perEntryRog.has_key(k):
                 perEntryRog[k] = nTfill(0.0, 3)
@@ -1611,7 +1611,7 @@ e.pdb_id = s1.pdb_id;
                     if value < 40.: # For debugging.
                         continue
                     # end if
-                    print row, value
+                    print(row, value)
                 # end for
             # end for
         # end for
@@ -1850,7 +1850,7 @@ def bin_by(y, x, nbins=None, ymin=None, ymax=None):
     bins[-1] += 1
     indicies = np.digitize(x, bins)
     output = []
-    for i in xrange(1, len(bins)):
+    for i in range(1, len(bins)):
         output.append(y[indicies == i])
     # end for
     # Just return the left edges of the bins

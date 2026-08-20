@@ -84,15 +84,15 @@ class DyanaDihedralConstraintFile(DyanaGenericFile):
 
   def read(self,verbose = 0):
 
-    print "Using CYANA library - courtesy of Peter Guentert."
+    print("Using CYANA library - courtesy of Peter Guentert.")
 
     if verbose == 1:
-      print "Reading %s dihedral constraint list %s" % (self.format,self.name)
+      print("Reading %s dihedral constraint list %s" % (self.format,self.name))
 
     dihedralId = 0
     chainCode = self.defaultMolCode
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -128,7 +128,7 @@ class DyanaDihedralConstraintFile(DyanaGenericFile):
 
   def write(self,verbose = 0):
 
-    print "Using CYANA library - courtesy of Peter Guentert."
+    print("Using CYANA library - courtesy of Peter Guentert.")
 
     #
     # Output format is (example following):
@@ -139,7 +139,7 @@ class DyanaDihedralConstraintFile(DyanaGenericFile):
     # ...
 
     if verbose == 1:
-      print "Writing %s dihedral constraint list %s" % (self.format,self.name)
+      print("Writing %s dihedral constraint list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -164,7 +164,7 @@ class DyanaDihedralConstraintFile(DyanaGenericFile):
 
         atomNames = string.join([member.atomName for member in constraint.items[0].members],'-')
 
-        print "  Error: cannot find %s angle name for %s, atoms %s" % (self.format,constraint.resLabel,atomNames)
+        print("  Error: cannot find %s angle name for %s, atoms %s" % (self.format,constraint.resLabel,atomNames))
 
     fout.close()
 
@@ -190,7 +190,7 @@ class DyanaDihedralConstraint:
     refAngle = self.cyanaLib.findAngle(resLabel,self.name)
     
     if not refAngle:
-      print "  Warning: no %s angle available for %s. Ignored." % (self.name,resLabel)
+      print("  Warning: no %s angle available for %s. Ignored." % (self.name,resLabel))
       return False
     
     (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
@@ -217,7 +217,7 @@ class DyanaDihedralConstraint:
     locations = []
 
     if len(self.items) > 1:
-      print "  Warning can only handle one dihedral constraint item"
+      print("  Warning can only handle one dihedral constraint item")
 
     item = self.items[0]
     locIndex = None

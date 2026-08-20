@@ -20,8 +20,8 @@ class AllChecks(TestCase):
     def testRemovePreTagLines(self):
         spuriousSpaceMsg = 'something     with     many spaces'
         msg = '\n'.join([HTML_TAG_PRE, spuriousSpaceMsg, HTML_TAG_PRE2 ])
-        self.assertNotEquals(msg, spuriousSpaceMsg)
-        self.assertEquals(removePreTagLines(msg), spuriousSpaceMsg)
+        self.assertNotEqual(msg, spuriousSpaceMsg)
+        self.assertEqual(removePreTagLines(msg), spuriousSpaceMsg)
 
     def setupSimplestProject(self):
         cingDirTmpTest = os.path.join( cingDirTmp, 'test_html' )
@@ -29,7 +29,7 @@ class AllChecks(TestCase):
         os.chdir(cingDirTmpTest)
         entryId = 'test'
         project = Project(entryId)
-        self.failIf(project.removeFromDisk())
+        self.assertFalse(project.removeFromDisk())
         project = Project.open(entryId, status='new')
         molecule = Molecule(name='moleculeName')
         molecule.ensemble = Ensemble(molecule) # Needed for html.

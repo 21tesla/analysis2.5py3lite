@@ -16,7 +16,7 @@ DEFAULT_COLUMN_LABEL = 'COLUMN_' # a number will be added.
 ROW_WITHOUT_COLUMNS_STRING   = "No columns present"
 NULL_STRING = '' # may be modified
 
-class Relation():
+class Relation:
 
     def __init__(self, name, dbms, columnList=None, lol=None):
         # Name for the column. Only place where order of columns is defined and matters.*/
@@ -134,7 +134,7 @@ class Relation():
         try:
             resource = urllib.urlopen(url_links)
             reader = csv.reader(resource)
-        except IOError:
+        except OSError:
             nTtracebackError()
             nTerror("Couldn't open url for reader: " + url_links)
             return True
@@ -160,7 +160,7 @@ class Relation():
                     myList = self.attr[label]
                     myList.append(row[c])
         # Never know when the connection is finally empty.
-        except IOError:
+        except OSError:
             pass
 #        nTdebug("Read %8d rows %2d cols to relation %s" % (self.sizeRows(), self.sizeColumns(), self.name))
     # end def
@@ -521,7 +521,7 @@ class Relation():
 # end class
 
 
-class DBMS():
+class DBMS:
     def __init__(self):
         self.tables = {}
 

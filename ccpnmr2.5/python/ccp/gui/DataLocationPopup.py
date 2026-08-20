@@ -93,7 +93,7 @@ if __name__ == '__main__':
   import sys
 
   if len(sys.argv) != 2:
-    print 'must specify project directory'
+    print('must specify project directory')
     sys.exit()
 
   path = sys.argv[1]

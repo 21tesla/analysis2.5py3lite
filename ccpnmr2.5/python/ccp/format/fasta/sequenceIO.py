@@ -77,12 +77,12 @@ class FastaSequenceFile(FastaGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s sequence file %s" % (self.format,self.name)
+      print("Reading %s sequence file %s" % (self.format,self.name))
 
     sequenceRead = 0
     sequenceLine = ""
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     lineErrors = []
     validLines = 0
@@ -134,16 +134,16 @@ class FastaSequenceFile(FastaGenericFile):
       fileReadOk = False
       self.sequences = []
     elif lineErrors:
-      print "  Bad fasta format lines:%s" % self.newline
+      print("  Bad fasta format lines:%s" % self.newline)
       for lineError in lineErrors:
-        print lineError
+        print(lineError)
       
     return fileReadOk
 
   def write(self,columnLength = 60, verbose = 0):
 
     if verbose == 1:
-      print "Writing fasta sequence file %s" % self.name
+      print("Writing fasta sequence file %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -206,9 +206,9 @@ if __name__ == "__main__":
     sequenceFile.read(verbose = 1)
 
     for seq in sequenceFile.sequences:
-      print seq.molName
+      print(seq.molName)
       for seqEl in seq.elements:
-        print seqEl.seqCode, seqEl.code1Letter
+        print(seqEl.seqCode, seqEl.code1Letter)
 
     sequenceFile.name = 'local/seq.testout'
 

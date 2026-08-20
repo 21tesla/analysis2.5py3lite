@@ -2,7 +2,7 @@ from sys import platform
 
 from os import listdir, path
 
-from Tkinter import PhotoImage
+from tkinter import PhotoImage
 
 from memops.gui.Scrollbar import Scrollbar
 from memops.gui.Canvas import Canvas
@@ -679,7 +679,7 @@ class Tree(Frame):
       callbacks = [None] * n  
 
     if not editWidgets:
-      editWidgets = [[] for x in xrange(n)]  
+      editWidgets = [[] for x in range(n)]  
 
     for i, parent in enumerate(parents):
       object = objects[i]
@@ -858,7 +858,7 @@ if __name__ == '__main__':
         
         if mimeType:
           if not icon_dict.get(mimeType):
-            print mimeType
+            print(mimeType)
         
           icon = icon_dict.get(mimeType) \
                   or icon_dict.get(mimeType.split('/')[0]) \
@@ -876,7 +876,7 @@ if __name__ == '__main__':
 
   def doubleClick(node):
     data = (node.isOpen, node.label, node.object, len(node.children))
-    print 'Callback on node -  open:%s label:%s, object:%s, children:%d' % data
+    print('Callback on node -  open:%s label:%s, object:%s, children:%d' % data)
 
   
   def openDir(node):

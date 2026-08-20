@@ -76,7 +76,7 @@ class CnsDistanceConstraintFile(CnsGenericFile):
   def checkLinePattern(self,line):
 
     if self.patt[self.format + 'ChemShiftFormat'].search(line):
-      print "  Can only read assigned distance restraint lists"
+      print("  Can only read assigned distance restraint lists")
       return None
   
     return 1
@@ -84,7 +84,7 @@ class CnsDistanceConstraintFile(CnsGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading cns distance constraint list %s" % self.name
+      print("Reading cns distance constraint list %s" % self.name)
 
     return self.readGeneric(CnsDistanceConstraint)
 
@@ -156,9 +156,9 @@ class CnsDistanceConstraintFile(CnsGenericFile):
 
           fout.write("   %-2s %sresid %-4d %s%s" % ('(' * braces,
                                                                segIdString,
-		                       member.seqCode,
-		                       atomNameString,
-		                       ')' * braces))
+                               member.seqCode,
+                               atomNameString,
+                               ')' * braces))
 
           if not oneLinePerItem:
             fout.write(self.newline)
@@ -178,7 +178,7 @@ class CnsDistanceConstraintFile(CnsGenericFile):
               
             peakString = (" peak %5d weight  %8.5E volume  %8.5E" % (constraint.peakNum,
                                                                      weight,
-			         constraint.peakVol))
+                     constraint.peakVol))
 
             for j in range(0,len(constraint.ppms)):
               ppm = constraint.ppms[j]
@@ -192,7 +192,7 @@ class CnsDistanceConstraintFile(CnsGenericFile):
           fout.write("  %9.3f %9.3f %9.3f%s" % (constraint.targetDist,
                                                 constraint.minusDist,
                                                 constraint.plusDist,
-		                                            peakString))
+                                                    peakString))
           
           fout.write(self.newline)
 
@@ -221,7 +221,7 @@ class CnsDistanceConstraintFile(CnsGenericFile):
 
   def printWriteText(self):
   
-    print "Writing cns distance constraint list %s" % self.name
+    print("Writing cns distance constraint list %s" % self.name)
 
 class CnsDistanceConstraint:
 
@@ -312,7 +312,7 @@ class CnsDistanceConstraint:
             try:
               ppms.append(curCols[1])
             except:
-              print curCols
+              print(curCols)
               raise
   
         self.setOtherData(weight,peakNum,peakVol,ppms)

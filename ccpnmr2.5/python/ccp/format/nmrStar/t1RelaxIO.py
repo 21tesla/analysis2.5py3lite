@@ -206,4 +206,4 @@ if __name__ == "__main__":
 
     for t1RelaxFile in nmrStarFile.t1RelaxFiles:
       for t1Relax in t1RelaxFile.t1RelaxValues:
-        print t1Relax.Id, t1Relax.seqCode, t1Relax.resLabel, t1Relax.atomName, t1Relax.value, t1Relax.valueError
+        print(t1Relax.Id, t1Relax.seqCode, t1Relax.resLabel, t1Relax.atomName, t1Relax.value, t1Relax.valueError)

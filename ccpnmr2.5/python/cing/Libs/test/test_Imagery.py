@@ -17,7 +17,7 @@ import unittest
 
 if not cingPaths.convert: # Requirement for test.
 #    raise ImportWarning('convert')
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( 'convert', getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( 'convert', getCallerFileName() ))
     raise SkipTest('convert')
 # end if
 class AllChecks(TestCase):

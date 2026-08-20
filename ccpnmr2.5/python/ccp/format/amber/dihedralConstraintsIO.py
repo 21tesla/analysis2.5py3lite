@@ -78,7 +78,7 @@ class AmberDihedralConstraintFile(AmberGenericFile):
 
     if verbose == 1:
     
-      print "Reading %s dihedral constraint list %s" % (self.format,self.name)
+      print("Reading %s dihedral constraint list %s" % (self.format,self.name))
     
     constraintInfoList = self.readConstraints()
     

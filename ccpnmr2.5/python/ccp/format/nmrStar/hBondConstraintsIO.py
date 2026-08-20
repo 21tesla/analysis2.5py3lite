@@ -94,8 +94,8 @@ if __name__ == "__main__":
     for constraintFile in nmrStarFile.constraintFiles:
       for constraint in constraintFile.constraints:
         for node in constraint.nodes:
-          print constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound
+          print(constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound)
           mlist = []
           for member in node.members:
             mlist.append(member.Id)
-          print "   " + str(mlist)
+          print("   " + str(mlist))

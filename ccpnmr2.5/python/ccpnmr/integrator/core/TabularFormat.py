@@ -54,7 +54,7 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
-class TabularFormat(object):
+class TabularFormat:
   """generic table and keyword file format
   """
   
@@ -93,7 +93,7 @@ class TabularFormat(object):
     """ Write text to file
     Input: target can be a string or a stream
     """
-    if isinstance(target, basestring):
+    if isinstance(target, str):
       stream = open(target,'w')
     else:
       stream = target

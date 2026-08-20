@@ -438,7 +438,7 @@ def _runWattos(project, ranges=None, tmp = None, parseOnly=False):
         nTerror("Path does not exist: %s" % (pathOutSurplus))
         return True
 #    nTdebug('> parsing ' + pathOutSurplus)
-    fullTextSurplus = open(pathOutSurplus, 'r').read()
+    fullTextSurplus = open(pathOutSurplus).read()
     if not fullTextSurplus:
         nTerror('Failed to parse Wattos surplus summary file')
         return True

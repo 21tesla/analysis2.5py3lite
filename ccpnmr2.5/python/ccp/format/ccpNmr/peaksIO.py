@@ -109,13 +109,13 @@ class CcpNmrPeakFile(CcpNmrGenericFile):
   def read(self,verbose = False):
 
     if verbose:
-      print "Reading %s peak list %s" % (self.format,self.name)
+      print("Reading %s peak list %s" % (self.format,self.name))
       
     #
     # Open and read the file
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     lines = fin.readlines()
     fin.close()
     
@@ -143,7 +143,7 @@ class CcpNmrPeakFile(CcpNmrGenericFile):
           numDim += 1
       
       else:
-        print "  Error: unrecognized column heading %s - will be ignored" % (headerCol)
+        print("  Error: unrecognized column heading %s - will be ignored" % (headerCol))
         attributeName = convertFunc = None
       
       self.headerInfo.append((attributeName,convertFunc))
@@ -179,7 +179,7 @@ class CcpNmrPeakFile(CcpNmrGenericFile):
 
       else:
       
-        print "  Error: Could not read peak line, has %d columns should be %d according to header." % (len(cols),headerLen)
+        print("  Error: Could not read peak line, has %d columns should be %d according to header." % (len(cols),headerLen))
 
 class CcpNmrPeak:
 

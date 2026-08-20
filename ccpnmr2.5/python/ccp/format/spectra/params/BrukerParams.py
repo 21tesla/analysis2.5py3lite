@@ -74,7 +74,7 @@ class BrukerParams(ExternalParams):
       if file != 'procs':
         ss = os.path.join(dd, 'procs')
         if os.path.isfile(ss):
-          print 'Switching to input file: %s' % ss
+          print('Switching to input file: %s' % ss)
           procs_file = ss
     
     self.procs_file = procs_file
@@ -89,7 +89,7 @@ class BrukerParams(ExternalParams):
       help = BrukerParHelp('help')
       procParData = BrukerProcessingParData(self.procs_file, help.tags)
       procParData.get()
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
     
     # get acquisition file data
@@ -136,8 +136,8 @@ class BrukerParams(ExternalParams):
             # maybe we have e.g. a 2D projection of an original 3D spectrum
             # Anyway the acquisition parameters can not be trusted to match the
             # processing dimensions.
-            print (
-             'WARNING, Spectrum is a computed, %sD projection or slice of a %sD Experiment'
+            print((
+             'WARNING, Spectrum is a computed, %sD projection or slice of a %sD Experiment')
              % (numDim, nAxes))
             acqParData = None
           nAxes = numDim
@@ -244,7 +244,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: required argument: <procs_file>'
+    print('Error: required argument: <procs_file>')
     sys.exit(1)
 
   procs_file = sys.argv[1]

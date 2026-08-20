@@ -112,11 +112,11 @@ class AzaraProcessingParsFile(AzaraGenericFile,GenericProcessingParsFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading Azara processing parameters file %s" % self.name
+      print("Reading Azara processing parameters file %s" % self.name)
 
     try:
-      fin = open(self.name, 'rU')
-    except IOError, e:
+      fin = open(self.name)
+    except OSError as e:
       raise e
 
     lines = fin.readlines()
@@ -265,7 +265,7 @@ class AzaraProcessingParsFile(AzaraGenericFile,GenericProcessingParsFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing azara processing pars file %s" % self.name
+      print("Writing azara processing pars file %s" % self.name)
 
     numDim = self.fPars['numDim']
     
@@ -307,7 +307,7 @@ class AzaraProcessingParsFile(AzaraGenericFile,GenericProcessingParsFile):
     self.fout.close()
 
     if verbose == 1:
-      print self.scriptName + " finished..."
+      print(self.scriptName + " finished...")
 
 ###################
 # Main of program #
@@ -334,15 +334,15 @@ if __name__ == "__main__":
     
     aparsKeys = procParFile.aPars.keys()
     aparsKeys.sort()
-    print 'apars'
+    print('apars')
     for aparsKey in aparsKeys:
-      print "  %-20s: %s" % (aparsKey,str(procParFile.aPars[aparsKey]))
+      print("  %-20s: %s" % (aparsKey,str(procParFile.aPars[aparsKey])))
     
     fparsKeys = procParFile.fPars.keys()
     fparsKeys.sort()
-    print 'fpars'
+    print('fpars')
     for fparsKey in fparsKeys:
-      print "  %-20s: %s" % (fparsKey,str(procParFile.fPars[fparsKey]))
+      print("  %-20s: %s" % (fparsKey,str(procParFile.fPars[fparsKey])))
 
     procParFile.name = outFile
  

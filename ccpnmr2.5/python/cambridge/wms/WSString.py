@@ -58,7 +58,7 @@ class WSString:
         subIndex = 0
         fixDeep = deep
 
-        strg += '<Arraylist'+`fixDeep`+'.'+`index`+'>'
+        strg += '<Arraylist'+str(fixDeep)+'.'+str(index)+'>'
         deep += 1
 
         for i in range(0, lstSize):
@@ -85,7 +85,7 @@ class WSString:
             if i < lstSize -1:
                 strg += '<#>'
                     
-        strg += '<Arraylist'+`fixDeep`+'.'+`index`+'/>'
+        strg += '<Arraylist'+str(fixDeep)+'.'+str(index)+'/>'
 
         return strg
                     
@@ -108,7 +108,7 @@ class WSString:
 
             #print set, nbKeys
 
-            strg += '<Hashmap'+`fixDeep`+'.'+`index`+'>'
+            strg += '<Hashmap'+str(fixDeep)+'.'+str(index)+'>'
             deep += 1
 
             for i in range(nbKeys):
@@ -158,7 +158,7 @@ class WSString:
                 if i < nbKeys -1:
                     strg += '<;>'
                     
-            strg += '<Hashmap'+`fixDeep`+'.'+`index`+'/>'
+            strg += '<Hashmap'+str(fixDeep)+'.'+str(index)+'/>'
 
         return strg
                     

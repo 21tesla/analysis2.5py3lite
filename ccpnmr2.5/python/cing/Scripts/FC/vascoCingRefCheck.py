@@ -247,7 +247,7 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
             switchOutput(False)        
         ccpnProject = loadProject(self.ccpnDir)
         if not self.showMessages:
-            print 'switching messaging on again.'
+            print('switching messaging on again.')
             switchOutput(True)
         if ccpnProject == None:
             nTerror("Failed to load CCPN project from: %s" % self.ccpnDir)

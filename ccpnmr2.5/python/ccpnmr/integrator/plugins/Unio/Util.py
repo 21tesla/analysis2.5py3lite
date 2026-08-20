@@ -192,7 +192,7 @@ def candidNmrCalcRun(nmrCalcRun):
     dataSource = peakListData.dataSource
     spectrumKind = getSpectrumKind(dataSource)
     if spectrumKind is None:
-      print 'WARNING, incorrect spectrum type. Removing %s' % peakListData
+      print('WARNING, incorrect spectrum type. Removing %s' % peakListData)
       for runParameter in peakListData.runParameters:
         runParameter.delete()
       peakListData.delete()

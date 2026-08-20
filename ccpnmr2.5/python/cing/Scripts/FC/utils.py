@@ -23,7 +23,7 @@ from glob import glob
 from memops.general.Io import loadProject
 from memops.general.Io import saveProject
 from shutil import rmtree
-import Tkinter
+import tkinter
 import tarfile
 
 def reportDifference(ccpnProject, fn):
@@ -155,15 +155,15 @@ def fcProcessEntry( entry_code, ccpnTgzFile, outputCcpnTgzFile, functionToRun='s
         allowPopups = True
         minimalPrompts = False
 
-    print 'entry_code                                                                                    ', entry_code
+    print('entry_code                                                                                    ', entry_code)
 #    print 'bmrb_id                                                                                       ', bmrb_id
-    print 'allowPopups                                                                                   ', allowPopups
-    print 'isInteractive                                                                                 ', isInteractive
-    print 'minimalPrompts                                                                                ', minimalPrompts
-    print 'verbose                                                                                       ', verbose
-    print 'doSwapCheck                                                                                   ', doSwapCheck
-    print 'doSaveProject                                                                                 ', doSaveProject
-    print 'doExport                                                                                      ', doExport
+    print('allowPopups                                                                                   ', allowPopups)
+    print('isInteractive                                                                                 ', isInteractive)
+    print('minimalPrompts                                                                                ', minimalPrompts)
+    print('verbose                                                                                       ', verbose)
+    print('doSwapCheck                                                                                   ', doSwapCheck)
+    print('doSaveProject                                                                                 ', doSaveProject)
+    print('doExport                                                                                      ', doExport)
 
     guiRoot = None
     if allowPopups:

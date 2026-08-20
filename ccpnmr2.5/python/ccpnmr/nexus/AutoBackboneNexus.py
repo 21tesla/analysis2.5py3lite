@@ -33,7 +33,7 @@ from ccpnmr.analysis.core.MoleculeBasic import getLinkedResidue
 from ccpnmr.analysis.core.AssignmentBasic import findConnectedSpinSystem
 from ccpnmr.nexus.NexusBasic import getSpinSystemInterIntraResonances
 
-import Tkinter
+import tkinter
 
 from math import exp, log, sqrt
 
@@ -71,14 +71,14 @@ def matrixRefine(C,A,R, matrixIter, progressBar):
     F = multiply((C*B*Rt) + (Ct*B*R), B)
     
     # On spin system
-    for s in xrange(m):
+    for s in range(m):
       s3 = F[s].sum()
       if s3:
         F[s] /= s3
     
     # On residue
     F = F.T
-    for s in xrange(n):
+    for s in range(n):
       s3 = F[s].sum()
       if s3:
         F[s] /= s3
@@ -151,8 +151,8 @@ def autoBackboneNexus(chain, spinSystems, shiftList,
   maxS = B.max()
   assign = {}
   scores = []
-  for s in xrange(m):
-    for r in xrange(n):
+  for s in range(m):
+    for r in range(n):
       scores.append((A[s,r]*B[s,r],s,r))
   
   scores.sort()
@@ -183,7 +183,7 @@ def autoBackboneNexus(chain, spinSystems, shiftList,
   C /= C.max()
 
   m, n = A.shape
-  for r in xrange(n):
+  for r in range(n):
     if r not in assign:
       assign[r] = None
   
@@ -202,7 +202,7 @@ def autoBackboneNexus(chain, spinSystems, shiftList,
   
   e = 10
   ensemble = []
-  for i in xrange(e):
+  for i in range(e):
     ensemble.append((sc, assign.copy()))
 
   if progressBar:
@@ -269,7 +269,7 @@ def autoBackboneNexus(chain, spinSystems, shiftList,
     if ensemble[-1][0] > scBest:
       scBest = ensemble[-1][0]
       assignBest = ensemble[-1][1].copy()
-      print 'Best Score:', scBest
+      print('Best Score:', scBest)
     
     randint(1,len(ensemble))
     scW, assignW = ensemble[0]
@@ -516,12 +516,12 @@ def getInitialAssignMatrix(chain, spinSystems, peakLists, shiftList,
   R = matrix(rMatrix)
   
   # Normalise per Spin System
-  for s in xrange(A.shape[0]):
+  for s in range(A.shape[0]):
     A[s] /= A[s].max()
   
   # Normalise per Residue
   A = A.T
-  for s in xrange(A.shape[0]):
+  for s in range(A.shape[0]):
     A[s] /= A[s].max()
   A = A.T
   

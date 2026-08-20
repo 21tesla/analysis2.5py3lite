@@ -110,7 +110,7 @@ class NmrViewFormat(DataFormat):
     self.procParsFile.read()
 
     if self.verbose == 1:
-      print "Reading processing pars from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading processing pars from %s file %s" % (self.formatLabel,self.fileName))
 
   def getPeaks(self):
   
@@ -149,7 +149,7 @@ class NmrViewFormat(DataFormat):
       self.fileName = self.peaksFileName
 
     if self.verbose == 1:
-      print "Reading peak list from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading peak list from %s file %s" % (self.formatLabel,self.fileName))
 
     # TODO HERE: have to figure out what to do if project file read...
    
@@ -161,7 +161,7 @@ class NmrViewFormat(DataFormat):
   def getFullProject(self,fileName,peakKeyWdList = None, sequenceKeyWds = None):
   
     if self.verbose == 1:
-      print "Reading %s star project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s star project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.NmrViewStarFile(fileName)
     self.file.read()
@@ -323,7 +323,7 @@ class NmrViewFormat(DataFormat):
             self.getSinglePeakResName(assignName)
         
         except:
-          print "  Problems handling %s assignment name %s... ignored." % (self.format,self.rawPeak.assign[self.rawPeakDimIndex])
+          print("  Problems handling %s assignment name %s... ignored." % (self.format,self.rawPeak.assign[self.rawPeakDimIndex]))
 
   def getSinglePeakResName(self,assignName):
   
@@ -473,7 +473,7 @@ class NmrViewFormat(DataFormat):
         for peakDimContrib in peakDimContribs:
           ll = self.resonanceToAtoms.get(peakDimContrib.resonance)
           if ll is None:
-            print ("  Can't handle resonance %s for peak %d" 
+            print("  Can't handle resonance %s for peak %d" 
                    % (getResNameText(peakDimContrib.resonance), 
                    self.peak.serial))
           else:
@@ -596,7 +596,7 @@ class NmrViewFormat(DataFormat):
                self.rawMeasurementClass(measurement.value,
                		                       atomName,
                		                       self.seqCode,
-			                                     defaultMolCode))
+                                                 defaultMolCode))
       
       if self.atomMeasurements.has_key(resonanceToAtom):
         del(self.atomMeasurements[resonanceToAtom])

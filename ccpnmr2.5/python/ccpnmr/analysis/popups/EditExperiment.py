@@ -304,7 +304,7 @@ class EditExperimentPopup(BasePopup):
   J Biomol NMR. 2006 Nov;36(3):147-55* (link_)
 
   .. _`experiment nomenclature paper`:  http://www.ncbi.nlm.nih.gov/pubmed/17031528
-  .. _`link`:  http://www.ncbi.nlm.nih.gov/pubmed/17031528
+  .. _str(link):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
   .. _`Assignment Panel`: EditAssignmentPopup.html
   .. _`CcpNmr ECI`: EntryCompletionPopup.html
   """
@@ -857,7 +857,7 @@ class EditExperimentPopup(BasePopup):
 
     for func in ('__init__', 'delete'):
       notifyFunc(self.updateAfter,'ccp.nmr.Nmr.ShiftList', func)
-	
+    
     for func in ('setDetails', 'setName', 'setExperimentType','setShiftList',
                  'setShiftReferences','addShiftReference','removeShiftReference',
                  'setMolSystems','addMolSystem','removeMolSystem', 'setVolumeUnit'):

@@ -150,7 +150,7 @@ def getCcpnObject(ccpnMap, startObject):
       findObject = reduce(lambda obj, attrOrFunc: getAttrOrFunc(obj,attrOrFunc),ccpnObjectStrings[1:],startObject)
 
     except:
-      print "  Cannot get CCPN object for link %s, starting object %s" % (ccpnObjectStrings, startObject)
+      print("  Cannot get CCPN object for link %s, starting object %s" % (ccpnObjectStrings, startObject))
       raise
       findObject = []
 
@@ -173,7 +173,7 @@ def getCcpnMapValue(ccpnMap, startObject):
       ccpnMapValue = getFunc(getCcpnObject(ccpnVarName, startObject) )
 
     except:
-      print "  Cannot CCPN map value for %s, function %s" % (ccpnVarName,getFunc)
+      print("  Cannot CCPN map value for %s, function %s" % (ccpnVarName,getFunc))
       raise
 
   elif ccpnMap == None:
@@ -1132,4 +1132,4 @@ if __name__ == '__main__':
     #print finalInfoList
 
     for row in finalInfoList:
-      print row #[0], row[3:]
+      print(row #[0], row[3:])

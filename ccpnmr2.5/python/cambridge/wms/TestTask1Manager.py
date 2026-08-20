@@ -48,7 +48,7 @@ class TestTask1Manager(Thread):
 
     def __init__(self, id, status, repository=None):
 
-        print 'creating new TestTask1Manager ', id, ', ', status
+        print('creating new TestTask1Manager ', id, ', ', status)
 
         # we need to know the repository because client side
         # tasks could be running off any repository (or none
@@ -72,7 +72,7 @@ class TestTask1Manager(Thread):
         wsstr_out = WSString(response1._return)
         ss = wsstr_out.getStructHM()
         
-        print 'got task details ', ss
+        print('got task details ', ss)
 
         # input project Name. Needs to be
         if ss.has_key('inputVersion'):
@@ -115,7 +115,7 @@ class TestTask1Manager(Thread):
         # will call the actual exec (be it through WS or directly)
         # and will essentially tie in to the extend NMR code base
 
-        print 'running ', self
+        print('running ', self)
 
 
         # important to set the status to RUNNING so we don't try
@@ -134,7 +134,7 @@ class TestTask1Manager(Thread):
 
         wsstr_in = WSString(h2)
 
-        print 'trying to update with ', h2, ', ', wsstr_in.str
+        print('trying to update with ', h2, ', ', wsstr_in.str)
         request1._arg2 = wsstr_in.str
 
         port.record(request1)
@@ -146,20 +146,20 @@ class TestTask1Manager(Thread):
 
         # This needs to be set off the data model (or could be prompted)
         expDir = '/home/jionides/work/CCPN/test_EXP_data'
-        print 'run: STARTING EXPORT'
+        print('run: STARTING EXPORT')
         self._repository.export_project(self._inputProjectName, self._inputVersionTag,expDir)
-        print 'run: FINISHED EXPORT'
+        print('run: FINISHED EXPORT')
 
         # For now run directly off here
-        print 'run: STARTING TASK'
+        print('run: STARTING TASK')
         projDir = expDir + '/' + self._inputProjectName
         task = Test1(projDir)
         task.process()
-        print 'run: FINISHED TASK'
+        print('run: FINISHED TASK')
 
         self.isComplete = True
         self.isRunning = False
-        print 'run: DONE'
+        print('run: DONE')
 
 
     def abort(self):
@@ -185,9 +185,9 @@ class TestTask1Manager(Thread):
         # re-import the results
         newVersionTag = self._repository.increment_version(self._inputVersionTag)
         expDir = '/home/jionides/work/CCPN/test_EXP_data/' +  self._inputProjectName
-        print 'run: STARTING IMPORT'
+        print('run: STARTING IMPORT')
         self._repository.import_project(self._inputProjectName, newVersionTag,expDir)
-        print 'run: FINISHED IMPORT'
+        print('run: FINISHED IMPORT')
 
         # then set the output version
         h2 = {'serial': self._taskId,
@@ -204,7 +204,7 @@ class TestTask1Manager(Thread):
 
         wsstr_in = WSString(h2)
 
-        print 'trying to update output with ', h2, ', ', wsstr_in.str
+        print('trying to update output with ', h2, ', ', wsstr_in.str)
         request1._arg2 = wsstr_in.str
 
         port.record(request1)
@@ -224,7 +224,7 @@ class TestTask1Manager(Thread):
 
         wsstr_in = WSString(h2)
 
-        print 'trying to update status with ', h2, ', ', wsstr_in.str
+        print('trying to update status with ', h2, ', ', wsstr_in.str)
         request2._arg2 = wsstr_in.str
 
         port.record(request2)

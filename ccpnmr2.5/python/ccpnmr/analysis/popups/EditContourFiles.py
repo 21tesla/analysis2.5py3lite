@@ -70,11 +70,11 @@ class EditContourFilesPopup(BasePopup):
 
   When a contour file is created for a spectrum then by default it is used to
   display contours rather than having them calculated on the fly.  This can be
-  changed in the main `Spectra`_ dialog in the Display Options tab.
+  changed in the main str(Spectra)_ dialog in the Display Options tab.
 
   See also: `Creating Contour Files`_, `Add Existing Contour Files`_.
 
-  .. _`Spectra`: EditSpectrumPopup.html
+  .. _str(Spectra): EditSpectrumPopup.html
   .. _`Creating Contour Files`: CreateContourFilePopup.html
   .. _`Add Existing Contour Files`: AddContourFilePopup.html
 """
@@ -220,7 +220,7 @@ class EditContourFilesPopup(BasePopup):
       # just change url path since (hopefully) nobody else is using it
       try:
         url.path = path
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Setting url path', e.error_msg, parent=self)
 
   def getPath(self, storedContour):
@@ -239,7 +239,7 @@ class EditContourFilesPopup(BasePopup):
 
     try:
       storedContour.path = path
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Setting stored contour path', e.error_msg, parent=self)
 """
 
@@ -313,7 +313,7 @@ class EditContourFilesPopup(BasePopup):
           try:
             os.remove(path)
           except:
-            print 'Warning: could not remove %s' % path
+            print('Warning: could not remove %s' % path)
       for storedContour in storedContours:
         storedContour.delete()
 

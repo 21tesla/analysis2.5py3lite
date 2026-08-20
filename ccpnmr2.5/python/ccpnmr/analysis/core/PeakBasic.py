@@ -2170,9 +2170,9 @@ def fitPeaks(peaks, fitMethod, updatePosition=True):
   """
   try:
     from ccpnmr.c.PeakList import fitPeaksInRegion
-  except Exception, e:
-    print 'Could not import fitPeaksInRegion'
-    print e
+  except Exception as e:
+    print('Could not import fitPeaksInRegion')
+    print(e)
     return
 
   fittedPeaks = []
@@ -3847,9 +3847,9 @@ def structurePredictNoePeakList(structure, spectrum, distThreshold=5.0, progress
         
         if labelling:
           for atomI in atomSetI.atoms:
-	    elemI = atomI.chemAtom.elementSymbol
+        elemI = atomI.chemAtom.elementSymbol
             isotopeI = DEFAULT_ISOTOPES[elemI]
-	    for atomJ in atomSetJ.atoms:
+        for atomJ in atomSetJ.atoms:
               elemJ = atomJ.chemAtom.elementSymbol
               isotopeJ = DEFAULT_ISOTOPES[elemJ]
               fracDict = getLabelAtomPairFractions(labelling, atomI, atomJ)
@@ -4050,7 +4050,7 @@ def translateSpectrumUsingPeaks(referencePeak, translatePeak, dimMapping):
     msg = 'translating %s dim %d dataDimRef refValue from %4.3f to ' % (s, trnDim, trnDataDimRef.refValue)
     trnDataDimRef.refValue += refPeakDim.value - trnPeakDim.value
     
-    print '%s%4.3f' % (msg, trnDataDimRef.refValue)
+    print('%s%4.3f' % (msg, trnDataDimRef.refValue))
 
 def getPeakAnnotation(peak, noPeakAnnotationChar='', noPeakDimAnnotationChar='', joinChar='', doPeakDims=True):
   """

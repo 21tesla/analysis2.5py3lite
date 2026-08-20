@@ -79,12 +79,12 @@ class TargetedAcquisitionSequenceFile(TargetedAcquisitionGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading TargetedAcquisition sequence file %s" % self.name
-    print "Reading TargetedAcquisition sequence file %s" % self.name
+      print("Reading TargetedAcquisition sequence file %s" % self.name)
+    print("Reading TargetedAcquisition sequence file %s" % self.name)
 
     molName = None
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()

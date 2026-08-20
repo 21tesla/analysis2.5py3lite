@@ -99,7 +99,7 @@ class FontList(PulldownList):
 if __name__ == '__main__':
 
   def myCallback(font):
-    print 'myCallback', font
+    print('myCallback', font)
 
   import Tkinter
   r = Tkinter.Tk()

@@ -165,7 +165,7 @@ class NmrStarFormat(DataFormat):
     self.setCcpnMolTypes()
     
     if self.verbose == 1:
-      print "Reading sequence from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading sequence from %s file %s" % (self.formatLabel,self.fileName))
 
 
   #
@@ -333,7 +333,7 @@ class NmrStarFullReaderFile(NmrStarFile):
 
     else:
     
-      print "ERROR UNRECOGNIZED VERSION '%s'" % (str(self.version))
+      print("ERROR UNRECOGNIZED VERSION '%s'" % (str(self.version)))
 
   
   def setupSaveFrame(self,saveFrameName,title):
@@ -341,7 +341,7 @@ class NmrStarFullReaderFile(NmrStarFile):
     keywds = {}
   
     if not self.sfDict.has_key(saveFrameName):
-      print "  Warning: saveframe name %s not in reference data!" % (saveFrameName)
+      print("  Warning: saveframe name %s not in reference data!" % (saveFrameName))
 
     else:
       keywds['prefix'] = self.getPrefix(saveFrameName)
@@ -367,12 +367,12 @@ class NmrStarFullReaderFile(NmrStarFile):
   
     if versionHits['3.0'] > versionHits['2.1.1'] and self.version != '3.0':
      
-      print "  Warning: setting nmrStar version to 3.0 for reading."
+      print("  Warning: setting nmrStar version to 3.0 for reading.")
       self.version = '3.0'
          
     elif versionHits['2.1.1'] > versionHits['3.0'] and self.version != '2.1.1':
      
-      print "  Error: no full version 2.1.1 nmrStar reader available - use version 3.0 files."
+      print("  Error: no full version 2.1.1 nmrStar reader available - use version 3.0 files.")
       return False
     
     return True

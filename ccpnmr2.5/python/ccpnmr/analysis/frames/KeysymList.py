@@ -89,7 +89,7 @@ if (__name__ == '__main__'):
 
   def callback(selected_indices, entry):
 
-    print 'callback', selected_indices, entry
+    print('callback', selected_indices, entry)
 
   root = Tkinter.Tk()
 
@@ -98,11 +98,11 @@ if (__name__ == '__main__'):
 
   def getSelected():
     selected = menu.getSelected()
-    print 'getSelected', selected
+    print('getSelected', selected)
 
   def getSelectedInd():
     selected = menu.getSelectedIndex()
-    print 'getSelectedInd', selected
+    print('getSelectedInd', selected)
 
   button = Tkinter.Button(root, text='getSelected', command=getSelected)
   button.grid()

@@ -90,7 +90,7 @@ class MolmolCoordinateFile(MolmolGenericFile):
     # Read coordinates and other info
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -107,7 +107,7 @@ class MolmolCoordinateFile(MolmolGenericFile):
       elif self.patt['pdbHeader'].search(line):
       
         if line.find('MOLMOL') < 0:
-          print "  Warning: probably invalid molmol file!"
+          print("  Warning: probably invalid molmol file!")
       
       elif self.patt['pdbCompound'].search(line):
       
@@ -160,7 +160,7 @@ class MolmolCoordinateFile(MolmolGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -259,10 +259,10 @@ if __name__ == "__main__":
   for mc in molmolFile.modelCoordinates:
   
     for coo in molmolFile.modelCoordinates[mc]:
-      print coo.serial, coo.resName
+      print(coo.serial, coo.resName)
       
   for chain in molmolFile.chains:
-    print chain.chainId
+    print(chain.chainId)
 
   molmolFile.name = 'local/test.coord'  
   molmolFile.write()

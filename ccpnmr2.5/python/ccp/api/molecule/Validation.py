@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -799,7 +799,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.ValidationStore.__init__"
+        print("ERROR in ccp.molecule.Validation.ValidationStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -858,10 +858,10 @@ class ValidationStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2747,7 +2747,7 @@ class NmrConstraintListValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.NmrConstraintListValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.NmrConstraintListValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2793,10 +2793,10 @@ class NmrConstraintListValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4097,7 +4097,7 @@ class NmrConstraintValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.NmrConstraintValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.NmrConstraintValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4143,10 +4143,10 @@ class NmrConstraintValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5444,7 +5444,7 @@ class NmrMeasurementListValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.NmrMeasurementListValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.NmrMeasurementListValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5490,10 +5490,10 @@ class NmrMeasurementListValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6794,7 +6794,7 @@ class NmrMeasurementValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.NmrMeasurementValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.NmrMeasurementValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6840,10 +6840,10 @@ class NmrMeasurementValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8153,7 +8153,7 @@ class PeakValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.PeakValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.PeakValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8199,10 +8199,10 @@ class PeakValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9495,7 +9495,7 @@ class PeakListValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.PeakListValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.PeakListValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9541,10 +9541,10 @@ class PeakListValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10838,7 +10838,7 @@ class ResidueValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.ResidueValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.ResidueValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10884,10 +10884,10 @@ class ResidueValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12180,7 +12180,7 @@ class AtomValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.AtomValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.AtomValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12226,10 +12226,10 @@ class AtomValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -13522,7 +13522,7 @@ class StructureValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.StructureValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.StructureValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -13568,10 +13568,10 @@ class StructureValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -14836,7 +14836,7 @@ class EntryValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.EntryValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.EntryValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -14882,10 +14882,10 @@ class EntryValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -15589,7 +15589,7 @@ class ChainValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.ChainValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.ChainValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -15635,10 +15635,10 @@ class ChainValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -16931,7 +16931,7 @@ class MolSysAtomValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.MolSysAtomValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.MolSysAtomValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -16977,10 +16977,10 @@ class MolSysAtomValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -18133,7 +18133,7 @@ class MolSystemValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.MolSystemValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.MolSystemValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -18179,10 +18179,10 @@ class MolSystemValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -19335,7 +19335,7 @@ class MolSysChainValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.MolSysChainValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.MolSysChainValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -19381,10 +19381,10 @@ class MolSysChainValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -20537,7 +20537,7 @@ class MolSysResidueValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.MolSysResidueValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.MolSysResidueValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -20583,10 +20583,10 @@ class MolSysResidueValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -21729,7 +21729,7 @@ class EnsembleValidation(ValidationResult):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.Validation.EnsembleValidation.__init__"
+        print("ERROR in ccp.molecule.Validation.EnsembleValidation.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -21775,10 +21775,10 @@ class EnsembleValidation(ValidationResult):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

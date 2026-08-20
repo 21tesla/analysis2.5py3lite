@@ -159,14 +159,14 @@ if __name__ == '__main__':
   #
   
   for residue in chainA.residues:
-    print residue.ccpCode, residue.seqCode
-    print "  ",
+    print(residue.ccpCode, residue.seqCode)
+    print("  ",)
     for atom in residue.sortedAtoms():
-      print atom.name,
-    print
+      print(atom.name,)
+    print()
     
-  print chainA.code, chainA.molecule.name
-  print chainB.code, chainB.molecule.name
+  print(chainA.code, chainA.molecule.name)
+  print(chainB.code, chainB.molecule.name)
 
   #
   # Check if whole project is valid

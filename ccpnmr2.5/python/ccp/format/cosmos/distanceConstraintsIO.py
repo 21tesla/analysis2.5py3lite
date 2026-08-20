@@ -78,7 +78,7 @@ class CosmosDistanceConstraintFile(CosmosGenericFile):
 
     if verbose == 1:
  
-      print "Writing %s distance constraint list %s" % (self.format,self.name)
+      print("Writing %s distance constraint list %s" % (self.format,self.name))
     
 
     #
@@ -123,7 +123,7 @@ class CosmosDistanceConstraintFile(CosmosGenericFile):
         elif rcOptCutoff > 0:
           distance = constraint.targetDistance + rcOptCutoff
 
-        fileLine += "{:.1f}(1.0)".format(distance) #,rcOptCutoff)
+        fileLine += f"{distance:.1f}(1.0)" #,rcOptCutoff)
         
         fileLines.append(fileLine)
   

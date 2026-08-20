@@ -112,7 +112,7 @@ class TranslatePeakPopup(BasePopup):
                 'The position of the fixed peak in the relevant dimension; potential new position of the moving peak after re-referencing changes',
                 'The chemical shift difference between the two peak positions on one dimension']
     headingList = ['Moving\nDim','Isotope','Fixed\nDim','Original\nPosition',
-                   'New\nPosition',u'\u0394']
+                   'New\nPosition','\u0394']
     self.scrolledMatrix = ScrolledMatrix(frame, headingList=headingList, 
                                          callback=self.selectPeakDim,
                                          editWidgets=editWidgets, maxRows=5,

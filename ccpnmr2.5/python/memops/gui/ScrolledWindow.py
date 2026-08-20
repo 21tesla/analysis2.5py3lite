@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import math
 
-import Tkinter
+import tkinter
 
 from memops.universal.Region1D import Region1D
 from memops.universal.Region2D import Region2D
@@ -1648,7 +1648,7 @@ class ScrolledWindow(Frame):
     try:
       row = self.yslices.index(slice)
     except:
-      raise ValueError, 'slice not in row list' # should never be here
+      raise ValueError('slice not in row list' # should never be here)
 
     return row
 
@@ -1657,7 +1657,7 @@ class ScrolledWindow(Frame):
     try:
       col = self.xslices.index(slice)
     except:
-      raise ValueError, 'slice not in col list' # should never be here
+      raise ValueError('slice not in col list' # should never be here)
 
     return col
 
@@ -1670,7 +1670,7 @@ class ScrolledWindow(Frame):
       except:
         pass
     else:
-      raise ValueError, 'canvas not in list' # should never be here
+      raise ValueError('canvas not in list' # should never be here)
 
     #print 'row, col', row, col
     return (row, col)
@@ -2248,7 +2248,7 @@ if (__name__ == '__main__'):
       c = s.canvases[0][i]
       w = c.winfo_width()
       ws.append(w)
-    print ws
+    print(ws)
         
   def printHeights():
 
@@ -2257,7 +2257,7 @@ if (__name__ == '__main__'):
       c = s.canvases[j][0]
       h = c.winfo_height()
       hs.append(h)
-    print hs
+    print(hs)
 
   def change(dx):
     w0 = s.canvases[0][0].winfo_width()
@@ -2273,7 +2273,7 @@ if (__name__ == '__main__'):
     change(-5)
 
   def configure(event):
-    print 'configure:', event.width, event.height, s.getCanvasRowCol(event.widget)
+    print('configure:', event.width, event.height, s.getCanvasRowCol(event.widget))
 
   def expose(event):
     #print 'expose:', event.x, event.y, event.width, event.height
@@ -2281,14 +2281,14 @@ if (__name__ == '__main__'):
 
   #def keypress(canvas, event):
   def keypress(event):
-    print 'keypress'
+    print('keypress')
 
   def view_set(canvas, xview, yview):
     #print 'view_set:', xview.t0, xview.t1, yview.t0, yview.t1
     pass
 
   def test(n, event):
-    print 'test:', n, event.x, event.y
+    print('test:', n, event.x, event.y)
 
   root = Tkinter.Tk()
 

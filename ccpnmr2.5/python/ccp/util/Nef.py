@@ -687,14 +687,14 @@ def _mapAssignedResonances(topObject, assignmentMap, molSystem=None, chainMap=No
 
           else:
             # random multiple atom selection
-            resonanceName = '/'.join(sorted((str(x.name) for x in atomSets)))
+            resonanceName = '/'.join(sorted(str(x.name) for x in atomSets))
 
         assignmentMap[resonance] = (chainCode, sequenceCode, residueType,
                                     resonanceName.replace('*','#'))
 
       else:
         # multiple resonances not matching chemAtomSet
-        atomsName = '/'.join(sorted((str(x.name) for x in atomSets)))
+        atomsName = '/'.join(sorted(str(x.name) for x in atomSets))
         for resonance in resonances:
           # NB this name can not be in use already, so we do not need to check
           resonanceName = '%s@%s' % (atomsName, resonance.serial)

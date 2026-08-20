@@ -107,7 +107,7 @@ if __name__ == '__main__':
   a = [[1, 2], [3, 4]]
   b = [1, 1]
 
-  print 'before', a, b
+  print('before', a, b)
   gaussJordan(a, b)
-  print 'after', a, b
+  print('after', a, b)
 

@@ -31,7 +31,7 @@ if __name__ == '__main__':
   doFileChanges = False
   
   if not doFileChanges:
-    print "  WARNING: not making any changes!"
+    print("  WARNING: not making any changes!")
   # TODO BELOW clearly has to come from some central Constants information!!!
   targetDirectory = os.path.join(getTopDirectory(),'..','..','stable','ccpn') #
 
@@ -50,10 +50,10 @@ if __name__ == '__main__':
   for (sourceDir,targetDir,prefix) in copyList:
       
     if not os.path.exists(targetDir):
-      print "Error: target directory %s does not exist - aborting." % targetDir
+      print("Error: target directory %s does not exist - aborting." % targetDir)
       sys.exit()
       
-    print "Examining source %s to target %s..." % (sourceDir,targetDir)
+    print("Examining source %s to target %s..." % (sourceDir,targetDir))
 
     if not customCcpCodeList:
       targetCcpCodeList = getCcpCodeList(targetDir,prefix = prefix)
@@ -107,7 +107,7 @@ if __name__ == '__main__':
               # if information is exactly the same. Keep for now though.
               if not filecmp.cmp(targetFile,sourceFile):
                 if not deleteOriginalTarget:
-                  print "Overwriting %s" % targetFile
+                  print("Overwriting %s" % targetFile)
                 doCopy = True
             else:
               doCopy = True
@@ -115,17 +115,17 @@ if __name__ == '__main__':
             if doCopy:
             
               if deleteOriginalTarget:
-                print "Using new name %s instead of %s, removing original..." % (sourceFileName,chemCompFileName)
+                print("Using new name %s instead of %s, removing original..." % (sourceFileName,chemCompFileName))
                 if doFileChanges:
                   os.remove(targetFile)
                 targetFile = os.path.join(targetDir,sourceFileName)
               else:
-                print "Copying %s..." % (chemCompFileName)
+                print("Copying %s..." % (chemCompFileName))
             
               if doFileChanges:
                 shutil.copy(sourceFile,targetFile)
               
-              print
+              print()
             
           else:
-            print " NO %s" % sourceFile
+            print(" NO %s" % sourceFile)

@@ -77,11 +77,11 @@ class AutoAssignSequenceFile(AutoAssignGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading autoAssign sequence file %s" % self.name
+      print("Reading autoAssign sequence file %s" % self.name)
 
     molName = None
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -123,7 +123,7 @@ class AutoAssignSequenceFile(AutoAssignGenericFile):
   def readFromShifts(self,shiftFile, verbose = 0):
   
     if verbose == 1:
-      print "Extracting %s sequence from chemical shift file %s" % (self.format,shiftFile.name)
+      print("Extracting %s sequence from chemical shift file %s" % (self.format,shiftFile.name))
 
     (pathname,shiftFileName) = os.path.split(shiftFile.name)
     self.sequences.append(AutoAssignSequence(molName = shiftFileName))
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     sequenceFile.read(verbose = 1)
     
     for seq in sequenceFile.sequences:
-      print seq.molName
+      print(seq.molName)
       for seqel in seq.elements:
-        print seqel.seqCode, seqel.code1Letter
+        print(seqel.seqCode, seqel.code1Letter)
     

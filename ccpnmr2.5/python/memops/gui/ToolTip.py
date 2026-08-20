@@ -52,11 +52,11 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter
+import tkinter
 
 FONT = "Helvetica 9"
 
-class ToolTip(object):
+class ToolTip:
 
   def __init__(self, parent, text='*Blank Tool Tip*', delay=1500, *args, **kw):
   

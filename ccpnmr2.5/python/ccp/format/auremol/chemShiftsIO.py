@@ -128,7 +128,7 @@ class AuremolChemShiftFile(AuremolFile):
                                                     label))
           else:
           
-            print "  Error: missing atomKey %s for compound %s!" % (atomKey,label)
+            print("  Error: missing atomKey %s for compound %s!" % (atomKey,label))
 
 class AuremolChemShift:
 

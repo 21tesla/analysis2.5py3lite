@@ -53,9 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import time
 
-import Tkinter
-
-from memops.general.Constants import True, False
+import tkinter
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Label import Label

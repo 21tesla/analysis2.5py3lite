@@ -10,7 +10,7 @@ from cing.core.validate import plotparams180
 from cing.core.validate import xGrid180
 from cing.core.validate import yGrid180
 from numpy.lib.twodim_base import histogram2d
-import cPickle
+import pickle
 import csv
 
 #Takes a file with dihedral angles values and converts them to a python pickle file

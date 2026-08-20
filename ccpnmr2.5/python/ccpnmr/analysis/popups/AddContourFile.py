@@ -219,12 +219,12 @@ class AddContourFilePopup(BasePopup):
       path = os.path.basename(fileName)
       if not os.path.exists(contourDir):
         os.makedirs(contourDir)
-      print 'Copying %s to %s' % (fileName, contourDir)
+      print('Copying %s to %s' % (fileName, contourDir))
       shutil.copy(fileName, contourDir)
 
     try:
       header = getStoredContourHeader(fileName)
-    except Exception, e:
+    except Exception as e:
       showError('File error', str(e), parent=self)
       return
 

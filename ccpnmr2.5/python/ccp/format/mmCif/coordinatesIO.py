@@ -138,7 +138,7 @@ class MMCIFCoordinateFile(MMCIFFile):
     
     for modelNum in self.modelCoordinates.keys():
       if not self.modelCoordinates[modelNum]:
-        print "  Warning: model %s has no coordinates - removed." % modelNum
+        print("  Warning: model %s has no coordinates - removed." % modelNum)
         del(self.modelCoordinates[modelNum])
 
 class MMCIFChain:

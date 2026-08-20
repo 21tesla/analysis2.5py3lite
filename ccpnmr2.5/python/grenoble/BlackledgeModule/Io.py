@@ -97,11 +97,11 @@ def BlackledgeToPdbConverter( inFile, outFile ):
       Hopefully this function will fix it. """
 
   if not os.path.isfile( inFile ):
-    print '%s cannot find input file %s, exiting.' % ( __name__, inFile )
+    print('%s cannot find input file %s, exiting.' % ( __name__, inFile ))
     sys.exit()
 
   newLines = []
-  for line in open( inFile, 'r' ).readlines():
+  for line in open( inFile ).readlines():
     if line.startswith( 'ATOM' ):
       # insert extra space
       newLine = line[:55] + ' ' + line[55:60] + ' ' + line[60:65] + '          ' + line[65:]
@@ -200,7 +200,7 @@ if __name__ == '__main__':
   # BlackledgeToPdbConverter( 'module/tempC.pdb', 'fileIo.pdb' )
 
   for line in getRawBackValuesFromFile( 'tmpqfl7PJ.tab.back' ):
-    print line
+    print(line)
 
 
 

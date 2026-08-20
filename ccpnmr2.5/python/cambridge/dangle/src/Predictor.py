@@ -317,7 +317,7 @@ class Predictor:
           
             obs = query[p][q]
             exp = plot[p][q] * n
-            s += obs * log((obs/exp))
+            s += obs * log(obs/exp)
 
         s *= 2
         gListAppend(s)
@@ -376,7 +376,7 @@ class Predictor:
           
         plot = {}
         
-        fopen = open(filename, 'r')
+        fopen = open(filename)
         
         for line in fopen.readlines():
           if (line[0] == '\0')or(line[0] == '#'):

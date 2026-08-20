@@ -141,13 +141,13 @@ def getStructureFromFiles(molSystem, pdbPaths, fileType=None, doWarnings=True):
       dd = None
       if fileType is not None:
         try:
-          print '### trying %s' % fileType
+          print('### trying %s' % fileType)
           dd = _makeStructureDictFromPdb(pdbPath, fileType)
         except:
           pass
    
       if not dd:
-        print '### trying rough'
+        print('### trying rough')
         dd = _makeStructureDictFromRoughPdb(pdbPath)
    
       if dd:
@@ -167,14 +167,14 @@ def getStructureFromFiles(molSystem, pdbPaths, fileType=None, doWarnings=True):
         
       else:
         nSkipped += 1
-        print ('Error coordinate read failed. Skipping %s'
+        print('Error coordinate read failed. Skipping %s'
                % pdbPath)
         
     # make ensemble
     
     if data:
       if nSkipped:
-        print 'WARNING, %s files skipped' % nSkipped
+        print('WARNING, %s files skipped' % nSkipped)
       return makeStructureEnsemble(data, molSystem, modelNames=modelNames,
                                    doWarnings=doWarnings)
     
@@ -357,11 +357,11 @@ def makeStructureEnsemble(strucDict, molSystem, modelNames=None,
       else:
       
         if checkTruncation and (startPair or endTrunc):
-          print ('WARNING, Structure truncated (Start:%s, End:%s) rel. to existing chain.' 
+          print('WARNING, Structure truncated (Start:%s, End:%s) rel. to existing chain.' 
                  % (startPair, endTrunc))
         
         if mismatch:
-          print 'WARNING, Imperfect match: %s non-terminal mismatches' % len(mismatch)
+          print('WARNING, Imperfect match: %s non-terminal mismatches' % len(mismatch))
         
         
     if not msChain:
@@ -586,7 +586,7 @@ def makeStructureEnsemble(strucDict, molSystem, modelNames=None,
               failedAtoms.append('%s %d %s %4s' % 
                                  (chCode,seqId,msResidue.ccpCode,atomName) )
               continue
-            print '### NBNB add extra atom:', (chCode,seqId,atomKey)
+            print('### NBNB add extra atom:', (chCode,seqId,atomKey))
  
             systemAtoms.add(systemAtom)
             atomCheckDict[(systemAtom, altLoc)] = True
@@ -708,8 +708,8 @@ def makeStructureEnsemble(strucDict, molSystem, modelNames=None,
     #      if 'Q' not in x 
     #      and not [x.endswith(y) for y in skipAtoms]]
     if ll:
-      print ('## WARNING %s failed atoms. Unique, non-pesudo atoms are:' 
-             % len(failedAtoms), ', '.join(ll))
+      print(('## WARNING %s failed atoms. Unique, non-pesudo atoms are:' 
+             % len(failedAtoms), ', '.join(ll)))
   
   if failedAtoms and doWarnings:
     msg = 'No equivalent molecular system atoms for PDB atoms: %s'

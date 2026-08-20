@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Color  import hexRepr
 from memops.gui.Canvas import Canvas
@@ -115,7 +115,7 @@ class Separator(Frame):
 if __name__ == '__main__':
 
   def printEvent(event):
-    print event.x, event.y
+    print(event.x, event.y)
 
   from Label import Label
 

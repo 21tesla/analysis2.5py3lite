@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.universal.Region1D import Region1D
 from memops.universal.Util import formatDecimals
@@ -178,7 +178,7 @@ class RegionScrollbar(Scrollbar):
 if __name__ == '__main__':
  
   def callback(view_region):
-    print 'callback', view_region
+    print('callback', view_region)
 
   root = Tkinter.Tk()
  
@@ -194,9 +194,9 @@ if __name__ == '__main__':
     (w0, w1) = r.world_region
     w0 = w0 - 1
     w1 = w1 + 1
-    print 'update_world_region1', w0, w1
+    print('update_world_region1', w0, w1)
     wr = Region1D(w0, w1)
-    print 'update_world_region2', wr
+    print('update_world_region2', wr)
     r.setWorldRegion(wr)
 
   b = Tkinter.Button(root, text='update world', command=update_world_region)

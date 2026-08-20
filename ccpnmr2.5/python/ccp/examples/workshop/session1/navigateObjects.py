@@ -28,38 +28,38 @@ if __name__ == '__main__':
 
   project = loadProject('topObjectTest')
 
-  print 'Project: [%s]' % project, '\n'
+  print('Project: [%s]' % project, '\n')
 
   # Find the first database with a parameter.
 
   database = project.findFirstDatabase(name = 'UniProt')
 
-  print 'Database: [%s]' % database, '\n'
+  print('Database: [%s]' % database, '\n')
 
   # Sorted taxonomy top objects.
 
   taxonomies = project.sortedTaxonomies()
 
-  print 'Sorted taxonomies: [%s]' % taxonomies, '\n'
+  print('Sorted taxonomies: [%s]' % taxonomies, '\n')
 
   # Find all NmrProjects.
 
   nmrProjects = project.findAllNmrProjects()
 
-  print 'All Nmr Projects: [%s]' % nmrProjects, '\n'
+  print('All Nmr Projects: [%s]' % nmrProjects, '\n')
 
   # The dir() function.
 
-  print 'Database dir:', dir(database), '\n'
+  print('Database dir:', dir(database), '\n')
 
   # root
-  print 'Database root:', database.root, '\n'
+  print('Database root:', database.root, '\n')
 
   # memopsRoot
-  print 'Database memopsRoot:', database.memopsRoot, '\n'
+  print('Database memopsRoot:', database.memopsRoot, '\n')
 
   # parent
-  print 'Database parent:', database.parent, '\n'
+  print('Database parent:', database.parent, '\n')
 
   # topObject
-  print 'Database top object:', database.topObject, '\n'
+  print('Database top object:', database.topObject, '\n')

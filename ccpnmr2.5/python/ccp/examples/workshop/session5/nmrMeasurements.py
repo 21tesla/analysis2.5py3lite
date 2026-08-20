@@ -45,8 +45,8 @@ if __name__ == '__main__':
   # Get info back out, via Resonances (can also do this via Shifts of course)
   #
   
-  print "Shiftlist information:"
-  print
+  print("Shiftlist information:")
+  print()
   
   shiftUnit = shiftList.unit
   
@@ -54,10 +54,10 @@ if __name__ == '__main__':
     shift = resonance.findFirstShift(parent = shiftList)
     
     if shift:
-      print "Resonance %3d: %7.3f %s +/- %4.3f %s     %s" % (resonance.serial,shift.value,shiftUnit,shift.error,shiftUnit,shift.details)
+      print("Resonance %3d: %7.3f %s +/- %4.3f %s     %s" % (resonance.serial,shift.value,shiftUnit,shift.error,shiftUnit,shift.details))
   
-  print
-  print
+  print()
+  print()
   
   
   #
@@ -80,12 +80,12 @@ if __name__ == '__main__':
   # link names.
   #
   
-  print "J coupling list information:"
-  print
+  print("J coupling list information:")
+  print()
   
   for jCoupling in jCouplingList.sortedMeasurements():
   
     resonances = jCoupling.sortedResonances()
-    print "Resonances %3d - %3d:  %7.3f" % (resonances[0].serial,resonances[1].serial,jCoupling.value)
+    print("Resonances %3d - %3d:  %7.3f" % (resonances[0].serial,resonances[1].serial,jCoupling.value))
   
   

@@ -36,13 +36,13 @@ class AllChecks(TestCase):
         serie = NTlist()
         serie.append(0.0)
         rms = serie.rms()
-        self.assertEquals(rms, 0.0)
+        self.assertEqual(rms, 0.0)
         serie.append(1.0)
         rms = serie.rms()
-        self.assertAlmostEquals(rms, 0.707, 3)
+        self.assertAlmostEqual(rms, 0.707, 3)
         serie.append(2.0)
         rms = serie.rms()
-        self.assertAlmostEquals(rms, 1.291, 3)
+        self.assertAlmostEqual(rms, 1.291, 3)
 
     def testToPoundedComment(self):
         # Note the test for an empty line is included.
@@ -52,7 +52,7 @@ b
         expectedOutput = """# a
 # b
 # """
-        self.assertEquals(expectedOutput, toPoundedComment(strMsg))
+        self.assertEqual(expectedOutput, toPoundedComment(strMsg))
 
 
     def testNTlistRemoveDuplicates(self):
@@ -95,36 +95,36 @@ b
         x.append(100)
         y.append(200)
         y.append(300)
-        self.assertEquals( x.lenRecursive(), 3)
+        self.assertEqual( x.lenRecursive(), 3)
 
     def testLenRecursive(self):
         x = NTdict(a=None)
-        self.assertEquals( x.lenRecursive(), 1)
+        self.assertEqual( x.lenRecursive(), 1)
         x.b = NTlist(1,2)
-        self.assertEquals( x.lenRecursive(), 3)
+        self.assertEqual( x.lenRecursive(), 3)
         x.c = {'foo': {'bar': [ 1,2 ]}} # Can be any mix of elements. Only finals count
-        self.assertEquals( x.lenRecursive(), 5)
+        self.assertEqual( x.lenRecursive(), 5)
         x.d = ( 3, None, 5) # even tuples
-        self.assertEquals( x.lenRecursive(), 8)
+        self.assertEqual( x.lenRecursive(), 8)
 
     def testLenRecursiveCyclic(self):
         x = NTdict(a=None)
         y = NTdict(b=x)
-        self.assertEquals( y.lenRecursive(), 1)
+        self.assertEqual( y.lenRecursive(), 1)
         x.cyclic = y        
         self.assertRaises( RuntimeError, y.lenRecursive, max_depth = 999 ) # 99 is allowed and would fail this unit check.       
-        self.assertEquals( y.lenRecursive(max_depth = 0), 1) # y.b
-        self.assertEquals( y.lenRecursive(max_depth = 1), 2) # y.b.a
-        self.assertEquals( y.lenRecursive(max_depth = 2), 2) # y.b.a and y.b.cyclic ?
-        self.assertEquals( y.lenRecursive(max_depth = 3), 3) # y.b.a, y.b.cyclic, and y.b.cyclic.b ?
-        self.assertEquals( y.lenRecursive(max_depth = 5), 4) 
-        self.assertEquals( y.lenRecursive(max_depth = 9), 6) 
-        self.assertEquals( y.lenRecursive(max_depth = 99),51) 
+        self.assertEqual( y.lenRecursive(max_depth = 0), 1) # y.b
+        self.assertEqual( y.lenRecursive(max_depth = 1), 2) # y.b.a
+        self.assertEqual( y.lenRecursive(max_depth = 2), 2) # y.b.a and y.b.cyclic ?
+        self.assertEqual( y.lenRecursive(max_depth = 3), 3) # y.b.a, y.b.cyclic, and y.b.cyclic.b ?
+        self.assertEqual( y.lenRecursive(max_depth = 5), 4) 
+        self.assertEqual( y.lenRecursive(max_depth = 9), 6) 
+        self.assertEqual( y.lenRecursive(max_depth = 99),51) 
         
         z = [[1,2],[3,4,5]]
-        self.assertEquals( lenRecursive(z, max_depth = 0),2) 
-        self.assertEquals( lenRecursive(z, max_depth = 1),5) 
-        self.assertEquals( lenRecursive(z, max_depth = 2),5) 
+        self.assertEqual( lenRecursive(z, max_depth = 0),2) 
+        self.assertEqual( lenRecursive(z, max_depth = 1),5) 
+        self.assertEqual( lenRecursive(z, max_depth = 2),5) 
 
     def testGetDeepAvgByKeys(self):
         d=NTdict()
@@ -134,20 +134,20 @@ b
         a.append('abc')
         x = d.getDeepAvgByKeys('key')
 #        print 'x=', x
-        self.assertEquals( x, 'abc')
+        self.assertEqual( x, 'abc')
 
         # Fraction by default needs to be 1.0; complete consensus
         a.append('def')
         x = d.getDeepAvgByKeys('key')
-        self.assertEquals( x, False)
+        self.assertEqual( x, False)
 
         # Should crash on None element
         a.append(None)
         x = d.getDeepAvgByKeys('key')
-        self.assertEquals( x, False)
+        self.assertEqual( x, False)
 
         x = a.getConsensus(minFraction=0.5)
-        self.assertEquals( x, 'abc')
+        self.assertEqual( x, 'abc')
 
     def testGetDeepByKeysOrAttrS(self):
 #        cing.verbosity = cing.verbosityDebug
@@ -164,10 +164,10 @@ b
         setDeepByKeys(d, value, *keyList)
         nTdebug("complex object: %s" % d)
         valueOut = getDeepByKeysOrAttributes(d,*keyList)
-        self.assertEquals(value,valueOut)
+        self.assertEqual(value,valueOut)
         keyList = [ 'a.b', 'c' ]
         valueOut = getDeepByKeysOrAttributes(d,*keyList)
-        self.assertEquals(value,valueOut)
+        self.assertEqual(value,valueOut)
         keyList = [ 'a.b.', 'c' ] # extra dot should mess this up.
         valueOut = getDeepByKeysOrAttributes(d,*keyList)
         self.assertFalse(valueOut) # None will evaluate to False as well.
@@ -229,7 +229,7 @@ b
         input = [ [1,2,3], [4,5,6] ]
         expected = [ [1,4], [2,5], [3,6] ]
         output = transpose(input)
-        self.assertEquals(output, expected)
+        self.assertEqual(output, expected)
     # end def
 # end class
 

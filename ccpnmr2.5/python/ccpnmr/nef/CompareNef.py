@@ -113,10 +113,6 @@ compareNef contains the following routines:
   printCompareList      print the compare list to the screen
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -234,7 +230,7 @@ def defineArguments():
 # nefItem
 #=========================================================================================
 
-class nefItem(object):
+class nefItem:
     """Holds the contents of a single Nef comparison
     inWhich   a flag labelling which file the item was found in
               1 = found in the first file, 2 = found on the second file, 3 = common to both
@@ -378,16 +374,16 @@ def printCompareList(nefList, inFile1, inFile2):
 #=========================================================================================
 
 def _filterName(inName):
-    """Remove rogue `n` quotes from the names.
+    """Remove rogue str(n) quotes from the names.
     (This is currently only a test)
 
     :param inName:
     :return:
     """
-    # ejb - need to remove the rogue `n` at the beginning of the name if it exists
+    # ejb - need to remove the rogue str(n) at the beginning of the name if it exists
     #       as it is passed into the namespace and gets added iteratively every save
-    #       next three lines remove all occurrences of `n` from name
-    regex = u'\`\d*`+?'
+    #       next three lines remove all occurrences of str(n) from name
+    regex = '\`\d*`+?'
     return re.sub(regex, '', inName)  # substitute with ''
 
 
@@ -797,13 +793,13 @@ def compareNefFiles(inFile1, inFile2, options, cItem=None, nefList=None):
         try:
             NefData1 = _loadGeneralFile(path=inFile1)
         except Exception as e:
-            print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e), e)
+            print(f'Error on line {sys.exc_info()[-1].tb_lineno}', type(e), e)
             return None
 
         try:
             NefData2 = _loadGeneralFile(path=inFile2)
         except Exception as e:
-            print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e), e)
+            print(f'Error on line {sys.exc_info()[-1].tb_lineno}', type(e), e)
             return None
 
         if options.ignoreBlockName is False:

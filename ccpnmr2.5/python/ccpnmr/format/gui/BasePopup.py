@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 from memops.gui.BasePopup import BasePopup
-import Tkinter
+import tkinter
   
 class TemporaryBasePopup(BasePopup):
 

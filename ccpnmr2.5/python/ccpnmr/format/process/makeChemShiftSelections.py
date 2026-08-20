@@ -77,7 +77,7 @@ def makeChemShiftSelections(guiParent,chains,chemShiftList,verbose = 0):
   #
   
   if not chains or not chemShiftList:
-    print "  ERROR need chains or chemShiftList!"
+    print("  ERROR need chains or chemShiftList!")
     return False
   
   #
@@ -148,7 +148,7 @@ def makeChemShiftSelections(guiParent,chains,chemShiftList,verbose = 0):
 
 
         if not atomRecognized:
-          print " Chain atom name %s not found" % atomName            
+          print(" Chain atom name %s not found" % atomName)
         
   #
   # Do per chain... but keep track of all.
@@ -196,7 +196,7 @@ def makeChemShiftSelections(guiParent,chains,chemShiftList,verbose = 0):
           results[chemShiftClass][1] += 1
           
       if not atomRecognized:
-        print " Chemical shift atom name %s not found" % atomName            
+        print(" Chemical shift atom name %s not found" % atomName)
             
     del format.measurementFile
 
@@ -211,7 +211,7 @@ def makeChemShiftSelections(guiParent,chains,chemShiftList,verbose = 0):
 
     for chemShiftClass in chemShiftResultClasses:
       percentage = results[chemShiftClass][1] * 100.0 / results[chemShiftClass][0]
-      print "  %-20s: %6.2f found (%d/%d total)" % (chemShiftClass,percentage,results[chemShiftClass][1],results[chemShiftClass][0])
+      print("  %-20s: %6.2f found (%d/%d total)" % (chemShiftClass,percentage,results[chemShiftClass][1],results[chemShiftClass][0]))
 
   return results
 

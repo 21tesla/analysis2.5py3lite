@@ -8,7 +8,7 @@ import os
 import platform
 import sys
 import time
-import urllib2
+import urllib.request
 
 #-----------------------------------------------------------------------------------
 # Synchronize block with cing.Libs.helper.py
@@ -32,15 +32,15 @@ def _nTgetoutput( cmd ):
 # end def
 def _nTerror(msg):
     'Convenience method'
-    print "ERROR:",msg
+    print("ERROR:",msg)
 # end def
 def _nTwarning(msg):
     'Convenience method'
-    print "WARNING:",msg
+    print("WARNING:",msg)
 # end def
 def _nTmessage(msg):
     'Convenience method'
-    print msg
+    print(msg)
 # end def
 #-----------------------------------------------------------------------------------
 
@@ -165,10 +165,10 @@ def compareVersionTuple( t1, t2):
 def isInternetConnected():
     """Retrieves about 6 kbytes from google; takes 0.2 seconds on fast network."""
     url = 'http://www.google.com'
-    req = urllib2.Request(url=url)
+    req = urllib.request.Request(url=url)
     result = None
     try:
-        f = urllib2.urlopen(req)
+        f = urllib.request.urlopen(req)
         result = f.readlines()
     except:
 #        print "DEBUG: Failed to find internet connection to: %s\nDEBUG: Presuming internet is down." % url

@@ -50,7 +50,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.Frame  import Frame
@@ -148,7 +148,7 @@ class PartitionedSelector(Frame):
 
       if i>= len(self.fonts):
         self.fonts.append(self.font)
-	
+    
       if i>= len(self.buttons):
         # command = lambda n=i, s=self: s.selectButton(n)
         # button  = Button(self,command=command,relief=self.buttonRelief,
@@ -263,7 +263,7 @@ class PartitionedSelector(Frame):
           self.selectButton(i, doCallback=False)
       else:
         self.selectButton(i, doCallback=False)
-	
+    
   def selectButton(self, i, doCallback=True):
   
     if i >= len(self.buttons):

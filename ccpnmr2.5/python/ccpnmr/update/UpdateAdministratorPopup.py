@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 import os, sys
-import Tkinter
+import tkinter
 from subprocess import Popen, PIPE
 
 from memops.gui.BasePopup       import BasePopup
@@ -485,11 +485,11 @@ class UpdateAdministratorPopup(BasePopup, UpdateAgent):
       return
 
   def makeTgz(self):
-    print '>>>makeTgz - ', repr(self._zipNameEntry.get())
+    print('>>>makeTgz - ', repr(self._zipNameEntry.get()))
     self._makeCompressed('.tgz', ['tar', '-czf'])
 
   def makeZip(self):
-    print '>>>makeZip - ', repr(self._zipNameEntry.get())
+    print('>>>makeZip - ', repr(self._zipNameEntry.get()))
     self._makeCompressed('.zip', ['zip', '-rq'])
 
   def _fillCompareList(self, currentPath = os.getcwd()):
@@ -513,7 +513,7 @@ class UpdateAdministratorPopup(BasePopup, UpdateAgent):
 
             # get the different files between the branches for this repository
             gitCmd = 'diff --name-only %s %s --' % (self._lineEditBase.get(), self._lineEditUpdate.get())
-            print ">>> gitCommand:", gitCmd
+            print(">>> gitCommand:", gitCmd)
             _files = runGitCommand(gitCmd)
             if _files:
 
@@ -623,7 +623,7 @@ class UpdateAdministratorPopup(BasePopup, UpdateAgent):
   def editFilter(self, *args):
     """return pressed in the filter box - update the filter list
     """
-    print '>>>editFilter - ', repr(self._filterEntry.get())
+    print('>>>editFilter - ', repr(self._filterEntry.get()))
     self._fillCompareList()
 
   def editSubDirectory(self, *args):
@@ -634,7 +634,7 @@ class UpdateAdministratorPopup(BasePopup, UpdateAgent):
   def editServerVersion(self, *args):
     """Change the serverVersion to update different branch
     """
-    print '>>>editServerVersion - ', repr(self.serverVersionEntry.get())
+    print('>>>editServerVersion - ', repr(self.serverVersionEntry.get()))
     self._updateServerSettings()
 
   def _updateServerSettings(self):

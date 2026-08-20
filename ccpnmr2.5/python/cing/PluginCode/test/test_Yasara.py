@@ -18,7 +18,7 @@ try:
     from cing.PluginCode.yasaraPlugin import yasaraShell #@UnusedImport needed to throw a ImportWarning so that the test is handled.
     import yasara #@UnresolvedImport
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( YASARA_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( YASARA_STR, getCallerFileName() ))
     raise SkipTest(YASARA_STR)
 # end try
 
@@ -29,7 +29,7 @@ class AllChecks(TestCase):
         entryId = "testYasara"
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         project = Project( entryId )
 #            project = Project.open( entryId, status='old' )

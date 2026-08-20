@@ -3,15 +3,15 @@
 # of a CCPN project to an iCing server.
 
 import os, tarfile, time, random, glob
-import httplib, mimetypes, mimetools
+import http.client, mimetypes, mimetools
 
 try:
-  import urllib2
-except ImportError, err:
-  print "* Warning * Cannot import Python module urllib2."
-  print " - Please check your SSL libraries."
-  print " - Submission to to the iCing server will not work."
-  print err
+  import urllib.request
+except ImportError as err:
+  print("* Warning * Cannot import Python module urllib.request.")
+  print(" - Please check your SSL libraries.")
+  print(" - Submission to to the iCing server will not work.")
+  print(err)
 
 from memops.gui.MessageReporter import showWarning, showYesNo
 
@@ -51,32 +51,32 @@ def ccpnCingSubmitMacro(argServer, url="https://nmr.le.ac.uk/"):
         iCingUrl = os.path.join(url, 'icing/serv/iCingServlet')
     
         credentials, results, tarFileName = iCingSetup(project, url=iCingUrl)
-        print credentials
-        print results
+        print(credentials)
+        print(results)
 
         if results:
             
             entryId = iCingProjectName(credentials, iCingUrl).get(RESPONSE_RESULT)
             urls = getResultUrls(credentials, entryId, url)
-            print "Base URL", urls[0]
-            print "Results URL:", urls[1]
-            print "Log URL:", urls[2]
-            print "Zip URL:", urls[3]
+            print("Base URL", urls[0])
+            print("Results URL:", urls[1])
+            print("Log URL:", urls[2])
+            print("Zip URL:", urls[3])
              
-            print iCingRun(credentials, iCingUrl)
+            print(iCingRun(credentials, iCingUrl))
             
             status = iCingStatus(credentials, iCingUrl)
 
-            print status
+            print(status)
             for i in range(100):
               time.sleep(60)
               status2 = iCingStatus(credentials, iCingUrl)
-              print status2
+              print(status2)
               
               if status2 != status:
                 break
             
-            print "Done"
+            print("Done")
             #print iCingLog(credentials, url)
 
             zipFileName = argServer.getFile()
@@ -84,11 +84,11 @@ def ccpnCingSubmitMacro(argServer, url="https://nmr.le.ac.uk/"):
             if zipFileName:
               logText = iCingFetch(credentials, url, iCingUrl, zipFileName)
               argServer.showInfo('Results saved to %s' % zipFileName)
-              print logText
+              print(logText)
             else:
               argServer.showInfo('No file name')
             
-            print iCingPurge(credentials, url)
+            print(iCingPurge(credentials, url))
             
             
 def getResultUrls(credentials, entryId, url="https://nmr.le.ac.uk/"):
@@ -323,11 +323,11 @@ def encodeForm(fields, files=None, lineSep='\r\n',
 def urlOpen(request):
 
     try:
-        response = urllib2.urlopen(request)
+        response = urllib.request.urlopen(request)
 
-    except urllib2.URLError, e:
+    except urllib.request.URLError as e:
         if hasattr(e, 'reason'):
-            if isinstance(request, urllib2.Request):
+            if isinstance(request, urllib.request.Request):
               url = request.get_full_url()
             else:
               url = request
@@ -357,7 +357,7 @@ def sendRequest(url, fields, files):
                   'Content-Length': str(len(bodyData))
                   }
         
-    request = urllib2.Request(url, bodyData, headerDict)
+    request = urllib.request.Request(url, bodyData, headerDict)
     response = urlOpen(request)
     
     if not response:
@@ -392,7 +392,7 @@ def _processResponse(text):
         key , value = data
         dataDict[key] = value
       else:
-        print "Trouble",  pair
+        print("Trouble",  pair)
             
     
     return dataDict
@@ -400,4 +400,4 @@ def _processResponse(text):
 if __name__ == '__main__':
 
   for i in range(80):
-    print getRandomKey()
+    print(getRandomKey())

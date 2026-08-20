@@ -28,7 +28,7 @@ class AllChecks(TestCase):
     def test_NTutils(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         namepattern, startdir = "test*.py", cingPythonDir # CVS is only for developers
         nameList = findFiles(namepattern, startdir)
@@ -49,7 +49,7 @@ class AllChecks(TestCase):
             angleList.append(v1)
             angleList.append(v2)
             result = angleList.cAverage(0, 360, 0, None)
-            self.failUnless(result)
+            self.assertTrue(result)
             circularAverage, _circularVariance, _n = result
             if cav != None:
                 self.assertAlmostEqual(circularAverage, cav, places = 5)
@@ -58,14 +58,14 @@ class AllChecks(TestCase):
         angleList = NTlist()
         angleList.append(1)
         result = angleList.cAverage(0, 360, 0, None)
-        self.failUnless(result)
+        self.assertTrue(result)
         circularAverage, _circularVariance, _n = result
         self.assertAlmostEqual(circularAverage, 1, places = 5)
 
     def testCircularAverage3(self):
         angleList = NTlist()
         result = angleList.cAverage(0, 360, 0, None)
-        self.failUnless(result)
+        self.assertTrue(result)
         _circularAverage, _circularVariance, _n = result
 
 
@@ -127,63 +127,63 @@ class AllChecks(TestCase):
         nTdebug("av %s, sd %s, n %s" % (av, sd, n))
         self.assertAlmostEqual(av, 10.22, places = 1) # verified in Excel stddev function.
         self.assertAlmostEqual(sd, 4.18, places = 1)
-        self.assertEquals(n, 9)
+        self.assertEqual(n, 9)
 
         myList = NTlist(1, None, 1, 1)
         (av, sd, n) = myList.average()
         nTdebug("av %s, sd %s, n %s" % (av, sd, n))
         self.assertAlmostEqual(av, 1.0, places = 1)
         self.assertAlmostEqual(sd, 0.0, places = 1)
-        self.assertEquals(n, 3)
+        self.assertEqual(n, 3)
 
         myList = NTlist(1, 2)
         (av, sd, n) = myList.average()
         nTdebug("av %s, sd %s, n %s" % (av, sd, n))
         self.assertAlmostEqual(av, 1.5, places = 1)
         self.assertAlmostEqual(sd, 0.707, places = 2)
-        self.assertEquals(n, 2)
+        self.assertEqual(n, 2)
 
         myList = NTlist(1)
         (av, sd, n) = myList.average()
         nTdebug("(one element) av %s, sd %f, n %s" % (av, sd, n))
         self.assertAlmostEqual(av, 1.0, places = 1)
         self.assertTrue(isNaN(sd))
-        self.assertEquals(n, 1)
+        self.assertEqual(n, 1)
 
         myList = NTlist()
         (av, sd, n) = myList.average()
         nTdebug("av %s, sd %s, n %s" % (av, sd, n))
         self.assertTrue(isNaN(av))
         self.assertTrue(isNaN(sd))
-        self.assertEquals(n, 0)
+        self.assertEqual(n, 0)
 
         myList = NTlist(0.0, 0.0, 0.0)
         (av, sd, n) = myList.average()
         nTdebug("av %s, sd %s, n %s" % (av, sd, n))
-        self.assertEquals(av, 0)
-        self.assertEquals(sd, 0)
-        self.assertEquals(n, 3)
+        self.assertEqual(av, 0)
+        self.assertEqual(sd, 0)
+        self.assertEqual(n, 3)
 
     def testValueToFormattedString(self):
-        self.assertEquals(val2Str(None, "%5.2f", None), NaNstring)
-        self.assertEquals(val2Str(None, "%5.2f", 5), "%5s" % NaNstring)
-        self.assertEquals(val2Str(6.3, "%5.2f", 5), " 6.30")
-        self.assertEquals(val2Str(6.3, "%.2f"), "6.30")
-        self.assertEquals(val2Str(6.3, "%03d"), "006")
-        self.assertEquals(val2Str("6.3", "%03d"), "006")
-        self.assertEquals(val2Str("f6.3", "%03d"), None)
-        self.assertEquals(val2Str(None, "%03d", useNanString=False), '')
+        self.assertEqual(val2Str(None, "%5.2f", None), NaNstring)
+        self.assertEqual(val2Str(None, "%5.2f", 5), "%5s" % NaNstring)
+        self.assertEqual(val2Str(6.3, "%5.2f", 5), " 6.30")
+        self.assertEqual(val2Str(6.3, "%.2f"), "6.30")
+        self.assertEqual(val2Str(6.3, "%03d"), "006")
+        self.assertEqual(val2Str("6.3", "%03d"), "006")
+        self.assertEqual(val2Str("f6.3", "%03d"), None)
+        self.assertEqual(val2Str(None, "%03d", useNanString=False), '')
 
 
     def testNTlistDifferenceInt(self):
         xL = NTlist( 'a', 'b' )
         yL = NTlist( 'b', 'c', 'c' )
         xLdiff = xL.difference(yL)
-        self.assertEquals(xLdiff, ['a'])
+        self.assertEqual(xLdiff, ['a'])
         xLyLintersection = xL.intersection(yL)
-        self.assertEquals(xLyLintersection, ['b'])
+        self.assertEqual(xLyLintersection, ['b'])
         xLyLunion = xL.union(yL) # Uses multi set semantics
-        self.assertEquals(xLyLunion, ['a', 'b', 'c', 'c'])
+        self.assertEqual(xLyLunion, ['a', 'b', 'c', 'c'])
 
     def _testSwitchOutput( self):
         """Note that this fails but used to work.
@@ -192,7 +192,7 @@ class AllChecks(TestCase):
         nTdebug("Message to debug")
         nTerror("Intended message to error")
         switchOutput( showOutput=False, doStdOut=True, doStdErr=True)
-        print "Message to regular sys.stdout should not be printed"
+        print("Message to regular sys.stdout should not be printed")
         nTdebug("Message to debug 2 should not be printed")
         nTerror("Message to error 2 should not be printed")
         switchOutput( showOutput=True, doStdOut=True, doStdErr=True)
@@ -203,7 +203,7 @@ class AllChecks(TestCase):
 if __name__ == "__main__":
     cing.verbosity = verbosityNothing
     cing.verbosity = verbosityDebug
-#    cProfile.run('unittest.main()', 'fooprof')
+#    profile.run('unittest.main()', 'fooprof')
 #    p = pstats.Stats('fooprof')
 #    p.sort_stats('time').print_stats(10)
 #    p.sort_stats('cumulative').print_stats(40)

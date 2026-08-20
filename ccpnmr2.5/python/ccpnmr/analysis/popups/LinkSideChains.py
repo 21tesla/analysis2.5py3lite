@@ -1880,7 +1880,7 @@ class LinkSideChainsPopup(BasePopup):
           linkScoreMatrix[i][k] = linkScore
 
       
-      print I, J # Check size of problem
+      print(I, J # Check size of problem)
 
       # # # # # # # # # FIND AND SCORE WHOLE SIDE CHAIN ROUTES # # # # # # # # # #
             
@@ -2626,8 +2626,8 @@ def iteration(C,A,R):
   
   """
   l = []
-  for i in xrange(m):
-    for j in xrange(n):
+  for i in range(m):
+    for j in range(n):
       l.append((F[i,j],(i,j)))
   
   l.sort()
@@ -2649,7 +2649,7 @@ def iteration(C,A,R):
   # On spin system
   #n, m = F.shape
  
-  for s in xrange(m):
+  for s in range(m):
     s3 = F[s].sum()
     if s3:
       F[s] /= s3
@@ -2657,7 +2657,7 @@ def iteration(C,A,R):
   # On residue
   F = F.T
   #n, m = F.shape
-  for s in xrange(n):
+  for s in range(n):
     s3 = F[s].sum()
     if s3:
       F[s] /= s3

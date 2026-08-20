@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.ToolTip import ToolTip
@@ -336,10 +336,10 @@ class Menu(Tkinter.Menu, Base):
 if __name__ == '__main__':
 
   def new():
-    print 'new'
+    print('new')
 
   def pick():
-    print 'pick'
+    print('pick')
 
   root = Tkinter.Tk()
  

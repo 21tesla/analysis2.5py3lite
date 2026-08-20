@@ -110,9 +110,9 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading nmrDraw peak list %s" % self.name
+      print("Reading nmrDraw peak list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     refDimInfo = {}
     refDimInfo['Label'] = []
@@ -156,7 +156,7 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
           #
           
           if not refDimCodes:
-            print "  Warning: DATA AXIS lines missing from header - deducing AXIS values from VARS line."
+            print("  Warning: DATA AXIS lines missing from header - deducing AXIS values from VARS line.")
             
             refDimCodes = []
             findCode = '_AXIS'
@@ -171,7 +171,7 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
                 refDimInfo['highPpm'].append(0)
                 refDimInfo['lowPpm'].append(0)
                        
-            print "  Warning: set codes %s" % refDimCodes
+            print("  Warning: set codes %s" % refDimCodes)
 
           n = len(refDimCodes)
           self.setDimensions(n)
@@ -199,8 +199,8 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
 
                   matchString = string.replace(refVarCodeSingle,'n',dimRefCode)
                   if refDatum[4] and matchString != cols[colNum]:
-                    print "  Error: can't read nmrDraw file - headers don't match."
-                    print "%6s, col %d. '%s'<->'%s'" % (refDatum[4], colNum, matchString, cols[colNum])
+                    print("  Error: can't read nmrDraw file - headers don't match.")
+                    print("%6s, col %d. '%s'<->'%s'" % (refDatum[4], colNum, matchString, cols[colNum]))
                     return 0
                   elif refDatum[4]:
                     self.varCodes.append(matchString)
@@ -208,8 +208,8 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
 
             else:
               if refDatum[4] and refVarCode != cols[colNum]:
-                print "  Error: can't read nmrDraw file - headers don't match."
-                print "%6s, col %d. '%s'<->'%s'" % (refDatum[4], colNum, refVarCode, cols[colNum])
+                print("  Error: can't read nmrDraw file - headers don't match.")
+                print("%6s, col %d. '%s'<->'%s'" % (refDatum[4], colNum, refVarCode, cols[colNum]))
                 return 0
 
               elif refDatum[4]:
@@ -237,7 +237,7 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
 
           else:
 
-            print "  Warning: unparsed nmrDraw peak list line:\n%s" % line
+            print("  Warning: unparsed nmrDraw peak list line:\n%s" % line)
 
       line = fin.readline()
 
@@ -246,7 +246,7 @@ class NmrDrawPeakFile(NmrDrawGenericFile):
   def write(self, verbose = 0):
 
     if verbose == 1:
-      print "Writing nmrDraw peak list %s" % self.name
+      print("Writing nmrDraw peak list %s" % self.name)
 
     fout = open(self.name,'w')
 

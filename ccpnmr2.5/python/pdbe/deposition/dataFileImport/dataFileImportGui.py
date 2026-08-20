@@ -47,7 +47,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import os, sys
-import Tkinter
+import tkinter
 
 from memops.general.Application    import Application
 from memops.general.Io             import loadProject, saveProject
@@ -199,9 +199,9 @@ class DataFileImportGui(BasePopup):
     try:
       saveProject(self.project, createFallback=True)
 
-      print 'successfully saved project'
+      print('successfully saved project')
       return True
-    except IOError, e:
+    except OSError as e:
       showError('Saving file', str(e), parent=self)
       return False
 

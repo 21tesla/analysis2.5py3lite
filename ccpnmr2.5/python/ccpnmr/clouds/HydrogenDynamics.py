@@ -71,7 +71,7 @@ def generateClouds(numClouds, constraints, resonances, coolingScheme, filePrefix
   
   numAtoms = len(resonances)
   
-  print "Number of atoms: %d" % (numAtoms)
+  print("Number of atoms: %d" % (numAtoms))
   
   for i in range(numClouds):
     pdbFileName = '%s%3.3d.pdb' % (filePrefix,i)
@@ -140,25 +140,25 @@ def makeCloudsDistConstraints(constraints,resonances):
     if coreResonance:
       resonances0.append(coreResonance)
     else:
-      print "Core resonance missing", core[i].resonanceSerial, core[i]
+      print("Core resonance missing", core[i].resonanceSerial, core[i])
     
     
   for constraint in constraints0:
     item = constraint.items[0]
     if dict.get(item.resonances[0].resonanceSerial) is None:
-      print 'Warning: Missing resonance serial %d' % item.resonances[0].resonanceSerial
+      print('Warning: Missing resonance serial %d' % item.resonances[0].resonanceSerial)
       continue 
 
     if dict.get(item.resonances[1].resonanceSerial) is None:
-      print 'Warning: Missing resonance serial %d' % item.resonances[1].resonanceSerial
+      print('Warning: Missing resonance serial %d' % item.resonances[1].resonanceSerial)
       continue 
     
     atom0 = dict[item.resonances[0].resonanceSerial]
     atom1 = dict[item.resonances[1].resonanceSerial]
     noeConstrList.add(atom0, atom1, constraint.lowerLimit, constraint.upperLimit)
 
-  print 'Total  C:%d  R:%d' % (len(constraints),  len(resonances) )
-  print 'Core   C:%d  R:%d' % (len(constraints0), len(resonances0))
+  print('Total  C:%d  R:%d' % (len(constraints),  len(resonances) ))
+  print('Core   C:%d  R:%d' % (len(constraints0), len(resonances0)))
     
   return resonances0, noeConstrList
 

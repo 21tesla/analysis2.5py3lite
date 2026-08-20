@@ -98,7 +98,7 @@ class NmrPipeProcessingScriptFile(NmrPipeGenericFile):
       return self.dataValues[dim][index].value
 
     except:
-      print "  Error: nmrPipe data reference index %d, dim %d not found." % (index,dim)
+      print("  Error: nmrPipe data reference index %d, dim %d not found." % (index,dim))
 
     return None
 
@@ -117,7 +117,7 @@ class NmrPipeProcessingScriptFile(NmrPipeGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing nmrPipe processing file %s" % self.name
+      print("Writing nmrPipe processing file %s" % self.name)
 
     fout = open(self.name,'w')
 
@@ -187,7 +187,7 @@ class NmrPipeProcessingScriptFile(NmrPipeGenericFile):
     fout.close()
 
     if verbose == 1:
-      print self.scriptName + " finished..."
+      print(self.scriptName + " finished...")
 
   def writefunc(self,func,arg,fout):
     
@@ -217,5 +217,5 @@ class NmrPipeProcessingScript:
     
 if __name__ == "__main__":
 
-  print "No test available"
+  print("No test available")
   

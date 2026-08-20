@@ -84,7 +84,7 @@ class NmrStarFile(NmrStarFile):
   def read(self,verbose = 0):
 
     if os.path.exists(self.name):
-      text = open(self.name,'r').read()
+      text = open(self.name).read()
       if not text.count(self.saveFrameName) and text.count("loop_"):
         
          # Also set version - can't do this from info
@@ -109,8 +109,8 @@ class NmrStarFile(NmrStarFile):
           text += "save_\n"
         
         self.text = text
-        print self.text
-        print "Warning: fixing input file to be correct NMR-STAR. This might not work."
+        print(self.text)
+        print("Warning: fixing input file to be correct NMR-STAR. This might not work.")
         
     self.readComponent(verbose = verbose) 
 

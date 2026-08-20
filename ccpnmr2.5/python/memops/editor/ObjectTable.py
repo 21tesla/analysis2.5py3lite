@@ -73,7 +73,7 @@ class ObjectTable(ScrolledMatrix):
       attr = key[-1]
       s = attr.name
       if (len(key) > 1):
-        if (type(key[-2]) == type(0)):
+        if (type(key[-2]) == int):
           role = key[-3]
           n = key[-2]
           t = '%s[%d]' % (role.otherClass.name, n)
@@ -128,7 +128,7 @@ class ObjectTable(ScrolledMatrix):
     try:
       self.update(objectList=objects, textMatrix=textMatrix)
     except:
-      print '***', self.metaclass.name, textMatrix
+      print('***', self.metaclass.name, textMatrix)
 
 if (__name__ == '__main__'):
 

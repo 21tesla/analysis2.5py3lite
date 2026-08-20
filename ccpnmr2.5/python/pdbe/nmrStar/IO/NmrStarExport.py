@@ -48,7 +48,7 @@ class NmrStarExport:
     if not nmrStarVersion:
       nmrStarVersion = getLatestNmrStarVersion()
     
-    print "  Using CCPN version %s, NMR-STAR version %s." % (ccpnVersion,nmrStarVersion)
+    print("  Using CCPN version %s, NMR-STAR version %s." % (ccpnVersion,nmrStarVersion))
     
     self.nmrEntry = nmrEntry
     self.ccpn2NmrStar = getCcpn2NmrStar(ccpnVersion,nmrStarVersion,exportClass = self)
@@ -258,7 +258,7 @@ class NmrStarExport:
         else:
           timeString = ""
       
-        print messageKey + "%s" % timeString
+        print(messageKey + "%s" % timeString)
 
   def loopSaveFrameData(self,keyFlag):
   
@@ -1416,9 +1416,9 @@ class NmrStarExport:
             atomType = atoms[0].chemAtom.elementSymbol
     
       if not atomName:
-        print "  Error: no single atom name found for resonance %d" % (resonanceToAtom.resonance.serial)
+        print("  Error: no single atom name found for resonance %d" % (resonanceToAtom.resonance.serial))
       if not atomType:
-        print "  Error: no single atom element type found for resonance %d" % (resonanceToAtom.resonance.serial)
+        print("  Error: no single atom element type found for resonance %d" % (resonanceToAtom.resonance.serial))
 
     self.setSimplePresetValue(presetValues,'Atom_ID' + starCode,atomName)
 
@@ -1614,7 +1614,7 @@ class NmrStarExport:
       ccpnObject = self.ccpnVar[parentCcpnLoopInfo[-1][0] ]      
       usingParentObject = True
         
-    if ccpnObject and type(ccpnObject) != type(''):
+    if ccpnObject and type(ccpnObject) != str:
       
       #
       # Resonances and fixedResonances original name information
@@ -2159,7 +2159,7 @@ class NmrStarExport:
           try:
             findObject = reduce(lambda obj, attrOrFunc: self.getAttrOrFunc(obj,attrOrFunc),ccpnObjectStrings[1:],startObject)
           except:
-            print ccpnObjectStrings, startObject
+            print(ccpnObjectStrings, startObject)
             raise
             findObject = []
         else:
@@ -2172,7 +2172,7 @@ class NmrStarExport:
 
     ccpnMapValue = None
 
-    if type(ccpnMap) == type(''):
+    if type(ccpnMap) == str:
       ccpnMapValue = self.getCcpnObject(ccpnMap)
 
     elif type(ccpnMap) == type( () ):
@@ -2180,7 +2180,7 @@ class NmrStarExport:
       try:
         ccpnMapValue = getFunc(self.getCcpnObject(ccpnVarName) )
       except:
-        print "  Cannot CCPN map value for %s, function %s" % (ccpnVarName,getFunc)
+        print("  Cannot CCPN map value for %s, function %s" % (ccpnVarName,getFunc))
         raise
         
     elif ccpnMap == None:
@@ -2530,7 +2530,7 @@ class NmrStarExport:
       
       # Necessary to distinguish between local and global verbosity!
       if verbose and self.verbose:
-        print "  Error: no %s appData for ccpn object %s!" % (keyword,self.curAppDataCcpnObject)
+        print("  Error: no %s appData for ccpn object %s!" % (keyword,self.curAppDataCcpnObject))
 
     return value
 
@@ -2545,7 +2545,7 @@ class NmrStarExport:
       
       # Necessary to distinguish between local and global verbosity!
       if verbose and self.verbose:
-        print "  Error: no %s appDataList for ccpn object %s!" % (keyword,self.curAppDataCcpnObject)
+        print("  Error: no %s appDataList for ccpn object %s!" % (keyword,self.curAppDataCcpnObject))
 
     return value
 

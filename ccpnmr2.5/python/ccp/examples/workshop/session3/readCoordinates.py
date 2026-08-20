@@ -10,7 +10,7 @@ def main(root, directory = None):
     directory = os.getcwd()
 
   fileNames = glob.glob(os.path.join(directory, '*.pdb'))
-  print 'fileNames', fileNames
+  print('fileNames', fileNames)
 
   # create PdbFormat
   pdbFormat = PdbFormat(root, verbose=1)
@@ -21,21 +21,21 @@ def main(root, directory = None):
 
   #root.saveModified()
 
-  print 'structureEnsembles', len(root.structureEnsembles)
-  print 'molSystems %d' % len(root.molSystems)
+  print('structureEnsembles', len(root.structureEnsembles))
+  print('molSystems %d' % len(root.molSystems))
 
   molSystem = root.findFirstMolSystem()
-  print 'chains %d' % len(molSystem.chains)  
+  print('chains %d' % len(molSystem.chains))
 
   for chain in molSystem.sortedChains():
     n = 0
     for residue in chain.residues:
       n += len(residue.atoms)
 
-    print 'chain %s %d %d' % (chain.code, len(chain.residues), n)
+    print('chain %s %d %d' % (chain.code, len(chain.residues), n))
 
   structureEnsemble = root.findFirstStructureEnsemble()
-  print 'models %d' % len(structureEnsemble.models)
+  print('models %d' % len(structureEnsemble.models))
 
 if __name__ == '__main__':
 

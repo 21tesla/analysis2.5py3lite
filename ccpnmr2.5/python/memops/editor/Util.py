@@ -121,7 +121,7 @@ def printKeyList(keyList):
     attr= key[-1]
     t = attr.name
     s.append(t)
-    print ', '.join(s)
+    print(', '.join(s))
 
 def getObjectKey(object, keyList = None):
 

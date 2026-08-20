@@ -35,7 +35,7 @@ class AnsigProject:
 def readProjectFile(projectFile, verbose=False):
 
   if verbose:
-    print 'Reading Ansig project (ctr) file "%s"' % projectFile
+    print('Reading Ansig project (ctr) file "%s"' % projectFile)
 
   project = AnsigProject(projectFile)
   project.foundControl = False
@@ -77,7 +77,7 @@ def readProjectFile(projectFile, verbose=False):
     parseAnsigFile(projectFile, callback, keywordDict,
                    directoryDict, canDefineDirectory=True)
     if not project.foundControl:
-      raise IOError('no "control" statement found in file "%s"' % projectFile)
+      raise OSError('no "control" statement found in file "%s"' % projectFile)
   finally:
     del project.foundControl
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
   import sys
 
   if len(sys.argv) != 2:
-    print 'need argument: ansig project (ctr) file'
+    print('need argument: ansig project (ctr) file')
     sys.exit()
 
   projectFile = sys.argv[1]

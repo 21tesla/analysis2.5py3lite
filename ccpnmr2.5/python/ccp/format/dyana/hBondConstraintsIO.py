@@ -79,7 +79,7 @@ class DyanaHBondConstraintFile(DyanaDistanceConstraintFile):
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
         
-      print "Reading %s H bonds constraint list %s" % (self.format,fileText)
+      print("Reading %s H bonds constraint list %s" % (self.format,fileText))
       
     # First try to read in as hbonds type file
     if not self.readHBondSpecificFile(self.name):
@@ -106,7 +106,7 @@ hbond H 6 O 40
     # First check whether this is a custom hbond file without distances, read in if so
     #
     
-    fin = open(fileName, 'rU')
+    fin = open(fileName)
     lines = fin.readlines()
     fin.close()
     
@@ -143,7 +143,7 @@ hbond H 6 O 40
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
 
-      print "Writing %s H bonds constraint list %s" % (self.format,fileText)
+      print("Writing %s H bonds constraint list %s" % (self.format,fileText))
 
     # Writer is same as for distance constraints...
 
@@ -171,16 +171,16 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
   
     for constraint in constraintFile.constraints:
-      print constraint.Id,
+      print(constraint.Id,)
 
-      print constraint.upperDist,
+      print(constraint.upperDist,)
       #print constraint.peakNum, constraint.peakVol, constraint.ppms
       for item in constraint.items:
         for member in item.members:
-          print member.seqCode, member.atomName,
-        print "|",
+          print(member.seqCode, member.atomName,)
+        print("|",)
 
-      print
+      print()
 
     constraintFile.name = 'local/hbonds.testout'
 

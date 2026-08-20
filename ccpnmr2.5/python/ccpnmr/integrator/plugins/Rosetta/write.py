@@ -77,7 +77,7 @@ def write(nmrCalcRun, targetDir):
   
   # write properties file (must be done at the end
   propFile = uniIo.joinPath(targetDir, intIo.propFileName)
-  print 'About to write', propFile
+  print('About to write', propFile)
   open(propFile,'w').write(json.dumps(jsonDict, sort_keys=True, 
                                       indent=intIo.propIndent))
 
@@ -158,5 +158,5 @@ if __name__ == '__main__':
     nmrCalcRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId, pluginName)
  
   else:
-    print "Usage: write projectDir NmrCalcRun.IDstring targetDir(optional)"
+    print("Usage: write projectDir NmrCalcRun.IDstring targetDir(optional)")
 

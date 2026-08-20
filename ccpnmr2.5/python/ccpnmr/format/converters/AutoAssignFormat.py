@@ -112,7 +112,7 @@ class AutoAssignFormat(DataFormat):
   def getFullProject(self,fileName, peakKeyWdList = None, sequenceKeyWds = None):
   
     if self.verbose == 1:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     self.file = self.projectIO.AutoAssignProjectFile(fileName)
     self.file.read()
@@ -156,7 +156,7 @@ class AutoAssignFormat(DataFormat):
   def createFullProject(self,fileName, peakListInfo = None, tolerances = None, setTag = None):
   
     if self.verbose == 1:
-      print "Writing %s project from file %s" % (self.formatLabel,fileName)
+      print("Writing %s project from file %s" % (self.formatLabel,fileName))
       
     self.file = self.projectIO.AutoAssignProjectFile(fileName)
 
@@ -258,10 +258,10 @@ class AutoAssignFormat(DataFormat):
               atomInfo.append('CA')
               atomInfo.append('CB')
             else:
-              print "  Warning: no %s atom info set for atomSite '%s'." % (self.format,atomSite.name)
+              print("  Warning: no %s atom info set for atomSite '%s'." % (self.format,atomSite.name))
           
           if not atomInfo:
-            print "  Warning: no atomSite info for expDimRef dim %d of reference experiment %s - guessing information from expDimRef." % (expDimRef.expDim.dim,expMeasurement.nmrExpPrototype.name)
+            print("  Warning: no atomSite info for expDimRef dim %d of reference experiment %s - guessing information from expDimRef." % (expDimRef.expDim.dim,expMeasurement.nmrExpPrototype.name))
 
         if not atomInfo:
           #
@@ -277,12 +277,12 @@ class AutoAssignFormat(DataFormat):
               if specType.count(atomName) > 0:
                 atomInfo.append(atomName)
             if not atomInfo:
-              print "  Warning: no specific 13C atom type found in experiment type '%s' - set to 'C13'." % specType
+              print("  Warning: no specific 13C atom type found in experiment type '%s' - set to 'C13'." % specType)
               atomInfo.append('C13')
           elif '15N' in expDimRef.isotopeCodes:
             atomInfo.append('N15')
           else:
-            print "  Warning: no %s atom info set for expDimRef with isotope codes '%s'." % (self.format,str(expDimRef.isotopeCodes))
+            print("  Warning: no %s atom info set for expDimRef with isotope codes '%s'." % (self.format,str(expDimRef.isotopeCodes)))
             atomInfo.append('X')
         
         if expDimRef.isFolded:

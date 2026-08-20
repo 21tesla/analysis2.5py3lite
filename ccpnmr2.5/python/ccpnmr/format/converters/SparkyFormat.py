@@ -109,7 +109,7 @@ class SparkyFormat(DataFormat):
   def getFullProject(self,fileName,peakKeyWdList = None, sequenceKeyWds = None, shiftList = None):
   
     if self.verbose:
-      print "Reading %s project from file %s" % (self.formatLabel,fileName)
+      print("Reading %s project from file %s" % (self.formatLabel,fileName))
    
     fileType = 'projectFile'
     self.file = self.projectIO.SparkyProjectFile(fileName)
@@ -124,7 +124,7 @@ class SparkyFormat(DataFormat):
       if self.file.peaksLocation.has_key(fileName):
         fileType = 'saveFile'
         self.file.saveFiles.append(fileName)
-        print "  Warning: file is of 'save' type - reading only single spectrum information, no sequences or chemical shifts."
+        print("  Warning: file is of 'save' type - reading only single spectrum information, no sequences or chemical shifts.")
     
     #
     # Process elements - call functions 'as if' reading real file, but pass
@@ -166,7 +166,7 @@ class SparkyFormat(DataFormat):
           spectrumNames.append(spectrumName)
           
       else:      
-        print "  Error: save file %s could not be read (not present in peaksLocation dictionary)" % saveFile
+        print("  Error: save file %s could not be read (not present in peaksLocation dictionary)" % saveFile)
     
     #
     # Select the relevant spectra (assuming that names are unique!)
@@ -226,11 +226,11 @@ class SparkyFormat(DataFormat):
   def createFullProject(self,fileName,peakKeyWdList = None):
     
     if not self.entry and not self.molSystem:
-      print "  ERROR: need valid entry or molSystem to proceed with Sparky project file writing."
+      print("  ERROR: need valid entry or molSystem to proceed with Sparky project file writing.")
       return False
     
     if self.verbose == 1:
-      print "Writing %s project to file %s" % (self.formatLabel,fileName)
+      print("Writing %s project to file %s" % (self.formatLabel,fileName))
     
     self.file = self.projectIO.SparkyProjectFile(fileName)
         
@@ -239,7 +239,7 @@ class SparkyFormat(DataFormat):
       self.molSystem = self.entry.molSystem 
       
     if not self.molSystem:
-      print "  ERROR: need a valid molSystem from entry to proceed." 
+      print("  ERROR: need a valid molSystem from entry to proceed.")
       return False
     
     #
@@ -369,7 +369,7 @@ class SparkyFormat(DataFormat):
           
           saveName = fileName + '.' + str(fileCount)
           if not self.peakFile.peaks:
-            print "  Warning aborting export of peak list %s for Sparky - has no peaks." % saveName
+            print("  Warning aborting export of peak list %s for Sparky - has no peaks." % saveName)
             continue
 
           self.file.saveFiles.append(saveName)
@@ -640,7 +640,7 @@ class SparkyFormat(DataFormat):
       if intensityTypes[intensityType] == 0:
         if intensityType in volumeIntensityType:
           if self.verbose:
-            print "  Warning: removing peak integration method %s - no values available." % (intensityType)
+            print("  Warning: removing peak integration method %s - no values available." % (intensityType))
           volumeIntensityType.pop(volumeIntensityType.index(intensityType))
     
     #
@@ -690,13 +690,13 @@ class SparkyFormat(DataFormat):
       for peakDimContrib in peakDimContribs:
       
         if isinstance(peakDimContrib,Nmr.PeakDimContribN):
-          print "   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored."
+          print("   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored.")
           continue
         
         # get resonanceToAtoms
         ll = self.resonanceToAtoms.get(peakDimContrib.resonance)
         if ll is None:
-          print ("  Can't handle resonance %s for peak %d" 
+          print("  Can't handle resonance %s for peak %d" 
                  % (getResNameText(peakDimContrib.resonance), 
                  self.peak.serial))
         else:
@@ -736,7 +736,7 @@ class SparkyFormat(DataFormat):
         resNameText = resNames[0]
       
         if len(resNames) > 1:   
-          print "  Warning: Multiple assignments currently not supported for %s. Only using first one." % self.format
+          print("  Warning: Multiple assignments currently not supported for %s. Only using first one." % self.format)
                 
     self.assign.append(resNameText)
       

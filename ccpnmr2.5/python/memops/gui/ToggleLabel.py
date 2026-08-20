@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
  
  
 from memops.gui.Button import Button
@@ -96,7 +96,7 @@ class ToggleLabel(Frame):
     try:
       return getattr(self.__dict__['arrow'], name)
     except:
-      raise AttributeError, "%s instance has no attribute '%s'" % (self.__class__.__name__, name)
+      raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
 
 if (__name__ == '__main__'):
  

@@ -355,7 +355,7 @@ def plotAll():
 
     
     for target in results.targets:
-        print target    
+        print(target)
         plotRmsd(target)
         plotRmsdBox(target)
         plotROG(target)
@@ -436,12 +436,12 @@ def mkHtml():
 </head>
 <body>
 <div id="container">
-	<div id="header">
-		<h1>Cing reports</h1>
-	<!-- end header -->	</div>
+    <div id="header">
+        <h1>Cing reports</h1>
+    <!-- end header -->	</div>
 %s
 <div id="footer">
-	<p>Validation reports for CASD-NMR using CING (<a href="http://code.google.com/p/cing/source/detail?r=1240">r1240</a>)	</p>
+    <p>Validation reports for CASD-NMR using CING (<a href="http://code.google.com/p/cing/source/detail?r=1240">r1240</a>)	</p>
 <!-- end footer --></div>
 </body>
 </html>

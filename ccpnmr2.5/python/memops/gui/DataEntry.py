@@ -146,8 +146,8 @@ if (__name__ == '__main__'):
   import Tkinter
 
   r = Tkinter.Tk()
-  print dataEntry.askString('ask string title', 'ask string prompt')
-  print dataEntry.askInteger('ask integer title', 'ask integer prompt')
-  print dataEntry.askFloat('ask float title', 'ask float prompt')
-  print dataEntry.askFile('ask file title', 'ask file prompt', parent=r)
-  print dataEntry.askDir('ask dir title', 'ask dir prompt', parent=r)
+  print(dataEntry.askString('ask string title', 'ask string prompt'))
+  print(dataEntry.askInteger('ask integer title', 'ask integer prompt'))
+  print(dataEntry.askFloat('ask float title', 'ask float prompt'))
+  print(dataEntry.askFile('ask file title', 'ask file prompt', parent=r))
+  print(dataEntry.askDir('ask dir title', 'ask dir prompt', parent=r))

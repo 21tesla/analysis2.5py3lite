@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Base import Base
 
@@ -76,7 +76,7 @@ class Frame(Tkinter.Frame, Base):
                 columnspan=colSpan, sticky=sticky)
 
     if expandGrid:
-      if type(expandGrid[0]) is type(1):
+      if type(expandGrid[0]) is int:
         row, col = expandGrid
         self.expandGrid(row, col)
       

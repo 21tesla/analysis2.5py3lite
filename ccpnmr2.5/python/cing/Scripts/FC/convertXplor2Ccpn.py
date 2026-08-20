@@ -12,7 +12,7 @@ from cing.Scripts.FC.constants import * #@UnusedWildImport
 from cing.Scripts.FC.utils import importPseudoPdb
 from glob import glob
 from memops.api import Implementation
-import Tkinter
+import tkinter
 import shutil
 
 

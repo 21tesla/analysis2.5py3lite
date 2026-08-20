@@ -84,7 +84,7 @@ class AmberDistanceConstraintFile(AmberGenericFile):
 
     if verbose == 1:
     
-      print "Reading %s %s constraint list %s" % (self.format,self.infoType,self.name)
+      print("Reading %s %s constraint list %s" % (self.format,self.infoType,self.name))
     
     constraintInfoList = self.readConstraints()
     

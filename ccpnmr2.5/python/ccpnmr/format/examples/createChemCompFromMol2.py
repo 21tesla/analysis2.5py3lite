@@ -22,20 +22,20 @@ def listChemCompInfo(chemComp):
         else:
           caIndex += 1
     
-    print chemComp.molType, chemComp.ccpCode
+    print(chemComp.molType, chemComp.ccpCode)
 
     for linking in linkings:
-      print
-      print "Linking:",linking
+      print()
+      print("Linking:",linking)
       chemAtomsByLinking[linking].sort()
-      print
-      print "ChemAtoms:"
-      print chemAtomsByLinking[linking]
-      print
-      print "ChemBonds:"
+      print()
+      print("ChemAtoms:")
+      print(chemAtomsByLinking[linking])
+      print()
+      print("ChemBonds:")
       for cb in chemBondsByLinking[linking]:
         chemAtoms = cb.sortedChemAtoms()
-        print "  (\"%s\",\"%s\"): '%s'," % (chemAtoms[0].name,chemAtoms[1].name,cb.bondType)
+        print("  (\"%s\",\"%s\"): '%s'," % (chemAtoms[0].name,chemAtoms[1].name,cb.bondType))
 
 
 if __name__ == '__main__':

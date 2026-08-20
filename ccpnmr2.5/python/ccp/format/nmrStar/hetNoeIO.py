@@ -214,4 +214,4 @@ if __name__ == "__main__":
 
     for hetNoeFile in nmrStarFile.hetNoeFiles:
       for hetNoe in hetNoeFile.hetNoeValues:
-        print hetNoe.Id, hetNoe.seqCode1, hetNoe.resLabel1, hetNoe.atomName1, hetNoe.seqCode2, hetNoe.resLabel2, hetNoe.atomName2, hetNoe.value, hetNoe.valueError
+        print(hetNoe.Id, hetNoe.seqCode1, hetNoe.resLabel1, hetNoe.atomName1, hetNoe.seqCode2, hetNoe.resLabel2, hetNoe.atomName2, hetNoe.value, hetNoe.valueError)

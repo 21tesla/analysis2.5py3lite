@@ -82,10 +82,10 @@ class AllChecks(TestCase):
 
 
     def _testTo3StateUpper(self):
-        self.assertEquals(     to3StateDssp(['S','E']), [' ','S'])
-        self.assertEquals(     to3StateDssp(['h','H']), [' ','H'])
-        self.assertNotEquals(  to3StateDssp([' ','H']), ['H','H'])
-        self.assertEquals(     to3StateDssp(['X','H']), [' ','H'])
+        self.assertEqual(     to3StateDssp(['S','E']), [' ','S'])
+        self.assertEqual(     to3StateDssp(['h','H']), [' ','H'])
+        self.assertNotEqual(  to3StateDssp([' ','H']), ['H','H'])
+        self.assertEqual(     to3StateDssp(['X','H']), [' ','H'])
 
     def _testPlotSet(self):
 #        hardcopySize = (60,30)

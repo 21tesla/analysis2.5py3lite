@@ -63,7 +63,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -159,7 +159,7 @@ a given set of coordinates.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.Atom.__init__"
+        print("ERROR in ccp.molecule.MolStructure.Atom.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -219,10 +219,10 @@ a given set of coordinates.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -2086,7 +2086,7 @@ class Chain(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.Chain.__init__"
+        print("ERROR in ccp.molecule.MolStructure.Chain.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2121,10 +2121,10 @@ class Chain(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3405,7 +3405,7 @@ class Coord(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.Coord.__init__"
+        print("ERROR in ccp.molecule.MolStructure.Coord.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3440,10 +3440,10 @@ class Coord(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4625,7 +4625,7 @@ created
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.DataMatrix.__init__"
+        print("ERROR in ccp.molecule.MolStructure.DataMatrix.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4660,10 +4660,10 @@ created
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6164,7 +6164,7 @@ Corresponds to a PDB MODEL.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.Model.__init__"
+        print("ERROR in ccp.molecule.MolStructure.Model.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6226,10 +6226,10 @@ Corresponds to a PDB MODEL.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -8913,7 +8913,7 @@ class Residue(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.Residue.__init__"
+        print("ERROR in ccp.molecule.MolStructure.Residue.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -8948,10 +8948,10 @@ class Residue(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10477,7 +10477,7 @@ trajectory for the MolSystem or part of it.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.MolStructure.StructureEnsemble.__init__"
+        print("ERROR in ccp.molecule.MolStructure.StructureEnsemble.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10544,10 +10544,10 @@ trajectory for the MolSystem or part of it.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

@@ -305,10 +305,10 @@ class NmrPipeTable( NTdict ):
 if __name__ == '__main__':
 
     tab = NmrPipeTable( 'test.tab' )
-    print tab[0]
-    print tab[0].get('PSI')
-    print tab[0].keys()
-    print tab[0].values()
+    print(tab[0])
+    print(tab[0].get('PSI'))
+    print(tab[0].keys())
+    print(tab[0].values())
 #    for c in tab[0]:
 #        print c
     tab.addRow( PHI=10, PSI=13)

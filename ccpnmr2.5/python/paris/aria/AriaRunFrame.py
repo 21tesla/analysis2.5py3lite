@@ -1,5 +1,5 @@
 import os, sys
-import Tkinter
+import tkinter
 
 from memops.gui.Button          import Button
 from memops.gui.DataEntry       import askString
@@ -21,9 +21,9 @@ from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists
 from ccpnmr.analysis.popups.EditCalculation import NmrCalcRunFrame, PEAK_DATA, CONSTRAINT_DATA
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 
-PARAM_ATTR_DICT = {type(1.0):'floatValue',
-                   type(1):'intValue',
-                   type(True):'booleanValue'}
+PARAM_ATTR_DICT = {float:'floatValue',
+                   int:'intValue',
+                   bool:'booleanValue'}
 
 FILTER_VIOL = 'FilterViol'
 KEEP_ASSIGN = 'KeepAssign'

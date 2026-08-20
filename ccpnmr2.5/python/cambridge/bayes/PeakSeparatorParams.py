@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 PeakSeparatorParams.py
 
@@ -7,7 +6,7 @@ Created by Daniel O'Donovan on 2010-11-10.
 Copyright (c) 2010 University of Cambridge. All rights reserved.
 """
 
-class PeakSeparatorParams(object):
+class PeakSeparatorParams:
   """ Just a class to hold the C Library Peak Separator parameters 
       Argument names / numbers reference - needed by C Library
                     # params.dataFile       0

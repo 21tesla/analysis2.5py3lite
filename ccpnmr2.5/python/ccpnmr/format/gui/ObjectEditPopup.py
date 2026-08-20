@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import string
 
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath
 from memops.universal.Util import returnInt, returnFloat
@@ -306,8 +306,8 @@ class ObjectEditPopup(TemporaryBasePopup):
 
       self.widgets[attrName] = ScrolledListbox(self.selfMaster,
                                          width = 50,
-	                                        height = 5,
-	                                        selectmode = Tkinter.MULTIPLE,
+                                            height = 5,
+                                            selectmode = Tkinter.MULTIPLE,
                                          initial_list = self.varLists[attrName],
                                          select_callback = self.changesMade)                                         
       
@@ -491,8 +491,8 @@ class ObjectEditPopup(TemporaryBasePopup):
 
           self.widgets[widgetName] = ScrolledListbox(self.selfMaster,
                                              width = 50,
-	                                            height = 5,
-	                                            selectmode = Tkinter.MULTIPLE,
+                                                height = 5,
+                                                selectmode = Tkinter.MULTIPLE,
                                              initial_list = varList,
                                              select_callback = self.changesMade)                                         
 

@@ -148,7 +148,7 @@ class OpenMacroPopup(BasePopup):
   
     self.loadButton.disable()
     functions = []
-    fileHandle = open(file, 'r')
+    fileHandle = open(file)
     line = fileHandle.readline()
     textMatrix = []
     while line :

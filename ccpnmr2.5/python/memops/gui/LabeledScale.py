@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
@@ -127,11 +127,11 @@ if __name__ == '__main__':
 
   def getValue():
 
-    print 'index = %s, value = %s' % (labeled_scale.get(), labeled_scale.getValue())
+    print('index = %s, value = %s' % (labeled_scale.get(), labeled_scale.getValue()))
 
   def setCallback(index):
 
-    print 'index = %s' % index
+    print('index = %s' % index)
 
   root = Tkinter.Tk()
 

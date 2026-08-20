@@ -574,9 +574,6 @@ try:
   junk = True
   junk = False
 except:
-  True = not 0
-  False = not True
-
 #############################################################################
 # enumerated types:
 # NB most are imported from ImpConstants
@@ -710,7 +707,7 @@ def compareModels(model1, model2, elementPairings=None, ignoreImplicit=True):
       if diffs:
         differ.append((ee.guid, ee.guid, diffs))
         if ee.guid is None:
-          print 'WARNING %s has no guid' % ee.qualifiedName
+          print('WARNING %s has no guid' % ee.qualifiedName)
  
     # check for name matches
     try:
@@ -729,7 +726,7 @@ def compareModels(model1, model2, elementPairings=None, ignoreImplicit=True):
   result['unique2'] = set(dict2.values())
   
   end = time.time()
-  print 'End comparing models, time used %s' % (end-start)
+  print('End comparing models, time used %s' % (end-start))
     
   #
   return result
@@ -880,12 +877,12 @@ def finaliseMetaClass(clazz):
         parType = allowedParTags[tag]
       except:
         raise MemopsError("%s: illegal tag %s for parameter %s" 
-         % (clazz.__name__, `tag`, `pName`)
+         % (clazz.__name__, str(tag), str(pName))
         )
         
       if parType is not None and not isinstance(val,parType):
         raise MemopsError("%s: tag %s for parameter %s has illegal value %s" 
-         % (clazz.__name__, `tag`, `pName`, `val`)
+         % (clazz.__name__, str(tag), str(pName), str(val))
         )
     
     # special checks
@@ -893,7 +890,7 @@ def finaliseMetaClass(clazz):
     # Booleans
     if pData.has_key('isFixed') and pData['isFixed'] not in (True, False):
       raise MemopsError("%s: tag %s for parameter %s has illegal value %s" 
-       % (clazz.__name__, `tag`, `pName`, `pData['isFixed']`)
+       % (clazz.__name__, str(tag), str(pName), `pData['isFixed']`)
       )
     
     # 'type' tag
@@ -902,19 +899,19 @@ def finaliseMetaClass(clazz):
     if pData.get('nameList') and (myType != 'content' or tag == 'constraints'):
       raise MemopsError(
        "%s: parameter %s is not standard content but has 'namelist'" 
-       % (clazz.__name__, `pName`)
+       % (clazz.__name__, str(pName))
       )
       
     if myType is None:
       if (clazz, pName) not in unTypedPars:
         raise MemopsError("%s: parameter %s has no explicit type " 
-                          % (clazz.__name__, `pName`))
+                          % (clazz.__name__, str(pName)))
         
     elif myType in miscParTypes:
       if myType == 'StringDict' and pData.get('hicard',1) != 1:
         raise MemopsError(
          "%s: tag %s for parameter %s is StringDict but has hicard %s" 
-         % (clazz.__name__, `tag`, `pName`, pData.get('hicard'))
+         % (clazz.__name__, str(tag), str(pName), pData.get('hicard'))
         )
     
     elif myType in pythonParTypes:
@@ -925,7 +922,7 @@ def finaliseMetaClass(clazz):
     
     else:
       raise MemopsError("%s: parameter %s has unsupported type %s" 
-                        % (clazz.__name__, `pName`, myType))
+                        % (clazz.__name__, str(pName), myType))
            
 
 
@@ -996,7 +993,7 @@ class MetaModelElement:
       pData = self.__class__.parameterData[tag]
     except KeyError:
       raise AttributeError("%s object has no attribute %s" 
-                            % (self.__class__, `tag`))
+                            % (self.__class__, str(tag)))
       
     # defined attribute
     getterFunc = pData.get('getterFunc')
@@ -1018,7 +1015,7 @@ class MetaModelElement:
         return copy.copy(self.__dataDict[tag])
       except KeyError:
         raise AttributeError("%s object has no attribute %s" 
-                             % (self.__class__, `tag`))
+                             % (self.__class__, str(tag)))
   
   def __setattr__(self, tag, value):
     
@@ -1199,10 +1196,10 @@ class MetaModelElement:
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s tagged value tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s tagged value tag %s is not a string" %(self, str(tag)))
     if type(value) != types.StringType:
       raise MemopsError("%s tagged value %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     allowedTags = self.allowedTags
@@ -1309,17 +1306,17 @@ class MetaModelElement:
       elif pData.get('isFixed'):
         # check fixed parameters
         raise MemopsError("%s - wrong value %s for fixed attribute %s" % 
-                          (self, `value`, tag))
+                          (self, str(value), tag))
       
       # string dictionaries
       if pType == 'StringDict':
         for key,val in value.items():
           if not key or not isinstance(key, types.StringType):
             raise MemopsError("%s: non-string or empty key %s in StringDict %s"
-                              % (self, `key`, tag))
+                              % (self, str(key), tag))
           if not val or not isinstance(val, types.StringType):
             raise MemopsError("%s: non-string or empty value %s in StringDict %s"
-                              % (self, `val`, tag))
+                              % (self, str(val), tag))
         continue
       
       # single or list (for further processing):
@@ -1330,7 +1327,7 @@ class MetaModelElement:
       elif hicard != infinity and len(value) > hicard:
         # hicard check
         raise MemopsError("%s.%s - more than %s elements in value: %s" % 
-                          (self, tag, hicard, `value`))
+                          (self, tag, hicard, str(value)))
           
       
       # Booleans and other enumerated types
@@ -1341,7 +1338,7 @@ class MetaModelElement:
         for item in value:
           if item not in enumeration:
             raise MemopsError("%s.%s - %s not among allowed values" % 
-                              (self, tag, `value`))
+                              (self, tag, str(value)))
         continue
       
       # string types
@@ -1349,21 +1346,21 @@ class MetaModelElement:
         for item in value:
           if not item or not isinstance(item,types.StringType):
             raise MemopsError("%s.%s - %s is empty or not a string" % 
-                              (self, tag, `value`))
+                              (self, tag, str(value)))
       
       elif pType == 'Token':
         for item in value:
           if not item or not isinstance(item,types.StringType):
             raise MemopsError("%s.%s - %s is empty or not a string" % 
-                              (self, tag, `item`))
+                              (self, tag, str(item)))
           for char in item:
             if char not in ImpConstants.validNameChars:
               raise MemopsError("%s %s %s contains illegal character %s"
-                                % (self, tag, `item`, `char`))
+                                % (self, tag, str(item), str(char)))
                               
           if item[0] in string.digits:
             raise MemopsError("%s %s %s starts with a digit"
-                              % (self, tag, `item`))
+                              % (self, tag, str(item)))
       
       # special exception - supertype of MemopsObject
       elif tag in ('supertypes','supertype') and name == 'MemopsObject':
@@ -1378,7 +1375,7 @@ class MetaModelElement:
         for item in value:
           if not isinstance(item, pType):
             raise MemopsError("%s - %s should be type %s for attribute %s" %
-                              (self, `value`, pType, tag))
+                              (self, str(value), pType, tag))
     
     # specific checks for MetaModelElement attributes      
     
@@ -1387,13 +1384,13 @@ class MetaModelElement:
       # autogenerated elements can be assumed to be OK
       if name[0] == ImpConstants.underscore:
         raise MemopsError("%s: name %s of non-implicit element starts with '_'"
-         % (self, `name`)
+         % (self, str(name))
         )
  
       if (ImpConstants.underscore in name[1:]
           and not isinstance(self,MetaOperation)
           and not isinstance(self,MetaConstraint)):
-        print "WARNING, name of %s contains underscore" % self
+        print("WARNING, name of %s contains underscore" % self)
     
     # check correct guid format
     guid = self.guid
@@ -1811,7 +1808,7 @@ class AbstractDataType(ConstrainedElement, HasSupertype):
     
     # name style
     if self.name[0] not in ImpConstants.uppercase:
-      print "WARNING, name of %s does not start with upper case" % self
+      print("WARNING, name of %s does not start with upper case" % self)
     
     # check two-way link
     for obj in subtypes:
@@ -1888,7 +1885,7 @@ class AbstractValue(ConstrainedElement):
           
     # name style
     if self.name[0] not in ImpConstants.lowercase:
-      print "WARNING, name of %s does not start with lower case" % self
+      print("WARNING, name of %s does not start with lower case" % self)
       
 #############################################################################
 
@@ -1996,8 +1993,8 @@ class ClassElement(AbstractValue):
     # give warning for dissimilar name and basename:
     nn = len(name) / 2
     if name[:nn] != baseName[:nn]:
-      print ("WARNING, %s baseName %s dissimilar to name %s"  
-                        % (self, `self.baseName`, `self.name`))
+      print(("WARNING, %s baseName %s dissimilar to name %s"  
+                        % (self, `self.baseName`, `self.name`)))
     
     
     # get temporary info for operations (avoids repeated getattr calls
@@ -2234,11 +2231,11 @@ class ComplexDataType(AbstractDataType):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s codeStub tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s codeStub tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s codeStub %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -2692,7 +2689,7 @@ class MetaPackage(MetaModelElement):
       # name style check:
       if (self.name[0] not in ImpConstants.lowercase and 
           self.container is not None):
-        print "WARNING, name of %s does not start with lower case" % self
+        print("WARNING, name of %s does not start with lower case" % self)
       
     elif (self.__classNames or self.__dataObjTypeNames or self.__dataTypeNames
           or self.__exceptionNames or self.__constantNames):
@@ -2739,7 +2736,7 @@ class MetaPackage(MetaModelElement):
            "package %s does not import the Implementation package"
            % self
           )
-	# removed to allow backwards compatibility from 3.0.a1'
+    # removed to allow backwards compatibility from 3.0.a1'
         #if self is not AccessControl and AccessControl not in ll:
         #  raise MemopsError(
         #   "package %s does not import the AccessControl package"
@@ -2748,7 +2745,7 @@ class MetaPackage(MetaModelElement):
       
       # name style check:
       if self.name[0] not in ImpConstants.uppercase:
-        print "WARNING, name of %s does not start with upper case" % self
+        print("WARNING, name of %s does not start with upper case" % self)
     
     if self is RootPackage:
       # special checks for root package, and for entire model
@@ -2917,11 +2914,11 @@ class MetaClass(ComplexDataType):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s codeStub tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s codeStub tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s codeStub %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -2943,11 +2940,11 @@ class MetaClass(ComplexDataType):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s codeStub tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s codeStub tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s codeStub %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -3489,11 +3486,11 @@ class MetaDataType(AbstractDataType):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s typeCode tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s typeCode tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s typeCode %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -3562,7 +3559,7 @@ class MetaDataType(AbstractDataType):
           return False
       
     except:
-      print "Error checking constraints in %s" % self.qualifiedName()
+      print("Error checking constraints in %s" % self.qualifiedName())
       raise
     
     #
@@ -3583,7 +3580,7 @@ class MetaDataType(AbstractDataType):
     for ee in enumeration:
       if not self.isValid(ee):
         raise MemopsError("%s : Illegal enumeration value %s"
-         % (self.qualifiedName(),`ee`)
+         % (self.qualifiedName(),str(ee))
         )
 
     # check single inheritance
@@ -3683,7 +3680,7 @@ class MetaException(HasParameters, HasSupertype):
     
     # name style
     if self.name[0] not in ImpConstants.uppercase:
-      print "WARNING, name of %s does not start with upper case" % self
+      print("WARNING, name of %s does not start with upper case" % self)
     
     # check two-way link
     for obj in self._MetaModelElement__dataDict['subtypes']:
@@ -3771,11 +3768,11 @@ class MetaOperation(HasParameters):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s codeStub tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s codeStub tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s codeStub %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -3867,14 +3864,14 @@ class MetaOperation(HasParameters):
     
     # name style
     if not self.isImplicit and self.name[0] not in ImpConstants.lowercase:
-      print "WARNING, name of %s does not start with lower case" % self
+      print("WARNING, name of %s does not start with lower case" % self)
       
     # opType dependent checks
     # check valid opType
     opType = self.opType
     opTypeInfo = OpTypes.operationData.get(opType)
     if opTypeInfo is None:
-      raise MemopsError("%s: Illegal optype %s" % (self,`opType`))
+      raise MemopsError("%s: Illegal optype %s" % (self,str(opType)))
       
     targetTag = opTypeInfo['targetTag']
     
@@ -4037,8 +4034,8 @@ class MetaOperation(HasParameters):
       if len(pars) == 1 and not pars[0].isImplicit and pars[0].name != 'value':
         if self.container.container is not implPackage:
           # warn of unusual names, but exclude implPackage to keep number down
-          print (
-           "WARNING, %s: single input parameter is not named 'value' but %s"
+          print((
+           "WARNING, %s: single input parameter is not named 'value' but %s")
            % (self,pars[0].name)
           )
       
@@ -4805,7 +4802,7 @@ class MetaConstant(MetaModelElement):
     
     # name style
     if self.name[0] not in ImpConstants.uppercase:
-      print "WARNING, name of %s does not start with upper case" % self
+      print("WARNING, name of %s does not start with upper case" % self)
     
 #############################################################################
 
@@ -4840,11 +4837,11 @@ class MetaConstraint(MetaModelElement):
     """
     
     if type(tag) != types.StringType:
-      raise MemopsError("%s codeStub tag %s is not a string" %(self, `tag`))
+      raise MemopsError("%s codeStub tag %s is not a string" %(self, str(tag)))
     
     if type(value) != types.StringType:
       raise MemopsError("%s codeStub %s value %s is not a string" %
-       (self, tag, `value`)
+       (self, tag, str(value))
       )
     
     if tag not in ImpConstants.codeStubTags:
@@ -4901,7 +4898,7 @@ has multiline %s code:
 %s
 
 that does not contains string 'isValid'
-      """ % (self, codeTag, `codeString`))
+      """ % (self, codeTag, str(codeString)))
 
 
 

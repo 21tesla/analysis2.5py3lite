@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 
-import Tkinter
+import tkinter
 
 from memops.api import Implementation as ApiImplementation
 from ccp.api.nmr import Nmr
@@ -341,7 +341,7 @@ class UrlViewerFrame(Frame):
     url = Io.getIoUrl()
     try:
       url.name = name
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Changing url name', e.error_msg)
 
   def getUrlPath(self, url):
@@ -375,7 +375,7 @@ class UrlViewerFrame(Frame):
     if (name):
       try:
         ApiImplementation.Url(self.project, name=name, path=normalisePath(os.getcwd()))
-      except Implementation.ApiError, e:
+      except Implementation.ApiError as e:
         showError('Creating url', e.error_msg)
 
   def deleteUrl(self):
@@ -518,7 +518,7 @@ class UrlViewerFrame(Frame):
 
     try:
       storage.isModifiable = not storage.isModifiable
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Changing storage isModifiable', e.error_msg)
 
   def getStorage(self):

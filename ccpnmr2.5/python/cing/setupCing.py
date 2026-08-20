@@ -51,15 +51,15 @@ def _NTgetoutput( cmd ):
 # end def
 def _nTerror(msg):
     'Convenience method'
-    print "ERROR:",msg
+    print("ERROR:",msg)
 # end def
 def _nTwarning(msg):
     'Convenience method'
-    print "WARNING:",msg
+    print("WARNING:",msg)
 # end def
 def _nTmessage(msg):
     'Convenience method'
-    print msg
+    print(msg)
 # end def
 def _getSvnRevision( envRootDir = 'CINGROOT'):
     """Return the revision number (int) or None if the revision isn't known. It depends on svn being available on the system."""
@@ -372,19 +372,19 @@ def _writeCingShellFile(isTcsh): # pylint: disable=W0621
     # mod is 775, which should be OK.
     #os.chmod(cname, 0755)
 
-    print ''
-    print '==> Please check/modify %s <===' % (cname)
-    print '    Then activate it by sourcing it in your shell settings file (.cshrc or .bashrc):'
-    print ''
-    print '    %s %s' % ( sourceCommand, cname)
-    print ''
-    print ''
-    print '==> Note by JFD'
-    print ' There is another dependency; cython. Please install it and run:'
-    print ' cd $CINGROOT/python/cing/Libs/cython; python compile.py build_ext --inplace'
-    print ' After installing cython; rerun setupCing.py or manually update the settings file.'
-    print ' We have included the Cython distribution needed so add to your PYTHONPATH for now:'
-    print ' $CINGROOT/dist/Cython (later it will be added by the cing.[c]sh created.'
+    print('')
+    print('==> Please check/modify %s <===' % (cname))
+    print('    Then activate it by sourcing it in your shell settings file (.cshrc or .bashrc):')
+    print('')
+    print('    %s %s' % ( sourceCommand, cname))
+    print('')
+    print('')
+    print('==> Note by JFD')
+    print(' There is another dependency; cython. Please install it and run:')
+    print(' cd $CINGROOT/python/cing/Libs/cython; python compile.py build_ext --inplace')
+    print(' After installing cython; rerun setupCing.py or manually update the settings file.')
+    print(' We have included the Cython distribution needed so add to your PYTHONPATH for now:')
+    print(' $CINGROOT/dist/Cython (later it will be added by the cing.[c]sh created.')
 
 #end def
 #------------------------------------------------------------------------------------
@@ -400,7 +400,7 @@ if __name__ == '__main__':
         elif sys.argv[1] == '-sh':
             isTcsh = False
         else:
-            print 'Failed to process argument(s) in sys.argv: [' + str(sys.argv) + ']'
+            print('Failed to process argument(s) in sys.argv: [' + str(sys.argv) + ']')
         # end if
     # end if
     
@@ -416,15 +416,15 @@ if __name__ == '__main__':
     check_cython()
 
     if not cingRoot:
-        print "Failed to derive the CINGROOT from this setupCing.py script; are there other setupCing.py or code confusing me here?"
+        print("Failed to derive the CINGROOT from this setupCing.py script; are there other setupCing.py or code confusing me here?")
         sys.exit(1)
 
     if not os.path.exists(cingRoot):
-        print "The derived CINGROOT does not exist: ["  + cingRoot + "]"
+        print("The derived CINGROOT does not exist: ["  + cingRoot + "]")
         sys.exit(1)
 
     if not cingPythonDir:
-        print "Failed to derive the CING python directory from this setupCing.py script. No clue why?"
+        print("Failed to derive the CING python directory from this setupCing.py script. No clue why?")
         sys.exit(1)
 
     parametersDict = {}
@@ -656,9 +656,9 @@ if __name__ == '__main__':
 #    use tcsh. Better ask a question once.
     if isTcsh == None:
         answer = None
-        print ''
+        print('')
         while answer not in ["y","n"]:
-            answer = raw_input("Do you use tcsh/csh [y] or bash/sh/ksh/zsh/ash etc. [n]; please enter y or n:")
+            answer = input("Do you use tcsh/csh [y] or bash/sh/ksh/zsh/ash etc. [n]; please enter y or n:")
         isTcsh = answer == "y"
     # end if
     

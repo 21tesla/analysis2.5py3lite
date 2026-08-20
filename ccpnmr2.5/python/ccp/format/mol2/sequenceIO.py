@@ -89,7 +89,7 @@ class Mol2SequenceFile(Mol2GenericFile):
       self.infoDict = mol2File.infoDict
     
     if verbose == 1:
-      print "Getting sequence/molecule information."
+      print("Getting sequence/molecule information.")
     
     #
     # TODO here do things very similar to PDB.
@@ -118,7 +118,7 @@ class Mol2SequenceFile(Mol2GenericFile):
     totalAtoms = len(self.infoDict['ATOM'])
     
     if totalAtoms != self.infoDict['MOLECULE']['numAtoms']:
-      print "  Warning: possible atom numbers mismatch. %d reported, %d counted." % (self.infoDict['MOLECULE']['numAtoms'],totalAtoms)
+      print("  Warning: possible atom numbers mismatch. %d reported, %d counted." % (self.infoDict['MOLECULE']['numAtoms'],totalAtoms))
     
     #
     # Get the chains (?) Or not worth it?

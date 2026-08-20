@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath
 
@@ -98,8 +98,8 @@ class MultiSelectionListSkeleton:
     row = row + 1
     self.multiSelect = ScrolledListbox(master,
                                        width = 50,
-	                                      height = 5,
-	                                      selectmode = Tkinter.MULTIPLE,
+                                          height = 5,
+                                          selectmode = Tkinter.MULTIPLE,
                                        initial_list = self.selectionList)
     self.multiSelect.grid(row=row, column=0, sticky=Tkinter.E, ipadx = 20)
     master.grid_columnconfigure(0, weight=1)

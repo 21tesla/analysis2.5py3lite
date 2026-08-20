@@ -82,7 +82,7 @@ class CosmosProjectFile(CosmosGenericFile):
   def write(self, version='003', verbose=False, fileType='COO'):
 
     if verbose == 1:
-      print "Writing %s .%s project file %s" % (self.format,fileType,self.name)
+      print("Writing %s .%s project file %s" % (self.format,fileType,self.name))
 
     fout = open(self.name,'w')
 

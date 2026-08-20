@@ -1275,9 +1275,9 @@ class NTdict(dict):
         Keys can be referenced as in dictionary methods, or as an attribute; e.g.
 
             aap = NTdict( noot=3, mies=4, kees='not awake' )
-            print aap['noot']
+            print(aap['noot'])
             > 3
-            print aap.noot
+            print(aap.noot)
             > 3
 
         Hashing and compare implemented.

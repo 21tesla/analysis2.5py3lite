@@ -120,7 +120,7 @@ class AuremolGenericFile(AuremolFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s molecular information file %s" % (self.format,self.name)
+      print("Reading %s molecular information file %s" % (self.format,self.name))
 
     #
     # Read info and other info
@@ -128,7 +128,7 @@ class AuremolGenericFile(AuremolFile):
 
     readSection = None
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
 
     while line:
@@ -174,7 +174,7 @@ class AuremolGenericFile(AuremolFile):
           
         elif cols[0][:4] == 'END_':
         
-          print "Warning: double END code %s" % cols[0]
+          print("Warning: double END code %s" % cols[0])
         
         else:
         
@@ -391,14 +391,14 @@ if __name__ == "__main__":
 
   for compound in auremolFile.compounds:
   
-    print compound.label, compound.compFile
+    print(compound.label, compound.compFile)
     
     for cs in compound.shifts:
-      print "%s: %.3f| " % (cs.atomKey, cs.value),
-    print
+      print("%s: %.3f| " % (cs.atomKey, cs.value),)
+    print()
   
   for par in auremolFile.parameters.keys():
-    print par, auremolFile.parameters[par].value, auremolFile.parameters[par].unit
+    print(par, auremolFile.parameters[par].value, auremolFile.parameters[par].unit)
 
   """
   file = os.path.join(getTopDirectory(),'../../reference/auremol/csp.comp')
@@ -408,5 +408,5 @@ if __name__ == "__main__":
 
   for atomInfo in auremolFile.atoms:
   
-    print atomInfo.atomKey, atomInfo.atomName, atomInfo.bondedAtoms
+    print(atomInfo.atomKey, atomInfo.atomName, atomInfo.bondedAtoms)
   """

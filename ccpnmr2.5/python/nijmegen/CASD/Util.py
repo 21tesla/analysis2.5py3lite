@@ -11,7 +11,7 @@ from nijmegen.CASD import Constants as casdConstants
 
 allDataDir = casdConstants.allDataDir
 
-class Extractor():
+class Extractor:
   def __init__(self, file):
     self.file = file
   
@@ -174,7 +174,7 @@ def extractCompressedFile(source, targetDir, dataId, okExts=()):
       try:
         extractor(source).extractall(targetDir)
       except:
-        print 'ERROR for %s, reading %s' % (dataId, source)
+        print('ERROR for %s, reading %s' % (dataId, source))
         traceback.print_exc(file=sys.stdout)
         return
       break
@@ -183,7 +183,7 @@ def extractCompressedFile(source, targetDir, dataId, okExts=()):
       if source.endswith(ext):
         break
     else:
-      print ('### WARNING, %s Unexpected file type for: %s' %
+      print('### WARNING, %s Unexpected file type for: %s' %
              (dataId, os.path.basename(source)))
     shutil.copy(source, targetDir)
   
@@ -206,7 +206,7 @@ def extractToJson(htmlFile):
   refKeys = set(result[0].keys())
   for dd in result[1:]:
     if set(dd.keys()) != refKeys:
-      print '~~~ Keys differ ', sorted(dd.keys())
+      print('~~~ Keys differ ', sorted(dd.keys()))
   
   # write result to json
   json.dump(result, open(jsonFile, 'w'), sort_keys=True, indent=4)
@@ -220,9 +220,9 @@ def createDirs(dictlist):
     entry = str(dd['EntryID'])
     path = os.path.join(target, entry)
     if not os.path.isdir(path):
-      print '... creating ', path
+      print('... creating ', path)
       os.makedirs(path)
-    print ss
+    print(ss)
   
   
 def getInputFile(identifier, subdir, ignoreErrors=False):
@@ -338,7 +338,7 @@ def addAtomSysName(project, ccpCode, atomName, altSysNames=(), sysName=None,
   
   chemComp = genIo.getChemComp(project, molType, ccpCode)
   if chemComp is None:
-    print '### ChemComp not found:', molType, ccpCode
+    print('### ChemComp not found:', molType, ccpCode)
   
   else:
     systemObj = chemComp.findFirstNamingSystem(name=namingSystem)
@@ -352,7 +352,7 @@ def addAtomSysName(project, ccpCode, atomName, altSysNames=(), sysName=None,
       systemObj.newAtomSysName(atomName=atomName, atomSubType=atomSubType,
                                sysName=sysName, altSysNames=altSysNames)
     else:
-      print '### AtomSysName already exists:', molType, ccpCode, namingSystem, atomName, atomSubType
+      print('### AtomSysName already exists:', molType, ccpCode, namingSystem, atomName, atomSubType)
       
   
 
@@ -374,7 +374,7 @@ def replacePdbNames(path):
   #def generalPdbFix(path):
   """ Fix PDB files, removing some errors. No effect on correct files
   """
-  print '### fixing PDB', path
+  print('### fixing PDB', path)
   
   replaces = (
   ('  CD  ILE',

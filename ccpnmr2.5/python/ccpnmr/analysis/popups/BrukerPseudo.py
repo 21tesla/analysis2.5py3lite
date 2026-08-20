@@ -147,7 +147,7 @@ class BrukerPseudoPopup(BasePopup):
 
     fileName = fileSelectPopup.file_select.getFile()
     
-    fileObj = open(fileName, 'rU')
+    fileObj = open(fileName)
     
     data = ''
     line = fileObj.readline()
@@ -180,7 +180,7 @@ class BrukerPseudoPopup(BasePopup):
       values = self.valueEntry.get()
       try:
         params.setSampledDim(self.dim, values)
-      except ApiError, e:
+      except ApiError as e:
         showError('Set Sampled Dim', e.error_msg, parent=self)
         return
     else:

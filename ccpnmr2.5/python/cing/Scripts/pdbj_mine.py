@@ -23,11 +23,11 @@ proxy_dict = None
 # set parameters
 base_url = 'http://service.pdbj.org/mine/sql'
 output_format = sys.argv[1]
-sql_query = open(sys.argv[2], 'r')
+sql_query = open(sys.argv[2])
 post_parameter = urllib.urlencode({'format':output_format, 'q':sql_query.read()})
 
 # generate access query
 result = urllib.urlopen(base_url, post_parameter, proxies=proxy_dict)
 
 # show result
-print result.read()
+print(result.read())

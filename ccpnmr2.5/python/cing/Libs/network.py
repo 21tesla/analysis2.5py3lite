@@ -6,7 +6,7 @@ import commands
 import mimetools
 import mimetypes
 import socket
-import urllib2
+import urllib.request
 
 
 #########################################################################################
@@ -69,17 +69,17 @@ def sendRequest(url, fields, files=None):
 #    nTdebug( "headerDict: [%s]" % headerDict )
 #    nTdebug( "bodyData: [%s]" % bodyData )
 
-    #enterRequest = urllib2.Request(url)
-    #print urllib2.urlopen(enterRequest).read()
+    #enterRequest = urllib.request.Request(url)
+    #print urllib.request.urlopen(enterRequest).read()
     #time.sleep(2)
 
 #    nTdebug("Requesting form to url: [" + url + "]")
-    request = urllib2.Request(url, bodyData, headerDict)
+    request = urllib.request.Request(url, bodyData, headerDict)
 
     try:
-        response = urllib2.urlopen(request)
+        response = urllib.request.urlopen(request)
 
-    except urllib2.URLError, e:
+    except urllib.request.URLError as e:
         if hasattr(e, 'reason'):
             msg = 'Connection to server URL %s failed with reason:\n%s' % (url, e.reason)
         elif hasattr(e, 'code'):

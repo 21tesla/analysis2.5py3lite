@@ -70,7 +70,7 @@ class NmrPipeFormat(DataFormat):
   def createProcParsFile(self):
   
     if self.verbose == 1:
-      print "Writing conversion parameters to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing conversion parameters to %s file %s" % (self.formatLabel,self.fileName))
       
     if not self.outputFile:
     
@@ -98,7 +98,7 @@ class NmrPipeFormat(DataFormat):
   def createProcScriptFile(self):
   
     if self.verbose == 1:
-      print "Writing processing script to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing processing script to %s file %s" % (self.formatLabel,self.fileName))
       
     if not self.outputFile:
     
@@ -205,7 +205,7 @@ class NmrPipeFormat(DataFormat):
           method = None
 
       if method:
-        print "  Error: Unknown storage method %s" % method
+        print("  Error: Unknown storage method %s" % method)
 
     if dqdData:
       # Bruker DQD: acquisition dim (assumed to be first) set to DQD

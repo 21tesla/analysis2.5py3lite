@@ -78,7 +78,7 @@ class AuremolSequenceFile(AuremolFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s sequence file %s" % (self.format,self.name)
+      print("Reading %s sequence file %s" % (self.format,self.name))
 
     self.sequences.append(AuremolSequence())
 
@@ -86,7 +86,7 @@ class AuremolSequenceFile(AuremolFile):
     codeLen = 3
     seqRead = 0
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -106,7 +106,7 @@ class AuremolSequenceFile(AuremolFile):
         codeLen = returnInt(cols[1])
         
         if codeLen not in (1,3):
-          print "Error: invalid sequence code letter length %d." % codeLen
+          print("Error: invalid sequence code letter length %d." % codeLen)
           return
 
       elif cols[0] == 'NUMBER:':
@@ -144,7 +144,7 @@ class AuremolSequenceFile(AuremolFile):
 
       else:
 
-        print "Warning: unknown keyword %s!" % cols[0]
+        print("Warning: unknown keyword %s!" % cols[0])
 
       line = fin.readline()
 
@@ -153,7 +153,7 @@ class AuremolSequenceFile(AuremolFile):
   def readFromCoordinates(self,coordinateFile, verbose = 0):
   
     if verbose == 1:
-      print "Extracting %s sequence from coordinate file %s" % (self.format,coordinateFile.name)
+      print("Extracting %s sequence from coordinate file %s" % (self.format,coordinateFile.name))
 
     seqCode = ""
     seqInsertCode = defaultSeqInsertCode
@@ -193,10 +193,10 @@ class AuremolSequenceFile(AuremolFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s sequence file %s" % self.name
+      print("Writing %s sequence file %s" % self.name)
 
     if len(self.sequences) > 1:
-      print "Warning: multiple sequences - writing to same file."        
+      print("Warning: multiple sequences - writing to same file.")
 
     fout = open(self.name,'w')
 
@@ -255,7 +255,7 @@ if __name__ == "__main__":
     for seq in sequenceFile.sequences:
       for seqel in seq.elements:
         if hasattr(seqel,'code3Letter'):
-          print seqel.seqCode, seqel.code3Letter
+          print(seqel.seqCode, seqel.code3Letter)
         else:
-          print seqel.seqCode, seqel.code1Letter
+          print(seqel.seqCode, seqel.code1Letter)
 

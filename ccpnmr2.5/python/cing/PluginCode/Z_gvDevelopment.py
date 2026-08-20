@@ -393,7 +393,7 @@ class gvProcheck:
 
         """
         path = os.path.join( self.rootPath, sprintf('%s.sum', self.molecule.name) )
-        fp = open( path, 'r' )
+        fp = open( path )
         if not fp:
             nTerror('gvProcheck.parseResult: %s not found', path)
         else:
@@ -742,10 +742,10 @@ Development of a Software Pipeline. Accepted by Proteins (2004).
 #
 #  return validObjs
 
-VALID_VALUE_TYPE_ATTRS = {type(0.0): 'floatValue',
-                          type(1): 'intValue',
-                          type('a'): 'textValue',
-                          type(True): 'booleanValue'}
+VALID_VALUE_TYPE_ATTRS = {float: 'floatValue',
+                          int: 'intValue',
+                          str: 'textValue',
+                          bool: 'booleanValue'}
 
 
 # # # # # # #  C I N G  E X A M P L E  # # # # # # #

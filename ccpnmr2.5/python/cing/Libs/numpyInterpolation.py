@@ -101,10 +101,10 @@ def interpn_check_data(z, targetcoords, bincoords):
     dim = z.ndim
     if bincoords:
         if len(bincoords) != dim:
-            raise ValueError, 'bincoords shape mismatch (A).'
+            raise ValueError('bincoords shape mismatch (A).')
         for i in range(dim):
             if prod(bincoords[i].shape) != z.shape[i]:
-                raise ValueError, 'bincoords shape mismatch (B).'
+                raise ValueError('bincoords shape mismatch (B).')
 
         coords = [ array_coordinates(targetcoords[i], bincoords[i].ravel()) for i in range(dim) ]
     else:

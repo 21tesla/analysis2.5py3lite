@@ -80,10 +80,10 @@ class AquaDistanceConstraintFile(AquaGenericFile):
 
     if verbose == 1:
       
-      print "Reading %s distance constraint list %s" % (self.format,self.name)
+      print("Reading %s distance constraint list %s" % (self.format,self.name))
 
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     self.chainCode = self.defaultMolCode
  
@@ -165,12 +165,12 @@ class AquaDistanceConstraintFile(AquaGenericFile):
         constraint.setLowerDistance(distance)
         
       else:
-        print "  Error: no distance found in %s format distance constraint file!" % self.format
+        print("  Error: no distance found in %s format distance constraint file!" % self.format)
 
       line = fin.readline()
       
     if numConstraints != listedNumConstraints:
-      print "  Error: number of constraints read (%d) does not match number of constraints listed (%d)" % (numConstraints,listedNumConstraints)
+      print("  Error: number of constraints read (%d) does not match number of constraints listed (%d)" % (numConstraints,listedNumConstraints))
 
     fin.close()
     
@@ -178,7 +178,7 @@ class AquaDistanceConstraintFile(AquaGenericFile):
     
     if verbose == 1:
     
-      print "Writing %s distance constraint list %s" % (self.format,self.name)
+      print("Writing %s distance constraint list %s" % (self.format,self.name))
         
     #
     # Output format is (example following):
@@ -236,14 +236,14 @@ class AquaDistanceConstraintFile(AquaGenericFile):
 
         if len(constraint.items) > 1:
 
-          print "  Warning: AQUA can't handle ambiguous restraints - left out items:"
+          print("  Warning: AQUA can't handle ambiguous restraints - left out items:")
 
           for i in range(1,len(constraint.items)):
-            print "    ",i,
+            print("    ",i,)
             for j in  range(0,2):
               member = constraint.items[i].members[j]
               print ("%3d %-4s %-5s " % (member.seqCode,member.resLabel,member.atomName)),
-            print
+            print()
 
     fout.close()
 

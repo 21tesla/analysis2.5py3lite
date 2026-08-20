@@ -76,9 +76,9 @@ class Protein:
     self.xmlFile = xml
     
     try:
-      fopen = open(xml,'r')
+      fopen = open(xml)
     except:
-      print 'Error: Cannot open input xml file %s.' % xml
+      print('Error: Cannot open input xml file %s.' % xml)
       #sys.exit(0)
       
     lines = fopen.readlines()
@@ -92,7 +92,7 @@ class Protein:
         i, self.res0 = self.getString(i, lines, '<res_0>', '</res_0>')
         self.res0 = int(self.res0)
         if (self.res0 < 0):
-          print 'Error: Res0 cannot be negative. Please check your chemical shift file.'
+          print('Error: Res0 cannot be negative. Please check your chemical shift file.')
           #sys.exit(0)
       elif (line.find('<chain>') != -1):
         i, self.chain = self.getString(i, lines, '<chain>', '</chain>')

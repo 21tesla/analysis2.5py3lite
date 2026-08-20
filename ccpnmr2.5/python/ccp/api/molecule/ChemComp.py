@@ -58,7 +58,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -2102,7 +2102,7 @@ ChemAtom(Set) involved.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.AtomSysName.__init__"
+        print("ERROR in ccp.molecule.ChemComp.AtomSysName.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2145,10 +2145,10 @@ ChemAtom(Set) involved.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3241,7 +3241,7 @@ class ChemAngle(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemAngle.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemAngle.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3279,10 +3279,10 @@ class ChemAngle(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -4008,7 +4008,7 @@ ChemCompVars.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemAtomSet.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemAtomSet.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -4051,10 +4051,10 @@ ChemCompVars.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6078,7 +6078,7 @@ class ChemBond(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemBond.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemBond.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6116,10 +6116,10 @@ class ChemBond(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -10791,7 +10791,7 @@ for all ChemCompVars, others have different names for different sets.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemCompSysName.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemCompSysName.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -10826,10 +10826,10 @@ for all ChemCompVars, others have different names for different sets.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12041,7 +12041,7 @@ constraints are placed on ChemCompVar and LinkEnd.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemCompVar.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemCompVar.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -12084,10 +12084,10 @@ constraints are placed on ChemCompVar and LinkEnd.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -12933,7 +12933,7 @@ constraints are placed on ChemCompVar and LinkEnd.
           (tag, text) = desc.split(':', 1)
         except ValueError:
           # no colon in descriptor
-          print("Malformed descriptor %s: %s does not contain ':'" % (value, `desc`))
+          print("Malformed descriptor %s: %s does not contain ':'" % (value, str(desc)))
           isValid = False
           break
         
@@ -12958,20 +12958,20 @@ constraints are placed on ChemCompVar and LinkEnd.
         ii = validTags.get(tag)
         if ii is None:
           # tag validity
-          print("Malformed descriptor %s: %s is not a valid tag" % (value, `tag`))
+          print("Malformed descriptor %s: %s is not a valid tag" % (value, str(tag)))
           isValid = False
           break
           
         elif ii < tagIndex:
           # tag order
-          print("Malformed descriptor %s: tag %s appears out of sequence" % (value, `tag`))
+          print("Malformed descriptor %s: tag %s appears out of sequence" % (value, str(tag)))
           isValid = False
           break
           
         elif ii == tagIndex:
           if subNo <= lastSubNo:
             # tags with subNo not presented in order
-            print("Malformed descriptor %s: %s is out of order" % (value, `desc`))
+            print("Malformed descriptor %s: %s is out of order" % (value, str(desc)))
             isValid = False
             break
             
@@ -13092,7 +13092,7 @@ constraints are placed on ChemCompVar and LinkEnd.
         
       else:
         isValid = False
-        print "Malformed linking %s - does not start with 'link:'" % value
+        print("Malformed linking %s - does not start with 'link:'" % value)
     if (not (isValid)):
       raise ApiError("""%s.checkValid: linking:
        linking constraint linking_format_rule violated by value""" % self.qualifiedName
@@ -14796,7 +14796,7 @@ constraints are placed on ChemCompVar and LinkEnd.
                 (tag, text) = desc.split(':', 1)
               except ValueError:
                 # no colon in descriptor
-                print("Malformed descriptor %s: %s does not contain ':'" % (value, `desc`))
+                print("Malformed descriptor %s: %s does not contain ':'" % (value, str(desc)))
                 isValid = False
                 break
               
@@ -14821,20 +14821,20 @@ constraints are placed on ChemCompVar and LinkEnd.
               ii = validTags.get(tag)
               if ii is None:
                 # tag validity
-                print("Malformed descriptor %s: %s is not a valid tag" % (value, `tag`))
+                print("Malformed descriptor %s: %s is not a valid tag" % (value, str(tag)))
                 isValid = False
                 break
                 
               elif ii < tagIndex:
                 # tag order
-                print("Malformed descriptor %s: tag %s appears out of sequence" % (value, `tag`))
+                print("Malformed descriptor %s: tag %s appears out of sequence" % (value, str(tag)))
                 isValid = False
                 break
                 
               elif ii == tagIndex:
                 if subNo <= lastSubNo:
                   # tags with subNo not presented in order
-                  print("Malformed descriptor %s: %s is out of order" % (value, `desc`))
+                  print("Malformed descriptor %s: %s is out of order" % (value, str(desc)))
                   isValid = False
                   break
                   
@@ -15293,7 +15293,7 @@ constraints are placed on ChemCompVar and LinkEnd.
               
             else:
               isValid = False
-              print "Malformed linking %s - does not start with 'link:'" % value
+              print("Malformed linking %s - does not start with 'link:'" % value)
           if (not (isValid)):
             raise ApiError("""%s.setLinking:
              linking constraint linking_format_rule violated by value""" % self.qualifiedName
@@ -15976,7 +15976,7 @@ reference.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemTorsion.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemTorsion.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -16014,10 +16014,10 @@ reference.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -17118,7 +17118,7 @@ class ChemTorsionSysName(memops.api.Implementation.DataObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemTorsionSysName.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemTorsionSysName.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -17153,10 +17153,10 @@ class ChemTorsionSysName(memops.api.Implementation.DataObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -17870,7 +17870,7 @@ created and linked to the correct AbstractChemAtoms.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.LinkEnd.__init__"
+        print("ERROR in ccp.molecule.ChemComp.LinkEnd.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -17905,10 +17905,10 @@ created and linked to the correct AbstractChemAtoms.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -19277,7 +19277,7 @@ given explicitly
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.NamingSystem.__init__"
+        print("ERROR in ccp.molecule.ChemComp.NamingSystem.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -19312,10 +19312,10 @@ given explicitly
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -21557,7 +21557,7 @@ and their order in the link define the stereochemistry of the atoms.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.Stereochemistry.__init__"
+        print("ERROR in ccp.molecule.ChemComp.Stereochemistry.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -21603,10 +21603,10 @@ and their order in the link define the stereochemistry of the atoms.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -22970,7 +22970,7 @@ definition of LinkEnds.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.LinkAtom.__init__"
+        print("ERROR in ccp.molecule.ChemComp.LinkAtom.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -23013,10 +23013,10 @@ definition of LinkEnds.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -24109,7 +24109,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.ChemAtom.__init__"
+        print("ERROR in ccp.molecule.ChemComp.ChemAtom.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -24152,10 +24152,10 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -26152,7 +26152,7 @@ from one.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.NonStdChemComp.__init__"
+        print("ERROR in ccp.molecule.ChemComp.NonStdChemComp.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -26219,10 +26219,10 @@ from one.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -27984,7 +27984,7 @@ four standrad DNA or RNA bases
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.molecule.ChemComp.StdChemComp.__init__"
+        print("ERROR in ccp.molecule.ChemComp.StdChemComp.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -28051,10 +28051,10 @@ four standrad DNA or RNA bases
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

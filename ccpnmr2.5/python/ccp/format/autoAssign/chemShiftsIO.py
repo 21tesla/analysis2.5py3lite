@@ -79,9 +79,9 @@ class AutoAssignChemShiftFile(AutoAssignGenericFile):
   def read(self, verbose = 0):
 
     if verbose == 1:
-      print "Reading %s chemical shift list %s" % (self.format,self.name)
+      print("Reading %s chemical shift list %s" % (self.format,self.name))
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     
     atomCols = []
 
@@ -174,7 +174,7 @@ class AutoAssignChemShiftFile(AutoAssignGenericFile):
 
   def write(self,verbose = 0):
     
-    print "Not relevant"
+    print("Not relevant")
 
 class AutoAssignChemShift:
 

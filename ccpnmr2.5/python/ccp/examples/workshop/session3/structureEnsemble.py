@@ -22,12 +22,12 @@ def main(root):
 
   # print some information out
   chain = molSystem.findFirstChain(code='A')
-  print 'chain empiricalFormula:', chain.empiricalFormula
-  print 'chain formalCharge:', chain.formalCharge
-  print 'chain molecularMass:', chain.molecularMass
-  print 'molSystem molecularMass:', molSystem.molecularMass
+  print('chain empiricalFormula:', chain.empiricalFormula)
+  print('chain formalCharge:', chain.formalCharge)
+  print('chain molecularMass:', chain.molecularMass)
+  print('molSystem molecularMass:', molSystem.molecularMass)
  
-  print 'sequence:', [residue.ccpCode for residue in chain.sortedResidues()]
+  print('sequence:', [residue.ccpCode for residue in chain.sortedResidues()])
 
   # create StructureEnsemble
   structureEnsemble = root.newStructureEnsemble(ensembleId=23, molSystem=molSystem)

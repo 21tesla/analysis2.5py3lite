@@ -81,10 +81,10 @@ class XEasyPeakFile(XEasyGenericFile):
   
     translateIntMethods = [("d","Denk integration"),
                            ("r","Rectangular integration"),
-	       ("e","Elliptical integration"),
-	       ("m","Maximum integration"),
-	       ("a","Automatic integration"),
-	       ("-","Not integrated")]
+           ("e","Elliptical integration"),
+           ("m","Maximum integration"),
+           ("a","Automatic integration"),
+           ("-","Not integrated")]
     
     if source == 'ccpn':
       for (code,methodName) in translateIntMethods:
@@ -96,10 +96,10 @@ class XEasyPeakFile(XEasyGenericFile):
       for (code,methodName) in translateIntMethods:
         if method == code:
           return methodName
-      print "Unknown xeasy integration code %s" % method
+      print("Unknown xeasy integration code %s" % method)
 
     else:
-      print "Unknown source for xeasy integration method translation %s" % source
+      print("Unknown source for xeasy integration method translation %s" % source)
 
     return None
     
@@ -118,13 +118,13 @@ class XEasyPeakFile(XEasyGenericFile):
       addText += ' with assignments as text strings'
 
     if verbose == 1:
-      print "Reading %s peak list %s%s." % (self.format,self.name,addText)
+      print("Reading %s peak list %s%s." % (self.format,self.name,addText))
       
     #
     # Now read file..
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Try to read number of dimensions on first line (default XEASY format)
     line = fin.readline()
@@ -137,10 +137,10 @@ class XEasyPeakFile(XEasyGenericFile):
       if line[0] == '#':
         dimCodes = line[1:].strip()
         n = len(dimCodes)
-        print "  Warning: irregular format, extracting dimensions from %s string on first first line." % dimCodes
+        print("  Warning: irregular format, extracting dimensions from %s string on first first line." % dimCodes)
     
     if not n:
-      print "  Error: number of dimensions could not be determined, aborting file read."
+      print("  Error: number of dimensions could not be determined, aborting file read.")
       return False        
     
     (path,specName) = splitPath(self.name)
@@ -232,7 +232,7 @@ class XEasyPeakFile(XEasyGenericFile):
   def write(self, verbose=0, cyanaFormat=False, cyanaTextAssignments=False):
 
     if verbose == 1:
-      print "Writing xeasy peak list %s" % self.name
+      print("Writing xeasy peak list %s" % self.name)
 
     fout = open(self.name,'w')
 

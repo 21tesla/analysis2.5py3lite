@@ -151,7 +151,7 @@ class RegisterPopup(BasePopup):
         return
       try:
         setattr(analysisProfile, attr, value)
-      except Exception, e:
+      except Exception as e:
         showError('Attribute setting', 'Error setting %s: %s' % (attr[4:], e), parent=self)
         return
     analysisProfile.save()
@@ -159,6 +159,6 @@ class RegisterPopup(BasePopup):
       result = updateRegister(analysisProfile)
       showInfo('Registering', result, parent=self)
       self.close()
-    except Exception, e:
+    except Exception as e:
       showError('Registering', str(e), parent=self)
 

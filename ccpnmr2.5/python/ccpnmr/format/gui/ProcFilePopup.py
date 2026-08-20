@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter, os
+import tkinter, os
 
 from memops.general.Application import createAppData
 from memops.universal.Io import joinPath
@@ -109,22 +109,22 @@ class ProcFilePopup(BasePopup):
                             lambda: self.rawData.findFirstApplicationData(application = self.nmrPipe,keyword = 'conversion script'),
                             lambda x = value: self.setApplData(self.rawData,self.nmrPipe,'conversion script',x),
                             ['autoconv.com'],
-	        'conversion script'],
+            'conversion script'],
                            ['    nmrPipe FIDs\n(inputs to...)',
                             lambda: self.rawData.findFirstApplicationData(application = self.nmrPipe,keyword = 'FID'),
                             lambda x = value: self.setApplData(self.rawData,self.nmrPipe,'FID',x),
                             ['auto.fid','auto%03d.fid'],
-	        'FID'],
+            'FID'],
                            ['Processing script file\n       (outputs to...)',
                             lambda: self.freqData.findFirstApplicationData(application = self.nmrPipe,keyword = 'processing script'),
                             lambda x = value: self.setApplData(self.freqData,self.nmrPipe,'processing script',x),
                             ['autoproc.com'],
-	        'processing script'],
+            'processing script'],
                            ['Processed data',
                             lambda: self.getDataSourceFileName(self.freqData),
                             lambda x = value: self.doDataStoreFileName(self.freqData,x),
                             ['auto.ft','auto%03d.ft'],
-	        'processed data']
+            'processed data']
                           ]
       
     # TODO: can add execute nmrPipe program buttons... see dataNavigator
@@ -147,22 +147,22 @@ class ProcFilePopup(BasePopup):
                             lambda: self.rawData.findFirstApplicationData(application = self.azara,keyword = 'processing parameters'),
                             lambda x = value: self.setApplData(self.rawData,self.azara,'processing parameters',x),
                             ['autoproc.par'],
-	        'processing parameters'],
+            'processing parameters'],
                            ['Processing script file\n (outputs to both...)',
                             lambda: self.freqData.findFirstApplicationData(application = self.azara,keyword = 'processing script'),
                             lambda x = value: self.setApplData(self.freqData,self.azara,'processing script',x),
                             ['autoproc.scr'],
-	        'processing script'],
+            'processing script'],
                            ['Processed data',
                             lambda: self.getDataSourceFileName(self.freqData),
                             lambda x = value: self.doDataStoreFileName(self.freqData,x),
                             ['spectrum.ft'],
-	        'spectrum'],
+            'spectrum'],
                            ['Processed data parameter file\n',
                             lambda: self.freqData.findFirstApplicationData(application = self.azara,keyword = 'spectrum parameters'),
                             lambda x = value: self.setApplData(self.freqData,self.azara,'spectrum parameters',x),
                             ['spectrum.par'],
-	        'spectrum parameters']
+            'spectrum parameters']
                           ]
       
     # TODO: can add execute process program buttons... see dataNavigator
@@ -209,7 +209,7 @@ class ProcFilePopup(BasePopup):
           fileName = defaults[0]
 
       else:
-        if type(getFuncOrValue) == type(""):
+        if type(getFuncOrValue) == str:
           fileName = getFuncOrValue
         else:
           fileName = getFuncOrValue.value

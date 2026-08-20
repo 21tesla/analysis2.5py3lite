@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import re
 
-import Tkinter
+import tkinter
 
 from memops.universal.Util import breakString
 
@@ -153,7 +153,7 @@ class Entry(Tkinter.Entry, Base):
 
     if (text is None):
       s = ''
-    elif (type(text) == type('')):
+    elif (type(text) == str):
       s = text
     elif (self.isArray):
       if (self.valToStr):

@@ -1,4 +1,4 @@
-import Tkinter, os
+import tkinter, os
 
 from memops.gui.Frame import Frame
 from memops.gui.FloatEntry import FloatEntry
@@ -155,7 +155,7 @@ class AuremolFrame(Frame):
       try:
         findAuremolPeaksThreshold(spectrum=self.spectrum, mode=self.peakMode,
                                   useAutoThreshold=0, threshold=threshold, seglevel=segLevel)
-      except Exception, e:
+      except Exception as e:
         showError('pickThreshold', str(e), parent=self)
   
   def pickAdaptive(self):
@@ -165,7 +165,7 @@ class AuremolFrame(Frame):
       try:
         findAuremolPeaksAdaptive(spectrum=self.spectrum, mode=self.peakMode,
                                  number=maxPeaks, seglevel=segLevel)
-      except Exception, e:
+      except Exception as e:
         showError('pickAdaptive', str(e), parent=self)
       
   def getSpectra(self):

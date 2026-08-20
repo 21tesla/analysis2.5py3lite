@@ -158,7 +158,7 @@ class ConcoordFormat(DataFormat):
               pseudoCorrection += chemAtomSet.distCorr
                 
             else:
-              print "  Error: no chemAtomSet with name %s for ccpCode %s." % (searchAtomName,resLabel)
+              print("  Error: no chemAtomSet with name %s for ccpCode %s." % (searchAtomName,resLabel))
           
         self.rawConstraint.upperPseudoDist = self.constraint.upperLimit + pseudoCorrection
         
@@ -237,10 +237,10 @@ class ConcoordFormat(DataFormat):
                 if chemAtomSysName:
                   atomNameLists[-1].append(getResName(chainCode,seqCode,chemAtomSysName,seqInsertCode = seqInsertCode))
                 else:
-                  print "  Error: problems with decompressing Concoord name %s - sysNames missing for %s" % (self.resSetNames[i],chemAtomSet.name)
+                  print("  Error: problems with decompressing Concoord name %s - sysNames missing for %s" % (self.resSetNames[i],chemAtomSet.name))
                 
           else:
-            print "  Error: can't decompress Concoord name %s" % self.resSetNames[i]
+            print("  Error: can't decompress Concoord name %s" % self.resSetNames[i])
        
       #
       # If no names use default
@@ -265,7 +265,7 @@ class ConcoordFormat(DataFormat):
       (chainCode0,seqCode0,spinSystemId0,seqInsertCode0,atomName0) = getNameInfo(resSetName0)
 
       if atomName0 == allResidueAtoms_kw:
-        print "  Error: not handling residue level constraints for %s." % self.format
+        print("  Error: not handling residue level constraints for %s." % self.format)
         continue
       
       for resSetName1 in atomNameLists[1]:
@@ -277,7 +277,7 @@ class ConcoordFormat(DataFormat):
         (chainCode1,seqCode1,spinSystemId1,seqInsertCode1,atomName1) = getNameInfo(resSetName1)
          
         if atomName1 == allResidueAtoms_kw:
-          print "  Error: not handling residue level constraints for %s." % self.format
+          print("  Error: not handling residue level constraints for %s." % self.format)
           continue
 
         #

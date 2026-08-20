@@ -5,7 +5,7 @@
 import os
 
 # added jmci; do we need this??
-import Tkinter
+import tkinter
 #from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -163,8 +163,8 @@ class ProtocolFrame(Frame):
     tree = node.tree
     par = node.object
 
-    print 'opening node "', par, '"'
-    print 'got series "', self.openedLinks[par], '"'
+    print('opening node "', par, '"')
+    print('got series "', self.openedLinks[par], '"')
 
     if len(self.openedLinks[par]) > 0:
 

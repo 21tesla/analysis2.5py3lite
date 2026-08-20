@@ -105,7 +105,7 @@ if __name__ == '__main__':
   def callback(text):
     global popup_select
     if (popup_select):
-      print 'callback: selected =', popup_select.getSelected()
+      print('callback: selected =', popup_select.getSelected())
 
   def toggle():
     global popup_select

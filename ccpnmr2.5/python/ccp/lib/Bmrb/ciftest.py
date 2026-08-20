@@ -12,32 +12,32 @@ from sans import quote
 
 class Test( ContentHandler, ErrorHandler ) :
     def comment( self, line, text ) :
-        print "Comment:", text, "in line", line
+        print("Comment:", text, "in line", line)
         return False
     def startData( self, line, name ) :
-        print "Start data block", name, "in line", line
+        print("Start data block", name, "in line", line)
         return False
     def endData( self, line, name ) :
-        print "End data block", name, "in line", line
+        print("End data block", name, "in line", line)
     def startSaveFrame( self, line, name ) :
-        print "Start saveframe", name, "in line", line
+        print("Start saveframe", name, "in line", line)
         return False
     def endSaveFrame( self, line, name ) :
-        print "End saveframe", name, "in line", line
+        print("End saveframe", name, "in line", line)
         return False
     def startLoop( self, line ) :
-        print "Start loop in line", line
+        print("Start loop in line", line)
         return False
     def endLoop( self, line ) :
-        print "End loop in line", line
+        print("End loop in line", line)
         return False
     def data( self, tag, tagline, val, valline, delim, inloop ) :
         if inloop : print "Loop",
         else : print "Free",
-        print "tag/value:", tag, ":", quote( val ), "(", tagline, ":", valline, ") d", delim
+        print("tag/value:", tag, ":", quote( val ), "(", tagline, ":", valline, ") d", delim)
         return False
     def error( self, line, msg ) :
-        print "parse error in line", line, ":", msg
+        print("parse error in line", line, ":", msg)
         return True
 #
 #

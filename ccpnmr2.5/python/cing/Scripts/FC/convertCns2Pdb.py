@@ -35,7 +35,7 @@ from ccpnmr.format.converters.CnsFormat import CnsFormat
 # Get Tkinter for popups
 #
 
-import Tkinter
+import tkinter
 
 if __name__ == '__main__':
 

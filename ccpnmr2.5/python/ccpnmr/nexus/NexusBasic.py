@@ -640,7 +640,7 @@ def linkSpinSystemInterIntraResonances(spinSystem, activeLists, tolerances=None)
         if not shift:
           continue
         ppm2 = shift.value
-	
+    
       delta = abs(ppm-ppm2)
       prevDelta = closestDict.get(peakDim)
       if (prevDelta is None) or (delta < prevDelta):

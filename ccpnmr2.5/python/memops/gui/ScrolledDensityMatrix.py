@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter, re
+import tkinter, re
 
 from math import log
 log10 = log(10)
@@ -211,7 +211,7 @@ class ScrolledDensityMatrix(ScrolledCanvas):
     y = self.canvas.canvasy(event.y)
     item = self.canvas.find('closest',x,y)
     if self.canvasDict.get(item) and (self.canvasDict[item][0] == 'box'):
-      print ">", self.canvasDict[item][2], self.canvasDict[item][1]
+      print(">", self.canvasDict[item][2], self.canvasDict[item][1])
   
   def mouseDoubleClick(self, event):
     
@@ -219,7 +219,7 @@ class ScrolledDensityMatrix(ScrolledCanvas):
     y = self.canvas.canvasy(event.y)
     item = self.canvas.find('closest',x,y)
     if self.canvasDict.get(item) and (self.canvasDict[item][0] == 'box'):
-      print ">", self.canvasDict[item][2], self.canvasDict[item][1]
+      print(">", self.canvasDict[item][2], self.canvasDict[item][1])
     
   def draw(self):
    
@@ -333,7 +333,7 @@ class ScrolledDensityMatrix(ScrolledCanvas):
         y += h
     
     dv1   = (maxVal-self.minVal)/20.0
-    order = int(round((log(dv1)/log10)))
+    order = int(round(log(dv1)/log10))
     dv    = round(dv1,-order) + 10**order
     start = (round(maxVal/dv)) * dv
     end   = min(0.0, (round(self.minVal/dv)) * dv)
@@ -587,7 +587,7 @@ class ScrolledDensityMatrix(ScrolledCanvas):
   
   def callback(self):
   
-    print "Callback", self
+    print("Callback", self)
 
   def deleteBox(self,i,j):
   

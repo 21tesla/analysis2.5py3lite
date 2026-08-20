@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath
 
@@ -486,7 +486,7 @@ class GroupChemShiftsPopup(BasePopup):
 
         fout.write(self.groupText[group])
   
-      print "Wrote file %s..." % filePopup.file
+      print("Wrote file %s..." % filePopup.file)
       
   def apply(self):
     

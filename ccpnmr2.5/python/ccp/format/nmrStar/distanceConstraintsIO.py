@@ -294,7 +294,7 @@ class NmrStarDistanceConstraintFile(NmrStarConstraintFile):
           Id = nodeMembersTableTags[tableTagNames['constraintID']][i]
   
           if not findConstraint.has_key(Id):
-            print "  Error in nmrStar file: constraint %s is not defined but is referenced." % Id
+            print("  Error in nmrStar file: constraint %s is not defined but is referenced." % Id)
   
           else:
             treeNodeId = nodeMembersTableTags[tableTagNames['nodeID']][i]
@@ -350,7 +350,7 @@ class NmrStarDistanceConstraintFile(NmrStarConstraintFile):
           Id = distanceTableTags[tableTagNames['constraintID']][i]
   
           if not findConstraint.has_key(Id):
-            print "  Error in nmrStar file: constraint %s is not defined but is referenced." % Id
+            print("  Error in nmrStar file: constraint %s is not defined but is referenced." % Id)
   
           else:
             treeNodeId = distanceTableTags[tableTagNames['nodeID']][i]
@@ -395,7 +395,7 @@ class NmrStarDistanceConstraint(GenericConstraint):
       if treeNodeId == node.Id:
         return node
         
-    print "  TreenodeID %d not found!" % treeNodeId
+    print("  TreenodeID %d not found!" % treeNodeId)
     
     return None
 
@@ -513,23 +513,23 @@ if __name__ == "__main__":
     for constraintFile in nmrStarFile.constraintFiles:
       """
       for comment in constraintFile.comments:
-        print comment
+        print(comment)
     """
 
       for constraint in constraintFile.constraints:
         if constraint.errors:
-          print constraint.errors
+          print(constraint.errors)
         for node in constraint.nodes:
           """
           if hasattr(node,'weight') and node.weight:
-            print node.weight,str(node.weight) # nmrStar 3.0 ONLY!!
+            print(node.weight,str(node.weight) # nmrStar 3.0 ONLY!!)
           """
           if hasattr(node,'target'):
-            print constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound
+            print(constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound)
           mlist = []
           for member in node.members:
             mlist.append([member.Id,member.seqCode,member.atomName])
-          print "   " + str(mlist)
+          print("   " + str(mlist))
           """
     
           """

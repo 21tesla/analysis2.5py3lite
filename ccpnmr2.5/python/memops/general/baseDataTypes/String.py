@@ -55,7 +55,7 @@ software development. Bioinformatics 21, 1678-1684.
 
 # corresponding python type
 try:
-  PythonType = basestring
+  PythonType = str
 except:
   from types import StringType as PythonType
 

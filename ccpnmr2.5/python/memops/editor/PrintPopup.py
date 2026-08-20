@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.MessageReporter import showError
@@ -135,7 +135,7 @@ class PrintPopup(BasePopup):
 
     try:
       self.outputHandler = self.printFrame.getOutputHandler(self.width, self.height)
-    except IOError, e:
+    except (OSError, e):
       showError('IO Error', str(e), parent=self)
       return False
     except:

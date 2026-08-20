@@ -127,7 +127,7 @@ def networkAnchorAssign(peakLists, intensityType='height', strictness=2, thresho
       progressBar.update_idletasks()
       
     else:
-      print 'Get existing NOE network for %s:%s:%d - %d peaks' % info
+      print('Get existing NOE network for %s:%s:%d - %d peaks' % info)
 
     if len(hDims) != 2:
       continue
@@ -195,7 +195,7 @@ def networkAnchorAssign(peakLists, intensityType='height', strictness=2, thresho
     progressBar.update_idletasks()
     
   else:  
-    print 'Getting covalent network - %d resonances' % len(nmrProject.resonances)
+    print('Getting covalent network - %d resonances' % len(nmrProject.resonances))
 
   neighbours = {}
   chemAtomToAtom = {}
@@ -340,7 +340,7 @@ def networkAnchorAssign(peakLists, intensityType='height', strictness=2, thresho
       progressBar.open()
       progressBar.update_idletasks()
     else:
-      print 'Anchoring iteration %d' % iter
+      print('Anchoring iteration %d' % iter)
     
     closeResonancesDict = {}    
     
@@ -438,7 +438,7 @@ def networkAnchorAssign(peakLists, intensityType='height', strictness=2, thresho
                 
         peakIntensity = peak.findFirstPeakIntensity(intensityType=intensityType)
         if not peakIntensity:
-          print 'Peak missing intensity', peak
+          print('Peak missing intensity', peak)
           continue
        
         else:  
@@ -757,12 +757,12 @@ def assignCloseSingleShiftMatches(peakList):
   bondedDims = getBondedDimsDict(spectrum)
 
   info = (experiment.name, spectrum.name, peakList.serial, len(peakList.peaks))
-  print 'Assigning obvious shift matches for %s:%s:%d - %d peaks' %  info
+  print('Assigning obvious shift matches for %s:%s:%d - %d peaks' %  info)
   
   c = 0
   for peak in peakList.peaks:
     if c and (c%100 == 0):
-      print '   %d' % (c,)
+      print('   %d' % (c,))
     c += 1
     
     peakDims = peak.sortedPeakDims()
@@ -833,7 +833,7 @@ def getCloseSingleShiftMatches(peakList, network, covalent,
     progressBar.open()
     progressBar.update_idletasks()
   else:
-    print 'Determining unique shift matches for %s:%s:%d - %d peaks' %  info
+    print('Determining unique shift matches for %s:%s:%d - %d peaks' %  info)
   
   for peak in peakList.peaks:
 

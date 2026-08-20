@@ -192,7 +192,7 @@ class TopShared:
 
       if len(nameMappings) > 1:
       
-        print "  Warning: multiple %s %s nameMappings available - picking first one." % (self.format,namingSystemName)
+        print("  Warning: multiple %s %s nameMappings available - picking first one." % (self.format,namingSystemName))
 
       self.nameMapping = list(nameMappings)[0]
 
@@ -282,7 +282,7 @@ class TopShared:
         chain = self.molSystem.findFirstChain(code = chainCode)
         
         if not chain:
-          print "  Error: forceChainMappings chain code '%s' is not present in molSystem! Aborting..." % chainCode
+          print("  Error: forceChainMappings chain code '%s' is not present in molSystem! Aborting..." % chainCode)
           forceMapping = 0
           break
         
@@ -373,7 +373,7 @@ class TopShared:
         else:
         
           doSet = 0
-          print "  Error invalid chain codes for this molecular system - doing manual selection"
+          print("  Error invalid chain codes for this molecular system - doing manual selection")
           self.formatChainCodeDict = {}
           self.ccpChainDict = {}
           break
@@ -510,7 +510,7 @@ class TopShared:
         if not self.setMappingFromChainMappings:
           self.status = False
         else:
-          print "  Missing mappings for format chains: %s. Continuing because other mappings were set." % str(self.formatChains.keys())
+          print("  Missing mappings for format chains: %s. Continuing because other mappings were set." % str(self.formatChains.keys()))
 
       interaction.destroy()
 

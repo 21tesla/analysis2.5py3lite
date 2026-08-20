@@ -161,11 +161,11 @@ class EditSymmetryPopup(BasePopup):
         self.notify(self.registerNotify)
 
         #Temporary report of parameters
-        print self.molSystem
-        print self.molecules
-        print self.symmetrySet
-        print self.symmetryOp
-        print self.symmetryCode
+        print(self.molSystem)
+        print(self.molecules)
+        print(self.symmetrySet)
+        print(self.symmetryOp)
+        print(self.symmetryCode)
 
     def getMolSystem(self, partner):
 

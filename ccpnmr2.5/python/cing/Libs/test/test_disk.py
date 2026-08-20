@@ -19,11 +19,11 @@ class AllChecks(TestCase):
         for i in range(10):
             f.write("Line %d\n" % i)
         f.close()
-        f2 = open(doneFileName,"r")
+        f2 = open(doneFileName)
         lastLineList = tail(f2,1)
         lastLine = lastLineList[0]
-        self.assertEquals( "Line 9", lastLine )
-        self.assertEquals( "['Line 9']", repr(lastLineList) ) # not necessary a test.
+        self.assertEqual( "Line 9", lastLine )
+        self.assertEqual( "['Line 9']", repr(lastLineList) ) # not necessary a test.
 
     def testGlobLast(self):
         globPattern = os.path.join(cingRoot, '*.txt')
@@ -31,8 +31,8 @@ class AllChecks(TestCase):
         nTdebug('lastFile: %s' % lastFile)
         d, _basename, extension = nTpath(lastFile)
         self.assertTrue(lastFile)
-        self.assertEquals(d, cingRoot)
-        self.assertEquals(extension, '.txt')
+        self.assertEqual(d, cingRoot)
+        self.assertEqual(extension, '.txt')
 
         globPattern = os.path.join(cingRoot, '*.xyz')
         lastFile = globLast(globPattern)

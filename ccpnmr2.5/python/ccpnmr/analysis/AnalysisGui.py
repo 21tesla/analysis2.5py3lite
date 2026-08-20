@@ -43,7 +43,7 @@ import os
 import sys
 import traceback
 
-import Tkinter
+import tkinter
 
 # IsWindowsOS code - (not imported yet due to dependencies
 # 1. Win32 binary over-writes sys.path and needs re-setting
@@ -62,9 +62,9 @@ except ImportError:
   #print os.environ['PYTHONPATH']
   #print
 
-  print 'Error, cannot import core CCPN Python modules:'
-  print 'Maybe your PYTHONPATH environment variable is not set or'
-  print 'does not contain the current CCPN installation directory.'
+  print('Error, cannot import core CCPN Python modules:')
+  print('Maybe your PYTHONPATH environment variable is not set or')
+  print('does not contain the current CCPN installation directory.')
   raise
 
 from memops.general.Implementation import ApiError
@@ -120,7 +120,7 @@ def main(projectDir=None, cache_size=64, glDirect=None):
   if projectDir:
     try:
       project = loadProject(top, path=projectDir)
-    except ApiError, e:
+    except ApiError as e:
       showError('Loading project', e.error_msg)
       raise
 
@@ -139,8 +139,8 @@ def main(projectDir=None, cache_size=64, glDirect=None):
 
 def usage():
 
-  print 'Allowed arguments:'
-  print '  [ -m memory_size_in_megabytes ] [ -glDirect gl_rendering_direct (0 or 1) ] [ project_directory ]'
+  print('Allowed arguments:')
+  print('  [ -m memory_size_in_megabytes ] [ -glDirect gl_rendering_direct (0 or 1) ] [ project_directory ]')
   sys.exit()
 
 def getOptArg(argv, flag, defaultValue, conversionFunc = None, validArg = ''):
@@ -149,13 +149,13 @@ def getOptArg(argv, flag, defaultValue, conversionFunc = None, validArg = ''):
   k = [i for i in range(n) if argv[i] == flag]
 
   if len(k) > 1:
-    print 'Multiple occurrences of flag "%s"' % flag
+    print('Multiple occurrences of flag "%s"' % flag)
     usage()
 
   if k:
     k = k[0]
     if k == (n-1):
-      print 'Flag "%s" requires argument' % flag
+      print('Flag "%s" requires argument' % flag)
       usage()
 
     value = argv[k+1]
@@ -165,7 +165,7 @@ def getOptArg(argv, flag, defaultValue, conversionFunc = None, validArg = ''):
       except Exception:
         if validArg:
           validArg = validArg + ' '
-        print 'Flag "%s" requires valid %sargument' % (flag, validArg)
+        print('Flag "%s" requires valid %sargument' % (flag, validArg))
         usage()
 
     del argv[k:k+2]
@@ -214,12 +214,12 @@ Continuing...
     if os.path.isfile(startupFile):
       try:
         execfile(startupFile)
-      except Exception, e:
-        print startupExecError % (traceback.format_exc(), startupFile)
-        print e
+      except Exception as e:
+        print(startupExecError % (traceback.format_exc(), startupFile))
+        print(e)
         sys.exit()
     else:
-      print missingStartupFileError % startupFile
+      print(missingStartupFileError % startupFile)
 
   argv = sys.argv[:]
 
@@ -234,15 +234,15 @@ Continuing...
       s = 's'
     else:
       s = ''
-    print 'Have extra arg%s: "%s"' % (s, ', '.join(argv[1:-1]))
+    print('Have extra arg%s: "%s"' % (s, ', '.join(argv[1:-1])))
     usage()
   elif (n == 2):
     projectDir = argv[1]
     if not os.path.isdir(projectDir):
-      print 'Path "%s" does not exist' % projectDir
+      print('Path "%s" does not exist' % projectDir)
       usage()
     elif not os.path.isdir(projectDir):
-      print 'Path "%s" is not a directory' % projectDir
+      print('Path "%s" is not a directory' % projectDir)
       usage()
 
   try:

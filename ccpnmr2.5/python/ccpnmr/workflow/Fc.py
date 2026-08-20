@@ -69,7 +69,7 @@ class FcWorkFlow(WorkFlow):
   
   def fcImportAllData(self):
 
-    print "Please define an importProjectData function in a subclass component of FcWorkFlow!"
+    print("Please define an importProjectData function in a subclass component of FcWorkFlow!")
     
   def fcImportFile(self,*args,**keywds):
   
@@ -88,8 +88,8 @@ class FcWorkFlow(WorkFlow):
   
     formatNameSuggestions = self.formatConversion.determineFormatNamesForFile(informationType,filePath)
 
-    print "Format suggestions for file %s containing %s information:" % (filePath,informationType)
-    print formatNameSuggestions
+    print("Format suggestions for file %s containing %s information:" % (filePath,informationType))
+    print(formatNameSuggestions)
     # TODO this behaviour should probably be settable
     exit(-1)
     
@@ -134,13 +134,13 @@ class FcWorkFlow(WorkFlow):
     resonances = self.formatConversion.getFormatClass(importFormatName).newResonances
     
     if not resonances:
-      print "\n  Warning: No new resonances created during this import, skipping resonance connecting.\n"
+      print("\n  Warning: No new resonances created during this import, skipping resonance connecting.\n")
       return None
 
     sequenceComparison.getFormatFileInformation(resonances,importFormatName)
 
     if not sequenceComparison.formatFileResidueDict.keys():
-      print "\n  Warning: No format chain information available, skipping resonance connecting.\n"
+      print("\n  Warning: No format chain information available, skipping resonance connecting.\n")
       return None
 
     sequenceComparison.createFormatFileChainInformation()
@@ -152,11 +152,11 @@ class FcWorkFlow(WorkFlow):
     if not self.forceChainMappings:
       self.forceChainMappings = sequenceComparison.compareFormatFileToCcpnInfo()
 
-      print "\n*** Chain mappings set by alignment information ***\n"
+      print("\n*** Chain mappings set by alignment information ***\n")
     else:
-      print "\n*** Chain mappings defined by user ***\n"
+      print("\n*** Chain mappings defined by user ***\n")
 
-    print self.forceChainMappings
+    print(self.forceChainMappings)
 
     #
     # Reset list of resonances for FormatClass!

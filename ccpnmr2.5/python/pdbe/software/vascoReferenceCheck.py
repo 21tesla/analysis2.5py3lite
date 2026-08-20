@@ -51,7 +51,7 @@ class VascoReferenceCheck:
     
   def checkProject(self,ccpnProject=None,ccpnDir=None,structureEnsembleId=None,shiftListSerial=None):
 
-    print drawBox(" VASCO: calculating rereferencing...")
+    print(drawBox(" VASCO: calculating rereferencing..."))
 
     #
     # Get info from CCPN project
@@ -177,7 +177,7 @@ class VascoReferenceCheck:
 
     from pdbe.analysis.external.stride.Util import StrideInfo #@UnresolvedImport
 
-    print "Calculating STRIDE secondary structure info..."
+    print("Calculating STRIDE secondary structure info...")
     strideInfo = StrideInfo(self.tmpFilePath)
     self.ssInfo = strideInfo.getSsInfo()
     #print self.ssInfo
@@ -186,7 +186,7 @@ class VascoReferenceCheck:
 
     from pdbe.adatah.WhatIf import getWhatIfInfo #@UnresolvedImport
 
-    print "Fetching WHATIF data..."
+    print("Fetching WHATIF data...")
     self.whatIfInfo = getWhatIfInfo(None,inputFile=self.tmpFilePath,outputWhatIfFile="tmp/%s.pp" % self.tmpFileName)
     #print self.whatIfInfo
     
@@ -234,7 +234,7 @@ class VascoReferenceCheck:
           #
 
           if curResidue != residue:
-            print "  ERROR two residues to same resonance!"
+            print("  ERROR two residues to same resonance!")
             atomNameList = []
             break
 
@@ -278,7 +278,7 @@ class VascoReferenceCheck:
 
       chain = self.ccpnProject.currentMolSystem.findFirstChain(code=chainCode)
       if not chain:
-        print "  No info for chain %s" % (chainCode)
+        print("  No info for chain %s" % (chainCode))
         continue
 
       molType = 'protein'
@@ -295,12 +295,12 @@ class VascoReferenceCheck:
         if self.ssInfo.has_key(chainCode) and self.ssInfo[chainCode].has_key(seqKey):
           ssCode = self.ssInfo[chainCode][seqKey]
         else:
-           print "  No secondary structure info for chain %s, residue %s" % (chainCode,str(seqKey))
+           print("  No secondary structure info for chain %s, residue %s" % (chainCode,str(seqKey)))
 
         residue = self.findResidue(chain,seqKey)
 
         if not residue:
-          print "  No info for chain %s, residue %s" % (chainCode,str(seqKey))
+          print("  No info for chain %s, residue %s" % (chainCode,str(seqKey)))
           continue
 
         ccpCode = residue.ccpCode
@@ -351,7 +351,7 @@ class VascoReferenceCheck:
                 try:           
                   heavyAtomNameKey = protonToHeavyAtomDict[ccpCode][atomSetKey]
                 except:
-                  print protonToHeavyAtomDict[ccpCode].keys()
+                  print(protonToHeavyAtomDict[ccpCode].keys())
                   raise
             else:
               heavyAtomNameKey = atomNameTuple[0]
@@ -457,7 +457,7 @@ class VascoReferenceCheck:
         exclude_outliers = 4.
         n_iterations = 1
 
-        print 'Reading raw data...'
+        print('Reading raw data...')
         full_set = getPickledDict(os.path.join("../originalData/results/",database))
 
         for entry in full_set.keys():
@@ -466,7 +466,7 @@ class VascoReferenceCheck:
           else:
             del(full_set[entry])
 
-        print 'Running estimation for full set...'     
+        print('Running estimation for full set...')
         full_ref, full_stats, full_bounds, full_processed = run_estimation(full_set, n=1, n_points=n_points,
                                                                                ref_cutoff=ref_cutoff,
                                                                                atom_type=atom_type,
@@ -523,8 +523,8 @@ class VascoReferenceCheck:
     atomKeys.sort()
     
     for atomKey in atomKeys:
-      print atomKey,
-      print self.rerefInfo[atomKey]
+      print(atomKey,)
+      print(self.rerefInfo[atomKey])
       
 if __name__ == '__main__':
 

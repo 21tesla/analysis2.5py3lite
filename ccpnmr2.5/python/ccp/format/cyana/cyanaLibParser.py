@@ -97,7 +97,7 @@ class CyanaLibrary:
   
   def read(self,file):
   
-    fin = open(file, 'rU')
+    fin = open(file)
     
     name = None
   
@@ -172,7 +172,7 @@ class CyanaLibrary:
               
             if not atomFound:
               
-              print "  No match for atom serial %s, angle %s (%s)" % (atomSerial,angle.name,cyanaRefInfo.name)
+              print("  No match for atom serial %s, angle %s (%s)" % (atomSerial,angle.name,cyanaRefInfo.name))
 
   def setAtomPosition(self):
   
@@ -235,9 +235,9 @@ class CyanaLibrary:
       resNames = atomOrderDict.keys()
       resNames.sort()
       for resName in resNames:
-        print resName
-        print "   ",atomOrderDict[resName]
-        print
+        print(resName)
+        print("   ",atomOrderDict[resName])
+        print()
         
     return atomOrderDict
 
@@ -245,26 +245,26 @@ class CyanaLibrary:
   
     for refInfo in self.refInfo.keys():
     
-      print refInfo
+      print(refInfo)
     
       for cyanaRefInfo in self.refInfo[refInfo]:
       
-        print "  ",cyanaRefInfo.name
+        print("  ",cyanaRefInfo.name)
       
         if cyanaRefInfo.angles:
           
-          print
-          print "    Angles:"
+          print()
+          print("    Angles:")
 
           for angle in cyanaRefInfo.angles:
             
-            print "      ",angle.name,angle.atomNames
+            print("      ",angle.name,angle.atomNames)
         
       
         if cyanaRefInfo.atoms:
           
-          print
-          print "    Atoms:"
+          print()
+          print("    Atoms:")
           
           text =  "      "
 
@@ -272,9 +272,9 @@ class CyanaLibrary:
             
             text += "%s (%s)," % (atom.name,atom.location)
             
-          print text[:-1]
+          print(text[:-1])
 
-      print
+      print()
   
   def findResLabel(self,resLabel):
     

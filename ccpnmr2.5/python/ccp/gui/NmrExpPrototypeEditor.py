@@ -322,7 +322,7 @@ class NmrExpPrototypePopup(BasePopup):
   Fogh RH, Vranken WF, Boucher W, Stevens TJ, Laue ED.
   J Biomol NMR. 2006 Nov;36(3):147-55* (link_)
 
-  .. _`link`:  http://www.ncbi.nlm.nih.gov/pubmed/17031528
+  .. _str(link):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
 
   """
 
@@ -862,7 +862,7 @@ class NmrExpPrototypePopup(BasePopup):
         self.nmrExpPrototype.setDetails(text)
       else:
         self.nmrExpPrototype.setDetails(None)
-    print self.nmrExpPrototype.details
+    print(self.nmrExpPrototype.details)
  
   def getDetails(self, nmrExpPrototype):
 

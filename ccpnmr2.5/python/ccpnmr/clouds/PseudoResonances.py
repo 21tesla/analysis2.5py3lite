@@ -55,7 +55,7 @@ class PseudoMolSystem:
   def mergePseudoResons(self,res1,res2):
 
     if (res1.parent is not self) or (res2.parent is not self):
-      print "PseudoResonance not in PseudoMolSystem"
+      print("PseudoResonance not in PseudoMolSystem")
       return
 
     for peakDim in res2.peakDims:
@@ -79,7 +79,7 @@ class PseudoMolSystem:
   def mergePseudoSpinSysts(self,ss1,ss2,name):
 
     if (ss1.parent is not self) or (ss2.parent is not self):
-      print "PseudoSpinSyst not in PseudoMolSystem"
+      print("PseudoSpinSyst not in PseudoMolSystem")
       return
 
     for pseudoReson in ss2.pseudoResons:
@@ -177,7 +177,7 @@ class PseudoReson:
   def setPseudoSpinSyst(self,pseudoSpinSyst=None):
   
     if pseudoSpinSyst and ( pseudoSpinSyst.parent is not self.parent):
-      print "Pseudo resonance has different parent to Pseudo spin system in PseudoReson.setPseudoSpinSyst"
+      print("Pseudo resonance has different parent to Pseudo spin system in PseudoReson.setPseudoSpinSyst")
       return
 
     if self.pseudoSpinSyst is pseudoSpinSyst:

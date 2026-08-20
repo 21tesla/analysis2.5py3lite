@@ -75,7 +75,7 @@ class PdbHandler:
       refModel = modelCoordKeys[0]
       coords = coordinateFile.modelCoordinates[refModel]
 
-      print "  Trying to automap coordinate atoms..."
+      print("  Trying to automap coordinate atoms...")
       forceChainMappings = matchCoordAtomsToMolSys(coords,self.molSystem,test = 0)
       if forceChainMappings:
         keywds['forceChainMappings'] = forceChainMappings
@@ -189,7 +189,7 @@ def getPdbCode(pdbCode, forceGet = False, pdbDir = None, source=''):
 
     except:
       
-      print "Error: no PDB file for %s!! Directory not recognized by this computer?" % pdbCode
+      print("Error: no PDB file for %s!! Directory not recognized by this computer?" % pdbCode)
       return False
 
   return True

@@ -266,7 +266,7 @@ class CingFrame(NmrCalcRunFrame):
     url = self.iCingBaseUrl
     iCingUrl = self.getServerUrl(url)
     logText = iCingRobot.iCingFetch(credentials, url, iCingUrl, fileName)
-    print logText
+    print(logText)
   
     msg = 'Results saved to file %s\n' % fileName
     msg += 'Purge results from iCing server?'

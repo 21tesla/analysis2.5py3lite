@@ -98,9 +98,9 @@ class SparkyChemShiftFile(SparkyGenericFile):
     colNums = {}
 
     if verbose == 1:
-      print "Reading sparky chemical shift list %s" % self.name
+      print("Reading sparky chemical shift list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     #
     # Start reading, look for header line
@@ -163,7 +163,7 @@ class SparkyChemShiftFile(SparkyGenericFile):
         #
 
         if numHeaderCols != len(cols):
-          print "  Unrecognized column headers: can't read sparky file... "
+          print("  Unrecognized column headers: can't read sparky file... ")
           return
 
         # Set order for column headers
@@ -205,7 +205,7 @@ class SparkyChemShiftFile(SparkyGenericFile):
               # If problems, still try to read in essential bits (all until 'ndim' column)
               #
 
-              print "  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,
+              print("  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,)
 
               for i in range(0,len(dataColCodes)):            
 
@@ -232,12 +232,12 @@ class SparkyChemShiftFile(SparkyGenericFile):
                   break
 
               if obligColumnFound != -1:
-                print "  Can't read... "
+                print("  Can't read... ")
                 line = fin.readline()
                 continue
               else:
-                print "  Reading first %d columns only." % dataColCodesLen
-                print
+                print("  Reading first %d columns only." % dataColCodesLen)
+                print()
 
             values = {}
 
@@ -286,7 +286,7 @@ class SparkyChemShiftFile(SparkyGenericFile):
     """
     
     if verbose == 1:
-      print "Writing %s chemical shift list %s" % (self.format,self.name)
+      print("Writing %s chemical shift list %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
 
@@ -383,5 +383,5 @@ class SparkyChemShift:
 
     else:
     
-      print "  Warning: empty or invalid data field %s for Sparky chemical shift file." % valueKey
+      print("  Warning: empty or invalid data field %s for Sparky chemical shift file." % valueKey)
       pass

@@ -339,7 +339,7 @@ def mergeObjects(sourceObj,targetObj):
               if backName in keyNames:
                 del childDict[newKey]
                 childDict[oldKey] = attrObj
-              print ("Merge failure: %s, %s result is not valid"
+              print("Merge failure: %s, %s result is not valid"
                      % (targetObj, attrObj))
               raise
 

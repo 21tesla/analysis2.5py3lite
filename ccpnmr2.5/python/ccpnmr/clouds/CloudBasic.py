@@ -136,7 +136,7 @@ def averageCoord(coordList):
 
 def readCloudFile(fileName, hydrogenOnly=True):
 
-  file = open(fileName, 'r')
+  file = open(fileName)
   coords = []
   atoms  = []
   shifts = []
@@ -305,7 +305,7 @@ def connectResonances(project, serials, shifts, atomTypes, isotopeCodes=('1H',),
     resonance = serialDict.get(serial)
     
     if resonance is None:
-      print 'Serial %d missing' % serial
+      print('Serial %d missing' % serial)
       resonance = shift1Dict.get('%6.4f' % shift)
     if resonance is None:
       resonance = shift2Dict.get('%5.3f' % shift)
@@ -327,7 +327,7 @@ def connectResonances(project, serials, shifts, atomTypes, isotopeCodes=('1H',),
     resonances.append(resonance)
 
   
-  print "Total: %d, Found: %d, New: %d" % (len(resonances),Cfound,Cnew)
+  print("Total: %d, Found: %d, New: %d" % (len(resonances),Cfound,Cnew))
   return resonances
 
 def makeConstraintsFromStructure(argServer, structure=None, atomRoots=None, threshold=5.5, tolerance=0.1, adcThreshold=7.0, atomTypes=('H',), adcAtoms=('H',)):
@@ -363,7 +363,7 @@ def makeConstraintsFromStructure(argServer, structure=None, atomRoots=None, thre
   resonanceDict  = {}
   adcAtomSets    = {}
   
-  print "Getting atomSets and resonances"
+  print("Getting atomSets and resonances")
   for residue in chain.residues:
     atomSetDict[residue] = []
     exclude = notVisible.get(residue.ccpCode) or ["H''",]
@@ -403,12 +403,12 @@ def makeConstraintsFromStructure(argServer, structure=None, atomRoots=None, thre
         if adcAtoms and (atom.name in adcAtoms):
           adcAtomSets[atomSet] = 1
           
-  print "Calculating distances"
+  print("Calculating distances")
   resonanceDists = []
   resonanceDists2 = []
   for amide1 in amideAtomSets:
     residue1 = amide1.finsFirstAtom().residue
-    print "  %d %s" % (residue1.seqCode, residue1.ccpCode)
+    print("  %d %s" % (residue1.seqCode, residue1.ccpCode))
     
     for amide2 in amideAtomSets:
       residue2 = amide2.findFirstAtom().residue
@@ -447,7 +447,7 @@ def makeConstraintsFromStructure(argServer, structure=None, atomRoots=None, thre
             if dist >= adcThreshold:
               resonanceDists2.append( (dist,resonanceDict[atomSet1],resonanceDict[atomSet2]) )
 
-  print "Generating constraints"
+  print("Generating constraints")
   if resonanceDists:
     constraintHead = makeNmrConstraintHead(project)
     constraintList = constraintHead.newDistanceConstraintList()
@@ -480,7 +480,7 @@ def makeConstraintsFromStructure(argServer, structure=None, atomRoots=None, thre
         constraint = constraintList2.newDistanceConstraint(weight=1.0, origData=dist, targetValue=dist,upperLimit=maxDist, lowerLimit=minDist, error=delta)
         item       = constraint.newDistanceConstraintItem(resonances=[fixedResonance1,fixedResonance2])
 
-  print "Done"
+  print("Done")
 
 def getMeanCloud(clouds):
 

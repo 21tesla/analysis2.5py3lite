@@ -39,7 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter
+import tkinter
 
 from memops.gui.ButtonList import ButtonList, UtilityButtonList
 from memops.gui.Label import Label
@@ -621,7 +621,7 @@ class ViewStructurePopup(BasePopup):
   def showConstraintConnections(self, constraint):
   
     if not hasattr(constraint, 'items'):
-      print "Structure display not supported for constraint type %s" % constraint.className
+      print("Structure display not supported for constraint type %s" % constraint.className)
     
     if constraint.className == 'DihedralConstraint':
       self.showResonancesDihedral(constraint.resonances)
@@ -654,14 +654,14 @@ class ViewStructurePopup(BasePopup):
       coordChain2 = self.structure.findFirstCoordChain(code=chain2.code)
       
       if not (coordChain1 and coordChain2):
-        print "No coord chain found"
+        print("No coord chain found")
         return
       
       coordRes1 = coordChain1.findFirstResidue(seqId=residue1.seqId)
       coordRes2 = coordChain2.findFirstResidue(seqId=residue2.seqId)
   
       if not (coordRes1 and coordRes2):
-        print "No coord res found"
+        print("No coord res found")
         return
       
       coordAtoms1 = []
@@ -694,7 +694,7 @@ class ViewStructurePopup(BasePopup):
         self.connections.append([atomSets1, atomSets2, cBond, color, value])
 
     else:
-      print "Display attempted for atoms without structure"
+      print("Display attempted for atoms without structure")
   
     self.updateAfter()
     
@@ -714,13 +714,13 @@ class ViewStructurePopup(BasePopup):
       coordChain = self.structure.findFirstCoordChain(code=chain.code)
       
       if not (coordChain):
-        print "No coord chain found"
+        print("No coord chain found")
         return
       
       coordRes = coordChain.findFirstResidue(seqId=residue.seqId)
   
       if not (coordRes):
-        print "No coord res found"
+        print("No coord res found")
         return
       
       coordAtoms = []
@@ -734,7 +734,7 @@ class ViewStructurePopup(BasePopup):
         self.structFrame.highlightAtom(atom)
         
     else:
-      print "Display attempted for atoms without structure"
+      print("Display attempted for atoms without structure")
   
     self.updateAfter()
   

@@ -4328,7 +4328,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
   # set up
   doComplex = not (simplified)
 
-  if ((compact and expanded)):
+  if (compact and expanded):
     raise ApiError("""XML save: Parameters 'compact' and 'expanded' are incompatible"""
     )
 
@@ -4371,7 +4371,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
   strapp('\n')
 
   # Write objects
-  print 'start generating output : ', topObject.getQualifiedName()
+  print('start generating output : ', topObject.getQualifiedName())
   stack = [topObject]
   mapStack = [mapping['abstractTypes'][topObject.__class__.__name__]]
   while stack:
@@ -4425,10 +4425,10 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
 
         # put keys on stack
         keys = val.getFullKey(True)
-        for ii in reversed(xrange(len(keys))):
+        for ii in reversed(range(len(keys))):
           key = keys[ii]
           stack.append(key)
-          if ((isinstance(key, memops.api.Implementation.MemopsObject) or isinstance(key, memops.api.Implementation.MemopsDataTypeObject))):
+          if (isinstance(key, memops.api.Implementation.MemopsObject) or isinstance(key, memops.api.Implementation.MemopsDataTypeObject)):
             mapStack.append(keyMaps[ii].get(key.__class__.__name__))
           else:
             mapStack.append(keyMaps[ii])
@@ -4473,7 +4473,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
         # IF BLOCK 4
         if (compact):
           # set header attributes and links
-          if ((doComplex and optLinks)):
+          if (doComplex and optLinks):
             names = headerAttrs + optLinks
           else:
             names = headerAttrs
@@ -4481,7 +4481,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
           # LOOP A
           for name in names:
             tmpMap = contDict[name]
-            if ((isImplementation and tmpMap.get('implSkip', False))):
+            if (isImplementation and tmpMap.get('implSkip', False)):
               continue
 
             # NB hicard is always 1 here
@@ -4505,7 +4505,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
               else:
                 # typ == 'attr'
                 # IF BLOCK 7
-                if ((doComplex or value != tmpMap.get('default'))):
+                if (doComplex or value != tmpMap.get('default')):
                   toStr = tmpMap['data'].get('toStr')
                   if ('text' == toStr):
                     # String type
@@ -4520,7 +4520,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
                   strapp(' %s="%s"' % (tmpMap['name'], value))
 
         # IF BLOCK 8
-        if ((compact and (not simpleAttrs and not cplxAttrs))):
+        if (compact and (not simpleAttrs and not cplxAttrs)):
           # class contains no XML elements. end immediately
           stack.pop()
           mapStack.pop()
@@ -4537,7 +4537,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
 
           if (compact):
             names = simpleAttrs
-          elif ((doComplex and optLinks)):
+          elif (doComplex and optLinks):
             names = headerAttrs + optLinks + simpleAttrs
           else:
             names = headerAttrs + simpleAttrs
@@ -4546,13 +4546,13 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
           # set simple attributes and links
           for name in names:
             tmpMap = contDict[name]
-            if ((isImplementation and tmpMap.get('implSkip', False))):
+            if (isImplementation and tmpMap.get('implSkip', False)):
               continue
 
             # IF BLOCK 9
             val = stackVal.__dict__[name]
-            if ((doComplex or val != tmpMap.get('default'))):
-              if ((tmpMap['hicard'] == 1 and val is not None)):
+            if (doComplex or val != tmpMap.get('default')):
+              if (tmpMap['hicard'] == 1 and val is not None):
                 # put here in case of (future) types
                 reuseList[0] = val
                 val = reuseList
@@ -4578,7 +4578,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
 
                   strapp('</%s>\n' % tag)
 
-                elif (('cplx' == tmpMap.get('eType') or expanded)):
+                elif ('cplx' == tmpMap.get('eType') or expanded):
                   # typ == 'attr', complex XML element
                   strapp('%s<%s>\n' % (indent, tag))
                   nIndent += indentBySpaces
@@ -4644,7 +4644,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
               tmpMap = contDict[name]
 
               # IF BLOCK 13
-              if (not ((isImplementation and tmpMap.get('implSkip', False)))):
+              if (not (isImplementation and tmpMap.get('implSkip', False))):
 
                 tag = tmpMap['tag']
                 tmpCont = tmpMap['content']
@@ -4703,7 +4703,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
   """
   if (topObject is not None):
     # check for topObject
-    if (not ((isinstance(topObject, memops.api.Implementation.MemopsRoot) or isinstance(topObject, memops.api.Implementation.TopObject)))):
+    if (not (isinstance(topObject, memops.api.Implementation.MemopsRoot) or isinstance(topObject, memops.api.Implementation.TopObject))):
       raise ApiError("""XML load: top obj is neither MemopsRoot nor TopObject"""
        + ": %s" % (topObject,)
       )
@@ -4757,11 +4757,11 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
           # get map and test
           try:
             curMap = loadMaps[tag]
-          except KeyError, ex:
+          except KeyError as ex:
             raise ApiError("""no map found for element"""
              + ": %s" % (tag,)
             )
-          except Exception, ex:
+          except Exception as ex:
             raise ApiError("""Load maps not set up correctly - should not get here"""
              + ": %s" % (tag,)
             )
@@ -4776,7 +4776,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
           # IF BLOCK 103
           if (not objStack):
             # inside _StorageUnit - preliminary check for TopObject element
-            if (not (('class' == typ and topObjectKey is None))):
+            if (not ('class' == typ and topObjectKey is None)):
               raise ApiError("""_StorageUnit has more than one child element"""
               )
 
@@ -4785,7 +4785,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
             # start of class, complex attribute, collection or exolink
 
             # IF BLOCK 105
-            if (('cplx' == typ or 'class' == typ)):
+            if ('cplx' == typ or 'class' == typ):
               # class, or cplx
 
               clazz = curMap['class']
@@ -4947,7 +4947,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
                 else:
                   try:
                     tmpMap = contMap[tag2]
-                  except KeyError, ex:
+                  except KeyError as ex:
                     raise ApiError("""no map found for XML attribute"""
                      + ": %s" % (tag2,)
                     )
@@ -4998,7 +4998,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
                         ll.append(value)
                         setattr(obj, name, ll)
 
-            elif ((partialLoad and ('child' == typ and result is not memopsRoot))):
+            elif (partialLoad and ('child' == typ and result is not memopsRoot)):
               # IF BLOCK 105
               # partially loading TopObject - end now
 
@@ -5042,7 +5042,7 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
               # get version,  package, and updated mapping
               fileVersion = elem.get('release')
               packageGuid = elem.get('packageGuid')
-              if ((fileVersion is None or packageGuid is None)):
+              if (fileVersion is None or packageGuid is None):
                 raise ApiError("""<_StorageUnit element lacks 'release' or 'packageGuid'"""
                 )
 
@@ -5082,11 +5082,11 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
 
         try:
           curMap = loadMaps[tag]
-        except KeyError, ex:
+        except KeyError as ex:
           raise ApiError("""no map found for element"""
            + ": %s" % (tag,)
           )
-        except Exception, ex:
+        except Exception as ex:
           raise ApiError("""Load maps not set up correctly - should not get here"""
            + ": %s" % (tag,)
           )
@@ -5311,14 +5311,14 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
         raise ApiError("""Premature end of file - no </_StorageUnit> found"""
         )
 
-      if ((objStack or skipElement is not None)):
+      if (objStack or skipElement is not None):
         raise ApiError("""Illegal state after parsing: objStack length, skipElement"""
          + ": %s:%s" % (len(objStack), skipElement)
         )
 
     # delayed load
     parserState = 'postprocessing data'
-    if ((result is memopsRoot or not (partialLoad))):
+    if (result is memopsRoot or not (partialLoad)):
       delayedLoadLinksStd(objectDict, crossLinkData)
 
     delayedLoadLinksExo(topObjByGuid, exoTopLinkData)
@@ -5338,15 +5338,15 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
     # unset isReading (NB - extra link is for future load of non-topObjects)
     resultTop = result.getTopObject()
     resultTop.__dict__['isReading'] = False
-    if ((not (partialLoad) or result is memopsRoot)):
+    if (not (partialLoad) or result is memopsRoot):
       resultTop.__dict__['isLoaded'] = True
-      if ((needCompatibility and resultTop.__dict__.get('isModifiable', False))):
+      if (needCompatibility and resultTop.__dict__.get('isModifiable', False)):
         resultTop.__dict__['isModified'] = True
 
-    if ((topObjectKey is not None and topObjectKey != 'ignore')):
+    if (topObjectKey is not None and topObjectKey != 'ignore'):
       xx = result.getFullKey()
       if (topObjectKey != xx):
-        print 'WARNING TopObject key changed on reading', topObjectKey, xx
+        print('WARNING TopObject key changed on reading', topObjectKey, xx)
 
     for obj in objectDict.values():
       obj.checkValid()
@@ -5363,14 +5363,14 @@ def loadFromStream(stream, topObjId=None, topObject=None, partialLoad=False):
     if (result is not None):
       result.getTopObject().__dict__['isReading'] = False
 
-    print 'Error loading file for: ', result
-    print 'Reading: ', stream
-    print 'Last xml tag read: ', tag
-    print 'Parser state was: ', parserState
+    print('Error loading file for: ', result)
+    print('Reading: ', stream)
+    print('Last xml tag read: ', tag)
+    print('Parser state was: ', parserState)
     if (objStack):
-      print 'Current object was: ', objStack[-1]
+      print('Current object was: ', objStack[-1])
     else:
-      print 'Object stack was empty'
+      print('Object stack was empty')
 
     raise
 
@@ -5602,9 +5602,9 @@ def delayedLoadLinksStd(objectDict, linkData):
       setattr(obj, name, ov)
 
   except:
-    print 'Error during Std link dereferencing. Object was: ', obj
-    print 'values were: ', val
-    print 'tag name was: ', name
+    print('Error during Std link dereferencing. Object was: ', obj)
+    print('values were: ', val)
+    print('tag name was: ', name)
     raise
 
 def delayedLoadLinksExo(objectDict, linkData):
@@ -5654,7 +5654,7 @@ def delayedLoadLinksExo(objectDict, linkData):
       setattr(obj, name, ov)
 
   except:
-    print 'Error during Exo link dereferencing. Object was: ', obj
-    print 'values were: ', val
-    print 'tag name was: ', name
+    print('Error during Exo link dereferencing. Object was: ', obj)
+    print('values were: ', val)
+    print('tag name was: ', name)
     raise

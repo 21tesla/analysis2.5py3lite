@@ -182,7 +182,7 @@ class EditResStructuresPopup(BasePopup):
  
       sd = sqrt(sd)
  
-      print meanRmsd, '+/-', sd
+      print(meanRmsd, '+/-', sd)
  
       n = 0
       for cloud in clouds:
@@ -190,7 +190,7 @@ class EditResStructuresPopup(BasePopup):
         if rmsd is None:
           keptClouds.append(cloud)
         elif abs(rmsd - meanRmsd) > (sdTolerance*sd):
-          print 'Cloud %s is bad' % (cloud)
+          print('Cloud %s is bad' % (cloud))
         else:
           keptClouds.append(cloud)
             
@@ -208,19 +208,19 @@ class EditResStructuresPopup(BasePopup):
       resDict = {}
       hmass = 25
       
-      print "L1", len(serials)
+      print("L1", len(serials))
       
       for resonance in self.nmrProject.resonances:
         resDict[resonance.serial] = resonance
  
-      print "L2", len(resDict)
+      print("L2", len(resDict))
       
       resonances = []
       for serial in serials:
         if resDict.get(serial) is not None:
           resonances.append( resDict[serial] )
 
-      print "L3", len(resonances)
+      print("L3", len(resonances))
       
       C = 0
       for resonance in resonances:
@@ -233,7 +233,7 @@ class EditResStructuresPopup(BasePopup):
           atomCoordList.add(hmass, coord.x, coord.y, coord.z)
           
           C +=1
-      print "L4", len(atomCoordList)
+      print("L4", len(atomCoordList))
     
       from ccpnmr.clouds.FilterClouds import writeTypedPdbCloud
       writeTypedPdbCloud(atomCoordList, pdbFileName, resonances)

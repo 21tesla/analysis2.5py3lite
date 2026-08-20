@@ -59,7 +59,7 @@ def str2bool(value):
   else:
     raise ApiError("String '%s' is not legal for a Boolean" % value)
 
-class DummyClass(object):
+class DummyClass:
   """ dummy class to store temporarily attributes of classes that
   are removed (not just changed).
   
@@ -941,8 +941,8 @@ def conv_ccp_MolSystem_1_0_106(headObject):
                 if ccv not in le.chemCompVars:
                   if len(chemCompVars) < 2:
                     deletedMls[ml] = None
-                    print (
-                     "WARNING, MolSystemLink to %s removed: No ChemCompVar found"
+                    print((
+                     "WARNING, MolSystemLink to %s removed: No ChemCompVar found")
                      % residue
                     )
                     ml.delete()
@@ -1001,8 +1001,8 @@ def conv_ccp_MolSystem_1_0_106(headObject):
         continue
       
       # break in last loop - no link can be made, delete MolSystemLink
-      print (
-       "WARNING, MolsystemLink could not be made between atoms \n%s and %s"
+      print((
+       "WARNING, MolsystemLink could not be made between atoms \n%s and %s")
        % ml.atoms
       )
       ml.delete()
@@ -1576,8 +1576,8 @@ def conv_ccp_Nmr_1_0_212(headObject):
             else:
               # The new value is incompatible with the existing one 
               # warn but use the old one anyway
-              print (
-               """WARNING experiment %s in %s - condition incompatible with %s
+              print((
+               """WARNING experiment %s in %s - condition incompatible with %s)
    Using pre-existing SampleCondition instead """
                % (exp,nxs,oldCond)
               )
@@ -1921,8 +1921,8 @@ def get_new_descriptor_113(chemComp,linking,descriptor):
     if not descrs:
       if hasNeutral:
         # only 'neutral available - use that
-        print ( "WARNING, %s.%s.%s descriptor %s forced to 'neutral'"
-         % (chemComp.molType, chemComp.ccpCode, linking, descriptor)
+        print(( "WARNING, %s.%s.%s descriptor %s forced to 'neutral'"
+         % (chemComp.molType, chemComp.ccpCode, linking, descriptor))
         )
         return 'neutral'
  

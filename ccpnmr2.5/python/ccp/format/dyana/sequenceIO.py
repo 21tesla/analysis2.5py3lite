@@ -81,7 +81,7 @@ class DyanaSequenceFile(DyanaGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s sequence file %s" % (self.format,self.name)
+      print("Reading %s sequence file %s" % (self.format,self.name))
     
     #
     # Parse the file
@@ -89,7 +89,7 @@ class DyanaSequenceFile(DyanaGenericFile):
     
     sequenceCols = []
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -146,7 +146,7 @@ class DyanaSequenceFile(DyanaGenericFile):
             # Create a new chain!
             chainCode = self.chainCodesString[len(self.sequences)-1]
             self.sequences.append(DyanaSequence(chainCode=chainCode))
-            print "  Warning: started new sequence '%s' based on linker residues." % chainCode
+            print("  Warning: started new sequence '%s' based on linker residues." % chainCode)
             chainResiduesAdded = False
             
           isLinker = True
@@ -202,14 +202,14 @@ class DyanaSequenceFile(DyanaGenericFile):
       fileReadOk = False
     else:
       for lineError in lineErrors:
-        print lineError
+        print(lineError)
     
     return fileReadOk
 
   def readFromCoordinates(self,coordinateFile, verbose = 0):
   
     if verbose == 1:
-      print "Extracting %s sequence from coordinate file %s" % (self.format,coordinateFile.name)
+      print("Extracting %s sequence from coordinate file %s" % (self.format,coordinateFile.name))
 
     seqCode = ""
     seqInsertCode = defaultSeqInsertCode
@@ -244,10 +244,10 @@ class DyanaSequenceFile(DyanaGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s sequence file %s" % (self.format,self.name)
+      print("Writing %s sequence file %s" % (self.format,self.name))
 
     if len(self.sequences) > 1:
-      print "Warning: multiple sequences - writing to same file."        
+      print("Warning: multiple sequences - writing to same file.")
 
     #
     # TODO TODO: have to fill in sequence gaps with linker residues!?>!

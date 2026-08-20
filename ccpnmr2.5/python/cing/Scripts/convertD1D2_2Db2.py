@@ -29,7 +29,7 @@ from cing.core.validate import yGrid360
 from matplotlib.pyplot import hist
 from numpy.ma.core import multiply
 from numpy.matrixlib.defmatrix import mat # pylint: disable=E0611
-import cPickle
+import pickle
 import csv
 
 

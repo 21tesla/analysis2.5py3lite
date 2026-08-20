@@ -133,7 +133,7 @@ if __name__ == '__main__':
     getMapping = getResidueMapping
     for residue in chain.sortedResidues():
       msg = "Making Atom Sets and Mappings for residue %s %s %d"
-      print msg % (chain.code,residue.ccpCode,residue.seqCode)
+      print(msg % (chain.code,residue.ccpCode,residue.seqCode))
       residueMapping = getMapping(residue, aromaticsEquivalent=True)
       atomSetMappings.extend( residueMapping.atomSetMappings )
       

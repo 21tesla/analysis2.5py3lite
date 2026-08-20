@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 from memops.universal.Util import formatDecimals
 
@@ -168,7 +168,7 @@ class RegionSelector(Frame):
     try:
       return getattr(self.__dict__['region_scrollbar'], name)
     except:
-      raise AttributeError, "RegionSelector instance has no attribute '%s'" % name
+      raise AttributeError("RegionSelector instance has no attribute '%s'" % name)
 
 if __name__ == '__main__':
  

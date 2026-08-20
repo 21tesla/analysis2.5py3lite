@@ -565,7 +565,7 @@ def testMacro(argServer):
       
         atomName = atom.name
 
-        print '%s %s %s:' % (chainCode, resId, atomName)
+        print('%s %s %s:' % (chainCode, resId, atomName))
 
         fractions = getSchemeAtomFractions(scheme, atom)
         
@@ -573,7 +573,7 @@ def testMacro(argServer):
         #  print '  %s %.3f' % (isotope,fractions[isotope])
 
         isotope = '13C'
-        print '  %s %.3f' % (isotope,fractions[isotope])
+        print('  %s %.3f' % (isotope,fractions[isotope]))
 
   for chain in molSystem.chains:
     chainCode = chain.code
@@ -581,7 +581,7 @@ def testMacro(argServer):
     for residue in chain.residues:
       resId = '%d%s' % (residue.seqCode,residue.ccpCode)
 
-      print '%s %s:' % (chainCode, resId)
+      print('%s %s:' % (chainCode, resId))
       
       atoms = []
       for atom in residue.atoms:
@@ -601,10 +601,10 @@ def testMacro(argServer):
         for name2, atom2 in atoms:
           fracs  = getSchemeAtomPairFractions(scheme, atom, atom2)
       
-          print '  %s %s' % (name, name2)
+          print('  %s %s' % (name, name2))
           
           #for key in fracs:
           key = ('13C','13C')
           
           iso1, iso2 = key
-          print '    %s %s %.3f' % (iso1,iso2,fracs[key])
+          print('    %s %s %.3f' % (iso1,iso2,fracs[key]))

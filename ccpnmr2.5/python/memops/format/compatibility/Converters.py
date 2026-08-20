@@ -46,7 +46,6 @@ automated software development. Bioinformatics 21, 1678-1684.
 """
 
 # needed  to make it work in Python 2.5
-from __future__ import absolute_import
 
 import gc
 import time

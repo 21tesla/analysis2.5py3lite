@@ -20,9 +20,9 @@ def openSpectrum(fileName, nmrProject=None, experiment=None, experimentName=None
       pass
   else:
     if not os.path.exists(fileName):
-      raise IOError('"%s" does not exist' % fileName)
+      raise OSError('"%s" does not exist' % fileName)
 
-    raise IOError('Could not determine file type for "%s"' % fileName)
+    raise OSError('Could not determine file type for "%s"' % fileName)
 
   # create experiment if need be
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
   from memops.api.Implementation import MemopsRoot
 
   if len(sys.argv) != 2:
-    print 'Need to specify file'
+    print('Need to specify file')
     sys.exit()
 
   fileName = sys.argv[1]

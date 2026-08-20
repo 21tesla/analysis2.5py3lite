@@ -286,7 +286,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     self.numStructures = len(self.structureList)
 
     if self.numStructures == 1:
-      print "  Warning: only one structure used in analysis!"
+      print("  Warning: only one structure used in analysis!")
     
     self.validStructures = self.numStructures
     if self.excludeStructures:
@@ -324,7 +324,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     if allDistanceConstraintLists:
 
-      print "--> Found distance restraints for analysis"
+      print("--> Found distance restraints for analysis")
 
       overallViolations['upper'] = {}
       overallViolations['lower'] = {}
@@ -365,7 +365,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             upperDist = constraint.targetValue
           
           if upperDist == None:
-            print ' No value for distance limit, ignoring...'
+            print(' No value for distance limit, ignoring...')
             continue
 
           distPerStruc = {}
@@ -518,7 +518,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     if allDihedralConstraintLists:
     
-      print "--> Found dihedral restraints for analysis"
+      print("--> Found dihedral restraints for analysis")
     
       overallViolations['dihedral'] = {}
       for strucIndex in range(self.numStructures):
@@ -592,7 +592,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           #
 
           if len(allAtomList) != 4:
-            print "  Atoms missing for dihedral angle, only recognized %s - ignored." % str(allAtomList)
+            print("  Atoms missing for dihedral angle, only recognized %s - ignored." % str(allAtomList))
             continue
 
           #
@@ -787,7 +787,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         constraintsNumber = len(cl.constraints)
         
         if not constraintsNumber:
-          print "  Error: %s constraint list %d has no constraints - ignored." % (clType,clKey)
+          print("  Error: %s constraint list %d has no constraints - ignored." % (clType,clKey))
           continue
 
         self.output['constraintInfo'][clKey] = {}
@@ -1391,7 +1391,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       else:
 
-        print "    Nothing to report - all good."
+        print("    Nothing to report - all good.")
 
       fout.write("\n")
       fout.write("    Per model level:")

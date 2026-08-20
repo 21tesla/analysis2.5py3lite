@@ -172,7 +172,7 @@ class NmrPipePseudoPopup(BasePopup):
     if not fileName:
       return
 
-    fileObj = open(fileName, 'rU')
+    fileObj = open(fileName)
 
     data = ''
     line = fileObj.readline()
@@ -223,7 +223,7 @@ class NmrPipePseudoPopup(BasePopup):
       values = self.valueEntry.get()
       try:
         params.setSampledDim(self.dim, values)
-      except ApiError, e:
+      except ApiError as e:
         showError('Set Sampled Dim', e.error_msg, parent=self)
         return
       params.fixNullDims(ignoreDim=self.dim)
@@ -238,7 +238,7 @@ class NmrPipePseudoPopup(BasePopup):
     template = self.templateEntry.get()
     try:
       values = getSampledValues(directory, template)
-    except ApiError, e:
+    except ApiError as e:
       showError('Fetch Values', e.error_msg, parent=self)
       return
     self.nptsEntry.set(len(values))

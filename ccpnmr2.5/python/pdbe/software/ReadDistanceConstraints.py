@@ -159,17 +159,17 @@ class ReadDistanceConstraints:
 
               targetValue = 0.0
 
-              if type(dc.targetValue) == type(float() ):
+              if type(dc.targetValue) == float:
                 targetValue = dc.targetValue
 
               upperLimit = 0.0
 
-              if type(dc.upperLimit) == type(float() ):
+              if type(dc.upperLimit) == float:
                 upperLimit = dc.upperLimit
 
               lowerLimit = 0.0
 
-              if type(dc.lowerLimit) == type(float() ):
+              if type(dc.lowerLimit) == float:
                 lowerLimit = dc.lowerLimit
 
               dataTuple = (dcl.serial, dcl.className,
@@ -277,7 +277,7 @@ if __name__ == '__main__':
 
   ccpnProjectName, = sys.argv[1:]
 
-  print ccpnProjectName
+  print(ccpnProjectName)
 
   mr = loadProject(ccpnProjectName)
 
@@ -288,4 +288,4 @@ if __name__ == '__main__':
   distConstData = readDistConst.getDistanceConstraintData(violData)
 
   for line in distConstData:
-    print line
+    print(line)

@@ -133,13 +133,13 @@ class Mol2GenericFile(FormatFile):
   def readGeneric(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading %s file %s" % (self.format,self.name)
+      print("Reading %s file %s" % (self.format,self.name))
       
     #
     # Read all information...
     #
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
     line = fin.readline()
     
     triposSection = None

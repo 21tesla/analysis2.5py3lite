@@ -48,7 +48,7 @@ import sys
 
 import string, Tkinter, time
 from memops.universal.Io import splitPath
-from Tkinter import *
+from tkinter import *
 
 from memops.gui.Label               import Label
 from memops.gui.ScrolledText        import ScrolledText
@@ -158,18 +158,18 @@ class ReportErrorPopup(BasePopup):
         'pythonVersion' : self.pythonVersion,
         'comment' : userComment }
 
-      print fetchUrl('http://www2.ccpn.ac.uk/cgi-bin/karolis/SubmitBug.py', values, timeout=3)
+      print(fetchUrl('http://www2.ccpn.ac.uk/cgi-bin/karolis/SubmitBug.py', values, timeout=3))
       try:
         self.close();
       except:
-        print '"Always send" option'
+        print('"Always send" option')
         
     except:
-      print "Report failed ", sys.exc_info()[0]
+      print("Report failed ", sys.exc_info()[0])
       try:
         self.close();
       except:
-        print '"Always send" option'
+        print('"Always send" option')
   def close(self):
     BasePopup.close(self)
     self.destroy()

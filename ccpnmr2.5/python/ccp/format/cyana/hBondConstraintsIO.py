@@ -75,7 +75,7 @@ class CyanaHBondConstraintFile(DyanaHBondConstraintFile):
       if self.lowerDistanceFile:
         fileText += ' and %s.' % self.lowerDistanceFile
     
-      print "Writing %s distance constraint list %s" % (self.format,fileText)
+      print("Writing %s distance constraint list %s" % (self.format,fileText))
     
     #
     # CYANA can handle ambiguous...
@@ -105,16 +105,16 @@ if __name__ == "__main__":
     constraintFile.read(verbose = 1)
   
     for constraint in constraintFile.constraints:
-      print constraint.Id,
+      print(constraint.Id,)
 
-      print constraint.upperDist,
+      print(constraint.upperDist,)
       #print constraint.peakNum, constraint.peakVol, constraint.ppms
       for item in constraint.items:
         for member in item.members:
-          print member.seqCode, member.atomName,
-        print "|",
+          print(member.seqCode, member.atomName,)
+        print("|",)
 
-      print
+      print()
 
     constraintFile.name = 'local/hbonds.testout'
 

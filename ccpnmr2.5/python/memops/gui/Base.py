@@ -54,7 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 # basic additional code that all widgets can use
 
-import Tkinter
+import tkinter
 
 from memops.gui.ToolTip import ToolTip
 
@@ -87,7 +87,7 @@ def getWidgetCount(widget):
 
 # assumes that some other class which is a widget class is used in parallel
 
-class Base(object):
+class Base:
 
   objectDoc = toolTip = None # in case constructor not called still want these to exist
 

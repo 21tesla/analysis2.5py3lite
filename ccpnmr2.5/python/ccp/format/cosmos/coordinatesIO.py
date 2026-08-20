@@ -77,7 +77,7 @@ class CosmosCoordinateFile(CosmosGenericFile):
   def write(self,version = '003',verbose = False, use_fout = None):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
      
     if use_fout:
       fout = use_fout
@@ -102,7 +102,7 @@ class CosmosCoordinateFile(CosmosGenericFile):
     modelNums.sort()
     
     if len(modelNums) > 1:
-      print "  Warning: only writing out first model!"
+      print("  Warning: only writing out first model!")
     
     for modelNum in modelNums[:1]:
         

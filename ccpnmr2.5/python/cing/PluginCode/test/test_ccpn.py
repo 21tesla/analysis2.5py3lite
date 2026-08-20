@@ -24,7 +24,7 @@ try:
     from memops.general.Io import loadProject
     from memops.general.Io import saveProject
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try
 
@@ -87,7 +87,7 @@ class AllChecks(TestCase):
             doTalos = False
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         for i,entryId in enumerate(AllChecks.entryList):
 
@@ -217,13 +217,13 @@ class AllChecks(TestCase):
         'Disabled test because...'
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         for entryId in AllChecks.entryList:
             # Allow pdb files to be of different naming systems for this test.
             project = Project(entryId)
-            self.failIf(project.removeFromDisk())
+            self.assertFalse(project.removeFromDisk())
             project = Project.open(entryId, status = 'new')
 
             cyanaFolder = os.path.join(cingDirTestsData,"cyana", entryId+".cyana.tgz")

@@ -200,4 +200,4 @@ if __name__ == "__main__":
 
     for hExchRateFile in nmrStarFile.hExchRateFiles:
       for hExchRate in hExchRateFile.hExchRateValues:
-        print hExchRate.Id, hExchRate.seqCode, hExchRate.resLabel, hExchRate.atomName, hExchRate.value, hExchRate.valueError
+        print(hExchRate.Id, hExchRate.seqCode, hExchRate.resLabel, hExchRate.atomName, hExchRate.value, hExchRate.valueError)

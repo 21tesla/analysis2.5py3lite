@@ -48,7 +48,7 @@ def stripVc(deletePersonal = 0, deleteTmp = 1, deleteUsers = 1 ):
     nTmessage("Will remove: %s" % deleteList)
     answer = None
     while answer not in ["y","n"]:
-        answer = raw_input("WARNING: Please confirm you are about to remove all non-public resources; please enter y or n:")
+        answer = input("WARNING: Please confirm you are about to remove all non-public resources; please enter y or n:")
     isOk = answer == "y"
     if not isOk:
         nTerror("Not removing resources.")

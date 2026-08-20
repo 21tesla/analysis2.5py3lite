@@ -280,7 +280,7 @@ class X3dna(NTdict):
         """
 
         # Read in the output file, and split into the different parameter blocks
-        x3dnaOutput = open(fileName, 'r').read()
+        x3dnaOutput = open(fileName).read()
         parameterBlocks = x3dnaOutput.split('****************************************************************************')
 
         for parameterBlock in parameterBlocks:

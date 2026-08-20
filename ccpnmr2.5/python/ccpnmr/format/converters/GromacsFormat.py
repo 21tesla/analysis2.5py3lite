@@ -140,7 +140,7 @@ class GromacsFormat(DataFormat):
           atomSerial = self.getAtomSerial(atom)
           
           if atomSerial == None:
-            print "  Error: no atom serial for atom '{}.{}.{}, aborting this constraint.'".format(atom.residue.chain.code,atom.residue.seqCode,atom.name)
+            print(f"  Error: no atom serial for atom '{atom.residue.chain.code}.{atom.residue.seqCode}.{atom.name}, aborting this constraint.'")
             atomSerials = []
             break
           

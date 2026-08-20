@@ -80,7 +80,7 @@ class GromacsDistanceConstraintFile(GromacsGenericFile):
 
     if verbose:
     
-      print "Reading %s distance constraint list %s" % (self.format,self.name)
+      print("Reading %s distance constraint list %s" % (self.format,self.name))
     
     fin = open(self.name, 'rU')
      
@@ -96,7 +96,7 @@ class GromacsDistanceConstraintFile(GromacsGenericFile):
       return
 
     if verbose: 
-      print "Writing %s distance constraint list %s" % (self.format,self.name)
+      print("Writing %s distance constraint list %s" % (self.format,self.name))
     
     fout = open(self.name,'w')
 
@@ -104,7 +104,7 @@ class GromacsDistanceConstraintFile(GromacsGenericFile):
     # Write out distance constraints
     #
     
-    fout.write("[ {} ]{}".format(self.constraintFileType,self.newline))
+    fout.write(f"[ {self.constraintFileType} ]{self.newline}")
     fout.write(";   ai     aj  type index type'  low    up1    up2  fac" + self.newline)
     
     for constraint in self.constraints:
@@ -114,9 +114,9 @@ class GromacsDistanceConstraintFile(GromacsGenericFile):
         for i in range(self.constraintElements):
         
           member = item.members[i]          
-          fout.write("{:7d}".format(member.atomSerial))
+          fout.write(f"{member.atomSerial:7d}")
 
-        fout.write("  1 {:7d}  1  {:6.3f} {:6.3f} {:6.3f} 1.0".format(constraint.serial,constraint.lowerLimit,constraint.upperLimit1,constraint.upperLimit2))
+        fout.write(f"  1 {constraint.serial:7d}  1  {constraint.lowerLimit:6.3f} {constraint.upperLimit1:6.3f} {constraint.upperLimit2:6.3f} 1.0")
         fout.write(self.newline)
 
 

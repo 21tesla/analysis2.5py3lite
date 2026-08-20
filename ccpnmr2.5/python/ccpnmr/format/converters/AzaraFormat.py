@@ -86,7 +86,7 @@ class AzaraFormat(DataFormat):
     self.procParsFile.read()
 
     if self.verbose == 1:
-      print "Reading processing pars from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading processing pars from %s file %s" % (self.formatLabel,self.fileName))
 
   def createProcParsFile(self):
   
@@ -95,7 +95,7 @@ class AzaraFormat(DataFormat):
     #
   
     if self.verbose == 1:
-      print "Writing processing parameters to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing processing parameters to %s file %s" % (self.formatLabel,self.fileName))
   
     self.procParsFile = self.processingParsIO.AzaraProcessingParsFile(self.fileName)
 
@@ -103,7 +103,7 @@ class AzaraFormat(DataFormat):
   def createProcScriptFile(self):
   
     if self.verbose == 1:
-      print "Writing processing script to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing processing script to %s file %s" % (self.formatLabel,self.fileName))
       
     if not self.outputFile:
     
@@ -343,7 +343,7 @@ class AzaraFormat(DataFormat):
               self.procScriptFile.setDataValue(tempExpDimIndex,'Rescale',"scale2 1 %-d -1 0         ! Rance-Kay type data" % tempFidDim.numPointsValid)
 
       else:
-        print "  Error: Unknown sensitivity enhancement method %s" % method
+        print("  Error: Unknown sensitivity enhancement method %s" % method)
         mode = ''
 
       self.procScriptFile.addBeginCommands.append('interlace ' + dimRef + '         ! %s type data' % mode)

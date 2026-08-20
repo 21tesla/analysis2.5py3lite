@@ -76,6 +76,6 @@ if __name__ == '__main__':
     intIo.mergeParallelRuns(nmrCalcRunId, projectFiles)
       
   else:
-    print "Usage: merge NmrCalcRun.IDstring projectFiles* "
+    print("Usage: merge NmrCalcRun.IDstring projectFiles* ")
   
   

@@ -912,7 +912,7 @@ def makeGuiMultiAtomSet(residue,multiGuiName,guiSetsNames,elementSymbol,mappingT
   for guiName in guiSetsNames:
     atomSetMapping = residueMapping.findFirstAtomSetMapping(name=makeGuiName(guiName, elementSymbol, molType))
     if atomSetMapping is None:
-      print "Non-existent group error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode, residue.seqCode, guiName
+      print("Non-existent group error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode, residue.seqCode, guiName)
       return
     #atomSet      = atomSetMapping.atomSets[0]
     chemAtomSet1 = atomSetMapping.chemAtomSet
@@ -920,16 +920,16 @@ def makeGuiMultiAtomSet(residue,multiGuiName,guiSetsNames,elementSymbol,mappingT
     for guiName2 in guiSetsNames:
       atomSetMapping2 = residueMapping.findFirstAtomSetMapping(name=makeGuiName(guiName2, elementSymbol, molType))
       if atomSetMapping2 is None:
-        print "Non-existent group error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode
+        print("Non-existent group error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode)
         return
       #atomSet      = atomSetMapping2.atomSets[0]
       chemAtomSet2 = atomSetMapping2.chemAtomSet
       if chemAtomSet2 and chemAtomSet1:
         if chemAtomSet1.isProchiral != chemAtomSet2.isProchiral:
-          print "Prochiratity error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode
+          print("Prochiratity error in makeGuiMultiAtomSet for", residue.molResidue.ccpCode)
           return
         if chemAtomSet1.isEquivalent != chemAtomSet2.isEquivalent:
-          print "Equivalent error in makeGuiMultiAtomSet for ", residue.molResidue.ccpCode
+          print("Equivalent error in makeGuiMultiAtomSet for ", residue.molResidue.ccpCode)
           return
 
   atomSets = []
@@ -990,7 +990,7 @@ def moveMolSystemChain(chain, molSystem):
       if atom2:
         mergeObjects(atom, atom2)
       else:
-        print "missing %d %s %s" % (residue2.seqCode,residue2.ccpCode,atom.name) 
+        print("missing %d %s %s" % (residue2.seqCode,residue2.ccpCode,atom.name))
         
     mergeObjects(residue1, residue2)
     

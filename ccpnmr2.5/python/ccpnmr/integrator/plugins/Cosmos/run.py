@@ -127,12 +127,12 @@ if __name__ == '__main__':
     
     nmrCalcRun = intIo.getNmrCalcRun(projectDir, nmrCalcRunId)
     if nmrCalcRun is None:
-      print "No NmrCalcRun found. Aborting"
+      print("No NmrCalcRun found. Aborting")
     else:
       run(nmrCalcRun)
       nmrCalcRun.root.saveModified()
       
   else:
-    print "Usage: run projectDir NmrCalcRun.IDstring"
+    print("Usage: run projectDir NmrCalcRun.IDstring")
   
   

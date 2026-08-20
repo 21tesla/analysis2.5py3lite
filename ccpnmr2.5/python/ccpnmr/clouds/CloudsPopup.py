@@ -37,7 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 import os
-import Tkinter
+import tkinter
 
 from memops.api import Implementation
 from ccp.api.nmr import Nmr, NmrConstraint
@@ -494,7 +494,7 @@ class CloudsPopup(BasePopup):
             atomSets.append(list(resonance.resonanceSet.atomSets))
             i += 1
  
-    print "Found %d atomSets" % (len(atomSets))
+    print("Found %d atomSets" % (len(atomSets)))
     weight    = 1
     adcWeight = 1
     constrDict = {}
@@ -502,7 +502,7 @@ class CloudsPopup(BasePopup):
     for i in range(N-1):
       atomSets0 = atomSets[i]
       residue0 = atomSets0[0].findFirstAtom().residue.seqId
-      print "R", residue0
+      print("R", residue0)
  
       for j in range(i+1,N):
         if j == i:

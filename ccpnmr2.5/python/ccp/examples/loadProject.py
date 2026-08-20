@@ -79,8 +79,8 @@ if __name__ == "__main__":
   # Print out some objects from this project
   #
   
-  print "Project object:", ccpnProject
-  print "Project name:", ccpnProject.name
+  print("Project object:", ccpnProject)
+  print("Project name:", ccpnProject.name)
   
   #
   # Note that there is a pause after the above is printed - this is because of
@@ -88,14 +88,14 @@ if __name__ == "__main__":
   # can print the information in there.
   #
   for mol in ccpnProject.molecules:
-    print mol.name
-    print mol.sortedMolResidues()
+    print(mol.name)
+    print(mol.sortedMolResidues())
     
-  print "List of molSystem objects:", ccpnProject.sortedMolSystems()
+  print("List of molSystem objects:", ccpnProject.sortedMolSystems())
   for molSys in ccpnProject.sortedMolSystems():
-    print "MolSystem name:", molSys.name
-    print "MolSystem code:", molSys.code
+    print("MolSystem name:", molSys.name)
+    print("MolSystem code:", molSys.code)
   
-  print "List of molecule objects:", ccpnProject.sortedMolecules()
+  print("List of molecule objects:", ccpnProject.sortedMolecules())
   for molecule in ccpnProject.sortedMolecules():
-    print "Molecule name:", molecule.name
+    print("Molecule name:", molecule.name)

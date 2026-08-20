@@ -1604,4 +1604,4 @@ if __name__ == '__main__':
   couplings = calculateKarplusCouplings(angle, couplingConstants, angleOffsets)
   coupling = calculateKarplusCoupling(angle, couplingConstants[0], angleOffsets[0])
 
-  print coupling, couplings
+  print(coupling, couplings)

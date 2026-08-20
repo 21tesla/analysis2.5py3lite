@@ -228,10 +228,10 @@ def getResidueProbability(ppms, ccpCode, elements, atomTypes=None, ppmsBound=Non
       
       if bound and (ppmB is not None):
         boundData = shiftRefs.get(bound)
-	
-	if boundData:
+    
+    if boundData:
           meanB, sdB, pMissingB, boundB = boundData      
-	  dB = ppmB-meanB
+      dB = ppmB-meanB
           eB = dB/sdB   
           pB = exp(-0.5*eB*eB)/(sdB*ROOT_TWO_PI)
       
@@ -394,10 +394,10 @@ def getShiftsResidueProbability(shifts, ccpCode, prior=0.05, molType=PROTEIN_MOL
     
       if bound:
         shift2 = bound.findFirstShift(parentList=shift.parentList)
-	if shift2:
-	  ppm2 = shift2.value
-	else:
-	  ppm2 = None
+    if shift2:
+      ppm2 = shift2.value
+    else:
+      ppm2 = None
       else:
         ppm2 = None
       
@@ -405,14 +405,14 @@ def getShiftsResidueProbability(shifts, ccpCode, prior=0.05, molType=PROTEIN_MOL
       assignNames = resonance.assignNames or set([])
       
       if (not assignNames) and resonance.peakDimContribs:
-	refExpDimRefs = set([])
+    refExpDimRefs = set([])
 
-	for contrib in resonance.peakDimContribs:
-	  refExpDimRef = contrib.peakDim.dataDimRef.expDimRef.refExpDimRef
+    for contrib in resonance.peakDimContribs:
+      refExpDimRef = contrib.peakDim.dataDimRef.expDimRef.refExpDimRef
   	  if refExpDimRef:
-	    refExpDimRefs.add(refExpDimRef)
-	  
-	for refExpDimRef in refExpDimRefs:
+        refExpDimRefs.add(refExpDimRef)
+      
+    for refExpDimRef in refExpDimRefs:
   	  expMeasurement = refExpDimRef.expMeasurement
   	  atomSites = expMeasurement.atomSites
  
@@ -563,7 +563,7 @@ if __name__ == '__main__':
   vals = {}
   ccpCodes = ['Ala','Cys','Asp','Glu',
  	      'Phe','Gly','His','Ile',
-	      'Lys','Leu','Met','Asn',
+          'Lys','Leu','Met','Asn',
  	      'Pro','Gln','Arg','Ser',
  	      'Thr','Val','Trp','Tyr',]
   
@@ -575,7 +575,7 @@ if __name__ == '__main__':
   tot = sum(vals.values())
   for ccpCode in ccpCodes:
     v = vals[ccpCode] / tot
-    print ccpCode, '%.3f' % v
+    print(ccpCode, '%.3f' % v)
  
 
 

@@ -15,7 +15,7 @@ from cing.core.sml import obj2SML
 
 storedPropList = [QUEENY_UNCERTAINTY1_STR, QUEENY_UNCERTAINTY2_STR, QUEENY_INFORMATION_STR ]
 
-class DmElement():
+class DmElement:
     "Distance Matrix element for Queeny"
     upperDefault = 256.0
     lowerDefault =   0.0

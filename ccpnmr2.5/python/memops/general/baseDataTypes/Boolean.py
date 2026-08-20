@@ -55,8 +55,6 @@ software development. Bioinformatics 21, 1678-1684.
 
 # corresponding python type
 from types import IntType as PythonType
-
-from memops.general.Constants import True, False
 from memops.general.Constants import trueString, falseString
 
 # Python types acceptable as input instead of main type

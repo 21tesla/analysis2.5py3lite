@@ -517,7 +517,7 @@ class CaspNmrCing(Lister):
         example_str_template = '<td><a href="' + self.cing_link_template + '"><img SRC="'
         example_str_template +=  cingImage + '" border=0 width="200" ></a><BR>%s</td>'
         file_name = os.path.join (self.base_dir, self.data_dir_local, "index.html")
-        file_content = open(file_name, 'r').read()
+        file_content = open(file_name).read()
         old_string = r"<!-- INSERT NEW DATE HERE -->"
         new_string = time.asctime()
         file_content = string.replace(file_content, old_string, new_string)

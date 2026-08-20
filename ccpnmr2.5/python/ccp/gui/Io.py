@@ -90,10 +90,10 @@ def loadProject(parent, path, projectName=None):
   for dataLocationStore in project.dataLocationStores:
     for dataStore in dataLocationStore.dataStores:
       if isinstance(dataStore, NumericMatrix) and not dataStore.nmrDataSources:
-        print 'deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath)
+        print('deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath))
         dataStore.delete()
       elif isinstance(dataStore, MimeTypeDataStore) and not dataStore.nmrDataSourceImages:
-        print 'deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath)
+        print('deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath))
         dataStore.delete()
       else:
         dataStores.append(dataStore)
@@ -119,7 +119,7 @@ def loadProject(parent, path, projectName=None):
         if baseDir is not None:
           # We have a file location that fits all missing files.
           # Change dataStores to use it
-          print 'WARNING, resetting data locations to: \n%s\n' % baseDir
+          print('WARNING, resetting data locations to: \n%s\n' % baseDir)
  
           ccpGenIo.changeDataStoreUrl(dataStores[0], baseDir)
           for ii,dataStore in enumerate(dataStores):

@@ -30,7 +30,7 @@ class AllChecks(TestCase):
             nTdebug("Testing %s" % repr(testTuple))
             testListNT = NTlist()
             testListNT += testList
-            self.assertEquals(testListNT.getConsensus(minFraction=minFraction,useLargest=useLargest),testResult)
+            self.assertEqual(testListNT.getConsensus(minFraction=minFraction,useLargest=useLargest),testResult)
 
     def testCircularAverageOfTwoDih(self):
 # VB van cing procheck routines
@@ -76,13 +76,13 @@ class AllChecks(TestCase):
         writeTextToFile(fn, 'Hello world\nThis is a special line\nAnd this isnot')
         resultList = []
         status = grep(fn, 'mismatch', resultList=resultList, doQuiet=True)
-        self.assertEquals( status, 1 )
+        self.assertEqual( status, 1 )
         resultList = []
         status = grep(fn, 'special', resultList=resultList, doQuiet=True)
-        self.assertEquals( status, 0 )
+        self.assertEqual( status, 0 )
         resultList = []
         status = grep(fn, 'SPECIAL', resultList=resultList, doQuiet=True, caseSensitive=False)
-        self.assertEquals( status, 0 )
+        self.assertEqual( status, 0 )
 
 
     def testAppendFromTable(self):
@@ -101,7 +101,7 @@ class AllChecks(TestCase):
         tList = [ 0, 601.1, 136741.0 ]
         tExpected = [ (0,0,0), (0,10,1), (37,59,1) ]
         for i,t in enumerate(tList):
-            self.assertEquals(timedelta2Hms(t), tExpected[i])
+            self.assertEqual(timedelta2Hms(t), tExpected[i])
     def testNTlist(self):
         ntList = NTlist([7,8,9])
 #        nTdebug("ntList: " + str(ntList) +"  length: %s" % len(ntList))
@@ -116,7 +116,7 @@ class AllChecks(TestCase):
                       0,0,0,0,0,0,0]
         for i, inputStr in enumerate(inputList):
 #            nTdebug("Test: %d" % i)
-            self.assertEquals( stringMeansBooleanTrue(inputStr), resultList[i]==1)
+            self.assertEqual( stringMeansBooleanTrue(inputStr), resultList[i]==1)
 
     def testAsci2list(self):
         
@@ -163,15 +163,15 @@ class AllChecks(TestCase):
         for i, inputStr in enumerate(inputList):
 #            nTdebug("testAsci2list: %d" % i)
             resultStr = str(asci2list(inputStr))
-            self.assertEquals( resultStr, resultLoL[i])
+            self.assertEqual( resultStr, resultLoL[i])
             resultStr2 = str(asci2list(inputStr, onlyStartStopIdx=True))
-            self.assertEquals( resultStr2, resultLoL2[i])
+            self.assertEqual( resultStr2, resultLoL2[i])
         # end for
         saveVerbosity = cing.verbosity
         cing.verbosity = cing.verbosityNothing
         result = asci2list('1--2') # will cause an error message and an empty return list.
         cing.verbosity = saveVerbosity
-        self.assertEquals(len(result),0)
+        self.assertEqual(len(result),0)
 
 
     def testGetDateTimeStampForFileName(self):

@@ -18,7 +18,7 @@ class AllChecks(TestCase):
     def _test_NrgCingRdb(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         host = 'localhost'
         if 1: # DEFAULT False
@@ -49,7 +49,7 @@ class AllChecks(TestCase):
     def _test_writeCsvNRG(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         myLoL = [ [0,1,2], [3,4,5] ]
         dbms = DBMS()

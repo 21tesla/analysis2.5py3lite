@@ -76,7 +76,7 @@ class ElementInfo:
 
 class XMLWriter:
 
-    def __init__(self, out=sys.stdout, encoding="utf-8", indent=u"  "):
+    def __init__(self, out=sys.stdout, encoding="utf-8", indent="  "):
         """
         out      - a stream for the output
         encoding - an encoding used to wrap the output for unicode
@@ -86,7 +86,7 @@ class XMLWriter:
         self.out = wrapper(out)
         self.stack = []
         self.indent = indent
-        self.out.write(u'<?xml version="1.0" encoding="%s"?>\n' \
+        self.out.write('<?xml version="1.0" encoding="%s"?>\n' \
                        % encoding)
 
     def doctype(self, root, pubid, sysid):
@@ -95,16 +95,16 @@ class XMLWriter:
         """
         if pubid == None:
             self.out.write(
-                u"<!DOCTYPE %s SYSTEM '%s'>\n" % (root, sysid))
+                "<!DOCTYPE %s SYSTEM '%s'>\n" % (root, sysid))
         else:
             self.out.write(
-                u"<!DOCTYPE %s PUBLIC '%s' '%s'>\n" \
+                "<!DOCTYPE %s PUBLIC '%s' '%s'>\n" \
                 % (root, pubid, sysid))
         
     def comment(self, comment):
     
       self.out.write(
-                u"<!--%s-->\n" % comment)
+                "<!--%s-->\n" % comment)
               
     def push(self, elem, attrs={}):
         """
@@ -113,8 +113,8 @@ class XMLWriter:
         self.__indent()
         self.out.write("<" + elem)
         for (a, v) in attrs.items():
-            self.out.write(u" %s='%s'" % (a, self.__escape_attr(v)))
-        self.out.write(u">\n")
+            self.out.write(" %s='%s'" % (a, self.__escape_attr(v)))
+        self.out.write(">\n")
         self.stack.append(elem)
 
     def elem(self, elem, content, attrs={}):
@@ -122,10 +122,10 @@ class XMLWriter:
         Create an element with text content only
         """
         self.__indent()
-        self.out.write(u"<" + elem)
+        self.out.write("<" + elem)
         for (a, v) in attrs.items():
-            self.out.write(u" %s='%s'" % (a, self.__escape_attr(v)))
-        self.out.write(u">%s</%s>\n" \
+            self.out.write(" %s='%s'" % (a, self.__escape_attr(v)))
+        self.out.write(">%s</%s>\n" \
                        % (self.__escape_cont(content), elem))
 
     def empty(self, elem, attrs={}):
@@ -133,10 +133,10 @@ class XMLWriter:
         Create an empty element
         """
         self.__indent()
-        self.out.write(u"<"+elem)
+        self.out.write("<"+elem)
         for a in attrs.items():
-            self.out.write(u" %s='%s'" % a)
-        self.out.write(u"/>\n")
+            self.out.write(" %s='%s'" % a)
+        self.out.write("/>\n")
         
     def pop(self):
         """
@@ -145,16 +145,16 @@ class XMLWriter:
         elem=self.stack[-1]
         del self.stack[-1]
         self.__indent()
-        self.out.write(u"</%s>\n" % elem)
+        self.out.write("</%s>\n" % elem)
     
     def __indent(self):
         self.out.write(self.indent * (len(self.stack) * 2))
     
     def __escape_cont(self, text):
-        return text.replace(u"&", u"&amp;")\
-               .replace(u"<", u"&lt;")
+        return text.replace("&", "&amp;")\
+               .replace("<", "&lt;")
 
     def __escape_attr(self, text):
-        return text.replace(u"&", u"&amp;") \
-               .replace(u"'", u"&apos;").replace(u"<", u"&lt;")
+        return text.replace("&", "&amp;") \
+               .replace("'", "&apos;").replace("<", "&lt;")
 

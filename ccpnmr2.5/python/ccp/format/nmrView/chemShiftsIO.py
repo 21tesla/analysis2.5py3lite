@@ -80,9 +80,9 @@ class NmrViewChemShiftFile(NmrViewGenericFile):
   def read(self,verbose = 0):
 
     if verbose == 1:
-      print "Reading NmrView chemical shift list %s" % self.name
+      print("Reading NmrView chemical shift list %s" % self.name)
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     line = fin.readline()
     # Read rest file
@@ -105,7 +105,7 @@ class NmrViewChemShiftFile(NmrViewGenericFile):
   def write(self,verbose = 0):
 
     if verbose:
-      print "Writing NmrView chemical shift list %s" % self.name
+      print("Writing NmrView chemical shift list %s" % self.name)
 
 
     fout = open(self.name,'w')
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     chemShiftFile.read(verbose = 1)
     
     for chemShift in chemShiftFile.chemShifts:
-      print chemShift.seqCode, chemShift.atomName, chemShift.value
+      print(chemShift.seqCode, chemShift.atomName, chemShift.value)
 
 
     chemShiftFile.name = outFile

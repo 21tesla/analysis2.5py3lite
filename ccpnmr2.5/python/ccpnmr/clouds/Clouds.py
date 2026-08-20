@@ -56,8 +56,8 @@ def midge(argServer=None):
   (resonances,noesyPeaks,intensityFactors) = getCloudsResonanceList(argServer)
   
   # now make the noesy F2 assignments!
-  print len(resonances), 'Resonances'
-  print len(noesyPeaks), 'Noesy peaks'
+  print(len(resonances), 'Resonances')
+  print(len(noesyPeaks), 'Noesy peaks')
   
   constraintList = optimiseRelaxation(resonances,noesyPeaks,intensityMax=36000000,intensityFactors=intensityFactors,tmix=60,sf=500,tcor=3,rleak=2)
   

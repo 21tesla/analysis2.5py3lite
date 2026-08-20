@@ -373,7 +373,7 @@ class GenericFormatPopup(BasePopup):
                   self.IOkeywords[component].update(self.formatModule.IOkeywords[superClassFunc])
 
             else:
-              print "  Warning: no IOkeywords information for %s!" % self.function[component]
+              print("  Warning: no IOkeywords information for %s!" % self.function[component])
               self.IOkeywords[component] = {}
 
             #
@@ -405,7 +405,7 @@ class GenericFormatPopup(BasePopup):
             inputKeyWord = addItem[1]
             
             if inputKeyWord not in self.IOkeywords[component]:
-              print "  Error: invalid %s keyword '%s' for %s!" % (self.importExportFlag,inputKeyWord,component)
+              print("  Error: invalid %s keyword '%s' for %s!" % (self.importExportFlag,inputKeyWord,component))
               continue
 
             # Check whether keyword already exists! If so, replace...
@@ -635,7 +635,7 @@ class GenericFormatPopup(BasePopup):
     if hidden:
       for twidgets in toggleWidgets:
         for twidget in twidgets:
-          if twidget != None and type(twidget) != type(''):
+          if twidget != None and type(twidget) != str:
             twidget.grid_forget()
 
         #print "Hiding 1 row..."
@@ -781,7 +781,7 @@ class GenericFormatPopup(BasePopup):
           if exportFuncLine == 'return':
             return
 
-          if type(exportFuncLine) == type(''):
+          if type(exportFuncLine) == str:
             eval(exportFuncLine)
           else:
             exportFuncLine()
@@ -893,7 +893,7 @@ class GenericFormatPopup(BasePopup):
 
           for importFuncLine in importFuncs:
 
-            if type(importFuncLine) == type(''):
+            if type(importFuncLine) == str:
               eval(importFuncLine)
             else:
               importFuncLine()

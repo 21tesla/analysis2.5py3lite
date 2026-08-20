@@ -21,9 +21,9 @@ import bmrb
 import copy
 import gzip
 import shutil
-import urllib2
+import urllib.request
 import itertools
-from cStringIO import StringIO
+from io import StringIO
 
 # Import our clone of an ordered dict if we are using a low version of python
 if sys.version_info < (2,7):
@@ -54,17 +54,17 @@ def diff(entry1,entry2):
     """Prints the differences between two entries. Non-equal entries will always be detected, but specific differences detected depends on order of entries."""
     diffs = entry1.compare(entry2)
     if len(diffs) == 0:
-        print "Identical entries."
+        print("Identical entries.")
     for difference in diffs:
-        print difference
+        print(difference)
 
 def validate(entry,schema=None):
     """Prints a validation report of an entry."""
     validation = entry.validate(schema)
     if len(validation) == 0:
-        print "No problems found during validation."
+        print("No problems found during validation.")
     for err in validation:
-        print err
+        print(err)
 
 def __cleanValue__(value):
     """Automatically quotes the value in the appropriate way. Don't quote values you send to this method or they will show up in another set of quotes as part of the actual data. E.g.:
@@ -151,7 +151,7 @@ def __interpretFile__(the_file):
         star_buffer = the_file
     elif type(the_file) is str:
         if the_file[0:7] == "http://" or the_file[0:8] == "https://" or the_file[0:6] == "ftp://":
-            star_buffer = urllib2.urlopen(the_file)
+            star_buffer = urllib.request.urlopen(the_file)
             return star_buffer
         else:
             star_buffer = open(the_file, 'r')
@@ -241,7 +241,7 @@ class __entryParser__(ContentHandler, ErrorHandler):
         if raise_parse_warnings:
             raise Warning("Parse warning: " + str(msg),line)
         if verbose:
-            print "Parse warning: " + str(msg) + " " + str(line)
+            print("Parse warning: " + str(msg) + " " + str(line))
 
 
 class schema:
@@ -283,7 +283,7 @@ class schema:
                 self.types[line[8][:line[8].index(".")]] = (line[1],line[42])
             else:
                 if verbose:
-                    print "Detected invalid tag in schema: %s" % str(line)
+                    print("Detected invalid tag in schema: %s" % str(line))
 
     def __repr__(self):
         """Return how we can be initialized."""
@@ -382,8 +382,8 @@ class entry:
         elif 'entry_num' in kargs:
             # Parse from the official BMRB library
             try:
-                star_buffer = urllib2.urlopen('http://rest.bmrb.wisc.edu/bmrb/NMR-STAR3/' + str(kargs['entry_num']))
-            except urllib2.HTTPError:
+                star_buffer = urllib.request.urlopen('http://rest.bmrb.wisc.edu/bmrb/NMR-STAR3/' + str(kargs['entry_num']))
+            except urllib.request.HTTPError:
                 raise IOError("Entry " + str(kargs['entry_num']) + " does not exist in the public database.")
         else:
             # Initialize a blank entry
@@ -528,11 +528,11 @@ class entry:
 
     def printTree(self):
         """Prints a summary, tree style, of the frames and loops in the entry."""
-        print repr(self)
+        print(repr(self))
         for pos,frame in enumerate(self):
-            print "\t[" + str(pos) + "] " + repr(frame)
+            print("\t[" + str(pos) + "] " + repr(frame))
             for pos2,loop in enumerate(frame):
-                print "\t\t[" + str(pos2) + "] " + repr(loop)
+                print("\t\t[" + str(pos2) + "] " + repr(loop))
 
     def validate(self,validation_schema=None):
         """Validate an entry against a STAR schema. You can pass your own custom schema if desired, otherwise the schema will be fetched from the BMRB servers. Returns a list of errors found. 0-length list indicates no errors found."""
@@ -751,7 +751,7 @@ class saveframe:
             raise ValueError("Column names can not contain spaces.")
 
         if verbose:
-            print "Adding tag: ("+name+") with value ("+value+")"
+            print("Adding tag: ("+name+") with value ("+value+")")
 
         self.tags[name] = value
 
@@ -911,9 +911,9 @@ class saveframe:
 
     def printTree(self):
         """Prints a summary, tree style, of the loops in the saveframe."""
-        print repr(self)
+        print(repr(self))
         for pos,loop in enumerate(self):
-            print "\t[" + str(pos) + "] " + repr(loop)
+            print("\t[" + str(pos) + "] " + repr(loop))
 
     def validate(self,validation_schema=None):
         """Validate a saveframe against a STAR schema. You can pass your own custom schema if desired, otherwise the schema will be fetched from the BMRB servers. Returns a list of errors found. 0-length list indicates no errors found."""
@@ -1211,7 +1211,7 @@ class loop:
             tags[pos] = __formatTag__(item)
 
         # Map column name to column position in list
-        column_mapping = dict(itertools.izip(reversed(self.columns), reversed(xrange(len(self.columns)))))
+        column_mapping = dict(itertools.izip(reversed(self.columns), reversed(range(len(self.columns)))))
 
         # Make sure their fields are actually present in the entry
         column_ids = []
@@ -1250,7 +1250,7 @@ class loop:
 
     def printTree(self):
         """Prints a summary, tree style, of the loop."""
-        print repr(self)
+        print(repr(self))
 
     def renumberRows(self, index_tag, start_value=1, maintain_ordering=False):
         """Renumber a given column incrementally. Set start_value to initial value if 1 is not acceptable. Set maintain_ordering to preserve sequence with offset. E.g. 2,3,3,5 would become 1,2,2,4."""
@@ -1410,23 +1410,23 @@ if __name__ == '__main__':
         diff(entry.fromFile(cmd_input[0]), entry.fromFile(cmd_input[1]))
         sys.exit(0)
 
-    print "Running unit tests..."
+    print("Running unit tests...")
 
     errors = 0
 
     def printError(e,x,ent_str):
         if len(e.args) == 1:
-            print str(x)+": ",str(e)
+            print(str(x)+": ",str(e))
         else:
-            print str(x)+": ",str(e.args[0]),"on line",(e.args[1]-1)
+            print(str(x)+": ",str(e.args[0]),"on line",(e.args[1]-1))
             splitted = ent_str.split("\n")
             with open("/tmp/"+str(x),"w") as tmp:
                 tmp.write(ent_str)
             for x in range(e.args[1]-5,e.args[1]+2):
                 try:
-                    print "\t%-5d: %s" % (x,splitted[x])
+                    print("\t%-5d: %s" % (x,splitted[x]))
                 except IndexError:
-                    print "\t%-5d: %s" % (x,"EOF")
+                    print("\t%-5d: %s" % (x,"EOF"))
                     return
 
     myrange = (15000,15200)
@@ -1437,12 +1437,12 @@ if __name__ == '__main__':
     if os.path.exists("/bmrb/linux/bin/stardiff"):
         import subprocess
         use_stardiff = True
-        print "External stardiff detected. Will use to verify results."
+        print("External stardiff detected. Will use to verify results.")
 
-    for x in xrange(*myrange):
+    for x in range(*myrange):
         try:
-            orig_str = urllib2.urlopen('http://rest.bmrb.wisc.edu/bmrb/NMR-STAR3/' + str(x)).read()
-        except urllib2.HTTPError:
+            orig_str = urllib.request.urlopen('http://rest.bmrb.wisc.edu/bmrb/NMR-STAR3/' + str(x)).read()
+        except urllib.request.HTTPError:
             continue
         try:
             ent = entry.fromString(orig_str)
@@ -1456,7 +1456,7 @@ if __name__ == '__main__':
         try:
             reent = entry.fromString(ent_str)
             if ent_str != str(reent):
-                print str(x)+": Inconsisent output when re-parsed."
+                print(str(x)+": Inconsisent output when re-parsed.")
                 errors += 1
         except Exception as e:
             printError(e,x,ent_str)
@@ -1476,18 +1476,18 @@ if __name__ == '__main__':
             compare.wait()
             results = compare.stdout.read()
             if not "NO DIFFERENCES REPORTED" in results:
-                print str(x)+": Output inconsistent with original: " + results.strip()
+                print(str(x)+": Output inconsistent with original: " + results.strip())
                 open("/tmp/" + str(x),"wb").write(str(ent_str))
                 errors += 1
 
         comp = ent.compare(reent)
         if len(comp) > 0:
-            print str(x)+": Internal entry comparator detects difference(s):"
+            print(str(x)+": Internal entry comparator detects difference(s):")
             diff(ent,reent)
 
     if errors == 0:
-        print "If you didn't see any errors, than everything is working!"
+        print("If you didn't see any errors, than everything is working!")
     else:
-        print "At least %d errors were found." % (errors)
+        print("At least %d errors were found." % (errors))
 
     sys.exit(0)

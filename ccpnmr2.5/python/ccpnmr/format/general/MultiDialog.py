@@ -114,7 +114,7 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print kw['selectionText']
+    print(kw['selectionText'])
     
     nonGuiClass.file = self.screenList.getString()
 
@@ -140,7 +140,7 @@ class MultiDialog:
     for argKey in ['title','text']:
     
       if kw.has_key(argKey):
-        print kw[argKey]
+        print(kw[argKey])
       
     if kw.has_key('dismissText'):
       dismissText = kw['dismissText']
@@ -183,7 +183,7 @@ class MultiDialog:
     for argKey in ['title','text']:
     
       if kw.has_key(argKey):
-        print kw[argKey]
+        print(kw[argKey])
       
     if kw.has_key('dismissText'):
       dismissText = kw['dismissText']
@@ -227,7 +227,7 @@ class MultiDialog:
     for argKey in ['title','topText']:
     
       if kw.has_key(argKey):
-        print kw[argKey]
+        print(kw[argKey])
       
     if kw.has_key('dismissText'):
       dismissText = kw['dismissText']
@@ -238,7 +238,7 @@ class MultiDialog:
 
       value = valueList[i]
       
-      print "%s (currently '%s'):" % (valueInfo[i],str(value))
+      print("%s (currently '%s'):" % (valueInfo[i],str(value)))
       value = self.screenList.getString()
       
       if kw.has_key('conversionFunc'):
@@ -748,7 +748,7 @@ class MultiDialog:
       formatChainCode = formatChainDictInfo[0]
       seqCodesList = formatChainDictInfo[1]
     
-      print "Pick corresponding Ccp chain for '%s', %d residues, %d first seqCode:" % (formatChainCode,len(seqCodesList),seqCodesList[0][0])
+      print("Pick corresponding Ccp chain for '%s', %d residues, %d first seqCode:" % (formatChainCode,len(seqCodesList),seqCodesList[0][0]))
     
       chosenChain = self.screenList.pickStringListItem(ccpChainList + [self.defaultFormatChain])
       
@@ -760,9 +760,9 @@ class MultiDialog:
         else:
           seqInsertCodeText = ''
 
-        print "Sequence code %d%s for chain '%s' corresponds to which sequence Id for %s?" % (formatFirstSeqCode,seqInsertCodeText,formatChainCode,chosenChain)
+        print("Sequence code %d%s for chain '%s' corresponds to which sequence Id for %s?" % (formatFirstSeqCode,seqInsertCodeText,formatChainCode,chosenChain))
         
-        print "  Sequence: %s" % ('-'.join(self.ccpChainCcpCodes[chosenChain]))
+        print("  Sequence: %s" % ('-'.join(self.ccpChainCcpCodes[chosenChain])))
         
         chosenSeqId = self.screenList.pickIntListItem(returnInts(self.ccpChainSeqIdCodes[chosenChain][0]))
     
@@ -894,10 +894,10 @@ class MultiDialog:
     
       seqLength = len(self.ccpChainSeqIdCodes[ccpChainLabel][0])
     
-      print "Export for ccpChain %s" % ccpChainLabel
+      print("Export for ccpChain %s" % ccpChainLabel)
       
-      print "SeqId (code): start %d (%d), end %d (%d)" % (self.ccpChainSeqIdCodes[ccpChainLabel][0][0],
-                                                          self.ccpChainSeqIdCodes[ccpChainLabel][1][0],
+      print("SeqId (code): start %d (%d), end %d (%d)" % (self.ccpChainSeqIdCodes[ccpChainLabel][0][0],
+                                                          self.ccpChainSeqIdCodes[ccpChainLabel][1][0],)
                                                           self.ccpChainSeqIdCodes[ccpChainLabel][0][-1],
                                                           self.ccpChainSeqIdCodes[ccpChainLabel][1][-1])
       #
@@ -910,12 +910,12 @@ class MultiDialog:
       
         while (not exportChainCode):
 
-          print "Choose export %s corresponding to this chain" % requireChainCode
+          print("Choose export %s corresponding to this chain" % requireChainCode)
           exportChainCode = self.screenList.getString()
           
           if exportChainCode in exportChainCodes:
 
-            print "Already selected for export - please choose another"
+            print("Already selected for export - please choose another")
             exportChainCode = None
 
           else:
@@ -934,7 +934,7 @@ class MultiDialog:
       
       while (not exportFirstSeqCode):
 
-        print "Choose sequence code corresponding to seqId 1 in export:"
+        print("Choose sequence code corresponding to seqId 1 in export:")
         exportFirstSeqCode = self.screenList.getInteger()
         
         if exportFirstSeqCode and not requireChainCode:
@@ -1023,7 +1023,7 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print "Choose a naming system (% match in brackets):"
+    print("Choose a naming system (% match in brackets):")
 
     namingSysString = self.screenList.pickStringListItem(self.namingSysList)
     nonGuiClass.namingSysName = self.namingSysDict[namingSysString]
@@ -1080,11 +1080,11 @@ class MultiDialog:
     
     if kw.has_key('headerLines'):
       for headerLine in kw['headerLines']:
-        print headerLine
+        print(headerLine)
 
-    print "Residue type '%s', atom '%s'." % (seqLabel,atomName)
+    print("Residue type '%s', atom '%s'." % (seqLabel,atomName))
           
-    print "Pick the relevant atom match for this coordinate atom:"
+    print("Pick the relevant atom match for this coordinate atom:")
 
     selectionText = showAllCode = 'Show all atoms'
     doNotLinkText = 'Do not link'
@@ -1111,8 +1111,8 @@ class MultiDialog:
     
       nonGuiClass.chemAtomOrSets = None
 
-    print
-    print "Propagate this mapping to:"
+    print()
+    print("Propagate this mapping to:")
     
     propagate = self.screenList.pickStringListItem(self.propagateList)
     nonGuiClass.propagate = self.propagateList.index(propagate)
@@ -1247,12 +1247,12 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print "Residue type '%s', resonance '%s'." % (self.ccpCode,resName)
+    print("Residue type '%s', resonance '%s'." % (self.ccpCode,resName))
     
     if self.shifts:
-      print "Shift values: %s ppm" % (self.shifts)
+      print("Shift values: %s ppm" % (self.shifts))
       
-    print "Pick the relevant atom match for this resonance:"
+    print("Pick the relevant atom match for this resonance:")
 
     selectionText = showAllCode = 'Show all atoms'
     doNotLinkText = 'Do not link'
@@ -1279,8 +1279,8 @@ class MultiDialog:
     
       nonGuiClass.chemAtomOrSets = None
 
-    print
-    print "Propagate this mapping to:"
+    print()
+    print("Propagate this mapping to:")
     
     propagate = self.screenList.pickStringListItem(self.propagateList)
     nonGuiClass.propagate = self.propagateList.index(propagate)
@@ -1458,10 +1458,10 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print "Residue type '%s', resonance '%s'." % (self.ccpCode,resName)
+    print("Residue type '%s', resonance '%s'." % (self.ccpCode,resName))
     
-    print "Pick already existing resonances to link to %s:" % self.infoText
-    print
+    print("Pick already existing resonances to link to %s:" % self.infoText)
+    print()
     
     if multi:
       selectedResNames = self.screenList.pickStringListMulti(self.resonanceList)
@@ -1542,7 +1542,7 @@ class MultiDialog:
       title="Project '%s': " % nmrRes.root.name + 'Group resonances'
       returnClass = self.ResonanceGroupFunction(guiParent,title)       
     elif returnClass.resNameGroups:
-      print "  Warning: autogrouped %s and %s." % (str(returnClass.resNameGroups[0]),str(returnClass.resNameGroups[1]))
+      print("  Warning: autogrouped %s and %s." % (str(returnClass.resNameGroups[0]),str(returnClass.resNameGroups[1])))
       
     return returnClass
       
@@ -1550,12 +1550,12 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print title
-    print "Residue type '%s'." % self.ccpCode
+    print(title)
+    print("Residue type '%s'." % self.ccpCode)
     
-    print "Which of the following resonances should be grouped?"
-    print "(remaining ones will also be combined)"
-    print
+    print("Which of the following resonances should be grouped?")
+    print("(remaining ones will also be combined)")
+    print()
     
     selectedResNames = self.screenList.pickStringListMulti(self.resonanceNameList)
  
@@ -1682,11 +1682,11 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print
-    print "Residue '%s-%d'" % (self.nmrRes.molResidue.ccpCode,self.nmrRes.seqCode)
+    print()
+    print("Residue '%s-%d'" % (self.nmrRes.molResidue.ccpCode,self.nmrRes.seqCode))
     
-    print self.message
-    print
+    print(self.message)
+    print()
     
     selectedOption = self.screenList.pickStringListItem(self.optionList)
     
@@ -1731,8 +1731,8 @@ class MultiDialog:
     
     nonGuiClass = NonGuiClass()
     
-    print self.topMessage
-    print self.question
+    print(self.topMessage)
+    print(self.question)
     
     selectedMeasurement = self.screenList.pickStringListItem(self.measurementValueList)
     
@@ -2114,10 +2114,10 @@ class ScreenList:
   
   def printColumnString(self,i,string):
   
-    print self.format % string,
+    print(self.format % string,)
     
     if self.numCols and (i+1)/self.numCols == float(i+1) / self.numCols:
-      print
+      print()
 
   def pickChoice(self,choiceList, dismissText = None):
   
@@ -2133,9 +2133,9 @@ class ScreenList:
     
     while (choice not in choiceList):
     
-      print choiceText,
+      print(choiceText,)
   
-      choice = raw_input()
+      choice = input()
 
       if str(returnInt(choice)) == choice:
         choice = returnInt(choice)
@@ -2152,7 +2152,7 @@ class ScreenList:
     
     while (not choice):
     
-      choice = raw_input()
+      choice = input()
       
       if str(returnInt(choice)) == choice:
         choice = returnInt(choice)
@@ -2164,7 +2164,7 @@ class ScreenList:
 
   def getString(self):
   
-    choice = raw_input()
+    choice = input()
         
     return choice
 
@@ -2183,7 +2183,7 @@ class ScreenList:
       
     self.screenSetup(maxStringLen + 4)
 
-    print
+    print()
   
     for i in range(len(stringList)):
       
@@ -2214,8 +2214,8 @@ class ScreenList:
       
     self.screenSetup(maxStringLen + 4)
 
-    print
-    print "(choose -1 to end multi selection)"
+    print()
+    print("(choose -1 to end multi selection)")
   
     for i in range(0,len(stringList)):
       
@@ -2231,8 +2231,8 @@ class ScreenList:
       if choice != -1:
         choiceString = stringList[choice]
         if choiceList.count(choiceString) == 0:
-          print "  Added %s." % choiceString
-          print
+          print("  Added %s." % choiceString)
+          print()
           choiceList.append(choiceString)
       else:
         break
@@ -2256,7 +2256,7 @@ class ScreenList:
       
     self.screenSetup(maxStringLen)
 
-    print
+    print()
   
     for i in range(0,len(valueList)):
       

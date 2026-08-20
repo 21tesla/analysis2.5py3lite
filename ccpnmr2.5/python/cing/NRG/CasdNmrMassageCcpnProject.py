@@ -215,7 +215,7 @@ def getFullEntryNameListForTarget(target, programHoH):
     """
     targetList = programHoH.keys()
     targetList.sort()
-    print targetList
+    print(targetList)
     if target not in targetList:
         nTerror("Failed to find target %s in list %s" % (target, str(targetList)))
         return None
@@ -233,7 +233,7 @@ def getFullEntryNameListForTarget(target, programHoH):
 def printCingUrls(programHoH):
     targetList = programHoH.keys()
     targetList.sort()
-    print targetList
+    print(targetList)
     for target in targetList:
         mapByLab = programHoH[target]
         labList = mapByLab.keys()
@@ -246,8 +246,8 @@ def printCingUrls(programHoH):
                     continue
             entryCode = target + labId
             ch23 = entryCode[1:3]
-            print "http://nmr.cmbi.ru.nl/CASD-NMR-CING/data/%s/%s/%s.cing" % (
-                    ch23, entryCode, entryCode                )
+            print("http://nmr.cmbi.ru.nl/CASD-NMR-CING/data/%s/%s/%s.cing" % (
+                    ch23, entryCode, entryCode                ))
 
 
 # NB TODO: reorganize this data into a class so it can be properly imported from the many other scripts.

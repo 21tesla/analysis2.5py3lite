@@ -57,7 +57,7 @@ def linkdataNRG():
     r1 = csql.cingresidue.alias()
 
     #The file opdracht_geerten_november2010.txt contains all input.
-    in_file = open(filename, "r")
+    in_file = open(filename)
     text = in_file.read()
     in_file.close()
 
@@ -187,7 +187,7 @@ def linkdataNRG():
     #out_file = open(outputFnLinkData,"w")
     #out_file.write(finaltext)
     #out_file.close()
-print 'hello'
+print('hello')
 
 if __name__ == '__main__':
     linkdataNRG()

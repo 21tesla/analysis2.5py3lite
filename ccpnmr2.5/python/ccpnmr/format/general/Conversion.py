@@ -118,7 +118,7 @@ class FormatConversionError(StandardError):
     
     return returnStr
  
-class FormatConversion(object):
+class FormatConversion:
 
   """
   
@@ -172,7 +172,7 @@ class FormatConversion(object):
       validCcpnProjectName = returnMemopsWord(ccpnProjectName)
       
       if not validCcpnProjectName == ccpnProjectName:
-        print "  Warning: Project name changed from '%s' to '%s' for CCPN validity" % (ccpnProjectName,validCcpnProjectName)
+        print("  Warning: Project name changed from '%s' to '%s' for CCPN validity" % (ccpnProjectName,validCcpnProjectName))
       
       self.ccpnProject = Implementation.MemopsRoot(name = validCcpnProjectName)
     
@@ -353,9 +353,9 @@ class FormatConversion(object):
     (exportFormats, ccpnObjects) = getValidExportFormats(self.ccpnProject) 
     
     if not exportFormats.has_key(formatName):
-      print "   Warning: no information for %s. Aborting." % formatName
+      print("   Warning: no information for %s. Aborting." % formatName)
     elif informationType not in exportFormats[formatName]:
-      print "   Warning: no information to export %s for %s. Aborting." % (informationType,formatName)
+      print("   Warning: no information to export %s for %s. Aborting." % (informationType,formatName))
     else:
       
       ccpnObjectsLoop = []
@@ -382,9 +382,9 @@ class FormatConversion(object):
         objectAddKeywordName = 'constraintList'
         
       elif informationType == 'project':
-        print "  Error: cannot export project data in exportAllObjects."
+        print("  Error: cannot export project data in exportAllObjects.")
       else:
-        print "  Error: unknown information type %s for exportAllObjects." % informationType
+        print("  Error: unknown information type %s for exportAllObjects." % informationType)
       
       #
       # Now do the export.
@@ -882,7 +882,7 @@ class FormatConversion(object):
           dataChanged = True
         else:
           # TODO what should happen here? 
-          print "ERROR - two unique matches!"
+          print("ERROR - two unique matches!")
           uniqueMatches = {}
           break
       
@@ -907,7 +907,7 @@ class FormatConversion(object):
       missingDim = None
       missingExpDim = None
       for expDimIndex in range(len(refExpDimPpmRange)):
-        print expDimIndex,
+        print(expDimIndex,)
         if not expDimIndex in uniqueMatches.values():
           missingExpDim = expDimIndex
         if not expDimIndex + 1 in uniqueMatches.keys():
@@ -1046,7 +1046,7 @@ class FormatConversion(object):
         
         if testMode:
           self.endSilent()   
-          print informationType,formatName, fileRead, fileInformation
+          print(informationType,formatName, fileRead, fileInformation)
         
         if fileRead:
           formatNameSuggestions.append(formatName)      
@@ -1101,10 +1101,10 @@ class FormatConversion(object):
         formatClass.file = getattr(formatClass,fileAttrName)
         
         # Don't reset fileName when reading list of filenames for coordinates!
-        if self.informationType != 'coordinates' or type(self.fileName) == type(''):
+        if self.informationType != 'coordinates' or type(self.fileName) == str:
           self.fileName = None  
         
-        print "  Warning: using preparsed file to read %s information..." % self.informationType
+        print("  Warning: using preparsed file to read %s information..." % self.informationType)
     
     #
     # Set single filename, or multiple ones if not string (assuming tuple or list)
@@ -1112,7 +1112,7 @@ class FormatConversion(object):
     
     if self.fileName:
 
-      if type(self.fileName) == type(''):
+      if type(self.fileName) == str:
         keywords['fileName'] = self.fileName
       else:
         keywords['fileNames'] = self.fileName
@@ -1135,7 +1135,7 @@ class FormatConversion(object):
     
     for keyword in self.addKeywords.keys():
       if keywords.has_key(keyword):
-        print "Warning: overwriting default keyword '%s' by set value!" % keyword
+        print("Warning: overwriting default keyword '%s' by set value!" % keyword)
       keywords[keyword] = self.addKeywords[keyword]
       
     #
@@ -1443,7 +1443,7 @@ class FormatConversion(object):
       elif len(constraintLists) > 1:  
         # TODO can here have option to just select first one?
         # TODO Or, alternatively, export all relevant lists?
-        print constraintLists
+        print(constraintLists)
         raise FormatConversionError("Multiple %ss present - have to select one and pass it as 'constraintList' using addKeywords" % listType)
       else:
         constraintList = constraintLists.pop()
@@ -1515,7 +1515,7 @@ class FormatConversion(object):
         
         if len(chains):
           if len(chains) > 1:
-            print "  Warning: multiple chains available - picking first one only."
+            print("  Warning: multiple chains available - picking first one only.")
           chain = chains.pop()
         else:
           raise FormatConversionError("No chain available - cannot export project.")
@@ -1566,7 +1566,7 @@ class FormatConversion(object):
         
         if len(entries):
           if len(entries) > 1:
-            print "  Warning: multiple entries available - picking first one only."
+            print("  Warning: multiple entries available - picking first one only.")
           entry = entries.pop()
         else:
           raise FormatConversionError("No entry available - cannot export project.")
@@ -1758,12 +1758,12 @@ class FormatConversion(object):
 
     for i in range(len(self.numResonancesLinked['linked'])):
       if self.numResonancesLinked['origUnlinked'][i]:
-        print "Linked %d resonances for %s." % (self.numResonancesLinked['linked'][i],self.numResonancesLinked['info'][i]),
+        print("Linked %d resonances for %s." % (self.numResonancesLinked['linked'][i],self.numResonancesLinked['info'][i]),)
         if self.numResonancesLinked['unlinked'][i]:
-          print " Unable to link %d resonances." % self.numResonancesLinked['unlinked'][i]
+          print(" Unable to link %d resonances." % self.numResonancesLinked['unlinked'][i])
           self.allResonancesLinked = False
         else:
-          print " All resonances now linked."
+          print(" All resonances now linked.")
 
   def setForceChainMappings(self,keywds,resonances):
 
@@ -1777,7 +1777,7 @@ class FormatConversion(object):
       forceChainMappings = sequenceComparison.compareFormatFileToCcpnInfo()        
       if forceChainMappings:
         keywds['forceChainMappings'] = forceChainMappings
-        print forceChainMappings
+        print(forceChainMappings)
         
     return keywds.copy()
              

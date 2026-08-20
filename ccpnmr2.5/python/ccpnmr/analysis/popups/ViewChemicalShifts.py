@@ -453,7 +453,7 @@ class ViewChemicalShiftsPopup(BasePopup):
       
       for residue, spinSystem in spinSystems:
         
-        if type(residue) is type(1):
+        if type(residue) is int:
           seqNum  = '{%d}' % residue
           
           if doOneLetter:

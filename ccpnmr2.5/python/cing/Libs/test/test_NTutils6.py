@@ -16,8 +16,8 @@ class AllChecks(TestCase):
     os.chdir(cingDirTmpTest)
 
     def testGetCallerName(self):
-        self.failIf( getCallerName() != 'testGetCallerName')
-        self.failIf( additionalTestRoutineByItself() != 'additionalTestRoutineByItself')
+        self.assertFalse( getCallerName() != 'testGetCallerName')
+        self.assertFalse( additionalTestRoutineByItself() != 'additionalTestRoutineByItself')
 
     def testGetUniqueName(self):
         resonanceSources = NTlist()
@@ -74,7 +74,7 @@ class AllChecks(TestCase):
                          ('A', 6, 'A', 9),
                         ]
         for i, obj in enumerate(inputList):
-            self.assertEquals( nTflatten(obj), expectedList[i] )
+            self.assertEqual( nTflatten(obj), expectedList[i] )
         pair = (('A', 6), ('A', 9))
 #        valueList =  nTflatten(pair)        
 #        nTmessage("valueList: %s" % valueList)

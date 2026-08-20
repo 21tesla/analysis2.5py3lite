@@ -84,11 +84,11 @@ class SaveFrame (Lister):
         if recursive:
             for tagtable in self.tagtables:
                 if tagtable.check_integrity():
-                    print "ERROR: integrity check failed for tagtable"
+                    print("ERROR: integrity check failed for tagtable")
                     return 1
         if self.verbosity >= 9:
-            print 'Checked integrity of SaveFrame(%2s tagtables, recurs.=%s)  : OK [%s]' % (
-                len(self.tagtables), recursive, self.title )
+            print('Checked integrity of SaveFrame(%2s tagtables, recurs.=%s)  : OK [%s]' % (
+                len(self.tagtables), recursive, self.title ))
 
         
 ###############################################################################
@@ -96,6 +96,6 @@ if __name__ == '__main__':
     if 1:
         sf = SaveFrame( verbosity=9 )
         sf.check_integrity()
-        print "sf:", sf.star_text()
-        print "sf:", sf
-        print "FINISHED"
+        print("sf:", sf.star_text())
+        print("sf:", sf)
+        print("FINISHED")

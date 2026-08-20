@@ -72,7 +72,7 @@ class FactorisedParams(ExternalParams):
     
     try:
       elementTree = ET.parse(self.parFile)
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
       
     topNode = elementTree.getroot()
@@ -84,12 +84,12 @@ class FactorisedParams(ExternalParams):
       decompositions = list(topNode.findall('Decomposition'))
       if decompositions:
         if len(decompositions) > 1:
-          print ('WARNING, found %s Decompositions in file %s\n Using first one'
+          print('WARNING, found %s Decompositions in file %s\n Using first one'
                  % (len(decompositions),  self.parFile))
         decomposition = decompositions[0]
       
       else:
-        print 'WARNING, no Decompositions found in file',  self.parFile
+        print('WARNING, no Decompositions found in file',  self.parFile)
         return
       
     # get top-level parameters from Decomposition node :

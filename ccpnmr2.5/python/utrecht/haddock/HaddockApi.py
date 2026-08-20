@@ -91,7 +91,7 @@ from HaddockServerUpload    import     ServerUpload
 from HaddockBasic            import  getStructureFromFile, addRdcParam, addDaniParam
 from HaddockLocal            import  *
 
-class HaddockApi(object):
+class HaddockApi:
     
     """Description: API for operation of the Haddock package from within a Python script.
        Input      : A valid ccpnProject instance
@@ -183,7 +183,7 @@ class HaddockApi(object):
         else:
             if self.debug: print("ERROR: getHaddockProject, no project with name %s" % name)
 
-class HaddockProject(object):
+class HaddockProject:
     
     """Description: HaddockProject is a convenient storage class for Haddock projects.
                     It takes care of setting default, processing data and ensuring 
@@ -441,7 +441,7 @@ class HaddockProject(object):
             self.runs.append(run)
             return run
 
-class HaddockPartner(object):
+class HaddockPartner:
     
     """Description: HaddockPartner is a convenient storage class for Haddock partners.
                     It takes care of setting default, processing data and ensuring 
@@ -681,7 +681,7 @@ class HaddockPartner(object):
 
                 hSeqId += 1    
 
-class HaddockRun(object):
+class HaddockRun:
     
     """Description: HaddockRun is a convenient storage class for Haddock runs.
                     It takes care of setting default, processing data and ensuring 

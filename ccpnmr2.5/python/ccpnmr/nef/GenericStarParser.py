@@ -104,10 +104,6 @@ DataBlocks, SaveFrames, and Loops, to prepend to item and column names.
 
 # NB must be Python 2.7 and 3.x compatible
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
 #=========================================================================================
@@ -267,7 +263,7 @@ class StarSyntaxError(ValueError):
 class NamedOrderedDict(OrderedDict):
 
     def __init__(self, name=None):
-        super(NamedOrderedDict, self).__init__()
+        super().__init__()
         self.name = name
 
     def __str__(self):
@@ -347,7 +343,7 @@ class DataExtent(NamedOrderedDict):
     """Top level container for general STAR object tree"""
 
     def __init__(self, name='Root'):
-        super(DataExtent, self).__init__(name=name)
+        super().__init__(name=name)
 
     def toString(self, indent='', separator=_defaultSeparator):
         blockSeparator = '\n\n\n\n'

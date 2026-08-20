@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 import os, string
 
@@ -146,7 +146,7 @@ class FormatFilePopup(BasePopup):
       
     self.file_select = FileSelect(master,
                                   file_types=file_types,
-	                                directory = directory,
+                                    directory = directory,
                                   double_callback=self.ok,
                                   multiSelect = self.multiSelect)
     
@@ -158,7 +158,7 @@ class FormatFilePopup(BasePopup):
       else:
         fileName = ''
       self.file_select.setFile(fileName)
-	              
+                  
     self.file_select.grid(row=0, column=0, sticky=Tkinter.NSEW)
 
     texts = [ self.selectionText ]

@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
   argList = ['edit','test']
   if not len(sys.argv) == 5 or sys.argv[1] not in argList:
-    print "Need one of %s as first argument to run script,\nthen give molType, ccpCode and new linking/descriptor to add with atom to remove (e.g. addLinkingToChemComp.py edit protein ASN link:ND2@remove:HD2)" % str(argList)
+    print("Need one of %s as first argument to run script,\nthen give molType, ccpCode and new linking/descriptor to add with atom to remove (e.g. addLinkingToChemComp.py edit protein ASN link:ND2@remove:HD2)" % str(argList))
     sys.exit()
     
   if sys.argv[1] == 'test':
@@ -52,7 +52,7 @@ if __name__ == '__main__':
   newDict = getDescriptorDict(newLinking)
   
   if not newDict:
-    print "  Exiting: cannot handle '%s' as descriptor/linking code." % newLinking
+    print("  Exiting: cannot handle '%s' as descriptor/linking code." % newLinking)
     sys.exit()
   
   #
@@ -64,7 +64,7 @@ if __name__ == '__main__':
   chemComp = getChemComp(tempProject,molType,ccpCode,chemCompArchiveDir=chemCompDir)
     
   if not chemComp:
-    print "  Exiting: unknown chemComp '%s','%s'" % (molType,ccpCode)
+    print("  Exiting: unknown chemComp '%s','%s'" % (molType,ccpCode))
     sys.exit()
 
   createNewDescriptors(chemComp,newDict,removeAtomNames,renameAtoms)

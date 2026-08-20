@@ -280,7 +280,7 @@ class Ccpn_To_NmrStar:
 
   def printTag(self,tag):
 
-    print 'TAG: [%s]' % tag
+    print('TAG: [%s]' % tag)
 
     return tag
 
@@ -1703,7 +1703,7 @@ class Ccpn_To_NmrStar:
 
       if resLabFrac:
         if atomLabFlag:
-          print '  Warning: mixture of labelling types in molecule %s' % component.molecule.name
+          print('  Warning: mixture of labelling types in molecule %s' % component.molecule.name)
           break
 
         resLabFracFlag = True
@@ -1713,7 +1713,7 @@ class Ccpn_To_NmrStar:
 
       else:
         if resLabFracFlag:
-          print '  Warning: mixture of labelling types in molecule %s' % component.molecule.name
+          print('  Warning: mixture of labelling types in molecule %s' % component.molecule.name)
           break
 
         atomLabFlag = True
@@ -1793,7 +1793,7 @@ class Ccpn_To_NmrStar:
         if firstBmrbLabel:
 
           if firstBmrbLabel != bmrbLabel:
-            print '  Warning: multiple labels for this molecule %s' % component.molecule.name
+            print('  Warning: multiple labels for this molecule %s' % component.molecule.name)
             break
 
         else:
@@ -2545,7 +2545,7 @@ class Ccpn_To_NmrStar:
           if appData:
             shiftRefsIdStr = appData.value
             if shiftRefsSetUse and shiftRefsIdStr != str(shiftRefsSetUse):
-              print '  Error: NMR Experiment %s has potentially the wrong chemical shift referencing.' % nmrExpt.name
+              print('  Error: NMR Experiment %s has potentially the wrong chemical shift referencing.' % nmrExpt.name)
               shiftRefsIdStr = str(shiftRefsSetUse)
 
           else:
@@ -2573,7 +2573,7 @@ class Ccpn_To_NmrStar:
             for Id in shiftRefsSetUse:
               shiftRef = nmrProject.findFirstShiftReference(serial=Id)
               if not shiftRef:
-                print '  Error: NMR Experiment %s does not have chemical shift reference with serial %d' % (nmrExpt, Id)
+                print('  Error: NMR Experiment %s does not have chemical shift reference with serial %d' % (nmrExpt, Id))
               else:
                 self.shiftReferenceList[-1].add(shiftRef)
 
@@ -2780,7 +2780,7 @@ class Ccpn_To_NmrStar:
     dataDims = []
     for dataDim in dataSource.sortedDataDims():
       if dataDim.className == 'FreqDataDim':
-	dataDims.append(dataDim)
+    dataDims.append(dataDim)
 
     return dataDims
 
@@ -9299,7 +9299,7 @@ class Ccpn_To_NmrStar_test(Ccpn_To_NmrStar):
 
     #self.sfDict['assigned_chemical_shifts']['ccpnLoop'] = "nmrEntry.findAllMeasurementLists(className='ChemicalShiftList', isSimulated=False)",
 
-    print "  Modifying mapping dictionary... "
+    print("  Modifying mapping dictionary... ")
 
     pass
  

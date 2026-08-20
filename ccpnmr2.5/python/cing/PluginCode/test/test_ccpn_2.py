@@ -18,7 +18,7 @@ try:
     from cing.PluginCode.Ccpn import modResDescriptorForTerminii
     from cing.PluginCode.Ccpn import patchCcpnResDescriptor
 except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
-    print "Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() )
+    print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try
 
@@ -90,8 +90,8 @@ class AllChecks(TestCase):
             if not ci:
                 self.assertFalse(cie)
             else:
-                self.assertEquals(ci[0], cie[0])
-                self.assertEquals(ci[1], cie[1])
+                self.assertEqual(ci[0], cie[0])
+                self.assertEqual(ci[1], cie[1])
             msgHoL.showMessage(999, 999, 999, 999)
     def _testPatchCcpnResDescriptor(self):
         rList = [ # result, description, ccpnMolType, linking,
@@ -105,7 +105,7 @@ class AllChecks(TestCase):
         for i in range(len(rList)):
             d = rList[i]
             nTdebug("d: %s" % d)
-            self.assertEquals(d[0], patchCcpnResDescriptor(d[1], d[2], d[3]))
+            self.assertEqual(d[0], patchCcpnResDescriptor(d[1], d[2], d[3]))
     # end def
 
     def testModDescriptorForTerminii( self ):
@@ -125,7 +125,7 @@ class AllChecks(TestCase):
         for i in range(len(rList)):
             d = rList[i]
             nTdebug("d: %s" % d)
-            self.assertEquals(d[1], modResDescriptorForTerminii( d[0], d[3], seqLength, d[2]))
+            self.assertEqual(d[1], modResDescriptorForTerminii( d[0], d[3], seqLength, d[2]))
 
 
     def _testCcpnProjectNameOfFn(self):
@@ -142,7 +142,7 @@ class AllChecks(TestCase):
         for i, input in enumerate(inputList):
             result = getProjectNameInFileName(input)
             nTdebug( "i, input, result, expected: [%s] [%s] [%s] [%s]" % ( i, input, result, expectedList[i]))
-            self.assertEquals(expectedList[i], result)
+            self.assertEqual(expectedList[i], result)
 
 
 if __name__ == "__main__":

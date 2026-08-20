@@ -20,7 +20,7 @@ degrees10 = pi/18.0
 def readDatabase(fileName):
 
   data = []
-  fileObj = open(fileName, 'r')
+  fileObj = open(fileName)
   line  = fileObj.readline()
 
   j = 0
@@ -110,7 +110,7 @@ def makeTrainingDataAngles(data):
     else:
       missing += 1
 
-  print "Excluded inputs:", missing
+  print("Excluded inputs:", missing)
   return trainingData
 
 def makeTrainingDataMissingShift(data):
@@ -212,7 +212,7 @@ def testFuncSS(nn, inputs, verbose=True):
   data = (pcSS,)
   
   if verbose:
-    print "Success rate : %5.2f%% " % data
+    print("Success rate : %5.2f%% " % data)
   
   return pcSS
  
@@ -293,7 +293,7 @@ def testFuncAngles(nn, inputs, verbose=True):
   data = (pc,pcSS, pcPhi,pcPsi,numGood10,numGood20,numGood30,numGood45,N,err,meanPhi, meanPsi)
   
   if verbose:
-    print "Success rate : %5.2f%% :: SS %5.2f%% Phi %5.2f%% Psi %5.2f%%  %5d|%5d|%5d|%5d of %5d error %5.2f mean %5.2f, %5.2f" % data
+    print("Success rate : %5.2f%% :: SS %5.2f%% Phi %5.2f%% Psi %5.2f%%  %5d|%5d|%5d|%5d of %5d error %5.2f mean %5.2f, %5.2f" % data)
   
   return pc
     
@@ -327,7 +327,7 @@ def testFuncMissingShift(nn, inputs):
   
   pc = (100.0*numGood)/N
   data = (pc,numGood,N,err,sqrt(meanDiff2),meanDiff)
-  print "Success rate : %5.2f%% - %5d of %5d error %5.2f RMS %5.2f mean %5.2f" % data
+  print("Success rate : %5.2f%% - %5d of %5d error %5.2f RMS %5.2f mean %5.2f" % data)
   return pc
 
 if __name__ == '__main__':
@@ -338,20 +338,20 @@ if __name__ == '__main__':
   
   # Train missing shifts
   
-  print 'Reading database'
+  print('Reading database')
   #data = readDatabase('networkVarInput.txt')
   data = readDatabase('DB_TALOS_186_secStruct_nn')
   
-  print 'Making training set'
+  print('Making training set')
   trainingSet = makeTrainingDataMissingShift(data)
   
   nIn  = len(trainingSet[0][0])
   nOut = len(trainingSet[0][1])
   nHid = 3
   
-  print "Inputs", nIn
-  print "Hidden", nHid
-  print "Output", nOut
+  print("Inputs", nIn)
+  print("Hidden", nHid)
+  print("Output", nOut)
 
   nn = NN(nIn, nHid, nOut, testFuncMissingShift)
 
@@ -362,50 +362,50 @@ if __name__ == '__main__':
 
   for iter in range(1):
 
-    print iter
+    print(iter)
 
     # Train predict angles
-    print 'Reading database'
+    print('Reading database')
     data = readDatabase('DB_TALOS_186_secStruct_nn')
-    print 'Read %d entries' % len(data)
+    print('Read %d entries' % len(data))
 
     nTest = int(len(data)/2.0)
 
     testData = data[:nTest]
     data = data[nTest:]
     
-    #for i in xrange():
+    #for i in range():
     #  n = len(data)
     #  j = randint(0, n-1)
     #  testData.append(data.pop(j))
 
 
 
-    print 'Making training set'
+    print('Making training set')
     trainingSet = makeTrainingDataAngles(data)
-    print 'Training Database size: %d' % len(trainingSet)
+    print('Training Database size: %d' % len(trainingSet))
 
-    print 'Making test set'
+    print('Making test set')
     testSet = makeTrainingDataAngles(testData)
-    print 'Test Database size: %d' % len(testSet)
+    print('Test Database size: %d' % len(testSet))
  
     nIn  = len(trainingSet[0][0])
     nOut = len(trainingSet[0][1])
     nHid = 4
  
-    print "Inputs", nIn
-    print "Hidden", nHid
-    print "Output", nOut
+    print("Inputs", nIn)
+    print("Hidden", nHid)
+    print("Output", nOut)
 
     nn = NN(nIn, nHid, nOut, testFuncSS)
 
     nn.train(trainingSet, iterations=20, N=0.5, M=0.2)
  
-    print 'BEST OF TRAINING:'
+    print('BEST OF TRAINING:')
  
     testFuncSS(nn, trainingSet, verbose=True)
  
-    print 'TEST RESULT:'
+    print('TEST RESULT:')
  
     testFuncSS(nn, testSet, True)
 

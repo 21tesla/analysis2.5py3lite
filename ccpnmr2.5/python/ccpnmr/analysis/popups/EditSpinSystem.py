@@ -1169,7 +1169,7 @@ class EditSpinSystemPopup(BasePopup):
       resonances, info = infoDict[spinSystem]
       data = list(info)
       unassigned = []
-      atomShifts = [[] for x in xrange(nAtoms)]
+      atomShifts = [[] for x in range(nAtoms)]
 
       for resonance, shift, name, assigned in resonances:
         if assigned:

@@ -51,12 +51,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter, tkMessageBox
+import tkinter, tkMessageBox
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # NOTE:ED - simple message queuing for the minute
-class _Messages(object):
+class _Messages:
   """Simple class to queue a set of errors that can be 'flushed' as a compound set of errors at the end
   """
   def __init__(self):
@@ -309,21 +309,21 @@ if (__name__ == '__main__'):
   s = showMulti('Multiple Choice', 'Select one of the following:',
                 ['Option 1','Option 2','Option 3','Cancel'],
                 [1,2,3,None])
-  print "Multi:", s
+  print("Multi:", s)
  
   showError('title', 'error message')
   s = showOkCancel('title', 'ok message')
-  print s, type(s)
+  print(s, type(s))
   s = showOkCancel('title', 'ok2 message')
-  print s, type(s)
+  print(s, type(s))
   s = showYesNo('title', 'yes message')
-  print s, type(s)
+  print(s, type(s))
   s = showYesNo('title', 'yes2 message')
-  print s, type(s)
+  print(s, type(s))
   showWarning('title', 'warning message')
   showInfo('title', 'info message')
   messageReporter.showError('error title', 'error message')
   messageReporter.showInfo('info title', 'info message')
   messageReporter.showWarning('warning title', 'warning message')
-  print messageReporter.showOkCancel('ok cancel title', 'ok cancel message')
-  print messageReporter.showYesNo('yes no title', 'yes no message')
+  print(messageReporter.showOkCancel('ok cancel title', 'ok cancel message'))
+  print(messageReporter.showYesNo('yes no title', 'yes no message'))

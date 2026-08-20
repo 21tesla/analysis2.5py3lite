@@ -47,7 +47,7 @@ class AllChecks(TestCase):
                     upperBound = testValues[i][1]
                     )
             nTdebug("Viol angle [%2d]: %8.0f" % (i, viol))
-            self.assertEquals(testValues[i][3], viol)
+            self.assertEqual(testValues[i][3], viol)
 
 if __name__ == "__main__":
     cing.verbosity = verbosityError

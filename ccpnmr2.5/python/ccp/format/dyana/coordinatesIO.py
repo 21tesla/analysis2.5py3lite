@@ -124,7 +124,7 @@ class DyanaCoordinateFile(DyanaGenericFile):
   def read(self, maxNum = None, verbose = 0):
 
     if verbose == 1:
-      print "Reading %s coordinate file %s" % (self.format,self.name)
+      print("Reading %s coordinate file %s" % (self.format,self.name))
     
     #
     # One structure per file...
@@ -142,7 +142,7 @@ class DyanaCoordinateFile(DyanaGenericFile):
     # Start reading file
     #
     
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     # Read, look for first line
     line = fin.readline()
@@ -212,7 +212,7 @@ class DyanaCoordinateFile(DyanaGenericFile):
         
         # Remove linker residue coordinates - irrelevant for CCPN, and cannot be stored.
         if resName in self.linkerResidueCodes:
-          print "  Warning: Removed %s linker residue" % resName
+          print("  Warning: Removed %s linker residue" % resName)
           
           if coordinateAddedToNewChain:
             currentRefChainId = self.chainCodesString[len(self.chains) - 1]
@@ -237,12 +237,12 @@ class DyanaCoordinateFile(DyanaGenericFile):
   def write(self,verbose = 0):
 
     if verbose == 1:
-      print "Writing %s coordinate file %s" % (self.format,self.name)
+      print("Writing %s coordinate file %s" % (self.format,self.name))
 
     fout = open(self.name,'w')
     
     if len(self.modelCoordinates) > 1:
-      print "Warning: can only handle 1 model per file for %s! Writing 1st model in list..." % self.format
+      print("Warning: can only handle 1 model per file for %s! Writing 1st model in list..." % self.format)
     
     modelNums = self.modelCoordinates.keys()
     modelNums.sort()

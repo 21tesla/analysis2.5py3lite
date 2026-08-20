@@ -213,7 +213,7 @@ class runCnsImporter:
     def readRunCns(self,runcns):
         
         param = re.compile('{===>}')
-        runfile = open(runcns,'r')
+        runfile = open(runcns)
         for line in runfile.readlines():
             line = line.strip()
             if param.match(line): self.processLine(param.split(line))

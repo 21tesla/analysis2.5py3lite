@@ -155,7 +155,7 @@ def restrFileHasIntensities(restrPdbCode):
     nmrStarFilePath = os.path.join(nmrGridDataDir,restrPdbCode,'parsed.str')
     
     if not os.path.exists(nmrStarFilePath):
-      print "NMR Restraints Grid file for %s not available!" % restrPdbCode
+      print("NMR Restraints Grid file for %s not available!" % restrPdbCode)
       return False
 
     nmrStarFile = NmrStarFile(nmrStarFilePath)
@@ -214,7 +214,7 @@ def getBmrbNmrGridCompletenessInfo(pdbCode, forceWrite = False):
           break
 
         else:
-          print "  Error: no link for completeness data for %s!" % pdbCode
+          print("  Error: no link for completeness data for %s!" % pdbCode)
           
   return finalFileName
     

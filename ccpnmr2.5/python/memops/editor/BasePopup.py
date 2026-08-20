@@ -52,8 +52,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 import os
-
-from memops.general.Constants import True, False
 from memops.general import Application
 from memops.general import Implementation
 

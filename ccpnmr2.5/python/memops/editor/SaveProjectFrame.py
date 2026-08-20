@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 import os
-import Tkinter
+import tkinter
 
 from memops.universal.Io import joinPath
 
@@ -170,9 +170,9 @@ class SaveProjectFrame(Frame):
           self.callback(self.project)
       elif self.modal:
         return # give another chance
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Save project', e.error_msg)
-    except IOError, e:
+    except (OSError, e):
       showError('Save project', str(e))
 
     if done:

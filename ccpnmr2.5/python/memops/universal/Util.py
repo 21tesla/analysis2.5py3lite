@@ -64,9 +64,6 @@ try:
   junk = True
   junk = False
 except:
-  True = not 0
-  False = not 1
-
 def formatFloat(x, places = 3):
   """autoformat float to specified number of significant figures
   currently does not do scientific formatting at all
@@ -309,7 +306,7 @@ def returnFloat(x,default = 0.0, verbose = True):
     x = float(x)
   except:
     if verbose:
-      print "Error converting '" + str(x) + "' to float: set to %s" % str(default)
+      print("Error converting '" + str(x) + "' to float: set to %s" % str(default))
     x = default
   return x
 
@@ -333,7 +330,7 @@ def returnLong(x, default = 0.0, verbose = 1):
     x = long(x)
   except:
     if verbose:
-      print "Error converting '" + str(x) + "' to long: set to %s" % str(default)
+      print("Error converting '" + str(x) + "' to long: set to %s" % str(default))
     x = default
   return x
 
@@ -357,7 +354,7 @@ def returnInt(x,default = 0, verbose = True):
     x = int(x)
   except:
     if verbose:
-      print "Error converting '" + str(x) + "' to integer: set to %s." % str(default)
+      print("Error converting '" + str(x) + "' to integer: set to %s." % str(default))
     
     x = default
       

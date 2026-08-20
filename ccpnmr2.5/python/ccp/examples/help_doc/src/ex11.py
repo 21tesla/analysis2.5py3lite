@@ -1,5 +1,5 @@
 import os
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import MemopsRoot
 

@@ -201,9 +201,9 @@ class CnsGenericFile(FormatFile):
 
     while (openBracket):
     
-      print "OPEN", elementNum, elementInnerNum, assiLine
-      print constraintElements
-      print
+      print("OPEN", elementNum, elementInnerNum, assiLine)
+      print(constraintElements)
+      print()
 
       #
       # Inside an element
@@ -219,8 +219,8 @@ class CnsGenericFile(FormatFile):
 
       while (openInnerBracket):
       
-        print 'OPEN INNER', elementNum, elementInnerNum, assiLine
-        print
+        print('OPEN INNER', elementNum, elementInnerNum, assiLine)
+        print()
 
         assiLine = assiLine[openInnerBracket.end():]
 
@@ -295,7 +295,7 @@ class CnsGenericFile(FormatFile):
 
           if origRestrNumString:
             if constraint.origId != returnInt(origRestrNumString.group(1)):
-              print "  Problem parsing file %s: can't handle OR statements" % self.name
+              print("  Problem parsing file %s: can't handle OR statements" % self.name)
 
           assiLine = assiLine[outerOr.end():]
           elementNum = 0
@@ -356,7 +356,7 @@ class CnsGenericFile(FormatFile):
 
     else:
 
-      print " Problems parsing constraint element ('%s')" % element
+      print(" Problems parsing constraint element ('%s')" % element)
 
       return (None,None,None)
 
@@ -365,7 +365,7 @@ class CnsGenericFile(FormatFile):
 
     elements = self.constraintElements
 
-    fin = open(self.name, 'rU')
+    fin = open(self.name)
 
     restrNum = -1  # Or start at 0?
 
@@ -506,11 +506,11 @@ class CnsGenericFile(FormatFile):
     fileReadOk = True
     
     if len(lineErrors) > numLines * 0.1:
-      print "  Error: CNS file not valid, too many errors"
+      print("  Error: CNS file not valid, too many errors")
       fileReadOk = False
     else:
       for lineError in lineErrors:
-        print lineError
+        print(lineError)
     
     return fileReadOk
     

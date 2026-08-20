@@ -1,5 +1,5 @@
 import os
-import Tkinter
+import tkinter
 
 from memops.api.Implementation import (MemopsRoot, Url)
 from memops.universal import Io as uniIo
@@ -35,12 +35,12 @@ def saveProject(project, name = 'test', subDir = 'data'):
 # Sub routine to print out details of the repositories.
 def printReposUrls(project):
 
-    print '\nUrls:'
+    print('\nUrls:')
 
     for repos in project.sortedRepositories():
-        print repos.name, repos.url.path
+        print(repos.name, repos.url.path)
 
-    print
+    print()
 
 if __name__ == '__main__':
 

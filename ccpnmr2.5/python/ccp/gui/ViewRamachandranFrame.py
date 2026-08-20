@@ -60,7 +60,7 @@ software development. Bioinformatics 21, 1678-1684.
 """
 import math
 import tkFont
-import cPickle
+import pickle
 
 from memops.gui.ScrolledCanvas  import ScrolledCanvas
 from memops.gui.Label           import Label
@@ -186,11 +186,11 @@ class ViewRamachandranFrame(ScrolledCanvas):
       
       if self.showCoords:
         coordStr = '[ %3.3f, %3.3f ]' % (phi,psi)
-	coordXtxt = x0+(0.9*(x1-x0))
+    coordXtxt = x0+(0.9*(x1-x0))
         coordYtxt = y0+y1
       else:
         coordStr = ''
-	coordXtxt = 0
+    coordXtxt = 0
         coordYtxt = 0
 
       if crosshair:
@@ -747,7 +747,7 @@ class ViewRamachandranFrame(ScrolledCanvas):
             phiPsiList.append((phi, psi))
 
     if (len(newSelect) <= 0):
-      print "No estimation in selected quadrant!"
+      print("No estimation in selected quadrant!")
       return
     
     # 2. calculate crude mean and sd

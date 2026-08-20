@@ -700,7 +700,7 @@ class EditStructuresPopup(BasePopup):
       tipTexts.append('The coordinate root mean square deviation for the residue within the ensemble, considering all atoms')
     
     if doAngles:
-      headingList.extend([u'\u03A6\nAngle',u'\u03A8\nAngle'])
+      headingList.extend(['\u03A6\nAngle','\u03A8\nAngle'])
       tipTexts.append('The phi protein backbone dihedral angle of the residue (C-N-CA-C)')
       tipTexts.append('The psi protein backbone dihedral angle of the residue (N-CA-C-N)')
       
@@ -775,13 +775,13 @@ class EditStructuresPopup(BasePopup):
             
             phi, psi = phiPsi
             if (phi is not None) and phi > 0:
-              category = u'+\u03A6'
+              category = '+\u03A6'
             
             elif psi is not None:
               if -110 < psi < 40:
-                category = u'\u03B1'
+                category = '\u03B1'
               else:
-                category = u'\u03B2'
+                category = '\u03B2'
                 
             datum.extend([category,])# prob])
           
@@ -1133,7 +1133,7 @@ class EditStructuresPopup(BasePopup):
        
       try:
         ensemble = getStructureFromFile(self.molSystem, file)
-      except Exception, e:
+      except Exception as e:
         showError('Structure from file', str(e), parent=self)
     
     if ensemble:

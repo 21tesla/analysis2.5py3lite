@@ -5,7 +5,7 @@ from cing.PluginCode.required.reqCcpn import CCPN_LOWERCASE_STR
 __author__ += 'Wim Vranken '
 
 # pylint: disable=R0903
-class NmrStar():
+class NmrStar:
     def __init__(self, project):
         self.project = project
         self.ccpnProject = None
@@ -40,9 +40,9 @@ class NmrStar():
         ccpnFolder = self.project.ccpnFolder
         if ccpnFolder.endswith(".tgz") or ccpnFolder.endswith(".tar.gz"):
             head, tail = os.path.split(ccpnFolder)
-            print head, tail
+            print(head, tail)
             baseNameList = tail.split('.')
-            print "baseNameList %s" % baseNameList
+            print("baseNameList %s" % baseNameList)
             baseName = baseNameList[0]
             ccpnFolder = os.path.join(head, baseName)
         if not ccpnFolder:

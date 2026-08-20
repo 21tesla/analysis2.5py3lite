@@ -7,11 +7,11 @@ def get_isd_name():
 
 def print_distance_restraint(r):
 
-  print '  number=%d, distance=%s, upper=%.2f, lower=%.2f' % \
+  print('  number=%d, distance=%s, upper=%.2f, lower=%.2f' % \)
         (r.number, str(r.distance), r.upper, r.lower)
 
   for a, b in r.contributions:
-    print ' ',a, b
+    print(' ',a, b)
 
 def getObjectKeyString(object, delimiter='|'):
   """Descrn: Make an object identifier string for a CCPN data model object
@@ -263,7 +263,7 @@ def export_structure(mol_system, polymer, model_number):
   try:
     structure = makeStructureEnsemble(struct_dict, mol_system) #, doWarnings=False)
   except:
-    print struct_dict
+    print(struct_dict)
     raise
   
   return structure
@@ -311,8 +311,8 @@ class CCPNReader:
         try:
             ccpn_project = loadProject(filename)
 
-        except Exception, msg:
-            raise IOError, 'Could not access CCPN project "%s". Error message was: %s' % (filename, msg)
+        except Exception as msg:
+            raise IOError('Could not access CCPN project "%s". Error message was: %s' % (filename, msg))
 
         return ccpn_project
 
@@ -358,7 +358,7 @@ class CCPNReader:
     def check_constraint_item(self, item, n_resonances=2):
 
         if len(item.resonances) <> n_resonances:
-            raise ValueError, 'should be exactly %d resonances' % n_resonances
+            raise ValueError('should be exactly %d resonances' % n_resonances)
 
     def get_atom_list(self, resonance):
 
@@ -386,7 +386,7 @@ class CCPNReader:
             else:
 
                 if self.debug:
-                    print 'Discarding duplicate', x
+                    print('Discarding duplicate', x)
 
         return [d[x] for x in keys]
 
@@ -407,7 +407,7 @@ class CCPNReader:
 
             if len(peaks) > 1:
                 if self.debug:
-                    print 'Constraint %s: Multiple reference peaks, using first one.' % number
+                    print('Constraint %s: Multiple reference peaks, using first one.' % number)
                     
             peak = list(peaks)[0]
 
@@ -422,12 +422,12 @@ class CCPNReader:
             value = constraint.origData
 
             if value is not None and self.debug:
-                print 'NOE or distance constraint %s: Using volume stored in original data.' % number
+                print('NOE or distance constraint %s: Using volume stored in original data.' % number)
 
         if value is None:
             value = constraint.targetValue ** (-6.)
             if self.debug:
-                print 'NOE or distance constraint %s: Using r^(-6) as volume.' % number
+                print('NOE or distance constraint %s: Using r^(-6) as volume.' % number)
 
         return value
 
@@ -467,7 +467,7 @@ class CCPNReader:
 
         if len(constraint.resonances) <> 4:
 
-            print '4 resonances expected for DihedralConstraint, %d found' % len(constraint.resonances)
+            print('4 resonances expected for DihedralConstraint, %d found' % len(constraint.resonances))
             return None, []
               
         atom_sets = [self.get_atom_list(R) for R in constraint.resonances]
@@ -501,13 +501,13 @@ class CCPNReader:
         for constraint in constraint_list.constraints:
 
             if self.debug:
-              print 'HBond restraint %d:'% constraint.serial
+              print('HBond restraint %d:'% constraint.serial)
 
             contribs = self.get_pair_contributions(constraint)
 
             if not contribs:
                 if self.debug:
-                    print 'No contributions found.'
+                    print('No contributions found.')
                     
                 continue
 
@@ -525,9 +525,9 @@ class CCPNReader:
                 r_isd.distance = 0.5*abs(constraint.upperLimit+constraint.lowerLimit)
 
                 if not self.debug:
-                  print 'HBond restraint %d:'% constraint.serial
+                  print('HBond restraint %d:'% constraint.serial)
 
-                print 'No distance found. Using (upper_bound+lower_bound)/2 as estimate.'
+                print('No distance found. Using (upper_bound+lower_bound)/2 as estimate.')
 
               else:
 
@@ -562,12 +562,12 @@ class CCPNReader:
         for constraint in constraint_list.constraints:
 
             if self.debug:
-              print 'Dihedral restraint %d:' % constraint.serial
+              print('Dihedral restraint %d:' % constraint.serial)
 
             atoms, contribs = self.get_quad_contributions(constraint)
 
             if not contribs:
-                print 'No contributions found.'
+                print('No contributions found.')
                 continue
 
             _atoms = [{'name': x.name, 'resid': x.residue.seqCode} for x in atoms]
@@ -575,7 +575,7 @@ class CCPNReader:
             dihedral_name = self.resolve_dihedral_name(_atoms, atoms[1].residue.ccpCode)
 
             if not dihedral_name:
-              print 'No torsion angle definition found for atoms %s' % str(tuple([(a.residue.seqCode, a.name) for a in atoms]))
+              print('No torsion angle definition found for atoms %s' % str(tuple([(a.residue.seqCode, a.name) for a in atoms])))
               continue
 
 ##             torsion_obj = getAtomsTorsion(atoms)
@@ -588,19 +588,19 @@ class CCPNReader:
             res2 = atoms[2].residue.seqCode-self.first_residue_number
 
             if res1 <> res2:
-              print 'Unable to define residue number unambiguously. Residue number for atoms 1 and 2: %d, %s.' % (res1, res2)
+              print('Unable to define residue number unambiguously. Residue number for atoms 1 and 2: %d, %s.' % (res1, res2))
               continue
 
             res_number = res1
             
             if len(constraint.items) > 1:
               if self.debug:
-                print 'Dihedral angle restraint %d has more than one DihedralConstraintItem. Using first one.' % constraint.serial
+                print('Dihedral angle restraint %d has more than one DihedralConstraintItem. Using first one.' % constraint.serial)
 
             try:
               item = constraint.items[0]
             except:
-              print 'Skipping dihedral angle restraint #%d: No contributions found.' % constraint_index
+              print('Skipping dihedral angle restraint #%d: No contributions found.' % constraint_index)
               continue
 
             r_isd = data.TorsionAngleMeasurement()
@@ -616,9 +616,9 @@ class CCPNReader:
                 r_isd.error = 0.5*abs(item.upperLimit-item.lowerLimit)
 
                 if not self.debug:
-                  print 'Dihedral restraint %d:' % constraint.serial
+                  print('Dihedral restraint %d:' % constraint.serial)
                               
-                print 'No target value found. Using (upper_bound+lower_bound)/2 as estimate.'
+                print('No target value found. Using (upper_bound+lower_bound)/2 as estimate.')
 
               else:
 
@@ -635,7 +635,7 @@ class CCPNReader:
             restraints.append(r_isd)
 
             if self.debug:
-              print 'Torsion angle %d: name=%s, residue number=%s, atoms=%s, value=%s' % \
+              print('Torsion angle %d: name=%s, residue number=%s, atoms=%s, value=%s' % \)
                     (constraint.serial, r_isd.name, str(r_isd.residue_number), str(contribs), str(r_isd.value))
 
         r_list = data.TorsionAngleList()
@@ -661,7 +661,7 @@ class CCPNReader:
 
             if not contribs:
                 if self.debug:
-                    print 'No contributions for restraint', constraint.serial
+                    print('No contributions for restraint', constraint.serial)
                     
                 continue
 
@@ -696,13 +696,13 @@ class CCPNReader:
             if constraint.targetValue is None and constraint.lowerLimit is None and \
                constraint.upperLimit is None:
 
-              print 'No target value or bounds found for RDC', constraint.serial
+              print('No target value or bounds found for RDC', constraint.serial)
               continue
 
             contribs = self.get_pair_contributions(constraint)
 
             if not contribs:
-              print 'No contributions for RDC', constraint.serial
+              print('No contributions for RDC', constraint.serial)
                     
               continue
 
@@ -718,7 +718,7 @@ class CCPNReader:
 
             else:
 
-              print 'RDC restraint %d: No target value found, using (upper_bound+lower_bound)/2.' % constraint.serial
+              print('RDC restraint %d: No target value found, using (upper_bound+lower_bound)/2.' % constraint.serial)
 
               r_isd.coupling = (constraint.upperLimit+constraint.lowerLimit)/2.
 
@@ -738,13 +738,13 @@ class CCPNReader:
         for constraint in constraint_list.constraints:
             
             if self.debug:
-              print 'Distance restraint %d:'% constraint.serial
+              print('Distance restraint %d:'% constraint.serial)
               
             contribs = self.get_pair_contributions(constraint)
 
             if not contribs:
                 if self.debug:
-                    print 'No contributions found.'
+                    print('No contributions found.')
                     
                 continue
 
@@ -764,9 +764,9 @@ class CCPNReader:
                 r_isd.distance = 0.5*abs(constraint.upperLimit+constraint.lowerLimit)
 
                 if not self.debug:
-                  print 'HBond restraint %d:'% ccpn_restraint_number
+                  print('HBond restraint %d:'% ccpn_restraint_number)
 
-                print 'No distance found. Using (upper_bound+lower_bound)/2 as estimate.'
+                print('No distance found. Using (upper_bound+lower_bound)/2 as estimate.')
 
               else:
 
@@ -823,7 +823,7 @@ class CCPNReader:
             d = {None: self.convert_jcoupling_restraint_list(constraint_list)}
 
         else:
-            print 'Unknown constrain list type "%s".' % key
+            print('Unknown constrain list type "%s".' % key)
             return None
 
         return d
@@ -894,7 +894,7 @@ class CCPNReader:
         for name in keys:
 
             if self.debug:
-              print 'Reading restraint list %s' % name
+              print('Reading restraint list %s' % name)
 
             key = getKeysFromString(name)
 
@@ -912,7 +912,7 @@ class CCPNReader:
                 if not r_list.restraints:
 
                   if self.debug:
-                    print 'Restraint list with key %s is empty.' % key
+                    print('Restraint list with key %s is empty.' % key)
                     continue
 
                 if label is not None:
@@ -931,7 +931,7 @@ class CCPNReader:
 
     def print_project_info(self):
 
-        from cPickle import loads
+        from pickle import loads
 
         restraint_types = {'DistanceConstraintList': 'Distance/NOE',
                            'HBondConstraintList': 'H-Bond',
@@ -941,9 +941,9 @@ class CCPNReader:
 
         ## sequences
 
-        print '\nContents of CCPN project %s:\n' % self.project_filename
+        print('\nContents of CCPN project %s:\n' % self.project_filename)
 
-        print 'ISD projects:'
+        print('ISD projects:')
 
         template = ' - Key: %s (created on %s)'
 
@@ -957,63 +957,63 @@ class CCPNReader:
           if not app_data:
             continue
 
-          print '\nNmrProject: %s\n' % nmr_project.name
+          print('\nNmrProject: %s\n' % nmr_project.name)
 
           for x in app_data:
             d = loads(x.value)
 
             date = d.get('date','N/A')
             
-            print template % (repr(d['key']), date)
+            print(template % (repr(d['key']), date))
 
           found = True
           
         if found:
-          print
+          print()
         else:
-          print '\n   None.\n'
+          print('\n   None.\n')
 
-        print 'Chains:\n'
+        print('Chains:\n')
 
         for mol_system in self.project.molSystems:
             for chain in mol_system.chains:
 
                 key = getObjectKeyString(chain)
 
-                print ' - ISD key: %s (CCPN details: %s)' % (repr(key), chain.details)
+                print(' - ISD key: %s (CCPN details: %s)' % (repr(key), chain.details))
 
         ## constraint lists
 
         constraint_lists = []
 
-        print '\nNMR projects:\n'
+        print('\nNMR projects:\n')
 
         for nmr_project in self.project.nmrProjects:
           key = getObjectKeyString(nmr_project)
-          print ' - ISD key: %s (CCPN name: %s)' % (repr(key), nmr_project.name)
+          print(' - ISD key: %s (CCPN name: %s)' % (repr(key), nmr_project.name))
           constraint_lists += [x.sortedConstraintLists() for x in nmr_project.nmrConstraintStores]
 
         if constraint_lists:
           constraint_lists = reduce(lambda a,b: a+b, constraint_lists)
 
-        print '\nConstraint lists: type (#restraints), ISD key (CCPN name):\n'
+        print('\nConstraint lists: type (#restraints), ISD key (CCPN name):\n')
 
         for x in constraint_lists:
 
             key = getObjectKeyString(x)
             _type = restraint_types.get(x.className, 'Unknown')
 
-            print ' - Type: %s (%.4d), ISD key: %s (CCPN name: %s)' % \
+            print(' - Type: %s (%.4d), ISD key: %s (CCPN name: %s)' % \)
                   (_type, len(x.constraints), repr(key), x.name)
 
         if not constraint_lists:
-          print '   None.'
+          print('   None.')
 
-        print
+        print()
 
     def new_app_data_object(self, dest, src, obj_key, key=None):
 
-      from cPickle import dumps
+      from pickle import dumps
       from memops.api.Implementation import AppDataString
       from isd import VERSION_STRING
       import time
@@ -1065,7 +1065,7 @@ class CCPNReader:
 
     def export_project_settings(self, settings, nmr_project_name, key):
 
-      print 'Exporting ISD project to CCPN NmrProject %s using key "%s" ...' % \
+      print('Exporting ISD project to CCPN NmrProject %s using key "%s" ...' % \)
             (nmr_project_name, key)
 
       nmr_project = self.get_nmr_project(nmr_project_name, True)
@@ -1082,7 +1082,7 @@ class CCPNReader:
 ##         for x in nmr_project.applicationData:
 ##           nmr_project.removeApplicationData(x)
 
-        print 'Exising project settings with key "%s" will be overwritten.' % key
+        print('Exising project settings with key "%s" will be overwritten.' % key)
 
         nmr_project.removeApplicationData(app_data)
         app_data = self.new_app_data_object(nmr_project, settings, key_project_settings, key)
@@ -1092,20 +1092,20 @@ class CCPNReader:
       nmr_project = list(self.project.findAllNmrProjects(name=nmr_project_name))
 
       if len(nmr_project) > 1:
-          raise KeyError, 'Key %s for CCPN NmrProject is not unique.' % \
+          raise KeyError('Key %s for CCPN NmrProject is not unique.' % \)
                 nmr_project_name
 
       elif not nmr_project:
 
         if create_new:
-          print 'CCPN NmrProject "%s" not found. Creating new project.' % nmr_project_name
+          print('CCPN NmrProject "%s" not found. Creating new project.' % nmr_project_name)
 
           from ccp.api.nmr.Nmr import NmrProject
           
           nmr_project = NmrProject(self.project, name=nmr_project_name)
           
         else:
-          raise KeyError, 'CCPN NmrProject with key %s not found.' % \
+          raise KeyError('CCPN NmrProject with key %s not found.' % \)
                 nmr_project_name
 
       else:
@@ -1115,9 +1115,9 @@ class CCPNReader:
 
     def read_project_settings(self, nmr_project_name, key):
 
-      from cPickle import loads
+      from pickle import loads
 
-      print 'Reading ISD project settings from CCPN NmrProject %s using key %s  ...' % \
+      print('Reading ISD project settings from CCPN NmrProject %s using key %s  ...' % \)
             (nmr_project_name, key)
 
       nmr_project = self.get_nmr_project(nmr_project_name)
@@ -1126,13 +1126,13 @@ class CCPNReader:
                                                     keyword=key_project_settings)
 
       if not app_data:
-        raise KeyError, 'CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \
+        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \)
               (nmr_project_name, key)
       
       ad = self.find_app_data(app_data, key)
 
       if ad is None:
-        raise KeyError, 'CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \
+        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \)
               (nmr_project_name, key)
 
       return self.get_app_data_object(ad)
@@ -1147,7 +1147,7 @@ class CCPNReader:
 
         if not mol_systems:
 
-            print 'CCPN MolSystem %s not found. Creating new one.' % \
+            print('CCPN MolSystem %s not found. Creating new one.' % \)
                   mol_system_name
 
             from ccp.api.molecule.MolSystem import MolSystem
@@ -1155,7 +1155,7 @@ class CCPNReader:
             mol_system = MolSystem(self.project, code=mol_system_name)
 
         elif len(mol_systems) <> 1:
-            raise KeyError, 'More than one CCPN MolSystem with name %s found.' % \
+            raise KeyError('More than one CCPN MolSystem with name %s found.' % \)
                   mol_system_name
 
         else:
@@ -1167,10 +1167,10 @@ class CCPNReader:
 
             index = index_list[i]
 
-            print index
+            print(index)
 
             if self.debug:
-                print 'Exporting structure index=%d' % index
+                print('Exporting structure index=%d' % index)
 
             state = ensemble[index]
 
@@ -1184,7 +1184,7 @@ class CCPNReader:
 
     def save(self):
       if self.debug:
-        print 'Saving CCPN project ...'
+        print('Saving CCPN project ...')
         
       self.project.saveModified()
 

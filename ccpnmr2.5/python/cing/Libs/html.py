@@ -29,7 +29,7 @@ from cing.core.parameters import htmlDirectories
 from cing.core.parameters import moleculeDirectories
 from cing.core.parameters import plugins
 from glob import glob1
-import cPickle
+import pickle
 import shutil
 
 HTML_TAG_PRE = "<PRE>"
@@ -207,7 +207,7 @@ def createHtmlCing(project, ranges=None):
 #end def
 
 # pylint: disable=R0903
-class HistogramsForPlotting():
+class HistogramsForPlotting:
     """
     Class for enabling load on demand
     Funny doesn't seem to speed booting up. And it really doesn't get loaded.

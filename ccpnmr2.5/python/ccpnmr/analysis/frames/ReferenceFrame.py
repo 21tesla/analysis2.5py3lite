@@ -111,14 +111,14 @@ class ReferenceFrame(Frame):
       for i in range(self.numDims):
         
         self.adjusts[i] = self.adjustEntry[i].get()
-	      
+          
       for peak in self.peakList.peaks:
         
-	dims = peak.peakDims
+    dims = peak.peakDims
         
         for i, peakDim in enumerate(peak.sortedPeakDims()):
           
-	  peakDim.position = peakDim.position + self.adjusts[i]
+      peakDim.position = peakDim.position + self.adjusts[i]
         
     self.parent.parent.owner.peaksUpdate()
     self.close() 

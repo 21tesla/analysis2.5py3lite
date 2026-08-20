@@ -85,10 +85,10 @@ if __name__ == "__main__":
   for mc in cyanaFile.modelCoordinates:
   
     for coo in cyanaFile.modelCoordinates[mc]:
-      print coo.serial, coo.resName, coo.x, coo.y, coo.z
+      print(coo.serial, coo.resName, coo.x, coo.y, coo.z)
       
   for chain in cyanaFile.chains:
-    print chain.chainId
+    print(chain.chainId)
 
   cyanaFile.name = 'local/test.coord'  
   cyanaFile.write()

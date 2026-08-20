@@ -67,7 +67,7 @@ class FelixParams(ExternalParams):
 
     try:
       fp = open(self.dataFile, 'rb')
-    except IOError, e:
+    except OSError as e:
       raise ApiError(str(e))
 
     s = fp.read(self.head)
@@ -111,7 +111,7 @@ if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: correct syntax: <script> <matrix_file>'
+    print('Error: correct syntax: <script> <matrix_file>')
     sys.exit(1)
 
   matrix_file = sys.argv[1]

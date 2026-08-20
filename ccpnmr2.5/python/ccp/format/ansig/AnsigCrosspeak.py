@@ -75,7 +75,7 @@ def readCrosspeakFile(project, verbose=False):
     return s
 
   if verbose:
-    print 'Reading Ansig crosspeaks file "%s"' % project.crosspeaksFile
+    print('Reading Ansig crosspeaks file "%s"' % project.crosspeaksFile)
 
   fp = open(project.crosspeaksFile, 'rb')
   s = fp.read()
@@ -172,10 +172,10 @@ def readCrosspeakFile(project, verbose=False):
       symmetryConnection, prevConnection, nextConnection, prevCorrConnection, nextCorrConnection, spectrum)
 
   if verbose:
-    print 'Number of deleted peaks = %d (ignoring these)' % deletedCount
-    print 'Number of non-deleted peaks = %d (retaining these)' % len(project.crosspeaks)
+    print('Number of deleted peaks = %d (ignoring these)' % deletedCount)
+    print('Number of non-deleted peaks = %d (retaining these)' % len(project.crosspeaks))
     for key in sorted(unknownSpectrumCount.keys()):
-      print 'Unknown spectrum "%s" with %d crosspeaks' % (key, unknownSpectrumCount[key])
+      print('Unknown spectrum "%s" with %d crosspeaks' % (key, unknownSpectrumCount[key]))
 
 """ below was copied in but is far from ready
 def setupCrosspeaks(project):
@@ -267,7 +267,7 @@ def setupCrosspeaks(project):
 def mergeResonances(project, verbose=False):
 
   if verbose:
-    print 'At start of mergeResonances have %d resonances' % len(project.resonances)
+    print('At start of mergeResonances have %d resonances' % len(project.resonances))
     nassignedCrosspeakDims = 0
 
   resonanceMap = {}
@@ -285,6 +285,6 @@ def mergeResonances(project, verbose=False):
         resonances.add((crosspeak, dim))
 
   if verbose:
-    print 'Number of assigned crosspeakDims = %d' % nassignedCrosspeakDims
-    print 'At end of mergeResonances have %d resonances' % len(project.resonances)
+    print('Number of assigned crosspeakDims = %d' % nassignedCrosspeakDims)
+    print('At end of mergeResonances have %d resonances' % len(project.resonances))
 """

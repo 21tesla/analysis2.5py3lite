@@ -83,20 +83,20 @@ class AriaWorkFlow(WorkFlow):
           break
 
         """
-        print run.inputConstraintStore
-        print run.inputMeasurementLists
-        print run.inputPeakLists
-        print run.inputStructures
-        print run.molSystem
-        print run.outputConstraintStore
-        print run.outputEnsemble
-        print run.outputMeasurementLists
-        print run.outputPeakLists
+        print(run.inputConstraintStore)
+        print(run.inputMeasurementLists)
+        print(run.inputPeakLists)
+        print(run.inputStructures)
+        print(run.molSystem)
+        print(run.outputConstraintStore)
+        print(run.outputEnsemble)
+        print(run.outputMeasurementLists)
+        print(run.outputPeakLists)
         """
     
 
 # TODO: change all url handling to this code! Much nicer... so posturl stuff can be changed?
-import urllib, urllib2, cookielib
+import urllib, urllib.request, cookielib
 from pdbe.adatah.Io import MultipartPostHandler
 
 # Note: might not need this subclass as long as methods don't overlap between local and other
@@ -160,14 +160,14 @@ class AriaCcpnGrid(AriaWorkFlow):
 
 
     cookies = cookielib.CookieJar()
-    cookieHandler = urllib2.HTTPCookieProcessor(cookies)
-    self.connection = urllib2.build_opener(cookieHandler,
+    cookieHandler = urllib.request.HTTPCookieProcessor(cookies)
+    self.connection = urllib.request.build_opener(cookieHandler,
                                            MultipartPostHandler)
-    urllib2.install_opener(self.connection)
+    urllib.request.install_opener(self.connection)
 
     # do this GET only so that can get hold of csrf token
-    req = urllib2.Request( loginToCcpnGridUrl )
-    handle = urllib2.urlopen(req)
+    req = urllib.request.Request( loginToCcpnGridUrl )
+    handle = urllib.request.urlopen(req)
 
     self.csrf_cookie = None
     for cookie in cookies:
@@ -175,7 +175,7 @@ class AriaCcpnGrid(AriaWorkFlow):
          self.csrf_cookie = cookie
          break
     if not self.csrf_cookie:
-      raise IOError( "No csrf cookie found" )
+      raise OSError( "No csrf cookie found" )
 
     # login using the usr, pwd, and csrf token
     dd = {
@@ -188,10 +188,10 @@ class AriaCcpnGrid(AriaWorkFlow):
         username=userId, password=password ) )
     """
 
-    req = urllib2.Request( loginToCcpnGridUrl, login_data )
+    req = urllib.request.Request( loginToCcpnGridUrl, login_data )
     # below is the key line; this is how you pass csrf token to POST
     req.add_header('X-CSRFToken', self.csrf_cookie.value)
-    returnPage = urllib2.urlopen( req )
+    returnPage = urllib.request.urlopen( req )
     
     uploadUrl = returnPage.url
     
@@ -220,10 +220,10 @@ class AriaCcpnGrid(AriaWorkFlow):
     #
     
     ##returnPage = self.connection.open(uploadUrl, uploadInfo)
-    req = urllib2.Request( uploadUrl, uploadInfo )
+    req = urllib.request.Request( uploadUrl, uploadInfo )
     if self.csrf_cookie:
       req.add_header('X-CSRFToken', self.csrf_cookie.value)
-    returnPage = urllib2.urlopen( req )
+    returnPage = urllib.request.urlopen( req )
     
     #print returnPage
     #print returnPage.url
@@ -240,10 +240,10 @@ class AriaCcpnGrid(AriaWorkFlow):
     #
 
     #statusPage = self.connection.open( self.ccpnGridStatusUrl,  {} )
-    req = urllib2.Request( self.ccpnGridStatusUrl )
+    req = urllib.request.Request( self.ccpnGridStatusUrl )
     if self.csrf_cookie:
       req.add_header('X-CSRFToken', self.csrf_cookie.value)
-    statusPage = urllib2.urlopen( req )
+    statusPage = urllib.request.urlopen( req )
     
     #
     # So what comes back here depends on whether project is tagged or not, will only allow tagged projects!!!
@@ -301,7 +301,7 @@ if __name__ == '__main__':
   while (status not in ('Finished','Failed')):
   
     infoDict = aria.getStatusPageInfo()
-    print aria.uniqueIdentifier, infoDict[aria.uniqueIdentifier]
+    print(aria.uniqueIdentifier, infoDict[aria.uniqueIdentifier])
     
     status = infoDict[aria.uniqueIdentifier]['status']
     

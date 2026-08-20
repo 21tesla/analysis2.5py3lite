@@ -216,7 +216,7 @@ class SelfmadeXMLParser:
             self.EndElementHandler(tag)
             return xmlfile[match.end():]
 
-        raise StandardError, 'mis-formatted xml file'
+        raise StandardError('mis-formatted xml file')
 
     def handle_element_match(self, match):
 
@@ -270,11 +270,11 @@ if __name__ == '__main__':
 
     def start_handler(x, y):
         return
-        print x, y
+        print(x, y)
 
     def end_handler(x):
         return
-        print x
+        print(x)
 
 
     p.StartElementHandler = start_handler

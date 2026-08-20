@@ -59,10 +59,10 @@ import string
 try:
   import urllib
 except:
-  print 'Warning: ScrolledHtml will only be able to open local files'
+  print('Warning: ScrolledHtml will only be able to open local files')
 import urlparse
 
-import Tkinter
+import tkinter
 
 from memops.universal.Io import splitPath
 

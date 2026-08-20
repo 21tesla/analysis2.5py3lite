@@ -2,7 +2,6 @@
 Module Documentation here
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
 
 
 #=========================================================================================
@@ -33,7 +32,7 @@ import re
 
 NMR_EXCHANGE_FORMAT = 'nmr_exchange_format'
 FRAME_PREFIX = 'nef_saveframe_'
-FRAME_SEARCH = r'{}(\w+)'.format(FRAME_PREFIX)
+FRAME_SEARCH = rf'{FRAME_PREFIX}(\w+)'
 SF_CATEGORY = 'sf_category'
 SF_FRAMECODE = 'sf_framecode'
 NAME = 'name'
@@ -55,7 +54,7 @@ VERSION = 'version'
 CCPN_PREFIX = 'ccpn_'
 
 
-class Validator(object):
+class Validator:
 
     def __init__(self, nef=None, validateNefDict=None):
         self.nef = nef
@@ -107,7 +106,7 @@ class Validator(object):
 
             if SF_FRAMECODE not in saveframe or saveframe.name != saveframe[SF_FRAMECODE]:
                 e = self._validation_errors[SAVEFRAME]
-                e += ["Saveframe.name for sf_framecode '{}' is not defined correctly.".format(saveframe[SF_FRAMECODE]), ]
+                e += [f"Saveframe.name for sf_framecode '{saveframe[SF_FRAMECODE]}' is not defined correctly.", ]
                 break
 
             # check against the validation dictionary
@@ -142,13 +141,13 @@ class Validator(object):
 
                         if saveframe[loop] and saveframe[loop].data:
                             # check for missing words/bad fields (keys)/malformed loops
-                            e += self.__dict_missing_keys(saveframe[loop].data[0], mandatoryLoopFields, label='{}:{}'.format(sf_name, loop))
-                            e += self.__dict_nonallowed_keys(saveframe[loop].data[0], mandatoryLoopFields + optionalLoopFields, label='{}:{}'.format(sf_name, loop))
-                            e += self.__loop_entries_inconsistent_keys(saveframe[loop].data, label='{}:{}'.format(sf_name, loop))
+                            e += self.__dict_missing_keys(saveframe[loop].data[0], mandatoryLoopFields, label=f'{sf_name}:{loop}')
+                            e += self.__dict_nonallowed_keys(saveframe[loop].data[0], mandatoryLoopFields + optionalLoopFields, label=f'{sf_name}:{loop}')
+                            e += self.__loop_entries_inconsistent_keys(saveframe[loop].data, label=f'{sf_name}:{loop}')
                         else:
 
                             # this error is a catch-all as loadFile should test the integrity of the nef file before validation
-                            e += ["Error reading loop '{}'.".format(loop), ]
+                            e += [f"Error reading loop '{loop}'.", ]
 
                     break
 
@@ -159,7 +158,7 @@ class Validator(object):
 
             else:
                 e = self._validation_errors[SAVEFRAME]
-                e += ["No sf_category '{}' found (possibly bad name defined).".format(saveframe[SF_CATEGORY]),]
+                e += [f"No sf_category '{saveframe[SF_CATEGORY]}' found (possibly bad name defined).",]
 
         return self._validation_errors
 
@@ -170,7 +169,7 @@ class Validator(object):
         VALID_KEY = SPECIFICATION_KEY
 
         if DICT_KEY not in nef:
-            return ['No {} saveframe.'.format(DICT_KEY)]
+            return [f'No {DICT_KEY} saveframe.']
         else:
 
             # TODO:ED format name should be defined in the mmcif_nef.dic
@@ -185,12 +184,12 @@ class Validator(object):
 
             if FORMAT_NAME in md:
                 if md[FORMAT_NAME] != format_name:
-                    e.append("{} must be '{}'.".format(format_name, NMR_EXCHANGE_FORMAT))
+                    e.append(f"{format_name} must be '{NMR_EXCHANGE_FORMAT}'.")
 
             if FORMAT_VERSION in md:
                 mdVersion = float(md[FORMAT_VERSION])
                 if mdVersion < format_version:
-                    e.append('This reader (version {}) does not support {}.'.format(format_version, mdVersion))
+                    e.append(f'This reader (version {format_version}) does not support {mdVersion}.')
 
             if CREATION_DATE in md:
                 # TODO: ED How to validate the creation date?
@@ -204,8 +203,8 @@ class Validator(object):
 
     def __dict_missing_keys(self, dct, required_keys, label=None):
         if label is None:
-            return ['Missing {} label.'.format(key) for key in required_keys if key not in dct]
-        return ['{}: missing {} label.'.format(label, key) for key in required_keys if key not in dct]
+            return [f'Missing {key} label.' for key in required_keys if key not in dct]
+        return [f'{label}: missing {key} label.' for key in required_keys if key not in dct]
 
     def __dict_missing_value_with_key(self, dct, keys):
         errors = []
@@ -215,7 +214,7 @@ class Validator(object):
                 if ('sf_category' in v) and (v['sf_category'] == key):
                     found_key = True
             if not found_key:
-                errors.append('No saveframes with sf_category: {}.'.format(key))
+                errors.append(f'No saveframes with sf_category: {key}.')
         return errors
 
     def __sf_framecode_name_mismatch(self, dct, sf_framecode):
@@ -249,13 +248,13 @@ class Validator(object):
                         fields_count = len(fields)
                         finished = False
                         break
-                    errors += self.__dict_missing_keys(entry, fields, label=label + ' item {}'
-                                                       .format(i))
+                    errors += self.__dict_missing_keys(entry, fields, label=label + f' item {i}'
+                                                       )
         return errors
 
     def __dict_nonallowed_keys(self, dct, allowed_keys, label=None):
         if label is None:
-            return ["Field '{}' not allowed.".format(key)
+            return [f"Field '{key}' not allowed."
                     for key in dct.keys() if key not in allowed_keys and not key.startswith(CCPN_PREFIX)]
-        return ["Field '{}' not allowed in {}.".format(key, label)
+        return [f"Field '{key}' not allowed in {label}."
                 for key in dct.keys() if key not in allowed_keys and not key.startswith(CCPN_PREFIX)]

@@ -987,7 +987,7 @@ class DataFormat(TopShared):
     
     try:
       self.getFullProject(fileName,**keywds)
-    except IOError, e:
+    except IOError as e:
       self.messageReporter.showError("Error","Error reading %s project file: %s" % (self.format,str(e)),parent = self.guiParent)
       return None
       
@@ -1081,7 +1081,7 @@ class DataFormat(TopShared):
       self.fileName = fileName
       try:
         self.getSequence()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s sequence file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
 
@@ -1314,7 +1314,7 @@ class DataFormat(TopShared):
 
         try:
           self.getCoordinates()
-        except IOError, e:
+        except IOError as e:
           self.messageReporter.showError("Error","Error reading %s coordinates file: %s" % (self.format,str(e)),parent = self.guiParent)
           return None
           
@@ -1342,7 +1342,7 @@ class DataFormat(TopShared):
         #
 
         if not self.getChainLinks():
-          print "  Error: no complete chain linking found between coordinates and chains. Aborting coordinate reading."
+          print("  Error: no complete chain linking found between coordinates and chains. Aborting coordinate reading.")
           return False
 
         #
@@ -1556,7 +1556,7 @@ class DataFormat(TopShared):
 
       try:
         self.getChemComps()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s chemical compound file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
     
@@ -2316,7 +2316,7 @@ class DataFormat(TopShared):
       
       try:
         self.getPeaks()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s peak list file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
       
@@ -2337,7 +2337,7 @@ class DataFormat(TopShared):
     if not hasSoftwareDefinitions:
     
       getSoftwareDefinitions(self.project)
-      print "Read software definitions."
+      print("Read software definitions.")
 
     #
     # Do some checks on the objects that were passed in
@@ -2472,7 +2472,7 @@ class DataFormat(TopShared):
       
       elif self.verbose:
       
-        print "  Warning: peak list %s doesn not contain any valid peaks - skipped." % self.specName
+        print("  Warning: peak list %s doesn not contain any valid peaks - skipped." % self.specName)
 
 
       #
@@ -2634,7 +2634,7 @@ class DataFormat(TopShared):
       self.dataSource = self.peakList.dataSource
       
       if not self.peakList.peaks:
-        print "  Warning: skipping peak list - no peaks available!"        
+        print("  Warning: skipping peak list - no peaks available!")
         continue
       
       # TODO: From here on still have to do for sparky (project), pipp!
@@ -2731,7 +2731,7 @@ class DataFormat(TopShared):
       try:
         self.getPeakAssignments() # TODO TODO: check whether file read, exit if not!!
                                   # Also do this for other read/write routines!!
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s peak assignments file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
       
@@ -3493,7 +3493,7 @@ class DataFormat(TopShared):
       
       try:
         self.getAcqPars()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s acquisition file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
 
@@ -3563,7 +3563,7 @@ class DataFormat(TopShared):
 
       try:
         self.getProcPars()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s processing parameters file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
 
@@ -3818,7 +3818,7 @@ class DataFormat(TopShared):
 
       try:
         self.getPeopleAndCitations()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s citation from file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
        
@@ -3890,7 +3890,7 @@ class DataFormat(TopShared):
       self.fileName = fileName
       try:
         self.getAssignment()
-      except IOError, e:
+      except IOError as e:
         self.messageReporter.showError("Error","Error reading %s assignment file: %s" % (self.format,str(e)),parent = self.guiParent)
         return None
 
@@ -3967,12 +3967,12 @@ class DataFormat(TopShared):
         if mandatory and not keywds.has_key(IOkeyword):
           
           if doReset:
-            print "  Error: mandatory keyword '%s' for '%s' missing! Cannot continue." % (IOkeyword,functionName)
+            print("  Error: mandatory keyword '%s' for '%s' missing! Cannot continue." % (IOkeyword,functionName))
             returnStatus = False
             break
             
           elif not hasattr(self,IOkeyword):
-            print "  Error: mandatory keyword '%s' for '%s' was not set! Cannot continue." % (IOkeyword,functionName)
+            print("  Error: mandatory keyword '%s' for '%s' was not set! Cannot continue." % (IOkeyword,functionName))
             returnStatus = False
             break
           
@@ -3989,7 +3989,7 @@ class DataFormat(TopShared):
 
       if keywds and verbose:
         for keywd in keywds.keys():
-          print "  Warning: keyword for '%s' not recognized: '%s'" % (functionName,keywd)
+          print("  Warning: keyword for '%s' not recognized: '%s'" % (functionName,keywd))
 
       #
       # Do not reset keywords if recalling method second time - add to keywords (for Measurement and Constraint stuff!)
@@ -4000,7 +4000,7 @@ class DataFormat(TopShared):
         keywds['resetIOkeywords'] = False
     
     else:
-      print "  Error: function '%s' not recognized in IOkeywords dictionary!" % (functionName)
+      print("  Error: function '%s' not recognized in IOkeywords dictionary!" % (functionName))
       returnStatus = False       
       
     #print functionName
@@ -4021,9 +4021,9 @@ class DataFormat(TopShared):
     #
     
     if returnStatus and verbose:
-      print
-      print drawBox("FormatConverter: executing %s" % functionName)
-      print
+      print()
+      print(drawBox("FormatConverter: executing %s" % functionName))
+      print()
       
     return returnStatus
 
@@ -4121,9 +4121,9 @@ class DataFormat(TopShared):
   def printConvertCountString(self,verbose):
     
     if verbose and self.resetConvertCount == True:
-      print
-      print self.getConvertCountString()
-      print
+      print()
+      print(self.getConvertCountString())
+      print()
 
   def quit(self):
   
@@ -4289,7 +4289,7 @@ class DataFormat(TopShared):
     self.sequenceFile.read(**readKeywds)
 
     if self.verbose == 1:
-      print "Reading sequence from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading sequence from %s file %s" % (self.formatLabel,self.fileName))
     
   def getSequenceSetFormatSpecificReadKeywds(self):
   
@@ -4319,7 +4319,7 @@ class DataFormat(TopShared):
     """
 
     if self.verbose == 1:
-      print "Writing sequence to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing sequence to %s file %s" % (self.formatLabel,self.fileName))
   
     self.sequenceFile = self.SequenceFileClass(self.fileName)
 
@@ -4445,7 +4445,7 @@ class DataFormat(TopShared):
       sequenceText = ''
 
     if self.verbose == 1:
-      print "Reading coordinates %sfrom %s file %s" % (sequenceText,self.formatLabel,self.fileName)
+      print("Reading coordinates %sfrom %s file %s" % (sequenceText,self.formatLabel,self.fileName))
 
   def getCoordinatesSetFormatSpecificReadKeywds(self):
 
@@ -4487,7 +4487,7 @@ class DataFormat(TopShared):
     """
   
     if self.verbose == 1:
-      print "Writing coordinates to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing coordinates to %s file %s" % (self.formatLabel,self.fileName))
   
     self.coordinateFile = self.CoordinateFileClass(self.fileName)
       
@@ -4532,7 +4532,7 @@ class DataFormat(TopShared):
     self.chemCompFile.read()
 
     if self.verbose == 1:
-      print "Reading chemComps from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading chemComps from %s file %s" % (self.formatLabel,self.fileName))
   
   #
   # ChemComp file writing
@@ -4558,7 +4558,7 @@ class DataFormat(TopShared):
     """
   
     if self.verbose == 1:
-      print "Writing chemComp to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing chemComp to %s file %s" % (self.formatLabel,self.fileName))
   
     self.chemCompFile = self.ChemCompFileClass(self.fileName)
 
@@ -4601,7 +4601,7 @@ class DataFormat(TopShared):
     try:
 
       if self.verbose == 1:
-        print "Reading %ss from %s file %s" % (self.measurementType,self.formatLabel,self.fileName)
+        print("Reading %ss from %s file %s" % (self.measurementType,self.formatLabel,self.fileName))
 
       # TODO HERE: have to figure out what to do if project file read...
       self.measurementFile = self.MeasurementFileClass(self.fileName)
@@ -4612,7 +4612,7 @@ class DataFormat(TopShared):
       sequenceText = self.getMeasurementsSequenceRead()
 
       if self.verbose == 1:
-        print "Reading %ss%s from %s file %s" % (self.measurementType,sequenceText,self.formatLabel,self.fileName)
+        print("Reading %ss%s from %s file %s" % (self.measurementType,sequenceText,self.formatLabel,self.fileName))
 
     except:
 
@@ -4665,7 +4665,7 @@ class DataFormat(TopShared):
       self.createMeasurementFileFormatSpecific()
      
       if self.verbose == 1:
-        print "Writing %ss to %s file %s" % (self.measurementType,self.formatLabel,self.fileName)
+        print("Writing %ss to %s file %s" % (self.measurementType,self.formatLabel,self.fileName))
   
     except:
 
@@ -4704,7 +4704,7 @@ class DataFormat(TopShared):
   def getPeaksGeneric(self):
   
     if self.verbose == 1:
-      print "Reading peak list from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading peak list from %s file %s" % (self.formatLabel,self.fileName))
 
     # TODO HERE: have to figure out what to do if project file read...
    
@@ -4733,7 +4733,7 @@ class DataFormat(TopShared):
   def createPeakFileGeneric(self):
   
     if self.verbose == 1:
-      print "Writing peak list(s) to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing peak list(s) to %s file %s" % (self.formatLabel,self.fileName))
   
     self.peakFile = self.PeakFileClass(self.fileName)
     
@@ -4823,7 +4823,7 @@ class DataFormat(TopShared):
       self.constraintFile.read()
 
       if self.verbose == 1:
-        print "Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
 
     except:
 
@@ -4866,7 +4866,7 @@ class DataFormat(TopShared):
       self.createConstraintFileFormatSpecific()
       
       if self.verbose == 1:
-        print "Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName)
+        print("Writing %s constraints to %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
   
     except:
       
@@ -5011,7 +5011,7 @@ class DataFormat(TopShared):
     self.assignmentFile.read(**readKeywds)
 
     if self.verbose == 1:
-      print "Reading assignments from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading assignments from %s file %s" % (self.formatLabel,self.fileName))
     
   def getAssignmentSetFormatSpecificReadKeywds(self):
   
@@ -5513,7 +5513,7 @@ class DataFormat(TopShared):
             for seqEl in self.sequence.elements:
               origSequenceDict[origMolName][1].append((seqEl,'other'))
               origSequenceDict[origMolName][0][0].elements.append(seqEl)
-              print "   Added water to molecule %s, original code %s" % (origMolName,seqEl.seqCode)
+              print("   Added water to molecule %s, original code %s" % (origMolName,seqEl.seqCode))
             
             continue
           
@@ -5575,7 +5575,7 @@ class DataFormat(TopShared):
           
         if len(molecules) == 1 and molecules[0].seqLength == len(self.sequence.elements):
 
-          print "  Autoset molecule %s from single mapping." % molName
+          print("  Autoset molecule %s from single mapping." % molName)
           createMoleculeDict[origMolName] = [molecule,[(self.sequence,[])]]
           
           for seqIndex in range(0,len(self.sequence.elements)):
@@ -5591,7 +5591,7 @@ class DataFormat(TopShared):
             
         else:
             
-          print "  Warning: mappings to multiple molecules were found... no automatic mapping done."
+          print("  Warning: mappings to multiple molecules were found... no automatic mapping done.")
       
       #
       # If mapping found, continue
@@ -5610,7 +5610,7 @@ class DataFormat(TopShared):
         
         if hasattr(sequenceElement,'residueType') and sequenceElement.residueType == 'other':
           origSequenceDict[origMolName][1].append((sequenceElement,'other'))
-          print "  Molecule %s set to type 'other' from sequence file information." % origMolName
+          print("  Molecule %s set to type 'other' from sequence file information." % origMolName)
           
       #
       # If nothing set yet, then do polymer checking...
@@ -5624,7 +5624,7 @@ class DataFormat(TopShared):
 
         if hasattr(self.sequence,'polymerType') and self.sequence.polymerType != 'unknown':
 
-          print "  Molecule %s set to type %s from sequence file information." % (origMolName,self.sequence.polymerType)
+          print("  Molecule %s set to type %s from sequence file information." % (origMolName,self.sequence.polymerType))
           
           for sequenceElement in self.sequence.elements:
             origSequenceDict[origMolName][1].append([sequenceElement,self.sequence.polymerType])
@@ -5716,12 +5716,12 @@ class DataFormat(TopShared):
               
               if fraction == 1:
                 molType = bioPolymerType
-                print "  Molecule type for unknown residues set to %s (unambiguously)" % molType
+                print("  Molecule type for unknown residues set to %s (unambiguously)" % molType)
                 break
 
               elif fraction >= 0.9:
                 molType = bioPolymerType
-                print "  Partial match for unknown residues with molecule type %s (%.1f %%)" % (molType,fraction * 100)
+                print("  Partial match for unknown residues with molecule type %s (%.1f %%)" % (molType,fraction * 100))
                 break
                 
               elif fraction:
@@ -5738,11 +5738,11 @@ class DataFormat(TopShared):
 
               if fraction == 1:
                 molType = bioPolymerType
-                print "  Molecule type for unknown residues set to %s (unambiguously)" % molType
+                print("  Molecule type for unknown residues set to %s (unambiguously)" % molType)
 
               elif fraction >= 0.9:
                 molType = bioPolymerType
-                print "  Partial match for unknown residues with molecule type %s (%.1f %%)" % (molType,fraction * 100)
+                print("  Partial match for unknown residues with molecule type %s (%.1f %%)" % (molType,fraction * 100))
 
               elif fraction:
                 if not preferredBioPolymer:
@@ -5781,7 +5781,7 @@ class DataFormat(TopShared):
                         origSequenceDict[origMolName][1][sequenceElementIndex][-1] = tmpMolType
                         chemCompFound = True
                         molType = tmpMolType
-                        print "Found in %s, file %s" % (repository.url.path,file)
+                        print("Found in %s, file %s" % (repository.url.path,file))
                         break
                     if chemCompFound:
                       break
@@ -6109,7 +6109,7 @@ class DataFormat(TopShared):
           # Now use normal chemComp creation approach, fake initialisation
           #
           
-          print drawBox("Warning: autocreating chemComp %s" % code, indent = "    ")
+          print(drawBox("Warning: autocreating chemComp %s" % code, indent = "    "))
           
           # Track original variables, reset afterward
           allowPopups = self.allowPopups
@@ -6171,12 +6171,12 @@ class DataFormat(TopShared):
             chemComp = self.getChemComp(molType,"Xxx")
             
           if not chemComp:
-            print "  Warning: no %s chemComp %s code %s selected. Will be ignored." % (residueTypeText,codeText,code)      
+            print("  Warning: no %s chemComp %s code %s selected. Will be ignored." % (residueTypeText,codeText,code))
             self.addWarning("No CCPN reference compound could be found for molecular type %s, compound %s with code %s." % (residueType,codeText,code))
             continue
 
           else:
-            print "  Warning: No %s chemComp %s code %s selected, replaced by Xxx chemComp to maintain chain sequence numbering." % (residueTypeText,codeText,code)  
+            print("  Warning: No %s chemComp %s code %s selected, replaced by Xxx chemComp to maintain chain sequence numbering." % (residueTypeText,codeText,code))
     
         #
         # Keep track of everything...
@@ -6225,11 +6225,11 @@ class DataFormat(TopShared):
 
     for origMolName in origMolNames:
     
-      print origMolName
+      print(origMolName)
       
       for consistentStretch in chemCompDict[origMolName]:
         
-        print "  %s: " % consistentStretch[0],
+        print("  %s: " % consistentStretch[0],)
         
         seqTexts = []
         
@@ -6246,10 +6246,9 @@ class DataFormat(TopShared):
             ccHead = consistentStretch[1][seqIndex][1]
             seqTexts.append(ccHead.ccpCode)
             
-        print string.join(seqTexts,'-')
+        print(string.join(seqTexts,'-'))
     
-    print
-    """
+    print("""
 
     #
     # Now reorganize automatically or let the user do it (also selection of chemCompVars!!)
@@ -6354,11 +6353,11 @@ class DataFormat(TopShared):
               for backupNamingSystemName in ('IUPAC','MSD','CUSTOM'):
                 namingSystem = chemComp.findFirstNamingSystem(name = backupNamingSystemName)
                 if namingSystem:
-                  print "  Warning: selected %s naming system for chemComp %s,%s because %s naming system does not exist." % (backupNamingSystemName,chemComp.molType,chemComp.ccpCode,self.namingSystemName)
+                  print("  Warning: selected %s naming system for chemComp %s,%s because %s naming system does not exist." % (backupNamingSystemName,chemComp.molType,chemComp.ccpCode,self.namingSystemName))
                   break
         
             if not namingSystem:
-              print "  Warning: no %s naming system or backup naming systems found for chemComp %s,%s... aborting linking/descriptor selection." % (self.namingSystemName,chemComp.molType,chemComp.ccpCode)
+              print("  Warning: no %s naming system or backup naming systems found for chemComp %s,%s... aborting linking/descriptor selection." % (self.namingSystemName,chemComp.molType,chemComp.ccpCode))
               continue
             
             #
@@ -6430,7 +6429,7 @@ class DataFormat(TopShared):
               chemCompVars = list(chemComp.findAllChemCompVars(linking = linking))
                          
               if not chemCompVars and origLinking != linking:
-                print "  Warning: could not find a chemCompVar for (%s,%s), linking '%s'. Switching to linking '%s'." % (chemComp.molType,chemComp.ccpCode,linking,origLinking)
+                print("  Warning: could not find a chemCompVar for (%s,%s), linking '%s'. Switching to linking '%s'." % (chemComp.molType,chemComp.ccpCode,linking,origLinking))
                 linking = origLinking
                 chemCompVars = list(chemComp.findAllChemCompVars(linking = linking))                
 
@@ -6525,7 +6524,7 @@ class DataFormat(TopShared):
                     selectedChemCompVars = defaultChemCompVars
                     
                 if len(selectedChemCompVars) > 1:
-                  print "  Warning: %d chemCompVar '%s','%s' matches based on atomnames - picking first match" % (len(selectedChemCompVars),chemComp.ccpCode,linking)
+                  print("  Warning: %d chemCompVar '%s','%s' matches based on atomnames - picking first match" % (len(selectedChemCompVars),chemComp.ccpCode,linking))
 
                 chemCompVar = selectedChemCompVars[0]
                   
@@ -6603,7 +6602,7 @@ class DataFormat(TopShared):
                   forceUserInteraction = True
 
             if not chemCompVar and not forceUserInteraction:
-              print "  ERROR: no chemCompVar %s,%s,%s found while automatically creating molecule - need user interaction." % (chemComp.molType,chemComp.ccpCode,linking)
+              print("  ERROR: no chemCompVar %s,%s,%s found while automatically creating molecule - need user interaction." % (chemComp.molType,chemComp.ccpCode,linking))
               forceUserInteraction = True
 
             for origSequenceNum in range(0,len(origSequenceDict[origMolName][0])):
@@ -6618,7 +6617,7 @@ class DataFormat(TopShared):
             if hasattr(seqElement,'code3Letter'):
               resNameText += ", resName %s" % seqElement.code3Letter
 
-            print "  Warning: no chemComp selected for %s, seqCode %s%s..." % (origMolName,seqElement.seqCode,resNameText)
+            print("  Warning: no chemComp selected for %s, seqCode %s%s..." % (origMolName,seqElement.seqCode,resNameText))
           
             for origSequenceNum in range(0,len(origSequenceDict[origMolName][0])):
               sequence = origSequenceDict[origMolName][0][origSequenceNum]
@@ -6732,7 +6731,7 @@ class DataFormat(TopShared):
       
       addText = self.createMolResidues(createMoleculeDict[molName],moleculeBonds)
       
-      print "Created %smolecule %s (molType %s, %d chemComps)" % (addText,newMolName,molecule.molType,len(molecule.molResidues))
+      print("Created %smolecule %s (molType %s, %d chemComps)" % (addText,newMolName,molecule.molType,len(molecule.molResidues)))
       
       #molecule.checkAllValid(complete = True)      
 
@@ -6799,7 +6798,7 @@ class DataFormat(TopShared):
   
   def setMoleculeInfo(self,molecule,createMoleculeInfo, newMolecule = True):
     
-    """
+    """)
     Set format-specific information for molecule (application data...)
     """
     
@@ -6997,7 +6996,7 @@ class DataFormat(TopShared):
       self.molecule = createMoleculeDict[origMolName][0]
       
       if not self.molecule.molResidues:
-        print "  Error: molecule %s does not have any molResidues! Chain creation aborted..." % self.molecule.name
+        print("  Error: molecule %s does not have any molResidues! Chain creation aborted..." % self.molecule.name)
         self.addWarning("Molecule %s not created because its sequence elements could not be identified." % self.molecule.name)
         continue
         
@@ -7016,7 +7015,7 @@ class DataFormat(TopShared):
             break
         
         if not validForChain:
-          print "Error: no information available for molecule %s! Ignoring..." % self.molecule.name
+          print("Error: no information available for molecule %s! Ignoring..." % self.molecule.name)
           continue
           
         chains = []
@@ -7208,7 +7207,7 @@ class DataFormat(TopShared):
                 residue = self.chains[-1].findFirstResidue(seqId = (resPos + 1))
                 
                 if not residue:
-                  print "  Warning: residue information missing for seqId %d in chain '%s'! Ignored." % (resPos+1,self.chains[-1].code)
+                  print("  Warning: residue information missing for seqId %d in chain '%s'! Ignored." % (resPos+1,self.chains[-1].code))
                   continue
                   
                 seqEl = sequenceElements[resPos][0]
@@ -7260,7 +7259,7 @@ class DataFormat(TopShared):
               
               seqElToChainRes[seqEl].append(residue)
                             
-            print "Created chain '%s', start seqCode %s, end seqCode %s, molecule '%s'..." % (self.chains[-1].code,str(firstSeqCode),str(lastSeqCode), self.molecule.name)
+            print("Created chain '%s', start seqCode %s, end seqCode %s, molecule '%s'..." % (self.chains[-1].code,str(firstSeqCode),str(lastSeqCode), self.molecule.name))
 
             #
             # TODO: create a resonanceGroup by default?!
@@ -7748,7 +7747,7 @@ class DataFormat(TopShared):
     else:
 
       appDataClass = None
-      print "Error: unknown type %s for resName" % str(type(resName))
+      print("Error: unknown type %s for resName" % str(type(resName)))
       
     if appDataClass:
 
@@ -7990,7 +7989,7 @@ class DataFormat(TopShared):
     if self.autoMergeShifts or self.minimalPrompts:
       
       if not self.autoMergeShifts:
-        print "  Warning: merged chemical shift values %.3f and %.3f for resonance %s" % (self.measurement.value,self.rawMeasurement.value,resName)
+        print("  Warning: merged chemical shift values %.3f and %.3f for resonance %s" % (self.measurement.value,self.rawMeasurement.value,resName))
 
       self.measurement.value = (self.measurement.value + self.rawMeasurement.value) /2
             
@@ -8014,7 +8013,7 @@ class DataFormat(TopShared):
     
     if self.rawMeasurement.value != None and abs(self.measurement.value - self.rawMeasurement.value) > self.measurementAllowedDiff:
       
-      print "  Warning: different values for same %s measurement. Keeping first value." % self.measurementApiCode
+      print("  Warning: different values for same %s measurement. Keeping first value." % self.measurementApiCode)
   
   def setNoeSpecific(self,resNames,resonances):
      
@@ -8049,7 +8048,7 @@ class DataFormat(TopShared):
       self.convertCount[self.mainCode][1][self.valueCode] += 1
       return self.ApiMeasurement(self.measurementList, value = rawMeasurement.value, resonance = resonance, **keywds)
     else:      
-      print 'For the residue %s%s assignment probability %.2f is below threshold'\
+      print('For the residue %s%s assignment probability %.2f is below threshold'\)
       %(rawMeasurement.resLabel,rawMeasurement.seqCode,rawMeasurement.figOfMerit)
       return
     
@@ -8352,7 +8351,7 @@ class DataFormat(TopShared):
       
       else:
         
-        print " WARNING: missing chemComp or chemCompVar in molecule %s - not created." % molecule.name
+        print(" WARNING: missing chemComp or chemCompVar in molecule %s - not created." % molecule.name)
     
     #
     # Set MolResLink if circular...
@@ -8399,7 +8398,7 @@ class DataFormat(TopShared):
           namingSystem = chemComp.findFirstNamingSystem(name = self.namingSystemName)
           
           if not namingSystem:
-            print "  Warning: no %s naming system available for %s,%s - aborting molResLink creation." % (self.namingSystemName,chemComp.molType,chemComp.ccpCode)
+            print("  Warning: no %s naming system available for %s,%s - aborting molResLink creation." % (self.namingSystemName,chemComp.molType,chemComp.ccpCode))
             continue
           
           chemAtomSysNames = findAllSysNamesByChemAtomOrSet(chemComp,chemComp.chemAtoms,self.namingSystemName)
@@ -8431,7 +8430,7 @@ class DataFormat(TopShared):
                     if not molResLinkEnd:
                       prevLink = MolSystem.MolSystemLinkEnd(residue,linkCode = chemAtomName)
                     else:
-                      print "  Error: could not set MolSystem LinkEnd '%s' for residue '%s.%d' because already exists on Molecule level!" % (chemAtomName,residue.chain.code,residue.seqCode)
+                      print("  Error: could not set MolSystem LinkEnd '%s' for residue '%s.%d' because already exists on Molecule level!" % (chemAtomName,residue.chain.code,residue.seqCode))
 
               elif Package == Molecule:
                 prevLink = residue.findFirstMolResLinkEnd(linkCode = chemAtomName)
@@ -8449,7 +8448,7 @@ class DataFormat(TopShared):
                       boundNamingSystem = boundChemComp.findFirstNamingSystem(name = self.namingSystemName)
 
                       if not boundNamingSystem:
-                        print "  Warning: no %s naming system available for %s,%s - aborting molResLink creation." % (self.namingSystemName,boundChemComp.molType,boundChemComp.ccpCode)
+                        print("  Warning: no %s naming system available for %s,%s - aborting molResLink creation." % (self.namingSystemName,boundChemComp.molType,boundChemComp.ccpCode))
                         continue
                       
                       boundChemAtomSysNames = findAllSysNamesByChemAtomOrSet(boundChemComp,boundChemComp.chemAtoms,self.namingSystemName)
@@ -8503,27 +8502,27 @@ class DataFormat(TopShared):
                               searchDict[searchDictKey].reverse()
                               try:
                                 bondLink = getattr(Package,objectName)(parent,**searchDict)                               
-                                print "  Set %sbond between (%s%s.%d,%s) and (%s%s.%d,%s)" % (infoString,residueInfo,residue.ccpCode,residue.seqCode,chemAtomName,boundResidueInfo,boundResidue.ccpCode,boundResidue.seqCode,boundChemAtomName)
+                                print("  Set %sbond between (%s%s.%d,%s) and (%s%s.%d,%s)" % (infoString,residueInfo,residue.ccpCode,residue.seqCode,chemAtomName,boundResidueInfo,boundResidue.ccpCode,boundResidue.seqCode,boundChemAtomName))
                               except:
-                                print "  Error: failed to set %sbond between (%s%s.%d,%s) and (%s%s.%d,%s)" % (infoString,residueInfo,residue.ccpCode,residue.seqCode,chemAtomName,boundResidueInfo,boundResidue.ccpCode,boundResidue.seqCode,boundChemAtomName)
+                                print("  Error: failed to set %sbond between (%s%s.%d,%s) and (%s%s.%d,%s)" % (infoString,residueInfo,residue.ccpCode,residue.seqCode,chemAtomName,boundResidueInfo,boundResidue.ccpCode,boundResidue.seqCode,boundChemAtomName))
 
                         else:
-                          print "  Warning: could not set molResLink %s because does not exist for (%s,%s). ChemComp info probably needs updating!" % (boundChemAtomName,boundResidue.molType,boundResidue.ccpCode)
+                          print("  Warning: could not set molResLink %s because does not exist for (%s,%s). ChemComp info probably needs updating!" % (boundChemAtomName,boundResidue.molType,boundResidue.ccpCode))
 
                       else:
-                        print "  Warning: could not set molecular bond because no %s sysName found for %s (%s,%s)." % (self.namingSystemName,boundSysAtomName,boundResidue.molType,boundResidue.ccpCode)
+                        print("  Warning: could not set molecular bond because no %s sysName found for %s (%s,%s)." % (self.namingSystemName,boundSysAtomName,boundResidue.molType,boundResidue.ccpCode))
 
                   else:
-                    print "  Warning: could not set molecular bond because sequence element (%s,%d) not converted into molResidue." % (boundSeqEl.residueType, boundSeqEl.seqCode)
+                    print("  Warning: could not set molecular bond because sequence element (%s,%d) not converted into molResidue." % (boundSeqEl.residueType, boundSeqEl.seqCode))
 
               else:
-                print "  Warning: could not set molResLink %s because does not exist for (%s,%s). ChemComp info probably needs updating!" % (chemAtomName,residue.molType,residue.ccpCode)
+                print("  Warning: could not set molResLink %s because does not exist for (%s,%s). ChemComp info probably needs updating!" % (chemAtomName,residue.molType,residue.ccpCode))
 
             else:
-              print "  Warning: could not set molecular bond because no %s sysName found for %s (%s,%s)." % (self.namingSystemName,sysAtomName,residue.molType,residue.ccpCode)
+              print("  Warning: could not set molecular bond because no %s sysName found for %s (%s,%s)." % (self.namingSystemName,sysAtomName,residue.molType,residue.ccpCode))
 
       else:
-        print "  Warning: could not find reference dictionary information for (%s,%s) to set bonds." % (seqEl.seqCode,str(seqEl.formatCode))
+        print("  Warning: could not find reference dictionary information for (%s,%s) to set bonds." % (seqEl.seqCode,str(seqEl.formatCode)))
 
   def getCode3Letter(self,sequenceElement):
 
@@ -8914,7 +8913,7 @@ class DataFormat(TopShared):
         addString = " (number %d)" % applData.value
       else:
         addString = ""
-      print "  Warning: Deleting original peak%s" % addString
+      print("  Warning: Deleting original peak%s" % addString)
         
       existingPeak.delete()
 
@@ -9182,7 +9181,7 @@ class DataFormat(TopShared):
             tempDataDimRefs[origPeakFileDim] = peak.sortedPeakDims()[peakDimIndex].dataDimRef
           
           except:
-            print "  Error trying to map peakDim %d to original dim %s" % (peakDimIndex,origPeakFileDim)
+            print("  Error trying to map peakDim %d to original dim %s" % (peakDimIndex,origPeakFileDim))
       
       #
       # Only use info if all went well!
@@ -9508,7 +9507,7 @@ class DataFormat(TopShared):
     
     for chain in self.chains[1:]:
       if self.molSystem != chain.molSystem:
-        print "  Error: invalid chain list (has to be same molSystem)"
+        print("  Error: invalid chain list (has to be same molSystem)")
         return False
     
     chainList = self.chains[:]
@@ -9632,7 +9631,7 @@ class DataFormat(TopShared):
               lowestSerial = tmpChainMapping.serial
               chainMapping = tmpChainMapping 
           
-          print "  Warning: resetting chain mapping..."
+          print("  Warning: resetting chain mapping...")
         
           chainMapping.formatChainCode = exportChainCode
           chainMapping.firstSeqId = 1
@@ -10044,7 +10043,7 @@ class DataFormat(TopShared):
       namingSystem = chemComp.findFirstNamingSystem(name = self.namingSystemName)
       
       if not namingSystem:
-        print "  Warning: no %s naming system for chemComp %s,%s!" % (self.namingSystemName,chemComp.molType,chemComp.ccpCode)
+        print("  Warning: no %s naming system for chemComp %s,%s!" % (self.namingSystemName,chemComp.molType,chemComp.ccpCode))
       
       chemAtomSysNames = []
       chemAtomOrSets = []
@@ -10165,7 +10164,7 @@ class DataFormat(TopShared):
       if atomName == resonanceToAtom.atomName:
         
         if self.atomNamesDict.has_key(atomName):
-          print "  ERROR: Atom name confusion for '%s.%d.%s'!" % (self.chain.code,self.residue.seqId,atomName)
+          print("  ERROR: Atom name confusion for '%s.%d.%s'!" % (self.chain.code,self.residue.seqId,atomName))
         self.atomNamesDict[atomName] = resonanceToAtom
         residueResonanceToAtomList.pop(residueResonanceToAtomList.index(resonanceToAtom))
         atomFound = 1
@@ -10223,9 +10222,9 @@ class DataFormat(TopShared):
                 listAtomNames = [resonanceToAtom.atomName,otherResonanceToAtom.atomName]
                 listAtomNames.sort()
                 
-                print ("  Warning: %s:%s compressed %s and %s to %s name..." 
+                print(("  Warning: %s:%s compressed %s and %s to %s name..." 
                        % (self.chemComp.ccpCode, self.residue.seqId,
-                          listAtomNames[0], listAtomNames[1], newAtomName))
+                          listAtomNames[0], listAtomNames[1], newAtomName)))
                           
                 residueResonanceToAtomList.pop(residueResonanceToAtomList.index(resonanceToAtom))
                 residueResonanceToAtomList.pop(residueResonanceToAtomList.index(otherResonanceToAtom))
@@ -10338,7 +10337,7 @@ class DataFormat(TopShared):
 
     if self.verbose and self.atomMeasurements != {}:
 
-      print "Unable to process following resonances:"
+      print("Unable to process following resonances:")
       
       outputLines = []
       
@@ -10355,7 +10354,7 @@ class DataFormat(TopShared):
       outputLines.sort()
       
       for line in outputLines:
-        print line
+        print(line)
         
   #
   # Constraint specific
@@ -10382,7 +10381,7 @@ class DataFormat(TopShared):
     for item in self.rawConstraint.items:
 
       if len(item.members) != self.constraintFile.constraintElements:
-        print "  %s constraint item with %d members (Id %d)... ignored" % (self.constraintApiCode,len(item.members),self.rawConstraint.Id)
+        print("  %s constraint item with %d members (Id %d)... ignored" % (self.constraintApiCode,len(item.members),self.rawConstraint.Id))
         continue
           
       self.items.append([])
@@ -10473,7 +10472,7 @@ class DataFormat(TopShared):
         for fixedResonance2 in resonances2:
         
           if fixedResonance1 == fixedResonance2:
-            print "  Error: duplicate resonance %s found - constraint not imported" % getResNameText(fixedResonance1)
+            print("  Error: duplicate resonance %s found - constraint not imported" % getResNameText(fixedResonance1))
             self.setConversionError(self.constraintList,self.rawConstraint.Id,1,'Not handling item from distance restraint (original ID %d) - duplicate resonances')
             continue
 
@@ -10505,7 +10504,7 @@ class DataFormat(TopShared):
 
     if not self.constraint.items:
 
-      print "  Error: constraint without items created - is now deleted."
+      print("  Error: constraint without items created - is now deleted.")
       self.constraint.delete()
       self.setConversionError(self.constraintList,self.rawConstraint.Id,1,'Distance restraint (original ID %d) deleted - no constraint items left.')
       self.convertCount[self.mainCode][1][self.valueCode] -= 1
@@ -10726,7 +10725,7 @@ class DataFormat(TopShared):
     #
   
     if len(self.items) > 1:
-      print "  Warning: %s constraint with multiple items - invalid, only using first one." % self.constraintType
+      print("  Warning: %s constraint with multiple items - invalid, only using first one." % self.constraintType)
         
     rawItemMember = self.items[0][0]
     self.rawConstraintItem = self.rawItems[0]
@@ -10755,7 +10754,7 @@ class DataFormat(TopShared):
     
     if not self.constraint:
 
-      print "  Error: constraint could not be created."
+      print("  Error: constraint could not be created.")
       self.setConversionError(self.constraintList,self.rawConstraint.Id,1,'Restraint (original ID %d) not created - already exists or not enough information.')  
 
   #
@@ -10828,7 +10827,7 @@ class DataFormat(TopShared):
     #
     
     if len(self.items) > 1:
-      print "  Warning multiple items for dihedral restraint - only first one used"
+      print("  Warning multiple items for dihedral restraint - only first one used")
     
     rawItemMembers = self.items[0]
     curFixedResonances = []
@@ -10838,14 +10837,14 @@ class DataFormat(TopShared):
       resonances = rawItemMembers[i].resonances
       
       if len(resonances) > 1:
-        print "  Warning multiple resonances for dihedral restraint item - only first one used"
+        print("  Warning multiple resonances for dihedral restraint item - only first one used")
     
       fixedResonance = resonances[0]
       
       if fixedResonance not in curFixedResonances:
         curFixedResonances.append(fixedResonance)
       else:
-        print "  Error: duplicate resonance %s found - constraint not imported" % getResNameText(fixedResonance)
+        print("  Error: duplicate resonance %s found - constraint not imported" % getResNameText(fixedResonance))
         self.setConversionError(self.constraintList,self.rawConstraint.Id,1,'Not handling dihedral restraint (original ID %d) - duplicate resonances')
         self.constraint = None
     
@@ -10873,7 +10872,7 @@ class DataFormat(TopShared):
         #
         # In this case means the dihedral constraint already exists - set it
         #
-        print "  Warning: Additional value found for dihedral constraint %s - added as extra item" % (self.rawConstraint.Id)
+        print("  Warning: Additional value found for dihedral constraint %s - added as extra item" % (self.rawConstraint.Id))
         self.constraint = self.constraintList.findFirstConstraint(resonances = dihedConstr.resonances)
 
       else:
@@ -10911,7 +10910,7 @@ class DataFormat(TopShared):
       self.setDihedralConstraintItemPars()
       
       if None in (self.constraintPars['upperLimit'],self.constraintPars['lowerLimit']):
-        print "  Error: trying to create dihedral constraint item without bounds."
+        print("  Error: trying to create dihedral constraint item without bounds.")
         return
         
       self.constraintItem = self.ApiConstraintItem(self.constraint,**self.constraintPars)
@@ -10995,7 +10994,7 @@ class DataFormat(TopShared):
 
             else:
             
-              print "  Not handling PeakDimContribN items"
+              print("  Not handling PeakDimContribN items")
     
     # Special cases, like XEASY with CYANA, force a specific naming system
     self.forceSpecificNamingSystemName()
@@ -11026,7 +11025,7 @@ class DataFormat(TopShared):
       namingSystemName = formatNamingDict[(format,None)]
       
     if self.verbose:
-      print "  Selecting naming system %s." % namingSystemName
+      print("  Selecting naming system %s." % namingSystemName)
   
     return namingSystemName
   
@@ -11058,7 +11057,7 @@ class DataFormat(TopShared):
     if (hasattr(self, 'resonanceToAtoms') and self.resonanceToAtoms
         and self.presetResonanceMapping):
       # We must use pre-existing mapping
-      print '### No map generation - using preset (%s resonances)' % len(self.resonanceToAtoms)
+      print('### No map generation - using preset (%s resonances)' % len(self.resonanceToAtoms))
       return
     
     #
@@ -11103,7 +11102,7 @@ class DataFormat(TopShared):
           if nameMappings:
 
             for nameMapping in nameMappings:
-              print "  Warning: using original format %s with unknown naming system" % nameMapping.formatName
+              print("  Warning: using original format %s with unknown naming system" % nameMapping.formatName)
       
       #
       # Set allowed formats...
@@ -11120,7 +11119,7 @@ class DataFormat(TopShared):
       
       if not self.allowedFormats:
       
-        print "  Warning: no allowed existing formats found for %s export in %s naming system - original names cannot be used" % (self.format,self.namingSystemName)
+        print("  Warning: no allowed existing formats found for %s export in %s naming system - original names cannot be used" % (self.format,self.namingSystemName))
     
     #
     # Here the correct molecular system is chosen: all info has to come from
@@ -11190,7 +11189,7 @@ class DataFormat(TopShared):
 
         if not matchFound:
           
-          print "  Warning: no original name found for %s. Ignored." % resonanceNameText
+          print("  Warning: no original name found for %s. Ignored." % resonanceNameText)
 
       #
       # If no original names are being used for this
@@ -11241,14 +11240,14 @@ class DataFormat(TopShared):
                           name=self.namingSystemName)
                     
           if not namingSystem:
-            print "  Warning: No %s naming system available for resonance %s" % (self.namingSystemName,getResNameText(resonance)),
+            print("  Warning: No %s naming system available for resonance %s" % (self.namingSystemName,getResNameText(resonance)),)
 
             if hasattr(self,'ignoreChemCompsWithNoSysNames') and self.ignoreChemCompsWithNoSysNames:
-              print " - not written."
+              print(" - not written.")
               continue
             
             else:
-              print " - trying to use default atom names."
+              print(" - trying to use default atom names.")
           
           chemAtomSet = getChemAtomSetFromAtomSets(atomSets)
           
@@ -11278,7 +11277,7 @@ class DataFormat(TopShared):
                 chemAtomSetName = atomSysName.sysName
               else:
                 chemAtomSetName = None
-                print "  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName
+                print("  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName)
               
             else:
               atomSysName = self.getChemAtomOrSetSysName((chemAtomSet, namingSystem), 
@@ -11289,7 +11288,7 @@ class DataFormat(TopShared):
 
               else:                                                                                            
                 chemAtomSetName = chemAtomSet.name                                                             
-                print "  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName   
+                print("  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName)
               
             #print "check: Same chemAtomSet %s (%s) set" % (chemAtomSet.name,chemAtomSet.chemComp.code3Letter)
 
@@ -11495,7 +11494,7 @@ Cannot map atom names for export.
                 
                   # If really nothing, use CCPN atom name
                   refSysName = tempChemAtomOrSet.name
-                  print "  Warning: no %s chemAtomSysName found... using CCPN name." % (tempChemAtomOrSet.name)
+                  print("  Warning: no %s chemAtomSysName found... using CCPN name." % (tempChemAtomOrSet.name))
   
                 else:
                   refSysName = atomSysName.sysName
@@ -11564,7 +11563,7 @@ Cannot map atom names for export.
                   else:
                     chemAtomSet = None
                     chemAtomSetName = None
-                    print "  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName
+                    print("  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName)
                   
                 else:
                   chemAtomSetSysName = self.getChemAtomOrSetSysName((chemAtomSet, 
@@ -11575,7 +11574,7 @@ Cannot map atom names for export.
                     chemAtomSetName = chemAtomSetSysName.sysName 
                   else:                                                                                            
                     chemAtomSetName = chemAtomSet.name                                                             
-                    print "  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName   
+                    print("  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName)
   
               else:  
                 chemAtomSetName = None
@@ -11624,7 +11623,7 @@ Cannot map atom names for export.
                 if atomSysName:
                   refSysName = atomSysName.sysName
                 else:
-                  print "  Warning: no %s sysName for %s... using CCPN name." % (self.namingSystemName,exportName)
+                  print("  Warning: no %s sysName for %s... using CCPN name." % (self.namingSystemName,exportName))
                   refSysName = chemAtom.name
                                     
                 chemAtomOrSet = chemAtomSet or chemAtom
@@ -11734,13 +11733,13 @@ Cannot map atom names for export.
                       
                   else:
                     if chemAtomSet.chemAtomSet and not self.individualAtomsIfNoSet:
-                      print ("  Warning: using CCPN name for atomSet '%s'..." 
-                             % exportName)
+                      print(("  Warning: using CCPN name for atomSet '%s'..." 
+                             % exportName))
                       sysNamesLink = [(chemAtomSet.name,chemAtomSet)]
 
                     else:
-                      print ("  Warning: no %s sysNames for %s... using individual atom name(s)." 
-                             % (self.namingSystemName,exportName))
+                      print(("  Warning: no %s sysNames for %s... using individual atom name(s)." 
+                             % (self.namingSystemName,exportName)))
               
               #
               # If no chemAtomSet sysName(s) were found, do it on the individual atom level...
@@ -11764,7 +11763,7 @@ Cannot map atom names for export.
                     sysNamesLink.append((atomSysName.sysName,chemAtom))
                   else:
                     sysNamesLink.append((chemAtom.name,chemAtom))
-                    print "  Warning: no %s sysName for %s... using CCPN name." % (self.namingSystemName,exportName)
+                    print("  Warning: no %s sysName for %s... using CCPN name." % (self.namingSystemName,exportName))
                     
                 #
                 # Still set the chemAtomSetName if there is one, for compressing resonances
@@ -11804,7 +11803,7 @@ Cannot map atom names for export.
         else:
           
           resonanceNameText = getResNameText(resonance)
-          print "  Warning: No resonanceSet for %s with name %s - ignored" % (resonance, resonanceNameText)
+          print("  Warning: No resonanceSet for %s with name %s - ignored" % (resonance, resonanceNameText))
     
     #
     # Debug code...
@@ -12011,7 +12010,7 @@ Cannot map atom names for export.
         setRawConstraintFunc()
 
       else:
-        print "  Warning: no items for %s constraint %d" % (constraintApiCode.lower(),self.constraint.serial)
+        print("  Warning: no items for %s constraint %d" % (constraintApiCode.lower(),self.constraint.serial))
         continue
         
       #print self.constraint.serial
@@ -12127,7 +12126,7 @@ Cannot map atom names for export.
                                   matchAtomSetId[1]]
 
 
-                        print "  %s constraint %d: Removed %s.%d.%s,%s.%d.%s based on %s.%d.%s,%s.%d.%s" % (constraintApiCode,self.constraint.serial,chainCodes[0],seqIds[0],fixedResonance.name,chainCodes[1],seqIds[1],otherFixedResonance.name,chainCodes[2],seqIds[2],matchFixedResonance.name,chainCodes[1],seqIds[1],matchOtherFixedResonance.name)
+                        print("  %s constraint %d: Removed %s.%d.%s,%s.%d.%s based on %s.%d.%s,%s.%d.%s" % (constraintApiCode,self.constraint.serial,chainCodes[0],seqIds[0],fixedResonance.name,chainCodes[1],seqIds[1],otherFixedResonance.name,chainCodes[2],seqIds[2],matchFixedResonance.name,chainCodes[1],seqIds[1],matchOtherFixedResonance.name))
 
                         constraintItemList.pop(tempIt)
                         tempIt -= 1
@@ -12204,7 +12203,7 @@ Cannot map atom names for export.
                                     otherResidue.seqId,
                                     ]
 
-                          print "  %s constraint %d: Removed %s.%d.%s,%s.%d.%s based on %s.%d.%s,%s.%d.%s (SET MATCH!)" % (constraintApiCode,self.constraint.serial,chainCodes[0],seqIds[0],fixedResonance.name,chainCodes[1],seqIds[1],otherFixedResonance.name,chainCodes[2],seqIds[2],matchFixedResonance.name,chainCodes[3],seqIds[3],matchOtherFixedResonance.name)
+                          print("  %s constraint %d: Removed %s.%d.%s,%s.%d.%s based on %s.%d.%s,%s.%d.%s (SET MATCH!)" % (constraintApiCode,self.constraint.serial,chainCodes[0],seqIds[0],fixedResonance.name,chainCodes[1],seqIds[1],otherFixedResonance.name,chainCodes[2],seqIds[2],matchFixedResonance.name,chainCodes[3],seqIds[3],matchOtherFixedResonance.name))
 
                           constraintItemList.pop(tempIt)
                           tempIt -= 1
@@ -12256,7 +12255,7 @@ Cannot map atom names for export.
           
           if self.exportAll == False:
 
-            print "  Warning: %s" % warningText
+            print("  Warning: %s" % warningText)
             continue
           
         #
@@ -12288,7 +12287,7 @@ Cannot map atom names for export.
           
             if [atomOrSetId,otherAtomOrSetId] in itemPairs:
               # DEBUG CODE: should not be necessary any more...
-              print "  %s to %s already exists..." % (self.resSetNames[0],self.resSetNames[1])
+              print("  %s to %s already exists..." % (self.resSetNames[0],self.resSetNames[1]))
               continue
             
             if otherAtomOrSetId:
@@ -12414,7 +12413,7 @@ Cannot map atom names for export.
     for self.constraint in constraints:
 
       if not self.constraint.items:
-        print "  Warning: No items for constraint %d" % self.constraint.serial
+        print("  Warning: No items for constraint %d" % self.constraint.serial)
         continue      
     
       self.resSetNames = self.constraintResNum * ['']
@@ -12482,7 +12481,7 @@ Cannot map atom names for export.
         if self.exportAll == False:
         
           badConstraint = True
-          print "  Warning: %s" % warningText
+          print("  Warning: %s" % warningText)
 
 
       #
@@ -12491,7 +12490,7 @@ Cannot map atom names for export.
       #
 
       if len(self.constraint.items) > 1:
-        print "  Warning: more than one item for dihedral constraint %d. Written as separate ones." % self.constraint.serial
+        print("  Warning: more than one item for dihedral constraint %d. Written as separate ones." % self.constraint.serial)
 
 
       for self.item in self.constraint.sortedItems():
@@ -12593,7 +12592,7 @@ Cannot map atom names for export.
       
       if delete:
         del self.constraintFile.constraints[-1]
-        print "  Error: only exactly 1 item allowed for rdc constraint %d - deleted." % self.constraint.serial
+        print("  Error: only exactly 1 item allowed for rdc constraint %d - deleted." % self.constraint.serial)
 
       return False
       
@@ -12990,7 +12989,7 @@ Cannot map atom names for export.
     #  print fc, self.formatChains[fc]
     
     if badChainIdList:
-      print "  Warning: no coordinate chain correspondence for chain(s) with codes %s!" % str(["'%s'" % chainCode for chainCode in badChainIdList])
+      print("  Warning: no coordinate chain correspondence for chain(s) with codes %s!" % str(["'%s'" % chainCode for chainCode in badChainIdList]))
       
     self.setChainLinks(forceChainMappings = self.forceChainMappings, resetMapping = self.resetMapping)
 
@@ -13018,7 +13017,7 @@ Cannot map atom names for export.
     testMode = False
     
     if self.verbose:
-      print "  Auto selecting naming system for coordinates..."
+      print("  Auto selecting naming system for coordinates...")
       
     modelNums = self.coordinateFile.modelCoordinates.keys()
     modelNums.sort()
@@ -13053,7 +13052,7 @@ Cannot map atom names for export.
       refChainId = self.getChainOrRefChainId(coordinate)
       
       if testMode:
-        print coordSeqCode, refChainId
+        print(coordSeqCode, refChainId)
 
       #
       # If change in chainId, reset variables
@@ -13066,10 +13065,10 @@ Cannot map atom names for export.
         if self.formatChainCodeDict.has_key(oldChainId):
           chainMappings = self.formatChainCodeDict[oldChainId]
           if testMode:
-            print chainMappings
-            print self.formatChainCodeDict
+            print(chainMappings)
+            print(self.formatChainCodeDict)
         else:
-          print "  Error: no chain mapping found for chain '%s'." % oldChainId
+          print("  Error: no chain mapping found for chain '%s'." % oldChainId)
           oldChainId = ""
           continue
 
@@ -13092,9 +13091,9 @@ Cannot map atom names for export.
           chain = self.chainMappingChain[chainMapping]
         
         if testMode:
-          print "Multiple chains", multipleChains," chainMapping", chainMapping, chain
-          print chainMapping.firstSeqId, chainMapping.formatFirstSeqCode
-          print chainMapping.parent.formatName, chainMapping.parent.namingSystem
+          print("Multiple chains", multipleChains," chainMapping", chainMapping, chain)
+          print(chainMapping.firstSeqId, chainMapping.formatFirstSeqCode)
+          print(chainMapping.parent.formatName, chainMapping.parent.namingSystem)
         
         # Make sure that code below gets called as well (could be two subsequent chains with seqCode 1!)
         oldSeqCode = ""
@@ -13128,9 +13127,9 @@ Cannot map atom names for export.
           if not chain:
             oldSeqCode = ''      
             if testMode:
-              print "Invalid chain identification based on seqCodes..."
-              print seqCodes
-              print oldSeqCode, oldInsertionCode
+              print("Invalid chain identification based on seqCodes...")
+              print(seqCodes)
+              print(oldSeqCode, oldInsertionCode)
             continue
             
         else:
@@ -13151,9 +13150,9 @@ Cannot map atom names for export.
           if not validSeqCode:
             oldSeqCode = ''
             if testMode:
-              print "Invalid seq code identification based on seqCodes..."
-              print seqCodes
-              print oldSeqCode, oldInsertionCode
+              print("Invalid seq code identification based on seqCodes...")
+              print(seqCodes)
+              print(oldSeqCode, oldInsertionCode)
             continue
           
         seqId = oldSeqCode + chainMapping.firstSeqId - chainMapping.formatFirstSeqCode
@@ -13164,7 +13163,7 @@ Cannot map atom names for export.
         if not residue:
           oldSeqCode = ''
           if testMode:
-            print "Can't find residue %s" % residue
+            print("Can't find residue %s" % residue)
           continue
 
       #
@@ -13199,25 +13198,25 @@ Cannot map atom names for export.
           
         if atomNameFound:
           if testMode:
-            print "  FOUND",sysNameKey, namingSystem.name, coordAtomName
+            print("  FOUND",sysNameKey, namingSystem.name, coordAtomName)
           namingSystemNames[namingSystem.name] += 1
   
     numAtoms = len(atomsHandled)
     
     if testMode:
-      print numAtoms
+      print(numAtoms)
       
       nsn = namingSystemNames.keys()
       nsn.sort()
       
       for ns in nsn:
-        print "  %s: %d" % (ns,namingSystemNames[ns])
+        print("  %s: %d" % (ns,namingSystemNames[ns]))
         
       asns = atomSysNameDict.keys()
       asns.sort()
       
       for asn in asns:
-        print "  %s: %s" % (asn, atomSysNameDict[asn])
+        print("  %s: %s" % (asn, atomSysNameDict[asn]))
     
     #
     # Now sort out, and print out list (temporary code)
@@ -13244,7 +13243,7 @@ Cannot map atom names for export.
         
           if testMode:
             namingSystemNameList.pop(namingSystemNameList.index(namingSystemName))          
-            print namingSystemName, namingSystemHit * 100.0  / numAtoms
+            print(namingSystemName, namingSystemHit * 100.0  / numAtoms)
 
       if not testMode:
         break
@@ -13255,10 +13254,10 @@ Cannot map atom names for export.
     # TODO: should probably allow selection here?
     
     if self.namingSystemName not in bestHits and bestHits:
-      print "  Resetting naming system to %s for coordinates - has higher atom name match (%.f%%)" % (bestHits[0],highestMatch)
+      print("  Resetting naming system to %s for coordinates - has higher atom name match (%.f%%)" % (bestHits[0],highestMatch))
       self.namingSystemName = bestHits[0]
     else:
-      print "  Selected naming system %s has %.f%% match with atom names." % (self.namingSystemName,highestMatch)
+      print("  Selected naming system %s has %.f%% match with atom names." % (self.namingSystemName,highestMatch))
               
   def mapCoordinateAtoms(self):
     """ June 2011 Rasmus Fogh: Changed to fit new model:
@@ -13272,7 +13271,7 @@ Cannot map atom names for export.
     #
     
     if self.verbose:
-      print "   Mapping coordinate atoms..."
+      print("   Mapping coordinate atoms...")
   
     modelNums = self.coordinateFile.modelCoordinates.keys()
     modelNums.sort()
@@ -13322,7 +13321,7 @@ Cannot map atom names for export.
           chainMappings = self.formatChainCodeDict[oldChainId]
         else:
           mappingErrors['chain'].append(((oldChainId,),'No mapping'))
-          print "  Error: no chain mapping found for chain '%s'." % oldChainId
+          print("  Error: no chain mapping found for chain '%s'." % oldChainId)
           oldChainId = None       
           continue
 
@@ -13380,7 +13379,7 @@ Cannot map atom names for export.
               break
           
           if not chain:
-            print "  Error: no chain/residue mapping for seqCode %d, chainCode '%s' - ignoring." % (oldSeqCode,oldChainId)
+            print("  Error: no chain/residue mapping for seqCode %d, chainCode '%s' - ignoring." % (oldSeqCode,oldChainId))
             self.ignoredSeqCodes.append((oldChainId,oldSeqCode,oldInsertionCode))
             mappingErrors['residue'].append(((oldChainId,oldSeqCode,oldInsertionCode),'No mapping'))
             oldSeqCode = ''
@@ -13403,7 +13402,7 @@ Cannot map atom names for export.
               validSeqCode = True
           
           if not validSeqCode:
-            print "  Error: seqCode %d not valid for chainCode '%s' - ignoring." % (oldSeqCode,oldChainId)
+            print("  Error: seqCode %d not valid for chainCode '%s' - ignoring." % (oldSeqCode,oldChainId))
             self.ignoredSeqCodes.append((oldChainId,oldSeqCode,oldInsertionCode))
             mappingErrors['residue'].append(((oldChainId,oldSeqCode,oldInsertionCode),'Not a valid sequence code'))
             oldSeqCode = ''
@@ -13418,11 +13417,11 @@ Cannot map atom names for export.
         if not residue:
           if len(chain.residues) == 1:
             residue = chain.findFirstResidue()
-            print "  Warning: single residue chain '%s', picking only residue for seqCode %d (seqId %d)" % (chain.code,oldSeqCode,residue.seqId)
+            print("  Warning: single residue chain '%s', picking only residue for seqCode %d (seqId %d)" % (chain.code,oldSeqCode,residue.seqId))
           
           if not residue:
 
-            print "  ERROR: can't handle seqCode %d in chain '%s' - no matching residue! Searched chain %s, seqId %d." % (oldSeqCode,oldChainId,chain.code,seqId)
+            print("  ERROR: can't handle seqCode %d in chain '%s' - no matching residue! Searched chain %s, seqId %d." % (oldSeqCode,oldChainId,chain.code,seqId))
             self.ignoredSeqCodes.append((oldChainId,oldSeqCode,oldInsertionCode))
             mappingErrors['residue'].append(((oldChainId,oldSeqCode,oldInsertionCode),'Cannot find residue match'))
             oldSeqCode = ''
@@ -13641,12 +13640,12 @@ Cannot map atom names for export.
 
             if atom:
               atomName = atom.name
-              print "  New mapping: atom '%s' to atom %s" % (coordAtomName,atomName)
+              print("  New mapping: atom '%s' to atom %s" % (coordAtomName,atomName))
               self.coordAtomMapping[mappingKey] = [chain,residue,atom,atomStatus]
 
             else:
               atomName = None
-              print "  New mapping: atom '%s' will not be linked." % (coordAtomName)
+              print("  New mapping: atom '%s' will not be linked." % (coordAtomName))
 
             #
             # Propagate for this residue only, for all residues of this type
@@ -13664,7 +13663,7 @@ Cannot map atom names for export.
 
           else:
 
-            print "Error: Not linking atom %s (chemAtom selection dismissed)" % coordId
+            print("Error: Not linking atom %s (chemAtom selection dismissed)" % coordId)
             self.addWarning("Coordinate atom %s not linked." % coordId)
             mappingErrors['atom'].append((mappingKey,'Cannot find atom match'))
             
@@ -13853,7 +13852,7 @@ Cannot map atom names for export.
       #
     
       self.structureNumber += 1
-      print "  Reading model %d..." % self.structureNumber
+      print("  Reading model %d..." % self.structureNumber)
             
       model = self.structureEnsemble.newModel()
       model.addApplicationData(Implementation.AppDataString(application=ccpNmr_kw, 
@@ -13948,11 +13947,11 @@ Cannot map atom names for export.
     
     if pseudoAtomMessage in noMappingKeys:
       ll = noMappingKeys.pop(pseudoAtomMessage)
-      print "  %s in %d instances over all models." % (pseudoAtomMessage,len(ll))
+      print("  %s in %d instances over all models." % (pseudoAtomMessage,len(ll)))
     
     for key, modelNums in sorted(noMappingKeys.items()):
-      print ("  Error: no mapping found for %s (models %s)" 
-             % (key,','.join(str(x) for x in modelNums)))
+      print(("  Error: no mapping found for %s (models %s)" 
+             % (key,','.join(str(x) for x in modelNums))))
     
 
   def setCoordChainOrigData(self,cChain,coordinate):
@@ -14050,7 +14049,7 @@ Cannot map atom names for export.
         # get atom, residue and chain
         atom = coordAtom.atom
         if not atom:
-          print "   ERROR: no atom linked to coordinate atom %s - skipping" % coordAtom
+          print("   ERROR: no atom linked to coordinate atom %s - skipping" % coordAtom)
           continue
         residue = atom.residue
         chain = residue.chain
@@ -14079,8 +14078,8 @@ Cannot map atom names for export.
             break
         if not atomName:
           atomName = atom.name
-          print (
-           "  Warning: No chemAtomSysName for atom %s in chain %s, residue %s - using Iupac name" 
+          print((
+           "  Warning: No chemAtomSysName for atom %s in chain %s, residue %s - using Iupac name")
            % (atomName,chain.code,residue.seqCode)
           )
         data['atomName'][ii] = atomName
@@ -14719,10 +14718,10 @@ Cannot map atom names for export.
                                                  boundLinkAtom = linkEndLinkAtoms[0],
                                                  remoteLinkAtom = remoteLinkAtom)
   
-            print "  Made linkEnd %s" % linkCode
+            print("  Made linkEnd %s" % linkCode)
           
         else:
-          print "  Could not make linkEnd %s - %s atoms missing." % (linkCode,str(missingAtoms))
+          print("  Could not make linkEnd %s - %s atoms missing." % (linkCode,str(missingAtoms)))
 
     #
     # Create the vars...
@@ -14743,7 +14742,7 @@ Cannot map atom names for export.
                 if linkAtom:
                   chemAtomList.append(linkAtom)
             else:
-              print "  Error: no link code %s, %s" % (linkCode,descriptor)
+              print("  Error: no link code %s, %s" % (linkCode,descriptor))
               isValid = False
       
         for i in range(len(self.chemCompAtoms)):
@@ -14756,14 +14755,14 @@ Cannot map atom names for export.
         if isValid:
           #TODO: have to set charge, ... stuff on HIGHER level!!
           chemCompVar = ChemComp.ChemCompVar(chemComp, linking = linking,formalCharge = 0, isAromatic = 0, isParamagnetic = 0, descriptor = descriptor, chemAtoms = chemAtomList)
-          print "Created %s,%s: %s,%s" % (chemComp.ccpCode,chemComp.molType,descriptor,linking)
+          print("Created %s,%s: %s,%s" % (chemComp.ccpCode,chemComp.molType,descriptor,linking))
         
           if self.chemCompCoords:
             chemCompVarCoord = chemCompCoord.newChemCompVarCoord(linking = chemCompVar.linking, descriptor = chemCompVar.descriptor)
             chemCompVarToCoord[chemCompVar] = chemCompVarCoord
 
         else:
-          print "Could not create %s,%s: %s,%s. Link info missing" % (chemComp.ccpCode,chemComp.molType,descriptor,linking)
+          print("Could not create %s,%s: %s,%s. Link info missing" % (chemComp.ccpCode,chemComp.molType,descriptor,linking))
           
     #
     # Now create the chemAtomCoords, if necessary
@@ -14839,7 +14838,7 @@ Cannot map atom names for export.
   
   
     if not self.chemCompVarCoord:
-      print "  Warning: could not find chemCompVarCoord for %s, %s, %s, %s, %s!" % (self.coordSystem,chemComp.molType,chemComp.ccpCode,self.chemCompVar.linking,self.chemCompVar.descriptor)
+      print("  Warning: could not find chemCompVarCoord for %s, %s, %s, %s, %s!" % (self.coordSystem,chemComp.molType,chemComp.ccpCode,self.chemCompVar.linking,self.chemCompVar.descriptor))
 
   def createRawChemComp(self):
     
@@ -14864,7 +14863,7 @@ Cannot map atom names for export.
       atomSysName = findChemAtomOrSetSysName(namingSystem, chemAtom)
       
       if not atomSysName:
-        print "  Warning: no %s chemAtomSysName for atom %s - using atom name instead." % (self.namingSystemName,chemAtom.name)
+        print("  Warning: no %s chemAtomSysName for atom %s - using atom name instead." % (self.namingSystemName,chemAtom.name))
         rawAtomName = chemAtom.name
       else:
         rawAtomName = atomSysName.sysName
@@ -14873,7 +14872,7 @@ Cannot map atom names for export.
       chemAtomCoord = self.chemCompVarCoord.findFirstChemAtomCoord(name = chemAtom.name)
       
       if not chemAtomCoord:
-        print " Warning: missing coord for atom %s - set to 0.0" % (chemAtom.name)
+        print(" Warning: missing coord for atom %s - set to 0.0" % (chemAtom.name))
         (x,y,z) = (0.0,0.0,0.0)
       else:
         (x,y,z) = (chemAtomCoord.x,chemAtomCoord.y,chemAtomCoord.z)
@@ -14935,7 +14934,7 @@ Cannot map atom names for export.
         rawAtomSerialDict[linkAtomName] = atomSerial
         coords[linkAtomName] = (x,y,z)
 
-        print "  Created %s for output." % (linkAtomName)
+        print("  Created %s for output." % (linkAtomName))
         
         atomSerial += 1
 
@@ -15089,7 +15088,7 @@ Cannot map atom names for export.
       
       if not person:
         if len(personsFound) > 1:
-          print "  Warning: match (but no full match) found for person %s %s %s - picking first match." % (firstName,initials,familyName)
+          print("  Warning: match (but no full match) found for person %s %s %s - picking first match." % (firstName,initials,familyName))
         person = personsFound[0]
         
     return person
@@ -15333,7 +15332,7 @@ Cannot map atom names for export.
       
       if not citation:
         if len(citationsFound) > 1:
-          print "  Warning: match (but no full match) found for citation %s %s %s - picking first match." % (title, status, year)
+          print("  Warning: match (but no full match) found for citation %s %s %s - picking first match." % (title, status, year))
         citation = citationsFound[0]
         
     return citation
@@ -15356,11 +15355,11 @@ Cannot map atom names for export.
         if resonanceGroup and residue:
           resonanceGroup.residue = residue
         else:
-          print "  Error: could not set assignment:",
+          print("  Error: could not set assignment:",)
           if not resonanceGroup:
-            print " resonance group with serial %s not found." % (str(assignment.spinSystemId))
+            print(" resonance group with serial %s not found." % (str(assignment.spinSystemId)))
           elif not residue:
-            print " residue with seqId %d not found in chain '%s'." % (assignment.seqId,self.chain.code)
+            print(" residue with seqId %d not found in chain '%s'." % (assignment.seqId,self.chain.code))
             
   def setSpecificAssignmentInfo(self):
     
@@ -15518,7 +15517,7 @@ Cannot map atom names for export.
           
         else:
         
-          print "  Warning: no nucleus information for expDimRef %d" % (expDimRef.dim)
+          print("  Warning: no nucleus information for expDimRef %d" % (expDimRef.dim))
 
   def selectSpectrometer(self):
   
@@ -16140,8 +16139,8 @@ def cleanAtomNameLists (resNames, resAtomSetNames):
   debug = 'Q' in ''.join(str(x) for x in resAtomSetNames)
   
   if debug:
-    print '\n@@@1-', resNames
-    print '@@@1 ', resAtomSetNames
+    print('\n@@@1-', resNames)
+    print('@@@1 ', resAtomSetNames)
   
   resNames = list(resNames)
   resAtomSetNames = list(resAtomSetNames)
@@ -16160,8 +16159,8 @@ def cleanAtomNameLists (resNames, resAtomSetNames):
     ii +=1
   
   if debug:
-    print '\n@@@2-', resNames
-    print '@@@2 ', resAtomSetNames
+    print('\n@@@2-', resNames)
+    print('@@@2 ', resAtomSetNames)
   
   # Next remove duplicates that share an AtomSetName
   ii = 0
@@ -16179,8 +16178,8 @@ def cleanAtomNameLists (resNames, resAtomSetNames):
     ii += 1
   
   if debug:
-    print '\n@@@3-', resNames
-    print '@@@3 ', resAtomSetNames
+    print('\n@@@3-', resNames)
+    print('@@@3 ', resAtomSetNames)
     
   # Finally remove duplicate names
   ii = 0
@@ -16196,8 +16195,8 @@ def cleanAtomNameLists (resNames, resAtomSetNames):
     ii +=1
   
   if debug:
-    print '\n@@@4-', resNames
-    print '@@@4 ', resAtomSetNames
+    print('\n@@@4-', resNames)
+    print('@@@4 ', resAtomSetNames)
   
   #
   return resNames, resAtomSetNames
@@ -16213,7 +16212,7 @@ def getResonanceAtomMap(namingSystemName, resonances,
   minus original atom names and sysname caching
   """
   
-  print '### starting getResonanceAtomMap'
+  print('### starting getResonanceAtomMap')
     
   # set up
   resonanceToAtoms = {}
@@ -16257,14 +16256,14 @@ def getResonanceAtomMap(namingSystemName, resonances,
       namingSystem = residue.chemCompVar.chemComp.findFirstNamingSystem(
                       name=namingSystemName)
       if not namingSystem:
-        print ("  Warning: No %s naming system available for resonance %s" 
-               % (namingSystemName, exportName))
+        print(("  Warning: No %s naming system available for resonance %s" 
+               % (namingSystemName, exportName)))
 
         if ignoreChemCompsWithNoSysNames:
-          print " - not written."
+          print(" - not written.")
           continue
         else:
-          print " - trying to use default atom names."
+          print(" - trying to use default atom names.")
           
       if residues:
         # There were atoms from different residues - set residue back to None
@@ -16307,12 +16306,12 @@ def getResonanceAtomMap(namingSystemName, resonances,
           chemAtomSetName = atomSysName.sysName
         elif individualAtomsIfNoSet:               
           chemAtomSetName = None
-          print ("  Warning: no %s sysNames found for %s (%s). ChemAtomSet not used." 
-                 % (namingSystemName, chemAtomSet.name, exportName))
+          print(("  Warning: no %s sysNames found for %s (%s). ChemAtomSet not used." 
+                 % (namingSystemName, chemAtomSet.name, exportName)))
         else:                                          
           chemAtomSetName = chemAtomSet.name
-          print ("  Warning 1: no %s sysNames found for %s (%s)... using CCPN name." 
-                 % (namingSystemName, chemAtomSet.name, exportName))
+          print(("  Warning 1: no %s sysNames found for %s (%s)... using CCPN name." 
+                 % (namingSystemName, chemAtomSet.name, exportName)))
           
         # Make list of chemAtomSet contents (chemAtoms or chemAtomSets)
         chemAtomOrSetList = (chemAtomSet.sortedChemAtomSets() or 
@@ -16443,8 +16442,8 @@ def getResonanceAtomMap(namingSystemName, resonances,
             else:
               # If really nothing, use CCPN atom name
               refSysName = tempChemAtomOrSet.name
-              print ("  Warning 2: no %s sysNames found for %s (%s)... using CCPN name." 
-                     % (namingSystemName, tempChemAtomOrSet.name, exportName))
+              print(("  Warning 2: no %s sysNames found for %s (%s)... using CCPN name." 
+                     % (namingSystemName, tempChemAtomOrSet.name, exportName)))
                          
             # Finally set mapping
             r2a = ResonanceToAtoms(reson, residue.chain, residue.seqId, 
@@ -16510,7 +16509,7 @@ def getResonanceAtomMap(namingSystemName, resonances,
               else:
                 chemAtomSet = None
                 chemAtomSetName = None
-                print "  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName
+                print("  Warning: no chemAtomSetSysName found for %s ... ChemAtomSet not used." % exportName)
               
             else:
               chemAtomSetSysName = findChemAtomOrSetSysName(namingSystem, 
@@ -16521,7 +16520,7 @@ def getResonanceAtomMap(namingSystemName, resonances,
                 chemAtomSetName = chemAtomSetSysName.sysName 
               else:                                                                                            
                 chemAtomSetName = chemAtomSet.name                                                             
-                print "  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName   
+                print("  Warning: no chemAtomSetSysName found for %s ... using CCPN name." % exportName)
 
           else:  
             chemAtomSetName = None
@@ -16569,8 +16568,8 @@ def getResonanceAtomMap(namingSystemName, resonances,
             if atomSysName:
               refSysName = atomSysName.sysName
             else:
-              print ("  Warning: no %s sysName for %s... using CCPN name." % 
-                     (namingSystemName,exportName))
+              print(("  Warning: no %s sysName for %s... using CCPN name." % 
+                     (namingSystemName,exportName)))
               refSysName = chemAtom.name
                                 
             chemAtomOrSet = chemAtomSet or chemAtom
@@ -16662,14 +16661,14 @@ def getResonanceAtomMap(namingSystemName, resonances,
                   
               else:
                 if chemAtomSet.chemAtomSet and not individualAtomsIfNoSet:
-                  print ("  Warning 3: no %s sysNames for %s ... using CCPN name ."
-                         % (namingSystemName, exportName), chemAtomSetName)
+                  print(("  Warning 3: no %s sysNames for %s ... using CCPN name ."
+                         % (namingSystemName, exportName), chemAtomSetName))
                   sysNamesLink = [(chemAtomSet.name,chemAtomSet)]
 
                 else:
                   chemAtomSetName = None
-                  print ("  Warning: no %s sysNames for %s... using individual atom name(s)."
-                         % (namingSystemName, exportName))
+                  print(("  Warning: no %s sysNames for %s... using individual atom name(s)."
+                         % (namingSystemName, exportName)))
           
           #
           # If no chemAtomSet sysName(s) were found, do it on the individual atom level...
@@ -16693,8 +16692,8 @@ def getResonanceAtomMap(namingSystemName, resonances,
                 sysNamesLink.append((atomSysName.sysName, chemAtom))
               else:
                 sysNamesLink.append((chemAtom.name,chemAtom))
-                print ("  Warning 4: no %s sysName for %s... using CCPN name." 
-                       % (namingSystemName, exportName), chemAtomSetName)
+                print(("  Warning 4: no %s sysName for %s... using CCPN name." 
+                       % (namingSystemName, exportName), chemAtomSetName))
                 
             #
             # Still set the chemAtomSetName if there is one, for compressing resonances
@@ -16734,8 +16733,8 @@ def getResonanceAtomMap(namingSystemName, resonances,
               
     else:
       # If there is no resonanceSet for the resonance, then ignore it
-      print ("  Warning: No assignment for resonance %s (%s) - ignored" 
-             % (resonance.serial, resonance.name))
+      print(("  Warning: No assignment for resonance %s (%s) - ignored" 
+             % (resonance.serial, resonance.name)))
   
   
   #

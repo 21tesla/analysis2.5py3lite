@@ -36,7 +36,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import Tkinter, re
+import tkinter, re
 
 from os import listdir
 
@@ -217,7 +217,7 @@ class CloudHomologueAssignPopup(BasePopup):
     if self.molSystem:
       for chain in self.molSystem.chains:
         chains.append( [chain.code, chain] )
-	
+    
     return chains
 
 

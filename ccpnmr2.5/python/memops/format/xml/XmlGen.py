@@ -318,7 +318,7 @@ class XmlGen(ModelTraverse):
   def __init__(self):
     
     # init handling
-    super(XmlGen, self).__init__()
+    super().__init__()
     pp = self.modelPortal.topPackage
     self.implPackage = pp.metaObjFromQualName(self.implPackageName)
     #self.baseClass = self.implPackage.getElement(ImpConstants.baseClassName)

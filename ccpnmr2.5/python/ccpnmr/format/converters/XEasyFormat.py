@@ -129,7 +129,7 @@ class XEasyFormat(DataFormat):
   def getPeaks(self):
   
     if self.verbose == 1:
-      print "Reading peak list from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading peak list from %s file %s" % (self.formatLabel,self.fileName))
 
     # TODO HERE: have to figure out what to do if project file read...
     # TODO: Xeasy peak colour, userCode do not fit right now.
@@ -149,7 +149,7 @@ class XEasyFormat(DataFormat):
   def getPeakAssignments(self):
   
     if self.verbose == 1:
-      print "Reading peak assignments from %s file %s" % (self.formatLabel,self.fileName)
+      print("Reading peak assignments from %s file %s" % (self.formatLabel,self.fileName))
 
     # TODO HERE: have to figure out what to do if project file read...
     # TODO: Xeasy peak colour, userCode do not fit right now.
@@ -162,7 +162,7 @@ class XEasyFormat(DataFormat):
   def createPeakAssignmentFile(self):
   
     if self.verbose == 1:
-      print "Writing peak assignments to %s file %s" % (self.formatLabel,self.fileName)
+      print("Writing peak assignments to %s file %s" % (self.formatLabel,self.fileName))
   
     self.peakAssignmentsFile = self.PeakAssignmentFileClass(self.fileName)
     self.peakAssignmentsFile.setDimensions(self.numDim)
@@ -194,7 +194,7 @@ class XEasyFormat(DataFormat):
   
     if (hasattr(self,'cyana21Naming') and self.cyana21Naming) or (hasattr(self,'cyanaFormat') and self.cyanaFormat):
       self.forceNamingSystemName = self.getFormatNamingSystemName(format = 'cyana', version = '2.1') 
-      print "  Warning: setting naming system to %s." % self.forceNamingSystemName
+      print("  Warning: setting naming system to %s." % self.forceNamingSystemName)
 
   def createShift(self,resonance,chemShift):
     
@@ -488,7 +488,7 @@ class XEasyFormat(DataFormat):
       
         if isinstance(peakDimContrib,Nmr.PeakDimContribN):
 
-          print "   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored."
+          print("   Warning: cannot handle multiple resonances for one peakDim contribution. Ignored.")
       
         else:
           
@@ -612,7 +612,7 @@ class XEasyFormat(DataFormat):
           intensityTypes.append(intensity.intensityType)
     
     if self.integrationMethod not in intensityTypes and len(intensityTypes) == 1:
-      print "  Warning: resetting peak integration method to %s - no %s values available." % (intensityTypes[0],self.integrationMethod)
+      print("  Warning: resetting peak integration method to %s - no %s values available." % (intensityTypes[0],self.integrationMethod))
       self.integrationMethod = intensityTypes[0]
       
   def orderByAtomNames(self,residueResonanceToAtomList):
@@ -646,7 +646,7 @@ class XEasyFormat(DataFormat):
       chemCompVar = self.residue.molResidue.chemComp.findFirstChemCompVar(linking = 'middle', isDefaultVar = True)
       
       if not chemCompVar:
-        print "  ERROR: no chemCompVar found for XEasy - might be non-standard residue."
+        print("  ERROR: no chemCompVar found for XEasy - might be non-standard residue.")
         return
         
     chemAtomSysNames = findAllSysNamesByChemAtomOrSet(chemCompVar.chemComp,chemCompVar.chemAtoms,self.namingSystemName)
@@ -662,7 +662,7 @@ class XEasyFormat(DataFormat):
         chemAtomOrSet = chemCompVar.findFirstChemAtomSet(name = chemAtomSysName.atomName, subType = chemAtomSysName.atomSubType)
         
       if not chemAtomOrSet:
-        print "  Warning: ignoring atom with name %s for %s export." % (chemAtomSysName.atomName,self.format)
+        print("  Warning: ignoring atom with name %s for %s export." % (chemAtomSysName.atomName,self.format))
         continue
       
       applData = None
@@ -673,7 +673,7 @@ class XEasyFormat(DataFormat):
       # TODO THIS IS A SLIGHT HACK TO AVOID UNNECESSARY PRINTOUTS
       if not applData:
         if chemAtomSysName.sysName not in ['HN','O','H',"O'","O''"]:
-          print "  Warning: no XEASY serial number for %s ('%s','%s'), sysName %s" % (self.residue.ccpCode,chemCompVar.linking,chemCompVar.descriptor,chemAtomSysName.sysName)
+          print("  Warning: no XEASY serial number for %s ('%s','%s'), sysName %s" % (self.residue.ccpCode,chemCompVar.linking,chemCompVar.descriptor,chemAtomSysName.sysName))
         continue
         
       serialOrder = applData.value

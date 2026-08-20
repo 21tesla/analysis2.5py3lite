@@ -23,20 +23,20 @@ def pull_data(from_db, to_db, tables):
     destination, dengine = make_session(to_db)
 
     for table_name in tables:
-        print 'Processing', table_name
-        print 'Pulling schema from source server'
+        print('Processing', table_name)
+        print('Pulling schema from source server')
         table = Table(table_name, smeta, autoload=True)
-        print 'Creating table on destination server'
+        print('Creating table on destination server')
         table.metadata.create_all(dengine)
         newRecord = quick_mapper(table)
         columns = table.columns.keys()
-        print 'Transferring records'
+        print('Transferring records')
         for record in source.query(table).all():
             data = dict(
                 [(str(column), getattr(record, column)) for column in columns]
             )
             destination.merge(newRecord(**data))
-    print 'Committing changes'
+    print('Committing changes')
     destination.commit()
 
 def print_usage():
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     options = dict(optlist)
     if '-f' not in options or '-t' not in options or not tables:
         print_usage()
-        raise SystemExit, 1
+        raise SystemExit(1)
 
     pull_data(
         options['-f'],

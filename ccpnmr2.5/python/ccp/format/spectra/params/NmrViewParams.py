@@ -140,7 +140,7 @@ class NmrViewParams(ExternalParams):
     
     try:
       fp = open(self.dataFile, 'rb')
-    except IOError, e:
+    except OSError as e:
       raise ApiError('nmrview file %s is not acessible' % self.dataFile + str(e))
     
     s = fp.read(self.head)
@@ -293,11 +293,11 @@ class NmrViewParams(ExternalParams):
           self.nuc[i] = '1H'
       
       
-    except Exception, e:
+    except Exception as e:
       errorSf = []
       for sf in self.sf:
         errorSf.append('%7.3f' % sf)
-      print 'error: couldn\'t guess nuclei for frequencies %s' % errorSf
+      print('error: couldn\'t guess nuclei for frequencies %s' % errorSf)
   
   def checkParFileNumberOfFields(self, parFile, lineIndex, fields, expected):
     if len(fields) != expected:
@@ -319,7 +319,7 @@ class NmrViewParams(ExternalParams):
       if isfile(parFile):
         try:
           fp = open(parFile, 'rb')
-        except IOError, e:
+        except OSError as e:
           raise ApiError('can\'t open nmrview .par file %s: \n' % parFile + str(e))
         
         for i, line in enumerate(fp):
@@ -347,15 +347,15 @@ class NmrViewParams(ExternalParams):
             self.refpt[axisIndex] = atof(fields[3])
             self.refppm[axisIndex] = atof(fields[2])
       
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
         traceback.print_exc(file=sys.stdout)
 
 if (__name__ == '__main__'):
 
   import sys
   if (len(sys.argv) != 2):
-    print 'Error: correct syntax: <script> <matrix_file>'
+    print('Error: correct syntax: <script> <matrix_file>')
     sys.exit(1)
 
   matrix_file = sys.argv[1]

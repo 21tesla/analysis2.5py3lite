@@ -13,7 +13,7 @@ def cleanAppData(project):
   
   appDataObjectDict = {}
   
-  print "Collecting application data... this might take a while."
+  print("Collecting application data... this might take a while.")
   
   #findAppData(project,appDataObjectDict)
   
@@ -58,13 +58,13 @@ def cleanAppData(project):
         for atom in residue.atoms:
           findAppData(atom,appDataObjectDict)
   
-  print "Finished collecting application data."
+  print("Finished collecting application data.")
   
   for format in ['ccpNmr'] + allFormatsDict.keys():
     if appDataObjectDict.has_key(format):
       for (object,appData) in appDataObjectDict[format]:
         object.removeApplicationData(appData)
-      print "  Deleted application data for %s..." % format
+      print("  Deleted application data for %s..." % format)
 
 if __name__ == '__main__':
 

@@ -34,14 +34,14 @@ def dirToCasdTree(path=None, trialRun=False):
         if len(ll) == 2:
             dest = casdFileDir(ll[0])
         if dest is None:
-            print 'WARNING, file name %s does not start with CASD EntryName' % ff
+            print('WARNING, file name %s does not start with CASD EntryName' % ff)
    
         elif os.path.exists(dest):
-            print 'MOVing:', ff, dest
+            print('MOVing:', ff, dest)
             if not trialRun:
                 os.rename(os.path.join(path,ff), os.path.join(dest,ff))
         else:
-            print 'WARNING, destination directory %s does not exist' % dest
+            print('WARNING, destination directory %s does not exist' % dest)
  
 
 def casdFileDir(entryName):

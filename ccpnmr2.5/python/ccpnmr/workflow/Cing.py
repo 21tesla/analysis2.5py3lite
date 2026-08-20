@@ -64,7 +64,7 @@ class WebCing(CingWorkFlow):
   def cingRequest(self,action,uploadFileName=None):
   
     if not action:
-      print "Need an action!"
+      print("Need an action!")
       return
   
     if uploadFileName:
@@ -187,7 +187,7 @@ class WebCing(CingWorkFlow):
     statusPage = None
     
     if verbose:
-      print "Waiting for termination",
+      print("Waiting for termination",)
       
     while (not statusPage or 'notDone' in statusPage):
     
@@ -195,11 +195,11 @@ class WebCing(CingWorkFlow):
       time.sleep(2)
       
       if verbose:
-        print ".",
+        print(".",)
         sys.stdout.flush()
     
     if verbose: 
-      print
+      print()
     
     #
     # Get the log (bit obsolete as also done in file download)
@@ -209,14 +209,14 @@ class WebCing(CingWorkFlow):
     
     if verbose:
       pyDict = eval(logPage)
-      print pyDict['Result']
+      print(pyDict['Result'])
         
     #
     # Now get the .tgz of the CING project...
     #
     
     if verbose:
-      print "Downloading CING information..."
+      print("Downloading CING information...")
     
     self.cingProjectDownload(downloadDir)
     

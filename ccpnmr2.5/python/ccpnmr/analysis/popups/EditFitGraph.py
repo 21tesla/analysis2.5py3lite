@@ -206,7 +206,7 @@ class EditFitGraphPopup(BasePopup):
                 'The value of the best-fit function at the X-axis location',
                 'The difference between the experimental (Y-axis) value and the fitted value',
                 'The error in the experimental (Y-axis) value']
-    headingList = ['Point','x','y','Fitted y',u'\u0394','y error']
+    headingList = ['Point','x','y','Fitted y','\u0394','y error']
     self.scrolledMatrix = ScrolledMatrix(guiFrame, headingList=headingList,
                                          callback=self.selectObject,
                                          tipTexts=tipTexts, grid=(row,0))

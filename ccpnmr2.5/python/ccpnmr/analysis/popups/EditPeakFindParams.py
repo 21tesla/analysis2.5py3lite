@@ -537,7 +537,7 @@ class EditPeakFindParamsPopup(BasePopup):
     project = self.project
     try:
       PeakFindParams.setPeakFindParams(project, params)
-    except Implementation.ApiError, e:
+    except Implementation.ApiError as e:
       showError('Parameter error', e.error_msg, parent=self)
 
   def reset(self):

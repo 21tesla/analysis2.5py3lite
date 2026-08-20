@@ -51,7 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import Tkinter
+import tkinter
 
 
 from memops.gui.Canvas import Canvas
@@ -214,7 +214,7 @@ class ValueRamp(Frame):
 if (__name__ == '__main__'):
 
   def callback(multiplier):
-    print 'callback', multiplier
+    print('callback', multiplier)
 
   r = Tkinter.Tk()
 

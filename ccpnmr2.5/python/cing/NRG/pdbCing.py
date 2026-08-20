@@ -198,7 +198,7 @@ class PdbCing(Lister):
             try:
                 resource = urllib.urlopen(url_links)
                 reader = csv.reader(resource)
-            except IOError:
+            except OSError:
                 nTerror("couldn't open url for reader: " + url_links)
                 return True
 
@@ -214,7 +214,7 @@ class PdbCing(Lister):
                         self.matches_one2many[     bmrb_code ] = pdb_code
                         self.matches_one2many_inv[ pdb_code  ] = bmrb_code
             # Never know when the connection is finally empty.
-            except IOError:
+            except OSError:
                 pass
 
             if url_links == url_many2one:
@@ -491,7 +491,7 @@ class PdbCing(Lister):
 #        file_name = os.path.join (self.base_dir, "data", "index.html")
         file_name = os.path.join (self.base_data_dir, "index.html")
 
-        file_content = open(file_name, 'r').read()
+        file_content = open(file_name).read()
         old_string = r"<!-- INSERT NEW DATE HERE -->"
         new_string = time.asctime()
         file_content = string.replace(file_content, old_string, new_string)
@@ -651,7 +651,7 @@ class PdbCing(Lister):
         nTmessage("Copy the adjusted php script")
         org_file = os.path.join(self.base_data_dir, 'redirect.php')
         new_file = os.path.join(self.results_dir, 'redirect.php')
-        file_content = open(org_file, 'r').read()
+        file_content = open(org_file).read()
         old_string = 'URL_BASE'
         file_content = string.replace(file_content, old_string, self.results_url)
         open(new_file, 'w').write(file_content)

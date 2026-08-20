@@ -17,7 +17,7 @@ class AllChecks(TestCase):
     def test_xplor_nih(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
-        self.failIf(os.chdir(cingDirTmpTest), msg =
+        self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
         entryId = "gb1"
@@ -26,7 +26,7 @@ class AllChecks(TestCase):
         pdbFilePath = os.path.join( pdbDirectory, pdbFileName)
 
         project = Project( entryId )
-        self.failIf( project.removeFromDisk())
+        self.assertFalse( project.removeFromDisk())
         project = Project.open( entryId, status='new' )
         project.initPDB( pdbFile=pdbFilePath, convention = XPLOR )
 #        project.validate(ranges, parseOnly, htmlOnly, doProcheck, doWhatif, doWattos, doTalos)

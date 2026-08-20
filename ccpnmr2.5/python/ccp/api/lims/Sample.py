@@ -62,7 +62,7 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import cStringIO
+import io
 #import sets
 import traceback
 import types
@@ -2238,7 +2238,7 @@ allow a link to be created to the product data page.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.RefSampleSource.__init__"
+        print("ERROR in ccp.lims.Sample.RefSampleSource.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -2273,10 +2273,10 @@ allow a link to be created to the product data page.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -3083,7 +3083,7 @@ the contents of the sample.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.SampleComponent.__init__"
+        print("ERROR in ccp.lims.Sample.SampleComponent.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -3129,10 +3129,10 @@ the contents of the sample.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -5121,7 +5121,7 @@ class SampleStore(memops.api.Implementation.TopObject):
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.SampleStore.__init__"
+        print("ERROR in ccp.lims.Sample.SampleStore.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -5176,10 +5176,10 @@ class SampleStore(memops.api.Implementation.TopObject):
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -6202,7 +6202,7 @@ supplier and batch independant.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.RefSample.__init__"
+        print("ERROR in ccp.lims.Sample.RefSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -6241,10 +6241,10 @@ supplier and batch independant.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -9245,7 +9245,7 @@ located in an Holder.
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.Sample.__init__"
+        print("ERROR in ccp.lims.Sample.Sample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -9284,10 +9284,10 @@ located in an Holder.
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 
@@ -13699,7 +13699,7 @@ its  physical properties : dimensions, color,...
             func(self, value)
         del dataDict['inConstructor']
       except:
-        print "ERROR in ccp.lims.Sample.CrystalSample.__init__"
+        print("ERROR in ccp.lims.Sample.CrystalSample.__init__")
         del dataDict['inConstructor']
         raise
 
@@ -13738,10 +13738,10 @@ its  physical properties : dimensions, color,...
         self.delete()
         del dataDict['inConstructor']
       except:
-        print '''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state'''
+        print('''WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state''')
         del dataDict['inConstructor']
-      raise exc_info[0], exc_info[1], exc_info[2]
+      raise exc_info[1]
 
     # doNotifies
 

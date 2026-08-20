@@ -16,7 +16,7 @@ data = spread
 
 # basic plot
 wisk_lo, wisk_hi = boxplot(data)
-print "wisk_lo, wisk_hi %s %s" % (wisk_lo, wisk_hi)
+print("wisk_lo, wisk_hi %s %s" % (wisk_lo, wisk_hi))
 
 savefig('/Users/jd/tmp/cingTmp/boxplot_simple.png')
 
