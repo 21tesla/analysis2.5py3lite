@@ -83,7 +83,6 @@ def returnMemopsWord(value):
   """
  
   if value:
-    pass
 
     # NB changed - did not fulfillits promise
     #wordString = value.replace(' ','')
@@ -93,7 +92,6 @@ def returnMemopsWord(value):
     return wordString
 
   else:
-    pass
  
     return value
 
@@ -105,7 +103,6 @@ def returnMemopsLine(value):
   """
  
   if value:
-          pass
  
     wordString = value.replace(os.linesep,' ')
     wordString = wordString[:80]
@@ -113,7 +110,6 @@ def returnMemopsLine(value):
     return wordString
  
   else:
-          pass
  
     return value
 
@@ -125,14 +121,12 @@ def returnMemopsText(value):
   """
  
   if value:
-          pass
  
     wordString = value[:254]
  
     return wordString
  
   else:
-          pass
  
     return value
 
@@ -666,7 +660,6 @@ def transferData(newParent, sourceObj, oldToNew=None,
     objsToBeDeleted = set([x for x in delayDataDict if not isinstance(x, int,)])
     deleteFailed = False
     for obj in objsToBeDeleted:
-            pass
       try:
         obj._singleDelete(objsToBeDeleted)
       except:
@@ -675,7 +668,6 @@ def transferData(newParent, sourceObj, oldToNew=None,
                % (xx.__class__, id(xx))))
   
     if targetObj is not None:
-            pass
       try:
         topObj = targetObj.topObject
         topObj.__dict__['isReading'] = False
@@ -780,9 +772,7 @@ def delayedLoadLinksCopy(objectDict, linkData, ignoreMissing=False):
   getObj = objectDict.get
    
   while linkData:
-          pass
-    
-    # set up 
+    # set up
     curMap = popLinkData()
     val = popLinkData()
     obj = popLinkData()
@@ -796,8 +786,6 @@ def delayedLoadLinksCopy(objectDict, linkData, ignoreMissing=False):
     # that modifies object outside the subtree
     
     if hicard == 1:
-            pass
-    
       # get new value
       vv = val[0]
       newVal = getObj(vv)

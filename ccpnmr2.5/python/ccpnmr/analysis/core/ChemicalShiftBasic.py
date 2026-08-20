@@ -228,8 +228,8 @@ def getResidueProbability(ppms, ccpCode, elements, atomTypes=None, ppmsBound=Non
       
       if bound and (ppmB is not None):
         boundData = shiftRefs.get(bound)
-    
-    if boundData:
+
+        if boundData:
           meanB, sdB, pMissingB, boundB = boundData      
           dB = ppmB-meanB
           eB = dB/sdB   
@@ -394,10 +394,10 @@ def getShiftsResidueProbability(shifts, ccpCode, prior=0.05, molType=PROTEIN_MOL
     
       if bound:
         shift2 = bound.findFirstShift(parentList=shift.parentList)
-    if shift2:
-      ppm2 = shift2.value
-    else:
-      ppm2 = None
+        if shift2:
+          ppm2 = shift2.value
+        else:
+          ppm2 = None
       else:
         ppm2 = None
       
@@ -405,50 +405,50 @@ def getShiftsResidueProbability(shifts, ccpCode, prior=0.05, molType=PROTEIN_MOL
       assignNames = resonance.assignNames or set([])
       
       if (not assignNames) and resonance.peakDimContribs:
-    refExpDimRefs = set([])
+        refExpDimRefs = set([])
 
-    for contrib in resonance.peakDimContribs:
-      refExpDimRef = contrib.peakDim.dataDimRef.expDimRef.refExpDimRef
-  	  if refExpDimRef:
-        refExpDimRefs.add(refExpDimRef)
-      
-    for refExpDimRef in refExpDimRefs:
-  	  expMeasurement = refExpDimRef.expMeasurement
-  	  atomSites = expMeasurement.atomSites
- 
-  	  for atomSite in atomSites:
-  	    name = atomSite.name
- 
-  	    if name == 'CO':
-  	      name == 'C'
+        for contrib in resonance.peakDimContribs:
+          refExpDimRef = contrib.peakDim.dataDimRef.expDimRef.refExpDimRef
+          if refExpDimRef:
+            refExpDimRefs.add(refExpDimRef)
 
-  	    elif name in ('H','N',): # Not specific sites
-  	      continue
-              
-  	    elif (name == 'HA') and (ccpCode == 'Gly'):
-  	      name = 'HA2'
+        for refExpDimRef in refExpDimRefs:
+          expMeasurement = refExpDimRef.expMeasurement
+          atomSites = expMeasurement.atomSites
 
-  	    elif (name == 'HB') and (ccpCode not in betaBranch):
-  	      name = 'HB2'
- 
-  	    elif name in ('C','Cali'):
-  	      for expTransfer in atomSite.expTransfers:
-  	        if expTransfer.transferType in ('onebond','CP'):
-  	          atomSites2 = list(expTransfer.atomSites)
-  	          atomSites2.remove(atomSite)
-  	          name2 = atomSites2[0].name
- 
-  	          if (name2 == 'CA') and (ccpCode != 'Gly'):
-  	            name = 'CB'
-  	            break
-  	          elif name2 == 'CO':
-  	            name = 'CA'
-  	            break
+          for atomSite in atomSites:
+            name = atomSite.name
 
-  	      else:
-  	        continue
+            if name == 'CO':
+              name == 'C'
 
-            assignNames.add(name)
+            elif name in ('H','N',): # Not specific sites
+              continue
+
+            elif (name == 'HA') and (ccpCode == 'Gly'):
+              name = 'HA2'
+
+            elif (name == 'HB') and (ccpCode not in betaBranch):
+              name = 'HB2'
+
+            elif name in ('C','Cali'):
+              for expTransfer in atomSite.expTransfers:
+                if expTransfer.transferType in ('onebond','CP'):
+                  atomSites2 = list(expTransfer.atomSites)
+                  atomSites2.remove(atomSite)
+                  name2 = atomSites2[0].name
+
+                  if (name2 == 'CA') and (ccpCode != 'Gly'):
+                    name = 'CB'
+                    break
+                  elif name2 == 'CO':
+                    name = 'CA'
+                    break
+
+              else:
+                continue
+
+        assignNames.add(name)
 
       boundPpmsAppend(ppm2)
       ppmsAppend(shift.value)
