@@ -38,27 +38,28 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from ccpnmr.update.UpdateAgent import UpdateAgent, UPDATE_SERVER_LOCATION, UPDATE_DIRECTORY, UPDATE_DATABASE_FILE
 
-def updateAuto(serverLocation=UPDATE_SERVER_LOCATION,
-               serverDirectory=UPDATE_DIRECTORY,
-               dataFile=UPDATE_DATABASE_FILE):
+from ccpnmr.update.UpdateAgent import UPDATE_DATABASE_FILE, UPDATE_DIRECTORY, UPDATE_SERVER_LOCATION, UpdateAgent
 
-  updateAgent = UpdateAgent(serverLocation, serverDirectory, dataFile, isGraphical=False)
-  server = updateAgent.server
-  if server:
-      server.getFileUpdates()
-      if not server.fileUpdates:
+
+def updateAuto(serverLocation=UPDATE_SERVER_LOCATION, serverDirectory=UPDATE_DIRECTORY, dataFile=UPDATE_DATABASE_FILE):
+
+    updateAgent = UpdateAgent(serverLocation, serverDirectory, dataFile, isGraphical=False)
+    server = updateAgent.server
+    if server:
         server.getFileUpdates()
-      if server.fileUpdates:
-        updateAgent.installNewUpdates()  
-      else:
-        print('No updates')
-    
-if __name__ == '__main__':
-  import os
+        if not server.fileUpdates:
+            server.getFileUpdates()
+        if server.fileUpdates:
+            updateAgent.installNewUpdates()
+        else:
+            print("No updates")
 
-  updateAuto()
 
-  # NOTE:ED - seems to need this to clean up in Windows10
-  os._exit(0)
+if __name__ == "__main__":
+    import os
+
+    updateAuto()
+
+    # NOTE:ED - seems to need this to clean up in Windows10
+    os._exit(0)

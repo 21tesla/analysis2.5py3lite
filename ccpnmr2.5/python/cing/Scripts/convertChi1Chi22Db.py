@@ -1,17 +1,12 @@
-from cing import cingDirData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqDssp import to3StateDssp
-from cing.core.molecule import common20AADict
-from cing.core.validate import binCount
-from cing.core.validate import bins360
-from cing.core.validate import plotparams360
-from cing.core.validate import xGrid360
-from cing.core.validate import yGrid360
-from numpy.lib.twodim_base import histogram2d
-import pickle
 import csv
 
+from numpy.lib.twodim_base import histogram2d
+
+from cing import cingDirData, cingDirTmp
+from cing.core.molecule import common20AADict
+from cing.core.validate import binCount, bins360, plotparams360, xGrid360, yGrid360
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqDssp import to3StateDssp
 
 #Takes a file with dihedral angles values and converts them to a python pickle file
 #with histograms for (combined) residue and sec. struct. types.
@@ -77,7 +72,7 @@ def main():
         if not inRange(chi2):
             nTerror("chi2 not in range for row: %s" % repr(row))
             return
-        if not common20AADict.has_key(resType):
+        if resType not in common20AADict:
             nTdebug("Residue not in common 20 for row: %s" % repr(row))
 #            rowCount -= 1
             continue

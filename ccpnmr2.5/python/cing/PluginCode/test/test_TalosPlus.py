@@ -2,22 +2,24 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_TalosPlus.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqNih import TALOSPLUS_STR
-from cing.core.classes import Project
-from cing.core.parameters import cingPaths
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import shutil
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.parameters import cingPaths
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
+from cing.PluginCode.required.reqNih import TALOSPLUS_STR
+
 #from cing.Libs.fpconst import * #@UnusedWildImport
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)

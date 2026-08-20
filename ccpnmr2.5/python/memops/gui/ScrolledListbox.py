@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,290 +50,312 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter, tkSimpleDialog
+
+import tkSimpleDialog
 
 from memops.gui.ButtonList import ButtonList
-
 from memops.gui.Frame import Frame
 
+
 class ScrolledListbox(Frame):
+    def __init__(
+        self,
+        parent,
+        initial_list=None,
+        width=60,
+        height=5,
+        xscroll=True,
+        yscroll=True,
+        addDeleteButtons=False,
+        selectmode=Tkinter.BROWSE,
+        exportselection=0,
+        select_callback=None,
+        double_callback=None,
+        list_background="white",
+        *args,
+        **kw,
+    ):
+
+        if initial_list is None:
+            initial_list = []
+
+        Frame.__init__(self, parent, *args, **kw)
+
+        self.selectmode = selectmode
 
-  def __init__(self, parent, initial_list = None,
-               width = 60, height = 5,
-               xscroll = True, yscroll = True, addDeleteButtons = False,
-               selectmode = Tkinter.BROWSE, exportselection = 0,
-               select_callback = None, double_callback = None,
-               list_background = 'white',
-               *args, **kw):
-
-    if (initial_list is None):
-      initial_list = []
-
-    Frame.__init__(self, parent, *args, **kw)
-
-    self.selectmode = selectmode
-
-    self.grid_rowconfigure(0, weight=1)
-    self.grid_columnconfigure(0, weight=1)
-    listbox = Tkinter.Listbox(self, width=width, height=height,
-                      background = list_background,
-                      selectmode=selectmode, exportselection=exportselection)
-    listbox.grid(row=0, column=0, sticky=Tkinter.NSEW)
-
-    if (xscroll):
-      xscrollbar = Tkinter.Scrollbar(self, orient=Tkinter.HORIZONTAL)
-      xscrollbar.config(command=listbox.xview)
-      listbox.config(xscrollcommand=xscrollbar.set)
-      xscrollbar.grid(row=1, column=0, sticky=Tkinter.EW)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        listbox = Tkinter.Listbox(
+            self,
+            width=width,
+            height=height,
+            background=list_background,
+            selectmode=selectmode,
+            exportselection=exportselection,
+        )
+        listbox.grid(row=0, column=0, sticky=Tkinter.NSEW)
 
-    if (yscroll):
-      yscrollbar = Tkinter.Scrollbar(self, orient=Tkinter.VERTICAL)
-      yscrollbar.config(command=listbox.yview)
-      listbox.config(yscrollcommand=yscrollbar.set)
-      yscrollbar.grid(row=0, column=1, sticky=Tkinter.NS)
-
-    if addDeleteButtons:
-      texts = ['Add item','Delete selected']
-      commands = [self.addItem,self.deleteItems]
-      buttons = ButtonList(self,texts = texts, commands = commands)
-      buttons.grid(row =1, columnspan = 2, sticky = Tkinter.EW)
+        if xscroll:
+            xscrollbar = Tkinter.Scrollbar(self, orient=Tkinter.HORIZONTAL)
+            xscrollbar.config(command=listbox.xview)
+            listbox.config(xscrollcommand=xscrollbar.set)
+            xscrollbar.grid(row=1, column=0, sticky=Tkinter.EW)
 
-    # bind frame, not listbox, because listbox with focus has
-    # activation which means in particular that get underlining
-    self.bind('<Enter>', self.enterCallback)
-    self.bind('<KeyPress>', self.keypressCallback)
-
-    self.listbox = listbox
+        if yscroll:
+            yscrollbar = Tkinter.Scrollbar(self, orient=Tkinter.VERTICAL)
+            yscrollbar.config(command=listbox.yview)
+            listbox.config(yscrollcommand=yscrollbar.set)
+            yscrollbar.grid(row=0, column=1, sticky=Tkinter.NS)
 
-    self.setItems(initial_list)
-
-    self.setSelectCallback(select_callback)
-    self.setDoubleCallback(double_callback)
-
-    self.size = self.listbox.size # otherwise get Frame size called
-
-  def moveSelectedItemUp(self, *event):
-
-    if (self.selectmode != Tkinter.SINGLE):
-      return
+        if addDeleteButtons:
+            texts = ["Add item", "Delete selected"]
+            commands = [self.addItem, self.deleteItems]
+            buttons = ButtonList(self, texts=texts, commands=commands)
+            buttons.grid(row=1, columnspan=2, sticky=Tkinter.EW)
 
-    ind = self.getSelected()
-
-    if (ind):
+        # bind frame, not listbox, because listbox with focus has
+        # activation which means in particular that get underlining
+        self.bind("<Enter>", self.enterCallback)
+        self.bind("<KeyPress>", self.keypressCallback)
 
-      s = self.get(ind)
-      self.delete(ind)
-      self.insert(ind-1, s)
-      self.select_set(ind-1)
-      self.see(ind-1)
+        self.listbox = listbox
 
-  def moveSelectedItemDown(self, *event):
+        self.setItems(initial_list)
 
-    if (self.selectmode != Tkinter.SINGLE):
-      return
+        self.setSelectCallback(select_callback)
+        self.setDoubleCallback(double_callback)
 
-    n = self.size()
-    ind = self.getSelected()
+        self.size = self.listbox.size  # otherwise get Frame size called
 
-    if ((ind != None) and (ind < n-1)):
+    def moveSelectedItemUp(self, *event):
 
-      s = self.get(ind)
-      self.delete(ind)
-      self.insert(ind+1, s)
-      self.select_set(ind+1)
-      self.see(ind+1)
+        if self.selectmode != Tkinter.SINGLE:
+            return
 
-  def addItem(self):
-  
-    newItem = tkSimpleDialog.askstring('Enter new value','New value:',parent = self)
-    
-    if newItem:
-      newItem = newItem.strip()
-      self.append(newItem)
+        ind = self.getSelected()
 
-  def deleteItems(self):
-  
-    selectedItems = self.getSelectedItems()
-    if type(selectedItems) != type([]):
-      selectedItems = [selectedItems]
-    
-    unSelectedItems = []
+        if ind:
+            s = self.get(ind)
+            self.delete(ind)
+            self.insert(ind - 1, s)
+            self.select_set(ind - 1)
+            self.see(ind - 1)
 
-    for item in self.listbox.get(0, Tkinter.END):
-      if item not in selectedItems:
-        unSelectedItems.append(item)
-    
-    self.setItems(unSelectedItems)
-    
-  def getAllItems(self):
-  
-    return self.listbox.get(0, Tkinter.END)
+    def moveSelectedItemDown(self, *event):
 
-  def getSelected(self):
+        if self.selectmode != Tkinter.SINGLE:
+            return
 
-    inds = [ int(sel) for sel in self.listbox.curselection() ]
+        n = self.size()
+        ind = self.getSelected()
 
-    if (self.selectmode == Tkinter.SINGLE):
-      if (inds):
-        return inds[0]
-      else:
-        return None
-    else:
-      return inds
+        if (ind != None) and (ind < n - 1):
+            s = self.get(ind)
+            self.delete(ind)
+            self.insert(ind + 1, s)
+            self.select_set(ind + 1)
+            self.see(ind + 1)
 
-  def getSelectedItems(self):
+    def addItem(self):
 
-    items = [ self.get(sel) for sel in self.listbox.curselection() ]
+        newItem = tkSimpleDialog.askstring("Enter new value", "New value:", parent=self)
 
-    if (self.selectmode == Tkinter.SINGLE):
-      if (items):
-        return items[0]
-      else:
-        return None
-    else:
-      return items
+        if newItem:
+            newItem = newItem.strip()
+            self.append(newItem)
 
-  def setSelectedItems(self, items):
+    def deleteItems(self):
 
-    entries = list(self.getItems())
+        selectedItems = self.getSelectedItems()
+        if type(selectedItems) != type([]):
+            selectedItems = [selectedItems]
 
-    self.listbox.select_clear(0, Tkinter.END)
+        unSelectedItems = []
 
-    if (self.selectmode == Tkinter.SINGLE):
-      if (items):
-        items = [items]
+        for item in self.listbox.get(0, Tkinter.END):
+            if item not in selectedItems:
+                unSelectedItems.append(item)
 
-    for item in items:
-      try:
-        ind = entries.index(item)
-        self.select_set(ind)
-      except:
-        pass
-      
-  def getItems(self):
+        self.setItems(unSelectedItems)
 
-    return self.get(0, Tkinter.END)
+    def getAllItems(self):
 
-  def setItems(self, entries):
+        return self.listbox.get(0, Tkinter.END)
 
-    self.clear()
-    for e in entries:
-      self.append(e)
+    def getSelected(self):
 
-  def append(self, x):
+        inds = [int(sel) for sel in self.listbox.curselection()]
 
-    self.listbox.insert(Tkinter.END, x)
+        if self.selectmode == Tkinter.SINGLE:
+            if inds:
+                return inds[0]
+            else:
+                return None
+        else:
+            return inds
 
-  def clear(self):
+    def getSelectedItems(self):
 
-    self.listbox.delete(0, Tkinter.END)
+        items = [self.get(sel) for sel in self.listbox.curselection()]
 
-  def enterCallback(self, event):
+        if self.selectmode == Tkinter.SINGLE:
+            if items:
+                return items[0]
+            else:
+                return None
+        else:
+            return items
 
-    self.focus()
+    def setSelectedItems(self, items):
 
-  def keypressCallback(self, event):
+        entries = list(self.getItems())
 
-    #print dir(event), str(event.keysym), str(event.keycode)
+        self.listbox.select_clear(0, Tkinter.END)
 
-    if (event.keysym in [ 'Up', 'Down' ]):
+        if self.selectmode == Tkinter.SINGLE:
+            if items:
+                items = [items]
 
-      selected = self.curselection()
+        for item in items:
+            try:
+                ind = entries.index(item)
+                self.select_set(ind)
+            except:
+                pass
 
-      if (selected):
+    def getItems(self):
 
-        ind = int(selected[0]) # tough if more than one selected
+        return self.get(0, Tkinter.END)
 
-        if (event.keysym == 'Up'):
+    def setItems(self, entries):
 
-          if (ind != 0):
-            ind = ind - 1
+        self.clear()
+        for e in entries:
+            self.append(e)
 
-        else: # (event.keysym == 'Down')
+    def append(self, x):
 
-          size = self.size()
-          if (ind != (size-1)):
-            ind = ind + 1
+        self.listbox.insert(Tkinter.END, x)
 
-        self.select_clear(0, Tkinter.END)
-        self.select_set(ind)
-        self.see(ind)
-        
-        if (self.select_callback):
-          self.select_callback(event)
+    def clear(self):
 
-  def setSelectCallback(self, select_callback):
+        self.listbox.delete(0, Tkinter.END)
 
-    self.select_callback = select_callback
+    def enterCallback(self, event):
 
-    if (select_callback):
-      self.listbox.bind('<ButtonRelease-1>', select_callback)
+        self.focus()
 
-  def setDoubleCallback(self, double_callback):
+    def keypressCallback(self, event):
 
-    self.double_callback = double_callback
+        # print dir(event), str(event.keysym), str(event.keycode)
 
-    if (double_callback):
-      self.listbox.bind('<Double-1>', double_callback)
+        if event.keysym in ["Up", "Down"]:
+            selected = self.curselection()
 
-  def __getattr__(self, name):
+            if selected:
+                ind = int(selected[0])  # tough if more than one selected
 
-    # dispatch everything not defined by ScrolledListbox to listbox widget
+                if event.keysym == "Up":
+                    if ind != 0:
+                        ind = ind - 1
 
-    try:
-      return getattr(self.__dict__['listbox'], name)
-    except:
-      raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
+                else:  # (event.keysym == 'Down')
+                    size = self.size()
+                    if ind != (size - 1):
+                        ind = ind + 1
 
-if (__name__ == '__main__'):
+                self.select_clear(0, Tkinter.END)
+                self.select_set(ind)
+                self.see(ind)
 
-  def myCallback(event):
+                if self.select_callback:
+                    self.select_callback(event)
 
-    print('myCallback:', listbox.getSelected(), listbox.getSelectedItems())
+    def setSelectCallback(self, select_callback):
 
-  def myCallback2(event):
+        self.select_callback = select_callback
 
-    print('myCallback2:', listbox.getSelected())
-    #listbox.moveSelectedItemUp()
-    listbox.moveSelectedItemDown()
+        if select_callback:
+            self.listbox.bind("<ButtonRelease-1>", select_callback)
 
-  #
-  # Use for list selection
-  #
+    def setDoubleCallback(self, double_callback):
 
-  root = Tkinter.Tk()
+        self.double_callback = double_callback
 
-  listbox = ScrolledListbox(root, width=60, height=10,
-              xscroll=False, selectmode=Tkinter.SINGLE,
-              initial_list = ('init1', 'init2'),
-              select_callback=myCallback, double_callback=myCallback2)
+        if double_callback:
+            self.listbox.bind("<Double-1>", double_callback)
 
-  for n in [ 'abc', '123', 'edf', 456 ]:
-    listbox.append(str(n))
+    def __getattr__(self, name):
 
-  #listbox.grid(sticky=Tkinter.NSEW)
-  listbox.pack(expand=1, fill=Tkinter.BOTH)
+        # dispatch everything not defined by ScrolledListbox to listbox widget
 
-  root.mainloop()
-  
-  
-  #
-  # Use for list editing
-  #
+        try:
+            return getattr(self.__dict__["listbox"], name)
+        except:
+            raise AttributeError("%s instance has no attribute '%s'" % (self.__class__.__name__, name))
 
-  root = Tkinter.Tk()
 
-  listbox = ScrolledListbox(root, width=60, height=10,
-              xscroll=False, selectmode=Tkinter.SINGLE,
-              initial_list = ('init1', 'init2'),
-              select_callback=myCallback, double_callback=myCallback2,addDeleteButtons = True)
+if __name__ == "__main__":
 
-  for n in [ 'abc', '123', 'edf', 456 ]:
-    listbox.append(str(n))
+    def myCallback(event):
 
-  #listbox.grid(sticky=Tkinter.NSEW)
-  listbox.pack(expand=1, fill=Tkinter.BOTH)
+        print("myCallback:", listbox.getSelected(), listbox.getSelectedItems())
 
-  root.mainloop()
-  
-  listbox.getAllItems()
+    def myCallback2(event):
+
+        print("myCallback2:", listbox.getSelected())
+        # listbox.moveSelectedItemUp()
+        listbox.moveSelectedItemDown()
+
+    #
+    # Use for list selection
+    #
+
+    root = Tkinter.Tk()
+
+    listbox = ScrolledListbox(
+        root,
+        width=60,
+        height=10,
+        xscroll=False,
+        selectmode=Tkinter.SINGLE,
+        initial_list=("init1", "init2"),
+        select_callback=myCallback,
+        double_callback=myCallback2,
+    )
+
+    for n in ["abc", "123", "edf", 456]:
+        listbox.append(str(n))
+
+    # listbox.grid(sticky=Tkinter.NSEW)
+    listbox.pack(expand=1, fill=Tkinter.BOTH)
+
+    root.mainloop()
+
+    #
+    # Use for list editing
+    #
+
+    root = Tkinter.Tk()
+
+    listbox = ScrolledListbox(
+        root,
+        width=60,
+        height=10,
+        xscroll=False,
+        selectmode=Tkinter.SINGLE,
+        initial_list=("init1", "init2"),
+        select_callback=myCallback,
+        double_callback=myCallback2,
+        addDeleteButtons=True,
+    )
+
+    for n in ["abc", "123", "edf", 456]:
+        listbox.append(str(n))
+
+    # listbox.grid(sticky=Tkinter.NSEW)
+    listbox.pack(expand=1, fill=Tkinter.BOTH)
+
+    root.mainloop()
+
+    listbox.getAllItems()

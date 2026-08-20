@@ -85,7 +85,7 @@ Citing:          If you are using this software for academic purposes, we
 A Python example script for the use of the Haddock API.
 """
 
-from HaddockApi    import *
+from HaddockApi import *
 
 if __name__ == '__main__':
 
@@ -100,11 +100,11 @@ if __name__ == '__main__':
   print("\n** Summary of stored Haddock projects and their content **")
   for pr in api.projects:
       print("project: ", pr.name)
- 
+
       # Loop over stored Haddock partners
       for partner in pr.partners:
           print("  partners: ", partner.code)
- 
+
       # Loop over stored runs
       for run in pr.runs:
           print("  run: ", run.serial)
@@ -171,7 +171,7 @@ if __name__ == '__main__':
   newr.run.numIt0Structures = 100
   newr.run.numIt1Structures = 20
   newr.run.numWrefStructures = 20
- 
+
   print("\n** Export haddock projects **")
 
   # Exporting is performed at the run level

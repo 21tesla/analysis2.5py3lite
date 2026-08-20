@@ -1,15 +1,12 @@
 # Back-Propagation Neural Networks
-# 
+#
 # Written in Python.  See http://www.python.org/
 # Placed in the public domain.
 # Neil Schemenauer <nas@arctrix.com>
 
 import math
 import random
-import string
 import time
-
-from numpy import array
 
 random.seed(time.time())
 
@@ -38,7 +35,7 @@ def triggerGradTanh(y):
 
 # our self.weightsOutput function, tanh is a little nicer than the standard 1/(1+e^-x)
 def triggerFunc(x):
-    
+
     v =  0.8920620580763845 * math.exp(-2.5*x*x)
     return v
     #return math.tanh(x)
@@ -62,21 +59,21 @@ class NN:
         self.signalInput  = [1.0]*self.nInput
         self.signalHidden = [1.0]*self.nHidden
         self.signalOutput = [1.0]*self.nOutput
-        
+
         # create weights
         self.weightsInput = makeMatrix(self.nInput, self.nHidden)
         self.weightsOutput = makeMatrix(self.nHidden, self.nOutput)
-        
+
         # set them to random vaules
         for i in range(self.nInput):
             for j in range(self.nHidden):
                 self.weightsInput[i][j] = rand(-1, 1)
-                
+
         for j in range(self.nHidden):
             for k in range(self.nOutput):
                 self.weightsOutput[j][k] = rand(-1, 1)
 
-        # last change in weights for momentum   
+        # last change in weights for momentum
         self.ci = makeMatrix(self.nInput, self.nHidden)
         self.co = makeMatrix(self.nHidden, self.nOutput)
         self.cm = [1.0]*self.nInput
@@ -95,9 +92,9 @@ class NN:
         nOut = range(self.nOutput)
         nHid = range(self.nHidden)
         nInp = range(self.nInput)
-        
+
         self.missingInput = {}
-        
+
         if len(inputs) != self.nInput-1:
             print(len(inputs), self.nInput-1)
             raise ValueError('wrong number of inputs')
@@ -141,7 +138,7 @@ class NN:
         nOut = range(self.nOutput)
         nHid = range(self.nHidden)
         nInp = range(self.nInput)
-    
+
         if len(targets) != self.nOutput:
             raise ValueError('wrong number of target values')
 
@@ -179,24 +176,24 @@ class NN:
         #error = 0.0
         #for k in range(len(targets)):
         #    error += 0.5*(targets[k]-so[k])**2
-            
-            
+
+
         #return error
 
 
     def test(self, nn, patterns, verbose=True):
-    
-        n = 0 
+
+        n = 0
         m = len(patterns)
         err = 0.0
         for data, known in patterns:
           #print p[0], '->', self.update(p[0])
-         
+
           predict =  nn.update(data)
-          
+
           i = known.index(max(known))
           j = predict.index(max(predict))
-         
+
           for k in range(len(known)):
             err += 0.5*(known[k]-predict[k])**2
 
@@ -204,7 +201,7 @@ class NN:
              n += 1
 
         pc = (100.0*n)/m
-        
+
         if verbose:
           print("Success rate %d from %d : %.2f%% error %.2f" % (n,m,pc,err))
         return pc
@@ -234,7 +231,7 @@ class NN:
         print('Subset: %d' % i)
         random.shuffle(patterns)
         self.backPropagateTrain(patterns[:int(n/nSplit)], 7, 0.5,  0.2)
-      
+
       print("Phase 2")
       self.backPropagateTrain(patterns, iterations, 0.5,  0.2)
       print("Phase 3")
@@ -252,33 +249,33 @@ class NN:
 
 
     def backPropagateTrain(self, patterns, iterations=10, N=0.5, M=0.1):
-      
-      
+
+
       # N: learning rate
       # M: momentum factor
       for i in range(iterations):
         #error = 0.0
-        
+
         #print i
-        
+
         random.shuffle(patterns)
 
         for inputs, targets in patterns:
           self.update(inputs)
            #error += self.backPropagate(targets, N, M)
           self.backPropagate(targets, N, M)
-          
+
         #if i % 1 == 0:
         score = self.testFunction(self, patterns)
 
         if self.bestScore is None:
           self.bestScore = score
-         
+
         if score >= self.bestScore:
           self.bestScore = score
-          self.weightsBestIn = [x[:] for x in self.weightsInput] 
+          self.weightsBestIn = [x[:] for x in self.weightsInput]
           self.weightsBestOut = [x[:] for x in self.weightsOutput]
-   
+
           #print 'Back Propagate Iteration %d error %-14f' % (i+1,error)
 
 

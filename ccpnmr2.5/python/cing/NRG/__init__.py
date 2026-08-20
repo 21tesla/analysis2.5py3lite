@@ -1,8 +1,6 @@
 # These archive ids will be used to switch beteen the different setups/rdbs/projects. E.g. look at the use of nrgCing.archive_id
 # Use the below map from archive to schema for switching.
-from cing.NRG.settings import results_base
-from cing.NRG.settings import results_base_recoord
-from cing.NRG.settings import results_base_redo
+from cing.NRG.settings import results_base, results_base_recoord, results_base_redo
 
 ARCHIVE_NRG_ID      =  'ARCHIVE_NRG'
 ARCHIVE_DEV_NRG_ID  =  'ARCHIVE_DEV_NRG'
@@ -59,9 +57,9 @@ CASP_NMR_BASE_NAME = 'CASP-NMR-CING'
 inputDirCASP_NMR = 'file:///Users/jd/%s/data' + CASP_NMR_BASE_NAME
 
 SCHEMA_ID_ALL_STR = 'SCHEMA_ID_ALL' # Used as a wild card for all below ids.
-schemaIdList  = [ CASD_DB_NAME,    PDB_DB_NAME,    NRG_DB_SCHEMA,    DEV_NRG_DB_SCHEMA,    CASP_DB_NAME,    
+schemaIdList  = [ CASD_DB_NAME,    PDB_DB_NAME,    NRG_DB_SCHEMA,    DEV_NRG_DB_SCHEMA,    CASP_DB_NAME,
                  NMR_REDO_DB_SCHEMA,    NMR_REDOA_DB_SCHEMA,    RECOORD_DB_SCHEMA, RECOORDA_DB_SCHEMA   ]
-archiveIdList = [ ARCHIVE_CASD_ID, ARCHIVE_PDB_ID, ARCHIVE_NRG_ID, ARCHIVE_DEV_NRG_ID,   ARCHIVE_CASP_ID, 
+archiveIdList = [ ARCHIVE_CASD_ID, ARCHIVE_PDB_ID, ARCHIVE_NRG_ID, ARCHIVE_DEV_NRG_ID,   ARCHIVE_CASP_ID,
                  ARCHIVE_NMR_REDO_ID,   ARCHIVE_NMR_REDOA_ID,   ARCHIVE_RECOORD_ID, ARCHIVE_RECOORDA_ID   ]
 
 archiveIdPdbBased = archiveIdList[:] # Requires PDB ID can be derived.

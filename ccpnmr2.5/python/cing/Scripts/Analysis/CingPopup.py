@@ -1,10 +1,9 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
 
-import sys
 
 from memops.editor.BasePopup import BasePopup
-
 from nijmegen.cing.CingFrame import CingFrame
+
 
 def testCingPopup(argServer):
 

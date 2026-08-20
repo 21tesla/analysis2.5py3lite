@@ -24,42 +24,41 @@
 
 from memops.general.Io import loadProject
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    project = loadProject("topObjectTest")
 
-  project = loadProject('topObjectTest')
+    print("Project: [%s]" % project, "\n")
 
-  print('Project: [%s]' % project, '\n')
+    # Find the first database with a parameter.
 
-  # Find the first database with a parameter.
+    database = project.findFirstDatabase(name="UniProt")
 
-  database = project.findFirstDatabase(name = 'UniProt')
+    print("Database: [%s]" % database, "\n")
 
-  print('Database: [%s]' % database, '\n')
+    # Sorted taxonomy top objects.
 
-  # Sorted taxonomy top objects.
+    taxonomies = project.sortedTaxonomies()
 
-  taxonomies = project.sortedTaxonomies()
+    print("Sorted taxonomies: [%s]" % taxonomies, "\n")
 
-  print('Sorted taxonomies: [%s]' % taxonomies, '\n')
+    # Find all NmrProjects.
 
-  # Find all NmrProjects.
+    nmrProjects = project.findAllNmrProjects()
 
-  nmrProjects = project.findAllNmrProjects()
+    print("All Nmr Projects: [%s]" % nmrProjects, "\n")
 
-  print('All Nmr Projects: [%s]' % nmrProjects, '\n')
+    # The dir() function.
 
-  # The dir() function.
+    print("Database dir:", dir(database), "\n")
 
-  print('Database dir:', dir(database), '\n')
+    # root
+    print("Database root:", database.root, "\n")
 
-  # root
-  print('Database root:', database.root, '\n')
+    # memopsRoot
+    print("Database memopsRoot:", database.memopsRoot, "\n")
 
-  # memopsRoot
-  print('Database memopsRoot:', database.memopsRoot, '\n')
+    # parent
+    print("Database parent:", database.parent, "\n")
 
-  # parent
-  print('Database parent:', database.parent, '\n')
-
-  # topObject
-  print('Database top object:', database.topObject, '\n')
+    # topObject
+    print("Database top object:", database.topObject, "\n")

@@ -1,20 +1,22 @@
 """
 Classes for dealing with STAR syntax
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.STAR import Utils
 from cing.STAR.SaveFrame import SaveFrame
 from cing.STAR.TagTable import TagTable
-from cing.STAR.Text import comments_strip
-from cing.STAR.Text import nmrView_compress
-from cing.STAR.Text import pattern_save_begin
-from cing.STAR.Text import pattern_save_begin_nws
-from cing.STAR.Text import pattern_save_end
-from cing.STAR.Text import pattern_save_end_nws
-from cing.STAR.Text import pattern_tag_name_nws
-from cing.STAR.Text import pattern_tagtable_loop
-from cing.STAR.Text import pattern_tagtable_loop_nws
-from cing.STAR.Text import semicolon_block_collapse
+from cing.STAR.Text import (
+    comments_strip,
+    nmrView_compress,
+    pattern_save_begin,
+    pattern_save_begin_nws,
+    pattern_save_end,
+    pattern_save_end_nws,
+    pattern_tag_name_nws,
+    pattern_tagtable_loop,
+    pattern_tagtable_loop_nws,
+    semicolon_block_collapse,
+)
 
 __author__    = "$Author: jurgenfd $"
 ___revision__ = "$Revision: 1084 $"
@@ -82,7 +84,7 @@ class File (Lister):
             nTerror(' no filename in STARFile with title: %s' % self.title)
             return 1
 #        print "DEBUG: Current directory", os.listdir(os.curdir)
-        text = open(self.filename, 'r').read()
+        text = open(self.filename).read()
         if self.parse(text=text, nmrView_type = nmrView_type):
             print("ERROR: couldn't parse file")
             return 1
@@ -297,7 +299,7 @@ class File (Lister):
 #            print "Appended: ", str
             matchList.append( m )
 
-        input  = open(inputFN,  'r')
+        input  = open(inputFN)
         output = open(outputFN, 'w')
         a =[]
         line = input.readline()
@@ -374,7 +376,7 @@ class File (Lister):
         if (status == None):
             try:
                 open(self.filename, 'w').write(output)
-            except IOError:
+            except OSError:
                 nTerror(' Could not open the file for writing %s' % self.filename)
                 return 1
             if self.verbosity >= 9:

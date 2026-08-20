@@ -1,4 +1,5 @@
-import sys, codecs
+import codecs
+import sys
 
 #from xml.etree.ElementTree import ElementTree
 #from xml.etree import ElementTree # Use this on flynn
@@ -13,28 +14,28 @@ from memops.universal.ElementTree import ElementTree
 class ElementInfo:
 
   def __init__(self,fileName, attrs = None, runTree = True):
-  
+
     root = ElementTree(file = fileName)
     #root = ET.ElementTree(file = fileName)
 
     self.topElement = root.getroot()
-    
+
     if attrs:
       self.attrs = attrs
     else:
       self.attrs = {}
-    
+
     self.initSubClass()
-    
+
     parentList = []
-    
+
     if runTree:
       self.getElementInfo(self.topElement,parentList,0)
-  
+
   def initSubClass(self):
-  
+
     pass
-    
+
   def getElementInfo(self,element,parentList,level):
 
     self.elementFunc(element,parentList,level)
@@ -44,23 +45,23 @@ class ElementInfo:
       self.attrsFunc(element,parentList,level)
 
     children = element.getchildren()
-    
+
     self.setParentList(parentList,element)
 
     for childElement in children:
       self.getElementInfo(childElement,parentList[:],level + 1)
-  
+
   def setParentList(self,parentList,element):
 
     parentList.append(element)
-  
+
   def elementFunc(self,element,parentList,level):
-    
+
     # Define in subclass
     pass
 
   def attrsFunc(self,element,parentList,level):
-  
+
     # Define in subclass
     pass
 
@@ -100,12 +101,12 @@ class XMLWriter:
             self.out.write(
                 "<!DOCTYPE %s PUBLIC '%s' '%s'>\n" \
                 % (root, pubid, sysid))
-        
+
     def comment(self, comment):
-    
+
       self.out.write(
                 "<!--%s-->\n" % comment)
-              
+
     def push(self, elem, attrs={}):
         """
         Create an element which will have child elements
@@ -137,7 +138,7 @@ class XMLWriter:
         for a in attrs.items():
             self.out.write(" %s='%s'" % a)
         self.out.write("/>\n")
-        
+
     def pop(self):
         """
         Close an element started with the push() method
@@ -146,10 +147,10 @@ class XMLWriter:
         del self.stack[-1]
         self.__indent()
         self.out.write("</%s>\n" % elem)
-    
+
     def __indent(self):
         self.out.write(self.indent * (len(self.stack) * 2))
-    
+
     def __escape_cont(self, text):
         return text.replace("&", "&amp;")\
                .replace("<", "&lt;")

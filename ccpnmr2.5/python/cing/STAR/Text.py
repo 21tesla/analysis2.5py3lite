@@ -1,8 +1,9 @@
 """
 Classes for dealing with STAR syntax
 """
-from cing import verbosity
 import re
+
+from cing import verbosity
 
 __author__    = "$Author: jurgenfd $"
 ___revision__ = "$Revision: 1050 $"
@@ -66,23 +67,23 @@ pattern_eoline_etcet   = re.compile( r'[\n\r\v\f]' )
 pattern_single_qoute   = re.compile( r"'" )
 pattern_double_qoute   = re.compile( r'"' )
 
-pattern_save_begin      = re.compile('save_(\S+)\s+')
-pattern_save_end        = re.compile('save_\s*')
-pattern_tagtable_loop   = re.compile("loop_\s*" )
-pattern_tagtable_stop   = re.compile("stop_\s*" )
+pattern_save_begin      = re.compile(r'save_(\S+)\s+')
+pattern_save_end        = re.compile(r'save_\s*')
+pattern_tagtable_loop   = re.compile(r"loop_\s*" )
+pattern_tagtable_stop   = re.compile(r"stop_\s*" )
 # Same thing but not eating all white space chars, just a minimal match
-pattern_save_begin_nws      = re.compile('save_\S')
+pattern_save_begin_nws      = re.compile(r'save_\S')
 # Pattern extended to include matches to "save_" as the last characters in a file.
 # in other words; without a end of line.
-pattern_save_end_nws        = re.compile('(?:save_\s)|(?:save_$)')
+pattern_save_end_nws        = re.compile(r'(?:save_\s)|(?:save_$)')
 #pattern_save_end_nws        = re.compile('save_\s')
-pattern_tagtable_loop_nws   = re.compile('loop_\s')
-pattern_tag_name_nws        = re.compile('_\S')
+pattern_tagtable_loop_nws   = re.compile(r'loop_\s')
+pattern_tag_name_nws        = re.compile(r'_\S')
 # Same thing but requiring a prefixed white space char:
 ##pattern_sf_begin_or_end = re.compile('\ssave_')
-pattern_tagtable_loop_2 = re.compile('\sloop_\s+' )
-pattern_tagtable_stop_2 = re.compile('\sstop_\s+' )
-pattern_tagname_2       = re.compile('\s_\S+\s+' )
+pattern_tagtable_loop_2 = re.compile(r'\sloop_\s+' )
+pattern_tagtable_stop_2 = re.compile(r'\sstop_\s+' )
+pattern_tagname_2       = re.compile(r'\s_\S+\s+' )
 
 pattern_tag_name = re.compile(r"""(_\S+) \s+
      """, re.DOTALL | re.MULTILINE | re.VERBOSE )
@@ -336,9 +337,9 @@ def semicolon_block_collapse( text ):
 #    count = 0
     startpos = 0
 
-    pattern_semicolon_only = re.compile("^\;", re.MULTILINE)
+    pattern_semicolon_only = re.compile(r"^\;", re.MULTILINE)
     # Added special _end pattern with $ for better pattern matching - Wim 31/10/2005
-    pattern_semicolon_only_end = re.compile("(^\;\s*$)", re.MULTILINE)
+    pattern_semicolon_only_end = re.compile(r"(^\;\s*$)", re.MULTILINE)
 
     semicolon_start = pattern_semicolon_only.search(text[startpos:])
 

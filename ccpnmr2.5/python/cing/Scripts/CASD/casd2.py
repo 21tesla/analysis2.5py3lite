@@ -6,10 +6,10 @@ python -u $CINGROOT/python/cing/Scripts/CASD/casd2.py --target CGR26A
 '''
 
 from cing import cingVersion
-from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.CASD import programHoH
 from cing.core.classes import ProjectTree
+from cing.Libs.AwkLike import AwkLikeS
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.CASD import programHoH
 
 targets = programHoH.keys()
 g = NTlist()
@@ -134,7 +134,7 @@ options.target = '1brv'
 if not options.target:
     nTerror('No target defined, aborting')
     sys.exit(1)
-if not options.target in targets:
+if options.target not in targets:
     nTerror('Target "%s" not in %s, aborting', options.target, targets)
     sys.exit(1)
 

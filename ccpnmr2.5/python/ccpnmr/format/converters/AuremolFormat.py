@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,228 +52,229 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import string, copy, os, traceback, sys
+import os
+import sys
+import traceback
 
-from memops.universal.Io import joinPath, splitPath
-
-from memops.api import Implementation
 from ccp.api.nmr import Nmr
-
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-from ccpnmr.format.general.Constants import ccpNmr_kw, volume_kw, height_kw
-
 from ccp.general.Util import setUniqueAppData
+from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
+from ccpnmr.format.general.Constants import ccpNmr_kw, height_kw, volume_kw
 
-from ccp.format.general.Constants import defaultSeqInsertCode
 
 class AuremolFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'auremol'
-    self.IOkeywords = IOkeywords
+        self.format = "auremol"
+        self.IOkeywords = IOkeywords
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getPeaks = self.getPeaksGeneric
+    def setGenericImports(self):
 
-    self.getCoordinates = self.getCoordinatesGeneric
-    self.createCoordinateFile = self.createCoordinateFileGeneric 
+        self.getSequence = self.getSequenceGeneric
 
-  #
-  # Deviations from generic import stuff
-  #
+        self.getPeaks = self.getPeaksGeneric
 
-  def getCoordinatesSetSequenceFile(self):
-    
-    self.setSequenceFileClass()
-    self.sequenceFile = self.SequenceFileClass(self.fileName)
-    self.sequenceFile.readFromCoordinates(self.coordinateFile)
+        self.getCoordinates = self.getCoordinatesGeneric
+        self.createCoordinateFile = self.createCoordinateFileGeneric
 
-  def getMeasurements(self):
-  
     #
-    # Get a measurement list
-    #
-    
-    try:
-
-      if self.verbose == 1:
-        print("Reading %ss from %s file %s" % (self.measurementType,self.formatLabel,self.fileName))
-
-      # TODO HERE: have to figure out what to do if project file read...
-  
-      # Read initial metafile, make sure all comp files exist!
-      
-      metaFile = self.generalIO.AuremolMetaFile(self.fileName)
-      metaFile.read()
-      
-      for compound in metaFile.compounds:
-        while not os.path.exists(compound.compFile):
-          (dirName,fileName) = os.path.split(compound.compFile)
-          print(dirName, fileName)
-          interaction = self.multiDialog.FileName(self.guiParent,file = 'auremol.comp', component = 'chemComps', selectionText = 'Select file for compound %s' % compound.label, format = self.format)
-          compound.compFile = interaction.file
-
-      self.measurementFile = self.MeasurementFileClass(self.fileName)
-      self.measurementFile.read(metaFile = metaFile)
-
-    except StandardError:
-
-      errorMessage = traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
-    
-      self.messageReporter.showWarning("Warning"," Cannot read %ss for %s...:\n%s." % (self.measurementType,self.formatLabel,errorMessage),self.guiParent)
-      self.measurementFile = None
-      
-      return traceback.format_exception(sys.exc_type,sys.exc_value,sys.exc_info()[2]) 
-
-  #
-  # Functions different to default functions in DataFormat
-  #
-
-  def createShift(self,resonance,chemShift):
-    
-    keywds = {}
-    
-    #
-    # Also set ambiguity code if listed
-    #
-    
-    if chemShift.ambCode != None:
-      setUniqueAppData('AppDataInt',resonance,self.format,'ambiguityCode',chemShift.ambCode)
-    
-    #
-    # Shift error could be missing...
-    #
-    
-    if hasattr(chemShift,'error'):
-
-      keywds['error'] = chemShift.error
-      
-    #
-    # Create shift linked to resonance
+    # Deviations from generic import stuff
     #
 
-    self.convertCount[self.mainCode][1][self.valueCode] += 1
+    def getCoordinatesSetSequenceFile(self):
 
-    return Nmr.Shift(self.measurementList, value = chemShift.value, resonance = resonance, **keywds)
+        self.setSequenceFileClass()
+        self.sequenceFile = self.SequenceFileClass(self.fileName)
+        self.sequenceFile.readFromCoordinates(self.coordinateFile)
 
+    def getMeasurements(self):
 
-  def setPeakIntensity(self):
-  
-    # PeakIntensity attributes
-    # Intensity and volume are always set for an nmrView peak
+        #
+        # Get a measurement list
+        #
 
-    if self.rawPeak.volume != 0:
-      if self.rawPeak.volumeError:
-        error = self.rawPeak.volumeError
-      else:
-        error = None
-    
-      peakInt = Nmr.PeakIntensity(self.peak,value = self.rawPeak.volume, error = error, method = self.methods[self.format]['Volume'])
-      peakInt.intensityType = volume_kw
+        try:
+            if self.verbose == 1:
+                print("Reading %ss from %s file %s" % (self.measurementType, self.formatLabel, self.fileName))
 
-    if self.rawPeak.intensity != 0:
-      peakInt = Nmr.PeakIntensity(self.peak,value = self.rawPeak.intensity, method = self.methods[self.format]['Intensity'])
-      peakInt.intensityType = height_kw
+            # TODO HERE: have to figure out what to do if project file read...
 
-  def setSpectrumInfoFromPeakList(self):
-    
-    for i in range(0,len(self.dataDimRefs)):
-      
-      sw = self.peakFile.spectrumInfo['swsHz'][i]
-      sf = self.peakFile.spectrumInfo['sfs'][i]
-      numPoints = self.peakFile.spectrumInfo['numPoints'][i]
-      
-      # TODO USE OFFSET!!!!! 
-      
-      dataDimRef = self.dataDimRefs[i]
-      expDimRef = dataDimRef.expDimRef
-      freqDataDim = dataDimRef.dataDim
-      
-      expDimRefDefault = expDimRef.findFirstApplicationData(application = ccpNmr_kw, keyword = 'default')
-      freqDataDimDefault = freqDataDim.findFirstApplicationData(application = ccpNmr_kw, keyword = 'default')
-      
-      #
-      # Only reset if clear that experiment was created as default - redundant as checking for new datasource but...
-      #
-      
-      if expDimRefDefault and expDimRefDefault.value and freqDataDimDefault and freqDataDimDefault.value:
-        
-        expDimRef.sf = sf
-        expDimRef.baseFrequency = sf
-        freqDataDim.numPointsOrig = numPoints
-        freqDataDim.numPoints = numPoints
-        freqDataDim.valuePerPoint = (2.0 * sw) / ((freqDataDim.isComplex + 1) * freqDataDim.numPointsOrig)
-        expDimRefDefault.delete()
-        freqDataDimDefault.delete()
+            # Read initial metafile, make sure all comp files exist!
 
-  def setPeakExtras(self):
-  
-    self.peak.annotation = self.rawPeak.label
-    self.peak.details = self.rawPeak.comment
-    
-    if self.rawPeak.probability and self.rawPeak.probability != -1.0:
-      self.peak.figOfMerit = self.rawPeak.probability
-  
-    if self.rawPeak.assign:
-      
-      #
-      # Make peakContribs for this one...
-      #
-      
-      pass
-      
-      # TODO get link to atom info to set correct info here!
-      
-      #numContribs = len(self.rawPeak.assign[0].split(self.assignTagSep))
-      
-      #for i in range(numContribs):
-      #  self.peakContribs.append(Nmr.PeakContrib(self.peak))
-        
-    if hasattr(self.rawPeak,'subPeaks'):
-      # TODO HANDLE THIS!!
-      pass
+            metaFile = self.generalIO.AuremolMetaFile(self.fileName)
+            metaFile.read()
 
-  def setPeakDim(self):
-  
-    dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
+            for compound in metaFile.compounds:
+                while not os.path.exists(compound.compFile):
+                    (dirName, fileName) = os.path.split(compound.compFile)
+                    print(dirName, fileName)
+                    interaction = self.multiDialog.FileName(
+                        self.guiParent,
+                        file="auremol.comp",
+                        component="chemComps",
+                        selectionText="Select file for compound %s" % compound.label,
+                        format=self.format,
+                    )
+                    compound.compFile = interaction.file
 
-    self.peakDim = self.peak.findFirstPeakDim(dim = dataDimRef.dataDim.dim)
+            self.measurementFile = self.MeasurementFileClass(self.fileName)
+            self.measurementFile.read(metaFile=metaFile)
 
-    self.peakDim.dataDimRef = dataDimRef
+        except StandardError:
+            errorMessage = traceback.format_exception_only(sys.exc_type, sys.exc_value)[-1]
 
-    self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
-    
-    if self.rawPeak.width[self.rawPeakDimIndex] != -1.0:
-      #rawPeak.width[i] is in points?
-      # TODO: make sure this is used correctly!!!
-      self.peakDim.decayRate = self.rawPeak.width[self.rawPeakDimIndex] / dataDimRef.valuePerPoint
+            self.messageReporter.showWarning(
+                "Warning",
+                " Cannot read %ss for %s...:\n%s." % (self.measurementType, self.formatLabel, errorMessage),
+                self.guiParent,
+            )
+            self.measurementFile = None
 
-  def thisPeakValid(self):
-    
-    # TODO add some info here?
-    if not self.rawPeak.ppm:
-      return 0
-    
-    return 1
+            return traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_info()[2])
 
-  def getPeakResNames(self):
-  
-    self.resNames = []
-   
-    # TODO need to handle this at one stage!!
-    pass
-    
-    
-  def getExportChainCode(self,exportChainCode,chain):
-    
-    # Returns original chain code - this format uses segId so OK if longer than 1 char
-    
-    return exportChainCode
-  
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getMultiChainFormatPresetChainMapping(chainList)
+    #
+    # Functions different to default functions in DataFormat
+    #
+
+    def createShift(self, resonance, chemShift):
+
+        keywds = {}
+
+        #
+        # Also set ambiguity code if listed
+        #
+
+        if chemShift.ambCode != None:
+            setUniqueAppData("AppDataInt", resonance, self.format, "ambiguityCode", chemShift.ambCode)
+
+        #
+        # Shift error could be missing...
+        #
+
+        if hasattr(chemShift, "error"):
+            keywds["error"] = chemShift.error
+
+        #
+        # Create shift linked to resonance
+        #
+
+        self.convertCount[self.mainCode][1][self.valueCode] += 1
+
+        return Nmr.Shift(self.measurementList, value=chemShift.value, resonance=resonance, **keywds)
+
+    def setPeakIntensity(self):
+
+        # PeakIntensity attributes
+        # Intensity and volume are always set for an nmrView peak
+
+        if self.rawPeak.volume != 0:
+            if self.rawPeak.volumeError:
+                error = self.rawPeak.volumeError
+            else:
+                error = None
+
+            peakInt = Nmr.PeakIntensity(
+                self.peak, value=self.rawPeak.volume, error=error, method=self.methods[self.format]["Volume"]
+            )
+            peakInt.intensityType = volume_kw
+
+        if self.rawPeak.intensity != 0:
+            peakInt = Nmr.PeakIntensity(
+                self.peak, value=self.rawPeak.intensity, method=self.methods[self.format]["Intensity"]
+            )
+            peakInt.intensityType = height_kw
+
+    def setSpectrumInfoFromPeakList(self):
+
+        for i in range(0, len(self.dataDimRefs)):
+            sw = self.peakFile.spectrumInfo["swsHz"][i]
+            sf = self.peakFile.spectrumInfo["sfs"][i]
+            numPoints = self.peakFile.spectrumInfo["numPoints"][i]
+
+            # TODO USE OFFSET!!!!!
+
+            dataDimRef = self.dataDimRefs[i]
+            expDimRef = dataDimRef.expDimRef
+            freqDataDim = dataDimRef.dataDim
+
+            expDimRefDefault = expDimRef.findFirstApplicationData(application=ccpNmr_kw, keyword="default")
+            freqDataDimDefault = freqDataDim.findFirstApplicationData(application=ccpNmr_kw, keyword="default")
+
+            #
+            # Only reset if clear that experiment was created as default - redundant as checking for new datasource but...
+            #
+
+            if expDimRefDefault and expDimRefDefault.value and freqDataDimDefault and freqDataDimDefault.value:
+                expDimRef.sf = sf
+                expDimRef.baseFrequency = sf
+                freqDataDim.numPointsOrig = numPoints
+                freqDataDim.numPoints = numPoints
+                freqDataDim.valuePerPoint = (2.0 * sw) / ((freqDataDim.isComplex + 1) * freqDataDim.numPointsOrig)
+                expDimRefDefault.delete()
+                freqDataDimDefault.delete()
+
+    def setPeakExtras(self):
+
+        self.peak.annotation = self.rawPeak.label
+        self.peak.details = self.rawPeak.comment
+
+        if self.rawPeak.probability and self.rawPeak.probability != -1.0:
+            self.peak.figOfMerit = self.rawPeak.probability
+
+        if self.rawPeak.assign:
+            #
+            # Make peakContribs for this one...
+            #
+
+            pass
+
+            # TODO get link to atom info to set correct info here!
+
+            # numContribs = len(self.rawPeak.assign[0].split(self.assignTagSep))
+
+            # for i in range(numContribs):
+            #  self.peakContribs.append(Nmr.PeakContrib(self.peak))
+
+        if hasattr(self.rawPeak, "subPeaks"):
+            # TODO HANDLE THIS!!
+            pass
+
+    def setPeakDim(self):
+
+        dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
+
+        self.peakDim = self.peak.findFirstPeakDim(dim=dataDimRef.dataDim.dim)
+
+        self.peakDim.dataDimRef = dataDimRef
+
+        self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
+
+        if self.rawPeak.width[self.rawPeakDimIndex] != -1.0:
+            # rawPeak.width[i] is in points?
+            # TODO: make sure this is used correctly!!!
+            self.peakDim.decayRate = self.rawPeak.width[self.rawPeakDimIndex] / dataDimRef.valuePerPoint
+
+    def thisPeakValid(self):
+
+        # TODO add some info here?
+        if not self.rawPeak.ppm:
+            return 0
+
+        return 1
+
+    def getPeakResNames(self):
+
+        self.resNames = []
+
+        # TODO need to handle this at one stage!!
+        pass
+
+    def getExportChainCode(self, exportChainCode, chain):
+
+        # Returns original chain code - this format uses segId so OK if longer than 1 char
+
+        return exportChainCode
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getMultiChainFormatPresetChainMapping(chainList)

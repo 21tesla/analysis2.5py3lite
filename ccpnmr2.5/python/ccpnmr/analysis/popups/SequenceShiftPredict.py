@@ -39,295 +39,292 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import tkinter
+from ccpnmr.analysis.core.AssignmentBasic import findFirstAtomShiftInShiftList, getShiftLists
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from ccpnmr.analysis.wrappers.CamCoil import LFP_SCRIPT, SCRIPT_PHS, SCRIPT_TEXTS, runCamCoil
+from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.MessageReporter import showError
+from memops.gui.PulldownList import PulldownList
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
-from memops.gui.Label               import Label
-from memops.gui.LabelFrame          import LabelFrame
-from memops.gui.ScrolledMatrix      import ScrolledMatrix
-from memops.gui.PulldownList        import PulldownList
-from memops.gui.MessageReporter     import showError, showInfo
-
-from memops.editor.Util             import createDismissHelpButtonList
-
-from ccpnmr.analysis.popups.BasePopup       import BasePopup
-
-from ccpnmr.analysis.core.AssignmentBasic   import getShiftLists, findFirstAtomShiftInShiftList
-
-from ccpnmr.analysis.wrappers.CamCoil       import runCamCoil, SCRIPT_TEXTS, SCRIPT_PHS, LFP_SCRIPT
 
 class SequenceShiftPredictPopup(BasePopup):
-  """
-  **Predict Protein Shifts from Sequence**
-  
-  This popup window is designed to allow the prediction of chemical shifts
-  for a protein chain from the sequence (so with no structural information),
-  using the (external) program CamCoil.
+    """
+    **Predict Protein Shifts from Sequence**
 
-  The Options to select are the Chain for which the prediction is made, and
-  the prediction type and the pH used for the prediction, and also the Shift
-  List, which is not used for the prediction but is used for the comparison
-  with the prediction.
+    This popup window is designed to allow the prediction of chemical shifts
+    for a protein chain from the sequence (so with no structural information),
+    using the (external) program CamCoil.
 
-  CamCoil has two variations, one for the prediction of random coil chemical
-  shifts and one for prediction of protein loops chemical shifts.
+    The Options to select are the Chain for which the prediction is made, and
+    the prediction type and the pH used for the prediction, and also the Shift
+    List, which is not used for the prediction but is used for the comparison
+    with the prediction.
 
-  The Chemical Shift Predictions table lists the atoms in the chain.
-  For each atom the data listed is the residue number, residue type, atom
-  name, first shift found for that atom in the chosen shiftList, chemical
-  shift predicted by CamCoil, and the difference between the actual shift
-  and the predicted shift (if both exist).
-  
-  To run the prediction click on the "Run CamCoil Prediction!" button.  This
-  does not store any predicted shifts in the project.
+    CamCoil has two variations, one for the prediction of random coil chemical
+    shifts and one for prediction of protein loops chemical shifts.
 
-  **Caveats & Tips**
+    The Chemical Shift Predictions table lists the atoms in the chain.
+    For each atom the data listed is the residue number, residue type, atom
+    name, first shift found for that atom in the chosen shiftList, chemical
+    shift predicted by CamCoil, and the difference between the actual shift
+    and the predicted shift (if both exist).
 
-  **References**
+    To run the prediction click on the "Run CamCoil Prediction!" button.  This
+    does not store any predicted shifts in the project.
 
-  The CamCoil programme:
+    **Caveats & Tips**
 
-  http://www-vendruscolo.ch.cam.ac.uk/camcoil.php
+    **References**
 
-  *A. De Simone, A. Cavalli, S-T. D. Hsu, W. Vranken and M. Vendruscolo
-  Accurate random coil chemical shifts from an analysis of loop regions in native states of proteins.
-  J. Am. Chem. Soc. 131(45):16332-3
-  """
+    The CamCoil programme:
 
-  def __init__(self, parent, *args, **kw):
+    http://www-vendruscolo.ch.cam.ac.uk/camcoil.php
 
-    self.chain = None
-    self.shiftList = None
-    self.predictionDict = {}
-     
-    BasePopup.__init__(self, parent=parent, title='Data Analysis : Predict Shifts from Sequence')
+    *A. De Simone, A. Cavalli, S-T. D. Hsu, W. Vranken and M. Vendruscolo
+    Accurate random coil chemical shifts from an analysis of loop regions in native states of proteins.
+    J. Am. Chem. Soc. 131(45):16332-3
+    """
 
-  def body(self, guiFrame):
+    def __init__(self, parent, *args, **kw):
 
-    self.geometry('700x500')
-   
-    guiFrame.expandGrid(1,0)
-    
-    row = 0
-    
-    # TOP LEFT FRAME
-    
-    frame = LabelFrame(guiFrame, text='Options')
-    frame.grid(row=row, column=0, sticky='nsew')
-    frame.columnconfigure(7, weight=1)
-        
-    label = Label(frame, text='Chain')
-    label.grid(row=0, column=0, sticky='w')
-    self.chainPulldown = PulldownList(frame, callback=self.changeChain,
-                                      tipText='Choose the molecular system chain to make predictions for')
-    self.chainPulldown.grid(row=0, column=1, sticky='w')
-    
-    label = Label(frame, text='Shift List')
-    label.grid(row=0, column=2, sticky='w')
-    self.shiftListPulldown = PulldownList(frame, callback=self.changeShiftList,
-                                          tipText='Select the shift list to take input chemical shifts from')
-    self.shiftListPulldown.grid(row=0, column=3, sticky='w')
+        self.chain = None
+        self.shiftList = None
+        self.predictionDict = {}
 
-    label = Label(frame, text='Type')
-    label.grid(row=0, column=4, sticky='w')
-    self.scriptPulldown = PulldownList(frame, texts=SCRIPT_TEXTS,
-                                       callback=self.changeScript,
-                                       tipText='Select the algorithm script for this chain')
-    self.scriptPulldown.grid(row=0, column=5, sticky='w')
-    
-    self.pHLabel = Label(frame, text='pH')
-    self.pHLabel.grid(row=0, column=6, sticky='w')
-    self.pHPulldown = PulldownList(frame, texts=SCRIPT_PHS,
-                        tipText='Select the pH to make the prediction for')
-    self.pHPulldown.grid(row=0, column=7, sticky='w')
-    
-    row += 1
-    
-    # BOTTOM LEFT FRAME
-    
-    frame = LabelFrame(guiFrame, text='Chemical Shift Predictions')
-    frame.grid(row=row, column=0, sticky='nsew')
-    frame.grid_columnconfigure(0, weight=1)
-    frame.grid_rowconfigure(0, weight=1)
-    
-    tipTexts = ['Residue number in chain',
-                'Residue type code',
-                'Atom name',
-                'Actual shift (first one it finds for atom in chosen shiftList)',
-                'CamCoil predicted shift',
-                'Predicted - Actual']
+        BasePopup.__init__(self, parent=parent, title="Data Analysis : Predict Shifts from Sequence")
 
-    headingList        = ['Res\nNum','Res\nType','Atom\nName',
-                          'Actual\nShift','Predicted\nShift','Difference']
-                          
-    n = len(headingList)
-    editWidgets        = n * [None]
-    editGetCallbacks   = n * [None]
-    editSetCallbacks   = n * [None]
-                          
-    self.predictionMatrix = ScrolledMatrix(frame, 
-                                           headingList=headingList, 
-                                           tipTexts=tipTexts,
-                                           editWidgets=editWidgets,
-                                           editGetCallbacks=editGetCallbacks,
-                                           editSetCallbacks=editSetCallbacks)
-    self.predictionMatrix.grid(row=0, column=0, sticky='nsew')
-    
-    row += 1
+    def body(self, guiFrame):
 
-    tipTexts = ['Run the CamCoil method to predict chemical shifts from sequence']
-                
-    texts = ['Run CamCoil Prediction!']
-    commands = [self.runCamCoil]
-    self.buttonList = createDismissHelpButtonList(guiFrame, texts=texts, commands=commands,
-                                                 help_url=self.help_url,
-                                                 expands=True, tipTexts=tipTexts)
-    self.buttonList.grid(row=row, column=0)
-    
-    self.update()
- 
-    self.notify(self.registerNotify)
+        self.geometry("700x500")
 
-  def destroy(self):
-      
-    self.notify(self.unregisterNotify)
-    BasePopup.destroy(self)
- 
-  def notify(self, notifyfunc):
-     
-    for func in ('__init__', 'delete'):
-      notifyfunc(self.updateChainPulldown, 'ccp.molecule.MolSystem.Chain', func)
-      
-    for func in ('setValue',):
-      notifyfunc(self.updatePredictionMatrixAfter, 'ccp.nmr.Nmr.Shift', func)
-      
-  def update(self):
-    
-    self.updateShiftListPulldown()
-    self.updateChainPulldown()
-    self.updatePredictionMatrixAfter()
-  
-  def runCamCoil(self):
-    
-    chain = self.chain
-    script = self.scriptPulldown.getText()
-    if script == LFP_SCRIPT:
-      pH = ''
-    else:
-      pH = self.pHPulldown.getText()
-    
-    if not chain:
-      showError('Cannot Run CamCoil', 'Please specify a chain.', parent=self)
-      return
-      
-    self.predictionDict[chain] = runCamCoil(chain, pH=pH, script=script)
+        guiFrame.expandGrid(1, 0)
 
-    self.updatePredictionMatrix()
-   
-  def updatePredictionMatrixAfter(self, index=None, text=None):
-    
-    self.after_idle(self.updatePredictionMatrix)
-    
-  def updatePredictionMatrix(self):
+        row = 0
 
-    objectList  = []
-    textMatrix  = []
+        # TOP LEFT FRAME
 
-    chain = self.chain
-    shiftList = self.shiftList
-    if chain:
-      atomShiftDict = self.predictionDict.get(chain, {})
+        frame = LabelFrame(guiFrame, text="Options")
+        frame.grid(row=row, column=0, sticky="nsew")
+        frame.columnconfigure(7, weight=1)
 
-      for residue in chain.sortedResidues():
-        for atom in residue.sortedAtoms():
-          currShift = shiftList and findFirstAtomShiftInShiftList(atom, shiftList)
-          value = currShift and currShift.value
-          predShift = atomShiftDict.get(atom)
-          if currShift and predShift:
-            delta = predShift - value
-          else:
-            delta = None
-          data = [residue.seqCode, residue.ccpCode, atom.name, value, predShift, delta]
+        label = Label(frame, text="Chain")
+        label.grid(row=0, column=0, sticky="w")
+        self.chainPulldown = PulldownList(
+            frame, callback=self.changeChain, tipText="Choose the molecular system chain to make predictions for"
+        )
+        self.chainPulldown.grid(row=0, column=1, sticky="w")
 
-          textMatrix.append(data)
-          objectList.append(atom)
-      
-    self.predictionMatrix.update(textMatrix=textMatrix,
-                                 objectList=objectList)
-    
-  def changeChain(self, chain):
-    
-    if chain is not self.chain:
-      self.chain = chain
-      self.updatePredictionMatrixAfter()
-    
-  def changeShiftList(self, shiftList):
+        label = Label(frame, text="Shift List")
+        label.grid(row=0, column=2, sticky="w")
+        self.shiftListPulldown = PulldownList(
+            frame, callback=self.changeShiftList, tipText="Select the shift list to take input chemical shifts from"
+        )
+        self.shiftListPulldown.grid(row=0, column=3, sticky="w")
 
-    if shiftList is not self.shiftList:
-      self.shiftList = shiftList
-      self.updatePredictionMatrixAfter()
+        label = Label(frame, text="Type")
+        label.grid(row=0, column=4, sticky="w")
+        self.scriptPulldown = PulldownList(
+            frame, texts=SCRIPT_TEXTS, callback=self.changeScript, tipText="Select the algorithm script for this chain"
+        )
+        self.scriptPulldown.grid(row=0, column=5, sticky="w")
 
-  def changeScript(self, script):
-  
-    if script == LFP_SCRIPT:
-      self.pHLabel.grid_forget()
-      self.pHPulldown.grid_forget()
-    else:
-      self.pHLabel.grid(row=0, column=6, sticky='w')
-      self.pHPulldown.grid(row=0, column=7, sticky='w')
+        self.pHLabel = Label(frame, text="pH")
+        self.pHLabel.grid(row=0, column=6, sticky="w")
+        self.pHPulldown = PulldownList(frame, texts=SCRIPT_PHS, tipText="Select the pH to make the prediction for")
+        self.pHPulldown.grid(row=0, column=7, sticky="w")
 
-  def updateChainPulldown(self, obj=None):
-    
-    index = 0
-    names = []
-    chains = []
-    chain = self.chain
-    
-    for molSystem in self.project.molSystems:
-      msCode = molSystem.code
+        row += 1
 
-      for chainA in molSystem.chains:
-        residues = chainA.residues
+        # BOTTOM LEFT FRAME
 
-        if not residues:
-          continue
+        frame = LabelFrame(guiFrame, text="Chemical Shift Predictions")
+        frame.grid(row=row, column=0, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
 
-        for residue in residues:
-          # Must have at least one protein residue
-          if residue.molType == 'protein':
-            names.append('%s:%s' % (msCode, chainA.code))
-            chains.append(chainA)
-            break
- 
-    if chains:
-      if chain not in chains:
-        chain = chains[0]
-        
-      index = chains.index(chain)
-        
-    else:
-      chain = None
-    
-    if chain is not self.chain:
-      self.chain = chain
-      self.updatePredictionMatrixAfter()
-        
-    self.chainPulldown.setup(names, chains, index)
-    
-  def updateShiftListPulldown(self, obj=None):
+        tipTexts = [
+            "Residue number in chain",
+            "Residue type code",
+            "Atom name",
+            "Actual shift (first one it finds for atom in chosen shiftList)",
+            "CamCoil predicted shift",
+            "Predicted - Actual",
+        ]
 
-    index = 0
-    names = []
-    shiftLists = getShiftLists(self.nmrProject)
+        headingList = ["Res\nNum", "Res\nType", "Atom\nName", "Actual\nShift", "Predicted\nShift", "Difference"]
 
-    if shiftLists:
-      if self.shiftList not in shiftLists:
-        self.shiftList = shiftLists[0]
+        n = len(headingList)
+        editWidgets = n * [None]
+        editGetCallbacks = n * [None]
+        editSetCallbacks = n * [None]
 
-      index = shiftLists.index(self.shiftList)
-      names = ['%s:%d' % (sl.name,sl.serial) for sl in shiftLists]
+        self.predictionMatrix = ScrolledMatrix(
+            frame,
+            headingList=headingList,
+            tipTexts=tipTexts,
+            editWidgets=editWidgets,
+            editGetCallbacks=editGetCallbacks,
+            editSetCallbacks=editSetCallbacks,
+        )
+        self.predictionMatrix.grid(row=0, column=0, sticky="nsew")
 
-    else:
-      self.shiftList = None
+        row += 1
 
-    self.shiftListPulldown.setup(names, shiftLists, index)
- 
+        tipTexts = ["Run the CamCoil method to predict chemical shifts from sequence"]
+
+        texts = ["Run CamCoil Prediction!"]
+        commands = [self.runCamCoil]
+        self.buttonList = createDismissHelpButtonList(
+            guiFrame, texts=texts, commands=commands, help_url=self.help_url, expands=True, tipTexts=tipTexts
+        )
+        self.buttonList.grid(row=row, column=0)
+
+        self.update()
+
+        self.notify(self.registerNotify)
+
+    def destroy(self):
+
+        self.notify(self.unregisterNotify)
+        BasePopup.destroy(self)
+
+    def notify(self, notifyfunc):
+
+        for func in ("__init__", "delete"):
+            notifyfunc(self.updateChainPulldown, "ccp.molecule.MolSystem.Chain", func)
+
+        for func in ("setValue",):
+            notifyfunc(self.updatePredictionMatrixAfter, "ccp.nmr.Nmr.Shift", func)
+
+    def update(self):
+
+        self.updateShiftListPulldown()
+        self.updateChainPulldown()
+        self.updatePredictionMatrixAfter()
+
+    def runCamCoil(self):
+
+        chain = self.chain
+        script = self.scriptPulldown.getText()
+        if script == LFP_SCRIPT:
+            pH = ""
+        else:
+            pH = self.pHPulldown.getText()
+
+        if not chain:
+            showError("Cannot Run CamCoil", "Please specify a chain.", parent=self)
+            return
+
+        self.predictionDict[chain] = runCamCoil(chain, pH=pH, script=script)
+
+        self.updatePredictionMatrix()
+
+    def updatePredictionMatrixAfter(self, index=None, text=None):
+
+        self.after_idle(self.updatePredictionMatrix)
+
+    def updatePredictionMatrix(self):
+
+        objectList = []
+        textMatrix = []
+
+        chain = self.chain
+        shiftList = self.shiftList
+        if chain:
+            atomShiftDict = self.predictionDict.get(chain, {})
+
+            for residue in chain.sortedResidues():
+                for atom in residue.sortedAtoms():
+                    currShift = shiftList and findFirstAtomShiftInShiftList(atom, shiftList)
+                    value = currShift and currShift.value
+                    predShift = atomShiftDict.get(atom)
+                    if currShift and predShift:
+                        delta = predShift - value
+                    else:
+                        delta = None
+                    data = [residue.seqCode, residue.ccpCode, atom.name, value, predShift, delta]
+
+                    textMatrix.append(data)
+                    objectList.append(atom)
+
+        self.predictionMatrix.update(textMatrix=textMatrix, objectList=objectList)
+
+    def changeChain(self, chain):
+
+        if chain is not self.chain:
+            self.chain = chain
+            self.updatePredictionMatrixAfter()
+
+    def changeShiftList(self, shiftList):
+
+        if shiftList is not self.shiftList:
+            self.shiftList = shiftList
+            self.updatePredictionMatrixAfter()
+
+    def changeScript(self, script):
+
+        if script == LFP_SCRIPT:
+            self.pHLabel.grid_forget()
+            self.pHPulldown.grid_forget()
+        else:
+            self.pHLabel.grid(row=0, column=6, sticky="w")
+            self.pHPulldown.grid(row=0, column=7, sticky="w")
+
+    def updateChainPulldown(self, obj=None):
+
+        index = 0
+        names = []
+        chains = []
+        chain = self.chain
+
+        for molSystem in self.project.molSystems:
+            msCode = molSystem.code
+
+            for chainA in molSystem.chains:
+                residues = chainA.residues
+
+                if not residues:
+                    continue
+
+                for residue in residues:
+                    # Must have at least one protein residue
+                    if residue.molType == "protein":
+                        names.append("%s:%s" % (msCode, chainA.code))
+                        chains.append(chainA)
+                        break
+
+        if chains:
+            if chain not in chains:
+                chain = chains[0]
+
+            index = chains.index(chain)
+
+        else:
+            chain = None
+
+        if chain is not self.chain:
+            self.chain = chain
+            self.updatePredictionMatrixAfter()
+
+        self.chainPulldown.setup(names, chains, index)
+
+    def updateShiftListPulldown(self, obj=None):
+
+        index = 0
+        names = []
+        shiftLists = getShiftLists(self.nmrProject)
+
+        if shiftLists:
+            if self.shiftList not in shiftLists:
+                self.shiftList = shiftLists[0]
+
+            index = shiftLists.index(self.shiftList)
+            names = ["%s:%d" % (sl.name, sl.serial) for sl in shiftLists]
+
+        else:
+            self.shiftList = None
+
+        self.shiftListPulldown.setup(names, shiftLists, index)

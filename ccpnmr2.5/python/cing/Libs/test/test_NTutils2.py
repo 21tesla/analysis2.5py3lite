@@ -3,10 +3,12 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils2.py
 """
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.molecule import Molecule
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing.core.molecule import Molecule
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 
@@ -112,7 +114,7 @@ class AllChecks(TestCase):
         self.assertEqual( s, '. (+- .)')
         s = "%s"  % NTvalue(value=1.0,   error=None, fmt='%.3f (+- %.3f)')
         self.assertEqual( s, '1.0 (+- .)')
-        s = "%s"  % NTvalue(value=1.000, error=None, fmt='%.3f (+- %.3f)') 
+        s = "%s"  % NTvalue(value=1.000, error=None, fmt='%.3f (+- %.3f)')
         # still this mistake was not detected for a number:  -0.54700000000000004 (+- .) that's why the below extra tests.
         self.assertEqual( s, '1.0 (+- .)')
         s = "%s"  % NTvalue(value=2.000, error=0.2,  fmt='%.3f (+- %.3f)')

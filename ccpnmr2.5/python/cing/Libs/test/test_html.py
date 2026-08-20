@@ -2,18 +2,15 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_html.py
 """
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import HTML_TAG_PRE
-from cing.Libs.html import HTML_TAG_PRE2
-from cing.Libs.html import HTMLfile
-from cing.Libs.html import MakeHtmlTable
-from cing.Libs.html import removePreTagLines
-from cing.core.classes import Project
-from cing.core.molecule import Ensemble
-from cing.core.molecule import Molecule
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.core.classes import Project
+from cing.core.molecule import Ensemble, Molecule
+from cing.Libs.html import HTML_TAG_PRE, HTML_TAG_PRE2, HTMLfile, MakeHtmlTable, removePreTagLines
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

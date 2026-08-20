@@ -212,7 +212,7 @@ class exportClassic:
             
         for model in models[0:modelId]:
             fileName = join(self.projectRoot,'%s-%s_%d.pdb' % (molSystem.code,chainstring,model.serial))
-            if not self.fileNames.has_key(partner): self.fileNames[partner] = ('%s-%s_%d' % (molSystem.code,chainstring,model.serial))
+            if partner not in self.fileNames: self.fileNames[partner] = ('%s-%s_%d' % (molSystem.code,chainstring,model.serial))
             print("Export structure %s" % fileName)
             fileObj = open(fileName, 'w')
             fileObj.write(getPdbString(model,[ch.chain for ch in partner.sortedChains()],chainRename=partner.code,blankchain=True))

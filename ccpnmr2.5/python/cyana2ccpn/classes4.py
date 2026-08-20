@@ -1,5 +1,6 @@
-from cing.Libs.NTutils import *
 from cing.core.classes2 import RestraintList
+from cing.Libs.NTutils import *
+
 
 class Restraint(NTdict):
     """

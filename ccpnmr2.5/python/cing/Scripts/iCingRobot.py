@@ -2,10 +2,12 @@
 # Run: python -u $CINGROOT/python/cing/Scripts/iCingRobot.py
 # There is a unit test at: cing.Scripts.test.testiCingRobot
 
-from cing import cingDirTestsData
-from cing.Libs.NTutils import * #@UnusedWildImport
-import mimetools
 import urllib.request
+
+import mimetools
+
+from cing import cingDirTestsData
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 FORM_ACCESS_KEY = "AccessKey"
 FORM_USER_ID = "UserId"
@@ -113,7 +115,7 @@ def _processResponse(text):
     dataDict = {}
 
     for pair in text.split('","'):
-        data = pair.split('":"')      
+        data = pair.split('":"')
         if len(data) == 2:
             key , value = data
             dataDict[key] = value

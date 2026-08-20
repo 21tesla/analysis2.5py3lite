@@ -46,23 +46,16 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import os, sys
-import tkinter
+import os
 
-from memops.general.Application    import Application
-from memops.general.Io             import loadProject, saveProject
-from memops.general.Util           import isProjectModified
-
-from memops.gui.DataEntry       import askString #, askDir, askFile
-from memops.gui.Menu            import Menu
-from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-
-from memops.editor.BasePopup          import BasePopup
-from memops.editor.OpenProjectPopup   import OpenProjectPopup
-from memops.editor.SaveProjectPopup   import SaveProjectPopup
-from memops.editor.WebBrowser         import ProjectWebBrowser
-
+from memops.editor.BasePopup import BasePopup
+from memops.editor.SaveProjectPopup import SaveProjectPopup
+from memops.general.Application import Application
+from memops.general.Io import saveProject
+from memops.general.Util import isProjectModified
+from memops.gui.DataEntry import askString  #, askDir, askFile
+from memops.gui.Menu import Menu
+from memops.gui.MessageReporter import showError, showInfo, showYesNo
 from pdbe.deposition.dataFileImport.dataFileImportFrame import DataFileImportFrame
 from pdbe.deposition.dataFileImport.formatConverterWrapper import FormatConverterWrapper
 
@@ -85,30 +78,30 @@ class DataFileImportGui(BasePopup):
     # Application object needed to store application-specific data with project
     self.application = Application(name=PROGRAM_NAME)
     self.versionInfo = VERSION
-    
+
     ccpnProjectName = askString("CCPN project name",'Please give a name to this import session:')
-    
+
     self.fcWrapper = FormatConverterWrapper(ccpnProjectName=ccpnProjectName,guiRoot=self)
     self.project = self.fcWrapper.formatConversion.ccpnProject
-    
+
     # Application popup is a superclass of memops.editor.BasePoup
     BasePopup.__init__(self, parent=root, title=PROGRAM_NAME,
                        location='+100+100', class_=self.application.name)
 
     self.setTitle(PROGRAM_NAME)
-                     
+
   def body(self, guiParent):
 
     self.geometry('600x350')
 
     # Ensure that the first row and column in popup expand
     guiParent.expandGrid(0,0)
-    
+
     self.importFrame = DataFileImportFrame(guiParent, basePopup=self, grid=(0,0))
-     
+
     # Dictionary to store popups opened by this application - e.g. need to close upon quit
     self.popups = {}
-    
+
     # Default font
     self.font = DEFAULT_FONT
 
@@ -117,11 +110,11 @@ class DataFileImportGui(BasePopup):
 
     self.mainMenu    = Menu(self)
     self.projectMenu = self.makeProjectMenu()
-    
+
     self.mainMenu.add_command(label='Formats',shortcut='F',command=self.importFrame.showFormats)
     self.mainMenu.add_command(label='Help',shortcut='H',command=self.importFrame.showMainInstructions)
-   
-    # Put the main menu 
+
+    # Put the main menu
     self.config(menu=self.mainMenu)
 
     self.setMenuState()
@@ -151,15 +144,15 @@ class DataFileImportGui(BasePopup):
 
     showInfo('Version', 'Version ' + self.versionInfo, parent=self)
 
-  
+
   def setMenuState(self):
 
     state = Tkinter.NORMAL
 
     for option in ('Save','Save As','Quit','Version'):
       i = self.projectMenu.options.index(option)
-      self.projectMenu.entryconfig(i, state=state)      
-      
+      self.projectMenu.entryconfig(i, state=state)
+
   def askSaveFile(self):
 
     popup = self.openPopup('save_project', SaveProjectPopup)
@@ -234,11 +227,11 @@ class DataFileImportGui(BasePopup):
     # where the commend line was getting screwed up on exit.
     if os.name == 'posix':
       os.system('stty sane')
-      
+
     os._exit(0)
 
   def destroy(self):
-  
+
     BasePopup.destroy(self)
 
 
@@ -249,10 +242,10 @@ def launchDataFileImport():
   root = Tkinter.Tk()
   root.withdraw()
   top  = DataFileImportGui(root)
- 
+
   top.update_idletasks()
-  
-  root.mainloop()  
+
+  root.mainloop()
 
 if __name__ == '__main__':
 

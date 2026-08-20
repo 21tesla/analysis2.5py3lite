@@ -1,8 +1,10 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer5.py
-from cing.Libs.Imagery import convertImageMagick
-from matplotlib.dates import date2num
 import datetime
 import os
+
+from matplotlib.dates import date2num
+
+from cing.Libs.Imagery import convertImageMagick
 
 
 def createPinUp(pdb_id, extraArgListStr):

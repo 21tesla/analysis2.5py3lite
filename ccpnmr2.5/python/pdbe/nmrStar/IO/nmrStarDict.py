@@ -5,10 +5,18 @@
 # Values per field are [name of tag,function to get data,foreign key name,obligatory value]
 #
 
-from ccp.format.nmrStar.util import returnStarInt, returnStarFloat
-from ccp.format.nmrStar.util import returnStarString, returnStarDateTime, returnStarAtCode
-from ccp.format.nmrStar.util import returnStarCode, returnStarLine, returnStarName, returnStarIdName
-from ccp.format.nmrStar.util import returnStarYesNo, returnStarFaxPhoneEmail, returnStarLabel
+from ccp.format.nmrStar.util import (
+  returnStarAtCode,
+  returnStarCode,
+  returnStarDateTime,
+  returnStarFaxPhoneEmail,
+  returnStarFloat,
+  returnStarInt,
+  returnStarLabel,
+  returnStarLine,
+  returnStarString,
+  returnStarYesNo,
+)
 
 value = None
 

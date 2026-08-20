@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,104 +52,98 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os,string
-
 # Import general functions
-from memops.universal.Util import returnFloat, returnFloats
-from memops.universal.Util import returnInt
 from ccp.format.cns.generalIO import CnsGenericFile
-from memops.universal.Io import getTopDirectory
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from memops.universal.Util import returnFloat
 
 #####################
 # Class definitions #
 #####################
-    
+
+
 class CnsChemShiftFile(CnsGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.chemShifts = []
+    """
+    Information on file level
+    """
 
-  def read(self,verbose = 0):
+    def initialize(self):
 
-    if verbose == 1:
-      print("Reading %s chemical shift list %s" % (self.format,self.name))
+        self.chemShifts = []
 
-    fin = open(self.name)
-    lines = fin.readlines()
-    fin.close()
-    
-    numLines = len(lines)
-    errorMessages = []
+    def read(self, verbose=0):
 
-    for line in lines:
+        if verbose == 1:
+            print("Reading %s chemical shift list %s" % (self.format, self.name))
 
-      if self.patt['exclamation'].search(line) or self.patt['emptyline'].search(line):
-        pass
-      
-      else:
-        
-        chemShiftStoreSearch = self.patt[self.format + 'ChemShiftStore'].search(line)
-        seqCodeSearch = self.patt[self.format + 'SeqCode'].search(line)
-        atomNameSearch = self.patt[self.format + 'AtomName'].search(line)
-        
-        if seqCodeSearch and atomNameSearch and chemShiftStoreSearch:
-          seqCode = seqCodeSearch.group(1)
-          atomName = atomNameSearch.group(1)
-          chemShift = chemShiftStoreSearch.group(1)
+        fin = open(self.name)
+        lines = fin.readlines()
+        fin.close()
 
-          self.chemShifts.append(CnsChemShift(chemShift,atomName,seqCode,self.defaultMolCode))
-        
+        numLines = len(lines)
+        errorMessages = []
+
+        for line in lines:
+            if self.patt["exclamation"].search(line) or self.patt["emptyline"].search(line):
+                pass
+
+            else:
+                chemShiftStoreSearch = self.patt[self.format + "ChemShiftStore"].search(line)
+                seqCodeSearch = self.patt[self.format + "SeqCode"].search(line)
+                atomNameSearch = self.patt[self.format + "AtomName"].search(line)
+
+                if seqCodeSearch and atomNameSearch and chemShiftStoreSearch:
+                    seqCode = seqCodeSearch.group(1)
+                    atomName = atomNameSearch.group(1)
+                    chemShift = chemShiftStoreSearch.group(1)
+
+                    self.chemShifts.append(CnsChemShift(chemShift, atomName, seqCode, self.defaultMolCode))
+
+                else:
+                    errorMessages.append(
+                        "  Error: could not read the following %s chemical shift file line:" % (self.format,)
+                    )
+                    errorMessages.append(">>>", line)
+
+        #
+        # Check if valid file.
+        #
+
+        fileReadOk = True
+
+        if len(errorMessages) > numLines * 0.1:
+            print("  Error: file not valid - too many errors.")
+            fileReadOk = False
         else:
-          errorMessages.append("  Error: could not read the following %s chemical shift file line:" % (self.format,))
-          errorMessages.append(">>>",line)
-    
-    #
-    # Check if valid file.
-    #
-    
-    fileReadOk = True
-    
-    if len(errorMessages) > numLines * 0.1:
-      print("  Error: file not valid - too many errors.")
-      fileReadOk = False
-    else:
-      for errorMessage in errorMessages:
-        print(errorMessage)
-    
-    return fileReadOk
-  
-  def write(self,verbose = 0):
+            for errorMessage in errorMessages:
+                print(errorMessage)
 
-    if verbose == 1:
-      print("Writing %s chemical shift list %s" % (self.format,self.name))
+        return fileReadOk
 
+    def write(self, verbose=0):
 
-    fout = open(self.name,'w')
+        if verbose == 1:
+            print("Writing %s chemical shift list %s" % (self.format, self.name))
 
-    #
-    # Write out chem shifts
-    #
+        fout = open(self.name, "w")
 
-    for chemShift in self.chemShifts:
+        #
+        # Write out chem shifts
+        #
 
-      fout.write("do ( store1 = %.3f )  ( resid %d and name %s )" % (
-                      
-                       chemShift.value,
-                      chemShift.seqCode,
-                    	 chemShift.atomName))
-                       
-      fout.write(self.newline)
+        for chemShift in self.chemShifts:
+            fout.write(
+                "do ( store1 = %.3f )  ( resid %d and name %s )"
+                % (chemShift.value, chemShift.seqCode, chemShift.atomName)
+            )
+
+            fout.write(self.newline)
+
 
 class CnsChemShift:
+    def __init__(self, value, atomName, seqCode, defaultMolCode):
 
-  def __init__(self,value,atomName,seqCode,defaultMolCode):
-  
-    self.value = returnFloat(value)
-    self.atomName = atomName
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.molCode = defaultMolCode
+        self.value = returnFloat(value)
+        self.atomName = atomName
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.molCode = defaultMolCode

@@ -3,13 +3,14 @@ Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_PDBEntryLists.py
 """
 
-from cing import cingDirTestsData #@UnusedImport
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.helper import isInternetConnected
-from cing.NRG.PDBEntryLists import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.helper import isInternetConnected
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.PDBEntryLists import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

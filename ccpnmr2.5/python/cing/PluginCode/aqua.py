@@ -5,9 +5,10 @@ Adds methods:
 
 Unit testing is done thru procheck.
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 from cing.core.molecule import Atom
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def exportAtom2aqua(atom):
     """
@@ -85,7 +86,7 @@ def export2aqua(project, tmp=None):
                         lower = MIN_DISTANCE_ANY_ATOM_PAIR
                     if not isinstance(lower, float):
                         # JFD Failed to reproduce the cause of issue 185 so keeping this statement in.
-                        nTcodeerror("What is the lower class: %s" % lower.__class__) 
+                        nTcodeerror("What is the lower class: %s" % lower.__class__)
                         return True
 
 #                    nTdebug("lower: %s" % lower)
@@ -115,7 +116,7 @@ def export2aqua(project, tmp=None):
                     # Dihedral
 #                    Return string with restraint in Aqua format
 #                        ANGLE  [CHAIN id]  residue_name  residue_number  [INSERT code]
-#                        ...angle_name  bound_high  bound_low                    
+#                        ...angle_name  bound_high  bound_low
                     result = None
                     # (<Residue>, angleName, <AngleDef>) tuple
                     _Residue, angleName, _AngleDef = dr.retrieveDefinition()

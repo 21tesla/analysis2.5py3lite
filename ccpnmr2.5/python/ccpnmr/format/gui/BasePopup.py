@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,49 +53,48 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 from memops.gui.BasePopup import BasePopup
-import tkinter
-  
+
+
 class TemporaryBasePopup(BasePopup):
+    #
+    # Same as memops.gui.BasePopup, but window is destroy()ed when closed.
+    # Used in conjunction with code to lock the Python script.
+    #
 
-  #
-  # Same as memops.gui.BasePopup, but window is destroy()ed when closed.
-  # Used in conjunction with code to lock the Python script.
-  #
+    def open(self, doWait=True):
 
-  def open(self, doWait = True):
+        if self.state() == "normal":
+            Tkinter.Toplevel.lift(self)
+        else:
+            self.deiconify()
 
-    if (self.state() == 'normal'):
-      Tkinter.Toplevel.lift(self)
-    else:
-      self.deiconify()
+        self.config(borderwidth=0)
+        self.do_grab()
 
-    self.config(borderwidth=0)
-    self.do_grab()
-    
-    if doWait:
-      self.wait_variable(self.var)
+        if doWait:
+            self.wait_variable(self.var)
 
-  def deiconify(self):
+    def deiconify(self):
 
-    if (self.location):
-      self.geometry(self.location)
+        if self.location:
+            self.geometry(self.location)
 
-    self.lift() # might happen automatically
-    Tkinter.Toplevel.deiconify(self)
+        self.lift()  # might happen automatically
+        Tkinter.Toplevel.deiconify(self)
 
-    self.do_grab()
+        self.do_grab()
 
-  def close(self, *event):
+    def close(self, *event):
 
-    if (self.state() == 'normal'):
-      self.withdraw()
+        if self.state() == "normal":
+            self.withdraw()
 
-    self.grab_release()
+        self.grab_release()
 
-    self.var.set('')
-    self.update_idletasks()
+        self.var.set("")
+        self.update_idletasks()
 
-    if (self.parent):
-      self.parent.focus_set()
-  
-    self.destroy()
+        if self.parent:
+            self.parent.focus_set()
+
+        self.destroy()

@@ -21,14 +21,12 @@ __version__ = "0.1"
 
 
 
-import os, sys, time
-
+import time
 from threading import Thread
 
 from SharedBeanService_services import *
-from WSString import *
-
 from Test1 import Test1
+from WSString import *
 
 # TODO
 
@@ -55,15 +53,15 @@ class TestTask1Manager(Thread):
         # at all!). For now this will be none and the repository
         # is implicit within the imported ws stubs
         self._repository = repository
-        
+
         # task serial number
         self._taskId = id
 
         # get the info
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
-        request1 = getFieldsWithMethod();
-        request1._arg0 = 'org.pimslims.applet.server.TaskBean';
+        request1 = getFieldsWithMethod()
+        request1._arg0 = 'org.pimslims.applet.server.TaskBean'
         request1._arg1 = 'getTest1Fields'
         h2 = {'serial': self._taskId }
         wsstr_in = WSString(h2)
@@ -71,11 +69,11 @@ class TestTask1Manager(Thread):
         response1 = port.getFieldsWithMethod(request1)
         wsstr_out = WSString(response1._return)
         ss = wsstr_out.getStructHM()
-        
+
         print('got task details ', ss)
 
         # input project Name. Needs to be
-        if ss.has_key('inputVersion'):
+        if 'inputVersion' in ss:
             self._inputProjectName = ss['inputVersion']['project']['name'].__str__()
             self._inputVersionTag = ss['inputVersion']['versionTag'].__str__()
         else:
@@ -83,7 +81,7 @@ class TestTask1Manager(Thread):
             self.abort()
 
         # task serial number
-        self._taskStatus = status 
+        self._taskStatus = status
 
         #checking
         self.isComplete = False
@@ -120,17 +118,17 @@ class TestTask1Manager(Thread):
 
         # important to set the status to RUNNING so we don't try
         # to start another process with the same input params!
-        
+
         h2 = {'serial': self._taskId,
               'status': 'RUNNING' }
 
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
 
-        request1 = record();
+        request1 = record()
 
-        request1._arg0 = 'org.pimslims.applet.server.TaskBean';
-        request1._arg1 = 'updateStatus';
+        request1._arg0 = 'org.pimslims.applet.server.TaskBean'
+        request1._arg1 = 'updateStatus'
 
         wsstr_in = WSString(h2)
 
@@ -197,10 +195,10 @@ class TestTask1Manager(Thread):
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
 
-        request1 = record();
+        request1 = record()
 
-        request1._arg0 = 'org.pimslims.applet.server.TaskBean';
-        request1._arg1 = 'updateOutput';
+        request1._arg0 = 'org.pimslims.applet.server.TaskBean'
+        request1._arg1 = 'updateOutput'
 
         wsstr_in = WSString(h2)
 
@@ -217,10 +215,10 @@ class TestTask1Manager(Thread):
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
 
-        request2 = record();
-        
-        request2._arg0 = 'org.pimslims.applet.server.TaskBean';
-        request2._arg1 = 'updateStatus';
+        request2 = record()
+
+        request2._arg0 = 'org.pimslims.applet.server.TaskBean'
+        request2._arg1 = 'updateStatus'
 
         wsstr_in = WSString(h2)
 
@@ -228,7 +226,7 @@ class TestTask1Manager(Thread):
         request2._arg2 = wsstr_in.str
 
         port.record(request2)
-        
+
 
     """
 

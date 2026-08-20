@@ -6,12 +6,12 @@ Created on May 30, 2011
 
 @author: jd
 '''
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.NoeCompleteness import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.Libs.NoeCompleteness import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 
 class AllChecks(TestCase):
@@ -24,8 +24,8 @@ class AllChecks(TestCase):
 ##        cing.verbosity = cing.verbosityDebug
 #        ncl = NoeCompletenessAtomLib()
 #        self.assertTrue(ncl)
-#        
-        
+#
+
     def test_ArtificialRestraints(self):
         'test artificialRestraints'
 #        cing.verbosity = cing.verbosityDebug
@@ -64,7 +64,7 @@ class AllChecks(TestCase):
         resList = m.ranges2list(ranges)
         nTdebug("resList: %s" % resList)
         self.assertTrue(resList)
-        
+
         if doCompletenessCheck:
             resultCompleteness = doCompleteness( project,
                  max_dist_expectedOverall = max_dist_expectedOverall,
@@ -78,9 +78,9 @@ class AllChecks(TestCase):
             )
             self.assertTrue(resultCompleteness)
 
-        if doTheoreticalDihedralCheck:        
+        if doTheoreticalDihedralCheck:
             resultTheoreticalDihedral = doTheoreticalDihedral( project,
-                 variance = 10, 
+                 variance = 10,
 #                 ob_file_name = None, # defaults to dih_standard.str
 #                 ob_file_name = os.path.join( cingDirLibs, NoeCompletenessAtomLib.STR_FILE_DIR, 'dih_backbone.str'),
                  write_ac_lists = True,
@@ -94,7 +94,7 @@ class AllChecks(TestCase):
                  max_dist_expectedOverall = 2.7, # you might want this tighter. In Wattos I use:
 # Float   hbHADistance Hydrogen bond distance between proton and acceptor cutoff (2.7 Angstroms suggested)
 # Float   hbDADistance Hydrogen bond distance between donor and acceptor cutoff (3.35 Angstroms suggested)
-                 
+
                  use_intra = True,
                  ob_file_name = os.path.join( cingDirLibs, NoeCompletenessAtomLib.STR_FILE_DIR, 'ob_hydrogen_bond.str'),
                  write_dc_lists = True,
@@ -104,8 +104,8 @@ class AllChecks(TestCase):
             )
             self.assertTrue(resultHydrogenBondCheck)
     # end def
-# end class        
-        
-if __name__ == "__main__":    
+# end class
+
+if __name__ == "__main__":
     cing.verbosity = cing.verbosityDebug
     unittest.main()

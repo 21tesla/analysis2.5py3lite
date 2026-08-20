@@ -81,14 +81,15 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-import     sys
-from     os.path         import     join
-from     HaddockBasic    import    evalWcPairing
+from os.path import join
+
+from HaddockBasic import evalWcPairing
+
 
 class dnaRnaRestraints:
-    
+
     def __init__(self,ccpnproject,partner,projectRoot,arg=None):
-        
+
         self.defaults         = {'debug':0,'verbose':True,'bpplan':False,'bplan':True,'pickpuc':True,
                                 'pickbacdih':True,'c1pick':False,'c1lower':0.05,'c1upper':0.05,'wcpairing':True,
                                'wc_up':0.05,'wc_low':0.05,'wc_uri_up':0.01,'wc_uri_low':0.01}
@@ -96,7 +97,7 @@ class dnaRnaRestraints:
         self.residueZones     = []
         self.fileString        = ""
         self.projectRoot     = projectRoot
-        
+
         molSystem = self.partner.molSystem
         ensembles = ccpnproject.sortedStructureEnsembles()
         if molSystem: ensembles = [e for e in ensembles if e.molSystem is molSystem]
@@ -112,41 +113,41 @@ class dnaRnaRestraints:
         self.__writeC1C1restraint()
         self.__writeWCpairing()
         self.__writeFooter()
-        
+
     def writeToFile(self):
-        
+
         outfile = open(join(self.projectRoot,'dna-rna_restraints.def'),'w')
         outfile.write(self.fileString)
-        outfile.close()    
+        outfile.close()
 
     def __writeBPplanarity(self):
 
         self.fileString += ("{=========================================== base-pair planarity ===========================================}\n")
-        
+
         self.fileString += ("{* Use planarity restraints for Watson-Crick base pairing *}\n")
         self.fileString += ("{+ choice: true false +}\n\n")
 
         self.fileString += ("{===>} basepair_planar=%s;\n\n" % str(self.defaults['bpplan']).lower())
 
-    def __writeBasePlanarity(self):    
+    def __writeBasePlanarity(self):
 
         self.fileString +=  ("{============================================== base planarity =============================================}\n\n")
-        
+
         self.fileString +=  ("{* Restrain base planarity. This selection must only include nucleotide residues *}\n\n")
 
         if self.defaults['bplan'] == True:
             zone = ""
             for rzone in self.residueZones:
                 if len(zone) == 0: zone += ("(resid %i:%i and segid %s)" % (rzone[0],rzone[1],self.partner.code))
-                else: zone += (" or (resid %i:%i and segid %s)" % (rzone[0],rzone[1],self.partner.code))    
-            self.fileString +=  ("{===>} bases_planar=(%s);\n\n" % zone)    
+                else: zone += (" or (resid %i:%i and segid %s)" % (rzone[0],rzone[1],self.partner.code))
+            self.fileString +=  ("{===>} bases_planar=(%s);\n\n" % zone)
         else:
             self.fileString +=  ("{* Base planarity not restraint *}\n\n")
 
     def __writePucker(self):
 
         self.fileString += ("{=================================== sugar-pucker dihedral angle restraints ================================}\n\n")
-        
+
         self.fileString += ("{* Pick the dihedral angles of the sugar pucker from the input structure\n")
         self.fileString += ("   and restrain them within the given error range *}\n")
         self.fileString += ("{+ choice: true false +}\n\n")
@@ -162,21 +163,21 @@ class dnaRnaRestraints:
 
             self.fileString += ("{* conformation of group %i *}\n" % puckercount)
             self.fileString += ('{+ choice: "a-form" "b-form" "other" +}\n')
-            
+
             self.fileString += ("{===>} pform_%i=\"other\";\n\n" % puckercount)
-                
+
             self.fileString += ("{* user defined sugar pucker for group %i *}\n" % puckercount)
 
             self.fileString += ("{* dihedral C1'-C2'-C3'-C4' *}\n")
-            self.fileString += ("{===>} dihedral_nu2_%i=-34.9;\n" % puckercount) 
+            self.fileString += ("{===>} dihedral_nu2_%i=-34.9;\n" % puckercount)
             self.fileString += ("{* dihedral C1'-C2'-C3'-C4' error range *}\n")
             self.fileString += ("{===>} error_nu2_%i=0.0;\n" % puckercount)
             self.fileString += ("{* dihedral C5'-C4'-C3'-C2' *}\n")
-            self.fileString += ("{===>} dihedral_nu3_%i=-86.4;\n" % puckercount) 
+            self.fileString += ("{===>} dihedral_nu3_%i=-86.4;\n" % puckercount)
             self.fileString += ("{* dihedral C5'-C4'-C3'-C2' error range *}\n")
             self.fileString += ("{===>} error_nu3_%i=0.0;\n" % puckercount)
             self.fileString += ("{* dihedral C1'-O4'-C4'-C5' *}\n")
-            self.fileString += ("{===>} dihedral_nu4_%i=106.4;\n" % puckercount) 
+            self.fileString += ("{===>} dihedral_nu4_%i=106.4;\n" % puckercount)
             self.fileString += ("{* dihedral C1'-O4'-C4'-C5' error range *}\n")
             self.fileString += ("{===>} error_nu4_%i=0.0;\n\n" % puckercount)
 
@@ -185,7 +186,7 @@ class dnaRnaRestraints:
     def __writeSPBackbone(self):
 
         self.fileString += ("{================================ phosphate backbone dihedral angle restraints =============================}\n\n")
-        
+
         self.fileString += ("{* Pick the dihedral angles of the phosphate backbone from the input structure and\n")
         self.fileString += ("   restrain them within the given error range *}\n")
         self.fileString += ("{+ choice: true false +}\n\n")
@@ -201,33 +202,33 @@ class dnaRnaRestraints:
 
             self.fileString += ("{* conformation of group %i *}\n" % bacdihcount)
             self.fileString += ('{+ choice: "a-form" "b-form" "other" +}\n')
-            
+
             self.fileString += ("{===>} dform_%i=\"other\";\n\n" % bacdihcount)
-        
+
             self.fileString += ("{* user defined posphate backbone for group %i *}\n" % bacdihcount)
 
             self.fileString += ("{* alpha dihedral O3'-P-O5'-C5' *}\n")
-            self.fileString += ("{===>} dihedral_alpha_%i=-10.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_alpha_%i=-10.0;\n" % bacdihcount)
             self.fileString += ("{* alpha dihedral range *}\n")
-            self.fileString += ("{===>} error_alpha_%i=10.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} error_alpha_%i=10.0;\n" % bacdihcount)
             self.fileString += ("{* beta dihedral P-O5'-C5'-C4' *}\n")
-            self.fileString += ("{===>} dihedral_beta_%i=136.4;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_beta_%i=136.4;\n" % bacdihcount)
             self.fileString += ("{* beta dihedral range *}\n")
-            self.fileString += ("{===>} error_beta_%i=40.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} error_beta_%i=40.0;\n" % bacdihcount)
             self.fileString += ("{* gamma dihedral O5'-C5'-C4'-C3' *}\n")
-            self.fileString += ("{===>} dihedral_gamma_%i=31.1;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_gamma_%i=31.1;\n" % bacdihcount)
             self.fileString += ("{* gamma dihedral range *}\n")
-            self.fileString += ("{===>} error_gamma_%i=20.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} error_gamma_%i=20.0;\n" % bacdihcount)
             self.fileString += ("{* delta dihedral C5'-C4'-C3'-O3' *}\n")
-            self.fileString += ("{===>} dihedral_delta_%i=-165.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_delta_%i=-165.0;\n" % bacdihcount)
             self.fileString += ("{* delta dihedral range *}\n")
-            self.fileString += ("{===>} error_delta_%i=50.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} error_delta_%i=50.0;\n" % bacdihcount)
             self.fileString += ("{* epsilon dihedral C4'-C3'-O3'-P *}\n")
-            self.fileString += ("{===>} dihedral_eps_%i=-165.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_eps_%i=-165.0;\n" % bacdihcount)
             self.fileString += ("{* epsilon dihedral range *}\n")
-            self.fileString += ("{===>} error_eps_%i=10.0;\n" % bacdihcount) 
+            self.fileString += ("{===>} error_eps_%i=10.0;\n" % bacdihcount)
             self.fileString += ("{* zeta dihedral C3'-O3'-P-O5' *}\n")
-            self.fileString += ("{===>} dihedral_zeta_%i=-150.8;\n" % bacdihcount) 
+            self.fileString += ("{===>} dihedral_zeta_%i=-150.8;\n" % bacdihcount)
             self.fileString += ("{* zeta dihedral range *}\n")
             self.fileString += ("{===>} error_zeta_%i=50.0;\n\n" % bacdihcount)
 
@@ -236,7 +237,7 @@ class dnaRnaRestraints:
     def __writeC1C1restraint(self):
 
         self.fileString += ("{============================================= C1'-C1' restraints ==========================================}\n\n")
-        
+
         self.fileString += ("{* Have the length of the C1'-C1' virtual bonds measured and restraints. *}\n")
         self.fileString += ("{+ choice: true false +}\n")
 
@@ -244,7 +245,7 @@ class dnaRnaRestraints:
 
         self.fileString += ("{* Error range used for C1'-C1' virtual bonds  *}\n")
         self.fileString += ("{===>} c1_low=%1.3f;\n" % self.defaults['c1lower'])
-        self.fileString += ("{===>} c1_up=%1.3f;\n\n" % self.defaults['c1upper'])    
+        self.fileString += ("{===>} c1_up=%1.3f;\n\n" % self.defaults['c1upper'])
 
     def __writeWCpairing(self):
 
@@ -262,7 +263,7 @@ class dnaRnaRestraints:
         self.fileString += ("{===>} wc_up_uri=%1.3f;\n\n" % self.defaults['wc_uri_up'])
 
         self.fileString += ("{* residues which form Watson-Crick pairs *}\n\n")
-        
+
         paircount = 1
         pairs = evalWcPairing(self.partner)
         for pair in pairs.pairs:

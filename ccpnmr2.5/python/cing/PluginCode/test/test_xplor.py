@@ -4,21 +4,21 @@ python $CINGROOT/python/cing/PluginCode/test/test_xplor.py
 
 For testing execution of cing inside of Xplor-NIH python interpreter with the data living outside of it.
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+import unittest
+from shutil import copyfile, rmtree
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqCcpn import CCPN_STR
 from cing.PluginCode.xplor import quoteAtomNameIfNeeded
-from cing.core.classes import Project
-from nose.plugins.skip import SkipTest
-from shutil import copyfile
-from shutil import rmtree
-from unittest import TestCase
-import unittest
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -32,7 +32,7 @@ class AllChecks(TestCase):
         for i, input in enumerate(inputList):
             self.assertEqual( expectedList[i], quoteAtomNameIfNeeded(input))
     # end def
-    
+
     def test_exportXplor(self):
         modelCount = 1
         entryList  = "1brv     2fws                      ".split()
@@ -61,7 +61,7 @@ class AllChecks(TestCase):
                 molecule.export2xplor( pdbFileName )
         # end for
     # end def
-    
+
     def _test_fullRedo(self):
         'Full recalculation and refinement by xplor nih. Too big to run by default.'
         nTdebug("Now in %s" % getCallerName())
@@ -80,20 +80,20 @@ class AllChecks(TestCase):
             cingFile = os.path.join(inputArchiveDir, cingFileLocalTgz)
             if not os.path.exists(cingFile):
                 self.fail("Neither %s or the .tgz exist" % cingFile)
-            
+
             if os.path.exists(cingDir):
                 rmtree(cingDir)
             if os.path.exists(cingFileLocalTgz):
                 os.unlink( cingFileLocalTgz )
-                
+
             copyfile(cingFile, cingFileLocalTgz )
-            project = Project.open(entryId, status='old') 
+            project = Project.open(entryId, status='old')
             self.assertTrue(project)
             self.assertFalse(project.fullRedo(modelCountAnneal = 4, bestAnneal = 3, best = 2))
         # end for
     # end def
-    
-    
+
+
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug
     unittest.main()

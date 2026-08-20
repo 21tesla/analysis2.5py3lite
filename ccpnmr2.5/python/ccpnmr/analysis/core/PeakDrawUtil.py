@@ -40,14 +40,19 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 # do not change below lightly!
 
-peak_draw_methods = [ 'uniform in pixels', 'uniform in ppm',
-                      'scaled globally', 'scaled by peaks in peaklist',
-                      'line width', 'box width' ]
+peak_draw_methods = [
+    "uniform in pixels",
+    "uniform in ppm",
+    "scaled globally",
+    "scaled by peaks in peaklist",
+    "line width",
+    "box width",
+]
 
 # note: the below has to be consistent with C code
 # matching C code is in c/ccpnmr/analysis/win_peak_list.h:
-DRAW_UNIFORM_METHOD  = 0
-DRAW_GLOBAL_METHOD   = 1
+DRAW_UNIFORM_METHOD = 0
+DRAW_GLOBAL_METHOD = 1
 DRAW_PEAKLIST_METHOD = 2
 DRAW_LINE_WIDTH_METHOD = 3
 
@@ -59,9 +64,9 @@ c_peak_draw_methods[peak_draw_methods[3]] = DRAW_PEAKLIST_METHOD
 c_peak_draw_methods[peak_draw_methods[4]] = DRAW_LINE_WIDTH_METHOD
 c_peak_draw_methods[peak_draw_methods[5]] = DRAW_UNIFORM_METHOD
 
+
 def getCPeakDrawMethod(project):
 
-  method = project.currentAnalysisProject.peakDrawMethod
+    method = project.currentAnalysisProject.peakDrawMethod
 
-  return c_peak_draw_methods[method]
-
+    return c_peak_draw_methods[method]

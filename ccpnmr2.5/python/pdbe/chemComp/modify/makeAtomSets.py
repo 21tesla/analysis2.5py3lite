@@ -1,28 +1,24 @@
-from memops.api import Implementation
 
-from ccp.general.Util import MakeAtomSets
 from ccp.general.Io import getChemComp
-
-from pdbe.chemComp.Util import getCcpCodeList
-
+from ccp.general.Util import MakeAtomSets
+from memops.api import Implementation
 from pdbe.chemComp.Constants import editChemCompDataDir
-
-import os
+from pdbe.chemComp.Util import getCcpCodeList
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
 
   makeAtomSets = MakeAtomSets()
 
   ccpCodeList = getCcpCodeList(editChemCompDataDir)
-    
+
   for (molType,ccpCodes) in ccpCodeList:
-    
+
     for ccpCode in ccpCodes[:5]:
-      
+
       project = Implementation.MemopsRoot(name = 'tempData')
 
       chemComp = getChemComp(project,molType,ccpCode,copyFile=False,download=False)

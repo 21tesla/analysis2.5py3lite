@@ -3,15 +3,16 @@ Original from Wim Vranken.
 Used for eNMR/weNMR workshop data sets.
 """
 
+import shutil
+from glob import glob
+
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
 from cing import issueListUrl
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.forkoff import do_cmd
-from cing.Scripts.FC.constants import * #@UnusedWildImport
-from glob import glob
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.FC.constants import *  #@UnusedWildImport
 from memops.api import Implementation
 from memops.api.Implementation import ApiError
-import shutil
 
 try:
     import Tkinter
@@ -139,7 +140,7 @@ def importStarChemicalShifts(ccpnProject, inputDir, guiRoot, allowPopups=1, mini
 
 
 #    formatCns = CnsFormat(ccpnProject, guiRoot, verbose=verbose, minimalPrompts=minimalPrompts, allowPopups=allowPopups, **presets)
-    formatNmrStarFormat = NmrStarFormat(ccpnProject, guiRoot, verbose=verbose, minimalPrompts=minimalPrompts, 
+    formatNmrStarFormat = NmrStarFormat(ccpnProject, guiRoot, verbose=verbose, minimalPrompts=minimalPrompts,
                                         allowPopups=allowPopups, **presets)
     ccpnShiftListOfList = []
 

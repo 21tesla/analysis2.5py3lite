@@ -9,23 +9,23 @@ This script will open the file with input data and gives a file back with the in
 Some of the imports aren't necessary. I just copied them from some scripts from Jurgen Doreleijers.
 I kept them all here in case that I'll need it some another time.
 """
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
-from cing.NRG.settings import * #@UnusedWildImport
-from cing.PluginCode.required.reqDssp import * #@UnusedWildImport
-from cing.PluginCode.required.reqProcheck import * #@UnusedWildImport
-from cing.PluginCode.required.reqWattos import * #@UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.PluginCode.sqlAlchemy import CgenericSql
-from cing.PluginCode.sqlAlchemy import CsqlAlchemy
-from pylab import * #@UnusedWildImport # imports plt too now.
-from scipy import * #@UnusedWildImport
-from sqlalchemy.schema import Table #@UnusedImport
-from sqlalchemy.sql.expression import func
-from sqlalchemy.sql.expression import select #@Reimport @UnusedImport
-from cing import cingDirTestsData
+from pylab import *  #@UnusedWildImport # imports plt too now.
+from scipy import *  #@UnusedWildImport
+from sqlalchemy.sql.expression import (
+    func,
+    select,  #@Reimport @UnusedImport
+)
 
+from cing import cingDirTestsData
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
+from cing.NRG.settings import *  #@UnusedWildImport
+from cing.PluginCode.required.reqDssp import *  #@UnusedWildImport
+from cing.PluginCode.required.reqProcheck import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWattos import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
+from cing.PluginCode.sqlAlchemy import CgenericSql, CsqlAlchemy
 
 db_name = PDBJ_DB_NAME
 user_name = PDBJ_DB_USER_NAME
@@ -127,11 +127,11 @@ def linkdataNRG():
     #nTdebug("ROG percentage per entry: %s" % result)
     for row in result:
         k = str(row[0])
-        if not perEntryRogdict.has_key(k):
+        if k not in perEntryRogdict:
             perEntryRogdict[k] = nTfill(0.0, 3)
         perEntryRogdict[k][int(row[1])] = float(row[2])
     for d in range(len(pdbidlisttotal)):
-        if not perEntryRogdict.has_key(str(pdbidlisttotal[d])):
+        if str(pdbidlisttotal[d] not in perEntryRogdict):
             perEntryRogdict[pdbidlisttotal[d]] = ['', '', '']
     #Below is a script that will select the pdb_id column, pc_gf, wi_ramchk, wi_bbcchk and wi_rotchk columns from the entry table.
     s1 = select([e1.c.pdb_id, e1.c.pc_rama_core, e1.c.wi_ramchk, e1.c.wi_bbcchk, e1.c.wi_rotchk])
@@ -141,13 +141,13 @@ def linkdataNRG():
         s2 = execute(s2).fetchall()
         if s2 == []:
             s2 = [(localpdbid, '', '', '', '', '')] # if there is no information, the pdbid is shown and the others are set empty.
-        if not pc_rama_coredict.has_key(localpdbid):
+        if localpdbid not in pc_rama_coredict:
             pc_rama_coredict.appendFromTable(s2, 0, 1)
             ramchkdict.appendFromTable(s2, 0, 2)
             bbcchkdict.appendFromTable(s2, 0, 3)
             rotchkdict.appendFromTable(s2, 0, 4)
 
-    #Below, the final text is composed. 
+    #Below, the final text is composed.
     #First the original 4 columns are set back. After that, some other information is added. All information is
     #separated by a comma.
     finaltext = ('pdbid1,pdbid2,length_total,length_match,matchfraction,experimental_meth_pdb2,Perc_most_fav_1,Ramchk_1,Bbcchk_1,Rotchk_1,'

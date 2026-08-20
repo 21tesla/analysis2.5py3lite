@@ -10,20 +10,23 @@ will be imported.
 
 Run as in test_RotateLeucines.py
 '''
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import rmdir
-from cing.Scripts.CombineRestraints import CHI1_LIST
-from cing.Scripts.CombineRestraints import CHI1_LOW_DEFAULT
-from cing.Scripts.CombineRestraints import CHI2_LIST
-from cing.Scripts.CombineRestraints import CHI2_UPP_DEFAULT
-from cing.Scripts.CombineRestraints import CV_THRESHOLD_SELECTION
-from cing.Scripts.CombineRestraints import ROTL_STR
-from cing.core.classes import Project
-from yasaramodule import * #@UnusedWildImport
 import shutil
-import yasara #@UnresolvedImport 
+
+import yasara  #@UnresolvedImport
+from yasaramodule import *  #@UnusedWildImport
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.disk import rmdir
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.CombineRestraints import (
+    CHI1_LIST,
+    CHI1_LOW_DEFAULT,
+    CHI2_LIST,
+    CHI2_UPP_DEFAULT,
+    CV_THRESHOLD_SELECTION,
+    ROTL_STR,
+)
 
 
 def selectBadLeucineList(proj, cv=CV_THRESHOLD_SELECTION, useAll=False):
@@ -33,7 +36,7 @@ def selectBadLeucineList(proj, cv=CV_THRESHOLD_SELECTION, useAll=False):
     '''
     nTmessage("Starting %s" % getCallerName())
     nTmessage("Finds a list of leucine residues that have an average chi 1 and 2 in the forbidden region.")
-    
+
     leuList = []  # Residue object list.
     mol = proj.molecule
     leuSel = mol.residuesWithProperties('LEU')
@@ -207,7 +210,7 @@ def runRotateLeucines(runDir, inputArchiveDir, entryId, cv=CV_THRESHOLD_SELECTIO
         if not leuList:
             nTerror('Failed to decodeResidueList')
             return True
-        # end if            
+        # end if
     else:
         leuList = selectBadLeucineList(project, cv, useAll=useAll)
     # end if
@@ -234,5 +237,5 @@ if __name__ == '__main__':
     if runRotateLeucines(runDir, inputArchiveDir, entryId):
         nTerror("Failed runRotateLeucines")
         sys.exit(1)
-    # end if    
+    # end if
 # end if

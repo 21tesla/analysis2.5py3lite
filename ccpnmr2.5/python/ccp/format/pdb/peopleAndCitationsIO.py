@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,254 +52,267 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
-
 # Import general functions
-from memops.universal.Util import returnInt
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.general.formatIO import Person, Citation
+from ccp.format.general.formatIO import Citation, Person
 
 # Import header reader
-from ccp.format.pdb.generalIO import PdbGenericFile, PdbFile
+from ccp.format.pdb.generalIO import PdbFile, PdbGenericFile
+from memops.universal.Util import returnInt
 
 #####################
 # Class definitions #
-#####################  
+#####################
+
 
 class PdbPeopleAndCitationsFile(PdbGenericFile):
-  """
-  Information on file level - is dummy file for generic PdbFile object really
-  """
-  def initialize(self):
+    """
+    Information on file level - is dummy file for generic PdbFile object really
+    """
 
-    self.citations = []
-    self.persons = []
-    self.authors = []
-    
-  def read(self, pdbFile = None, getAuthors = True, verbose = 0):
-    
-    if not pdbFile:
-    
-      #
-      # Read in header if not passed in.
-      #
+    def initialize(self):
 
-      pdbFile= PdbFile(self.name)
-      pdbFile.readHeader()
-   
-    self.pdbFile = pdbFile
-    
-    #
-    # PDB entry authors
-    #
+        self.citations = []
+        self.persons = []
+        self.authors = []
 
-    if getAuthors and self.pdbFile.headerVars.has_key('Authors'):
-      authorText = self.pdbFile.headerVars['Authors'].strip()
-      authorList = authorText.split(',')
-      for author in authorList:
-        authorBits = author.split('.')
-        
-        if len(authorBits) <= 1:
-          continue
-        elif not authorBits[-1]:
-          # Problem with string, occurs quite often, family name first
-          firstBits = authorBits[0].split()
-          if len(firstBits) > 1:
-            authorBits[0] = firstBits[-1]
-            authorBits[-1] = ' '.join(firstBits[:-1])
-            print("  Warning: fixed author name string %s!" % author)
-        
-        for i in range(len(authorBits)-1):
-          authorBits[i] = authorBits[i].strip()
-      
-        # Possible that family-type name has . in it, apparently.
-        while (1):
-          if len(authorBits) == 1:
-            print("  Warning: setting family name as '%s'" % authorBits[-1])
-            break
-          if ' ' in authorBits[-2]:
-            authorBits[-1] = authorBits.pop(-2) + '.' + authorBits[-1]
-            print("  Warning: setting family name as '%s'" % authorBits[-1])
-          else:
-            break
-          
-        if authorBits[-1][-4:] in (' JR.',' SR.'):
-          authorBits[-1] = authorBits[-1][:-4].strip()
-          familyTitle = authorBits[-1][-4:].strip()
-        else:
-          familyTitle = None
+    def read(self, pdbFile=None, getAuthors=True, verbose=0):
 
-        firstName = initials = None
+        if not pdbFile:
+            #
+            # Read in header if not passed in.
+            #
 
-        if len(authorBits) >= 2:
-          firstName = authorBits[0]
-          if len(authorBits) > 2:
-            initials = authorBits[1:-1]
+            pdbFile = PdbFile(self.name)
+            pdbFile.readHeader()
 
-        self.authors.append(Person(self,firstName,initials,authorBits[-1],familyTitle = familyTitle))
-    
-    #
-    # PDB  entry citation (if any)
-    #
-    
-    journalInfoList = []
-    isPrimary = False
-    
-    if self.pdbFile.headerVars.has_key('Journal'):
-            
-      journalInfoList.append(self.pdbFile.headerVars['Journal'])
-      isPrimary = True
+        self.pdbFile = pdbFile
 
-    # Additional reference info from REMARK 1
-    if self.pdbFile.otherCitations:
-      refIds = self.pdbFile.otherCitations.keys()
-      refIds.sort()
-      for refId in refIds:
-        journalInfoList.append(self.pdbFile.otherCitations[refId])
-    
-    for journalInfo in journalInfoList:
-    
-      journalType = 'journal'
-      
-      if journalInfo.has_key('PUBL'):
-        if journalInfo.has_key('EDIT'):
-          journalType = 'book'
-        else:
-          journalType = 'thesis'
-        
-        # In principle, place of publication is listed first, followed by
-        # a space, a colon, another space, and then the name of the publisher/issuer.
-        # The alternative way is publisher, comma, then publication place.
-        if journalInfo['PUBL'].count(' : '):
-          (publisherPlace,publisher) = journalInfo['PUBL'].split(' : ')
-        elif journalInfo['PUBL'].count(','):
-          publisherInfo = journalInfo['PUBL'].split(',')
-          publisher = publisherInfo[0]
-          publisherPlace = ', '.join(publisherInfo[1:])
-        else:
-          publisher = journalInfo['PUBL']
-          publisherPlace = None
-          
-        if publisherPlace:
-          publisherPlace = publisherPlace.strip()
-      
-      else:
-        publisherPlace = publisher = None
-      
-      # Again possible that REF not present...
+        #
+        # PDB entry authors
+        #
 
-      if not journalInfo.has_key('REF') or journalInfo['REF'] == 'TO BE PUBLISHED':
-        status = 'to be published'
-        pubName = None
-        volume = None
-        issue = None
-        firstPage = None
-        year = None
-      else:
-        refInfo = journalInfo['REF']
+        if getAuthors and "Authors" in self.pdbFile.headerVars:
+            authorText = self.pdbFile.headerVars["Authors"].strip()
+            authorList = authorText.split(",")
+            for author in authorList:
+                authorBits = author.split(".")
 
-        pubName = refInfo[0:28].strip()
+                if len(authorBits) <= 1:
+                    continue
+                elif not authorBits[-1]:
+                    # Problem with string, occurs quite often, family name first
+                    firstBits = authorBits[0].split()
+                    if len(firstBits) > 1:
+                        authorBits[0] = firstBits[-1]
+                        authorBits[-1] = " ".join(firstBits[:-1])
+                        print("  Warning: fixed author name string %s!" % author)
 
-        year = firstPage = volume = issue = None
+                for i in range(len(authorBits) - 1):
+                    authorBits[i] = authorBits[i].strip()
 
-        # TODO - not sure how to deal with status in these cases.
+                # Possible that family-type name has . in it, apparently.
+                while 1:
+                    if len(authorBits) == 1:
+                        print("  Warning: setting family name as '%s'" % authorBits[-1])
+                        break
+                    if " " in authorBits[-2]:
+                        authorBits[-1] = authorBits.pop(-2) + "." + authorBits[-1]
+                        print("  Warning: setting family name as '%s'" % authorBits[-1])
+                    else:
+                        break
 
-        #print 'TYPE: [%s]' % journalType
+                if authorBits[-1][-4:] in (" JR.", " SR."):
+                    authorBits[-1] = authorBits[-1][:-4].strip()
+                    familyTitle = authorBits[-1][-4:].strip()
+                else:
+                    familyTitle = None
 
-        if journalType == 'journal' and refInfo[30:32] == 'V.':
-          status = 'published'
-          year = returnInt(refInfo[43:47].strip())
-          firstPage = refInfo[37:42].strip()
-          volume = refInfo[32:36].strip()
-          #issue is not in PDB file
-        elif refInfo[43:47].strip():
-          status = 'published'
-          year = returnInt(refInfo[43:47].strip())
-        else:
-          status = 'to be published'
+                firstName = initials = None
 
-        #year = returnInt(refInfo[-4:].strip())
-        #firstPage = refInfo[-10:-4].strip()
-        #volume = refInfo[-15:-10].strip()
+                if len(authorBits) >= 2:
+                    firstName = authorBits[0]
+                    if len(authorBits) > 2:
+                        initials = authorBits[1:-1]
 
-        #pubName = refInfo[:-18].strip()
+                self.authors.append(Person(self, firstName, initials, authorBits[-1], familyTitle=familyTitle))
 
-      # Necessary to check 'cos of crappy old PDB files...
-      if journalInfo.has_key('TITL'):
-        title = journalInfo['TITL'].strip()
-      else:
-        title = None
+        #
+        # PDB  entry citation (if any)
+        #
 
-      citation = Citation(self,journalType,title,status,pubName,volume,issue,firstPage,year,publisherPlace, publisher, country = None, isPrimary = isPrimary)
-      self.citations.append(citation)
-      
-      # Only first citation is primary...
-      isPrimary = False
-      
-      for (attrName,pdbName) in (('authors','AUTH'),('editors','EDIT')):
-        if journalInfo.has_key(pdbName):
-          authorText = journalInfo[pdbName].strip()
-          authorList = authorText.split(',')
+        journalInfoList = []
+        isPrimary = False
 
-          for author in authorList:
-            authorBits = author.split('.')
+        if "Journal" in self.pdbFile.headerVars:
+            journalInfoList.append(self.pdbFile.headerVars["Journal"])
+            isPrimary = True
 
-            if len(authorBits) <= 1:
-              continue
-            elif not authorBits[-1]:
-              # Problem with string, occurs quite often, family name first
-              firstBits = authorBits[0].split()
-              if len(firstBits) > 1:
-                authorBits[0] = firstBits[-1]
-                authorBits[-1] = ' '.join(firstBits[:-1])
-                print("  Warning: fixed author name string %s!" % author)
-            
-            for i in range(len(authorBits)-1):
-              authorBits[i] = authorBits[i].strip()
-            
-            # Possible that family-type name has . in it, apparently.
-            while (1):
-              if len(authorBits) == 1:
-                print("  Warning: setting family name as '%s'" % authorBits[-1])
-                break
+        # Additional reference info from REMARK 1
+        if self.pdbFile.otherCitations:
+            refIds = self.pdbFile.otherCitations.keys()
+            refIds.sort()
+            for refId in refIds:
+                journalInfoList.append(self.pdbFile.otherCitations[refId])
 
-              if ' ' in authorBits[-2]:
-                authorBits[-1] = authorBits.pop(-2) + '.' + authorBits[-1]
-                print("  Warning: setting family name as '%s'" % authorBits[-1])
-              else:
-                break
+        for journalInfo in journalInfoList:
+            journalType = "journal"
 
-            if authorBits[-1][-4:] in (' JR.',' SR.'):
-              authorBits[-1] = authorBits[-1][:-4].strip()
-              familyTitle = authorBits[-1][-4:].strip()
+            if "PUBL" in journalInfo:
+                if "EDIT" in journalInfo:
+                    journalType = "book"
+                else:
+                    journalType = "thesis"
+
+                # In principle, place of publication is listed first, followed by
+                # a space, a colon, another space, and then the name of the publisher/issuer.
+                # The alternative way is publisher, comma, then publication place.
+                if journalInfo["PUBL"].count(" : "):
+                    (publisherPlace, publisher) = journalInfo["PUBL"].split(" : ")
+                elif journalInfo["PUBL"].count(","):
+                    publisherInfo = journalInfo["PUBL"].split(",")
+                    publisher = publisherInfo[0]
+                    publisherPlace = ", ".join(publisherInfo[1:])
+                else:
+                    publisher = journalInfo["PUBL"]
+                    publisherPlace = None
+
+                if publisherPlace:
+                    publisherPlace = publisherPlace.strip()
+
             else:
-              familyTitle = None
+                publisherPlace = publisher = None
 
-            personsFound = []
-            for tPerson in self.persons:
-              if tPerson.familyName == authorBits[-1] and tPerson.firstName == authorBits[0]:
-                personsFound.append(tPerson)
-            
-            person = None
-            if personsFound:
-              for tPerson in personsFound:
-                if tPerson.initials == authorBits[1:-1] and (not familyTitle or tPerson.familyTitle == familyTitle):            
-                  person = tPerson
-              if not person:
-                if len(personsFound) > 1:
-                  print("  Warning: picking first person from found list as default (no full initial match)")
-                person = personsFound[0]
+            # Again possible that REF not present...
 
-            # Create new person if no match...
-            if not person:
-              firstName = initials = None
-              if len(authorBits) >= 2:
-                firstName = authorBits[0]
-                if len(authorBits) > 2:
-                  initials = authorBits[1:-1]
+            if "REF" not in journalInfo or journalInfo["REF"] == "TO BE PUBLISHED":
+                status = "to be published"
+                pubName = None
+                volume = None
+                issue = None
+                firstPage = None
+                year = None
+            else:
+                refInfo = journalInfo["REF"]
 
-              person = Person(self,firstName,initials,authorBits[-1],familyTitle = familyTitle)
-              self.persons.append(person)
-              
-            getattr(citation,attrName).append(person)
+                pubName = refInfo[0:28].strip()
+
+                year = firstPage = volume = issue = None
+
+                # TODO - not sure how to deal with status in these cases.
+
+                # print 'TYPE: [%s]' % journalType
+
+                if journalType == "journal" and refInfo[30:32] == "V.":
+                    status = "published"
+                    year = returnInt(refInfo[43:47].strip())
+                    firstPage = refInfo[37:42].strip()
+                    volume = refInfo[32:36].strip()
+                    # issue is not in PDB file
+                elif refInfo[43:47].strip():
+                    status = "published"
+                    year = returnInt(refInfo[43:47].strip())
+                else:
+                    status = "to be published"
+
+                # year = returnInt(refInfo[-4:].strip())
+                # firstPage = refInfo[-10:-4].strip()
+                # volume = refInfo[-15:-10].strip()
+
+                # pubName = refInfo[:-18].strip()
+
+            # Necessary to check 'cos of crappy old PDB files...
+            if "TITL" in journalInfo:
+                title = journalInfo["TITL"].strip()
+            else:
+                title = None
+
+            citation = Citation(
+                self,
+                journalType,
+                title,
+                status,
+                pubName,
+                volume,
+                issue,
+                firstPage,
+                year,
+                publisherPlace,
+                publisher,
+                country=None,
+                isPrimary=isPrimary,
+            )
+            self.citations.append(citation)
+
+            # Only first citation is primary...
+            isPrimary = False
+
+            for attrName, pdbName in (("authors", "AUTH"), ("editors", "EDIT")):
+                if pdbName in journalInfo:
+                    authorText = journalInfo[pdbName].strip()
+                    authorList = authorText.split(",")
+
+                    for author in authorList:
+                        authorBits = author.split(".")
+
+                        if len(authorBits) <= 1:
+                            continue
+                        elif not authorBits[-1]:
+                            # Problem with string, occurs quite often, family name first
+                            firstBits = authorBits[0].split()
+                            if len(firstBits) > 1:
+                                authorBits[0] = firstBits[-1]
+                                authorBits[-1] = " ".join(firstBits[:-1])
+                                print("  Warning: fixed author name string %s!" % author)
+
+                        for i in range(len(authorBits) - 1):
+                            authorBits[i] = authorBits[i].strip()
+
+                        # Possible that family-type name has . in it, apparently.
+                        while 1:
+                            if len(authorBits) == 1:
+                                print("  Warning: setting family name as '%s'" % authorBits[-1])
+                                break
+
+                            if " " in authorBits[-2]:
+                                authorBits[-1] = authorBits.pop(-2) + "." + authorBits[-1]
+                                print("  Warning: setting family name as '%s'" % authorBits[-1])
+                            else:
+                                break
+
+                        if authorBits[-1][-4:] in (" JR.", " SR."):
+                            authorBits[-1] = authorBits[-1][:-4].strip()
+                            familyTitle = authorBits[-1][-4:].strip()
+                        else:
+                            familyTitle = None
+
+                        personsFound = []
+                        for tPerson in self.persons:
+                            if tPerson.familyName == authorBits[-1] and tPerson.firstName == authorBits[0]:
+                                personsFound.append(tPerson)
+
+                        person = None
+                        if personsFound:
+                            for tPerson in personsFound:
+                                if tPerson.initials == authorBits[1:-1] and (
+                                    not familyTitle or tPerson.familyTitle == familyTitle
+                                ):
+                                    person = tPerson
+                            if not person:
+                                if len(personsFound) > 1:
+                                    print(
+                                        "  Warning: picking first person from found list as default (no full initial match)"
+                                    )
+                                person = personsFound[0]
+
+                        # Create new person if no match...
+                        if not person:
+                            firstName = initials = None
+                            if len(authorBits) >= 2:
+                                firstName = authorBits[0]
+                                if len(authorBits) > 2:
+                                    initials = authorBits[1:-1]
+
+                            person = Person(self, firstName, initials, authorBits[-1], familyTitle=familyTitle)
+                            self.persons.append(person)
+
+                        getattr(citation, attrName).append(person)

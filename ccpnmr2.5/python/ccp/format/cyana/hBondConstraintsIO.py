@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,71 +51,76 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
+
+from ccp.format.cyana.generalIO import getFormat
+from ccp.format.dyana.hBondConstraintsIO import DyanaHBondConstraint, DyanaHBondConstraintFile
 from memops.universal.Io import getTopDirectory
 
 
-from ccp.format.dyana.hBondConstraintsIO import DyanaHBondConstraintFile
-from ccp.format.dyana.hBondConstraintsIO import DyanaHBondConstraint
-from ccp.format.cyana.generalIO import getFormat
-
 class CyanaHBondConstraintFile(DyanaHBondConstraintFile):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = getFormat()
 
-    self.format = getFormat()
-    
-  def write(self,verbose = 0, noAmbiguous = 0):
+    def write(self, verbose=0, noAmbiguous=0):
 
-    if verbose == 1:
-    
-      fileText = self.name
-      
-      if self.lowerDistanceFile:
-        fileText += ' and %s.' % self.lowerDistanceFile
-    
-      print("Writing %s distance constraint list %s" % (self.format,fileText))
-    
-    #
-    # CYANA can handle ambiguous...
-    #
-    
-    self.writeGeneric(noAmbiguous = noAmbiguous)
+        if verbose == 1:
+            fileText = self.name
+
+            if self.lowerDistanceFile:
+                fileText += " and %s." % self.lowerDistanceFile
+
+            print("Writing %s distance constraint list %s" % (self.format, fileText))
+
+        #
+        # CYANA can handle ambiguous...
+        #
+
+        self.writeGeneric(noAmbiguous=noAmbiguous)
+
 
 class CyanaHBondConstraint(DyanaHBondConstraint):
+    pass
 
-  pass
-    
+
 ###################
 # Main of program #
 ###################
 
 if __name__ == "__main__":
+    # NO REAL EXAMPLE FILE AVAILABLE!
+    files = ["../reference/diana/u1c.upl"]
 
-  # NO REAL EXAMPLE FILE AVAILABLE!
-  files = ['../reference/diana/u1c.upl']
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = CyanaHBondConstraintFile(file)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    constraintFile.read(verbose = 1)
-  
-    for constraint in constraintFile.constraints:
-      print(constraint.Id,)
+        constraintFile = CyanaHBondConstraintFile(file)
 
-      print(constraint.upperDist,)
-      #print constraint.peakNum, constraint.peakVol, constraint.ppms
-      for item in constraint.items:
-        for member in item.members:
-          print(member.seqCode, member.atomName,)
-        print("|",)
+        constraintFile.read(verbose=1)
 
-      print()
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+            )
 
-    constraintFile.name = 'local/hbonds.testout'
+            print(
+                constraint.upperDist,
+            )
+            # print constraint.peakNum, constraint.peakVol, constraint.ppms
+            for item in constraint.items:
+                for member in item.members:
+                    print(
+                        member.seqCode,
+                        member.atomName,
+                    )
+                print(
+                    "|",
+                )
 
-    constraintFile.write(verbose = 1)
+            print()
 
+        constraintFile.name = "local/hbonds.testout"
+
+        constraintFile.write(verbose=1)

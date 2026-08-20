@@ -53,56 +53,38 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 import os
 import sys
-import tkinter
 
-from memops.api                    import Implementation
-
-from memops.universal.Io           import normalisePath
-
-from memops.general.Implementation import ApiError
-from memops.general.Application    import Application
-from memops.general.Io             import loadProject, saveProject
-from memops.general.Util           import isProjectModified
-
-from memops.gui.DataEntry       import askString, askDir, askFile
-from memops.gui.Button          import Button
-from memops.gui.ButtonList      import ButtonList
-from memops.gui.FontMenu        import FontMenu
-from memops.gui.Frame           import Frame
-from memops.gui.FileSelectPopup import FileSelectPopup
-from memops.gui.FileSelect      import FileType
-from memops.gui.Label           import Label
-from memops.gui.Menu            import Menu
-from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
-from memops.gui.TabbedFrame     import TabbedFrame
-from memops.gui.Util            import createDismissHelpButtonList
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-
-from memops.editor.BasePopup          import BasePopup
-from memops.editor.OpenProjectPopup   import OpenProjectPopup
-from memops.editor.SaveProjectPopup   import SaveProjectPopup
-from memops.editor.WebBrowser         import ProjectWebBrowser
-
-from memops.universal.Io import getTopDirectory
-
+from cambridge.wms.DataExchFrame import DataExchFrame
+from cambridge.wms.ExtendNmrFrame import ExtendNmrFrame
+from cambridge.wms.LoginFrame import LoginPopup
+from cambridge.wms.ProjectFrame import ProjectFrame
+from cambridge.wms.ProtocolFrame import ProtocolFrame
 
 # WMS
-
 from cambridge.wms.RepositoryFrame import RepositoryFrame
-from cambridge.wms.ExtendNmrFrame import ExtendNmrFrame
-from cambridge.wms.ProjectFrame import ProjectFrame
-from cambridge.wms.TasksFrame import TasksFrame
-from cambridge.wms.DataExchFrame import DataExchFrame
-from cambridge.wms.WorkflowFrame import WorkflowFrame
-from cambridge.wms.ProtocolFrame import ProtocolFrame
-from cambridge.wms.UserFrame import UserFrame
-
-from cambridge.wms.LoginFrame import LoginPopup
-from cambridge.wms.RepositoryPropertiesFrame import RepositoryPropertiesPopup
-
 from cambridge.wms.RepositoryList import RepositoryList
-
+from cambridge.wms.RepositoryPropertiesFrame import RepositoryPropertiesPopup
 from cambridge.wms.TaskManager import TaskManager
+from cambridge.wms.TasksFrame import TasksFrame
+from cambridge.wms.UserFrame import UserFrame
+from cambridge.wms.WorkflowFrame import WorkflowFrame
+from memops.api import Implementation
+from memops.editor.BasePopup import BasePopup
+from memops.editor.OpenProjectPopup import OpenProjectPopup
+from memops.editor.SaveProjectPopup import SaveProjectPopup
+from memops.editor.WebBrowser import ProjectWebBrowser
+from memops.general.Application import Application
+from memops.general.Implementation import ApiError
+from memops.general.Io import loadProject, saveProject
+from memops.general.Util import isProjectModified
+from memops.gui.DataEntry import askDir, askFile, askString
+from memops.gui.FontMenu import FontMenu
+from memops.gui.Frame import Frame
+from memops.gui.Menu import Menu
+from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.TabbedFrame import TabbedFrame
+from memops.universal.Io import getTopDirectory, normalisePath
 
 DEFAULT_FONT = 'Helvetica 10'
 
@@ -141,7 +123,7 @@ class ApplicationPopup(BasePopup):
     # should set a placeholder. In fact, this placeholder will also have
     # a default user (guest) so that there is always a structure to
     # extend should the user wish to start from scratch and not log in
-    
+
     self.repList = RepositoryList()
     self.currentTask = None
 
@@ -154,7 +136,7 @@ class ApplicationPopup(BasePopup):
 
     self.setTitle(PROGRAM_NAME)
 
-                       
+
   def body(self, guiParent):
 
     self.geometry('700x600')
@@ -172,7 +154,7 @@ class ApplicationPopup(BasePopup):
     # options and can also use it to define any refreshes etc (although
     # these would be better done through notifiers)
 
-    
+
     softwareOpts = ['Repository','Project', 'Process','Client Tasks', 'Server Tasks', 'Data Exchange','Workflow','Protocols','User']
 
     # FIXME JMCI
@@ -187,17 +169,17 @@ class ApplicationPopup(BasePopup):
     self.tabbedFrame.grid(row=0, column=0, sticky='nsew')
 
 
-    frames = self.tabbedFrame.frames 
+    frames = self.tabbedFrame.frames
 
     # Logos
-    ccpnDir = getTopDirectory()    
-    imageDir = os.path.join(ccpnDir,'python','extendNmr','images')    
+    ccpnDir = getTopDirectory()
+    imageDir = os.path.join(ccpnDir,'python','extendNmr','images')
     imageFile = os.path.join(imageDir,'CcpnLogo.gif')
     self.ccpnLogo = Tkinter.PhotoImage(file=imageFile)
 
     # Dictionary to store popups opened by this application - e.g. need to close upon quit
     self.popups = {}
-    
+
     # Default font
     self.font   = 'Helvetica 10'
 
@@ -209,7 +191,7 @@ class ApplicationPopup(BasePopup):
     self.userMenu = self.makeUserMenu()
     self.repositoryMenu = self.makeRepositoryMenu()
     self.otherMenu   = self.makeOtherMenu()
-    
+
     # Put the top level menu
     self.config(menu=self.mainMenu)
     self.initRepository(frames[0])
@@ -241,39 +223,39 @@ class ApplicationPopup(BasePopup):
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_rowconfigure(1, weight=1)
-     
+
     repositoryFrame = RepositoryFrame(frame, basePopup=self)
     repositoryFrame.grid(row=1, column=0, sticky='nsew')
 
     self.updateFuncs.append(repositoryFrame.updateAll)
-    
+
 
   def initProjectFrame(self, frame):
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_rowconfigure(1, weight=1)
-    
+
     self.projectFrame = ProjectFrame(frame, basePopup=self)
     self.projectFrame.grid(row=1, column=0, sticky='nsew')
 
     self.updateFuncs.append(self.projectFrame.updateAll)
-    
+
   def initWms(self, frame):
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_rowconfigure(1, weight=1)
-     
+
     extendNmrFrame = ExtendNmrFrame(frame, basePopup=self)
     extendNmrFrame.grid(row=1, column=0, sticky='nsew')
 
     self.updateFuncs.append(extendNmrFrame.updateAll)
-    
+
 
   def initTasks(self, frame):
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_rowconfigure(1, weight=1)
-     
+
     tasksFrame = TasksFrame(frame, self)
     tasksFrame.grid(row=1, column=0, sticky='nsew')
 
@@ -292,7 +274,7 @@ class ApplicationPopup(BasePopup):
     dataExchFrame.grid(row=1, column=0, sticky='nsew')
 
     self.updateFuncs.append(dataExchFrame.updateAll)
-    
+
   def initWorkflow(self, frame):
 
     row = 0
@@ -331,7 +313,7 @@ class ApplicationPopup(BasePopup):
     userFrame.grid(row=1, column=0, sticky='nsew')
 
     self.updateFuncs.append(userFrame.updateAll)
-    
+
 
   ## The Menu ##
 
@@ -345,14 +327,14 @@ class ApplicationPopup(BasePopup):
     menu.add_command(label='Edit Profile',    shortcut='E', command=self.tmpCall)
     self.mainMenu.add_cascade(label='User', shortcut='U', menu=menu)
     menu.options = ['Log In','Log Out','Save Profile','View Profile','Create Profile', 'Edit Profile']
-    return menu 
-    
+    return menu
+
   def makeRepositoryMenu(self):
     self.repMenu = Menu(self.mainMenu, tearoff=0)
     # Add various options to the menu and state the functions they call
     self.repMenu.add_command(label='Manager',    shortcut='M', command=self.tmpCall)
     self.repMenu.add_command(label='Connect',    shortcut='C', command=self.openRepository)
-    
+
     # doesn't really work to have a disconnect; we do not have a list
     # of repositories and so would it refer to? Better to do this from
     # within the RepositoryFrame
@@ -368,19 +350,19 @@ class ApplicationPopup(BasePopup):
 
 
     # FIXME JMCI
-    
+
     # the quit option needs to be tied to a dialogue box that asks whether
     # the current connection state should be saved. This will have to be
     # secured and so means that the GUI should have a login itself (beyond
     # the logins for the various resources).
-    
+
     self.repMenu.add_command(label='Quit',       shortcut='Q', command=self.quit)
 
     self.mainMenu.add_cascade(label='Repository', shortcut='R', menu=self.repMenu)
     self.repMenu.options = ['Connect','Disconnect','Import Project','Export Project','Quit']
     return self.repMenu
 
-    
+
   def makeProjectMenu(self):
 
     # Submenu of the min menu
@@ -395,12 +377,12 @@ class ApplicationPopup(BasePopup):
     menu.add_command(label='Version', shortcut='V', command=self.showVersion)
     self.mainMenu.add_cascade(label='Project', shortcut='P', menu=menu)
 
-    menu.options = ['New','Open','Close','Save','Save As','Quit','Version']  
+    menu.options = ['New','Open','Close','Save','Save As','Quit','Version']
     return menu
 
 
   def makeOtherMenu(self):
-    
+
     # The fonts menu is a pre-created widget
     fontsMenu = FontMenu(self.mainMenu, self.setFont, sizes=(8,10,12),
                          doItalic=0, doBoldItalic=0, tearoff=0)
@@ -423,49 +405,49 @@ class ApplicationPopup(BasePopup):
       haveAnalysis = False
 
     try:
-      from ccpnmr.format.gui.FormatConverter import FormatConverter
       from ccpnmr.format.gui.DataShifter import DataShifter
+      from ccpnmr.format.gui.FormatConverter import FormatConverter
       haveFormatConv = True
     except ImportError:
       haveFormatConv = False
-  
+
     menu = Menu(self.mainMenu, tearoff=0)
-    
+
     if haveAnalysis:
       menu.add_command(label='Analysis',     shortcut='A', command=self.ccpNmrAnalysis)
     else:
       menu.add_command(label='Analysis ** NOT INSTALLED **',     shortcut='A', command=None)
-    
+
     if haveFormatConv:
       menu.add_command(label='Format Converter',  shortcut='F', command=self.ccpNmrFormatConverter)
       menu.add_command(label='Data Shifter',    shortcut='D', command=self.ccpNmrDataShifter)
     else:
       menu.add_command(label='Format Converter ** NOT INSTALLED **',  shortcut='F', command=None)
       menu.add_command(label='Data Shifter ** NOT INSTALLED **',    shortcut='D', command=None)
- 
+
     self.mainMenu.add_cascade(label='CcpNmr', shortcut='C', menu=menu)
 
-    menu.options = ['Analysis','Format Converter','Data Shifter']  
+    menu.options = ['Analysis','Format Converter','Data Shifter']
     return menu
-  
+
   def ccpNmrAnalysis(self, cacheSize=64):
-  
+
     from ccpnmr.analysis.AnalysisPopup import AnalysisPopup
     analysis = AnalysisPopup(self, cache_size=cacheSize, glDirect=None)
     analysis.update_idletasks() # fast
     if self.project:
        analysis.initProject(self.project)
-       
+
   def ccpNmrFormatConverter(self):
-  
+
     from ccpnmr.format.gui.FormatConverter import FormatConverter
     fc = FormatConverter(self,threading=False,project=self.project)
     fc.open()
     if self.project:
       fc.initProject(self.project)
-      
+
   def ccpNmrDataShifter(self):
-    
+
     from ccpnmr.format.gui.DataShifter import DataShifter
     ds = DataShifter(self)
     ds.open()
@@ -506,7 +488,7 @@ class ApplicationPopup(BasePopup):
 
     # at the moment we do this through methods in the popup. It
     # would be much more sensible to do this through some
-    # sort of callback. 
+    # sort of callback.
 
     login_popup = LoginPopup(self)
 
@@ -517,13 +499,13 @@ class ApplicationPopup(BasePopup):
 
     self.repList.currentRepository = rep
 
-    if self.frameShortcuts.has_key('Repository'):
+    if 'Repository' in self.frameShortcuts:
       self.frameShortcuts['Repository'].drawFrame()
 
-    if self.frameShortcuts.has_key('Tasks'):
+    if 'Tasks' in self.frameShortcuts:
       self.frameShortcuts['Tasks'].drawFrame()
     #for ff in self.tabbedFrame.frames[0].children.values():
-    #  ff.draw()    
+    #  ff.draw()
 
     #for ff in self.tabbedFrame.frames[3].children.values():
     #  ff.draw()
@@ -539,7 +521,7 @@ class ApplicationPopup(BasePopup):
   def closeRepository(self):
 
     pass
-  
+
   def logout(self):
 
     self.setUsername(None)
@@ -551,7 +533,7 @@ class ApplicationPopup(BasePopup):
     print(self.tabbedFrame.frames[0].__dict__)
     print('#########################')
 
-    if self.frameShortcuts.has_key('Repository'):
+    if 'Repository' in self.frameShortcuts:
       self.frameShortcuts['Repository'].drawFrame()
 
     #for ff in self.tabbedFrame.frames[0].children.values():
@@ -563,7 +545,7 @@ class ApplicationPopup(BasePopup):
   def openPopup(self, popup_name, clazz, oldStyle=False, *args, **kw):
 
     popup = self.popups.get(popup_name)
-  
+
     if (popup):
       popup.open()
     else:
@@ -571,14 +553,14 @@ class ApplicationPopup(BasePopup):
         analysisProfile = self.analysisProfile
       else:
         analysisProfile = None
-      
+
       if analysisProfile:
         transient = analysisProfile.transientDialogs
       else:
         transient = True
-      
+
       name = popup_name
-      
+
       if (oldStyle):
         popup = self.popups[popup_name] = clazz(self, transient=transient, *args, **kw)
       else:
@@ -601,13 +583,13 @@ class ApplicationPopup(BasePopup):
 
     self.destroyPopups()
     self.initProject()
- 
+
     return True
 
   def saveProject(self):
 
     self.saveFile()
-    
+
     # NBNB Rasmus 22/8/08 changed to fit AnalysisPopup (and removed 'isStored' bug)
     #if (self.project.isStored):
     #  self.saveFile()
@@ -624,37 +606,37 @@ class ApplicationPopup(BasePopup):
 
 
   def changeFont(self, analysisProfile):
-  
+
     if analysisProfile is self.analysisProfile:
       if self.font != analysisProfile.font:
-        self.font = analysisProfile.font or DEFAULT_FONT 
+        self.font = analysisProfile.font or DEFAULT_FONT
         self.setFont()
-      
+
   def selectFont(self, font): # Only called from main menu option
-    
+
     if self.project:
-      self.analysisProfile.font = font    
+      self.analysisProfile.font = font
 
   def setFont(self, font=None, popup=None):
 
     if font is None:
-      font = self.font or DEFAULT_FONT 
-          
+      font = self.font or DEFAULT_FONT
+
     else:
       self.font = font
 
     if not popup:
       popup = self
-    
+
     childList = popup.children.values()
-    
+
     classes = [Tkinter.Button,
                Tkinter.Label,
                Tkinter.Menu,
                Tkinter.Entry,
                Tkinter.Checkbutton,
                Tkinter.Radiobutton]
-    
+
     for child in childList:
       for clazz in classes:
         if isinstance(child, clazz):
@@ -664,16 +646,16 @@ class ApplicationPopup(BasePopup):
           else:
             child.config( font=font )
           break
-    
+
       if isinstance(child, Tkinter.Frame):
         child.font = font
-      
+
       elif isinstance(child, ScrolledMatrix):
-        child.setFont(font)  
-    
+        child.setFont(font)
+
       if hasattr(child, 'children'):
         childList.extend( child.children.values() )
-        
+
   def initProject(self, project=None):
 
     self.project = project
@@ -683,19 +665,19 @@ class ApplicationPopup(BasePopup):
       self.setFont()
       webBrowser = ProjectWebBrowser(self.top, popup=self, project=project)
       #self.helpButton.config(command = lambda url=self.help_url: webBrowser.open(url) )
-      
+
       for i, func in enumerate(self.updateFuncs):
         func(project)
-        
+
       for button in self.projButtons:
         button.enable()
-      
+
       self.setupSoftware()
-        
+
     else:
       for button in self.projButtons:
         button.disable()
-    
+
     self.setMenuState()
 
 
@@ -709,7 +691,7 @@ class ApplicationPopup(BasePopup):
 
   # need to look into this carefully and analyse the possible
   # states
-    
+
   def setMenuState(self):
 
     if self.project:
@@ -726,16 +708,16 @@ class ApplicationPopup(BasePopup):
     #for menu in [self.otherMenu,]: # Include more menus in this list
     #  for i in range(len(menu.options)):
     #    menu.entryconfig(i, state=state)
-      
-  
+
+
   def setupSoftware(self):
-    
+
      project = self.project
-    
+
      methodStore = project.currentMethodStore or \
                    project.findFirstMethodStore() or \
                    project.newMethodStore(name=project.name)
-        
+
      software = methodStore.findFirstSoftware(name=PROGRAM_NAME, version=VERSION)
      if not software:
        software = methodStore.newSoftware(name=PROGRAM_NAME, version=VERSION)
@@ -744,7 +726,7 @@ class ApplicationPopup(BasePopup):
      #software.vendorAddress = ''
      #software.vendorWebAddress = 'http:'
      #software.details = ''
-      
+
   def askSaveFile(self):
 
     popup = self.openPopup('save_project', SaveProjectPopup)
@@ -793,7 +775,7 @@ class ApplicationPopup(BasePopup):
     # should these be directory objects?
     repList.current_export_dir = '/home/jionides/work/CCPN/test_JMCI_data'
     repList.current_import_dir = '/home/jionides/work/CCPN/test_EXP_data'
-   
+
 
     self.repList = repList
 
@@ -802,13 +784,13 @@ class ApplicationPopup(BasePopup):
     self.setRepository(rep1)
 
     # really should be done through notifiers
-    if self.frameShortcuts.has_key('Repository'):
+    if 'Repository' in self.frameShortcuts:
       self.frameShortcuts['Repository'].drawFrame()
 
-    if self.frameShortcuts.has_key('Tasks'):
+    if 'Tasks' in self.frameShortcuts:
       self.frameShortcuts['Tasks'].drawFrame()
 
-    if self.frameShortcuts.has_key('DataExch'):
+    if 'DataExch' in self.frameShortcuts:
       self.frameShortcuts['DataExch'].drawFrame()
 
     for ff in self.tabbedFrame.frames[8].children.values():
@@ -822,14 +804,14 @@ class ApplicationPopup(BasePopup):
 
     opts = {}
     self.repMenu.add('separator',**opts)
-    
+
     for rep in repList.repositories:
       item = {'command': lambda rep=rep: self.setRepository(rep),
               'label': rep.name}
       self.repMenu.add('comman', **item)
 
     self.repMenu.config()
-              
+
 
   ## end WMS methods
 
@@ -929,11 +911,11 @@ class ApplicationPopup(BasePopup):
     # where the commend line was getting screwed up on exit.
     if os.name == 'posix':
       os.system('stty sane')
-      
+
     sys.exit(0)
 
   def destroy(self):
-  
+
     BasePopup.destroy(self)
 
 
@@ -945,19 +927,19 @@ def getProjectFont(project):
     font = analysisProject.font
   else:
     font = 'Helvetica 10'
-  
+
   return font
 
 def setProjectFont(project, font):
 
-  
+
   analysisProject = project.currentAnalysisProject
   nmrProject = project.currentNmrProject
 
   if not analysisProject:
     analysisProject = project.newAnalysisProject(name=project.name,
                                                  nmrProject=nmrProject)
-    
+
   analysisProject.font = font
 
 def launchApplication(projectDir=None):
@@ -967,7 +949,7 @@ def launchApplication(projectDir=None):
   root = Tkinter.Tk()
   root.withdraw()  # get rid of the root window Tkinter would otherwise put up
   top  = ApplicationPopup(root) # creates our controlled window (this class in fact)
- 
+
   project = None
   if projectDir:
     projectDir = normalisePath(projectDir)
@@ -979,14 +961,14 @@ def launchApplication(projectDir=None):
       project = loadProject(path=projectDir, showWarning=showWarning, askDir=askdir, askFile=askfile)
     except ApiError as e:
       showError('Reading project', e.error_msg, parent=top)
- 
+
   top.update_idletasks()
-  
+
   if project:
     top.initProject(project)
- 
+
   # waiting for mouse and keyboard commands
-  root.mainloop()  
+  root.mainloop()
 
 if __name__ == '__main__':
 
@@ -999,7 +981,7 @@ if __name__ == '__main__':
   ## we are almost certainly going to need a set of local config files that
   ## store various bits and pieces. It might make sense for this to be
   ## modelled and to use a Memops-generated API
-  
+
   if n > 1:
     projectDir = argv[1]
   else:

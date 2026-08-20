@@ -1,30 +1,38 @@
-import os,string,sys
+import os
+import string
+import sys
+
+from ccp.general.Io import getChemComp
+from ccp.general.Util import getOtherAtom
+from ccpnmr.format.converters.Mol2Format import Mol2Format
 
 #
 # CCPN specific...
 #
-
 from memops.api import Implementation
-from memops.universal.Util import makePowerSet, drawBox
+from memops.universal.Util import drawBox, makePowerSet
+from pdbe.chemComp.Constants import (
+  editChemCompCoordDataDir,
+  editChemCompDataDir,
+  origMol2DataDir,
+  testChemCompCoordDataDir,
+  testChemCompDataDir,
+)
+from pdbe.chemComp.Io import (
+  consolidateTemporaryChemCompOrCoord,
+  findChemCompOrCoordFilePath,
+  findExistingChemCompCoordInfo,
+  findExistingChemCompInfo,
+  saveTemporaryChemCompOrCoord,
+)
 
-from ccp.general.Util import getOtherAtom
-from ccp.general.Io import getChemComp
-
-from ccpnmr.format.converters.Mol2Format import Mol2Format
- 
-from pdbe.chemComp.Constants import origMol2DataDir
-from pdbe.chemComp.Io import findChemCompOrCoordFilePath
-from pdbe.chemComp.Io import saveTemporaryChemCompOrCoord, consolidateTemporaryChemCompOrCoord
-from pdbe.chemComp.Io import findExistingChemCompInfo, findExistingChemCompCoordInfo
-from pdbe.chemComp.Constants import editChemCompCoordDataDir, testChemCompCoordDataDir
-from pdbe.chemComp.Constants import editChemCompDataDir, testChemCompDataDir
 
 def getStereoPriorities(stereoAtom,chemBondsHandled):
 
   priorityList = []
   priorityKeys = []
   followPriorityKeys = []
- 
+
   for chemBond in stereoAtom.chemBonds:
     if chemBond in chemBondsHandled:
       otherAtom = None
@@ -33,56 +41,56 @@ def getStereoPriorities(stereoAtom,chemBondsHandled):
       otherAtom = getOtherAtom(stereoAtom,chemBond)
       priorityKey = (otherAtom.chemElement.atomNumber,bondDict[chemBond.bondType])
       chemBondsHandled.append(chemBond)
-      
+
       if priorityKey not in priorityKeys:
         priorityKeys.append(priorityKey)
       elif priorityKey not in followPriorityKeys:
         followPriorityKeys.append(priorityKey)
-    
+
     priorityList.append((priorityKey,otherAtom))
- 
+
   return (priorityList,followPriorityKeys)
 
 def findRingCarbon(chemAtom,connectedAtoms):
-  
+
   returnConnectedAtoms = None
-  
+
   for chemBond in chemAtom.chemBonds:
-  
+
     otherChemAtom = getOtherAtom(chemAtom,chemBond)
 
     if otherChemAtom == connectedAtoms[-1]:
       returnConnectedAtoms = connectedAtoms[:]
       break
-          
+
     elif otherChemAtom and otherChemAtom not in connectedAtoms and otherChemAtom.elementSymbol == 'C':
-      
+
       returnConnectedAtoms = findRingCarbon(otherChemAtom,connectedAtoms[:-1] + [otherChemAtom,connectedAtoms[-1]])
 
       if returnConnectedAtoms:
         break
-        
+
   return returnConnectedAtoms
 
 def getChemAtomKey(chemAtom):
 
   return (chemAtom.name,chemAtom.subType)
-            
+
 def getLinkAtom(chemAtom,bondType = 'single', multi = False):
 
   if not multi:
     linkAtomName = "%s_1" % chemAtom.name
   else:
     linkAtomName = "%s_%d_1" % (chemAtom.name,chemAtom.subType)
-  
+
   linkAtom = chemAtom.parent.findFirstChemAtom(className = 'LinkAtom', name = linkAtomName)
   if not linkAtom:
     linkAtom = chemAtom.parent.newLinkAtom(name = linkAtomName)
     chemAtom.parent.newChemBond(chemAtoms = [chemAtom,linkAtom], bondType = bondType)
-  
+
   return linkAtom
 
-  
+
 def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = False, saveData = True):
 
   carboMolType = 'carbohydrate'
@@ -90,57 +98,57 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
   project = Implementation.MemopsRoot(name = 'chemComp')
   project.currentUserId = 'ccpnRef'
-  
+
   #
   # Set archive dir info
   #
-  
+
   if testMode:
     chemCompDataDir = testChemCompDataDir
     chemCompCoordDataDir= testChemCompCoordDataDir
   else:
     chemCompDataDir = editChemCompDataDir
     chemCompCoordDataDir= editChemCompCoordDataDir
-  
+
   #
   # First import all mol2 files, pick one form as 'base' unit, adapt this one,
   # then add coords from other chemComps
   #
   # TODO: This is currently very specific!
   #
-  
+
   #
   # TODO SET A STEREOCHEMISTRY CLASS FOR THE A/B CHEMATOMS!!
   #
- 
+
   importDir = os.path.join(origMol2DataDir,'carbo')
   importFiles = os.listdir(os.path.join(importDir,carboBaseName))
-  
+
   for importFile in importFiles[:]:
     if not importFile[-4:] == 'mol2':
       importFiles.pop(importFiles.index(importFile))
-  
+
   importFiles.sort()
-  
-  
+
+
   mol2Format = Mol2Format(project, guiParent = None, allowPopups = False)
   molTypes = [carboMolType]
-  
+
   chemComps = []
   rawChemComps = []
-  
+
   for importFile in importFiles:
-    
+
     # Should be 'a', 'b' or 'o'
-    anomericCenter = importFile[0] 
-    
+    anomericCenter = importFile[0]
+
     if anomericCenter != 'a':
       ccpCode = '%s-%s' % (anomericCenter,carboBaseName)
     else:
       ccpCode = carboBaseName
 
     fileName = os.path.join(importDir,carboBaseName,importFile)
-    
+
     print("Reading mol2 file %s..." % fileName)
 
     ccs = mol2Format.readChemComps(
@@ -150,23 +158,23 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
                              saveChemComp = False,
                              minimalPrompts = True,
                              makeNamingSystem = namingSystemName)
-  
+
     chemComps.append(ccs[0])
     rawChemComps.append(mol2Format.rawChemComp)
-  
+
   #
   # Check whether only open form available (e.g. aldi ones)
-  # 
-  
+  #
+
   if len(chemComps) == 1 and chemComps[0].ccpCode[0] == 'o':
     print("  Warning: only open form available, not creating a/b isoforms.")
     hasOnlyOpenForm = True
-  else: 
+  else:
     hasOnlyOpenForm = False
-  
+
   #print chemComps
   #print rawChemComps
-    
+
   """
   for cch in project.chemCompHeads:
     print(cch.molType, cch.ccpCode)
@@ -174,47 +182,47 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
       print(ccv.descriptor)
       print(ccv.chemAtoms)
     print("""
-  
-  refChemComp = chemComps[0] # Should be the a form  
-  
+
+  refChemComp = chemComps[0] # Should be the a form
+
   #
   # Reset save location, check if file already exists
   #
 
   chemCompXmlFile = findChemCompOrCoordFilePath(refChemComp,testMode = testMode)
- 
+
   # In this case, getting nothing back with replace - False means that it does exist!
   if chemCompXmlFile and not replace:
     print("  ChemComp %s, %s already exists - aborting creation." % (carboMolType,carboBaseName))
 
     try:
       refChemComp = getChemComp(project, carboMolType, carboBaseName, download=False, chemCompArchiveDir = editChemCompDataDir,copyFile=False)
-      
+
     except:
       print("WARNING: chemcomp was already loaded!")
       refChemComp = project.findFirstChemComp(molType = carboMolType, ccpCode = carboBaseName)
 
     return refChemComp
-          
+
   #
   # Start creating/modifying...
   #
-  
+
   print()
   print(drawBox("Creating sugar information"))
   print()
-          
+
   #
   # Set the base Glyco CT code, this is always x-, except for -o only forms (aldehydes)
-  #  
+  #
   # TODO: might need to hack this for substituents so know which one is which... or just do it by order? Should be fine...
   #
-  
+
   refGlycoCtCode = "RES\n1b:%s" % baseGlycoCtCode
-  
+
   print("Setting GlycoCT code to:\n\n%s\n" % refGlycoCtCode)
   print()
-  
+
   project.override = True
   try:
     refChemComp.baseGlycoCtCode = refGlycoCtCode
@@ -241,7 +249,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
           connectedToC = False
           break
 
-      if connectedToC: 
+      if connectedToC:
 
         centralOAtom = chemAtom
 
@@ -292,18 +300,18 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
       for chemBond in searchCarbon.chemBonds:
         otherChemAtom = getOtherAtom(searchCarbon,chemBond)
         if otherChemAtom and otherChemAtom.elementSymbol == 'O' and otherChemAtom != centralOAtom:
-          anomericCarbon = searchCarbon 
+          anomericCarbon = searchCarbon
           anomericOxygen = otherChemAtom
           break
 
       if anomericCarbon:
         break
-      
+
   else:
     # Hardset these... not really anomeric but good enough
     anomericCarbon = refChemComp.findFirstChemAtom(name = 'C1')
     anomericOxygen = refChemComp.findFirstChemAtom(name = 'O1')
-      
+
 
   if not anomericCarbon:
     raise "  Error: no anomeric carbon found."
@@ -312,23 +320,23 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
     for chemBond in anomericOxygen.chemBonds:
       otherChemAtom = getOtherAtom(anomericOxygen,chemBond)
       if otherChemAtom and otherChemAtom.elementSymbol == 'H':
-        anomericHydrogen = otherChemAtom 
+        anomericHydrogen = otherChemAtom
         break
 
     if not anomericHydrogen:
       print("  Warning: no anomeric hydrogen found.")
 
-  
+
   #
   # Set the stereo information for the anomeric carbon, then create subtypes for beta and open forms
   #
-  
+
   #anomericCarbons = {'a': None, 'b': None, 'o': None}
-  
-  
+
+
   stereoAtom = anomericCarbon
   bondDict = {'single': 1,  'double': 2, 'triple': 3, 'aromatic': 1.5, 'dative': 1.0, 'singleplanar': 1.5}  # TODO CHECK THIS!
-  
+
   """)
   # OK to do this because is neutral 'real' chemComp, but otherwise need to start from chemCompVar!!!
   
@@ -365,16 +373,16 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
   bindingOxygens = []
   bindingHydrogens = {}
-  
+
   #
   # Set carbons to search for connected OH groups
   #
-  
+
   if not hasOnlyOpenForm:
     searchCarbons = ringCarbons + otherCarbons
   else:
     searchCarbons = list(refChemComp.findAllChemAtoms(elementSymbol = 'C'))
-    
+
     if 'aldi' in baseGlycoCtCode:
       # Don't do anything on 1 position for these - alditols
       searchCarbons.pop(searchCarbons.index(anomericCarbon))
@@ -394,7 +402,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
           if otherChemAtom.elementSymbol == elementSymbol and otherChemAtom != centralOAtom:
 
-            if not validConnectedAtoms.has_key(elementSymbol):
+            if elementSymbol not in validConnectedAtoms:
               validConnectedAtoms[elementSymbol] = []
             validConnectedAtoms[elementSymbol].append(otherChemAtom)
 
@@ -434,8 +442,8 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
         if not hasOnlyOpenForm and searchCarbon in otherCarbons:
           print("  Warning: setting oxygen %s as binding one (not directly connected to ring)." % (validOHgroups[0].name))
-  
-  
+
+
   #
   # Now create variants...
   #
@@ -447,30 +455,30 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
   bindingOxygenCombs = makePowerSet(bindingOxygens)
   origAnomericCarbon = anomericCarbon
-  
+
   linkAtomsMapForCoordinates = {}
-  
+
   if hasOnlyOpenForm:
     stereoTypes = ('open_1',)
   else:
     stereoTypes = ('stereo_1','stereo_2')
-  
+
 
   for stereoType in stereoTypes:
 
     subType = int(stereoType.split('_')[1])
     anomericCarbon = refChemComp.findFirstChemAtom(name = 'C1', subType = subType)
-    
+
     if not anomericCarbon:
       # Should only happen for stereo_2
-      
+
       creationDict = {'name': 'C1', 'subType': subType}
       for attrName in ('elementSymbol','shortVegaType','waterExchangeable'):
         creationDict[attrName] = getattr(origAnomericCarbon,attrName)
-      
+
       # TODO set chirality to OPPOSITE of whatever the first subtype is!
       anomericCarbon = refChemComp.newChemAtom(**creationDict)
-      
+
       namingSystem = refChemComp.findFirstNamingSystem(name = namingSystemName)
       namingSystem.newAtomSysName(sysName = anomericCarbon.name, atomName = anomericCarbon.name, atomSubType = anomericCarbon.subType)
 
@@ -478,7 +486,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
       for chemBond in origAnomericCarbon.chemBonds:
         otherChemAtom = getOtherAtom(origAnomericCarbon,chemBond)
         refChemComp.newChemBond(chemAtoms = (anomericCarbon,otherChemAtom),bondType = chemBond.bondType, stereochem = chemBond.stereochem)
-  
+
     for anomericBound in range(0,2):
       for i in range(0,len(bindingOxygenCombs)):
         bindingOxygens = bindingOxygenCombs[i]
@@ -511,7 +519,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
           currentChemAtoms.pop(currentChemAtoms.index(anomericOxygen))
           if anomericHydrogen:
             currentChemAtoms.pop(currentChemAtoms.index(anomericHydrogen))
-            
+
           anomericCarbonKey = getChemAtomKey(anomericCarbon)
           linkedAtomKeys.append(anomericCarbonKey)
 
@@ -521,7 +529,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
           linkAtoms[anomericCarbonKey] = linkAtom
           currentChemAtoms.append(linkAtom)
-          
+
           linkAtomsMapForCoordinates[(linkAtom.name,linkAtom.subType)] = anomericOxygen.name
 
         for bindingOxygen in bindingOxygens:
@@ -530,7 +538,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
           if bindingHydrogen and bindingHydrogen in currentChemAtoms:
             currentChemAtoms.pop(currentChemAtoms.index(bindingHydrogen))
-          
+
           bindingOxygenKey = getChemAtomKey(bindingOxygen)
           linkedAtomKeys.append(bindingOxygenKey)
           linkedAtoms[bindingOxygenKey] = bindingOxygen
@@ -539,11 +547,11 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
 
           linkAtoms[bindingOxygenKey] = linkAtom
           currentChemAtoms.append(linkAtom)
-          
+
           linkAtomsMapForCoordinates[(linkAtom.name,linkAtom.subType)] = bindingHydrogen.name
 
         linkedAtomKeys.sort()
-        
+
         # Possible for C1 linkages if not handled (only reducing end)
         if not linkedAtomKeys:
           continue
@@ -551,18 +559,18 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
         #
         # Create linkEnds
         #
-        
+
         linkInfo = []
 
         for linkedAtomKey in linkedAtomKeys:
-        
+
           if linkedAtomKey[0] == 'C1':
             linkCode = "%s_%s" % (linkedAtomKey[0],linkedAtomKey[1])
           else:
             linkCode = linkedAtomKey[0]
-            
+
           linkInfo.append(linkCode)
-        
+
           if not refChemComp.findFirstLinkEnd(linkCode = linkCode):
             boundChemAtom = linkedAtoms[linkedAtomKey]
             boundLinkAtom = linkAtoms[linkedAtomKey]
@@ -572,7 +580,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
         #linking = 'none'
         #descriptor = 'link:%s' % string.join(linkedAtomKeys,',')
         linking = 'link:%s' % string.join(linkInfo,',')
-        
+
         if stereoType.count('stereo'):
           descriptor = '%s:C1' % stereoType
         else:
@@ -586,7 +594,7 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
           #  else:
           #    print "   CA:",ca.name, ca.subType
           #print "   ",linkedAtomKeys
-          
+
           # Create the stereospecific GlycoCt code
           if stereoType == "stereo_1":
             stereoCode = 'a'
@@ -594,15 +602,15 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
             stereoCode = 'b'
           elif stereoType == 'open_1':
             stereoCode = 'o'
-          
+
           varGlycoCtCode = "RES\n1b:%s" % (stereoCode + baseGlycoCtCode[1:])
-          
+
           ccv = refChemComp.newChemCompVar(chemAtoms = currentChemAtoms, linking=linking, descriptor= descriptor, glycoCtCode = varGlycoCtCode, formalCharge=0, isParamagnetic=False, isAromatic=False)
 
   #
   # Make sure the chemElements are accessible
   #
-  
+
   project.currentChemElementStore = project.findFirstChemElementStore()
 
   #
@@ -622,20 +630,20 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
   # Set the PDB/MSD name - NOTE that have to do this for the correct a/b forms! Var specific!!
   #ChemComp.ChemCompSysName(refChemComp,namingSystem = 'PDB',sysName=ccpCode,specificChemCompVars = refChemComp.sortedChemCompVars())
   #ChemComp.ChemCompSysName(refChemComp,namingSystem = 'MSD',sysName=ccpCode,specificChemCompVars = refChemComp.sortedChemCompVars())
-  
+
   #
   # Check chemComp validatity and save
   # TODO make this all options in running script!
   #
-  
+
   refChemComp.checkAllValid()
-  
+
   if saveData:
 
     #
     # Get the original file GUID, if possible, when replacing existing file
     #
-    
+
     if replace:
 
       (existingGuid,existingFile) = findExistingChemCompInfo(chemCompDataDir,refChemComp.ccpCode,refChemComp.molType)
@@ -650,50 +658,50 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
     (tmpFilePath,existingFilePath) = saveTemporaryChemCompOrCoord(refChemComp,testMode = testMode)
 
     # Do a check here? Or don't bother?
-    consolidateTemporaryChemCompOrCoord(refChemComp,tmpFilePath,existingFilePath,testMode=testMode,replace=replace)    
+    consolidateTemporaryChemCompOrCoord(refChemComp,tmpFilePath,existingFilePath,testMode=testMode,replace=replace)
 
   #
   # Get the coordinates as well!
   #
-      
+
   print("  Creating coordinates!!")
-  
+
   chemCompCoord = project.newChemCompCoord(sourceName = coordSystem,molType = refChemComp.molType, ccpCode = refChemComp.ccpCode)
-  
+
   for i in range(len(rawChemComps)):
-  
+
     rawChemComp = rawChemComps[i]
-    
+
     # Identify which one we're dealing with!!
     (dirName,baseName) = os.path.split(rawChemComp.parent.name)
-    
+
     if baseName[0] == 'a':
       stereoDescriptor = "stereo_1:C1"
-      
+
     elif baseName[0] == 'b':
       stereoDescriptor = "stereo_2:C1"
-      
+
     elif baseName[0] == 'o':
       stereoDescriptor = "none"
-    
+
     else:
       print("  Not handling type '%s' for coordinates - ignored." % baseName[0])
       continue
-          
+
     #
     # Mark that generated by this script...
     #
 
     applData = Implementation.AppDataString(application = 'ccpNmr', keyword = 'origin', value = 'makeFullSugar.py')
     chemCompCoord.addApplicationData(applData)
-    
+
     # Don't do any link atoms (yet)... could in principle use atoms that are 'missing'
-    
+
     # TODO: should decompose descriptor here, then check...
     chemCompVars = refChemComp.findAllChemCompVars(descriptor = stereoDescriptor)
-    
+
     chemAtomKeys = []
-    
+
     for ccv in chemCompVars:
       for ca in ccv.sortedChemAtoms():
         caKey = (ca.name,ca.subType)
@@ -703,27 +711,27 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
     #
     # Create a dictionary for the coordinates, based on the 'raw' chemComp from the mol2 file
     #
-          
+
     chemAtomCoordDict = {}
-    
+
     for chemAtomKey in chemAtomKeys:
 
       coords = None
-      
-      if linkAtomsMapForCoordinates.has_key(chemAtomKey):
+
+      if chemAtomKey in linkAtomsMapForCoordinates:
         useChemAtomName = linkAtomsMapForCoordinates[chemAtomKey]
       else:
         useChemAtomName = chemAtomKey[0]
 
       for rawAtom in rawChemComp.atoms:
-      
+
         if rawAtom.name == useChemAtomName:
           coords = (rawAtom.x, rawAtom.y, rawAtom.z)
           break
-          
+
       if not coords:
         print("  Warning: no coordinate for %s, atom key %s." % (coordSystem,chemAtomKey))
-      elif not chemAtomCoordDict.has_key(chemAtomKey):
+      elif chemAtomKey not in chemAtomCoordDict:
         chemAtomCoordDict[chemAtomKey] = coords
       else:
         print("  Error: double atom key %s!" % chemAtomKey)
@@ -731,47 +739,47 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
     #
     # Set the coordinates
     #
-    
+
     chemAtomCoords = {}
 
     #print [ra.name for ra in rawChemComp.atoms]
 
     for chemCompVar in chemCompVars:
-    
+
       #print chemCompVar
 
       chemCompVarCoord = chemCompCoord.findFirstChemCompVarCoord(linking = chemCompVar.linking, descriptor = chemCompVar.descriptor)
 
       if not chemCompVarCoord:
         chemCompVarCoord = chemCompCoord.newChemCompVarCoord(linking = chemCompVar.linking, descriptor = chemCompVar.descriptor)
-        
+
       #print chemCompVarCoord
 
       for ca in chemCompVar.sortedChemAtoms():
-      
+
         caKey = (ca.name,ca.subType)
-        
+
         #print "%-20s" % str(caKey),
-        
-        if chemAtomCoordDict.has_key(caKey):
+
+        if caKey in chemAtomCoordDict:
           coords = chemAtomCoordDict[caKey]
 
           if coords:
-          
-            if chemAtomCoords.has_key(caKey):
+
+            if caKey in chemAtomCoords:
               chemAtomCoord = chemAtomCoords[caKey]
             else:
               chemAtomCoord = chemCompCoord.newChemAtomCoord(name = caKey[0], subType = caKey[1], x = coords[0], y = coords[1], z = coords[2])
               chemAtomCoords[caKey] = chemAtomCoord
-          
+
             if chemAtomCoord not in chemCompVarCoord.chemAtomCoords:
               chemCompVarCoord.addChemAtomCoord(chemAtomCoord)
               #print chemAtomCoord.name, chemAtomCoord.subType,
-        
+
         #print
 
   chemCompCoord.checkAllValid()
-  
+
   if saveData:
 
     if replace:
@@ -786,10 +794,10 @@ def makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode, replace = 
           project.override = False
 
     (tmpFilePath,existingFilePath) = saveTemporaryChemCompOrCoord(chemCompCoord,testMode = testMode)
-    
+
     # Do a check here? Or don't bother? This is blank regeneration from reference data, so should be OK!
-    consolidateTemporaryChemCompOrCoord(chemCompCoord,tmpFilePath,existingFilePath,testMode=testMode,replace=replace)    
-  
+    consolidateTemporaryChemCompOrCoord(chemCompCoord,tmpFilePath,existingFilePath,testMode=testMode,replace=replace)
+
   return refChemComp
 
 if __name__ == '__main__':
@@ -799,13 +807,13 @@ if __name__ == '__main__':
   carboBaseName = sys.argv[1]
   baseGlycoCtCode = sys.argv[2]
   coordSystem = 'euroCarbDb'
-   
+
   if '-create' in sys.argv:
     print("Warning: creating new sugar in edit/ directory!")
     testMode = False
   else:
     print("Creating in test directory!")
     testMode = True
-    
+
   makeFullSugar(carboBaseName,coordSystem,baseGlycoCtCode,testMode,saveData = False)
 

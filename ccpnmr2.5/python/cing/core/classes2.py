@@ -4,9 +4,10 @@ Created on Aug 30, 2010
 @author: jd
 '''
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqVasco import * #@UnusedWildImport
 from cing.core.ROGscore import ROGscore
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqVasco import *  #@UnusedWildImport
+
 
 # pylint: disable=R0903
 class ProjectListMember:
@@ -19,9 +20,9 @@ class ProjectListMember:
         self.project = None
         self.objectPath = None
         self.projectList = None
-        self.rogScore = ROGscore()        
+        self.rogScore = ROGscore()
     # end def
-    
+
     def decriticize(self):
 #        nTdebug("Now in ProjectListMember#%s" % getCallerName())
         # Any list
@@ -30,7 +31,7 @@ class ProjectListMember:
 #            nTdebug("Looking at object: %s [%r]" % (str(obj), repr(obj)))
             obj.decriticize()
         # end for
-    #end def    
+    #end def
 # end class
 
 
@@ -42,7 +43,7 @@ class RestraintList(NTlist, ProjectListMember):
     # use the same spelling through out.
     def __init__(self, name, status = 'keep'):
         NTlist.__init__(self)
-        ProjectListMember.__init__(self)      # Initialized objectPath  
+        ProjectListMember.__init__(self)      # Initialized objectPath
         self.__CLASS__ = 'RestraintList'
         self.name = name        # Name of the list
         self.status = status    # Status of the list; 'keep' indicates storage required
@@ -55,16 +56,16 @@ class RestraintList(NTlist, ProjectListMember):
         self.rmsdAv = 0.0
         self.rmsdSd = 0.0
         self.violAv = 0.0
-        self.violMaxAll = 0.0        
+        self.violMaxAll = 0.0
         self.violCount1 = 0       # Total violations over 0.1 A (1 degree)
         self.violCount3 = 0       # Total violations over 0.3 A (3 degrees)
         self.violCount5 = 0       # Total violations over 0.5 A (5 degrees)
 
 #        self.export2cyana = passThru # Explicite mention. Defaulting to passthru method.
 #        self.export2xplor = passThru
-#        self.path = None        
+#        self.path = None
     #end def
-    
+
     def __str__(self):
         return sprintf('<%s "%s" (%s,%d)>' % (self.__CLASS__, self.name, self.status, len(self)))
     #end def
@@ -75,7 +76,7 @@ class RestraintList(NTlist, ProjectListMember):
         'rename'
         return self.projectList.rename(self.name, newName)
     #end def
-    
+
     def renameToXplorCompatible(self):
         'rename to Xplor Compatible'
         n = len(self.name)
@@ -116,7 +117,7 @@ class RestraintList(NTlist, ProjectListMember):
         NTsort( self, byItem='id', inplace=True)
 
         if not path:
-            # Should have come from ProjectListMember? TODO: check             
+            # Should have come from ProjectListMember? TODO: check
             path = self.objectPath
         if self.SMLhandler.toFile(self, path) != self:
             nTerror('%s.save: failed creating "%s"' % (self.__CLASS__, path))
@@ -142,7 +143,7 @@ class RestraintList(NTlist, ProjectListMember):
         """Return restraint instance with id
         Returns None on error
         """
-        if not self._idDict.has_key(id):
+        if id not in self._idDict:
             nTerror('RestraintList.getId: invalid id (%d)', id)
             return None
         #end if
@@ -192,9 +193,9 @@ class ResonanceList(NTlist, ProjectListMember):
     # NB the unusual init. Differs in that arguments aren't added to the list.
     def __init__(self, name, status = 'keep'):
         NTlist.__init__(self)
-        ProjectListMember.__init__(self)      # Initialized objectPath  
+        ProjectListMember.__init__(self)      # Initialized objectPath
         self.__CLASS__ = 'ResonanceList'
-        self.name = name        # Name of the list        
+        self.name = name        # Name of the list
         self.status = status    # Status of the list; 'keep' indicates storage required
         self.currentId = 0      # Id for each element of list
         self._idDict = {}       # dictionary to look up id in case the list is sorted differently
@@ -275,13 +276,13 @@ class ResonanceList(NTlist, ProjectListMember):
         return self.__str__()
     #end def
     def rename(self, newName):
-        'Please use this rename instead of directly renaming so BMRB ID detection can kick in.'        
+        'Please use this rename instead of directly renaming so BMRB ID detection can kick in.'
         self.name = newName
         # Detect the id from strings like: bmr4020_21.str
-        pattern = re.compile( '^.*(bmr\d+).*$' )
+        pattern = re.compile( r'^.*(bmr\d+).*$' )
         match = pattern.match( self.name )
         if match:
-            bmrb_idStr = match.group(1)[3:]            
+            bmrb_idStr = match.group(1)[3:]
             self.bmrb_id = int(bmrb_idStr)
             if is_bmrb_code(self.bmrb_id):
 #                nTdebug("-0- Autodetected BMRB ID %s from new name: %s" % (self.bmrb_id, self.name))
@@ -314,7 +315,7 @@ class ResonanceList(NTlist, ProjectListMember):
         # sort the list on id number
         NTsort( self, byItem='id', inplace=True)
 
-        if not path: 
+        if not path:
             path = self.objectPath
         if self.SMLhandler.toFile(self, path) != self:
             nTerror('%s.save: failed creating "%s"' % (self.__CLASS__, path))
@@ -340,7 +341,7 @@ class ResonanceList(NTlist, ProjectListMember):
         """Return restraint instance with id
         Returns None on error
         """
-        if not self._idDict.has_key(id):
+        if id not in self._idDict:
             nTerror('ResonanceList.getId: invalid id (%d)', id)
             return None
         #end if
@@ -371,8 +372,7 @@ def getIndexRealResList(resonanceList):
     # end for
     return -1
 # end def
-        
+
 class CoordinateList( NTlist ):
     def __init__(self, *args):
         NTlist.__init__(self, *args)
-            

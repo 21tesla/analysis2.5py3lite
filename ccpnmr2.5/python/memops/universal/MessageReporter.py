@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,82 +52,91 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 
 """
+
+
 def showMessage(message_type, message):
 
-  print(message_type + ': ' + message)
+    print(message_type + ": " + message)
+
 
 def showInputMessage(input_types, message):
 
-  assert len(input_types) == 2
+    assert len(input_types) == 2
 
-  print(message + ':')
-  prompt = 'Choose one of: ' + ', '.join(input_types) + ' [' + input_types[0] + ']: '
+    print(message + ":")
+    prompt = "Choose one of: " + ", ".join(input_types) + " [" + input_types[0] + "]: "
 
-  # danger: n = 0, 1 backwards below because want yes/ok to be 1, no/cancel to be 0
-  n = -1
-  while (n < 0):
-    answer = input(prompt)
-    if (not answer):
-      n = 1
-    else:
-      answer = answer.lower().strip()
-      k = len(answer)
-      if (answer == input_types[0][:k]):
-        n = 1
-      elif (answer == input_types[1][:k]):
-        n = 0
+    # danger: n = 0, 1 backwards below because want yes/ok to be 1, no/cancel to be 0
+    n = -1
+    while n < 0:
+        answer = input(prompt)
+        if not answer:
+            n = 1
+        else:
+            answer = answer.lower().strip()
+            k = len(answer)
+            if answer == input_types[0][:k]:
+                n = 1
+            elif answer == input_types[1][:k]:
+                n = 0
 
-  #print 'showInputMessage: returning', n
-  return n
+    # print 'showInputMessage: returning', n
+    return n
+
 
 class MessageReporter:
+    def showError(self, title, message, *args, **kw):
 
-  def showError(self, title, message, *args, **kw):
- 
-    showMessage('Error', message)
+        showMessage("Error", message)
 
-  def showInfo(self, title, message, *args, **kw):
- 
-    showMessage('Information', message)
+    def showInfo(self, title, message, *args, **kw):
 
-  def showWarning(self, title, message, *args, **kw):
- 
-    showMessage('Warning', message)
+        showMessage("Information", message)
 
-  def showOkCancel(self, title, message, *args, **kw):
- 
-    return showInputMessage(('ok', 'cancel'), message)
+    def showWarning(self, title, message, *args, **kw):
 
-  def showYesNo(self, title, message, *args, **kw):
- 
-    return showInputMessage(('yes', 'no'), message)
+        showMessage("Warning", message)
+
+    def showOkCancel(self, title, message, *args, **kw):
+
+        return showInputMessage(("ok", "cancel"), message)
+
+    def showYesNo(self, title, message, *args, **kw):
+
+        return showInputMessage(("yes", "no"), message)
+
 
 messageReporter = MessageReporter()
 
+
 def showError(title, message, *args, **kw):
- 
-  messageReporter.showError(title, message, *args, **kw)
+
+    messageReporter.showError(title, message, *args, **kw)
+
 
 def showInfo(title, message, *args, **kw):
- 
-  messageReporter.showInfo(title, message, *args, **kw)
+
+    messageReporter.showInfo(title, message, *args, **kw)
+
 
 def showWarning(title, message, *args, **kw):
- 
-  messageReporter.showWarning(title, message, *args, **kw)
+
+    messageReporter.showWarning(title, message, *args, **kw)
+
 
 def showOkCancel(title, message, *args, **kw):
- 
-  return messageReporter.showOkCancel(title, message, *args, **kw)
+
+    return messageReporter.showOkCancel(title, message, *args, **kw)
+
 
 def showYesNo(title, message, *args, **kw):
- 
-  return messageReporter.showYesNo(title, message, *args, **kw)
 
-if (__name__ == '__main__'):
+    return messageReporter.showYesNo(title, message, *args, **kw)
 
-  messageReporter.showError('error title', 'error message')
-  messageReporter.showInfo('info title', 'info message')
-  messageReporter.showWarning('warning title', 'warning message')
-  print(messageReporter.showOkCancel('ok cancel title', 'ok cancel message'))
-  print(messageReporter.showYesNo('yes no title', 'yes no message'))
+
+if __name__ == "__main__":
+    messageReporter.showError("error title", "error message")
+    messageReporter.showInfo("info title", "info message")
+    messageReporter.showWarning("warning title", "warning message")
+    print(messageReporter.showOkCancel("ok cancel title", "ok cancel message"))
+    print(messageReporter.showYesNo("yes no title", "yes no message"))

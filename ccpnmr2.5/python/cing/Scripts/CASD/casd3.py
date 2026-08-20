@@ -5,15 +5,13 @@ Execute like:
 python -u $CINGROOT/python/cing/Scripts/CASD/casd2.py --target CGR26A
 '''
 
+import numpy as np
+
 import cing
 from cing import cingVersion
 from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.disk import NTpath
-from cing.core.classes import ProjectTree
-
-import numpy as np
-import matplotlib.pyplot as plt
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #cing.verbosity = 9
 
@@ -211,7 +209,7 @@ ranges = NTdict(
     StT322  = '36-62',   # cv: 7-63; limited by: Cheshire_231: 38-63, Munich_218, Munich_220: 26-62
     YR313A  = '17-97',   # cv: 1-115; limited by: Cheshire_327: 17-115, Munich_245: 16-111, Seattle_282: 1-97
     HR2876B = '12-105',  # cv: 12-107; limited by: Munich_244
-    HR8254A = '553-612', # cv: 551-621; limited by: Utrecht_269: 553-613, Munich_264, Munich_265: 551-612 
+    HR8254A = '553-612', # cv: 551-621; limited by: Utrecht_269: 553-613, Munich_264, Munich_265: 551-612
     HR2876C = '17-93',   # cv: 17-95; limited by: Utrecht_287
 )
 ranges.keysformat()
@@ -227,21 +225,21 @@ class Entry( NTdict ):
         self.comment     = ''
         self.cingSummary = None
         self.project     = None
-        
+
         for key in entryPars + cingPars:
             self[key] = None
         self.idx = 0
 
         self.update(kwds)
     #end def
-    
+
     def path(self, *args):
         p = self.dataPath / self.entryName[1:3] / self.entryName / self.entryName + '.cing'
         for a in args:
             p = p / a
         return p
     #end def
-    
+
     def readProject(self):
         path = self.path()
         if not path.exists():
@@ -251,7 +249,7 @@ class Entry( NTdict ):
         self.project = cing.Project.open(path,'old')
         return self.project
     #end def
-        
+
     def readSummary(self, fix=False):
         path = self.path(self.entryName, 'Cing', 'CingSummaryDict.xml')
         if not path.exists():
@@ -259,7 +257,7 @@ class Entry( NTdict ):
             return None
         nTmessage( '==> reading summary from %s', path )
         self.cingSummary = xML2obj(path)
-        
+
         if fix:
             rog = NTlist( 0, 0, 0 ) # Counts for red, orange, green.
             for resname, rogScore in self.cingSummary.CING_residueROG:
@@ -273,11 +271,11 @@ class Entry( NTdict ):
             #end for
             total = reduce(lambda x, y: x+y+0.0, rog) # total expressed as a float because of 0.0
             print(rog, total)
-            for i, _x in enumerate(rog): 
+            for i, _x in enumerate(rog):
                 rog[i] = rog[i]*100.0/total
             self.cingSummary.cing_red    = round(rog[0],1)
             self.cingSummary.cing_orange = round(rog[1],1)
-            self.cingSummary.cing_green  = round(rog[2],1)   
+            self.cingSummary.cing_green  = round(rog[2],1)
         #end if
         #copy the data
         for par in cingPars:
@@ -285,11 +283,11 @@ class Entry( NTdict ):
                 self[par] = self.cingSummary[par]
         return self.cingSummary
     #end def
-    
+
     def __str__(self):
         return '<Entry %s; Target: %s>' % (self.entryName, self.target)
     #end def
-    
+
     def format(self):
         s = "----- " + str(self) + """ -----
 group:           %(group)s
@@ -321,18 +319,18 @@ WI_janin:        %(WI_janin)s
 """ % self
         return s
     #end def
-    
+
     def toJson(self, path):
         pass
     #end def
-    
+
     def toXML(self, depth = 0, stream = sys.stdout, indent = '\t', lineEnd = '\n'):
         nTindent(depth, stream, indent)
         fprintf(stream, "<Entry>")
         fprintf(stream, lineEnd)
 
         for key in collumns + entryPars + cingPars:
-            if self.has_key(key):
+            if key in self:
                 value = self[key]
                 nTindent(depth+1, stream, indent)
                 fprintf(stream, "<key name=%s>", quote(key))
@@ -341,7 +339,7 @@ WI_janin:        %(WI_janin)s
                 nTindent(depth+1, stream, indent)
                 fprintf(stream, "</key>")
                 fprintf(stream, lineEnd)
-            #end if    
+            #end if
         #end for
         nTindent(depth, stream, indent)
         fprintf(stream, "</Entry>")
@@ -357,7 +355,7 @@ class XMLEntryHandler( XMLhandler ):
 
     def handle(self, node):
         attrs = self.handleDictElements(node)
-        if attrs == None: 
+        if attrs == None:
             return None
         result = Entry(dataPath=dataPath)
         result.update(attrs)
@@ -381,20 +379,20 @@ class ResultsList(NTlist):
         self.methods  = NTlist()
         self.ranges   = ranges
     #end def
-    
+
     def append( self, entry ):
         NTlist.append(self, entry)
         # make some mappings to find them back
         self.byKey[entry.idx] = entry
         self.byKey[(entry.target,entry.group)] = entry
         self.byKey[entry.entryName] = entry
-        
+
         self.byTarget.setdefault(entry.target, NTlist())
         self.byTarget[entry.target].append(entry)
-        
+
         self.byGroup.setdefault(entry.group, NTlist())
         self.byGroup[entry.group].append(entry)
-                
+
         self.byMethod.setdefault(entry.method, NTlist())
         self.byMethod[entry.method].append(entry)
 
@@ -405,7 +403,7 @@ class ResultsList(NTlist):
         if entry.method not in self.methods:
             self.methods.append(entry.method)
     #end def
-    
+
     def allEntries(self, byTarget=False, byGroup=False):
         if byTarget:
             for target in self.byTarget.values():
@@ -419,12 +417,12 @@ class ResultsList(NTlist):
             for entry in self:
                 yield entry
     #end def
-    
+
     def readCingSummaries(self):
         for entry in self:
             entry.readSummary()
     #end def
-    
+
     def save(self, path=None):
         if path == None:
             path = self.dataPath / 'results.xml'
@@ -434,7 +432,7 @@ class ResultsList(NTlist):
         print('==> Saving %d entries to %s' % (len(tmp), path))
         obj2XML(tmp, path=path)
     #end def
-    
+
     @staticmethod
     def restore(path=None):
         if path == None:
@@ -442,24 +440,24 @@ class ResultsList(NTlist):
         tmp = xML2obj(path)
         if not tmp:
             return 1
-        
-        results = ResultsList(dataPath=path[:-1])       
+
+        results = ResultsList(dataPath=path[:-1])
         for entry in tmp:
             # replace keyword
-            if entry.has_key('programType'):
+            if 'programType' in entry:
                 entry['method'] = entry['programType']
                 del entry['programType']
             if entry['method'] == 'None' and entry['group'] == 'Org':
                 entry['method'] = 'Original'
-                
-            results.append(entry)       
+
+            results.append(entry)
         return results
     #end def
-    
+
     def __str__(self):
         return '<ResultsList (N:%d,groups:%d,targets:%d)>' % (len(self),len(self.groups),len(self.targets))
     #end def
-    
+
     def format(self):
         s = """=============== ResultsList ===============
 dataPath:   %s
@@ -470,7 +468,7 @@ methods:    %s
 """ % (self.dataPath, len(self), self.groups.format(), self.targets.format(), self.methods.format())
         return s
     #end def
-    
+
     def printAll(self, target=None):
         print(self.format())
         if target == None:
@@ -482,7 +480,7 @@ methods:    %s
             for entry in self.byTarget[t]:
                 print(entry.format())
     #end def
-    
+
     def calculatePairWiseRmsd( self, entry1, entry2, ranges ):
         """Calculate pairwise rmsd between mol1 and mol2
            Optionally use ranges for the fitting
@@ -492,18 +490,18 @@ methods:    %s
             return None, None, None, None
         else:
             mol1 = entry1.project.molecule
-        
+
         if not entry2 or not entry2.project:
             nTerror('ResultsList.calculatePairWiseRmsd: undefined entry2')
             return None, None, None, None
         else:
             mol2 = entry2.project.molecule
- 
+
         #Use ranges routines to define fitAtoms ed
         fitResidues1 = mol1.setResiduesFromRanges(ranges)
         fitAtoms1 = mol1.selectFitAtoms( fitResidues1, backboneOnly=True, includeProtons = False )
         mol1.ensemble.setFitCoordinates( fitAtoms1 )
-        fitResidues2 = mol2.setResiduesFromRanges(ranges)        
+        fitResidues2 = mol2.setResiduesFromRanges(ranges)
         fitAtoms2 = mol2.selectFitAtoms( fitResidues2, backboneOnly=True, includeProtons = False )
         mol2.ensemble.setFitCoordinates( fitAtoms2 )
     #    mol2.superpose( ranges )
@@ -558,12 +556,12 @@ methods:    %s
                         pairwise2.average2( fmt='%.2f +- %.2f'),
                         pairwise12.average2(fmt='%.2f +- %.2f') )
     #end def
-    
+
     def processTarget( self, target):
         "Calculate rmsd's for target"
         if target not in self.targets:
             nTerror('ResultsList.processTarget: invalid target')
-            return True        
+            return True
         for e2 in results.byTarget[target]:
             self.calcRmsdToTarget(e2)
         #end for
@@ -575,12 +573,12 @@ methods:    %s
             e1.readProject()
         ranges = e1.project.molecule.rangesByCv()
         print('%s: %s' % (e1, ranges))
-        
+
         for e in self.byTarget[target][1:]:
             mol,res,atms = getFitted(e,ranges)
             print('%s: %d-%d' % (e, atms[0].residue.resNum, atms[-1].residue.resNum))
     #end def
-    
+
     def getValues(self, target, par):
         """get values of par for target
         return numpy array
@@ -588,16 +586,16 @@ methods:    %s
         l = len(self.byTarget[target])
         x = np.zeros(l)
         values = np.zeros(l)
-        
+
         methodDict = {}
         for i,g in enumerate(self.methods):
             methodDict[g] = float(i+1)
-        
+
         for i,e in enumerate(self.byTarget[target]):
             # map group onto index
             x[i] = methodDict[e.method]
             methodDict[e.method]+= 0.1
-            
+
             _tmp = NTvalue(0.0, 0.0)
             #print par, type(e[par]), type(_tmp)
             if par in e:
@@ -607,21 +605,21 @@ methods:    %s
                     values[i] = float(e[par])
         #end for
         return x,values
-    #end def    
-    
+    #end def
+
     def calcRmsdToTarget( self, entry):
         "Calculate rmsd of entry to target"
         target = entry.target
         if target not in self.targets:
             nTerror('ResultsList.CalcRmsdToTarget: invalid target')
-            return True        
+            return True
         if (target,'Org') not in self.byKey:
             nTerror('ResultsList.CalcRmsdToTarget: cannot find original')
             return True
         e1 = self.byKey[(target,'Org')]
         if e1 == entry:
             entry.rmsdToTarget = NTvalue(0.0,0.0,fmt='%.2f +- %.2f')
-        else:        
+        else:
             if e1.project == None:
                 e1.readProject()
             if target in self.ranges:
@@ -629,12 +627,12 @@ methods:    %s
             else:
                 e1.ranges = e1.project.molecule.rangesByCv()
             e1.nmodels = len(e1.project.molecule.ensemble)
-            
+
             if entry.project == None:
                 entry.readProject()
-            entry.ranges = e1.ranges        
+            entry.ranges = e1.ranges
             entry.nmodels = len(entry.project.molecule.ensemble)
-            
+
             _tmp,e1.rmsd,entry.rmsd,entry.rmsdToTarget = self.calculatePairWiseRmsd(e1, entry, e1.ranges)
         #endif
         print('==> %s rmsdToTarget: %s ranges: %s' % (entry, entry.rmsdToTarget, entry.ranges))
@@ -646,7 +644,7 @@ methods:    %s
 def parseEntryInfo():
     #initiate a results dictionary
     results = ResultsList(dataPath)
-    
+
     # fill the results dictionary
     entryIdx = 1
     for line in AwkLikeS(EntryInfo, commentString='#', minNF=5):
@@ -665,7 +663,7 @@ def parseEntryInfo():
             entryIdx += 1
             nTwarning('parseEntryInfo: assigned idx %d to entry "%s"', entry.idx, entry.entryName)
         #end if
-        
+
         results.append(entry)
     #end for
     return results
@@ -680,7 +678,7 @@ def getFitted( entry, ranges ):
     return mol, res, atms
 #end def
 
-    
+
 def reorder( results ):
     "Reorder the entry to follow new order based on methods"
     methods = 'Original CYANA UNIO ARIA ASDP-CNS Ponderosa I-TASSER Cheshire Cheshire-YAPP autonoe-Rosetta-alpha ASDP-Rosetta CS-HM-DP-Rosetta CS-HM-Rosetta CS-DP-Rosetta CS-Rosetta BE-metadynamics'.split()

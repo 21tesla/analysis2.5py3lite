@@ -1,7 +1,7 @@
 """
 ======================COPYRIGHT/LICENSE START==========================
 
-GromosFormat.py: Contains functions specific to GROMOS conversions 
+GromosFormat.py: Contains functions specific to GROMOS conversions
 
 Copyright (C) 2012 Wim Vranken (Vrije Universiteit Brussel)
 
@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,60 +52,58 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-#import copy
+# import copy
 
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
-from ccp.format.general.Constants import defaultSeqInsertCode
 
 class GromosFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'gromos'
-    self.IOkeywords = IOkeywords
+        self.format = "gromos"
+        self.IOkeywords = IOkeywords
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getCoordinates = self.getCoordinatesGeneric
-    #self.createCoordinateFile = self.createCoordinateFileGeneric 
+    def setGenericImports(self):
 
-  #
-  # Deviations from generic import stuff
-  #
+        self.getSequence = self.getSequenceGeneric
 
-  def getCoordinatesSetFormatSpecificReadKeywds(self):
-    
-    readKeywds = {}
-    
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
+        self.getCoordinates = self.getCoordinatesGeneric
+        # self.createCoordinateFile = self.createCoordinateFileGeneric
 
-  def getSequenceSetFormatSpecificReadKeywds(self):  
-   
-    readKeywds = {}
+    #
+    # Deviations from generic import stuff
+    #
 
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
-  
-  def readCoordinatesInitSpecific(self):
-  
-    # Or do with keywords and remove again from DataFormat.py?
-    self.trackAtomSerials = True
-  
-  #
-  # Functions different to default functions in DataFormat
-  #
-  """
+    def getCoordinatesSetFormatSpecificReadKeywds(self):
+
+        readKeywds = {}
+
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
+
+        return readKeywds
+
+    def getSequenceSetFormatSpecificReadKeywds(self):
+
+        readKeywds = {}
+
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
+
+        return readKeywds
+
+    def readCoordinatesInitSpecific(self):
+
+        # Or do with keywords and remove again from DataFormat.py?
+        self.trackAtomSerials = True
+
+    #
+    # Functions different to default functions in DataFormat
+    #
+    """
   def setRawCoordinate(self):
   
-    if not self.coordinateFile.modelCoordinates.has_key(self.modelId):
+    if self.modelId not in self.coordinateFile.modelCoordinates:
 
       self.coordinateFile.modelCoordinates[self.modelId] = []
     
@@ -161,7 +159,6 @@ class GromosFormat(DataFormat):
     self.coordinateFile.modelCoordinates[self.modelId].append(modelCoordinate)
   """
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getMultiChainFormatPresetChainMapping(chainList)
-    
+    def getPresetChainMapping(self, chainList):
+
+        return self.getMultiChainFormatPresetChainMapping(chainList)

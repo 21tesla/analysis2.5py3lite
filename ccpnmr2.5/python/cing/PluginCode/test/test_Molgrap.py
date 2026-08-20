@@ -2,22 +2,22 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_Molgrap.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing import cingPythonCingDir
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import rmdir
-from cing.PluginCode.required.reqMolgrap import MOLGRAP_STR
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import shutil
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp, cingPythonCingDir
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.disk import rmdir
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqMolgrap import MOLGRAP_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.molgrap import Molgrap #@UnusedImport Keep to indicate dep and proper handeling.
+    pass  #@UnusedImport Keep to indicate dep and proper handeling.
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( MOLGRAP_STR, getCallerFileName() ))
     raise SkipTest(MOLGRAP_STR)
@@ -52,7 +52,7 @@ class AllChecks(TestCase):
         self.assertFalse(project.molecule.export2gif(pathGif, project=project))
         self.assertTrue(os.path.exists(pathGif))
         pathMolGifPinup = pathGif[:-4] + '_pin.gif'
-        self.assertTrue(os.path.exists(pathMolGifPinup))                
+        self.assertTrue(os.path.exists(pathMolGifPinup))
         pathGifDefault =  os.path.join( cingPythonCingDir, 'PluginCode', DATA_STR, 'UnknownImage.gif' )
         self.assertFalse(os.path.getsize(pathGif) == os.path.getsize(pathGifDefault))
         nTmessage("Created new molecular imagery at: %s" % self.cingDirTmpTest)

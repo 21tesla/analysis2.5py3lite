@@ -1,24 +1,19 @@
+import tarfile
+from shutil import copytree, rmtree
+
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.forkoff import do_cmd
-from cing.NRG.CasdNmrMassageCcpnProject import dataDir
-from cing.NRG.CasdNmrMassageCcpnProject import mapEntrycodeNew2EntrycodeAndCity
-from cing.NRG.CasdNmrMassageCcpnProject import programHoH
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
+from cing.NRG.CasdNmrMassageCcpnProject import dataDir, mapEntrycodeNew2EntrycodeAndCity, programHoH
 from cing.NRG.casdNmrPresetDict import presetDict
 from cing.Scripts.FC.convertCyana2Ccpn import importCyanaCoorAndRes
 from cing.Scripts.FC.convertXplor2Ccpn import importXplorCoorAndRes
-from cing.Scripts.FC.utils import importPseudoPdb
-from cing.Scripts.FC.utils import swapCheck
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from memops.general.Io import loadProject
-from memops.general.Io import saveProject
-from shutil import copytree
-from shutil import rmtree
-import tkinter
-import tarfile
+from cing.Scripts.FC.utils import importPseudoPdb, swapCheck
+from memops.general.Io import loadProject, saveProject
+
 
 def annotateEntry(entryCodeNew, *extraArgList):
     nTmessage(header)
@@ -137,11 +132,11 @@ def annotateEntry(entryCodeNew, *extraArgList):
     if replaceCoordinates or replaceRestraints:
         if programId == CYANA:
             importCyanaCoorAndRes(ccpnProject, inputAuthorDir, guiRoot,
-                replaceCoordinates=replaceCoordinates, replaceRestraints=replaceRestraints, 
+                replaceCoordinates=replaceCoordinates, replaceRestraints=replaceRestraints,
                 allowPopups=allowPopups, minimalPrompts=minimalPrompts, verbose=verbose, **presets)
         elif programId == XPLOR:
             importXplorCoorAndRes(ccpnProject, inputAuthorDir, guiRoot,
-                replaceCoordinates=replaceCoordinates, replaceRestraints=replaceRestraints, 
+                replaceCoordinates=replaceCoordinates, replaceRestraints=replaceRestraints,
                 allowPopups=allowPopups, minimalPrompts=minimalPrompts, verbose=verbose, **presets)
         elif programId == PDB:
             importPseudoPdb(ccpnProject, inputAuthorDir, guiRoot,

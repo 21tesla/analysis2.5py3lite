@@ -6,21 +6,16 @@ Molmol fails to compile on Mountain Lion OSX as of 2012-08-08 on development mac
 Actually, this works again with XQuartz installed and symbolic links from
 /usr/X11R6 to /opt/X11R6 etc.  
 """
-from cing import cingDirMolmolScripts
-from cing import cingDirTmp
-from cing import cingPythonCingDir
-from cing import cingRoot
-from cing import issueListUrl
+from glob import glob
+
+from cing import cingDirMolmolScripts, cingDirTmp, cingPythonCingDir, cingRoot, issueListUrl
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Molecule
+from cing.core.parameters import cingPaths, directories
 from cing.Libs import disk
 from cing.Libs.Imagery import convertImageMagick
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.TypeChecking import check_string
-from cing.Libs.TypeChecking import check_type
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Molecule
-from cing.core.parameters import cingPaths
-from cing.core.parameters import directories
-from glob import glob
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.TypeChecking import check_string, check_type
 
 if True: # block
     useModule = True
@@ -64,7 +59,7 @@ class Molgrap(NTdict):
             nTwarning('runMolgrap: no models for "%s"', molecule)
             return
 
-        if not os.environ.has_key('MOLMOLHOME'):
+        if 'MOLMOLHOME' not in os.environ:
             nTmessage('MOLMOLHOME not defined by user, using a temporary one')
             os.putenv('MOLMOLHOME', self.projectDirTmp)
 
@@ -259,7 +254,7 @@ class Molgrap(NTdict):
         Substitute from a dictionary the content of a file writting to another
         """
 
-        output_text = open(file_name_in, 'r').read()
+        output_text = open(file_name_in).read()
         for i in range(len(org)):
             #print "DEBUG: Doing replace of: org[i]"
             output_text = output_text.replace(org[i], new[i])
@@ -289,7 +284,7 @@ def export2gif(molecule, pathMolGif, project = None):
     if convertImageMagick(pathMolGif, pathMolGifPinup, options='-geometry 114x80'):
         nTerror("convertImageMagick failed for: " + pathMolGifPinup)
     # end if
-    
+
     if failed:
         return True
     return None

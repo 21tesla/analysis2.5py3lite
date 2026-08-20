@@ -2,14 +2,14 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test2_ccpn.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.classes import Project
-from shutil import move #@UnusedImport
-from unittest import TestCase
 import shutil
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

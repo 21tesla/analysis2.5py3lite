@@ -1,7 +1,8 @@
-from cing import osType
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
 import platform
+
+from cing import osType
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
 
 #-----------------------------------------------------------------------------
 # Global program parameters (non-user)
@@ -148,19 +149,19 @@ plotParameters = NTdict(
 plotParameters.PHI     = plotParameters.dihedralDefault.copy()
 plotParameters.PHI.min = -180
 plotParameters.PHI.max =  180
-plotParameters.PHI.xlabelLat = '$\phi 1$' # Latex
+plotParameters.PHI.xlabelLat = r'$\phi 1$' # Latex
 
 plotParameters.PSI  = plotParameters.PHI.copy()
-plotParameters.PHI.xlabelLat = '$\psi 1$' # Latex
+plotParameters.PHI.xlabelLat = r'$\psi 1$' # Latex
 
 plotParameters.CHI1 = plotParameters.dihedralDefault.copy()
-plotParameters.CHI1.xlabelLat = '$\chi 1$'
+plotParameters.CHI1.xlabelLat = r'$\chi 1$'
 
 plotParameters.CHI2 = plotParameters.dihedralDefault.copy()
-plotParameters.CHI2.xlabelLat = '$\chi 2$'
+plotParameters.CHI2.xlabelLat = r'$\chi 2$'
 
 plotParameters.CHI3 = plotParameters.dihedralDefault.copy()
-plotParameters.CHI3.xlabelLat = '$\chi 3$'
+plotParameters.CHI3.xlabelLat = r'$\chi 3$'
 
 plotParameters.Cb4N = plotParameters.dihedralDefault.copy()
 plotParameters.Cb4N.xlabelLat = '$Cb4N$'

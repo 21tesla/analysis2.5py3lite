@@ -8,8 +8,9 @@ Execute like:
 python -u $C/python/cing/Scripts/vCing/stripVc.py
 
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
 from shutil import rmtree
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 homeDir = '/Users/jd'
 #homeDir = '/home/i' # DEFAULT: '/home/i'
@@ -37,14 +38,14 @@ def stripVc(deletePersonal = 0, deleteTmp = 1, deleteUsers = 1 ):
     Remove resources that may be personal of nature. Such as Dropbox, commercial programs and ssh keys.
     Return True on error like not removing resources.
     '''
-    
+
     deleteList = []
     if deletePersonal:
         deleteList += deleteListHomeI
     # end if
     if deleteTmp:
         deleteList += deleteListTmp
-    # end if    
+    # end if
     nTmessage("Will remove: %s" % deleteList)
     answer = None
     while answer not in ["y","n"]:

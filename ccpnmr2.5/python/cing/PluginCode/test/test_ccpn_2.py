@@ -3,20 +3,24 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_ccpn_2.py
 """
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import isRootDirectory
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing.Libs.disk import isRootDirectory
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
-    from cing.PluginCode.Ccpn import getProjectNameInFileName
-    from cing.PluginCode.Ccpn import getRestraintBoundList
-    from cing.PluginCode.Ccpn import modResDescriptorForTerminii
-    from cing.PluginCode.Ccpn import patchCcpnResDescriptor
+    from cing.PluginCode.Ccpn import (
+        Ccpn,  #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+        getProjectNameInFileName,
+        getRestraintBoundList,
+        modResDescriptorForTerminii,
+        patchCcpnResDescriptor,
+    )
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -51,7 +55,7 @@ class AllChecks(TestCase):
                  (5.0, - 5.0, None, None, Ccpn.RESTRAINT_IDX_DIHEDRAL), # Is a range of 350 degrees.
                  (None, None, - 10.0, 20.0, Ccpn.RESTRAINT_IDX_DIHEDRAL), # Is a range of 20 degrees.
                  (None, None, 350.0, 20.0, Ccpn.RESTRAINT_IDX_DIHEDRAL), # Same.
-                 (None, None, 123.0, 200.0, Ccpn.RESTRAINT_IDX_DIHEDRAL), 
+                 (None, None, 123.0, 200.0, Ccpn.RESTRAINT_IDX_DIHEDRAL),
                  # Give a reasonable warning and sets to full circle by setting to (0,-SMALL_FLOAT_FOR_DIHEDRAL_ANGLES)
                    ]
         cingRlist = [

@@ -2,14 +2,15 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_pdb.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.utils import printSequenceFromPdbFile
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.utils import printSequenceFromPdbFile
+
 
 class AllChecks(TestCase):
 

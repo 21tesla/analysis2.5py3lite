@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,190 +38,216 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import os
 
-import tkinter
-
+from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.api.Implementation import Url
-
-from memops.universal.Io import joinPath, normalisePath
-
 from memops.gui.Button import Button
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.Entry import Entry
+from memops.gui.FileSelectPopup import FileSelectPopup
 from memops.gui.IntEntry import IntEntry
 from memops.gui.Label import Label
-from memops.gui.FileSelectPopup import FileSelectPopup
-from memops.gui.MessageReporter import showYesNo, showWarning
+from memops.gui.MessageReporter import showWarning, showYesNo
 from memops.gui.RadioButtons import RadioButtons
-
-from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.universal.Io import joinPath, normalisePath
 
 # for this to work parent needs defined setBackupOn(), setBackupOff() and doBackup()
 
+
 class BackupProjectPopup(BasePopup):
+    """
+    **Create Automatic Project Backup**
 
-  """
-  **Create Automatic Project Backup**
+    The purpose of this dialog is to allow the user to create backups
+    of their project automatically.  The XML files for the backup go
+    into a separate directory from the project itself.  If the project
+    directory is called PROJECTDIR then the default for the backup
+    directory is PROJECTDIR_backup, although that can be changed to
+    something else in this dialog.
 
-  The purpose of this dialog is to allow the user to create backups
-  of their project automatically.  The XML files for the backup go
-  into a separate directory from the project itself.  If the project
-  directory is called PROJECTDIR then the default for the backup
-  directory is PROJECTDIR_backup, although that can be changed to
-  something else in this dialog.
+    Other than the backup directory, the user can specify the frequency
+    of the backup, in minutes.
 
-  Other than the backup directory, the user can specify the frequency
-  of the backup, in minutes.
+    The "Apply Auto Settings" does not have to be applied if the user
+    has changed the on/off setting or if the user has changed the
+    Auto-backup frequency and entered a carriage return.
 
-  The "Apply Auto Settings" does not have to be applied if the user
-  has changed the on/off setting or if the user has changed the
-  Auto-backup frequency and entered a carriage return.
+    The "Do Immediate Backup" is in case the user wants to do a backup
+    then and there.
 
-  The "Do Immediate Backup" is in case the user wants to do a backup
-  then and there.
+    There is no backup for the backup.
+    """
 
-  There is no backup for the backup.
-  """
+    on_off_entries = ["on", "off"]
 
-  on_off_entries = ['on', 'off']
+    def __init__(self, parent, help_msg="", help_url="", *args, **kw):
 
-  def __init__(self, parent, help_msg = '', help_url = '', *args, **kw):
+        self.help_msg = help_msg
+        self.help_url = help_url
 
-    self.help_msg = help_msg
-    self.help_url = help_url
+        BasePopup.__init__(self, parent=parent, title="Project : Backup", **kw)
 
-    BasePopup.__init__(self, parent=parent, title='Project : Backup', **kw)
+    def body(self, guiFrame):
 
-  def body(self, guiFrame):
+        self.geometry("500x130")
 
-    self.geometry('500x130')
+        guiFrame.grid_columnconfigure(2, weight=1)
+        guiFrame.grid_rowconfigure(3, weight=1)
 
-    guiFrame.grid_columnconfigure(2,weight=1)
-    guiFrame.grid_rowconfigure(3,weight=1)
+        self.alarm_id = None
 
-    self.alarm_id = None
+        row = 0
+        tipText = "Browse for the directory into which project backups will be made"
+        button = Button(
+            guiFrame, text="Directory:", command=self.selectDir, grid=(row, 0), tipText=tipText, sticky="ew"
+        )
 
-    row = 0
-    tipText = 'Browse for the directory into which project backups will be made'
-    button = Button(guiFrame, text='Directory:', command=self.selectDir,
-                    grid=(row, 0), tipText=tipText, sticky='ew')
+        repository = self.project.findFirstRepository(name="backup")
+        if repository:
+            text = repository.url.path
+        else:  # this is trouble, but should not happen
+            text = ""
 
-    repository = self.project.findFirstRepository(name='backup')
-    if repository:
-      text = repository.url.path
-    else: # this is trouble, but should not happen
-      text = ''
-    
-    tipText = 'Enter the name of the directory into which project backups will be made' 
-    self.dir_entry = Entry(guiFrame, text=text, tipText=tipText,
-                           width=40, returnCallback=self.applyAuto,
-               grid=(row, 1), gridSpan=(1,2), sticky='ew')
-               
-    row += 1
-    label = Label(guiFrame, text='Auto-backup:', grid=(row, 0))
-    if self.analysisProject.doAutoBackup:
-      ind = 0
-    else:
-      ind = 1
-    
-    tipTexts = ['Toggle the timed automatic backup on',
-                'Toggle the timed automatic backup off']  
-    self.on_off_buttons = RadioButtons(guiFrame, entries=self.on_off_entries,
-                                       tipTexts=tipTexts, select_callback=self.applyAuto,
-                        selected_index=ind, grid=(row,1))
- 
-    row +=1
-    tipText = 'The number of minutes to wait before automatic project backups'
-    label = Label(guiFrame, text='Auto-backup frequency:',
-                  grid=(row,0))
-                   
-    self.freq_entry = IntEntry(guiFrame, text=self.analysisProject.autoBackupFreq,
-                               returnCallback=self.applyAuto, tipText=tipText)
-    self.freq_entry.grid(row=row, column=1)
-    
-    label = Label(guiFrame, text=' (minutes)', grid=(row,2))
- 
-    row = row + 1
-    # Blank for expansion
+        tipText = "Enter the name of the directory into which project backups will be made"
+        self.dir_entry = Entry(
+            guiFrame,
+            text=text,
+            tipText=tipText,
+            width=40,
+            returnCallback=self.applyAuto,
+            grid=(row, 1),
+            gridSpan=(1, 2),
+            sticky="ew",
+        )
 
-    row = row + 1
-    texts = [ 'Apply Auto Settings', 'Do Immediate Backup' ]
-    commands = [ self.applyAuto, self.applyManual ]
-    tipTexts = ['Commit the specified settings and commence automated CCPN project backup',
-                'Backup the CCPN project now, into the specified backup directory']
-    buttons = UtilityButtonList(guiFrame, texts=texts, commands=commands,
-                                doClone=False, helpMsg=self.help_msg,
-                                helpUrl=self.help_url, tipTexts=tipTexts,
-                                grid=(row, 0), gridSpan=(1,3), sticky='nsew')
+        row += 1
+        label = Label(guiFrame, text="Auto-backup:", grid=(row, 0))
+        if self.analysisProject.doAutoBackup:
+            ind = 0
+        else:
+            ind = 1
 
-  def selectDir(self):
+        tipTexts = ["Toggle the timed automatic backup on", "Toggle the timed automatic backup off"]
+        self.on_off_buttons = RadioButtons(
+            guiFrame,
+            entries=self.on_off_entries,
+            tipTexts=tipTexts,
+            select_callback=self.applyAuto,
+            selected_index=ind,
+            grid=(row, 1),
+        )
 
-    popup = FileSelectPopup(self, show_file=False)
-    dir = popup.getDirectory()
-    popup.destroy()
+        row += 1
+        tipText = "The number of minutes to wait before automatic project backups"
+        label = Label(guiFrame, text="Auto-backup frequency:", grid=(row, 0))
 
-    if (dir):
-      self.dir_entry.set(dir)
-      self.setDir()
+        self.freq_entry = IntEntry(
+            guiFrame, text=self.analysisProject.autoBackupFreq, returnCallback=self.applyAuto, tipText=tipText
+        )
+        self.freq_entry.grid(row=row, column=1)
 
-  def setDir(self):
+        label = Label(guiFrame, text=" (minutes)", grid=(row, 2))
 
-    directory = self.dir_entry.get()
-    if not directory:
-      showWarning('No directory', 'No directory specified, not setting backup directory', parent=self)
-      return
+        row = row + 1
+        # Blank for expansion
 
-    if not os.path.abspath(directory):
-      directory = joinPath(os.getcwd(), directory)
+        row = row + 1
+        texts = ["Apply Auto Settings", "Do Immediate Backup"]
+        commands = [self.applyAuto, self.applyManual]
+        tipTexts = [
+            "Commit the specified settings and commence automated CCPN project backup",
+            "Backup the CCPN project now, into the specified backup directory",
+        ]
+        buttons = UtilityButtonList(
+            guiFrame,
+            texts=texts,
+            commands=commands,
+            doClone=False,
+            helpMsg=self.help_msg,
+            helpUrl=self.help_url,
+            tipTexts=tipTexts,
+            grid=(row, 0),
+            gridSpan=(1, 3),
+            sticky="nsew",
+        )
 
-    if os.path.exists(directory):
-      if not os.path.isdir(directory):
-        showWarning('Path not directory', 'Path "%s" exists but is not a directory' % directory, parent=self)
-        return
-    else:
-      if showYesNo('Directory does not exist', 'Directory "%s" does not exist, should it be created?' % directory, parent=self):
-        os.mkdir(directory)
-      else:
-        showWarning('Directory not created', 'Directory "%s" not created so not setting backup directory' % directory, parent=self)
-        return
+    def selectDir(self):
 
-    repository = self.project.findFirstRepository(name='backup')
-    if not repository:
-      showWarning('No backup repository', 'No backup repository found (something wrong somewhere)', parent=self)
-      return
+        popup = FileSelectPopup(self, show_file=False)
+        dir = popup.getDirectory()
+        popup.destroy()
 
-    url = repository.url
-    if url.path != directory:
-      repository.url = Url(path=normalisePath(directory))
+        if dir:
+            self.dir_entry.set(dir)
+            self.setDir()
 
-  def setFreq(self):
+    def setDir(self):
 
-    freq = self.freq_entry.get()
+        directory = self.dir_entry.get()
+        if not directory:
+            showWarning("No directory", "No directory specified, not setting backup directory", parent=self)
+            return
 
-    if (freq is None):
-      freq = 0
+        if not os.path.abspath(directory):
+            directory = joinPath(os.getcwd(), directory)
 
-    self.analysisProject.autoBackupFreq = freq
+        if os.path.exists(directory):
+            if not os.path.isdir(directory):
+                showWarning("Path not directory", 'Path "%s" exists but is not a directory' % directory, parent=self)
+                return
+        else:
+            if showYesNo(
+                "Directory does not exist",
+                'Directory "%s" does not exist, should it be created?' % directory,
+                parent=self,
+            ):
+                os.mkdir(directory)
+            else:
+                showWarning(
+                    "Directory not created",
+                    'Directory "%s" not created so not setting backup directory' % directory,
+                    parent=self,
+                )
+                return
 
-  def setInfo(self):
+        repository = self.project.findFirstRepository(name="backup")
+        if not repository:
+            showWarning("No backup repository", "No backup repository found (something wrong somewhere)", parent=self)
+            return
 
-    self.setFreq()
-    self.setDir()
+        url = repository.url
+        if url.path != directory:
+            repository.url = Url(path=normalisePath(directory))
 
-    on_off = (self.on_off_buttons.get() == 'on')
-    self.analysisProject.doAutoBackup = on_off
+    def setFreq(self):
 
-  def applyAuto(self, *event):
+        freq = self.freq_entry.get()
 
-    self.setInfo()
-    on_off = self.on_off_buttons.get()
-    if on_off == 'on':
-      self.parent.setBackupOn()
-    else:
-      self.parent.setBackupOff()
+        if freq is None:
+            freq = 0
 
-  def applyManual(self):
+        self.analysisProject.autoBackupFreq = freq
 
-    self.setDir()
-    self.parent.doBackup()
+    def setInfo(self):
+
+        self.setFreq()
+        self.setDir()
+
+        on_off = self.on_off_buttons.get() == "on"
+        self.analysisProject.doAutoBackup = on_off
+
+    def applyAuto(self, *event):
+
+        self.setInfo()
+        on_off = self.on_off_buttons.get()
+        if on_off == "on":
+            self.parent.setBackupOn()
+        else:
+            self.parent.setBackupOff()
+
+    def applyManual(self):
+
+        self.setDir()
+        self.parent.doBackup()

@@ -3,28 +3,15 @@ Implementation of the CING API's main classes.
 Split into 3 for better performance.
 """
 
-from configparser import configparser
-from cing import cingPythonCingDir
-from cing import cingRoot
-from cing import issueListUrl
+
+from cing import cingRoot, issueListUrl
+from cing.core.classes2 import *  #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Atom, nTdihedralOpt
 from cing.Libs.Geometry import violationAngle
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import copydir
-from cing.Libs.disk import remove
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqNih import TALOSPLUS_LIST_STR
-from cing.PluginCode.required.reqWhatif import summaryCheckIdList
-from cing.STAR.File import File
-from cing.core.classes2 import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Atom
-from cing.core.molecule import Ensemble
-from cing.core.molecule import Molecule
-from cing.core.molecule import nTdihedralOpt
-from cing.core.molecule import nTdistanceOpt #@UnusedImport
-from glob import glob
-from glob import glob1
-from shutil import rmtree
-import tarfile
+
 __version__ = cing.__version__
 __date__ = cing.__date__
 __author__ = cing.__author__
@@ -315,7 +302,7 @@ class Restraint(NTdict):
         Examine for violations larger then cutoff, return list of violating models or None on error
         Requires violations attribute (obtained with calculateAverage method.
         """
-        if not self.has_key('violations'):
+        if 'violations' not in self:
             return None
 
         violatingModels = NTlist()
@@ -1537,7 +1524,7 @@ class DihedralRestraint(Restraint):
         mol = self.atoms[0].getMolecule()
         if mol == None:
             return resultError
-        if mol._dihedralDict.has_key(tuple(self.atoms)):
+        if tuple(self.atoms in mol._dihedralDict):
             return mol._dihedralDict[tuple(self.atoms)]
         return resultError
         #end if

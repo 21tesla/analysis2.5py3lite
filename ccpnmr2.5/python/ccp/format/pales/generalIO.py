@@ -3,7 +3,7 @@
 """
 ======================COPYRIGHT/LICENSE START==========================
 
-generalIO.py: General I/O information for PALES files 
+generalIO.py: General I/O information for PALES files
  (see http://www.mpibpc.mpg.de/groups/zweckstetter/_links/software_pales.htm)
 
 Copyright (C) 2005 Wim Vranken (European Bioinformatics Institute)
@@ -15,14 +15,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,38 +56,36 @@ Development of a Software Pipeline. Accepted by Proteins (2004).
 ===========================REFERENCE END===============================
 """
 
-from ccp.format.general.formatIO import FormatFile
-
 from ccp.format.general.Constants import defaultMolCode
-
+from ccp.format.general.formatIO import FormatFile
 from ccp.format.general.Util import getSeqAndInsertCode
 
 #####################
 # Class definitions #
 #####################
 
+
 class PalesGenericFile(FormatFile):
+    def setGeneric(self):
 
-  def setGeneric(self):
-    
-    self.setFormat()
-    self.defaultMolCode = defaultMolCode
-    
-  def setFormat(self):
-  
-    self.format = 'pales'
-    
+        self.setFormat()
+        self.defaultMolCode = defaultMolCode
+
+    def setFormat(self):
+
+        self.format = "pales"
+
+
 class PalesConstraintItem:
+    def __init__(self):
 
-  def __init__(self):
-    
-    self.members = []
-    
+        self.members = []
+
+
 class PalesConstraintMember:
+    def __init__(self, chainCode, seqCode, resLabel, atomName):
 
-  def __init__(self,chainCode,seqCode,resLabel,atomName):
-    
-    self.chainCode = chainCode
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.atomName = atomName
-    self.resLabel = resLabel
+        self.chainCode = chainCode
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.atomName = atomName
+        self.resLabel = resLabel

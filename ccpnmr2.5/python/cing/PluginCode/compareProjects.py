@@ -6,13 +6,15 @@ USE THE CLASS IN cing.core.classes.ProjectTree INSTEAD OF THIS ONE!!!
 TOBE REMOVED
 Routines to compare different Project instances
 """
-from cing import Project
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import copydir
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Ensemble
-from numpy import linalg as LA
 import numpy as np
+from numpy import linalg as LA
+
+from cing import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Ensemble
+from cing.Libs.disk import copydir
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class Projects( NTtree ): # pylint: disable=R0904
     """
@@ -212,8 +214,8 @@ class PhiPsiLists( NTlist ):
 
         # Assemble the phi,psi of the models from residueList
         for res in residueList:
-#            if res and res.has_key('PHI') and res.has_key('PSI'):
-            if res and res.has_key('PHI') and res.has_key('PSI') and res.has_key('Cb4N') and res.has_key('Cb4C'):
+#            if res and 'PHI' in res and 'PSI' in res:
+            if res and 'PHI' in res and 'PSI' in res and 'Cb4N' in res and 'Cb4C' in res:
                 for i in range(0,molecule.modelCount):
                     #print '>>', res, i,molecule.modelCount,len(res.PHI),len(res.PSI),len(res.Cb4N),len(res.Cb4C)
 #                    self[i].append(res.PHI[i],res.PSI[i])
@@ -529,7 +531,7 @@ def printRestraintScores( projects, stream=sys.stdout ):
 
 def printScore( name, rogScore ):
     clist = rogScore.colorCommentList.zap(1)
-    if len(clist) == 0: 
+    if len(clist) == 0:
         clist.append('---')
     printf('%-20s%-10s %s\n', name, rogScore, clist[0])
     for c in clist[1:]:
@@ -614,7 +616,7 @@ def colorPhiPsiMacro( projects, minValue=2.0, maxValue=4.0 ):
         fprintf(fp, 'ColorRes object %d, Gray\n', p.id+1)
         fprintf(fp, 'PropRes object %d, -999\n', p.id+1)
         for res in p.molecule.allResidues():
-            if res.has_key('phipsiRmsds'):
+            if 'phipsiRmsds' in res:
                 if not isNaN(res.phipsiRmsds[0][p.id].value):
                     fprintf( fp, 'PropRes object %d residue %d, %7.3f\n', p.id+1, res.resNum, res.phipsiRmsds[0][p.id].value)
             #end if
@@ -652,7 +654,7 @@ def colorPDBmacro( projects ):
         #fprintf(fp, 'loadPDB %s\n', os.path.abspath(projects.path(p.name+'.pdb')))
         selectedResidues = p.molecule.setResiduesFromRanges(projects.ranges)
         #print '>>', selectedResidues
-        if p.has_key('color'):
+        if 'color' in p:
             fprintf(fp, 'ColorObject %d, %d\n', p.id+1, p.color)
             for res in p.molecule.allResidues():
                 #print res,
@@ -714,7 +716,7 @@ def mkYasaraByResidueMacro(projects, keys,
     for p in projects:
         for res in p.molecule.allResidues():
             value = getDeepByKeysOrAttributes(res, *keys)
-    #        if res.has_key(property) and res[property] != None and not isNaN(res[property]):
+    #        if property in res and res[property] != None and not isNaN(res[property]):
             if value != None and not isNaN(value):
                 fprintf(stream, 'PropRes object %d Residue %d, %.4f\n', p.id+1, res.resNum, value)
         #end for
@@ -787,15 +789,15 @@ def getRanges( projects, cutoff = 1.7 ):
         phi = NTlist() # list for all phi values
         psi = NTlist() # list for all psi values
         #print '>>>', res
-        if res.has_key('PHI') and res.has_key('PSI'):
+        if 'PHI' in res and 'PSI' in res:
 
             for p in projects:
-                if projects.moleculeMap.has_key(res) and projects.moleculeMap[res].has_key((p.name, p.molecule.name)):
+                if res in projects.moleculeMap and (p.name, p.molecule.name in projects.moleculeMap[res]):
                     currentRes = projects.moleculeMap[res][(p.name, p.molecule.name)]
                     #print p,currentRes
-                    if currentRes.has_key('PHI'):
+                    if 'PHI' in currentRes:
                         phi.append(*currentRes['PHI'])
-                    if currentRes.has_key('PSI'):
+                    if 'PSI' in currentRes:
                         psi.append(*currentRes['PSI'])
                 #end if
             #end for
@@ -803,10 +805,10 @@ def getRanges( projects, cutoff = 1.7 ):
             psi.cAverage()
 
             use1 = 0
-            if (2.0 - res.PHI.cv - res.PSI.cv > cutoff): 
+            if (2.0 - res.PHI.cv - res.PSI.cv > cutoff):
                 use1 = 1
             use2 = 0
-            if (2.0 - phi.cv - psi.cv > cutoff): 
+            if (2.0 - phi.cv - psi.cv > cutoff):
                 use2 = 1
             #printf('%-35s %-35s  %6.2f  %1d     %6.2f %6.2f   %6.2f  %1d     %2d\n',
             #       res.PHI, res.PSI, 2.0 - res.PHI.cv - res.PSI.cv, use1,

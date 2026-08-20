@@ -1,4 +1,4 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 
 class Peirce:
@@ -153,7 +153,7 @@ class Peirce:
     def peirceTestOld( self, valueList ):
         n = len( valueList )
 
-        if n<3: 
+        if n<3:
             return (None, None)
 
         newValues = NTlist()
@@ -201,7 +201,7 @@ class Peirce:
                         try:
                             newValues.remove( item )
                             outliers.append( item )
-                        except: 
+                        except:
                             pass
                         #end try
                         nOutliers += 1

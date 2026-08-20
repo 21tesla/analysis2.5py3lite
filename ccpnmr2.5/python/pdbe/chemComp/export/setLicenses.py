@@ -1,8 +1,7 @@
-from memops.scripts.license.headers import setLicenses
-
-from pdbe.chemComp.Constants import editChemCompDataDir
-
 import sys
+
+from memops.scripts.license.headers import setLicenses
+from pdbe.chemComp.Constants import editChemCompDataDir
 
 if __name__ == '__main__':
 

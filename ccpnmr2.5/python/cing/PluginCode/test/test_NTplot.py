@@ -2,12 +2,14 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_NTplot.py
 """
-from cing import cingDirTmp
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.matplib import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.matplib import *  #@UnusedWildImport
+
 #from pylab import * # preferred importing. Includes nx imports. #@UnusedWildImport
 
 class AllChecks(TestCase):

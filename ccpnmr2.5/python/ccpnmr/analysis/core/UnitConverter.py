@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,68 +38,74 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
+
 def ppm2pnt(ppm, dataDimRef):
 
-  freqDataDim = dataDimRef.dataDim
+    freqDataDim = dataDimRef.dataDim
 
-  npoints = freqDataDim.numPointsOrig
-  sw = freqDataDim.spectralWidthOrig
-  sf = dataDimRef.expDimRef.sf
-  refpt = dataDimRef.refPoint
-  refppm = dataDimRef.refValue
+    npoints = freqDataDim.numPointsOrig
+    sw = freqDataDim.spectralWidthOrig
+    sf = dataDimRef.expDimRef.sf
+    refpt = dataDimRef.refPoint
+    refppm = dataDimRef.refValue
 
-  t = - npoints * sf / float(sw)
-  pnt = t*(ppm - refppm) + refpt
+    t = -npoints * sf / float(sw)
+    pnt = t * (ppm - refppm) + refpt
 
-  return pnt
+    return pnt
+
 
 def pnt2ppm(pnt, dataDimRef):
 
-  freqDataDim = dataDimRef.dataDim
+    freqDataDim = dataDimRef.dataDim
 
-  npoints = freqDataDim.numPointsOrig
-  sw = freqDataDim.spectralWidthOrig
-  sf = dataDimRef.expDimRef.sf
-  refpt = dataDimRef.refPoint
-  refppm = dataDimRef.refValue
+    npoints = freqDataDim.numPointsOrig
+    sw = freqDataDim.spectralWidthOrig
+    sf = dataDimRef.expDimRef.sf
+    refpt = dataDimRef.refPoint
+    refppm = dataDimRef.refValue
 
-  t = - npoints * sf / float(sw)
-  ppm = (pnt - refpt)/t + refppm
+    t = -npoints * sf / float(sw)
+    ppm = (pnt - refpt) / t + refppm
 
-  return ppm
+    return ppm
+
 
 def hz2pnt(hz, dataDimRef):
 
-  freqDataDim = dataDimRef.dataDim
+    freqDataDim = dataDimRef.dataDim
 
-  npoints = freqDataDim.numPointsOrig
-  sw = freqDataDim.spectralWidthOrig
-  sf = dataDimRef.expDimRef.sf
-  refpt = dataDimRef.refPoint
-  refppm = dataDimRef.refValue
+    npoints = freqDataDim.numPointsOrig
+    sw = freqDataDim.spectralWidthOrig
+    sf = dataDimRef.expDimRef.sf
+    refpt = dataDimRef.refPoint
+    refppm = dataDimRef.refValue
 
-  t = - npoints / float(sw)
-  pnt = t*(hz - sf*refppm) + refpt
+    t = -npoints / float(sw)
+    pnt = t * (hz - sf * refppm) + refpt
 
-  return pnt
+    return pnt
+
 
 def pnt2hz(pnt, dataDimRef):
 
-  freqDataDim = dataDimRef.dataDim
+    freqDataDim = dataDimRef.dataDim
 
-  npoints = freqDataDim.numPointsOrig
-  sw = freqDataDim.spectralWidthOrig
-  sf = dataDimRef.expDimRef.sf
-  refpt = dataDimRef.refPoint
-  refppm = dataDimRef.refValue
+    npoints = freqDataDim.numPointsOrig
+    sw = freqDataDim.spectralWidthOrig
+    sf = dataDimRef.expDimRef.sf
+    refpt = dataDimRef.refPoint
+    refppm = dataDimRef.refValue
 
-  t = - npoints / float(sw)
-  hz = (pnt - refpt)/t + sf*refppm
+    t = -npoints / float(sw)
+    hz = (pnt - refpt) / t + sf * refppm
 
-  return hz
+    return hz
+
 
 unit_converter = {}
-unit_converter[('ppm', 'point')] = ppm2pnt
-unit_converter[('point', 'ppm')] = pnt2ppm
-unit_converter[('Hz', 'point')] = hz2pnt
-unit_converter[('point', 'Hz')] = pnt2hz
+unit_converter[("ppm", "point")] = ppm2pnt
+unit_converter[("point", "ppm")] = pnt2ppm
+unit_converter[("Hz", "point")] = hz2pnt
+unit_converter[("point", "Hz")] = pnt2hz

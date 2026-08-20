@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,90 +51,81 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-import string
-
-from memops.universal.Io import joinPath
-
-from memops.gui.BasePopup import BasePopup
-from memops.gui.Label import Label
-from memops.gui.Util import createHelpButtonList
-from memops.gui.CheckButton import CheckButton
 
 from ccpnmr.format.general.Io import getHelpUrlDir
+from memops.gui.BasePopup import BasePopup
+from memops.gui.CheckButton import CheckButton
+from memops.gui.Label import Label
+from memops.gui.Util import createHelpButtonList
+from memops.universal.Io import joinPath
+
 
 class ResonanceGroupPopup(BasePopup):
- 
-  help_url = joinPath(getHelpUrlDir(),'ResonanceGroup.html')
+    help_url = joinPath(getHelpUrlDir(), "ResonanceGroup.html")
 
-  def __init__(self, parent, resonanceNameList, resonanceLineDict, ccpCode, title = 'Group resonances'):
-   
-    self.resNameGroups = None
-     
-    self.resonanceNameList = resonanceNameList
-    self.resonanceLineDict = resonanceLineDict
-    self.checkButtons = []
-    self.ccpCode = ccpCode
-        
-    BasePopup.__init__(self, parent=parent, title=title, modal=True, transient=True)
+    def __init__(self, parent, resonanceNameList, resonanceLineDict, ccpCode, title="Group resonances"):
 
-  def body(self, master):
-      
-    master.grid_columnconfigure(0, weight = 1)
-    master.grid_columnconfigure(1, weight = 1)
-  
-    self.geometry('600x400')
+        self.resNameGroups = None
 
-    #
-    # Popup window
-    #
+        self.resonanceNameList = resonanceNameList
+        self.resonanceLineDict = resonanceLineDict
+        self.checkButtons = []
+        self.ccpCode = ccpCode
 
-    row = 0
-    label = Label(master, text= "Residue type '%s'" % self.ccpCode)
-    label.grid(row=row, column=0, sticky=Tkinter.EW)
-      
-    row = row + 1
-    label = Label(master, text= "Please select resonances that belong together (remaining ones are also grouped)")
-    label.grid(row=row, column=0, sticky=Tkinter.EW)
-     
-    for resName in self.resonanceNameList:
+        BasePopup.__init__(self, parent=parent, title=title, modal=True, transient=True)
 
-      row = row + 1
-      
-      label = Label(master, text= "Resonance '%s'" % resName)
-      label.grid(row=row, column=0, sticky=Tkinter.EW)     
-      
-      self.checkButtons.append(CheckButton(master))
-      self.checkButtons[-1].grid(row=row, column=1, sticky=Tkinter.EW)     
+    def body(self, master):
 
-    row = row + 1
-    texts = [ 'OK' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
-    buttons.grid(row=row, column=0)
+        master.grid_columnconfigure(0, weight=1)
+        master.grid_columnconfigure(1, weight=1)
 
-    for i in range(row):
-      master.grid_rowconfigure(i, weight = 1)
+        self.geometry("600x400")
 
-  def apply(self):
-    
-    self.resNameGroups = []
-    self.resNameGroups.append([])
-    self.resNameGroups.append([])
-    
-    for i in range(0,len(self.checkButtons)):
-      
-      checkButton = self.checkButtons[i]
-      
-      if checkButton.isSelected():
-        
-        groupIndex = 0
-        
-      else:
-      
-        groupIndex = 1
+        #
+        # Popup window
+        #
 
-      self.resNameGroups[groupIndex].append(self.resonanceLineDict[i])
-        
-    return True
-  
+        row = 0
+        label = Label(master, text="Residue type '%s'" % self.ccpCode)
+        label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+        row = row + 1
+        label = Label(master, text="Please select resonances that belong together (remaining ones are also grouped)")
+        label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+        for resName in self.resonanceNameList:
+            row = row + 1
+
+            label = Label(master, text="Resonance '%s'" % resName)
+            label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+            self.checkButtons.append(CheckButton(master))
+            self.checkButtons[-1].grid(row=row, column=1, sticky=Tkinter.EW)
+
+        row = row + 1
+        texts = ["OK"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
+        buttons.grid(row=row, column=0)
+
+        for i in range(row):
+            master.grid_rowconfigure(i, weight=1)
+
+    def apply(self):
+
+        self.resNameGroups = []
+        self.resNameGroups.append([])
+        self.resNameGroups.append([])
+
+        for i in range(0, len(self.checkButtons)):
+            checkButton = self.checkButtons[i]
+
+            if checkButton.isSelected():
+                groupIndex = 0
+
+            else:
+                groupIndex = 1
+
+            self.resNameGroups[groupIndex].append(self.resonanceLineDict[i])
+
+        return True

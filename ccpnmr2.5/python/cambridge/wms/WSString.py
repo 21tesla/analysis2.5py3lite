@@ -1,5 +1,5 @@
 
-import sys, re
+import re
 
 
 class WSString:
@@ -15,13 +15,13 @@ class WSString:
             self.str = self.hashMapToString(val)
 
         elif (isinstance(val,list)):
-        
+
             self.str = self.listToString(val)
-            
+
         #elif (isinstance(val,str)):
 
         else :
-            
+
             self.str = val
 
     # public methods
@@ -36,7 +36,7 @@ class WSString:
 
 
     # For legacy. remove
-        
+
     def getStructHM(self):
 
         return self.stringToHashMap(self.str)
@@ -76,19 +76,19 @@ class WSString:
                     subIndex += 1
                     subString = self.listToString(sublst, deep, subIndex)
                     strg += subString
-                    
+
             # not sure why we don't use the types here
             else:
                 strg += lst[i]
-                        
+
 
             if i < lstSize -1:
                 strg += '<#>'
-                    
+
         strg += '<Arraylist'+str(fixDeep)+'.'+str(index)+'/>'
 
         return strg
-                    
+
 
     # attempt to write the method properly
 
@@ -114,7 +114,7 @@ class WSString:
             for i in range(nbKeys):
 
                 #print 'looping ', fixDeep, i
-            
+
                 strg += set[i]
                 strg += '<=>'
 
@@ -123,17 +123,17 @@ class WSString:
 
                 else:
 
-                    #print 'appending ', hashmap[set[i]] , ' (from ',  set[i], ')' 
+                    #print 'appending ', hashmap[set[i]] , ' (from ',  set[i], ')'
                     if isinstance(hashmap[set[i]],str):
                         strg += hashmap[set[i]]
-                        
+
                     elif isinstance(hashmap[set[i]],dict):
                         submap = hashmap[set[i]]
                         if len(submap.keys()) > 0:
                             subIndex += 1
                             subString = self.hashMapToString(submap, deep, subIndex)
                             strg += subString
-                        
+
                     elif isinstance(hashmap[set[i]],list):
                         sublist = hashmap[set[i]]
                         if len(sublist) > 0:
@@ -157,13 +157,13 @@ class WSString:
 
                 if i < nbKeys -1:
                     strg += '<;>'
-                    
+
             strg += '<Hashmap'+str(fixDeep)+'.'+str(index)+'/>'
 
         return strg
-                    
 
-                
+
+
 
 
     # attempt to write the method properly
@@ -174,7 +174,7 @@ class WSString:
         lst = []
         regex = ''
 
-        if len(strg) > 0:            
+        if len(strg) > 0:
             regex = '<Arraylist[0-9]+.[0-9]+>'
             pattern = re.compile(regex)
             matcher = pattern.search(strg, 0)
@@ -199,7 +199,7 @@ class WSString:
                         value = self.stringToHashMap(strg)
                         #print ' getting hashmap from ', strg
                         lst.append(value)
-                
+
                         regex = '<Hashmap[0-9]+.[0-9]+>'
                         pattern = re.compile(regex)
                         matcher = pattern.search(strg, 0)
@@ -213,18 +213,18 @@ class WSString:
                             strg = strg[3:]
 
                         #print ' returning ', strg
-                        
+
                     elif strg[:10] == '<Arraylist':
                         value = self.stringToList(strg)
                         lst.append(value)
-                            
+
                         regex = '<Arraylist[0-9]+.[0-9]+>'
                         pattern = re.compile(regex)
                         matcher = pattern.search(strg, 0)
                         endTag = matcher.group()[:-1] + '/>'
                         endSeq= strg.find(endTag,startSeq)
                         strg=strg[endSeq + len(endTag):]
-                            
+
                         cutAt = strg.find('<#>')
                         if cutAt == 0:
                             strg = strg[3:]
@@ -250,9 +250,9 @@ class WSString:
                             strg = strg[cutAt+3:]
 
                         lst.append(value)
-                    
+
         return lst
-                
+
 
     # attempt to write the method properly
 
@@ -261,7 +261,7 @@ class WSString:
         map = {}
         regex = ''
 
-        if len(strg) > 0:            
+        if len(strg) > 0:
             regex = '<Hashmap[0-9]+.[0-9]+>'
             pattern = re.compile(regex)
             matcher = pattern.search(strg, 0)
@@ -292,7 +292,7 @@ class WSString:
                         value = self.stringToHashMap(strg)
                         #print ' getting hashmap from ', strg
                         map[key]=value
-                
+
                         regex = '<Hashmap[0-9]+.[0-9]+>'
                         pattern = re.compile(regex)
                         matcher = pattern.search(strg, 0)
@@ -306,11 +306,11 @@ class WSString:
                             strg = strg[3:]
 
                         #print ' returning ', strg
-                        
+
                     elif strg[:10] == '<Arraylist':
                         value = self.stringToList(strg)
                         map[key]=value
-                            
+
                         regex = '<Arraylist[0-9]+.[0-9]+>'
                         #print 'ArrayList group', matcher.group()
                         pattern = re.compile(regex)
@@ -318,7 +318,7 @@ class WSString:
                         endTag = matcher.group()[:-1] + '/>'
                         endSeq= strg.find(endTag,startSeq)
                         strg=strg[endSeq + len(endTag):]
-                            
+
                         cutAt = strg.find('<;>')
                         if cutAt == 0:
                             strg = strg[3:]
@@ -343,8 +343,8 @@ class WSString:
                             value = strg[:cutAt]
                             strg = strg[cutAt+3:]
                         map[key] = value
-                    
+
         return map
-        
-                
+
+
 

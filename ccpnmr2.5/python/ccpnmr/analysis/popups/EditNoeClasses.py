@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,283 +38,281 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.general import Implementation
 
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-from ccpnmr.analysis.core.ExperimentBasic import getSpectrumIsotopes, getThroughSpacePeakLists
 from ccpnmr.analysis.core.ConstraintBasic import getIntensityDistanceTable
+from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists
 from ccpnmr.analysis.core.Util import setSpectrumNoeDistanceClasses
-
+from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Label import Label
 from memops.gui.PulldownMenu import PulldownMenu
-from memops.gui.ScrolledMatrix import ScrolledMatrix 
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+
 
 class EditNoeClassesPopup(BasePopup):
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        self.guiParent = parent
+        BasePopup.__init__(self, parent=parent, title="NOE Distance Classes", **kw)
 
-    self.guiParent = parent
-    BasePopup.__init__(self, parent=parent, title='NOE Distance Classes', **kw)
+    def body(self, guiFrame):
 
-  def body(self, guiFrame):
-  
-    self.noeClassChoice = None
-    self.spectrum = None
-    self.intensEntry = FloatEntry(self, returnCallback=self.setIntens, width=5)
-    self.targetEntry = FloatEntry(self, returnCallback=self.setTarget, width=5)
-    self.minEntry    = FloatEntry(self, returnCallback=self.setMin,    width=5)
-    self.maxEntry    = FloatEntry(self, returnCallback=self.setMax,    width=5)
-   
-    row = 0
+        self.noeClassChoice = None
+        self.spectrum = None
+        self.intensEntry = FloatEntry(self, returnCallback=self.setIntens, width=5)
+        self.targetEntry = FloatEntry(self, returnCallback=self.setTarget, width=5)
+        self.minEntry = FloatEntry(self, returnCallback=self.setMin, width=5)
+        self.maxEntry = FloatEntry(self, returnCallback=self.setMax, width=5)
 
-    label = Label(guiFrame, text='Spectrum: ', grid=(row,0))
-    tipText = ''
-    self.spectrumPulldown = PulldownMenu(guiFrame,self.changeSpectrum, grid=(row,1))
+        row = 0
 
-    row +=1
+        label = Label(guiFrame, text="Spectrum: ", grid=(row, 0))
+        tipText = ""
+        self.spectrumPulldown = PulldownMenu(guiFrame, self.changeSpectrum, grid=(row, 1))
 
-    guiFrame.expandGrid(row, 1)
+        row += 1
 
-    tipTexts = ['Lower bound of this intensity category. Values are relative to reference intensity.',
-                'Target restraint distance for this category',
-                'Lower bound distance for this category',
-                'Upper bound distance for this category']
-    headingList = ['Min. NOE\nIntensity','Target\nDist','Min\nDist','Max\nDist']
-    editWidgets = [self.intensEntry,self.targetEntry,self.minEntry,self.maxEntry]
-    editGetCallbacks = [self.getIntens,self.getTarget,self.getMin,self.getMax]
-    editSetCallbacks = [self.setIntens,self.setTarget,self.setMin,self.setMax]
-    
-    self.noeClassMatrix = ScrolledMatrix(guiFrame,
-                                         headingList=headingList,
-                                         callback=self.selectClass,
-                                         tipTexts=tipTexts,
-                                         editWidgets=editWidgets,
-                                         editSetCallbacks=editSetCallbacks,
-                                         editGetCallbacks=editGetCallbacks,
-                                         deleteFunc=self.deleteClass,
-                                         grid=(row,0), gridSpan=(1,2))
-                                         
+        guiFrame.expandGrid(row, 1)
 
-    row +=1
+        tipTexts = [
+            "Lower bound of this intensity category. Values are relative to reference intensity.",
+            "Target restraint distance for this category",
+            "Lower bound distance for this category",
+            "Upper bound distance for this category",
+        ]
+        headingList = ["Min. NOE\nIntensity", "Target\nDist", "Min\nDist", "Max\nDist"]
+        editWidgets = [self.intensEntry, self.targetEntry, self.minEntry, self.maxEntry]
+        editGetCallbacks = [self.getIntens, self.getTarget, self.getMin, self.getMax]
+        editSetCallbacks = [self.setIntens, self.setTarget, self.setMin, self.setMax]
 
-    tipTexts = ['Add a new distance restraint category',
-                'Deleted selected restraint categor']
-    texts = ['Add Class','Delete Class']
-    commands = [self.addClass,self.deleteClass]
-    self.bottomButtons = UtilityButtonList(guiFrame, doClone=False, grid=(row,0),
-                                           gridSpan=(1,2), tipTexts=tipTexts,
-                                           commands=commands, texts=texts)
+        self.noeClassMatrix = ScrolledMatrix(
+            guiFrame,
+            headingList=headingList,
+            callback=self.selectClass,
+            tipTexts=tipTexts,
+            editWidgets=editWidgets,
+            editSetCallbacks=editSetCallbacks,
+            editGetCallbacks=editGetCallbacks,
+            deleteFunc=self.deleteClass,
+            grid=(row, 0),
+            gridSpan=(1, 2),
+        )
 
-    for func in ('__init__','delete','setName'):
-      self.registerNotify(self.updateSpectra, 'ccp.nmr.Nmr.Experiment', func)
-      self.registerNotify(self.updateSpectra, 'ccp.nmr.Nmr.DataSource', func)
+        row += 1
 
-    self.updateSpectra()
-    self.update()
+        tipTexts = ["Add a new distance restraint category", "Deleted selected restraint categor"]
+        texts = ["Add Class", "Delete Class"]
+        commands = [self.addClass, self.deleteClass]
+        self.bottomButtons = UtilityButtonList(
+            guiFrame, doClone=False, grid=(row, 0), gridSpan=(1, 2), tipTexts=tipTexts, commands=commands, texts=texts
+        )
 
-  def open(self):
-  
-    self.updateSpectra()
-    self.update()
-    BasePopup.open(self)
+        for func in ("__init__", "delete", "setName"):
+            self.registerNotify(self.updateSpectra, "ccp.nmr.Nmr.Experiment", func)
+            self.registerNotify(self.updateSpectra, "ccp.nmr.Nmr.DataSource", func)
 
-  def updateSpectra(self, *opt):
-    
-    spectra = self.getSpectra()
-    if not spectra:
-      return
-    
-    names = [self.getSpectrumName(x) for x in spectra]
-    if (not self.spectrum) or (self.spectrum not in spectra):
-      self.spectrum = spectra[0]
-    
-    self.spectrumPulldown.setup(names, names.index(self.getSpectrumName(self.spectrum)) )
-    
-    self.update()
+        self.updateSpectra()
+        self.update()
 
-  def changeSpectrum(self, i, name):
-  
-    self.spectrum = self.getSpectra()[i]
-    self.update()
+    def open(self):
 
-  def getSpectrumName(self,spectrum):
-  
-    name = '%s:%s' % (spectrum.experiment.name,spectrum.name)
-    return name
-  
-  def getSpectra(self):
-  
-    spectra = set()
-    peakLists = getThroughSpacePeakLists(self.nmrProject)
-    
-    for peakList in peakLists:
-      spectra.add(peakList.dataSource)
- 
-    spectra = list(spectra)
-    spectra.sort()
- 
-    return spectra
-    
-  def selectClass(self, noeClass, row, col):
-  
-    if noeClass:
-      self.noeClassChoice = (row, noeClass)
-      
-    if len(self.noeClassMatrix.objectList) > 1:
-      self.bottomButtons.buttons[1].enable()
-    else:
-      self.bottomButtons.buttons[1].disable()
+        self.updateSpectra()
+        self.update()
+        BasePopup.open(self)
 
-  def addClass(self):
-  
-    if self.spectrum:
-      noeClass = [0.0,6.0,0.0,6.0]
- 
-      noeClasses = getIntensityDistanceTable(self.spectrum)
-      noeClasses.append(noeClass)
-      setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
+    def updateSpectra(self, *opt):
 
-      self.update()
-  
-  def deleteClass(self, *event):
-    
-    if self.spectrum:
-      noeClasses = getIntensityDistanceTable(self.spectrum)
+        spectra = self.getSpectra()
+        if not spectra:
+            return
 
-      if self.noeClassChoice and (self.noeClassChoice[1] in noeClasses):
-        if len(noeClasses) > 1:
-          (i,noeClass) = self.noeClassChoice
-          noeClasses.remove(noeClass)
-          self.noeClassChoice = None
-          setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
-          self.update()
-    
-  def setIntens(self, event):
-  
-    if self.noeClassChoice:
-      val = self.intensEntry.get() or 0.0
-      self.noeClassChoice[1][0] = val
-      
-    self.updateClass()
-  
-  def getIntens(self, row):
-  
-    if row:
-      self.intensEntry.set(row[0])
-  
-  def setTarget(self, event):
-  
-    if self.noeClassChoice:
-      val = self.targetEntry.get() or 0.0
-      self.noeClassChoice[1][1] = val
-      
-    self.updateClass()
-  
-  def getTarget(self, row):
-  
-    if row:
-      self.targetEntry.set(row[1])
-  
-  def setMin(self, event):
-  
-    if self.noeClassChoice:
-      val = self.minEntry.get() or 0.0
-      self.noeClassChoice[1][2] = val
-      
-    self.updateClass()
-  
-  def getMin(self, row):
-  
-    if row:
-      self.minEntry.set(row[2])
-  
-  def setMax(self, event):
-  
-    if self.noeClassChoice:
-      val = self.maxEntry.get() or 0.0
-      self.noeClassChoice[1][3] = val
-      
-    self.updateClass()
-  
-  def getMax(self, row):
-  
-    if row:
-      self.maxEntry.set(row[3])
-    
-  def getClasses(self):
-  
-    noeClasses = []
-    if self.spectrum:
-      noeClasses = getIntensityDistanceTable(self.spectrum)
+        names = [self.getSpectrumName(x) for x in spectra]
+        if (not self.spectrum) or (self.spectrum not in spectra):
+            self.spectrum = spectra[0]
 
-    if noeClasses:
-      for i in range(len(noeClasses)):
-        (intens,target,minimum,maximum) = noeClasses[i]
+        self.spectrumPulldown.setup(names, names.index(self.getSpectrumName(self.spectrum)))
 
-        if minimum > maximum:
-          (minimum,maximum) = (maximum,minimum)
-        minimum = min(target, minimum)
-        maximum = max(target, maximum)
-        intens  = max(intens, 0.0)
-        
-        noeClasses[i] = [intens,target,minimum,maximum]
-      noeClasses.sort()
-      noeClasses.reverse()
-    
-    else:
-      noeClasses = []
-      if self.spectrum:
-        # default
-        noeClasses = getIntensityDistanceTable(self.spectrum)
-      
-    return noeClasses
-    
-  def updateClass(self):
-  
-    if self.spectrum and self.noeClassChoice:
-      (i, noeClass) = self.noeClassChoice
-      noeClasses = getIntensityDistanceTable(self.spectrum)
-      noeClasses[i] = noeClass
-      setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
-      self.update()
-    
-  def update(self):
+        self.update()
 
+    def changeSpectrum(self, i, name):
 
-    textMatrix = []
-    objectList = self.getClasses()
-    
-    if self.spectrum:
-      if self.noeClassChoice and (len(objectList) > 1):
-        self.bottomButtons.buttons[1].enable()
-      else:
-        self.bottomButtons.buttons[1].disable()
-      self.bottomButtons.buttons[0].enable()
-    else:
-      self.bottomButtons.buttons[0].disable()
-      self.bottomButtons.buttons[1].disable()
-      
-    for (intens,target,minimum,maximum) in objectList:
-      datum = []
-      datum.append(intens)
-      datum.append(target)
-      datum.append(minimum)
-      datum.append(maximum)
-      textMatrix.append(datum)
-    
-    self.noeClassMatrix.update(objectList=objectList,textMatrix=textMatrix)
-    
-    if self.spectrum:
-      setSpectrumNoeDistanceClasses(self.spectrum,objectList)
-  
-  def destroy(self):
+        self.spectrum = self.getSpectra()[i]
+        self.update()
 
-    for func in ('__init__','delete','setName'):
-      self.unregisterNotify(self.updateSpectra, 'ccp.nmr.Nmr.Experiment', func)
-      self.unregisterNotify(self.updateSpectra, 'ccp.nmr.Nmr.DataSource', func)
+    def getSpectrumName(self, spectrum):
 
-    BasePopup.destroy(self)
+        name = "%s:%s" % (spectrum.experiment.name, spectrum.name)
+        return name
 
-   
+    def getSpectra(self):
+
+        spectra = set()
+        peakLists = getThroughSpacePeakLists(self.nmrProject)
+
+        for peakList in peakLists:
+            spectra.add(peakList.dataSource)
+
+        spectra = list(spectra)
+        spectra.sort()
+
+        return spectra
+
+    def selectClass(self, noeClass, row, col):
+
+        if noeClass:
+            self.noeClassChoice = (row, noeClass)
+
+        if len(self.noeClassMatrix.objectList) > 1:
+            self.bottomButtons.buttons[1].enable()
+        else:
+            self.bottomButtons.buttons[1].disable()
+
+    def addClass(self):
+
+        if self.spectrum:
+            noeClass = [0.0, 6.0, 0.0, 6.0]
+
+            noeClasses = getIntensityDistanceTable(self.spectrum)
+            noeClasses.append(noeClass)
+            setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
+
+            self.update()
+
+    def deleteClass(self, *event):
+
+        if self.spectrum:
+            noeClasses = getIntensityDistanceTable(self.spectrum)
+
+            if self.noeClassChoice and (self.noeClassChoice[1] in noeClasses):
+                if len(noeClasses) > 1:
+                    (i, noeClass) = self.noeClassChoice
+                    noeClasses.remove(noeClass)
+                    self.noeClassChoice = None
+                    setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
+                    self.update()
+
+    def setIntens(self, event):
+
+        if self.noeClassChoice:
+            val = self.intensEntry.get() or 0.0
+            self.noeClassChoice[1][0] = val
+
+        self.updateClass()
+
+    def getIntens(self, row):
+
+        if row:
+            self.intensEntry.set(row[0])
+
+    def setTarget(self, event):
+
+        if self.noeClassChoice:
+            val = self.targetEntry.get() or 0.0
+            self.noeClassChoice[1][1] = val
+
+        self.updateClass()
+
+    def getTarget(self, row):
+
+        if row:
+            self.targetEntry.set(row[1])
+
+    def setMin(self, event):
+
+        if self.noeClassChoice:
+            val = self.minEntry.get() or 0.0
+            self.noeClassChoice[1][2] = val
+
+        self.updateClass()
+
+    def getMin(self, row):
+
+        if row:
+            self.minEntry.set(row[2])
+
+    def setMax(self, event):
+
+        if self.noeClassChoice:
+            val = self.maxEntry.get() or 0.0
+            self.noeClassChoice[1][3] = val
+
+        self.updateClass()
+
+    def getMax(self, row):
+
+        if row:
+            self.maxEntry.set(row[3])
+
+    def getClasses(self):
+
+        noeClasses = []
+        if self.spectrum:
+            noeClasses = getIntensityDistanceTable(self.spectrum)
+
+        if noeClasses:
+            for i in range(len(noeClasses)):
+                (intens, target, minimum, maximum) = noeClasses[i]
+
+                if minimum > maximum:
+                    (minimum, maximum) = (maximum, minimum)
+                minimum = min(target, minimum)
+                maximum = max(target, maximum)
+                intens = max(intens, 0.0)
+
+                noeClasses[i] = [intens, target, minimum, maximum]
+            noeClasses.sort()
+            noeClasses.reverse()
+
+        else:
+            noeClasses = []
+            if self.spectrum:
+                # default
+                noeClasses = getIntensityDistanceTable(self.spectrum)
+
+        return noeClasses
+
+    def updateClass(self):
+
+        if self.spectrum and self.noeClassChoice:
+            (i, noeClass) = self.noeClassChoice
+            noeClasses = getIntensityDistanceTable(self.spectrum)
+            noeClasses[i] = noeClass
+            setSpectrumNoeDistanceClasses(self.spectrum, noeClasses)
+            self.update()
+
+    def update(self):
+
+        textMatrix = []
+        objectList = self.getClasses()
+
+        if self.spectrum:
+            if self.noeClassChoice and (len(objectList) > 1):
+                self.bottomButtons.buttons[1].enable()
+            else:
+                self.bottomButtons.buttons[1].disable()
+            self.bottomButtons.buttons[0].enable()
+        else:
+            self.bottomButtons.buttons[0].disable()
+            self.bottomButtons.buttons[1].disable()
+
+        for intens, target, minimum, maximum in objectList:
+            datum = []
+            datum.append(intens)
+            datum.append(target)
+            datum.append(minimum)
+            datum.append(maximum)
+            textMatrix.append(datum)
+
+        self.noeClassMatrix.update(objectList=objectList, textMatrix=textMatrix)
+
+        if self.spectrum:
+            setSpectrumNoeDistanceClasses(self.spectrum, objectList)
+
+    def destroy(self):
+
+        for func in ("__init__", "delete", "setName"):
+            self.unregisterNotify(self.updateSpectra, "ccp.nmr.Nmr.Experiment", func)
+            self.unregisterNotify(self.updateSpectra, "ccp.nmr.Nmr.DataSource", func)
+
+        BasePopup.destroy(self)

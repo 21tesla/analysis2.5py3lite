@@ -7,19 +7,13 @@ Methods:
   export2NIH():
         Export resonances talos format
 """
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqNih import NIH_STR
-from cing.PluginCode.required.reqNih import TALOSPLUS_LIST_STR
 from cing.core.classes import DihedralRestraint
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE
-from cing.core.parameters import cingPaths
-from cing.core.sml import sML2obj
-from cing.core.sml import SMLhandler
-from cing.core.sml import SMLsaveFormat
-from cing.core.sml import obj2SML
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE, cingPaths
+from cing.core.sml import SMLhandler, SMLsaveFormat, obj2SML, sML2obj
+from cing.Libs.AwkLike import AwkLike, AwkLikeS
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqNih import NIH_STR, TALOSPLUS_LIST_STR
 
 if True: # block
     useModule = True
@@ -493,7 +487,7 @@ NIHheaderDefs = NTdict()
 for l in AwkLikeS( NIHheaderDefinitionString, minNF = 3 ):
     if (l.dollar[1] == '#define'):
         #print '>>', l.dollar[0]
-        if l.NF > 5: 
+        if l.NF > 5:
             comment = ' '.join(l.dollar[5:l.NF])
         else: comment = None
         NIHheaderDefs[l.dollar[2]] = int(l.dollar[3])   # store value
@@ -847,7 +841,7 @@ nrows:    %d''', self.tabFile, self.columnDefs.zap('name'), self.nrows
     def column( self, cName ):
         """Return list of values of column cName or None on error
         """
-        if cName not in self: 
+        if cName not in self:
             return None
 
         col = NTlist()
@@ -862,7 +856,7 @@ nrows:    %d''', self.tabFile, self.columnDefs.zap('name'), self.nrows
         Hide column(s) cNames
         """
         for c in cNames:
-            if not c in self:
+            if c not in self:
                 nTerror('NmrPipeTable.hideColumn: column "%s" not defined\n', c)
             else:
                 self[c].hide = True
@@ -875,7 +869,7 @@ nrows:    %d''', self.tabFile, self.columnDefs.zap('name'), self.nrows
         Show column(s) cNames
         """
         for c in cNames:
-            if not c in self:
+            if c not in self:
                 nTerror('NmrPipeTable.showColumn: column "%s" not defined\n', c)
             else:
                 self[c].hide = False
@@ -950,14 +944,14 @@ nrows:    %d''', self.tabFile, self.columnDefs.zap('name'), self.nrows
 
         fprintf(     stream, 'VARS    ' )
         for c in self.columnDefs:
-            if not c.hide: 
+            if not c.hide:
                 fprintf( stream, '%s ', c.name )
         #end for
         fprintf( stream, '\n' )
 
         fprintf(     stream, 'FORMAT  ' )
         for c in self.columnDefs:
-            if not c.hide: 
+            if not c.hide:
                 fprintf( stream, '%s ', c.fmt )
         #end for
         fprintf( stream, '\n' )
@@ -1129,7 +1123,7 @@ DATA ATOMNAMES HA CA CB C N HN
                 for ra in ac.realAtoms():
                     atomName = ra.translate(IUPAC)
                     # Translate to TalosPlus
-                    if talosDict.has_key(atomName):
+                    if atomName in talosDict:
                         atomName = talosDict[atomName]
                     else:
                         nTerror('exportShifts2TalosPlus: strange, we should not be here (ra=%s)', ra)
@@ -1241,7 +1235,7 @@ class SMLTalosPlusResultHandler( SMLhandler ):
     def handle(self, line, fp, molecule=None):
         # The handle restores the attributes of TalosPlus object
         # Needs a valid molecule
-        if molecule == None: 
+        if molecule == None:
             return None
         tPlus = TalosPlusResult()
         return self.dictHandler(tPlus, fp, molecule)
@@ -1250,7 +1244,7 @@ class SMLTalosPlusResultHandler( SMLhandler ):
     def endHandler(self, tPlus, molecule=None):
         # Restore linkage
         # Needs a valid molecule
-        if molecule == None: 
+        if molecule == None:
             return None
         res = molecule.decodeNameTuple(tPlus.residue)
         if res == None:
@@ -1334,7 +1328,7 @@ def _importTalosPlus( project, predFile, ssFile=None ):
             row.residue.talosPlus.Q_H = row.Q_H    # Helix
             row.residue.talosPlus.Q_E = row.Q_E    # Extended
             row.residue.talosPlus.Q_L = row.Q_L    # Loop
-            if ssdict.has_key(row.SS_CLASS):
+            if row.SS_CLASS in ssdict:
                 row.residue.talosPlus.ss_class = ssdict[row.SS_CLASS]
             else:
                 row.residue.talosPlus.ss_class = None
@@ -1493,7 +1487,7 @@ def saveTalosPlus( project, tmp=None ):
 
     myList = NTlist()
     for res in project.molecule.allResidues():
-        if res.has_key('talosPlus') and res.talosPlus != None:
+        if 'talosPlus' in res and res.talosPlus != None:
             myList.append(res.talosPlus)
     #end for
     smlFile = os.path.join(path, talosDefs.smlFile )
@@ -1557,7 +1551,7 @@ def talosPlus2restraints( project, name=TALOSPLUS_LIST_STR, status='noRefine', e
         nTmessage("talosPlus2restraints: No project defined")
         return True
 
-    if not project.status.has_key('talosPlus') or not project.status.talosPlus.completed:
+    if 'talosPlus' not in project.status or not project.status.talosPlus.completed:
         nTmessage("talosPlus2restraints: No talos+ data")
         return True
 

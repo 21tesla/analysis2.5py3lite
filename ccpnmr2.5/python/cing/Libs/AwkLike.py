@@ -3,8 +3,9 @@ New AwkLike implementation
 GWV 2 Oct 2013
 
 """
-import sys
 import os
+import sys
+
 from cing.Libs import NTutils as ntu
 from cing.Libs import fpconst
 

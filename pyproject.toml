@@ -145,10 +145,11 @@ known-first-party = [
 
 [tool.pytest.ini_options]
 testpaths = [
+    "ccpnmr2.5/python/tests",
     "ccpnmr2.5/python/ccpnmr/nef/testing",
-    "ccpnmr2.5/python/cing",
 ]
 pythonpath = ["ccpnmr2.5/python"]
+python_files = ["test_*.py", "Test_*.py"]
 addopts = "-v --tb=short"
 
 [tool.mypy]

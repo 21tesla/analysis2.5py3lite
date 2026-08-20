@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,26 +55,19 @@ software development. Bioinformatics 21, 1678-1684.
 
 import sys
 
-from ccpnmr.integrator.core import Util as intUtil
 from ccpnmr.integrator.core import Io as intIo
 
-
-
-if __name__ == '__main__':
-
-
-  """ Merge multiple projectfiles (directories or .tgz) as output from WMS).
+if __name__ == "__main__":
+    """ Merge multiple projectfiles (directories or .tgz) as output from WMS).
   """
-  
-  if len(sys.argv) >= 3:
-    #
-    # set up input
-    nmrCalcRunId = sys.argv[1]
-    projectFiles = sys.argv[2:]
-    
-    intIo.mergeParallelRuns(nmrCalcRunId, projectFiles)
-      
-  else:
-    print("Usage: merge NmrCalcRun.IDstring projectFiles* ")
-  
-  
+
+    if len(sys.argv) >= 3:
+        #
+        # set up input
+        nmrCalcRunId = sys.argv[1]
+        projectFiles = sys.argv[2:]
+
+        intIo.mergeParallelRuns(nmrCalcRunId, projectFiles)
+
+    else:
+        print("Usage: merge NmrCalcRun.IDstring projectFiles* ")

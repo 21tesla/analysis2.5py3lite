@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,124 +39,116 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import re
-
-from memops.general.Implementation import ApiError
-
 from ccp.general.ArgumentServer import ArgumentServer as GenArgumentServer
 from ccpnmr.analysis.core.AssignmentBasic import makeResonanceGuiName
-from ccpnmr.analysis.core.MoleculeBasic   import getResidueCode
-from ccpnmr.analysis.core.Util            import getAnalysisProfile, getAnalysisProject
+from ccpnmr.analysis.core.MoleculeBasic import getResidueCode
+from ccpnmr.analysis.core.Util import getAnalysisProfile, getAnalysisProject
+
 
 class ArgumentServer(GenArgumentServer):
- 
-  def getCurrentPeaks(self):
+    def getCurrentPeaks(self):
 
-    peaks  = list(self.parent.currentPeaks)
-    if not peaks:
-      self.messageReporter.showWarning('Warning','No peaks currently selected')
-      if not self.inGui:
-        print('Need to define %s.currentPeaks\n' % self.parent)
-    
-    return peaks
-  
-  def getCurrentStrip(self):
-        
-    return self.parent.currentStrip
+        peaks = list(self.parent.currentPeaks)
+        if not peaks:
+            self.messageReporter.showWarning("Warning", "No peaks currently selected")
+            if not self.inGui:
+                print("Need to define %s.currentPeaks\n" % self.parent)
 
-  def getCurrentPeak(self):
-        
-    return self.parent.currentPeak
-  
-  def getCurrentWindow(self):
-  
-    return self.parent.currentWindow
-    
-  def getCurrentWindowPane(self):
-  
-    return self.parent.currentWindowPane
+        return peaks
 
-  def getCurrentWindowPopup(self):
-  
-    return self.parent.currentWindowPopup
+    def getCurrentStrip(self):
 
-  def getCurrentSpectra(self):
-  
-    return list(self.parent.currentSpectra) or []
+        return self.parent.currentStrip
 
-  def getCurrentCanvas(self):
+    def getCurrentPeak(self):
 
-    return self.parent.currentCanvas
+        return self.parent.currentPeak
 
-  def getCurrentEvent(self):
+    def getCurrentWindow(self):
 
-    return self.parent.currentEvent
+        return self.parent.currentWindow
 
-  def getCurrentPeakLists(self):
-  
-    return list(self.parent.currentPeakLists) or []
-   
-  def getCurrentPosition(self):
-  
-    if self.parent.currentPosition:
-      return self.parent.currentPosition
+    def getCurrentWindowPane(self):
 
-    popup = self.getCurrentWindowPopup()
-    canvas = self.getCurrentCanvas()
-    event = self.getCurrentEvent()
-  
-    if popup and canvas and event:
-      return popup.calcWorldCoord(canvas, event.x, event.y)[:2]
+        return self.parent.currentWindowPane
 
-    return None
+    def getCurrentWindowPopup(self):
 
-  def getCurrentSpectrum(self):
-  
-    peak = self.parent.currentPeak
-    if peak:
-      return peak.peakList.dataSource
-      
-  def getCurrentPeakDim(self):
-  
-    peakDim = self.parent.currentPeakDim
-  
-    if not peakDim:
-  
-      peak = self.getCurrentPeak()  
-  
-      if not peak:
-        self.messageReporter.showWarning('Warning','No peak or peak dim currently selected')
-        return
-     
-      peakDim = self.chooseObject(peak.sortedPeakDims())
-  
-    return peakDim
+        return self.parent.currentWindowPopup
 
-  def getAnalysisProject(self):
+    def getCurrentSpectra(self):
 
-    return getAnalysisProject(self.getProject())
+        return list(self.parent.currentSpectra) or []
 
-  def getAnalysisProfile(self):
+    def getCurrentCanvas(self):
 
-    return getAnalysisProfile(self.getProject())
+        return self.parent.currentCanvas
 
-  def getResonanceGuiName(self, resonance, fullName=True):
-    """ Analysis resonance name - overrides default version
-    """
-    return makeResonanceGuiName(resonance, fullName)
+    def getCurrentEvent(self):
 
-  def getWindow(self):
+        return self.parent.currentEvent
 
-    analProject = self.getProject().currentAnalysisProject
-    return self.chooseObject(analProject.sortedSpectrumWindows(),
-                             key='name', objectName='Window')
+    def getCurrentPeakLists(self):
 
-  def getColorScheme(self):
-  
-    project = self.getProject()
-    return self.chooseObject(project.currentAnalysisProfile.sortedColorSchemes())
-  
-  def getResidueCode(self, obj):
-    """Analysis-specific version of getResidueCode - overrides generic version
-    """
-    return getResidueCode(obj)
+        return list(self.parent.currentPeakLists) or []
+
+    def getCurrentPosition(self):
+
+        if self.parent.currentPosition:
+            return self.parent.currentPosition
+
+        popup = self.getCurrentWindowPopup()
+        canvas = self.getCurrentCanvas()
+        event = self.getCurrentEvent()
+
+        if popup and canvas and event:
+            return popup.calcWorldCoord(canvas, event.x, event.y)[:2]
+
+        return None
+
+    def getCurrentSpectrum(self):
+
+        peak = self.parent.currentPeak
+        if peak:
+            return peak.peakList.dataSource
+
+    def getCurrentPeakDim(self):
+
+        peakDim = self.parent.currentPeakDim
+
+        if not peakDim:
+            peak = self.getCurrentPeak()
+
+            if not peak:
+                self.messageReporter.showWarning("Warning", "No peak or peak dim currently selected")
+                return
+
+            peakDim = self.chooseObject(peak.sortedPeakDims())
+
+        return peakDim
+
+    def getAnalysisProject(self):
+
+        return getAnalysisProject(self.getProject())
+
+    def getAnalysisProfile(self):
+
+        return getAnalysisProfile(self.getProject())
+
+    def getResonanceGuiName(self, resonance, fullName=True):
+        """Analysis resonance name - overrides default version"""
+        return makeResonanceGuiName(resonance, fullName)
+
+    def getWindow(self):
+
+        analProject = self.getProject().currentAnalysisProject
+        return self.chooseObject(analProject.sortedSpectrumWindows(), key="name", objectName="Window")
+
+    def getColorScheme(self):
+
+        project = self.getProject()
+        return self.chooseObject(project.currentAnalysisProfile.sortedColorSchemes())
+
+    def getResidueCode(self, obj):
+        """Analysis-specific version of getResidueCode - overrides generic version"""
+        return getResidueCode(obj)

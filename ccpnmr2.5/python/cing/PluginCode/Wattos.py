@@ -1,12 +1,10 @@
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.parameters import cingPaths, plugins
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.NmrStar import NmrStar
 from cing.PluginCode.required.reqMatplib import MATPLIB_STR
-from cing.PluginCode.required.reqWattos import * #@UnusedWildImport
+from cing.PluginCode.required.reqWattos import *  #@UnusedWildImport
 from cing.STAR.File import File
-from cing.core.parameters import cingPaths
-from cing.core.parameters import plugins
-
 
 if True: # block
     # TODO: use more advanced tests.
@@ -374,7 +372,7 @@ def _runWattos(project, ranges=None, tmp = None, parseOnly=False):
         if not os.path.exists(fullname):
             nTerror("Failed to create file [%s] in nmrStar.toNmrStarFile" % fullname)
             return None
-        
+
         scriptComplete = wattos.scriptTemplate
         scriptComplete = scriptComplete.replace("INPUT_STR_FILE", fileName)
         scriptComplete = scriptComplete.replace("VERBOSITY", repr(cing.verbosity))
@@ -500,7 +498,7 @@ def createHtmlWattos(project, ranges = None):
     if not getDeepByKeysOrAttributes(plugins, MATPLIB_STR, IS_INSTALLED_STR):
 #        nTdebug('Skipping createHtmlWattos because no matplib installed.')
         return
-    from cing.PluginCode.matplib import MoleculePlotSet #@UnresolvedImport
+    from cing.PluginCode.matplib import MoleculePlotSet  #@UnresolvedImport
 
 #    wiPlotList.append( ('_01_backbone_chi','QUA/RAM/BBC/C12') )
     # The following object will be responsible for creating a (png/pdf) file with

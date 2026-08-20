@@ -6,8 +6,7 @@ python -u addCCPN.py
 Adjust sourceFile where needed
 """
 
-from cing import * #@UnusedWildImport
-
+from cing import *  #@UnusedWildImport
 
 sourceFile = 'CcpnResAtomNomenclature_081103.txt'
 
@@ -18,16 +17,16 @@ for line in AwkLike(sourceFile, commentString = '#'):
     if d[1] == 'RESIDUE':
         ccpnName = ' '.join(d[13:])
         iupacName = d[9]
-        if iupacName == '-': 
+        if iupacName == '-':
             iupacName = None
         cyanaName = d[5]
-        if cyanaName == '-': 
+        if cyanaName == '-':
             cyanaName = None
         dyanaName = d[7]
-        if dyanaName == '-': 
+        if dyanaName == '-':
             dyanaName = None
         cingName  = d[3]
-        if cingName == '-': 
+        if cingName == '-':
             cingName = None
 
         resdef = NTdb.getResidueDefByName(cingName, 'INTERNAL_0')

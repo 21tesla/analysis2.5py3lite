@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,108 +50,116 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Base import Base
 
+
 class CheckButton(Tkinter.Checkbutton, Base):
+    def __init__(
+        self,
+        parent,
+        text="",
+        selected=False,
+        callback=None,
+        grid=None,
+        gridSpan=(1, 1),
+        sticky="w",
+        docKey=None,
+        tipText=None,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, text ='', selected=False,
-               callback=None, grid=None, gridSpan=(1,1),
-               sticky='w', docKey=None, tipText=None, *args, **kw):
-   
-    if not docKey:
-      docKey = text
+        if not docKey:
+            docKey = text
 
-    self.font = kw.get('font')
-    if not kw.has_key('bg'):
-      kw['bg'] = 'grey90'
-      
-    if not kw.has_key('highlightbackground'):
-      kw['highlightbackground'] = kw.get('bg') or 'grey90'
-      
-    if not kw.has_key('highlightcolor'):
-      kw['highlightcolor'] = kw.get('bg') or 'grey90'
- 
-    if not kw.has_key('activebackground'):
-      kw['activebackground'] = '#D0B0A0'
- 
-    if not kw.has_key('selectcolor'):
-      kw['selectcolor'] = '#D0B0A0'
-      
-    Tkinter.Checkbutton.__init__(self, parent, *args, **kw)
-    Base.__init__(self, docKey=docKey, tipText=tipText)
+        self.font = kw.get("font")
+        if "bg" not in kw:
+            kw["bg"] = "grey90"
 
-    self.callback = callback
-    self.var = Tkinter.IntVar()
-    self.config(text=text, variable=self.var)
+        if "highlightbackground" not in kw:
+            kw["highlightbackground"] = kw.get("bg") or "grey90"
 
-    if (callback):
-      self.config(command=self.doCallback)
+        if "highlightcolor" not in kw:
+            kw["highlightcolor"] = kw.get("bg") or "grey90"
 
-    self.setSelected(selected)
- 
-    if grid is not None:
-      row, col = grid
-      rowSpan, colSpan = gridSpan
-      self.grid(row=row, column=col, rowspan=rowSpan,
-                columnspan=colSpan, sticky=sticky)
+        if "activebackground" not in kw:
+            kw["activebackground"] = "#D0B0A0"
 
-  def doCallback(self):
+        if "selectcolor" not in kw:
+            kw["selectcolor"] = "#D0B0A0"
 
-    self.callback(self.getSelected())
+        Tkinter.Checkbutton.__init__(self, parent, *args, **kw)
+        Base.__init__(self, docKey=docKey, tipText=tipText)
 
-  def isSelected(self):
+        self.callback = callback
+        self.var = Tkinter.IntVar()
+        self.config(text=text, variable=self.var)
 
-    return self.getSelected()
+        if callback:
+            self.config(command=self.doCallback)
 
-  def get(self):
+        self.setSelected(selected)
 
-    return self.getSelected()
+        if grid is not None:
+            row, col = grid
+            rowSpan, colSpan = gridSpan
+            self.grid(row=row, column=col, rowspan=rowSpan, columnspan=colSpan, sticky=sticky)
 
-  def getSelected(self):
+    def doCallback(self):
 
-    if self.var.get():
-      return True
-    else:
-      return False
+        self.callback(self.getSelected())
 
-  def set(self, selected):
+    def isSelected(self):
 
-    self.setSelected(selected)
+        return self.getSelected()
 
-  def setSelected(self, selected):
+    def get(self):
 
-    if selected:
-      self.var.set(1)
-    else:
-      self.var.set(0)
+        return self.getSelected()
 
-  def toggle(self):
+    def getSelected(self):
 
-    self.setSelected(not self.getSelected())
+        if self.var.get():
+            return True
+        else:
+            return False
 
-if __name__ == '__main__':
+    def set(self, selected):
 
-  from memops.gui.Button import Button
+        self.setSelected(selected)
 
-  def get_me():
-    print('get_me:', c.getSelected())
+    def setSelected(self, selected):
 
-  def toggle_me():
-    c.toggle()
+        if selected:
+            self.var.set(1)
+        else:
+            self.var.set(0)
 
-  def my_callback(selected):
-    print('my_callback:', selected)
+    def toggle(self):
 
-  root = Tkinter.Tk()
+        self.setSelected(not self.getSelected())
 
-  c = CheckButton(root, 'check button', callback=my_callback,
-                  tipText='What this does')
-  c.grid()
-  b = Button(root, text='get me', command=get_me)
-  b.grid()
-  b = Button(root, text='toggle me', command=toggle_me)
-  b.grid()
 
-  root.mainloop()
+if __name__ == "__main__":
+    from memops.gui.Button import Button
+
+    def get_me():
+        print("get_me:", c.getSelected())
+
+    def toggle_me():
+        c.toggle()
+
+    def my_callback(selected):
+        print("my_callback:", selected)
+
+    root = Tkinter.Tk()
+
+    c = CheckButton(root, "check button", callback=my_callback, tipText="What this does")
+    c.grid()
+    b = Button(root, text="get me", command=get_me)
+    b.grid()
+    b = Button(root, text="toggle me", command=toggle_me)
+    b.grid()
+
+    root.mainloop()

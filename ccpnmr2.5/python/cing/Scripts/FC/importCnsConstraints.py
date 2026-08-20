@@ -16,34 +16,29 @@ Contact: Wim Vranken <wim@ebi.ac.uk>
 # Get the Implementation package to create a project
 #
 
-from memops.api import Implementation
-from memops.universal import Io as uniIo
+#
+# Standard Python stuff
+#
+import os
+import shutil
+
+#
+# Get Tkinter for popups
+#
 from ccp.api.nmr import Nmr
 
 #
 # Function to get resonances 'in order' for pairwise constraints,
 # if this information was specified.
 #
-
-from ccp.general.Util import getResonancesFromPairwiseConstraintItem #@UnresolvedImport
+from ccp.general.Util import getResonancesFromPairwiseConstraintItem  #@UnresolvedImport
 
 #
 # Import the CNS format class
 #
-
 from ccpnmr.format.converters.CnsFormat import CnsFormat
-
-#
-# Get Tkinter for popups
-#
-
-import tkinter
-
-#
-# Standard Python stuff
-#
-
-import os, shutil
+from memops.api import Implementation
+from memops.universal import Io as uniIo
 
 if __name__ == '__main__':
 

@@ -5,9 +5,11 @@ Execute like (counting CING's code base lines; 110k+)
 wc str(python $CINGROOT/python/cing/Libs/find.py '*.py' $CINGROOT)
 """
 
-from cing.Libs.NTutils import findvisitor
 import os
 import sys
+
+from cing.Libs.NTutils import findvisitor
+
 
 def find2(pattern, startdir=os.curdir):
     "Renamed to distinguish from string's find and pylab's find"

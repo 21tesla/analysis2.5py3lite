@@ -1,23 +1,25 @@
 from ccpnmr.format.general.Constants import assign_kw, atomSerial_kw
 
-def cleanResonanceAppData(project,formatName):
 
-  if project.currentNmrProject:
-    for resonance in project.currentNmrProject.resonances:
-      for keyword in (assign_kw,atomSerial_kw,'shiftList','mappingSingleMatch'):
-        appData = resonance.findFirstApplicationData(application = formatName, keyword = keyword)
-        if appData:
-          resonance.removeApplicationData(appData)
+def cleanResonanceAppData(project, formatName):
 
-if __name__ == '__main__':
+    if project.currentNmrProject:
+        for resonance in project.currentNmrProject.resonances:
+            for keyword in (assign_kw, atomSerial_kw, "shiftList", "mappingSingleMatch"):
+                appData = resonance.findFirstApplicationData(application=formatName, keyword=keyword)
+                if appData:
+                    resonance.removeApplicationData(appData)
 
-  from memops.general.Io import loadProject
-  import sys
 
-  projectDir = sys.argv[1]
+if __name__ == "__main__":
+    import sys
 
-  project = loadProject(projectDir)
-  
-  cleanResonanceAppData(project,'xeasy')
-  
-  #project.saveModified()
+    from memops.general.Io import loadProject
+
+    projectDir = sys.argv[1]
+
+    project = loadProject(projectDir)
+
+    cleanResonanceAppData(project, "xeasy")
+
+    # project.saveModified()

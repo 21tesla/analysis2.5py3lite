@@ -2,14 +2,14 @@
 Runs and retrieves DSSP
 Add's runDssp method to project class
 """
+from glob import glob
+
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE, cingPaths
 from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqDssp import DSSP_STR
 from cing.PluginCode.required.reqProcheck import SECSTRUCT_STR
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE
-from cing.core.parameters import cingPaths
-from glob import glob
 
 if True: # block
     useModule = True
@@ -161,7 +161,7 @@ class Dssp:
                     nTerror('in Dssp.parseResult: residue not found (%s,%d); giving up.' % (chain, resNum))
                     return True
                 # For first model reset the dssp dictionary in the residue
-                if model == 0 and residue.has_key('dssp'):
+                if model == 0 and 'dssp' in residue:
                     del(residue['dssp'])
                 residue.setdefault('dssp', NTdict())
 
@@ -177,7 +177,7 @@ class Dssp:
             #end for
         #end for
         for residue in self.molecule.allResidues():
-            if residue.has_key(DSSP_STR):
+            if DSSP_STR in residue:
 #                residue[DSSP_STR].consensus = residue[DSSP_STR].secStruct.setConsensus(CONSENSUS_SEC_STRUCT_FRACTION)
                 residue[DSSP_STR].consensus = residue[DSSP_STR].secStruct.setConsensus(useLargest=True)
                 residue[DSSP_STR].keysformat()
@@ -190,7 +190,7 @@ class Dssp:
 #        item = SECSTRUCT_STR
 ##        for item in [ SECSTRUCT_STR ]:
 #        for res in self.project.molecule.allResidues():
-#            if res.has_key( item ):
+#            if  item  in res:
 #                itemList = res[ item ]
 #                c = itemList.setConsensus()
 #                nTdebug('consensus: %s', c)
@@ -242,7 +242,7 @@ def runDssp(project, parseOnly=False)   :
     project.status.dssp.molecule = project.molecule.nameTuple()
     project.status.dssp.keysformat()
 
-    if project.molecule.has_key('dssp'):
+    if 'dssp' in project.molecule:
         del(project.molecule.dssp)
     #end if
 
@@ -266,7 +266,7 @@ def restoreDssp(project, tmp = None):
     Return True on error
     """
     nTmessage('==> Restoring dssp results')
-    
+
     if not project:
         nTerror('restoreDssp: no project defined')
         return True
@@ -292,7 +292,7 @@ def restoreDssp(project, tmp = None):
 
     project.status.dssp.parsed = False
 
-    if project.molecule.has_key('dssp'):
+    if 'dssp' in project.molecule:
         del(project.molecule.dssp)
     #end if
 

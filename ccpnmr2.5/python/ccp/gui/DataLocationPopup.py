@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,72 +51,71 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from memops.gui.Util import createDismissHelpButtonList
-
+from ccp.gui.DataLocationFrame import DataLocationFrame
 from memops.editor.BasePopup import BasePopup
 
-from ccp.gui.DataLocationFrame import DataLocationFrame
 
 class DataLocationPopup(BasePopup):
+    def __init__(
+        self, parent, project, title="Edit Project Spectrum & Data Paths", help_msg="", help_url="", *args, **kw
+    ):
 
-  def __init__(self, parent, project, title = 'Edit Project Spectrum & Data Paths',
-               help_msg = '', help_url = '', *args, **kw):
+        self.help_msg = help_msg
+        self.help_url = help_url
+        self.waiting = False
+        BasePopup.__init__(self, parent, project, title=title, *args, **kw)
 
-    self.help_msg = help_msg
-    self.help_url = help_url
-    self.waiting  = False
-    BasePopup.__init__(self, parent, project, title=title, *args, **kw)
+    def body(self, guiFrame):
 
-  def body(self, guiFrame):
+        self.geometry("700x500")
+        guiFrame.expandGrid(0, 0)
 
-    self.geometry('700x500')
-    guiFrame.expandGrid(0,0)
+        self.dataLocationFrame = DataLocationFrame(guiFrame, self.project, utilityButtons=True, grid=(0, 0))
 
-    self.dataLocationFrame = DataLocationFrame(guiFrame, self.project,
-                                               utilityButtons=True, grid=(0,0))
+        buttonList = self.dataLocationFrame.buttonList
+        buttonList.helpUrl = self.help_url
+        buttonList.helpMsg = self.help_msg
 
-    buttonList = self.dataLocationFrame.buttonList
-    buttonList.helpUrl = self.help_url
-    buttonList.helpMsg = self.help_msg
-    
-    self.dataLocationFrame.administerNotifiers(self.registerNotify)
+        self.dataLocationFrame.administerNotifiers(self.registerNotify)
 
-  def destroy(self):
+    def destroy(self):
 
-    self.dataLocationFrame.administerNotifiers(self.unregisterNotify)
+        self.dataLocationFrame.administerNotifiers(self.unregisterNotify)
 
-    BasePopup.destroy(self)
+        BasePopup.destroy(self)
 
-if __name__ == '__main__':
 
-  import sys
+if __name__ == "__main__":
+    import sys
 
-  if len(sys.argv) != 2:
-    print('must specify project directory')
-    sys.exit()
+    if len(sys.argv) != 2:
+        print("must specify project directory")
+        sys.exit()
 
-  path = sys.argv[1]
+    path = sys.argv[1]
 
-  import Tkinter
-  from memops.gui.DataEntry import askDir, askFile
-  from memops.gui.MessageReporter import showWarning
-  from memops.general.Io import loadProject
-  from memops.universal.Io import normalisePath
+    import Tkinter
 
-  # This needs to be above loadProject because that can pop up
-  # dialogs, and it will create a root if one has not been created
-  # already, and that will lead to the later code crashing
-  r = Tkinter.Tk()
+    from memops.general.Io import loadProject
+    from memops.gui.DataEntry import askDir, askFile
+    from memops.gui.MessageReporter import showWarning
+    from memops.universal.Io import normalisePath
 
-  path = normalisePath(path)
-  askdir = lambda title, prompt, initial_value: askDir(title, prompt,
-              initial_value, parent=top, extra_dismiss_text='Skip')
-  askfile = lambda title, prompt, initial_value: askFile(title, prompt,
-              initial_value, parent=top, extra_dismiss_text='Skip')
-  project = loadProject(path, showWarning=showWarning,
-                        askDir=askdir, askFile=askfile)
+    # This needs to be above loadProject because that can pop up
+    # dialogs, and it will create a root if one has not been created
+    # already, and that will lead to the later code crashing
+    r = Tkinter.Tk()
 
-  popup = DataLocationPopup(r, project)
+    path = normalisePath(path)
+    askdir = lambda title, prompt, initial_value: askDir(
+        title, prompt, initial_value, parent=top, extra_dismiss_text="Skip"
+    )
+    askfile = lambda title, prompt, initial_value: askFile(
+        title, prompt, initial_value, parent=top, extra_dismiss_text="Skip"
+    )
+    project = loadProject(path, showWarning=showWarning, askDir=askdir, askFile=askfile)
 
-  r.withdraw()
-  r.mainloop()
+    popup = DataLocationPopup(r, project)
+
+    r.withdraw()
+    r.mainloop()

@@ -15,45 +15,47 @@
 
 from memops.general.Io import loadProject
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # Load the project with the DNA molecule.
 
-  # Load the project with the DNA molecule.
+    project = loadProject("dnaTest")
 
-  project = loadProject('dnaTest')
+    # Locate the DNA molecule in the project.
 
-  # Locate the DNA molecule in the project.
+    molecule = project.findFirstMolecule(name="myDnaMoleculeName")
 
-  molecule = project.findFirstMolecule(name = 'myDnaMoleculeName')
+    # Make a new molSystem top object.
 
-  # Make a new molSystem top object.
+    keywds = {"code": "myMolecularSystemCode", "name": "My molecular system name"}
+    molSystem = project.newMolSystem(**keywds)
 
-  keywds = {'code': 'myMolecularSystemCode',
-            'name': 'My molecular system name'}
-  molSystem = project.newMolSystem(**keywds)
+    # Make a chain for this molSystem that is linked to the reference
+    #   DNA molecule.
 
-  # Make a chain for this molSystem that is linked to the reference
-  #   DNA molecule.
+    chain = molSystem.newChain(code="A", molecule=molecule)
 
-  chain = molSystem.newChain(code = 'A', molecule = molecule)
+    # Print some basic information about the chain and molecule.
 
-  # Print some basic information about the chain and molecule.
+    print("Code [%s], name [%s]" % (chain.code, chain.molecule.name))
 
-  print('Code [%s], name [%s]' % (chain.code, chain.molecule.name))
+    # Navigate residues in this chain and print atom names.
 
-  # Navigate residues in this chain and print atom names.
+    for res in chain.sortedResidues():
+        print("Residue [%s], position [%s]" % (res.ccpCode, res.seqCode + 1))
+        print(
+            "  Atoms: ",
+        )
 
-  for res in chain.sortedResidues():
-    print('Residue [%s], position [%s]' % (res.ccpCode, res.seqCode + 1))
-    print('  Atoms: ',)
+        for atom in res.sortedAtoms():
+            print(
+                atom.name,
+            )
+        print("\n")
 
-    for atom in res.sortedAtoms():
-      print(atom.name,)
-    print('\n')
+    # Hack to find the currentElementStore.
 
-  # Hack to find the currentElementStore.
+    project.currentChemElementStore = project.findFirstChemElementStore()
 
-  project.currentChemElementStore = project.findFirstChemElementStore()
+    # Check that the project is valid.
 
-  # Check that the project is valid.
-
-  project.checkAllValid(complete = True)
+    project.checkAllValid(complete=True)

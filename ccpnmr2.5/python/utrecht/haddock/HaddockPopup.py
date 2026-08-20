@@ -83,13 +83,11 @@ Citing:          If you are using this software for academic purposes, we
 
 import sys
 
-from memops.gui.Frame           import Frame
-from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
-from memops.gui.Util            import createDismissHelpButtonList
-from memops.editor.BasePopup    import BasePopup
-from memops.gui.FileSelectPopup import FileSelectPopup
+from HaddockFrame import HaddockFrame
 
-from HaddockFrame               import HaddockFrame
+from memops.editor.BasePopup import BasePopup
+from memops.gui.FileSelectPopup import FileSelectPopup
+from memops.gui.Util import createDismissHelpButtonList
 
 """
 Description: Graphical user interface around the Utrecht HADDOCK molecular docking 
@@ -107,15 +105,17 @@ def HaddockGUI(argServer):
     popup.open()
 
 def standAloneUse(argv=None):
-    
+
     """Use the Haddock GUI in stand alone mode"""
-    
-    import Tkinter, os
+
+
+    import Tkinter
+
     from memops.general.Io import loadProject
-    
+
     guiRoot = Tkinter.Tk()
     project = None
-    
+
     if len(argv) > 1:
         project = loadProject(argv[1])
     else:
@@ -125,14 +125,14 @@ def standAloneUse(argv=None):
         else:
             print("No project defined means exit")
         popup.destroy()
-    
+
     if project:
         guiRoot.withdraw()
-        popup = HaddockPopup(guiRoot, project)    
+        popup = HaddockPopup(guiRoot, project)
         guiRoot.mainloop()
-    
+
 class HaddockPopup(BasePopup):
-    
+
     def __init__(self, parent, ccpnProject):
 
         self.parent      = parent
@@ -142,7 +142,7 @@ class HaddockPopup(BasePopup):
 
         self.font = 'Helvetica 12'
         self.setFont()
-                    
+
     def body(self, guiFrame):
 
         # Ensure that the first row and column in popup expand
@@ -159,24 +159,24 @@ class HaddockPopup(BasePopup):
         self.bottomButtons.grid(row=1, column = 0, sticky = 'ew')
 
     def save(self):
-        
+
         self.hFrame.ccpnProject.saveModified()
-        
+
     def close(self):
-  
+
         BasePopup.destroy(self)
         #sys.exit(0)
- 
+
     def destroy(self):
-    
+
         BasePopup.destroy(self)
-    
+
 if __name__ == '__main__':
 
     standAloneUse(sys.argv)
 
-  
-  
-  
-  
-  
+
+
+
+
+

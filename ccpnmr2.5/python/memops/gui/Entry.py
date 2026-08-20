@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,154 +50,163 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import re
-
-import tkinter
-
-from memops.universal.Util import breakString
 
 from memops.gui.Base import Base
 from memops.gui.MessageReporter import showWarning
+from memops.universal.Util import breakString
 
 # this just makes it easier to set the entry value than does Tkinter.Entry
 
+
 class Entry(Tkinter.Entry, Base):
+    array_re = re.compile(r",?\s*")
+    separator = ", "
+    joiner = "\n"
 
-  array_re = re.compile(',?\s*')
-  separator = ', '
-  joiner = '\n'
+    def __init__(
+        self,
+        parent,
+        text="",
+        returnCallback=None,
+        isArray=False,
+        maxCharsPerLine=0,
+        valToStr=None,
+        strToVal=None,
+        grid=None,
+        gridSpan=(1, 1),
+        sticky="w",
+        docKey=None,
+        tipText=None,
+        leaveCallback=None,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, text = '', returnCallback=None,
-               isArray=False, maxCharsPerLine=0, valToStr=None,
-               strToVal=None, grid=None, gridSpan=(1,1),
-               sticky='w', docKey=None, tipText=None,
-               leaveCallback=None, *args, **kw):
+        if not docKey:
+            docKey = text
 
-    if not docKey:
-      docKey = text
+        self.isArray = isArray
+        self.maxCharsPerLine = maxCharsPerLine
+        self.valToStr = valToStr
+        self.strToVal = strToVal
 
-    self.isArray = isArray
-    self.maxCharsPerLine = maxCharsPerLine
-    self.valToStr = valToStr
-    self.strToVal = strToVal
+        if "bg" not in kw and "background" not in kw:
+            kw["bg"] = "white"
 
-    if (not kw.has_key('bg') and not kw.has_key('background')):
-      kw['bg'] = 'white'
+        Tkinter.Entry.__init__(self, parent, *args, **kw)
+        Base.__init__(self, docKey=docKey, tipText=tipText)
 
-    Tkinter.Entry.__init__(self, parent, *args, **kw)
-    Base.__init__(self, docKey=docKey, tipText=tipText)
+        self.parent = parent
 
-    self.parent = parent
+        self.set(text)
 
-    self.set(text)
+        # self.bind('<Enter>', self.enter)
+        # self.bind('<Leave>', self.leave)
+        # self.config(takefocus=0)
 
-    #self.bind('<Enter>', self.enter)
-    #self.bind('<Leave>', self.leave)
-    #self.config(takefocus=0)
-    
-    if grid is not None:
-      row, col = grid
-      rowSpan, colSpan = gridSpan
-      self.grid(row=row, column=col, rowspan=rowSpan,
-                columnspan=colSpan, sticky=sticky)
+        if grid is not None:
+            row, col = grid
+            rowSpan, colSpan = gridSpan
+            self.grid(row=row, column=col, rowspan=rowSpan, columnspan=colSpan, sticky=sticky)
 
-    self.returnCallback = returnCallback
-    if returnCallback:
-      self.bind('<KeyPress-Return>', returnCallback)
+        self.returnCallback = returnCallback
+        if returnCallback:
+            self.bind("<KeyPress-Return>", returnCallback)
 
-    self.leaveCallback = leaveCallback
-    if leaveCallback:
-      self.bind('<Leave>', leaveCallback, '+')
-    
-  def destroy(self):
+        self.leaveCallback = leaveCallback
+        if leaveCallback:
+            self.bind("<Leave>", leaveCallback, "+")
 
-    if self.returnCallback:
-      self.bind('<KeyPress-Return>')
+    def destroy(self):
 
-    if self.leaveCallback:
-      self.bind('<Leave>')
+        if self.returnCallback:
+            self.bind("<KeyPress-Return>")
 
-    Tkinter.Entry.destroy(self)
+        if self.leaveCallback:
+            self.bind("<Leave>")
 
-  def get(self):
+        Tkinter.Entry.destroy(self)
 
-    # TBD: str below is used to convert unicode to string
-    # (in Tcl/Tk 8.5 it looks like everything is unicode)
-    ###s = str(Tkinter.Entry.get(self).strip())
-    s = Tkinter.Entry.get(self).strip().encode('utf-8')
-    if (self.isArray):
-      if (self.maxCharsPerLine):
-        s = s.replace(self.joiner, self.separator)
-      if (s):
-        value = re.split(self.array_re, s)
-      else:
-        value = []
-      if (self.strToVal):
-        value = [self.strToVal(v) for v in value if v]
-    elif (self.strToVal):
-      if (s):
-        try:
-          value = self.strToVal(s)
-        except:
-          value = None
-          showWarning('Error', 'Could not convert value to required type')
-      else:
-        value = None
-    else:
-      value = s
+    def get(self):
 
-    return value
+        # TBD: str below is used to convert unicode to string
+        # (in Tcl/Tk 8.5 it looks like everything is unicode)
+        ###s = str(Tkinter.Entry.get(self).strip())
+        s = Tkinter.Entry.get(self).strip().encode("utf-8")
+        if self.isArray:
+            if self.maxCharsPerLine:
+                s = s.replace(self.joiner, self.separator)
+            if s:
+                value = re.split(self.array_re, s)
+            else:
+                value = []
+            if self.strToVal:
+                value = [self.strToVal(v) for v in value if v]
+        elif self.strToVal:
+            if s:
+                try:
+                    value = self.strToVal(s)
+                except:
+                    value = None
+                    showWarning("Error", "Could not convert value to required type")
+            else:
+                value = None
+        else:
+            value = s
 
-  def set(self, text):
+        return value
 
-    if (text is None):
-      s = ''
-    elif (type(text) == str):
-      s = text
-    elif (self.isArray):
-      if (self.valToStr):
-        s = self.separator.join([self.valToStr(x) for x in text])
-      else:
-        s = self.separator.join(text)
-      if (self.maxCharsPerLine):
-        s = breakString(s, self.separator, self.joiner, self.maxCharsPerLine)
-    elif (self.valToStr):
-      s = self.valToStr(text)
-    else:
-      s = text
+    def set(self, text):
 
-    self.delete(0, Tkinter.END)
-    self.insert(0, s)
+        if text is None:
+            s = ""
+        elif type(text) == str:
+            s = text
+        elif self.isArray:
+            if self.valToStr:
+                s = self.separator.join([self.valToStr(x) for x in text])
+            else:
+                s = self.separator.join(text)
+            if self.maxCharsPerLine:
+                s = breakString(s, self.separator, self.joiner, self.maxCharsPerLine)
+        elif self.valToStr:
+            s = self.valToStr(text)
+        else:
+            s = text
 
-  #def enter(self, event):
+        self.delete(0, Tkinter.END)
+        self.insert(0, s)
 
-  #  self.focus()
+    # def enter(self, event):
 
-  #def leave(self, event):
+    #  self.focus()
 
-  #  self.parent.focus()
+    # def leave(self, event):
 
-if (__name__ == '__main__'):
+    #  self.parent.focus()
 
-  from memops.gui.Button import Button
 
-  msg = 'hello world'
+if __name__ == "__main__":
+    from memops.gui.Button import Button
 
-  def func():
+    msg = "hello world"
 
-    global count
+    def func():
 
-    msg = entry.get()
-    entry.set(msg + '*')
+        global count
 
-  root = Tkinter.Tk()
- 
-  entry = Entry(root, text='hello world', tipText='Instructions')
-  entry.grid()
-  entry = Entry(root, text='hello world 2')
-  entry.grid()
-  button = Button(root, text='hit me', command=func)
-  button.grid()
+        msg = entry.get()
+        entry.set(msg + "*")
 
-  root.mainloop()
+    root = Tkinter.Tk()
 
+    entry = Entry(root, text="hello world", tipText="Instructions")
+    entry.grid()
+    entry = Entry(root, text="hello world 2")
+    entry.grid()
+    button = Button(root, text="hit me", command=func)
+    button.grid()
+
+    root.mainloop()

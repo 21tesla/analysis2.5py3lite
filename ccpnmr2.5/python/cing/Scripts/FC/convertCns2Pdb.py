@@ -16,47 +16,47 @@ Contact: Wim Vranken <wim@ebi.ac.uk>
 # These are standard Python libraries
 #
 
-import os, re, shutil
+import os
+import re
+import shutil
+
+from ccpnmr.format.converters.CnsFormat import CnsFormat
+
+#
+# Get Pdb and CnsFormat classes for format conversion
+#
+from ccpnmr.format.converters.PdbFormat import PdbFormat
 
 #
 # Get the Implementation package to create a project
 #
-
 from memops.api import Implementation
-
-# 
-# Get Pdb and CnsFormat classes for format conversion
-# 
-
-from ccpnmr.format.converters.PdbFormat import PdbFormat
-from ccpnmr.format.converters.CnsFormat import CnsFormat
 
 #
 # Get Tkinter for popups
 #
 
-import tkinter
 
 if __name__ == '__main__':
 
   #
   # Variables...
   #
-  
+
   dataDir = 'data/'
-  cnsFileMatchRegExp = "cns_(\d+)\.pdb$"
+  cnsFileMatchRegExp = r"cns_(\d+)\.pdb$"
 
   currentDir = os.path.abspath('.')
   projectDir = os.path.join(currentDir,'local')
   projectName = 'testCns2PdbConversion'
-  
+
   outputDir = os.path.join(currentDir,'local')
   outputPdbFileName = 'test.pdb'
-  
+
   #
   # Make sure the projectDir exists and delete existing data
   #
-  
+
   if not os.path.exists(projectDir):
     os.mkdir(projectDir)
 
@@ -67,20 +67,20 @@ if __name__ == '__main__':
   #
   # Open a CCPN project and make an NMR structure generation to link the structures to
   #
-  
+
   #
   # Easiest way to make sure project is saved in a particular directory is to make it
   # the active one. Otherwise have to change repository paths.
   #
-  
+
   curDir = os.getcwd()
   os.chdir(projectDir)
-  project = Implementation.MemopsRoot(name = projectName)    
+  project = Implementation.MemopsRoot(name = projectName)
   os.chdir(curDir)
-  
+
   nmrProject = project.newNmrProject(name = project.name)
   structureGeneration = nmrProject.newStructureGeneration()
-  
+
   #
   # Start Tkinter for user interaction
   #
@@ -137,7 +137,7 @@ if __name__ == '__main__':
   #
   # Make sure the outputDir exists...
   #
-  
+
   if not os.path.exists(outputDir):
     os.mkdir(outputDir)
 
@@ -154,5 +154,5 @@ if __name__ == '__main__':
   #
   # Save the CCPN project...
   #
-  
+
   project.saveModified()

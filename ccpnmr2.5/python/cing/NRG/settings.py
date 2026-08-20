@@ -4,8 +4,9 @@ Settings for the NRG-CING
 Test by:
 python $CINGROOT/python/cing/NRG/settings.py
 """
-from cing.Libs.NTutils import nTdebug
 import os
+
+from cing.Libs.NTutils import nTdebug
 
 PLOT_STR = 'plot'
 PLOT_TREND_STR = 'plotTrend'
@@ -28,7 +29,7 @@ dDir                = '/Library/WebServer/Documents'            # Web dir.
 VCsecret            = 'a/b/c' # Overriden locally. @UnusedVariable Only used in publishVC.py
 
 try:
-    from cing.NRG.localConstants import * #@UnusedWildImport # pylint: disable=E0611
+    from cing.NRG.localConstants import *  #@UnusedWildImport # pylint: disable=E0611
     nTdebug("Loaded NRG localConstants.py.")
 except:
     nTdebug("Consider creating a localConstants.py file with a different 'user' location.")
@@ -102,4 +103,4 @@ summaryHeaderTitleList = [
     'Chothia definition for alpha,beta,alpha/beta,coil,None',
     'Number of chains including water',
     'Total number of residues'
-]    
+]

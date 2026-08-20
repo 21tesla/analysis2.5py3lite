@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,119 +50,119 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Color import getIntRgb
 
-DEFAULTBACKGROUND = 'grey82'
-DEFAULTMIDCOLOR = 'grey90'
+DEFAULTBACKGROUND = "grey82"
+DEFAULTMIDCOLOR = "grey90"
 
 
 # this extends the Tkinter.Button class with a few extra functions
 class Button(Tkinter.Button, Base):
+    def __init__(self, parent, grid=None, gridSpan=(1, 1), sticky="w", docKey=None, tipText=None, *args, **kw):
 
-  def __init__(self, parent, grid=None, gridSpan=(1,1), sticky='w', 
-               docKey=None, tipText=None, *args, **kw):
+        if not docKey:
+            docKey = kw.get("text")
 
-    if not docKey:
-      docKey = kw.get('text')
+        self.font = kw.get("font")
+        if "bg" not in kw:
+            kw["bg"] = DEFAULTBACKGROUND
 
-    self.font = kw.get('font')
-    if not kw.has_key('bg'):
-      kw['bg'] = DEFAULTBACKGROUND
+        if not kw.get("activebackground"):
+            kw["activebackground"] = "#D0B0A0"
 
-    if not kw.get('activebackground'):
-      kw['activebackground'] = '#D0B0A0'
+        if not kw.get("highlightthickness"):
+            kw["highlightthickness"] = 1
 
-    if not kw.get('highlightthickness'):
-      kw['highlightthickness'] = 1
+        if not kw.get("highlightbackground"):
+            kw["highlightbackground"] = DEFAULTMIDCOLOR
 
-    if not kw.get('highlightbackground'):
-      kw['highlightbackground'] = DEFAULTMIDCOLOR
+        if not kw.get("highlightcolor"):
+            kw["highlightcolor"] = DEFAULTMIDCOLOR
 
-    if not kw.get('highlightcolor'):
-      kw['highlightcolor'] = DEFAULTMIDCOLOR
+        if "command" in kw:
+            self.buttonCommand = kw["command"]
+        else:
+            self.buttonCommand = None
 
-    if kw.has_key('command'):
-      self.buttonCommand = kw['command']
-    else:
-      self.buttonCommand = None
+        Tkinter.Button.__init__(self, parent, *args, **kw)
+        Base.__init__(self, docKey=docKey, tipText=tipText)
 
-    Tkinter.Button.__init__(self, parent, *args, **kw)
-    Base.__init__(self, docKey=docKey, tipText=tipText)
+        if grid is not None:
+            row, col = grid
+            rowSpan, colSpan = gridSpan
+            self.grid(row=row, column=col, rowspan=rowSpan, columnspan=colSpan, sticky=sticky)
 
-    if grid is not None:
-      row, col = grid
-      rowSpan, colSpan = gridSpan
-      self.grid(row=row, column=col, rowspan=rowSpan,
-                columnspan=colSpan, sticky=sticky)
+        self.parent = parent
+        self.determineFgs()
 
-    self.parent = parent
-    self.determineFgs()
-    
-  def determineFgs(self):
+    def determineFgs(self):
 
-    fg = self.cget('fg')
-    bg = self.cget('bg')
+        fg = self.cget("fg")
+        bg = self.cget("bg")
 
-    (r1, b1, g1) = getIntRgb(self, fg)
-    (r2, b2, g2) = getIntRgb(self, bg)
+        (r1, b1, g1) = getIntRgb(self, fg)
+        (r2, b2, g2) = getIntRgb(self, bg)
 
-    r = (r1 + r2) / 2
-    g = (g1 + g2) / 2
-    b = (b1 + b2) / 2
+        r = (r1 + r2) / 2
+        g = (g1 + g2) / 2
+        b = (b1 + b2) / 2
 
-    self.enableFg = fg
-    self.disableFg = '#%02x%02x%02x' % (r, g, b)
+        self.enableFg = fg
+        self.disableFg = "#%02x%02x%02x" % (r, g, b)
 
-  def disable(self):
+    def disable(self):
 
-    self.config(fg=self.disableFg, state=Tkinter.DISABLED)
+        self.config(fg=self.disableFg, state=Tkinter.DISABLED)
 
-  def enable(self):
+    def enable(self):
 
-    self.config(fg=self.enableFg, state=Tkinter.NORMAL)
+        self.config(fg=self.enableFg, state=Tkinter.NORMAL)
 
-  def setText(self, text):
+    def setText(self, text):
 
-    self.config(text=text)
+        self.config(text=text)
 
-  def setState(self, state):
+    def setState(self, state):
 
-    if (state.lower() == Tkinter.DISABLED):
-      self.disable()
-    else:
-      self.enable()
+        if state.lower() == Tkinter.DISABLED:
+            self.disable()
+        else:
+            self.enable()
 
-  def configure(self, **options):
+    def configure(self, **options):
 
-    if options.has_key('command'):
-      cmd = self.cget('command')
-      if cmd and cmd in self._tclCommands: # o/w get memory leak until button destroyed
-        self.deletecommand(str(cmd))
-      self.buttonCommand = options['command']
+        if "command" in options:
+            cmd = self.cget("command")
+            if cmd and cmd in self._tclCommands:  # o/w get memory leak until button destroyed
+                self.deletecommand(str(cmd))
+            self.buttonCommand = options["command"]
 
-    return Tkinter.Button.config(self, **options)
+        return Tkinter.Button.config(self, **options)
 
-  #config = configure - Taken out for now, as it messes analysis up
-  def config(self, **options):
+    # config = configure - Taken out for now, as it messes analysis up
+    def config(self, **options):
 
-    return self.configure(**options)
+        return self.configure(**options)
 
-if __name__ == '__main__':
 
-  root = Tkinter.Tk()
-  
-  def click():
-    print("Clicked")
-    root.destroy()
-  
-  #b = Button(root, text='+ - + -\n- + - +\n+ - + -\n- + - +', command=click)
-  b = Button(root, text='Click Me', command=click,
-             activebackground='red',
-             activeforeground='white',
-             tipText='Click for action')
-  b.pack()
-  
-  root.mainloop()
+if __name__ == "__main__":
+    root = Tkinter.Tk()
+
+    def click():
+        print("Clicked")
+        root.destroy()
+
+    # b = Button(root, text='+ - + -\n- + - +\n+ - + -\n- + - +', command=click)
+    b = Button(
+        root,
+        text="Click Me",
+        command=click,
+        activebackground="red",
+        activeforeground="white",
+        tipText="Click for action",
+    )
+    b.pack()
+
+    root.mainloop()

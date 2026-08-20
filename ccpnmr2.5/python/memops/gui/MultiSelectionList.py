@@ -1,4 +1,3 @@
-  
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,91 +50,96 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-
-from memops.universal.Io import joinPath
-
-from memops.gui.ScrolledListbox import ScrolledListbox
-from memops.gui.Label import Label
-from memops.gui.Util import createDismissHelpButtonList
 
 from memops.gui.BasePopup import BasePopup
+from memops.gui.Label import Label
+from memops.gui.ScrolledListbox import ScrolledListbox
+from memops.gui.Util import createDismissHelpButtonList
+
 
 class MultiSelectionListSkeleton:
- 
-  def __init__(self, parent, selectionList, selectionDict = {}, selectedItems = [], title = 'MultiSelect', text = 'MultiSelect', endText = None, dismissText = 'dismiss', urlFile = None, modal = False):
-  
-    self.selectionList = selectionList
-    self.selectionDict = selectionDict
-    self.selectedItems = selectedItems
-    self.text = text
-    self.endText = endText
-    self.dismissText = dismissText
-    self.isSelectedList = None
-    
-    self.setUrlFile(urlFile)
-    
-    self.startBasePopup(parent,title,modal,alwaysOnTop)
+    def __init__(
+        self,
+        parent,
+        selectionList,
+        selectionDict={},
+        selectedItems=[],
+        title="MultiSelect",
+        text="MultiSelect",
+        endText=None,
+        dismissText="dismiss",
+        urlFile=None,
+        modal=False,
+    ):
 
-  def startBasePopup(self,parent,title,modal,alwaysOnTop):
-  
-    pass
-     
-  def setUrlFile(self,urlFile):
-  
-    self.help_url = None
- 
-  def body(self, master):
-    
-    #
-    # Popup window
-    #
+        self.selectionList = selectionList
+        self.selectionDict = selectionDict
+        self.selectedItems = selectedItems
+        self.text = text
+        self.endText = endText
+        self.dismissText = dismissText
+        self.isSelectedList = None
 
-    row = 0
-    label = Label(master, text= self.text)
-    label.grid(row=row, column=0, sticky=Tkinter.EW)
+        self.setUrlFile(urlFile)
 
-    row = row + 1
-    self.multiSelect = ScrolledListbox(master,
-                                       width = 50,
-                                          height = 5,
-                                          selectmode = Tkinter.MULTIPLE,
-                                       initial_list = self.selectionList)
-    self.multiSelect.grid(row=row, column=0, sticky=Tkinter.E, ipadx = 20)
-    master.grid_columnconfigure(0, weight=1)
-    master.grid_rowconfigure(row, weight=1)
-    
-    if self.selectedItems:
-      self.multiSelect.setSelectedItems(self.selectedItems)
- 
-    if self.endText:
-      row = row + 1
-      label = Label(master, text= self.endText)
-      label.grid(row=row, column=0, sticky=Tkinter.EW)
- 
-    row = row + 1
-    texts = [ 'OK' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createDismissHelpButtonList(master, texts=texts, commands=commands, dismiss_text = self.dismissText, help_url=self.help_url)
-    buttons.grid(row=row, column=0)
-   
+        self.startBasePopup(parent, title, modal, alwaysOnTop)
 
-  def apply(self):
-    
-    self.isSelectedList = []
-    
-    for selectedItem in self.multiSelect.getSelectedItems():
-    
-      if self.selectionDict.has_key(selectedItem):
-        self.isSelectedList.append(self.selectionDict[selectedItem])
-      else:
-        self.isSelectedList.append(selectedItem)
-        
-    return True
+    def startBasePopup(self, parent, title, modal, alwaysOnTop):
+
+        pass
+
+    def setUrlFile(self, urlFile):
+
+        self.help_url = None
+
+    def body(self, master):
+
+        #
+        # Popup window
+        #
+
+        row = 0
+        label = Label(master, text=self.text)
+        label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+        row = row + 1
+        self.multiSelect = ScrolledListbox(
+            master, width=50, height=5, selectmode=Tkinter.MULTIPLE, initial_list=self.selectionList
+        )
+        self.multiSelect.grid(row=row, column=0, sticky=Tkinter.E, ipadx=20)
+        master.grid_columnconfigure(0, weight=1)
+        master.grid_rowconfigure(row, weight=1)
+
+        if self.selectedItems:
+            self.multiSelect.setSelectedItems(self.selectedItems)
+
+        if self.endText:
+            row = row + 1
+            label = Label(master, text=self.endText)
+            label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+        row = row + 1
+        texts = ["OK"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createDismissHelpButtonList(
+            master, texts=texts, commands=commands, dismiss_text=self.dismissText, help_url=self.help_url
+        )
+        buttons.grid(row=row, column=0)
+
+    def apply(self):
+
+        self.isSelectedList = []
+
+        for selectedItem in self.multiSelect.getSelectedItems():
+            if selectedItem in self.selectionDict:
+                self.isSelectedList.append(self.selectionDict[selectedItem])
+            else:
+                self.isSelectedList.append(selectedItem)
+
+        return True
 
 
-class MultiSelectionListPopup(MultiSelectionListSkeleton,BasePopup):
+class MultiSelectionListPopup(MultiSelectionListSkeleton, BasePopup):
+    def startBasePopup(self, parent, title, modal, alwaysOnTop):
 
-  def startBasePopup(self,parent,title,modal,True):
-  
-    BasePopup.__init__(self,parent = parent, title = title, modal = modal, transient=True)
+        BasePopup.__init__(self, parent=parent, title=title, modal=modal, transient=True)

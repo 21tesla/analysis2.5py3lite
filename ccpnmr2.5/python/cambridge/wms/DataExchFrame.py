@@ -1,41 +1,33 @@
 
 # required for WS layer
+
+# added jmci; do we need this??
+
 from SharedBeanService_services import *
 from WSString import *
 
-import os
-
-# added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
-
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
 from memops.gui.Frame import Frame
-from memops.gui.Tree import Tree
 from memops.gui.Label import Label
+from memops.gui.Tree import Tree
 
-
-
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class DataExchMasterPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='PRODECOMP')
 
-                       
+
   def body(self, guiFrame):
 
     guiFrame.grid_rowconfigure(0, weight=1)
@@ -45,20 +37,20 @@ class DataExchMasterPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('650x600')
-    
+
     self.update_idletasks()
- 
+
 
 class DataExchFrame(Frame):
 
   def __init__(self, guiParent, basePopup, rep1=None, rep2=None):
-    
+
     self.basePopup = basePopup
     self.guiParent = guiParent
 
-    # add this to shortcuts to ease navigation    
+    # add this to shortcuts to ease navigation
     self.basePopup.frameShortcuts['DataExch'] = self
 
     # FIXME
@@ -70,7 +62,7 @@ class DataExchFrame(Frame):
     self.repository2 = self.basePopup.repList.currentRepository
 
     Frame.__init__(self, guiParent)
-  
+
     self.grid_columnconfigure(0, weight=0, minsize=10)
     self.grid_columnconfigure(1, weight=1, minsize=20)
     self.grid_columnconfigure(2, weight=0, minsize=40)
@@ -103,7 +95,7 @@ class DataExchFrame(Frame):
     self.dataWidgets1.append(self.label1)
     self.frame1 = Tree(self)
     self.dataWidgets1.append(self.frame1)
-    
+
     self.dataWidgets2 = []
 
     self.label2 = Label(self)
@@ -126,9 +118,9 @@ class DataExchFrame(Frame):
 
       for widget in self.dataWidgets1:
         widget.grid_remove()
-        
+
       self.noRep1Label.grid(row=2, column=1, sticky='n')
-      
+
     else :
 
       self.noRep1Label.grid_remove()
@@ -142,13 +134,13 @@ class DataExchFrame(Frame):
 
       for widget in self.dataWidgets2:
         widget.grid_remove()
-        
+
       self.noRep2Label.grid(row=2, column=3, sticky='n')
 
     else:
 
       self.noRep2Label.grid_remove()
-      
+
       self.label2.set(self.repository2.user + '@' + self.repository2.name + '  ( ' + self.repository2.connect + ' )')
       self.label2.grid(row=2,column=3, sticky='w')
       self.frame2.grid(row=3,column=3, sticky='nsew')
@@ -168,11 +160,11 @@ class DataExchFrame(Frame):
     # this should be associated with the repository object
     loc = SharedBeanServiceLocator()
     port = loc.getSharedBean()
-    request = getList();
+    request = getList()
 
     # these are actually static
-    request._arg0 = 'org.pimslims.applet.server.ProjectBean';
-    request._arg1 = 'getList';
+    request._arg0 = 'org.pimslims.applet.server.ProjectBean'
+    request._arg1 = 'getList'
     request._arg2 = ''
 
     # get the response
@@ -195,7 +187,7 @@ class DataExchFrame(Frame):
     if len(ss) > 0:
       print('UPDATE: updating ')
       tree.update(parents, objects, texts, icons, callbacks)
-    
+
 
 
   def administerNotifiers(self, notifyFunc):
@@ -222,23 +214,22 @@ class DataExchFrame(Frame):
 
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = DataExchMasterPopup(root)
-  
+
   root.mainloop()

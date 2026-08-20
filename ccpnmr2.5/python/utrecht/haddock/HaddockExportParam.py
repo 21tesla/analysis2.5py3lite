@@ -81,20 +81,22 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-import     sys, os
-from    HaddockBasic    import getPdbString, getAirSegments, getFlexibleResidues, makeBackup
-from     HaddockLocal    import rdcProtocolStore, daniProtocolStore
+import os
+
+from HaddockBasic import getAirSegments, getFlexibleResidues, getPdbString, makeBackup
+from HaddockLocal import daniProtocolStore, rdcProtocolStore
+
 
 class exportParam:
-    
+
     """Description:    Export a 'new' type HADDOCK project. The project is exported as a self containing parameter file.
                        It can be uploaded to the HADDOCK server.
        Input:        Haddock project instance, CCPN project instance.
        Output:        Haddock project parameter file
     """
-    
+
     def __init__(self,hProject=None,latestRun=None,ccpnProject=None):
-        
+
         self.haddockproject = hProject
         self.latestRun = latestRun
         self.ccpnproject = ccpnProject
@@ -102,7 +104,7 @@ class exportParam:
         self.partners = self.haddockproject.sortedHaddockPartners()
         self.filestring = ""
         self.identlevel = 0
-        
+
         self.parameters = {'analysisClustRmsd':'clust_rmsd','analysisClustSize':'clust_size','analysisDistHBond':'dist_hb',
                            'analysisDistNonbond':'dist_nb','calcDesolvation':'calcdesolv','centerOfMassConstant':'kcont',
                            'centerOfMassRestraints':'cmrest','dielectricType':'dielec','doIncludeDihEnergy':'dihedflag',
@@ -117,13 +119,13 @@ class exportParam:
                            'solvent':'solvent','surfaceContactConstant':'ksurf','surfaceContactRestraints':'surfrest',
                            'useDnaRestraints':'dnarest_on','useDbSolvateMethod':'solvate_method',
                            'waterInitRestCutoff':'water_restraint_initial','waterRestCutoff':'water_restraint_cutoff',
-                           'waterRestScale':'water_restraint_scale','waterToKeep':'water_tokeep','waterToAddRandom':'water_randfrac',        
+                           'waterRestScale':'water_restraint_scale','waterToKeep':'water_tokeep','waterToAddRandom':'water_randfrac',
                            'waterSurfaceCutoff':'water_surfcutoff','doWaterAnalysis':'water_analysis','doRigidBodyWaterTrans':'transwater',
-                           'numInitWaterShells':'waterensemble'}        
-        
-        
+                           'numInitWaterShells':'waterensemble'}
+
+
         print("** Export Haddock project parameter file **")
-        
+
         if len(self.partners):
             self.writeHeader()
             self.writePartnerData()
@@ -132,52 +134,52 @@ class exportParam:
             self.writeSymmetryData()
             self.writeEnergyProtocolStores()
             self.writeFooter()
-        else: 
+        else:
             print("ERROR, No partners defined")
             return
-        
+
         print("** Export complete **")
-    
+
     def writeToFile(self):
-        
+
         """Write the parameter file string to file"""
-        
-        if len(self.filestring):    
+
+        if len(self.filestring):
             self.filename = os.path.join(self.workingDir,self.haddockproject.name+'-run'+str(self.latestRun.serial)+'.web')
             print("Export parameter to file %s" % self.filename)
             makeBackup(self.filename)
-        
+
             self.file = file(self.filename,'w')
             self.file.write(self.filestring)
             self.file.close()
-        
+
     def writeHeader(self):
-    
+
         """Write header line"""
-    
+
         self.filestring += ("HaddockRunParameters (\n")
-    
+
     def writeFooter(self):
-        
+
         """Write footer line"""
-        
+
         self.identlevel -= 1
         self.filestring += ("%s)\n" % (" "*self.identlevel))
-    
+
     def writePartnerData(self):
-    
+
         """Write partner specific data"""
-        
+
         ambigstring = None
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'AMBIG']
         if constraint:
-            for term in constraint: 
+            for term in constraint:
                 if term.fileName and os.path.isfile(term.fileName):
                     ambigstring = ""
                     ambigfile = file(term.fileName,'r')
                     for line in ambigfile.readlines(): ambigstring += line
                     ambigfile.close()
-        
+
         partnercount = 1
         self.identlevel += 1
         for partner in self.haddockproject.sortedHaddockPartners():
@@ -191,59 +193,59 @@ class exportParam:
             self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             partnercount += 1
-    
+
         if ambigstring: self.filestring += ("%stbldata = %s,\n" % (" "*self.identlevel,repr(ambigstring)))
-    
+
     def writeStructureData(self,partner):
-        
+
         """Write structure data for partner"""
-    
+
         self.identlevel += 1
         self.filestring += ("%spdb = PDBData (\n" % (" "*self.identlevel))
         self.identlevel += 1
         self.filestring += ("%smode = 'submit',\n" % (" "*self.identlevel))
         self.filestring += ("%schain = %s,\n" % (" "*self.identlevel,repr(partner.code)))
-        
+
         molSystem = partner.molSystem
         modelId   = int(partner.structureEnsemble.getDetails())
-        
+
         ensembles = self.ccpnproject.sortedStructureEnsembles()
         if molSystem: ensembles = [e for e in ensembles if e.molSystem is molSystem]
         models = []
         for e in ensembles: models += [model for model in e.sortedModels()]
-        
+
         chains = [hc.chain.pdbOneLetterCode.strip() for hc in partner.chains]
-    
+
         pdbstring = ''
         if modelId > 1:
             modelcount = 1
             for model in models[0:modelId]:
                 if modelcount == modelId:
-                    pdbstring += ('MODEL %i\n' % modelcount)    
+                    pdbstring += ('MODEL %i\n' % modelcount)
                     pdbstring += getPdbString(model,
                                               [ch.chain for ch in partner.sortedChains()],
                                               chainRename=partner.code,
-                                              fileEnd='ENDMDL\nEND\n') 
+                                              fileEnd='ENDMDL\nEND\n')
                 else:
-                    pdbstring += ('MODEL %i\n' % modelcount)    
+                    pdbstring += ('MODEL %i\n' % modelcount)
                     pdbstring += getPdbString(model,
                                               [ch.chain for ch in partner.sortedChains()],
                                               chainRename=partner.code,
                                               fileEnd='ENDMDL')
                     modelcount += 1
-        else: 
+        else:
             pdbstring = getPdbString(models[0],[ch.chain for ch in partner.sortedChains()],chainRename=partner.code)
-        
+
         self.filestring += ("%spdbdata = %s,\n" % (" "*self.identlevel,repr(pdbstring)))
         self.identlevel -= 1
         self.filestring += ("%s),\n" % (" "*self.identlevel))
-    
+
     def writeFlexible(self,partner):
-        
+
         """Write flexible and semi-flexible residues for the HADDOCK partner."""
-        
+
         flex = getFlexibleResidues(partner)
-        
+
         self.filestring += ("%ssemiflex = SemiflexSegmentList (\n" % (" "*self.identlevel))
         self.identlevel += 1
         self.filestring += ("%ssegments = RangeArray (\n" % (" "*self.identlevel))
@@ -268,14 +270,14 @@ class exportParam:
         self.filestring += ("%s),\n" % (" "*self.identlevel))
         self.identlevel -= 1
         self.filestring += ("%s),\n" % (" "*self.identlevel))
-    
+
     def writeActivePassive(self,partner,deactivate=False):
-        
+
         """Write active and passive residues for the HADDOCK partner"""
-        
+
         restraints = getAirSegments(partner)
         if deactivate == True: restraints['active'] = []; restraints['passive'] = []
-        
+
         self.filestring += ("%sr = RestraintsInterface (\n" % (" "*self.identlevel))
         self.identlevel += 1
         self.filestring += ("%sactivereslist = IntegerArray (\n" % (" "*self.identlevel))
@@ -292,9 +294,9 @@ class exportParam:
         self.filestring += ("%s),\n" % (" "*self.identlevel))
         self.identlevel -= 1
         self.filestring += ("%s),\n" % (" "*self.identlevel))
-    
+
     def writeHistidinePstate(self,partner):
-    
+
         self.filestring += ("%sauto_his = %s,\n" % (" "*self.identlevel,partner.autoHistidinePstate))
         if partner.autoHistidinePstate == False:
             pstates = []
@@ -304,39 +306,39 @@ class exportParam:
             for chain in ensembles[0].sortedCoordChains():
                 for residue in chain.sortedResidues():
                     if residue.residue.ccpCode == 'His':
-                        if residue.residue.descriptor == "prot:HD1;deprot:HE2": 
+                        if residue.residue.descriptor == "prot:HD1;deprot:HE2":
                             pstates.append({residue.residue.seqCode:'HISD'})
-                        elif residue.residue.descriptor == "deprot:HD1;prot:HE2":     
+                        elif residue.residue.descriptor == "deprot:HD1;prot:HE2":
                             pstates.append({residue.residue.seqCode:'HISE'})
-                        elif residue.residue.descriptor == "prot:HD1;prot:HE2":     
+                        elif residue.residue.descriptor == "prot:HD1;prot:HE2":
                             pstates.append({residue.residue.seqCode:'HIS+'})
                         else: pass
-            
+
             if len(pstates):
-                self.filestring += ("%shis = HistidineStateArray (\n" % (" "*self.identlevel)) 
+                self.filestring += ("%shis = HistidineStateArray (\n" % (" "*self.identlevel))
                 self.identlevel += 1
                 for pstate in pstates:
                     self.filestring +=("%s," % repr(pstate))
-                self.identlevel -= 1    
+                self.identlevel -= 1
                 self.filestring += ("%s),\n" % (" "*self.identlevel))
         else:
-            self.filestring += ("%shis = HistidineStateArray (\n" % (" "*self.identlevel)) 
-            self.filestring += ("%s),\n" % (" "*self.identlevel))        
-    
+            self.filestring += ("%shis = HistidineStateArray (\n" % (" "*self.identlevel))
+            self.filestring += ("%s),\n" % (" "*self.identlevel))
+
     def writeForceField(self,partner):
-    
+
         self.filestring += ("%sforcefield = %s,\n" % (" "*self.identlevel,repr(partner.forceFieldCode)))
         if partner.forceFieldCode == 'TOPALLHDG':
             self.filestring += ("%smoleculetype = 'Protein',\n" % (" "*self.identlevel))
         else:
-            self.filestring += ("%smoleculetype = %s,\n" % (" "*self.identlevel,repr(partner.forceFieldCode)))    
+            self.filestring += ("%smoleculetype = %s,\n" % (" "*self.identlevel,repr(partner.forceFieldCode)))
         self.filestring += ("%sdna = %s,\n" % (" "*self.identlevel,partner.isDna))
         self.filestring += ("%ssegid = %s,\n" % (" "*self.identlevel,repr(partner.code)))
-    
+
     def writeScoringWeights(self):
-    
+
         """Write the scoring weights for the different docking stages"""
-        
+
         scoringWeights = [(sw.term, sw.stage, sw.value) for sw in self.latestRun.scoringWeights]
         scoringWeights.sort()
         scoreTerm = ''
@@ -355,29 +357,29 @@ class exportParam:
                 self.identlevel += 1
                 self.filestring += ("%s%1.3f,\n" % (" "*self.identlevel,scoringWeight))
                 scoreTerm = term
-        
+
         self.identlevel -= 1
-        self.filestring += ("),\n")        
+        self.filestring += ("),\n")
 
     def writeSymmetryData(self):
-        
-        """Write symmetry data, type of symmetry, residues and chains involved"""                
-    
+
+        """Write symmetry data, type of symmetry, residues and chains involved"""
+
         symdict = {'ncs':[],'C2':[],'C3':[],'C4':[],'C5':[],'C6':[]}; symw = False
-    
+
         for symmetry in self.latestRun.sortedSymmetryRestraints():
             symdict[symmetry.symmetryCode].append((1,symmetry.segmentLength,'A'))
-        
+
         for symmetry in symdict:
             if len(symdict[symmetry]) > 0:
-                if symmetry == 'ncs': 
+                if symmetry == 'ncs':
                     self.filestring += ("%sncs = SymmetrySpecification (\n" % (" "*self.identlevel))
                     self.identlevel += 1
                     self.filestring += ("%son = True,\n" % (" "*self.identlevel))
                     self.filestring += ("%sconstant = %1.1f,\n" % (" "*self.identlevel,self.latestRun.get('ncsRestraintConstant')))
                     self.identlevel -= 1
                     self.filestring += ("%s),\n" % " "*self.identlevel)
-                elif symw == False: 
+                elif symw == False:
                     self.filestring += ("%ssymmetry = SymmetrySpecification (\n" % (" "*self.identlevel))
                     self.identlevel += 1
                     self.filestring += ("%son = True,\n" % (" "*self.identlevel))
@@ -386,8 +388,8 @@ class exportParam:
                     self.filestring += ("%s),\n" % " "*self.identlevel)
                     symw = True
                 else: pass
-                
-                for symrange in symdict[symmetry]:            
+
+                for symrange in symdict[symmetry]:
                     self.filestring += ("%s%ssegments = LabeldRangePairArray (\n" % (" "*self.identlevel,symmetry))
                     self.identlevel += 1
                     self.filestring += ("%sLabeledRangePair (\n" % (" "*self.identlevel))
@@ -398,7 +400,7 @@ class exportParam:
                     self.identlevel += 1
                     self.filestring += ("%sstart = %i,\n" % (" "*self.identlevel,symrange[0]))
                     self.filestring += ("%send = %i,\n" % (" "*self.identlevel,symrange[1]))
-                    self.filestring += ("%schain = %s,\n" % (" "*self.identlevel,symrange[2]))    
+                    self.filestring += ("%schain = %s,\n" % (" "*self.identlevel,symrange[2]))
                     self.identlevel -= 1
                     self.filestring += ("%s),\n" % (" "*self.identlevel))
                     self.identlevel -= 1
@@ -409,18 +411,18 @@ class exportParam:
                     self.filestring += ("%s),\n" % (" "*self.identlevel))
 
     def writeEnergyProtocolStores(self):
-        
+
         """Write all protocols that define energy constanst in different stages"""
-        
+
         protocolStores = ['distRestraintEnergyStore','dihRestraintEnergyStore',
                            'semiflexInterMolScalingStore','autoDistanceRestraintWeightStore']
-        
+
         protocolStoreDict = {}
-        
+
         for protocolStore in protocolStores:
             protocol = self.latestRun.findFirstHaddockEnergyTerm(code=protocolStore)
             if protocol:
-                for term in protocol.sortedEnergyTermParameters(): protocolStoreDict[term.code] = term.value                
+                for term in protocol.sortedEnergyTermParameters(): protocolStoreDict[term.code] = term.value
 
         'Hydrogen bond restraints'
         if self.latestRun.get('useHBondRestraints') == True:
@@ -433,10 +435,10 @@ class exportParam:
                         hbondfile = file(term.fileName,'r')
                         for line in hbondfile.readlines(): hbondstring += line
                         hbondfile.close()
-            if hbondstring:        
+            if hbondstring:
                 self.filestring += ("%shbonds_on = %s,\n" % (" "*self.identlevel,repr(self.latestRun.get('useHBondRestraints'))))
                 self.filestring += ("%shbonddata = %s,\n" % (" "*self.identlevel,repr(hbondstring)))
-        
+
         'Distance restraints energy constants'
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'UNAMBIG']
         if constraint:
@@ -447,9 +449,9 @@ class exportParam:
                     unambigfile = file(term.fileName,'r')
                     for line in unambigfile.readlines(): unambigstring += line
                     unambigfile.close()
-            if unambigstring:        
+            if unambigstring:
                 self.filestring += ("%sunambigtbldata = %s,\n" % (" "*self.identlevel,repr(unambigstring)))
-        
+
         for stage in ['unamb','amb','hbond']:
             self.filestring += ("%s%s =  ExtStageConstants (\n" % (" "*self.identlevel,stage))
             self.identlevel += 1
@@ -465,7 +467,7 @@ class exportParam:
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
-            
+
         'Automated distance restraints weighting'
         self.filestring += ("%sair_scaling = %s,\n" % (" "*self.identlevel,repr(self.latestRun.get('doAirScaling'))))
         self.filestring += ("%stot_unamb = %i,\n" % (" "*self.identlevel,self.latestRun.get('numUnambRestautoAir')))
@@ -479,7 +481,7 @@ class exportParam:
             self.filestring += ("%scool3 = %1.1f,\n" % (" "*self.identlevel,protocolStoreDict[stage+'_cool3']))
             self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
-        
+
         'Dihedral restraint energy constants'
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'DIHEDRAL']
         if constraint:
@@ -490,7 +492,7 @@ class exportParam:
                     dihedralfile = file(term.fileName,'r')
                     for line in dihedralfile.readlines(): dihedralstring += line
                     dihedralfile.close()
-            if dihedralstring:        
+            if dihedralstring:
                 self.filestring += ("%sdihedrals_on = True,\n" % (" "*self.identlevel))
                 self.filestring += ("%sdihedraldata = %s,\n" % (" "*self.identlevel,repr(dihedralstring)))
                 self.filestring += ("%sstages = StageConstants (\n" % (" "*self.identlevel))
@@ -501,7 +503,7 @@ class exportParam:
                 self.filestring += ("%scool3 = %1.1f,\n" % (" "*self.identlevel,protocolStoreDict['dihedrals_cool3']))
                 self.identlevel -= 1
                 self.filestring += ("%s),\n" % (" "*self.identlevel))
-        
+
         'RDC constraints'
         rdcs = 1
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'RDC']
@@ -514,11 +516,11 @@ class exportParam:
                 rdcs += 1
             else:
                 print("RDC Warning: RDC energyTerm %i defined but no RDC CNS file associated" % term.termId)
-        
+
         while rdcs < 6:
             self.writeRdcProtocol(rdcProtocolStore['terms'],rdcs,disable=True)
             rdcs += 1
-        
+
         'DANI constraints'
         danis = 1
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'DANI']
@@ -531,11 +533,11 @@ class exportParam:
                 danis += 1
             else:
                 print("DANI Warning: DANI energyTerm %i defined but no DANI CNS file associated" % term.termId)
-        
+
         while danis < 6:
             self.writeDaniProtocol(daniProtocolStore['terms'],danis,disable=True)
-            danis += 1        
-        
+            danis += 1
+
         'Scaling of intermolecular interactions for semi-flexible SA'
         self.filestring += ("%sscaling_init = ScalingConstants (\n" % (" "*self.identlevel))
         self.identlevel += 1
@@ -544,7 +546,7 @@ class exportParam:
         self.filestring += ("%scool3 = %1.3f,\n" % (" "*self.identlevel,protocolStoreDict['init_cool3']))
         self.identlevel -= 1
         self.filestring += ("%s),\n" % (" "*self.identlevel))
-        
+
         self.filestring += ("%sscaling_fin = ScalingConstants (\n" % (" "*self.identlevel))
         self.identlevel += 1
         self.filestring += ("%srigid = %1.3f,\n" % (" "*self.identlevel,protocolStoreDict['fin_rigid']))
@@ -552,13 +554,13 @@ class exportParam:
         self.filestring += ("%scool3 = %1.3f,\n" % (" "*self.identlevel,protocolStoreDict['fin_cool3']))
         self.identlevel -= 1
         self.filestring += ("%s),\n" % (" "*self.identlevel))
-        
+
         'Docking annealing protocol'
         protocol = self.latestRun.findFirstHaddockEnergyTerm(code='dockingProtocolStore')
-        for term in protocol.sortedEnergyTermParameters(): 
-            self.filestring += ("%s%s = %1.1f,\n" % (" "*self.identlevel,term.code,term.value))    
-    
-    def writeDaniProtocol(self,storedict,danis,danifile=None,disable=False):        
+        for term in protocol.sortedEnergyTermParameters():
+            self.filestring += ("%s%s = %1.1f,\n" % (" "*self.identlevel,term.code,term.value))
+
+    def writeDaniProtocol(self,storedict,danis,danifile=None,disable=False):
 
             self.filestring += ("%sdan%i = DANIParameters (\n" % (" "*self.identlevel,danis))
             self.identlevel += 1
@@ -572,34 +574,34 @@ class exportParam:
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['cool%s' % n]))
-            self.identlevel -= 1         
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
-            self.identlevel -= 1 
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.filestring += ('%stc = %1.1f,\n' % (" "*self.identlevel,storedict['tc']))
             self.filestring += ('%sanis = %1.1f,\n' % (" "*self.identlevel,storedict['anis']))
             self.filestring += ('%sr = %1.1f,\n' % (" "*self.identlevel,storedict['r']))
             self.filestring += ('%swh = %1.1f,\n' % (" "*self.identlevel,storedict['wh']))
             self.filestring += ('%swn = %1.1f,\n' % (" "*self.identlevel,storedict['wn']))
-            
+
             if danifile:
                 danistring = ""
                 openfile = file(danifile,'r')
                 for line in openfile.readlines(): danistring += line
                 opnefile.close()
-                
-                self.filestring += ('%sdanidata = %s,\n' % (" "*self.identlevel,repr(danistring)))    
-            
-            self.identlevel -= 1 
+
+                self.filestring += ('%sdanidata = %s,\n' % (" "*self.identlevel,repr(danistring)))
+
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
 
-    def writeRdcProtocol(self,storedict,rdcs,rdcfile=None,disable=False):    
+    def writeRdcProtocol(self,storedict,rdcs,rdcfile=None,disable=False):
 
             self.filestring += ("%srdc%i = RDCParameters (\n" % (" "*self.identlevel,rdcs))
             self.identlevel += 1
             if disable == True:
-                self.filestring += ('%schoice = %s,\n' % (" "*self.identlevel,repr('NO')))    
-            else:    
+                self.filestring += ('%schoice = %s,\n' % (" "*self.identlevel,repr('NO')))
+            else:
                 self.filestring += ('%schoice = %s,\n' % (" "*self.identlevel,repr(['NO','SANI','VANGLE'][int(storedict['rdc_choice'])])))
             self.filestring += ('%sr = %1.1f,\n' % (" "*self.identlevel,storedict['rdc_r']))
             self.filestring += ('%sd = %1.1f,\n' % (" "*self.identlevel,storedict['rdc_d']))
@@ -611,33 +613,33 @@ class exportParam:
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['rdc_hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['rdc_cool%s' % n]))
-            self.identlevel -= 1         
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
-            self.identlevel -= 1 
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.filestring += ('%sini_bor = StageConstants (\n' % (" "*self.identlevel))
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['ini_bor_hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['ini_bor_cool%s' % n]))
-            self.identlevel -= 1 
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.filestring += ('%sfin_bor = StageConstants (\n' % (" "*self.identlevel))
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['fin_bor_hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['fin_bor_cool%s' % n]))
-            self.identlevel -= 1 
-            self.filestring += ("%s),\n" % (" "*self.identlevel))        
+            self.identlevel -= 1
+            self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.filestring += ('%sini_cen = StageConstants (\n' % (" "*self.identlevel))
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['ini_cen_hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['ini_cen_cool%s' % n]))
-            self.identlevel -= 1 
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
             self.filestring += ('%sfin_cen = StageConstants (\n' % (" "*self.identlevel))
             self.identlevel += 1
             self.filestring += ('%shot = %1.1f,\n' % (" "*self.identlevel,storedict['fin_cen_hot']))
             for n in ['1','2','3']: self.filestring += ('%scool%s = %1.1f,\n' % (" "*self.identlevel,n,storedict['fin_cen_cool%s' % n]))
-            self.identlevel -= 1 
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
 
             if rdcfile:
@@ -647,21 +649,21 @@ class exportParam:
                 openfile.close()
 
                 self.filestring += ('%srdcdata = %s,\n' % (" "*self.identlevel,repr(rdcstring)))
-            
-            self.identlevel -= 1 
+
+            self.identlevel -= 1
             self.filestring += ("%s),\n" % (" "*self.identlevel))
-        
+
     def writeRunParameters(self):
-        
+
         """Write all general docking parameters"""
-        
+
         self.filestring += ("%srunname = 'run%i',\n" % (" "*self.identlevel,self.latestRun.serial))
-        
+
         for parameter in self.parameters:
             if parameter == 'useDbSolvateMethod':
                 if self.latestRun.get(parameter) == True:
-                    self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr('db')))    
-                else:    
-                    self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr('pnt')))    
+                    self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr('db')))
+                else:
+                    self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr('pnt')))
             else:
-                self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr(self.latestRun.get(parameter))))    
+                self.filestring += ("%s%s = %s,\n" % (" "*self.identlevel,self.parameters[parameter],repr(self.latestRun.get(parameter))))

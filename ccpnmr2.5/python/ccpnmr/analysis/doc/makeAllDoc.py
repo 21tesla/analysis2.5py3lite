@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,61 +39,63 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-#>>> from testCode.ccpnmr.analysis.testPopup import openPopups
-#>>> openPopups(top)
+# >>> from testCode.ccpnmr.analysis.testPopup import openPopups
+# >>> openPopups(top)
+
 
 def openAllAnalysisPopupsMacro(argServer):
 
-  from testCode.ccpnmr.analysis.testPopup import openPopups
-  openPopups(argServer.parent)
-  
-if __name__ == '__main__':
+    from testCode.ccpnmr.analysis.testPopup import openPopups
 
-  try:
-    import sphinx
-  except ImportError:
-    raise Exception('You must have the Sphinx module installed to run this script')
-
-  import subprocess
-  from ccpnmr.analysis.doc.makeAnalysisDocRst import makeAnalysisDoc
-  from ccpnmr.analysis.doc.makeCoreLibraryRst import makeCoreDoc
-  from ccpnmr.analysis.AnalysisGui import main
-  from testCode.ccpnmr.analysis.testPopup import openPopups
+    openPopups(argServer.parent)
 
 
-  # Open Analysis
+if __name__ == "__main__":
+    try:
+        import sphinx
+    except ImportError:
+        raise Exception("You must have the Sphinx module installed to run this script")
 
-  top = main()
+    import subprocess
 
-  # New, blank project to get things active
+    from testCode.ccpnmr.analysis.testPopup import openPopups
 
-  top.newProject('DocExtract')
+    from ccpnmr.analysis.AnalysisGui import main
+    from ccpnmr.analysis.doc.makeAnalysisDocRst import makeAnalysisDoc
+    from ccpnmr.analysis.doc.makeCoreLibraryRst import makeCoreDoc
 
-  # Open all popups
+    # Open Analysis
 
-  openPopups(top, False)
+    top = main()
 
-  # Extract popup rst
+    # New, blank project to get things active
 
-  makeAnalysisDoc(top)
+    top.newProject("DocExtract")
 
-  # Extract code library rst
+    # Open all popups
 
-  makeCoreDoc()
+    openPopups(top, False)
 
-  # run sphinx
+    # Extract popup rst
 
-  #subprocess.Popen(['make', 'clean']) # Wipes out CVS dirs
-  subprocess.Popen(['make', 'html'])
+    makeAnalysisDoc(top)
 
-  # Transfer to mammoth
+    # Extract code library rst
 
-  #PUBLISH_LOCATION = 'ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysis/'
-  #subprocess.Popen(['scp', '-r', './build/html/*', PUBLISH_LOCATION])
+    makeCoreDoc()
 
-  cmd1 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysis/"
-  cmd2 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysisEdge/"
-  
-  print("To update in-program documentation website for stable issue:\n%s\n" % cmd1)
-  print("To update in-program documentation website for leading-edge issue:\n%s\n" % cmd2)
-  
+    # run sphinx
+
+    # subprocess.Popen(['make', 'clean']) # Wipes out CVS dirs
+    subprocess.Popen(["make", "html"])
+
+    # Transfer to mammoth
+
+    # PUBLISH_LOCATION = 'ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysis/'
+    # subprocess.Popen(['scp', '-r', './build/html/*', PUBLISH_LOCATION])
+
+    cmd1 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysis/"
+    cmd2 = "scp -r ./build/html/* ccpn@mammoth:/data/ccpn/www/htdocs/documentation/analysisEdge/"
+
+    print("To update in-program documentation website for stable issue:\n%s\n" % cmd1)
+    print("To update in-program documentation website for leading-edge issue:\n%s\n" % cmd2)

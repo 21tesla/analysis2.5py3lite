@@ -1,10 +1,12 @@
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.peirceTest import peirceTest
-from cing.PluginCode.matplib import * #@UnusedWildImport
-from cing.core.classes import Project
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.peirceTest import peirceTest
+from cing.PluginCode.matplib import *  #@UnusedWildImport
+
 
 def plotTestHistoDihedral():
     nTdebug("Starting plotTestHistoDihedral")
@@ -14,7 +16,7 @@ def plotTestHistoDihedral():
     graphicsFormat = "png"
     residueName = "ASN1"
     dihedralName= "CHI1"
-    dihedralNameLatex= "$\chi 1$"
+    dihedralNameLatex= r"$\chi 1$"
 
     project     = Project('plotTestHistoDihedral')
     plotparams  = project.plotParameters.getdefault(dihedralName,'dihedralDefault')
@@ -54,8 +56,8 @@ def plotTestHistoDihedral():
                 )
     ps.addPlot(plot)
 
-    if not angleList.__dict__.has_key('good'):
-        nTerror("angleList.__dict__.has_key('good')")
+    if 'good' not in angleList.__dict__:
+        nTerror("'good' in angleList.__dict__")
         return True
 
     plot.histogram( angleList.good.zap(1),
@@ -63,7 +65,7 @@ def plotTestHistoDihedral():
                     attributes = boxAttributes( fillColor=plotparams.color )
                   )
 
-    if angleList.__dict__.has_key('outliers'):
+    if 'outliers' in angleList.__dict__:
         plot.histogram( angleList.outliers.zap(1),
                     plotparams.min, plotparams.max, bins,
                     attributes = boxAttributes( fillColor=plotparams.outlier),
@@ -72,7 +74,7 @@ def plotTestHistoDihedral():
 
 #    aAv  = angleList.cav
     aAv  = angleList.good.cav
-    
+
     width = 4.0
     lower, upper = 45, 55
     alpha = 0.3
@@ -111,7 +113,7 @@ def plotTestHistoDihedral():
 #                   lineAttributes(color=plotparams.upper, width=width) )
 #
     # Always plot the cav line
-    # pylint: disable=E1102    
+    # pylint: disable=E1102
     plot.line( (aAv, 0), (aAv, ylimMax), lineAttributes(color=plotparams.average, width=width) )
 #                   dashdotline() )
     fnBase = "testPlotHistoDihedral"

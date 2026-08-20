@@ -4,24 +4,26 @@ python $CINGROOT/python/cing/PluginCode/test/test_sqlAlchemy.py
 
 Fails if MySql or Postgresql backends are absent.
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import CASD_DB_NAME
-from cing.NRG import CASD_DB_USER_NAME
-from cing.NRG import DEV_NRG_DB_SCHEMA
-from cing.NRG import DEV_NRG_DB_USER_NAME
-from cing.NRG import NRG_DB_SCHEMA
-from cing.NRG import NRG_DB_USER_NAME
-from cing.NRG import PDBJ_DB_NAME
-from cing.PluginCode.sqlAlchemy import CsqlAlchemy
+import unittest
+from unittest import TestCase
+
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import backref
-from sqlalchemy.orm import relation
-from sqlalchemy.schema import Column
-from sqlalchemy.schema import ForeignKey
+from sqlalchemy.orm import backref, relation
+from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.sql.expression import select
 from sqlalchemy.types import Integer, String
-from unittest import TestCase
-import unittest
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import (
+    CASD_DB_NAME,
+    CASD_DB_USER_NAME,
+    DEV_NRG_DB_SCHEMA,
+    DEV_NRG_DB_USER_NAME,
+    NRG_DB_SCHEMA,
+    NRG_DB_USER_NAME,
+    PDBJ_DB_NAME,
+)
+from cing.PluginCode.sqlAlchemy import CsqlAlchemy
 
 Base = declarative_base()
 
@@ -63,7 +65,7 @@ class Address(Base):
 
 class AllChecks(TestCase):
     'Test case'
-    
+
     def _test_SqlAlchemyWithPdbjCing(self):
         'Watch out with executing this test routine. It kills.'
         pdb_id = '1brv'
@@ -126,8 +128,8 @@ class AllChecks(TestCase):
             return
         nTmessage("Connected to RDB now.")
         if True:
-            return # Just be sure to not continue here. 
-    
+            return # Just be sure to not continue here.
+
 #        users_table = Table('users', csql.metadata,
 #            Column('id', Integer, primary_key = True),
 #            Column('name', String(50)),

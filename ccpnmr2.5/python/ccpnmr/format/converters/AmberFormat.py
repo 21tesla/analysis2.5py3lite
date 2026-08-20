@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,70 +56,82 @@ import copy
 
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
-from ccp.format.general.Constants import defaultSeqInsertCode
-
-from ccpnmr.format.general.Constants import distanceConstraintDefaultLowerLimit
-from ccpnmr.format.general.Constants import defaultMolCode
-
 #
 # Add some information to IOkeywords...
 #
 
 IOkeywords = copy.deepcopy(IOkeywords)
 
-IOkeywords['readDistanceConstraints']['coordFile'] = (None,True,'The coordinate file related to this restraint list. Required for converting atom serials to atom names.')
-IOkeywords['readHBondConstraints']['coordFile'] =    (None,True,'The coordinate file related to this restraint list. Required for converting atom serials to atom names.')
-IOkeywords['readDihedralConstraints']['coordFile'] = (None,True,'The coordinate file related to this restraint list. Required for converting atom serials to atom names.')
+IOkeywords["readDistanceConstraints"]["coordFile"] = (
+    None,
+    True,
+    "The coordinate file related to this restraint list. Required for converting atom serials to atom names.",
+)
+IOkeywords["readHBondConstraints"]["coordFile"] = (
+    None,
+    True,
+    "The coordinate file related to this restraint list. Required for converting atom serials to atom names.",
+)
+IOkeywords["readDihedralConstraints"]["coordFile"] = (
+    None,
+    True,
+    "The coordinate file related to this restraint list. Required for converting atom serials to atom names.",
+)
+
 
 class AmberFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'amber'
-    self.IOkeywords = IOkeywords
+        self.format = "amber"
+        self.IOkeywords = IOkeywords
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
+    def setGenericImports(self):
 
-    self.getCoordinates = self.getCoordinatesGeneric
+        self.getSequence = self.getSequenceGeneric
 
-  #
-  # Deviations from generic import stuff
-  #
-  
-  def getConstraints(self):
-    
-    try:
-    
-      self.constraintFile = self.ConstraintFileClass(self.fileName)
-      self.constraintFile.read(coordFile=self.coordFile,verbose=self.verbose)
+        self.getCoordinates = self.getCoordinatesGeneric
 
-      if self.verbose:
-        print("Reading %s constraint list from %s file %s" % (self.constraintType,self.formatLabel,self.fileName))
-
-    except:
-
-      errorMessage = traceback.format_exception_only(sys.exc_type,sys.exc_value)[-1]
-      self.messageReporter.showWarning("Warning"," Cannot read %s constraints for %s...:\n%s" % (self.constraintApiCode,self.formatLabel,errorMessage),self.guiParent)
-      self.constraintFile = None
-      
-      raise
-      
-      return traceback.format_exception(sys.exc_type,sys.exc_value,sys.exc_info()[2]) 
-  
-  #
-  # Functions different to default functions in DataFormat
-  #
-
-  def duplicateChain(self):
-  
     #
-    # All chain info should be contained in coordinate file...
+    # Deviations from generic import stuff
     #
-    
-    return False
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)    
+    def getConstraints(self):
+
+        try:
+            self.constraintFile = self.ConstraintFileClass(self.fileName)
+            self.constraintFile.read(coordFile=self.coordFile, verbose=self.verbose)
+
+            if self.verbose:
+                print(
+                    "Reading %s constraint list from %s file %s"
+                    % (self.constraintType, self.formatLabel, self.fileName)
+                )
+
+        except:
+            errorMessage = traceback.format_exception_only(sys.exc_type, sys.exc_value)[-1]
+            self.messageReporter.showWarning(
+                "Warning",
+                " Cannot read %s constraints for %s...:\n%s" % (self.constraintApiCode, self.formatLabel, errorMessage),
+                self.guiParent,
+            )
+            self.constraintFile = None
+
+            raise
+
+            return traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_info()[2])
+
+    #
+    # Functions different to default functions in DataFormat
+    #
+
+    def duplicateChain(self):
+
+        #
+        # All chain info should be contained in coordinate file...
+        #
+
+        return False
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

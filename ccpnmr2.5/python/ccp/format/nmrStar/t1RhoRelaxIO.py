@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,163 +54,161 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.nmrStar.generalIO import NmrStarGenericFile
-from ccp.format.nmrStar.generalIO import NmrStarFile
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.nmrStar.generalIO import NmrStarFile, NmrStarGenericFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class NmrStarFile(NmrStarFile):
+    def initialize(self, version="3.1"):
 
-  def initialize(self, version = '3.1'):
-  
-    self.t1RhoRelaxFiles = []
-    
-    self.files = self.t1RhoRelaxFiles
-    
-    if not self.version:
-      self.version = version
-    
-    self.saveFrameName = 'heteronucl_T1rho_relaxation'
-    self.DataClassFile = NmrStarT1RhoRelaxFile
-   
-    self.components = [self.saveFrameName]
-    self.setComponents()
+        self.t1RhoRelaxFiles = []
 
-  def read(self,verbose = 0):
+        self.files = self.t1RhoRelaxFiles
 
-    self.readComponent(verbose = verbose) 
+        if not self.version:
+            self.version = version
+
+        self.saveFrameName = "heteronucl_T1rho_relaxation"
+        self.DataClassFile = NmrStarT1RhoRelaxFile
+
+        self.components = [self.saveFrameName]
+        self.setComponents()
+
+    def read(self, verbose=0):
+
+        self.readComponent(verbose=verbose)
 
 
 class NmrStarT1RhoRelaxFile(NmrStarGenericFile):
+    """
+    Information on file level
+    """
 
-  """
-  Information on file level
-  """
-  
-  def initialize(self,parent,saveFrame = None):
+    def initialize(self, parent, saveFrame=None):
 
-    # Warning: should in principle be version specific, this is 3.1
-    self.attrToTagMappings = (
-      
-        ('details','Details',None),
-        ('units', 'T1rho_val_units',None),
-        ('rexUnits', 'Rex_units',None),
-        ('specFreq','Spectrometer_frequency_1H',None),
-        ('tempCalibMethod','Temp_calibration_method',None),
-        ('tempControlMethod','Temp_control_method', None),
-        ('coherenceType','T1rho_coherence_type',None),
-    
-    )
+        # Warning: should in principle be version specific, this is 3.1
+        self.attrToTagMappings = (
+            ("details", "Details", None),
+            ("units", "T1rho_val_units", None),
+            ("rexUnits", "Rex_units", None),
+            ("specFreq", "Spectrometer_frequency_1H", None),
+            ("tempCalibMethod", "Temp_calibration_method", None),
+            ("tempControlMethod", "Temp_control_method", None),
+            ("coherenceType", "T1rho_coherence_type", None),
+        )
 
-    self.t1RhoRelaxValues = []
-    
-    self.saveFrame = saveFrame
-    
-    self.parent = parent
-    self.version = parent.version
+        self.t1RhoRelaxValues = []
 
-    if self.saveFrame:
-      self.parseSaveFrame()
+        self.saveFrame = saveFrame
 
-  def parseSaveFrame(self):
+        self.parent = parent
+        self.version = parent.version
 
-    if not self.checkVersion():
-      return
+        if self.saveFrame:
+            self.parseSaveFrame()
 
-    #
-    # Set saveframe (measurement list) level information.
-    #
+    def parseSaveFrame(self):
 
-    for (attrName,tagName,default) in self.attrToTagMappings:
-      if self.saveFrame.tags.has_key(tagName):
-        attrValue = self.saveFrame.tags[tagName]
-      else:
-        attrValue = default
-        
-      if not hasattr(self,attrName) or not self.attrName:
-        setattr(self,attrName,attrValue)
+        if not self.checkVersion():
+            return
 
-    #
-    # Read the table with the measurements
-    #
-    
-    tableName = '_T1rho'
+        #
+        # Set saveframe (measurement list) level information.
+        #
 
-    if self.saveFrame.tables.has_key(tableName):
-      t1RhoRelaxTableTags = self.saveFrame.tables[tableName].tags
-      numT1RhoRelaxValues = len(t1RhoRelaxTableTags['ID'])
+        for attrName, tagName, default in self.attrToTagMappings:
+            if tagName in self.saveFrame.tags:
+                attrValue = self.saveFrame.tags[tagName]
+            else:
+                attrValue = default
 
-      for i in range(0,numT1RhoRelaxValues):
-      
-        tmpMolCode = str(t1RhoRelaxTableTags['Entity_assembly_ID'][i])
+            if not hasattr(self, attrName) or not self.attrName:
+                setattr(self, attrName, attrValue)
 
-        self.t1RhoRelaxValues.append(NmrStarT1RhoRelax(tmpMolCode,self))       
-        self.t1RhoRelaxValues[-1].setData(t1RhoRelaxTableTags,i)
+        #
+        # Read the table with the measurements
+        #
 
-    tableName = '_Heteronucl_T1rho_experiment'
-    self.setMeasureExperiments(tableName)
+        tableName = "_T1rho"
 
-    tableName = '_Heteronucl_T1rho_software'
-    self.setMeasureSoftwares(tableName)
+        if tableName in self.saveFrame.tables:
+            t1RhoRelaxTableTags = self.saveFrame.tables[tableName].tags
+            numT1RhoRelaxValues = len(t1RhoRelaxTableTags["ID"])
+
+            for i in range(0, numT1RhoRelaxValues):
+                tmpMolCode = str(t1RhoRelaxTableTags["Entity_assembly_ID"][i])
+
+                self.t1RhoRelaxValues.append(NmrStarT1RhoRelax(tmpMolCode, self))
+                self.t1RhoRelaxValues[-1].setData(t1RhoRelaxTableTags, i)
+
+        tableName = "_Heteronucl_T1rho_experiment"
+        self.setMeasureExperiments(tableName)
+
+        tableName = "_Heteronucl_T1rho_software"
+        self.setMeasureSoftwares(tableName)
+
 
 class NmrStarT1RhoRelax:
+    def __init__(self, molCode, parent):
 
-  def __init__(self,molCode,parent):
+        self.molCode = molCode
+        self.parent = parent
 
-    self.molCode = molCode
-    self.parent = parent
-  
-  def setData(self,t1RhoRelaxTableTags,i):
-      
-    assignList = [['Id',            'ID',None],
-                  ['seqCode',       'Seq_ID',None],
-                  ['resLabel',      'Comp_ID',None],
-                  ['atomName',      'Atom_ID',None],
-                  ['atomType',      'Atom_type',None],
-                  ['value',         'T1rho_val',None],
-                  ['valueError',    'T1rho_val_err',0.0],
-                  ['rexValue',      'Rex_val',None],
-                  ['rexValueError', 'Rex_val_err',0.0],
-                  ['authorSeqCode', 'Author_seq_ID',None]
-                  ]
+    def setData(self, t1RhoRelaxTableTags, i):
 
-    for (attrName,tagName,default) in assignList:
+        assignList = [
+            ["Id", "ID", None],
+            ["seqCode", "Seq_ID", None],
+            ["resLabel", "Comp_ID", None],
+            ["atomName", "Atom_ID", None],
+            ["atomType", "Atom_type", None],
+            ["value", "T1rho_val", None],
+            ["valueError", "T1rho_val_err", 0.0],
+            ["rexValue", "Rex_val", None],
+            ["rexValueError", "Rex_val_err", 0.0],
+            ["authorSeqCode", "Author_seq_ID", None],
+        ]
 
-      if t1RhoRelaxTableTags.has_key(tagName):
-        if t1RhoRelaxTableTags[tagName][i] != None:
-          setattr(self,attrName,t1RhoRelaxTableTags[tagName][i])
-        else:
-          setattr(self,attrName,default)
-          
-    # For completeness...
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+        for attrName, tagName, default in assignList:
+            if tagName in t1RhoRelaxTableTags:
+                if t1RhoRelaxTableTags[tagName][i] != None:
+                    setattr(self, attrName, t1RhoRelaxTableTags[tagName][i])
+                else:
+                    setattr(self, attrName, default)
+
+        # For completeness...
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    # No t1rho values in any of my nmrstar files.
 
-  # No t1rho values in any of my nmrstar files.
+    files = ["/homes/penkett/project/nmrstar/files/bmr15230_3_pub.str"]
 
-  files = ['/homes/penkett/project/nmrstar/files/bmr15230_3_pub.str']
-  
-  for file in files:
-    
-    #file = os.path.join(getTopDirectory(), file)
-    
-    nmrStarFile = NmrStarFile(file, version='3.1')
+    for file in files:
+        # file = os.path.join(getTopDirectory(), file)
 
-    nmrStarFile.read(verbose = 1)
+        nmrStarFile = NmrStarFile(file, version="3.1")
 
-    for t1RhoRelaxFile in nmrStarFile.t1RhoRelaxFiles:
-      for t1RhoRelax in t1RhoRelaxFile.t1RhoRelaxValues:
-        print(t1RhoRelax.Id, t1RhoRelax.seqCode, t1RhoRelax.resLabel, t1RhoRelax.atomName, t1RhoRelax.value, t1RhoRelax.valueError, t1RhoRelax.rexValue, t1RhoRelax.rexValueError)
+        nmrStarFile.read(verbose=1)
+
+        for t1RhoRelaxFile in nmrStarFile.t1RhoRelaxFiles:
+            for t1RhoRelax in t1RhoRelaxFile.t1RhoRelaxValues:
+                print(
+                    t1RhoRelax.Id,
+                    t1RhoRelax.seqCode,
+                    t1RhoRelax.resLabel,
+                    t1RhoRelax.atomName,
+                    t1RhoRelax.value,
+                    t1RhoRelax.valueError,
+                    t1RhoRelax.rexValue,
+                    t1RhoRelax.rexValueError,
+                )

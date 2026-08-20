@@ -3,20 +3,19 @@ Whatif Module
 First version: gv June 3, 2007
 """
 
-from cing import issueListUrl
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import removeEmptyFiles
-from cing.PluginCode.required.reqMatplib import MATPLIB_STR
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE
-from cing.core.parameters import cingPaths
-from cing.core.parameters import plugins
 from glob import glob
 from shutil import copy
 from string import upper
+
+from cing import issueListUrl
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE, cingPaths, plugins
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.disk import removeEmptyFiles
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqMatplib import MATPLIB_STR
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
 
 #if cingPaths.whatif == None or cingPaths.whatif == PLEASE_ADD_EXECUTABLE_HERE:
 #    nTdebug("No whatif installed.")
@@ -37,7 +36,7 @@ class WhatifResult( NTdict ):
                          comment = Whatif.explain(checkID),
                        )
 #        # Initialize the lists
-        if cingNameDict.has_key(checkID):
+        if checkID in cingNameDict:
             self.alternate = cingNameDict[checkID]
         for c  in  [ VALUE_LIST_STR, QUAL_LIST_STR]:
             self[c] = nTfill( None, modelCount)
@@ -371,7 +370,7 @@ end y
 
             # if needed add WhatifResult instance
             # Do not use setdefault() as it generate too much overhead this way
-            if not self.molecule[WHATIF_STR].has_key(checkId):
+            if checkId not in self.molecule[WHATIF_STR]:
                 self.molecule[WHATIF_STR][checkId] = WhatifResult( checkId, level='MOLECULE', modelCount = self.molecule.modelCount)
                 # optionally add reference to alternate Cing name
                 cingId = cingCheckId( checkId )
@@ -411,7 +410,7 @@ end y
 #                nTmessage('Failed to have increased model idx at least once for checkId %s' % checkId)
                 continue
 
-            ensembleValueList = getDeepByKeysOrAttributes( self.molecule, WHATIF_STR, checkId, VALUE_LIST_STR )            
+            ensembleValueList = getDeepByKeysOrAttributes( self.molecule, WHATIF_STR, checkId, VALUE_LIST_STR )
             ensembleValueList[modelIdx] = value
 
             ensembleQualList = getDeepByKeysOrAttributes( self.molecule, WHATIF_STR, checkId, QUAL_LIST_STR )
@@ -554,14 +553,14 @@ RMS Z-scores, should be close to 1.0:
             key    = a[0].strip()
             value  = a[1].strip()
 
-            if self.recordKeyWordsToIgnore.has_key(key):
+            if key in self.recordKeyWordsToIgnore:
                 continue
 
             if key == 'CheckID':
                 curCheck = None
                 checkID = value # local var within this 'if' statement.
 #                nTdebug("found check ID: " + checkID)
-                if not nameDict.has_key( checkID ):
+                if  checkID  not in nameDict:
                     nTwarning("Whatif._parseCheckdb: Skipping an unknown CheckID: "+checkID)
                     continue
 #                if self.debugCheck != checkID:
@@ -569,7 +568,7 @@ RMS Z-scores, should be close to 1.0:
 #                    continue
                 isTypeFloat = False
 
-                if self.has_key( checkID ):
+                if  checkID  in self:
                     curCheck = self.get(checkID)
                 else:
                     curCheck = NTdict()
@@ -600,7 +599,7 @@ RMS Z-scores, should be close to 1.0:
 
                 # do NOT!! use setdefault routine because it will generate many times
                 # an expensive WhatifResult dummy first
-                if not curLocDic.has_key( curLocId ):
+                if  curLocId  not in curLocDic:
                     curLocDic[curLocId] = WhatifResult(checkID, curCheck[LEVEL_STR], self.molecule.modelCount)
 
                 curListDic = curLocDic[curLocId]
@@ -617,7 +616,7 @@ RMS Z-scores, should be close to 1.0:
                 nTerror( "Whatif._parseCheckdb: Expected key to be Value or Qual but found key, value pair: [%s] [%s]" % ( key, value ))
                 return None
 
-            if curListDic==None or not curListDic.has_key( keyWord ):
+            if curListDic==None or  keyWord  not in curListDic:
                 nTerror( "Whatif._parseCheckdb, line %d: Expected key %s for WhatifResult dict %s", line.NR, keyWord, curListDic)
 
             else:
@@ -704,7 +703,7 @@ RMS Z-scores, should be close to 1.0:
 #                checkId = check[CHECK_ID_STR]
 #                nTdebug( 'check        : ' + repr(check))
 #                nTdebug( 'check[CHECK_ID_STR]: ' + checkId)
-                if not check.has_key(LOC_ID_STR):
+                if LOC_ID_STR not in check:
 #                    nTdebug("Whatif._processCheckdb: There is no %s attribute, skipping check: [%s]" % ( LOC_ID_STR, check ))
 #                    nTdebug("  check: "+ repr(check))
                     continue
@@ -798,7 +797,7 @@ Name   :    0 ; A    ;   40 ; THR  ; _    ; HG21 ; _
         """
         if checkID == None:
             return nameDict.format()
-        elif checkID!=None and nameDict.has_key(checkID):
+        elif checkID!=None and checkID in nameDict:
             return nameDict[checkID]
         else:
             return None
@@ -813,7 +812,7 @@ def createHtmlWhatif(project, ranges=None):
     if not getDeepByKeysOrAttributes(plugins, MATPLIB_STR, IS_INSTALLED_STR):
         nTdebug('Skipping createHtmlWattos because no matplib installed.')
         return
-    from cing.PluginCode.matplib import MoleculePlotSet #@UnresolvedImport
+    from cing.PluginCode.matplib import MoleculePlotSet  #@UnresolvedImport
 
     mol = project.molecule
 #    wiPlotList.append( ('_01_backbone_chi','QUA/RAM/BBC/C12') )
@@ -1095,16 +1094,16 @@ def runWhatif( project, ranges=None, parseOnly=False ):
 #    nTdebug('Parsing whatif checks ')
 
     # clear the whatif data structure
-    if mol.has_key(WHATIF_STR):
+    if WHATIF_STR in mol:
         del(mol[WHATIF_STR])
     for chain in mol.allChains():
-        if chain.has_key(WHATIF_STR):
+        if WHATIF_STR in chain:
             del(chain[WHATIF_STR])
     for res in mol.allResidues():
-        if res.has_key(WHATIF_STR):
+        if WHATIF_STR in res:
             del(res[WHATIF_STR])
     for atm in mol.allAtoms():
-        if atm.has_key(WHATIF_STR):
+        if WHATIF_STR in atm:
             del(atm[WHATIF_STR])
 
     whatifStatus.parsed = False
@@ -1139,20 +1138,20 @@ def runWhatif( project, ranges=None, parseOnly=False ):
             return True
     except:
         nTtracebackError()
-        nTerror("Skipping restore of whatif summary.") 
+        nTerror("Skipping restore of whatif summary.")
         return True
     whatif._makeSummary()
 
     # complete the whatif data structure with NoneObjects
-    if not mol.has_key(WHATIF_STR):
+    if WHATIF_STR not in mol:
         mol[WHATIF_STR] = NoneObject
     for chain in mol.allChains():
-        if not chain.has_key(WHATIF_STR):
+        if WHATIF_STR not in chain:
             chain[WHATIF_STR] = NoneObject
         else:
             chain[WHATIF_STR].keysformat()
     for res in mol.allResidues():
-        if not res.has_key(WHATIF_STR):
+        if WHATIF_STR not in res:
             res[WHATIF_STR] = NoneObject
         else:
             # check and initiate altenative cingId names
@@ -1165,7 +1164,7 @@ def runWhatif( project, ranges=None, parseOnly=False ):
 #                               ('CHICHK', 'chi1'),
 #                               ('C12CHK', 'janin')
 #                              ]:
-#                if res[WHATIF_STR].has_key(key1):
+#                if key1 in res[WHATIF_STR]:
 #                    res[WHATIF_STR][key2] = res[WHATIF_STR][key1]
 #                else:
 #                    res[WHATIF_STR][key2] = NoneObject
@@ -1174,7 +1173,7 @@ def runWhatif( project, ranges=None, parseOnly=False ):
         #end if
 
     for atm in mol.allAtoms():
-        if not atm.has_key(WHATIF_STR):
+        if WHATIF_STR not in atm:
             atm[WHATIF_STR] = NoneObject
         else:
             atm[WHATIF_STR].keysformat()

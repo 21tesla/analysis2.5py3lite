@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,81 +52,66 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 
 """
-from ccpnmr.integrator.core import Io as intIo
-from ccpnmr.integrator.core import Util as intUtil
-
-
-
 
 defaultConfiguration = {
-  "protocol": {
-    "protocolParameters": [ 
-      {"name":"shiftFormat","paramType":"String","value":"TALOS"}
-    ]
-  }
+    "protocol": {"protocolParameters": [{"name": "shiftFormat", "paramType": "String", "value": "TALOS"}]}
 }
 
 
-
 def adaptNmrCalcRun(nmrCalcRun, protocolName):
-  """ Modify nmrCalcRun from generic MultiStructure form to protocol-specific
+    """Modify nmrCalcRun from generic MultiStructure form to protocol-specific
     Input:
-      nmrCalcRun: NmrCalc.Run 
+      nmrCalcRun: NmrCalc.Run
       String protocolName
-  """
-  
-  pass
+    """
 
-
+    pass
 
 
 def adaptNmrCalcRun(nmrCalcRun, protocolName):
-  """ Modify nmrCalcRun from generic MultiStructure form to protocol-specific
+    """Modify nmrCalcRun from generic MultiStructure form to protocol-specific
     Input:
-      nmrCalcRun: NmrCalc.Run 
+      nmrCalcRun: NmrCalc.Run
       String protocolName
-  """
-  
-  if protocolName.startswith('CS-ROSETTA') or protocolName.startswith('ROSETTA'):
-    csRosettaNmrCalcRun(nmrCalcRun)
-  
-  else:
-    raise Exception("Protocol %s not recognized" % protocolName)
+    """
+
+    if protocolName.startswith("CS-ROSETTA") or protocolName.startswith("ROSETTA"):
+        csRosettaNmrCalcRun(nmrCalcRun)
+
+    else:
+        raise Exception("Protocol %s not recognized" % protocolName)
+
 
 def csRosettaNmrCalcRun(nmrCalcRun):
-  """ Modify nmrCalcRun from generic MultiStructure form to ASDP-specific
+    """Modify nmrCalcRun from generic MultiStructure form to ASDP-specific
     Input:
-      nmrCalcRun: NmrCalc.Run 
-  """
-  
-  ## name : code dictionary for resetting code values
-  #codeRemapping = {
-  #}
-  
-  ## set proper codes for existing data parameters
-  #for runParameter in nmrCalcRun.sortedRunParameters():
-  #  name = runParameter.name
-  #  if name in codeRemapping:
-  #    runParameter.code = codeRemapping[name]
-  
-  # get data sets
-  
-  shiftListObjs = {}
-  for datum in nmrCalcRun.findAllData(className='MeasurementListData'):
-    measurementList = datum.measurementList
-    if measurementList.className == 'ShiftList':
-      shiftListObjs[measurementList] = datum
-    
-  # main shift list
-  if shiftListObjs:
-    if len(shiftListObjs) == 1:
-      shiftData = list(shiftListObjs.items())[0][1]
-      fileName = shiftData.findFirstRunParameter(name='fileName').textValue
-      fileFormat = shiftData.findFirstRunParameter(name='fileFormat').textValue
-      nmrCalcRun.newRunParameter(name='fileNameShift', code='INPUT_FILE',
-                                 textValue=fileName, data=shiftData)
-    else:
-      raise Exception("CS-ROSETTA requires exactly one shiftLst")
- 
- 
-  
+      nmrCalcRun: NmrCalc.Run
+    """
+
+    ## name : code dictionary for resetting code values
+    # codeRemapping = {
+    # }
+
+    ## set proper codes for existing data parameters
+    # for runParameter in nmrCalcRun.sortedRunParameters():
+    #  name = runParameter.name
+    #  if name in codeRemapping:
+    #    runParameter.code = codeRemapping[name]
+
+    # get data sets
+
+    shiftListObjs = {}
+    for datum in nmrCalcRun.findAllData(className="MeasurementListData"):
+        measurementList = datum.measurementList
+        if measurementList.className == "ShiftList":
+            shiftListObjs[measurementList] = datum
+
+    # main shift list
+    if shiftListObjs:
+        if len(shiftListObjs) == 1:
+            shiftData = list(shiftListObjs.items())[0][1]
+            fileName = shiftData.findFirstRunParameter(name="fileName").textValue
+            fileFormat = shiftData.findFirstRunParameter(name="fileFormat").textValue
+            nmrCalcRun.newRunParameter(name="fileNameShift", code="INPUT_FILE", textValue=fileName, data=shiftData)
+        else:
+            raise Exception("CS-ROSETTA requires exactly one shiftLst")

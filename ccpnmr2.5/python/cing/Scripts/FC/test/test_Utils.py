@@ -3,17 +3,18 @@ Created on Dec 21, 2010
 
 @author: jd
 '''
-from cing import cingDirTestsData #@UnusedImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
+import unittest
+from unittest import TestCase
+
 from matplotlib import mlab
 from nose.plugins.skip import SkipTest
-from unittest import TestCase
-import unittest
+
+from cing import cingDirTestsData  #@UnusedImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
     from cing.Scripts.FC.utils import getBmrbCsCountsFromFile
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
@@ -24,12 +25,12 @@ class AllChecks(TestCase):
     'Test case'
     def test_Median(self):
         'test median'
-# Wiki: If there is an even number of observations, then there is no single middle value; the median is then usually defined to be the 
-# mean of the two middle values.[1][2]      
-        lol = [ 
+# Wiki: If there is an even number of observations, then there is no single middle value; the median is then usually defined to be the
+# mean of the two middle values.[1][2]
+        lol = [
 #               [], # fails
                [1.2],
-               [1.0, 2.0], # Get 1.5 (matplotlib 1.0.1 or 2.0 (matplotlib 0.99.3) 
+               [1.0, 2.0], # Get 1.5 (matplotlib 1.0.1 or 2.0 (matplotlib 0.99.3)
                [1.0, 2.0, 4.0],
                ]
         expectedMedianList              = [ 1.2, 1.5, 2.0] # matplotlib 1.0.1
@@ -41,7 +42,7 @@ class AllChecks(TestCase):
                 self.assertEqual(ml[0], expectedMedianListOldMatplotlib[i])
         # end for
     # end def
-        
+
     def test_GetBmrbCsCountsFromFile(self):
         'test getting BMRB CS counts from file.'
         useVersion = '2'

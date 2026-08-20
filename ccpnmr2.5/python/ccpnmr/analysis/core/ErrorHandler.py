@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,25 +39,24 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+
 class ErrorHandler:
+    def __init__(self):
 
-  def __init__(self):
+        self.errorRepository = []
 
-    self.errorRepository = []
+    def reportNeeded(self, formatedTb, exc, val, tb):
+        for error in self.errorRepository:
+            if (str(val[0]) == str(error.val[0]) and formatedTb == error.formatedTb) or str(
+                val[0]
+            ) == "[Errno -2] Name or service not known":
+                return 0
 
-  def reportNeeded(self, formatedTb, exc, val, tb):
-      for error in self.errorRepository:
-        if (str(val[0]) == str(error.val[0]) and formatedTb == error.formatedTb) or str(val[0]) == '[Errno -2] Name or service not known':
-            return 0
-        
-      self.errorRepository.append(ErrorInstance(val, formatedTb))
-      return 1
-  
+        self.errorRepository.append(ErrorInstance(val, formatedTb))
+        return 1
+
+
 class ErrorInstance:
-
     def __init__(self, val, formatedTb):
         self.val = val
-        self.formatedTb = formatedTb 
-        
-        
-  
+        self.formatedTb = formatedTb

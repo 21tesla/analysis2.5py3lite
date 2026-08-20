@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-from cing.Libs.NTutils import nTdebug
-import cing
 import numpy
 import pylab
-from numpy import * #@UnusedWildImport
+from numpy import *  #@UnusedWildImport
+
+import cing
+from cing.Libs.NTutils import nTdebug
 
 cing.verbosity = cing.verbosityDebug
 

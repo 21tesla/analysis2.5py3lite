@@ -1,8 +1,8 @@
-import os
 import sys
 
 from memops.general.Io import loadProject
 from pdbe.software.violationStatistics import ViolationStatistics
+
 
 class ReadDistanceConstraints:
 

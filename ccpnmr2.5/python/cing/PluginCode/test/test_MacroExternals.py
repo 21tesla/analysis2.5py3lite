@@ -2,10 +2,12 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_MacroExternals.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.MacroExternals import mapValueToMolmolColor
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.MacroExternals import mapValueToMolmolColor
+
 
 class AllChecks(TestCase):
 

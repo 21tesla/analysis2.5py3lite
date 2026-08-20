@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Scripts/cingProfile.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.html import hPlot
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 cing.verbosity = cing.verbosityDebug
 
@@ -22,7 +22,7 @@ if True:
 
 #[PYTHON-002]
 # Not really python code but just a link for
-# 1044392 residues in D1D2 plots from $C/data/PluginCode/WhatIf/README.txt 
+# 1044392 residues in D1D2 plots from $C/data/PluginCode/WhatIf/README.txt
 
 #[PYTHON-003]
 # set x = 1cjg
@@ -48,6 +48,6 @@ for r in rl:
     nTmessage("%s has %03d DRs" % (r, n))
     count_total += n
     i += 1
-# end for 
+# end for
 averageCount = count_total / i
 nTmessage("For this segment there are on average %s DRs per residue" % averageCount)

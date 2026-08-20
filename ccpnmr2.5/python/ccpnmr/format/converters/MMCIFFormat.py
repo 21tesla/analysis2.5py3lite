@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,94 +52,89 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import copy
-
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
-from ccp.format.general.Constants import defaultSeqInsertCode
 
 #
 # Add some information to IOkeywords...
 #
-#IOkeywords = copy.deepcopy(IOkeywords)
+# IOkeywords = copy.deepcopy(IOkeywords)
+
 
 class MMCIFFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'mmCif'
-    self.IOkeywords = IOkeywords
+        self.format = "mmCif"
+        self.IOkeywords = IOkeywords
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getCoordinates = self.getCoordinatesGeneric
+    def setGenericImports(self):
 
-    #self.getChemComps = self.getChemCompsGeneric
+        self.getSequence = self.getSequenceGeneric
 
-  #
-  # Deviations from generic import stuff
-  #
-      
-  def getSequenceSetFormatSpecificReadKeywds(self):  
-   
-    readKeywds = {}
+        self.getCoordinates = self.getCoordinatesGeneric
 
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
+        # self.getChemComps = self.getChemCompsGeneric
 
-  def getCoordinatesSetFormatSpecificReadKeywds(self):
-   
-    readKeywds = {}
-    
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
-    
-  def getCoordinatesSetSequenceFile(self):
-    
-    self.setSequenceFileClass()
-    self.sequenceFile = self.SequenceFileClass(self.fileName)
-
-    readKeywds = self.getSequenceSetFormatSpecificReadKeywds()
-    self.sequenceFile.read(mmCif = self.coordinateFile.mmCif, **readKeywds)
-
-  #
-  # Code different from DataFormat
-  #
-
-  def duplicateChain(self):
-  
     #
-    # All chain info should be contained in mmCIF files...
+    # Deviations from generic import stuff
     #
-    
-    return False
 
-  def getSpecificPdbOneLetterCode(self,currentChainCode):
-    
-    pdbOneLetterCode = currentChainCode
-    
-    if self.sequence:
-      pdbOneLetterCode = self.sequence.chainCode
-      
-    # Currently not possible to be more than one letter, so reset to nothing.
-    # This restriction will likely change in the future.
-    if len(pdbOneLetterCode) > 1:
-      pdbOneLetterCode = ' '
-  
-    return pdbOneLetterCode
+    def getSequenceSetFormatSpecificReadKeywds(self):
 
-  def getPresetChainMapping(self,chainList):
-  
-    mappingChainDict = {}
-    
-    for chain in chainList:
-    
-      mappingChainDict[chain] = (chain.code,1)
-    
-    return mappingChainDict
+        readKeywds = {}
+
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
+
+        return readKeywds
+
+    def getCoordinatesSetFormatSpecificReadKeywds(self):
+
+        readKeywds = {}
+
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
+
+        return readKeywds
+
+    def getCoordinatesSetSequenceFile(self):
+
+        self.setSequenceFileClass()
+        self.sequenceFile = self.SequenceFileClass(self.fileName)
+
+        readKeywds = self.getSequenceSetFormatSpecificReadKeywds()
+        self.sequenceFile.read(mmCif=self.coordinateFile.mmCif, **readKeywds)
+
+    #
+    # Code different from DataFormat
+    #
+
+    def duplicateChain(self):
+
+        #
+        # All chain info should be contained in mmCIF files...
+        #
+
+        return False
+
+    def getSpecificPdbOneLetterCode(self, currentChainCode):
+
+        pdbOneLetterCode = currentChainCode
+
+        if self.sequence:
+            pdbOneLetterCode = self.sequence.chainCode
+
+        # Currently not possible to be more than one letter, so reset to nothing.
+        # This restriction will likely change in the future.
+        if len(pdbOneLetterCode) > 1:
+            pdbOneLetterCode = " "
+
+        return pdbOneLetterCode
+
+    def getPresetChainMapping(self, chainList):
+
+        mappingChainDict = {}
+
+        for chain in chainList:
+            mappingChainDict[chain] = (chain.code, 1)
+
+        return mappingChainDict

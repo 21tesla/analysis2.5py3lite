@@ -3,10 +3,8 @@
 # $CINGROOT/python/cing/Scripts/vCing/test/cingByVCtest.py a b
 
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
 
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug

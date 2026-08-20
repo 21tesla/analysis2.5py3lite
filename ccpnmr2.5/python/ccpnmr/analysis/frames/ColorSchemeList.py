@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,49 +45,50 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
-from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.Color import hexRepr
+from memops.gui.PulldownMenu import PulldownMenu
 
 # do not need for 'setName' since name is ColorScheme key
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class ColorSchemeList(PulldownMenu):
- 
-  def __init__(self, parent, getColorSchemes, extra_label = '', *args, **kw):
- 
-    self.getColorSchemes = getColorSchemes
-    self.extra_label = extra_label
- 
-    PulldownMenu.__init__(self, parent, *args, **kw)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setColorSchemes, 'ccpnmr.Analysis.ColorScheme', func)
- 
-    self.setColorSchemes()
+    def __init__(self, parent, getColorSchemes, extra_label="", *args, **kw):
 
-  def destroy(self):
- 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setColorSchemes, 'ccpnmr.Analysis.ColorScheme', func)
+        self.getColorSchemes = getColorSchemes
+        self.extra_label = extra_label
 
-    PulldownMenu.destroy(self)
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-  def setColorSchemes(self, *color):
- 
-    schemes = self.getColorSchemes()
-    names = [ scheme.name for scheme in schemes ]
-    #names.sort()
-    if (self.extra_label):
-      names = names + [self.extra_label]
-    #print 'setColorSchemes', names, self.selected_index
-    
-    hexColors = []
-    for scheme in schemes:
-      schemeColors = []
-      for c in scheme.colors:
-        schemeColors.append(hexRepr(c.r,c.g,c.b))
- 
-      hexColors.append(schemeColors)
-    
-    self.replace(names, self.selected_index, colors=hexColors)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setColorSchemes, "ccpnmr.Analysis.ColorScheme", func)
+
+        self.setColorSchemes()
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setColorSchemes, "ccpnmr.Analysis.ColorScheme", func)
+
+        PulldownMenu.destroy(self)
+
+    def setColorSchemes(self, *color):
+
+        schemes = self.getColorSchemes()
+        names = [scheme.name for scheme in schemes]
+        # names.sort()
+        if self.extra_label:
+            names = names + [self.extra_label]
+        # print 'setColorSchemes', names, self.selected_index
+
+        hexColors = []
+        for scheme in schemes:
+            schemeColors = []
+            for c in scheme.colors:
+                schemeColors.append(hexRepr(c.r, c.g, c.b))
+
+            hexColors.append(schemeColors)
+
+        self.replace(names, self.selected_index, colors=hexColors)

@@ -11,10 +11,10 @@ otherwise.
 
 Author: Jurgen F. Doreleijers, BMRB, September 2001
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
 import signal
 import types
-from datetime import datetime
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 __author__    = "$Author: WGTouw@gmail.com $"
 ___revision__ = "$Revision: 1201 $"
@@ -39,7 +39,7 @@ def do_cmd( cmd, bufferedOutput = True ):
     else:
         p = Popen(cmd, shell=True, stdout=PIPE)
         pipe = p.stdout
-        line = p.stdout.readline()        
+        line = p.stdout.readline()
         while line:
             nTmessageNoEOL( line )
             line = p.stdout.readline()
@@ -156,7 +156,7 @@ class ForkOff:
             args = ()
             if len(job) > 1:
                 args = job[1]
-            if type(args) != types.TupleType:
+            if type(args) != tuple:
                 nTerror("given argument not of type Tuple for job: %s", job)
                 return []
             if not ( type(func) == types.FunctionType or

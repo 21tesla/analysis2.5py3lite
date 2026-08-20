@@ -10,15 +10,15 @@ if the input project is in cwd.
 
 Most functionality is hard-coded here so be careful reading the actual code.
 """
+import tarfile
+from glob import glob1
+
+from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.DBMS import DBMS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import copy
-from cing.Libs.disk import globMultiplePatterns
+from cing.Libs.disk import copy, globMultiplePatterns
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG import CASP_NMR_BASE_NAME
 from cing.NRG.PDBEntryLists import writeEntryListToFile
-from cing.core.constants import * #@UnusedWildImport
-from glob import glob1
-import tarfile
 
 __author__ = "Wim Vranken <wim@ebi.ac.uk> Jurgen Doreleijers <jurgenfd@gmail.com>"
 

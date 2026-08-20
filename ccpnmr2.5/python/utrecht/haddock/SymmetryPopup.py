@@ -81,20 +81,19 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-from memops.gui.ButtonList      import ButtonList
-from memops.gui.CheckButton     import CheckButton
-from memops.gui.IntEntry        import IntEntry
-from memops.gui.LabelFrame      import LabelFrame
-from memops.gui.Label           import Label
-from memops.gui.MultiWidget     import MultiWidget
-from memops.gui.PulldownMenu    import PulldownMenu
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
+from HaddockBasic import setPartnerChains
+
+from memops.editor.BasePopup import BasePopup
+from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.CheckButton import CheckButton
+from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
 from memops.gui.MessageReporter import showWarning
+from memops.gui.MultiWidget import MultiWidget
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
-from memops.editor.BasePopup    import BasePopup
-from memops.editor.Util         import createDismissHelpButtonList
-
-from HaddockBasic          import setPartnerChains
 
 class EditSymmetryPopup(BasePopup):
 
@@ -140,11 +139,11 @@ class EditSymmetryPopup(BasePopup):
         self.segStartEntry    = IntEntry(self, returnCallback=self.setSegStart, width=6)
         self.segLengthEntry   = IntEntry(self, returnCallback=self.setSegLength, width=6)
 
-        headings = ['#','Symmetry\noperator','Mol System','Chains','Start\nresidue','Segment\nlength']  
-        editWidgets      = [None, None, self.molSysPulldown, self.chainSelect, self.segStartEntry, self.segLengthEntry] 
+        headings = ['#','Symmetry\noperator','Mol System','Chains','Start\nresidue','Segment\nlength']
+        editWidgets      = [None, None, self.molSysPulldown, self.chainSelect, self.segStartEntry, self.segLengthEntry]
         editGetCallbacks = [None, None, self.getMolSystem, self.getChains, self.getSegStart, self.getSegLength]
         editSetCallbacks = [None, self.setSymmCode, self.setMolSystem, self.setChains, self.setSegStart, self.setSegLength]
-        
+
         self.symmetryMatrix = ScrolledMatrix(frame,headingList=headings,
                                              callback=self.selectSymmetry,
                                              editWidgets=editWidgets,
@@ -156,7 +155,7 @@ class EditSymmetryPopup(BasePopup):
         commands = [self.addSymmetrySet,self.removeSymmetrySet]
         self.buttonList = createDismissHelpButtonList(guiFrame, texts=texts, commands=commands, expands=True)
         self.buttonList.grid(row=2,column=0,sticky='ew')
-        
+
         self.updateMolPartners()
         self.notify(self.registerNotify)
 
@@ -176,14 +175,14 @@ class EditSymmetryPopup(BasePopup):
         molSystems = self.ccpnProject.sortedMolSystems()
         if molSystems:
             names = [ms.code for ms in molSystems]
-            if molSystem not in molSystems: 
+            if molSystem not in molSystems:
                 molSystem = molSystems[0]
                 index = molSystems.index(molSystem)
 
         self.molSysPulldown.setup(names, index)
 
     def getChains(self, partner):
-  
+
         names  = []
         values = []
 
@@ -199,29 +198,29 @@ class EditSymmetryPopup(BasePopup):
                   values.append(True)
 
                 else:
-                  values.append(False)   
+                  values.append(False)
 
-                self.chainSelect.set(values=values,options=names)   
+                self.chainSelect.set(values=values,options=names)
 
         else:
             showWarning('Warning','Set Mol System or ensemble first',parent=self)
-            self.symmetryMatrix.keyPressEscape()        
-    
+            self.symmetryMatrix.keyPressEscape()
+
     def getSegLength(self, symmetryOp):
-        
+
         if symmetryOp and symmetryOp.segmentLength: self.segLengthEntry.set(symmetryOp.segmentLength)
 
     def getSegStart(self):
-    
+
         pass
 
     def setMolSystem(self, partner, name=None):
-  
+
         """Get all molsystems as stored in the project as list"""
 
         index =  self.molSysPulldown.getSelectedIndex()
         molSystems = self.ccpnProject.sortedMolSystems()
-  
+
         if molSystems:
             molSystem = molSystems[index]
             self.molPartner.molSystem = molSystem
@@ -241,29 +240,29 @@ class EditSymmetryPopup(BasePopup):
                 chains = [chains[i] for i in range(len(values)) if values[i]]
                 setPartnerChains(self.molPartner,chains)
 
-        self.symmetryMatrix.keyPressEscape()  
+        self.symmetryMatrix.keyPressEscape()
         self.updateAllAfter()
-        
+
     def setSegLength(self, event):
-        
+
         value = self.segLengthEntry.get() or 1
         self.symmetryOp.segmentLength = value
 
     def setSegStart(self):
-        
-        pass    
 
-    def setSymmCode(self, index, name=None): 
+        pass
 
-        self.symmetryCode = self.symmCodePulldown.getSelected()    
+    def setSymmCode(self, index, name=None):
+
+        self.symmetryCode = self.symmCodePulldown.getSelected()
 
     def selectSymmetry(self, obj, row, col):
-        
+
         self.symmetryOp = obj
         self.updateMolSysPulldown()
 
     def notify(self, notifyFunc):
-  
+
         for func in ('__init__', 'delete', 'setSymmetryCode','setSegmentLength'):
             notifyFunc(self.updateAllAfter, 'molsim.Symmetry.Symmetry', func)
 
@@ -271,7 +270,7 @@ class EditSymmetryPopup(BasePopup):
             notifyFunc(self.updateAllAfter, 'molsim.Symmetry.Segment', func)
 
     def addSymmetrySet(self):
-            
+
         if not self.ccpnProject.molSystems:
             showWarning('Warning','No molecular systems present in CCPN project',parent=self)
             return
@@ -281,11 +280,11 @@ class EditSymmetryPopup(BasePopup):
             setPartnerChains(partner, molSystem.chains)
 
             self.updateAllAfter()
-            
+
     def removeSymmetrySet(self):
-        
-        pass            
-    
+
+        pass
+
     def updateAllAfter(self, obj=None):
 
         if self.waiting: return
@@ -293,7 +292,7 @@ class EditSymmetryPopup(BasePopup):
             self.waiting = True
             self.after_idle(self.updateSymmetries,
                             self.updateMolPartners)
-    
+
     def updateMolPartners(self):
 
         textMatrix = []
@@ -306,13 +305,13 @@ class EditSymmetryPopup(BasePopup):
                      ','.join([c.chain.code for c in partner.chains]),
                      partner.autoHistidinePstate and 'Yes' or 'No',
                      partner.isDna and 'Yes' or 'No']
-            
+
             objectList.append(partner)
             textMatrix.append(datum)
 
         self.symmetryMatrix.update(objectList=objectList, textMatrix=textMatrix)
         self.updateMolSysPulldown()
-    
+
     def updateMolSysPulldown(self):
 
         names = []
@@ -330,13 +329,13 @@ class EditSymmetryPopup(BasePopup):
         else: self.molPartner = None
 
         self.molSysPulldown.setup(names, index)
-        
+
     def updateSymmetries(self):
 
         textMatrix  = []; objectList  = []
         if self.symmetrySet:
             for symmetryOp in self.symmetrySet.symmetries:
-                chains = []; segments = [] 
+                chains = []; segments = []
                 length = symmetryOp.segmentLength
 
                 for segment in symmetryOp.sortedSegments():

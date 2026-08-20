@@ -3,20 +3,24 @@
 # Execute in a directory with both a CCPN and a CING project directory named 1brv and 1brv.cing respectively.
 # $CINGROOT/python/cing/Scripts/FC/vascoCingRefCheck.py 1brv
 
+import glob
+
+from matplotlib import mlab
+
+#from pdbe.software.vascoReferenceCheck import VascoReferenceCheck
+from pdbe2.analysis.shifts.vascoReferenceCheck import VascoReferenceCheck
+
 from cing import cingDirScripts
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.Ccpn import Ccpn
-from cing.PluginCode.required.reqVasco import * #@UnusedWildImport
 from cing.core.classes import Project
 from cing.core.classes2 import ResonanceList
 from cing.core.parameters import moleculeDirectories
-from matplotlib import mlab
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.Ccpn import Ccpn
+from cing.PluginCode.required.reqVasco import *  #@UnusedWildImport
 from memops.api import Implementation
 from memops.general.Io import loadProject
-from memops.universal.Util import returnInt, returnFloat
-#from pdbe.software.vascoReferenceCheck import VascoReferenceCheck
-from pdbe2.analysis.shifts.vascoReferenceCheck import VascoReferenceCheck
-import glob
+from memops.universal.Util import returnFloat, returnInt
+
 
 class VascoCingReferenceCheck(VascoReferenceCheck):
     """
@@ -26,10 +30,10 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
     vascoReferenceCheck.py, in pdbe.software (now part of SF CVS)
     
     """
-    
+
     vascoRefDataPath = os.path.join(cingDirScripts, 'FC', 'vascoRefData')
     if not os.path.exists(vascoRefDataPath):
-        nTerror("In CING using vascoRefDataPath %s but is absent" % vascoRefDataPath)            
+        nTerror("In CING using vascoRefDataPath %s but is absent" % vascoRefDataPath)
 
     def setupDirectories(self, cingProject, ccpnDir=None):
         self.cingProject = cingProject
@@ -42,8 +46,8 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
             self.ccpnDir = ccpnDir
         else:
             self.ccpnDir = '%s' % entryCode
-    
-    
+
+
     def writePdbFile(self):
         pass
 
@@ -70,7 +74,7 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
                 ssCodeDict = {}
 
                 for ssCode in self.allSsInfo[chainCode][residueKey]:
-                    if not ssCodeDict.has_key(ssCode):
+                    if ssCode not in ssCodeDict:
                         ssCodeDict[ssCode] = 0
                     ssCodeDict[ssCode] += 1
 
@@ -107,23 +111,23 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
                 if len(seqCodeStr) < 1:
                     # happens for PDB entry 1cjg for 2 residues
                     # and for 2k6q for 2 residues.
-                    nTdebug("Skipping DSSP line for Vasco with empty seqCode string: " + line.strip()) 
-                    continue                
+                    nTdebug("Skipping DSSP line for Vasco with empty seqCode string: " + line.strip())
+                    continue
                 seqCode = returnInt(seqCodeStr)
                 chainCode = line[11:12]
                 secStruc = line[16:17]
 
-                if not self.allSsInfo.has_key(chainCode):
+                if chainCode not in self.allSsInfo:
                     self.allSsInfo[chainCode] = {}
 
                 seqKey = (seqCode, ' ')
 
-                if not self.allSsInfo[chainCode].has_key(seqKey):
+                if seqKey not in self.allSsInfo[chainCode]:
                     self.allSsInfo[chainCode][seqKey] = []
 
                 self.allSsInfo[chainCode][seqKey].append(secStruc)
     # end def
-    
+
     def createAsaInfo(self):
         'Return True on error.'
         if self.showMessages:
@@ -137,11 +141,11 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
                 nTerror("Failed %s when reading file." % (getCallerName()))
                 return True
         # end for
-        
+
         #
         # Now determine the median ASA for each
         #
-        # whatIfInfo is used in super class whereas allWhatIfInfo was filled before. 
+        # whatIfInfo is used in super class whereas allWhatIfInfo was filled before.
         self.whatIfInfo = self.allWhatIfInfo
         d = self.whatIfInfo['chains']
 #        medianIndex = None
@@ -152,12 +156,12 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
                     asaList.sort()
 #                    if not medianIndex:
 #                    medianIndex = int((len(asaList) / 2.0) + 0.5) # fails with round off on single element lists.
-                    ml = mlab.prctile(asaList,[50])                    
+                    ml = mlab.prctile(asaList,[50])
 #                    if medianIndex < 0 or medianIndex >= len(asaList):
 #                        nTerror("Found improper median index %s for %s" % (medianIndex, str(asaList)))
 #                        return True
 #                    d[chainCode][seqKey]['atoms'][atomName] = [asaList[medianIndex]] # Resetting list to only include median
-                    d[chainCode][seqKey]['atoms'][atomName] = [ml[0]] 
+                    d[chainCode][seqKey]['atoms'][atomName] = [ml[0]]
                     # Reseting array because JFD is not sure it's a regular array from mlab.
                 # end for
             # end for
@@ -190,12 +194,12 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
             # field 5 has nothing?
             atomName = fields[6]
             accessibility = fields[7]
-            
-            
+
+
             if skipHydrogens and atomName[0] == 'H':
                 _hydrogensSkipped += 1 # are zero anyway.
                 continue
-            
+
             if not insertionCode:
                 insertionCode = ' '
             seqKey = (returnInt(seqId), insertionCode)
@@ -210,14 +214,14 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
             accessibilityStr = accessibilityStr.strip()
             if len(accessibilityStr) < 1:
                 nTerror("Skipping line with empty accessibility string: " + line) # happens for PDB entry 1cjg for 2 residues
-                continue         
+                continue
             accessibility = returnFloat(accessibilityStr)
             d = self.allWhatIfInfo['chains']
-            if not d.has_key(chainCode):
+            if chainCode not in d:
                 d[chainCode] = {}
-            if not d[chainCode].has_key(seqKey):                
+            if seqKey not in d[chainCode]:
                 d[chainCode][seqKey] = {'hasBadAtoms': False, 'resLabel': resLabel, 'atoms': {}}
-            if not d[chainCode][seqKey]['atoms'].has_key(atomName):
+            if atomName not in d[chainCode][seqKey]['atoms']:
                 d[chainCode][seqKey]['atoms'][atomName] = []
 
             d[chainCode][seqKey]['atoms'][atomName].append(accessibility)
@@ -241,10 +245,10 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
     def checkAllShiftLists(self):
         """
         Return True on error
-        """        
+        """
         if not self.showMessages:
 #            print 'switching messaging off temporarily.'
-            switchOutput(False)        
+            switchOutput(False)
         ccpnProject = loadProject(self.ccpnDir)
         if not self.showMessages:
             print('switching messaging on again.')
@@ -252,12 +256,12 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
         if ccpnProject == None:
             nTerror("Failed to load CCPN project from: %s" % self.ccpnDir)
             return True
-        
+
 #        shiftLoL = ccpnProject.currentNmrProject.findAllMeasurementLists(className='ShiftList')
         # Use sorting by CCPN.
         shiftLoL = filterListByObjectClassName( ccpnProject.currentNmrProject.sortedMeasurementLists(), Ccpn.CCPN_CS_LIST )
 #        nTdebug("Working on shiftLoL %s", str(shiftLoL))
-        
+
         for i,shiftList in enumerate(shiftLoL):
             shiftListSerial=shiftList.serial
 #            nTdebug("Working on shiftListSerial %s", shiftListSerial)
@@ -293,7 +297,7 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
 #        if resonanceListName == None:
 #            nTerror("Failed to get resonanceListName from CCPN which will not allow CING to match later on for e.g. Vasco. Continuing.")
 #            resonanceListName = 'source'
-#        idx = getObjectIdxByName( mol.resonanceSources, resonanceListName ) 
+#        idx = getObjectIdxByName( mol.resonanceSources, resonanceListName )
 #        if i < 0:
 #            nTerror("Failed to get idx for resonanceListName %s" % resonanceListName )
 #            return True
@@ -301,14 +305,14 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
 #        if resonanceListName == None:
 #            nTerror("Failed to get resonanceListName from CCPN which will not allow CING to match later on for e.g. Vasco. Continuing.")
 #            return True
-        
+
         resonanceList = getDeepByKeysOrAttributes( mol.resonanceSources, i)
         if not isinstance(resonanceList, ResonanceList):
             nTerror("Failed to get resonanceList by idx: %s" % i)
             nTerror("mol.resonanceSources: %s" % str(mol.resonanceSources))
             return True
-        nTmessage("==> Tagging CING project with Vasco results for resonanceList: %s" % resonanceList)        
-        
+        nTmessage("==> Tagging CING project with Vasco results for resonanceList: %s" % resonanceList)
+
         if resonanceList.vascoApplied: # boolean xor is equivalent of the above line.
 #            nTdebug("CS were rereferenced before so first undoing previous application.")
             if mol.applyVascoCsCorrections( resonanceList = resonanceList, doRevert = True ):
@@ -316,10 +320,10 @@ class VascoCingReferenceCheck(VascoReferenceCheck):
                 return True
             # end def
         # end def
-            
+
         if mol.setVascoCsCorrections(self.rerefInfo, resonanceList ):
             nTerror("Failed to setVascoCsCorrections for: %s" % resonanceList)
-            return True         
+            return True
         if mol.applyVascoCsCorrections( resonanceList = resonanceList ):
             nTerror("Failed to applyVascoCsCorrections for: %s" % resonanceList)
             return True
@@ -335,9 +339,9 @@ if __name__ == '__main__':
         # Fails because of dependency on:
 #              File "/Users/jd/workspace35/ccpn/python/pdbe/software/vascoReferenceCheck.py", line 178, in createSsInfo
 #                from pdbe.analysis.external.stride.Util import StrideInfo #@UnresolvedImport
-#            ImportError: No module named external.stride.Util          
+#            ImportError: No module named external.stride.Util
         import Tkinter
-        root = Tkinter.Tk()        
+        root = Tkinter.Tk()
         ccpnDir = entryCode
         vascoReferenceCheck = VascoReferenceCheck(guiParent=root)
         vascoReferenceCheck.checkProject(ccpnDir=ccpnDir)

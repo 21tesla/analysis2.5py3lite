@@ -1,7 +1,7 @@
 from cing import NTdb
+from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 shifts = """
 # Statistics Calculated for All Chemical Shifts from Atoms in the 20 Common Amino Acids

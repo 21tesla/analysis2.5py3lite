@@ -1,44 +1,38 @@
 
-# Essentially the same as the ExtendNMR GUI for now. 
+# Essentially the same as the ExtendNMR GUI for now.
 
 
-import os
 
 # added jmci; do we need this??
-import tkinter
 #from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.Frame import Frame
-from memops.gui.LabelFrame import LabelFrame
-from memops.gui.Label import Label
-from memops.gui.Text import Text
-from memops.gui.Tree import Tree
-from memops.gui.Tree import Node
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
 from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.Text import Text
+from memops.gui.Tree import Tree
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class ProtocolPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='WMS Protocol')
 
-                       
+
   def body(self, guiFrame):
 
 
@@ -46,11 +40,11 @@ class ProtocolPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('650x600')
-    
+
     self.update_idletasks()
- 
+
 
 class ProtocolFrame(Frame):
 
@@ -64,14 +58,14 @@ class ProtocolFrame(Frame):
     self.basePopup.frameShortcuts['Protocol'] = self
 
     Frame.__init__(self, guiParent)
-  
+
     self.grid_rowconfigure(0, weight=0)
     self.grid_rowconfigure(1, weight=0, minsize=10)
     self.grid_rowconfigure(2, weight=0)
     self.grid_rowconfigure(3, weight=1)
     self.grid_rowconfigure(4, weight=0, minsize=30)
     self.grid_rowconfigure(5, weight=0, minsize=30)
-    
+
     self.grid_columnconfigure(0, weight=0)
     self.grid_columnconfigure(1, weight=1)
     self.grid_columnconfigure(2, weight=0)
@@ -83,7 +77,7 @@ class ProtocolFrame(Frame):
 
     initial_cols = ['Parameter','Type','Value']
     self.pMatrix = ScrolledMatrix(self, headingList=initial_cols, initialRows=15)
-    
+
     editButtonOpts=['Save','Clear','New Protocol','New Expt Type']
     editButtonCmds=[self.tmpCall,self.tmpCall,self.tmpCall,self.tmpCall]
     self.editButtons = ButtonList(self, editButtonOpts, editButtonCmds)
@@ -92,7 +86,7 @@ class ProtocolFrame(Frame):
     # needs custom version
     self.filter = FilterFrame(self, self.basePopup, text='Filter')
 
-    # no bean udnerneath for now so mock up nodes    
+    # no bean udnerneath for now so mock up nodes
     self.pTree = Tree(self, width=33)
 
     pButtonOpts1=['Load','Save']
@@ -102,7 +96,7 @@ class ProtocolFrame(Frame):
     pButtonOpts2=['New','Delete']
     pButtonCmds2=[self.tmpCall,self.tmpCall]
     self.pButtons2 = ButtonList(self, pButtonOpts2, pButtonCmds2)
-    
+
     self.openedLinks = {'Test 1': ['ParSet 1', 'ParSet 2'],
                         'Test 2': ['Std Pars', 'Big Pars', 'Little Pars'],
                         'ARIA': ['default', 'complex'],
@@ -113,7 +107,7 @@ class ProtocolFrame(Frame):
 
   def drawFrame(self):
 
-    
+
     # hack the WF Tree for now. just get is looking OK
     texts=['Test 1','Test 2', 'ARIA', 'CING', 'ISD']
     icons=[]
@@ -126,7 +120,7 @@ class ProtocolFrame(Frame):
       callbacks.append(self.openLink)
       parents.append(None)
 
-    self.pTree.update(parents, objects, texts, icons, callbacks)  
+    self.pTree.update(parents, objects, texts, icons, callbacks)
 
     self.title.set('Protocol: Std (ARIA)')
     self.title.grid(row=1, column=1, padx=5, sticky='w')
@@ -142,16 +136,16 @@ class ProtocolFrame(Frame):
     self.pButtons1.grid(row=4, column=2, padx=5, sticky='ew')
     self.pButtons2.grid(row=5, column=2, padx=5, sticky='ew')
 
-    matrix = [];
-    objs = [];
+    matrix = []
+    objs = []
 
     matrix.append(['Parameter1','String','foobar'])
-    objs.append('obj1');
+    objs.append('obj1')
     matrix.append(['Parameter2','Number','10'])
-    objs.append('obj2');
-    
+    objs.append('obj2')
+
     self.pMatrix.update(objectList=objs, textMatrix=matrix)
-    
+
 
   def tmpCall(self):
 
@@ -169,14 +163,14 @@ class ProtocolFrame(Frame):
     if len(self.openedLinks[par]) > 0:
 
       for pv in self.openedLinks[par]:
-    
+
         icon='folder'
         obj = par + '::' + pv
         text = pv
         callback=None
         tree.add(node, obj, text, icon, callback)
 
-    
+
   def administerNotifiers(self, notifyFunc):
 
       for func in ('__init__','delete','setName'):
@@ -201,11 +195,11 @@ class ProtocolFrame(Frame):
 
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
@@ -235,7 +229,7 @@ class FilterFrame(LabelFrame):
 
     LabelFrame.__init__(self, guiParent, borderRelief, text, justify,
                         width, font, height, *args, **kw)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -264,7 +258,7 @@ class FilterFrame(LabelFrame):
 
     self.nameText.xlear()
     self.userText.clear()
-    
+
 
   def tmpCall(self, event=None):
 
@@ -287,11 +281,11 @@ class FilterFrame(LabelFrame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
@@ -301,11 +295,12 @@ class FilterFrame(LabelFrame):
 if __name__ == "__main__":
 
   import sys
+
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   if len(sys.argv) == 2:
     path = sys.argv[1]
     from ccp.gui.Io import loadProject
@@ -314,5 +309,5 @@ if __name__ == "__main__":
     ccpnProject = None
 
   popup = ProtocolFramePopup(root, ccpnProject=ccpnProject)
-  
+
   root.mainloop()

@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,251 +52,227 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from ccp.format.general.formatIO import FormatFile
 from ccp.format.general.Constants import defaultMolCode
+from ccp.format.general.formatIO import FormatFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class TalosGenericFile(FormatFile):
+    def setGeneric(self):
 
-  def setGeneric(self):
-    
-    self.format = 'talos'
-    self.defaultMolCode = defaultMolCode
+        self.format = "talos"
+        self.defaultMolCode = defaultMolCode
 
-    self.refData = []
-    self.varCodes = []
-    self.formatCodes = []
-    
-    self.numCols = None
+        self.refData = []
+        self.varCodes = []
+        self.formatCodes = []
 
-  def read(self, verbose = 0):
-  
-    if verbose == 1:
-      self.printInfo('Reading')
-      
-    fin = open(self.name)
+        self.numCols = None
 
-    #
-    # Start reading
-    #
+    def read(self, verbose=0):
 
-    line = fin.readline()
+        if verbose == 1:
+            self.printInfo("Reading")
 
-    while line:
+        fin = open(self.name)
 
-      if not self.patt['emptyline'].search(line) and not self.patt[self.format + 'Remark'].search(line):
+        #
+        # Start reading
+        #
 
-        if self.patt[self.format + 'Dataline'].search(line):
+        line = fin.readline()
 
-          self.handleDataLine(line)
+        while line:
+            if not self.patt["emptyline"].search(line) and not self.patt[self.format + "Remark"].search(line):
+                if self.patt[self.format + "Dataline"].search(line):
+                    self.handleDataLine(line)
 
-        elif self.patt[self.format + 'Vars'].search(line):
+                elif self.patt[self.format + "Vars"].search(line):
+                    #
+                    # Get vars line, check if matches up with reference info
+                    #
 
-          #
-          # Get vars line, check if matches up with reference info
-          #
+                    cols = line.split()
+                    colNum = 1
 
-          cols = line.split()
-          colNum = 1
+                    for refDatum in self.refData:
+                        refVarCode = refDatum[0]
 
-          for refDatum in self.refData:
+                        # Bail out if obligatory header columns not present
+                        if refVarCode not in cols:
+                            if refDatum[4]:
+                                print(cols, refVarCode, refDatum)
+                                print("  Error: can't read %s file - headers don't match." % self.format)
+                                return False
+                            else:
+                                continue
+                        else:
+                            curColNum = cols.index(refVarCode) + 1
 
-            refVarCode = refDatum[0]
+                        while curColNum > colNum + 1:
+                            colNum += 1
+                            self.varCodes.append(None)
 
-            # Bail out if obligatory header columns not present
-            if refVarCode not in cols:
-              if refDatum[4]:
-                print(cols, refVarCode, refDatum)
-                print("  Error: can't read %s file - headers don't match." % self.format)
-                return False
-              else:
-                continue
-            else:
-              curColNum = cols.index(refVarCode) + 1
+                        self.varCodes.append(refVarCode)
+                        colNum += 1
 
-            while curColNum > colNum + 1:
-              colNum += 1
-              self.varCodes.append(None)
+                elif self.patt[self.format + "Format"].search(line):
+                    self.formatCodes = line.split()[1:]
+                    self.numCols = len(self.formatCodes)
 
-            self.varCodes.append(refVarCode)
-            colNum += 1
+                else:
+                    cols = line.split()
 
-        elif self.patt[self.format + 'Format'].search(line):
+                    if len(cols) == self.numCols:
+                        varsDict = {}
 
-          self.formatCodes = line.split()[1:]
-          self.numCols = len(self.formatCodes)
+                        for varCode in self.varCodes:
+                            varsDict[varCode] = cols.pop(0)
 
-        else:
-        
-          cols = line.split()
+                        self.setVarsLine(varsDict)
 
-          if len(cols) == self.numCols:
+                    else:
+                        print("  Warning: unparsed %s line:\n%s" % (self.format, line))
 
-            varsDict = {}
+            line = fin.readline()
 
-            for varCode in self.varCodes:
-              varsDict[varCode] = cols.pop(0)
+        fin.close()
 
-            self.setVarsLine(varsDict)
+    def write(self, use_fout=None, verbose=0):
 
-          else:
+        if verbose == 1:
+            self.printInfo("Writing")
 
-            print("  Warning: unparsed %s line:\n%s" % (self.format,line))
+        #
+        # Get the data items
+        #
 
-      line = fin.readline()
+        self.getVarItems()
 
-    fin.close()
+        #
+        # Start writing file
+        #
 
-  def write(self, use_fout = None, verbose = 0):
+        if not use_fout:
+            fout = open(self.name, "w")
 
-    if verbose == 1:
-      self.printInfo('Writing')
-      
-    #
-    # Get the data items
-    #
-    
-    self.getVarItems()
-    
-    #
-    # Start writing file
-    #
-    
-    if not use_fout:
-    
-      fout = open(self.name,'w')
+            #
+            # Write out header
+            #
 
-      #
-      # Write out header
-      #
-
-      fout.write("REMARK File written by CcpNmrFormat converter.")
-      fout.write(self.newline * 2)
-    
-    else:
-    
-      fout = use_fout   
-
-
-    self.writeDataLines(fout)
-
-    if self.varItems:
-    
-      fout.write(self.newline)
-
-      fout.write("VARS  ")
-
-      formatCodes = []
-
-      for refDatum in self.refData:
-
-        refVarCode = refDatum[0]
-        refFormatCode = refDatum[1]
-
-        if type(refVarCode) == type([]):
-
-          for dimRefCode in self.refDimCodes:
-
-            for refVarCodeSingle in refVarCode:
-
-              outString = refVarCodeSingle.replace('n',dimRefCode)
-
-              fout.write(" %s" % outString)
-
-              formatCodes.append(refFormatCode)
+            fout.write("REMARK File written by CcpNmrFormat converter.")
+            fout.write(self.newline * 2)
 
         else:
+            fout = use_fout
 
-          fout.write(" %s" % refVarCode)
-          formatCodes.append(refFormatCode)
+        self.writeDataLines(fout)
 
-      fout.write(self.newline)
+        if self.varItems:
+            fout.write(self.newline)
 
-      fout.write("FORMAT")
+            fout.write("VARS  ")
 
-      formatNum = 0
+            formatCodes = []
 
-      for formatCode in formatCodes:
+            for refDatum in self.refData:
+                refVarCode = refDatum[0]
+                refFormatCode = refDatum[1]
 
-        fout.write(" " + str(formatCode))
+                if type(refVarCode) == type([]):
+                    for dimRefCode in self.refDimCodes:
+                        for refVarCodeSingle in refVarCode:
+                            outString = refVarCodeSingle.replace("n", dimRefCode)
 
-      fout.write(self.newline * 2)
+                            fout.write(" %s" % outString)
 
-      #
-      # Write out data items
-      #
+                            formatCodes.append(refFormatCode)
 
-      for varItem in self.varItems:
+                else:
+                    fout.write(" %s" % refVarCode)
+                    formatCodes.append(refFormatCode)
 
-        line = ""
+            fout.write(self.newline)
 
-        for refDatum in self.refData:
+            fout.write("FORMAT")
 
-          refVarCode = refDatum[0]
-          refFormatCode = refDatum[1]
-          refAttrName = refDatum[2]
-          refFunc = refDatum[3]
+            formatNum = 0
 
-          value = getattr(varItem,refAttrName)
+            for formatCode in formatCodes:
+                fout.write(" " + str(formatCode))
 
-          line += (refFormatCode % refFunc(value))
-          line += " "
+            fout.write(self.newline * 2)
 
-        fout.write(line[:-1])
-        fout.write(self.newline)
+            #
+            # Write out data items
+            #
 
-    if not use_fout:
-      fout.close()
+            for varItem in self.varItems:
+                line = ""
 
-  def setVarsLine(self,varsDict):
-    pass
-    
-  def printInfo(self,action):
-    pass
-    
-  def handleDataLine(self,line):
-    pass
+                for refDatum in self.refData:
+                    refVarCode = refDatum[0]
+                    refFormatCode = refDatum[1]
+                    refAttrName = refDatum[2]
+                    refFunc = refDatum[3]
 
-  def writeDataLines(self,fout):
-    pass
+                    value = getattr(varItem, refAttrName)
 
-  def getVarItems(self):
-    
-    self.varItems = []
-    
+                    line += refFormatCode % refFunc(value)
+                    line += " "
+
+                fout.write(line[:-1])
+                fout.write(self.newline)
+
+        if not use_fout:
+            fout.close()
+
+    def setVarsLine(self, varsDict):
+        pass
+
+    def printInfo(self, action):
+        pass
+
+    def handleDataLine(self, line):
+        pass
+
+    def writeDataLines(self, fout):
+        pass
+
+    def getVarItems(self):
+
+        self.varItems = []
+
+
 class TalosGenericDataItem:
+    def __init__(self, parent):
 
-  def __init__(self,parent):
-  
-    self.parent = parent
-  
-    for refDatum in parent.refData:
+        self.parent = parent
 
-      refVarCode = refDatum[0]
-      refFormatCode = refDatum[1]
-      refAttrName = refDatum[2]
-      refFunc = refDatum[3]
-      
-      setattr(self,refAttrName,None)
-      
-    self.initItemSpecificData()
+        for refDatum in parent.refData:
+            refVarCode = refDatum[0]
+            refFormatCode = refDatum[1]
+            refAttrName = refDatum[2]
+            refFunc = refDatum[3]
 
-  def setVarsDict(self,varsDict, refData = None):
-  
-    if not refData:
-      refData = self.parent.refData
-      
-    for refDatum in refData:
+            setattr(self, refAttrName, None)
 
-      refVarCode = refDatum[0]
-      refFormatCode = refDatum[1]
-      refAttrName = refDatum[2]
-      refFunc = refDatum[3]
-     
-      setattr(self,refAttrName,refFunc(varsDict[refVarCode]))
+        self.initItemSpecificData()
 
-    self.setItemSpecificVars()
-      
+    def setVarsDict(self, varsDict, refData=None):
+
+        if not refData:
+            refData = self.parent.refData
+
+        for refDatum in refData:
+            refVarCode = refDatum[0]
+            refFormatCode = refDatum[1]
+            refAttrName = refDatum[2]
+            refFunc = refDatum[3]
+
+            setattr(self, refAttrName, refFunc(varsDict[refVarCode]))
+
+        self.setItemSpecificVars()

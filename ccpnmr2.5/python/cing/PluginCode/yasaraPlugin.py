@@ -24,26 +24,27 @@ screenDump(project.name+'.png')
 #Hit ^D four times to leave Yasara and CING shells.
 """
 
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Atom
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import pformat, startIpythonShell
 from cing.PluginCode.required.reqWhatif import WHATIF_STR
 from cing.PluginCode.required.reqYasara import YASARA_STR
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Atom
-from cing.main import pformat
-from cing.main import startIpythonShell
 
 try:
 #    import yasara
 #    from yasaramodule import *
-    from yasara import HUD #@UnresolvedImport
-    from yasaramodule import ColorPar #@UnresolvedImport
-    from yasaramodule import ColorRes #@UnresolvedImport
-    from yasaramodule import Console #@UnresolvedImport
-    from yasaramodule import LoadPDB #@UnresolvedImport
-    from yasaramodule import MarkAtom #@UnresolvedImport
-    from yasaramodule import PropRes #@UnresolvedImport
-    from yasaramodule import SaveBmp #@UnresolvedImport
-    from yasaramodule import Style #@UnresolvedImport
+    from yasara import HUD  #@UnresolvedImport
+    from yasaramodule import (
+        ColorPar,  #@UnresolvedImport
+        ColorRes,  #@UnresolvedImport
+        Console,  #@UnresolvedImport
+        LoadPDB,  #@UnresolvedImport
+        MarkAtom,  #@UnresolvedImport
+        PropRes,  #@UnresolvedImport
+        SaveBmp,  #@UnresolvedImport
+        Style,  #@UnresolvedImport
+    )
 except:
     raise ImportWarning(YASARA_STR)
 finally: # finally fails in python below 2.5
@@ -180,7 +181,7 @@ def yasaraShell(project):
 
         for res in project.molecule.allResidues():
             value = getDeepByKeysOrAttributes(res, *keys)
-    #        if res.has_key(property) and res[property] != None and not isNaN(res[property]):
+    #        if property in res and res[property] != None and not isNaN(res[property]):
             if value != None and not isNaN(value):
                 PropRes(sprintf('object %s Residue %d', object, res.resNum), value)
         #end for
@@ -249,7 +250,7 @@ def yasaraShell(project):
     #end def
 
     startIpythonShell(
-        in_template =  sprintf('yasara (%s) \#> ', project.name),
+        in_template =  sprintf(r'yasara (%s) \#> ', project.name),
         banner = '--------Dropping to yasara--------',
         exit_msg='--------Leaving yasara--------'
     )

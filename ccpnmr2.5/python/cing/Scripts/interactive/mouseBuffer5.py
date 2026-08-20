@@ -1,6 +1,7 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer5.py
-from cing.Libs.NTutils import * #@UnusedWildImport
-from pylab import * #@UnusedWildImport # imports plt too now.
+from pylab import *  #@UnusedWildImport # imports plt too now.
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 clf()
 ion()
@@ -25,7 +26,7 @@ scatter(xDat, yDat, s=0.5, marker='o', facecolors='k', edgecolors='k')
 #                plot(t, fitDatefuncD2(p, t), "r--", linewidth=1) # Plot of the data and the fit
 #                nTdebug("Setting xlimits to %s - %s" % (dateDatMin, dateDatMax))
 #                xlim(xmin=dateMin, xmax=dateMax, auto=True)
-#                xticks( range(dateDatMin, dateDatMax, binSizeTdel)) #     
+#                xticks( range(dateDatMin, dateDatMax, binSizeTdel)) #
 plot( (1990,2012), (1990,2012) )
 time.sleep(1000)
 

@@ -1,10 +1,9 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer6.py
-from cing.Libs.NTutils import * #@UnusedWildImport
-from pylab import * #@UnusedWildImport # imports plt too now.
+from pylab import *  #@UnusedWildImport # imports plt too now.
 
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
-
-# for 2kq3; for removing high violations in the DRs and talos dihedrals 
+# for 2kq3; for removing high violations in the DRs and talos dihedrals
 p = None # Just for misleading pylint and pydev.
 # START
 #p = project

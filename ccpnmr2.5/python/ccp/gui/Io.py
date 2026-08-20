@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -58,75 +58,70 @@ software development. Bioinformatics 21, 1678-1684.
 
 import os
 
-from memops.universal import Io as uniIo
-
+from ccp.api.general.DataLocation import MimeTypeDataStore, NumericMatrix
+from ccp.general import Io as ccpGenIo
+from ccp.gui.DataLocationPopup import DataLocationPopup
 from memops.general import Io as genIo
-
 from memops.gui.DataEntry import askDir, askFile
 from memops.gui.MessageReporter import showWarning
+from memops.universal import Io as uniIo
 
-from ccp.gui.DataLocationPopup import DataLocationPopup
-
-from ccp.general import Io as ccpGenIo
-
-from ccp.api.general.DataLocation import NumericMatrix
-from ccp.api.general.DataLocation import MimeTypeDataStore
 
 def loadProject(parent, path, projectName=None):
 
-  path = uniIo.normalisePath(path)
-  askdir = lambda title, prompt, initial_value: askDir(title, prompt,
-              initial_value, parent=parent, extra_dismiss_text='Skip')
-  askfile = lambda title, prompt, initial_value: askFile(title, prompt,
-              initial_value, parent=parent, extra_dismiss_text='Skip')
-  project = genIo.loadProject(path, showWarning=showWarning,
-                              askDir=askdir, askFile=askfile)
+    path = uniIo.normalisePath(path)
+    askdir = lambda title, prompt, initial_value: askDir(
+        title, prompt, initial_value, parent=parent, extra_dismiss_text="Skip"
+    )
+    askfile = lambda title, prompt, initial_value: askFile(
+        title, prompt, initial_value, parent=parent, extra_dismiss_text="Skip"
+    )
+    project = genIo.loadProject(path, showWarning=showWarning, askDir=askdir, askFile=askfile)
 
-  # now check dataStores
-  # delete those that are not used
-  # and otherwise check path to see if exists
+    # now check dataStores
+    # delete those that are not used
+    # and otherwise check path to see if exists
 
-  dataStores = []
-  for dataLocationStore in project.dataLocationStores:
-    for dataStore in dataLocationStore.dataStores:
-      if isinstance(dataStore, NumericMatrix) and not dataStore.nmrDataSources:
-        print('deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath))
-        dataStore.delete()
-      elif isinstance(dataStore, MimeTypeDataStore) and not dataStore.nmrDataSourceImages:
-        print('deleting dataStore %s with path %s' % (dataStore, dataStore.fullPath))
-        dataStore.delete()
-      else:
-        dataStores.append(dataStore)
+    dataStores = []
+    for dataLocationStore in project.dataLocationStores:
+        for dataStore in dataLocationStore.dataStores:
+            if isinstance(dataStore, NumericMatrix) and not dataStore.nmrDataSources:
+                print("deleting dataStore %s with path %s" % (dataStore, dataStore.fullPath))
+                dataStore.delete()
+            elif isinstance(dataStore, MimeTypeDataStore) and not dataStore.nmrDataSourceImages:
+                print("deleting dataStore %s with path %s" % (dataStore, dataStore.fullPath))
+                dataStore.delete()
+            else:
+                dataStores.append(dataStore)
 
-  badDataStores = [ dataStore for dataStore in dataStores if not os.path.exists(dataStore.fullPath) ]
+    badDataStores = [dataStore for dataStore in dataStores if not os.path.exists(dataStore.fullPath)]
 
-  if badDataStores:
-    # find DataUrls involved 
-    dataUrls = set(dataStore.dataUrl for dataStore in badDataStores)
-    startDir = project.packageLocator.findFirstRepository().url.dataLocation
-    
-    for dataUrl in dataUrls:
-      if not dataUrl.dataStores.difference(badDataStores):
-        # all DataStores for this DataUrl are bad
-        # we can make changes without affecting 'good' DataStores
- 
-        # Look for an obvious place the data may have moved to
-        dataStores =  dataUrl.sortedDataStores()
-        fullPaths = [dataStore.fullPath for dataStore in dataStores]
-        baseDir, newPaths = uniIo.suggestFileLocations(fullPaths,
-                                                       startDir=startDir)
- 
-        if baseDir is not None:
-          # We have a file location that fits all missing files.
-          # Change dataStores to use it
-          print('WARNING, resetting data locations to: \n%s\n' % baseDir)
- 
-          ccpGenIo.changeDataStoreUrl(dataStores[0], baseDir)
-          for ii,dataStore in enumerate(dataStores):
-            dataStore.path = newPaths[ii]
-    
-    if [dataStore for dataStore in dataStores if not os.path.exists(dataStore.fullPath)]:
-      popup = DataLocationPopup(parent, project, modal=True)
-      popup.destroy()
+    if badDataStores:
+        # find DataUrls involved
+        dataUrls = set(dataStore.dataUrl for dataStore in badDataStores)
+        startDir = project.packageLocator.findFirstRepository().url.dataLocation
 
-  return project
+        for dataUrl in dataUrls:
+            if not dataUrl.dataStores.difference(badDataStores):
+                # all DataStores for this DataUrl are bad
+                # we can make changes without affecting 'good' DataStores
+
+                # Look for an obvious place the data may have moved to
+                dataStores = dataUrl.sortedDataStores()
+                fullPaths = [dataStore.fullPath for dataStore in dataStores]
+                baseDir, newPaths = uniIo.suggestFileLocations(fullPaths, startDir=startDir)
+
+                if baseDir is not None:
+                    # We have a file location that fits all missing files.
+                    # Change dataStores to use it
+                    print("WARNING, resetting data locations to: \n%s\n" % baseDir)
+
+                    ccpGenIo.changeDataStoreUrl(dataStores[0], baseDir)
+                    for ii, dataStore in enumerate(dataStores):
+                        dataStore.path = newPaths[ii]
+
+        if [dataStore for dataStore in dataStores if not os.path.exists(dataStore.fullPath)]:
+            popup = DataLocationPopup(parent, project, modal=True)
+            popup.destroy()
+
+    return project

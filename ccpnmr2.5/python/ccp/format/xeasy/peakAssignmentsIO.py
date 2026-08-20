@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,385 +54,372 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-
 import os
 
-# Import general functions
-from memops.universal.Util import returnLong, returnLongs
-from memops.universal.Util import returnInt, returnInts
 from ccp.format.xeasy.generalIO import XEasyGenericFile
 from memops.universal.Io import getTopDirectory
+
+# Import general functions
+from memops.universal.Util import returnInt, returnInts, returnLongs
 
 #####################
 # Class definitions #
 #####################
 
+
 class XEasyPeakAssignmentFile(XEasyGenericFile):
-
-  """
-  XEasy .assign file: describes ambiguous assignments for a peak list
-  """
-  
-  def initialize(self):
-  
-    self.peakAssignments = []
-    self.assignmentsDim = []
-  
-  def setDimensions(self,ndim):
-  
-    self.numDim = ndim
-
-  def read(self,verbose = 0):
-  
     """
-    Reader for XEasy .assign file format
+    XEasy .assign file: describes ambiguous assignments for a peak list
     """
 
-    if verbose == 1:
-      print("Reading xeasy peak assignments file %s" % self.name)
+    def initialize(self):
 
-    fin = open(self.name, 'rU')
+        self.peakAssignments = []
+        self.assignmentsDim = []
 
-    #
-    # Read number of dimensions on first line
-    #
+    def setDimensions(self, ndim):
 
-    line = fin.readline()
-    cols = line.split()
+        self.numDim = ndim
 
-    n = returnInt(cols[0])
+    def read(self, verbose=0):
+        """
+        Reader for XEasy .assign file format
+        """
 
-    #
-    # Create the assignment file
-    #
+        if verbose == 1:
+            print("Reading xeasy peak assignments file %s" % self.name)
 
-    self.setDimensions(n)
-
-    #
-    # Read rest file
-    #
-
-    line = fin.readline()
-
-    while line:
-
-      cols = line.split()
-
-      #
-      # Line with peak number
-      #
-
-      if self.patt['hash'].search(line):
-
-        peaknum = cols[1]
-        assignments = []
-
-      #
-      # Line with atom serials
-      #
-
-      elif int(cols[0]) + 1 == len(cols):
-        assignments.append(cols[1:])
-
-      #
-      # Line with matrix binary encoding
-      #
-
-      elif len(cols) == 4:
+        fin = open(self.name)
 
         #
-        # First create peak assignment
+        # Read number of dimensions on first line
         #
 
-        peakAssignment = XEasyPeakAssignment(self,peaknum)
-        self.peakAssignments.append(peakAssignment)
+        line = fin.readline()
+        cols = line.split()
+
+        n = returnInt(cols[0])
 
         #
-        # Then handle binary format information
+        # Create the assignment file
         #
 
-        peakAssignment.setAssignCombinations(assignments,cols)
+        self.setDimensions(n)
 
-      else:
+        #
+        # Read rest file
+        #
 
-        print("Unrecognized line in XEasy assignment file:\n%s\n" % line)
+        line = fin.readline()
 
-      line = fin.readline()
+        while line:
+            cols = line.split()
 
-    fin.close()
+            #
+            # Line with peak number
+            #
 
-  def write(self, verbose = 0):
+            if self.patt["hash"].search(line):
+                peaknum = cols[1]
+                assignments = []
 
-    if verbose == 1:
-      print("Writing xeasy peak assignments file %s" % self.name)
+            #
+            # Line with atom serials
+            #
 
-    fout = open(self.name,'w')
+            elif int(cols[0]) + 1 == len(cols):
+                assignments.append(cols[1:])
 
-    numDim = self.numDim
+            #
+            # Line with matrix binary encoding
+            #
 
-    #
-    # Write out header
-    #
+            elif len(cols) == 4:
+                #
+                # First create peak assignment
+                #
 
-    fout.write("%d" % numDim)
-    fout.write(self.newline)
+                peakAssignment = XEasyPeakAssignment(self, peaknum)
+                self.peakAssignments.append(peakAssignment)
 
-    #
-    # Write out assignments
-    #
+                #
+                # Then handle binary format information
+                #
 
-    for peakAssignment in self.peakAssignments:
+                peakAssignment.setAssignCombinations(assignments, cols)
 
-      #
-      # Write peaknumber
-      #
+            else:
+                print("Unrecognized line in XEasy assignment file:\n%s\n" % line)
 
-      fout.write("# %d" % peakAssignment.peakNum)
-      fout.write(self.newline)
+            line = fin.readline()
 
-      binCodes = peakAssignment.getBinaryCodes()
+        fin.close()
 
-      #
-      # Write atom serials per dimension
-      #
+    def write(self, verbose=0):
 
-      for dim in range(0,numDim):
-        if self.assignmentsDim.count(dim) == 1:
-          assignIndex = self.assignmentsDim.index(dim)
-          assignments = peakAssignment.assignments[assignIndex]
-          numAssignments = len(assignments)
-        else:
-          assignments = []
-          numAssignments = 0
+        if verbose == 1:
+            print("Writing xeasy peak assignments file %s" % self.name)
 
-        fout.write("%d" % numAssignments)
+        fout = open(self.name, "w")
 
-        for i in range(0,numAssignments):
-          fout.write(" %d" % assignments[i])
+        numDim = self.numDim
 
+        #
+        # Write out header
+        #
+
+        fout.write("%d" % numDim)
         fout.write(self.newline)
 
-      #
-      # Write binary codes for matrix
-      #
+        #
+        # Write out assignments
+        #
 
-      line = ""
+        for peakAssignment in self.peakAssignments:
+            #
+            # Write peaknumber
+            #
 
-      for i in range(0,4):
+            fout.write("# %d" % peakAssignment.peakNum)
+            fout.write(self.newline)
 
-        line += "%d " % binCodes[i]
+            binCodes = peakAssignment.getBinaryCodes()
 
-      fout.write(line)
-      fout.write(self.newline)
+            #
+            # Write atom serials per dimension
+            #
 
-    fout.close()
+            for dim in range(0, numDim):
+                if self.assignmentsDim.count(dim) == 1:
+                    assignIndex = self.assignmentsDim.index(dim)
+                    assignments = peakAssignment.assignments[assignIndex]
+                    numAssignments = len(assignments)
+                else:
+                    assignments = []
+                    numAssignments = 0
+
+                fout.write("%d" % numAssignments)
+
+                for i in range(0, numAssignments):
+                    fout.write(" %d" % assignments[i])
+
+                fout.write(self.newline)
+
+            #
+            # Write binary codes for matrix
+            #
+
+            line = ""
+
+            for i in range(0, 4):
+                line += "%d " % binCodes[i]
+
+            fout.write(line)
+            fout.write(self.newline)
+
+        fout.close()
+
 
 class XEasyPeakAssignment:
-
-  #
-  # Do all encoding in here - none of this on top level!!!
-  #
-
-  def __init__(self,parent,peakNum):
-
-    self.peakNum = returnInt(peakNum)
-    self.parent = parent
-  
-    self.assignments = []
-    self.assignCombinations = []
-
-  #
-  # Code to use and produce binary matrix encoding in XEasy file
-  # Calculation method taken from Jens Linge's ReadXeasy.py script in the ARIA (pre-v2)
-  # distributions.
-  #
-
-  def setAssignCombinations(self,assignments,binCodes):
-  
-    matrixDims = []
-    assignmentMatrix = []
-    
     #
-    # Note that empty assignment dimensions will NOT be added
-    # self.assignmentsDim keeps track of which dimension was used
-    #
-    
-    for i in range(0,len(assignments)):
-      
-      assignmentDim = assignments[i]
-          
-      if len(assignmentDim) > 0:
-        matrixDims.append(len(assignmentDim))
-        self.assignments.append(returnInts(assignmentDim))
-        
-        if len(self.parent.assignmentsDim) < 2:
-          self.parent.assignmentsDim.append(i)
-                
-    if len(matrixDims) > 2:
-      print("  Error in XEasy peak assignment file: more than two dimensions have atom serials.")
-      
-    #
-    # Setup assignment matrix
-    #
-    
-    for i in range(0,matrixDims[0]):
-      
-      assignmentMatrix.append(matrixDims[1] * [1])
-
-    #
-    # Decode the binary codes
+    # Do all encoding in here - none of this on top level!!!
     #
 
-    binCodes = returnLongs(binCodes)
-    
-    for i in range(0,4):
+    def __init__(self, parent, peakNum):
 
-      binCode = binCodes[i] + 1
+        self.peakNum = returnInt(peakNum)
+        self.parent = parent
 
-      for exponent in range(31,-1,-1):
-        if binCode == 0:
-          continue
-        
+        self.assignments = []
+        self.assignCombinations = []
+
+    #
+    # Code to use and produce binary matrix encoding in XEasy file
+    # Calculation method taken from Jens Linge's ReadXeasy.py script in the ARIA (pre-v2)
+    # distributions.
+    #
+
+    def setAssignCombinations(self, assignments, binCodes):
+
+        matrixDims = []
+        assignmentMatrix = []
+
         #
-        # Handle overflow
+        # Note that empty assignment dimensions will NOT be added
+        # self.assignmentsDim keeps track of which dimension was used
         #
-        
-        elif binCode > 0:
 
-          binCode = - (2147483648 - binCode) - 2147483648
-          
-        if binCode <= -(2 ** exponent):
-          
-          binCode = binCode + 2 ** exponent
-          totalExponent = 32 * i + exponent
-          row = totalExponent % 10
-          col = totalExponent / 10
+        for i in range(0, len(assignments)):
+            assignmentDim = assignments[i]
 
-          try:
-          #
-          # TODO: Why is this necessary?!?! Discuss with Jens...
-          #
-            if len(assignments) == 2:
-              assignmentMatrix[row][col] = 0
-            elif len(assignments) == 3:
-              assignmentMatrix[col][row] = 0
-           
-          except:
-              print('WARNING: problem with assignment matrix!')
-              print(self.peakNum, assignmentMatrix, row, col)
-    
-    #
-    # Make a list of allowed combinations...
-    #
-    
-    for i in range(0,len(assignmentMatrix)):
-      for j in range(0,len(assignmentMatrix[i])):
-        if assignmentMatrix[i][j] == 1:
-          self.assignCombinations.append([self.assignments[0][i],self.assignments[1][j]])
-  
-  def getBinaryCodes(self):
-  
-    #
-    # Setup the assignment list for figuring out the binary codes
-    #
-    
-    self.assignments = []
-    
-    for i in range(0,2):
-      self.assignments.append([])
-    
-    for i in range(0,len(self.assignCombinations)):
-      for j in range(0,2):
-        if self.assignments[j].count(self.assignCombinations[i][j]) == 0:
-          self.assignments[j].append(self.assignCombinations[i][j])
+            if len(assignmentDim) > 0:
+                matrixDims.append(len(assignmentDim))
+                self.assignments.append(returnInts(assignmentDim))
 
-    
-    #
-    # Set up assignment matrix
-    #
-    
-    # Hack (see setAssignCombinations) for switching col/row
-    if self.parent.numDim == 2:
-      assiRow = 0
-      assiCol = 1
-    else:
-      assiRow = 1
-      assiCol = 0
+                if len(self.parent.assignmentsDim) < 2:
+                    self.parent.assignmentsDim.append(i)
 
-    assignmentMatrix = []
-    
-    for i in range(0,len(self.assignments[assiRow])):
-      assignmentMatrix.append([])
-      for j in range(0,len(self.assignments[assiCol])):
-        
-        if assiRow < assiCol and self.assignCombinations.count([self.assignments[0][i],self.assignments[1][j]]) != 0:
-          matrixElement = 1
-        elif assiRow > assiCol and self.assignCombinations.count([self.assignments[0][j],self.assignments[1][i]]) != 0:
-          matrixElement = 1
+        if len(matrixDims) > 2:
+            print("  Error in XEasy peak assignment file: more than two dimensions have atom serials.")
+
+        #
+        # Setup assignment matrix
+        #
+
+        for i in range(0, matrixDims[0]):
+            assignmentMatrix.append(matrixDims[1] * [1])
+
+        #
+        # Decode the binary codes
+        #
+
+        binCodes = returnLongs(binCodes)
+
+        for i in range(0, 4):
+            binCode = binCodes[i] + 1
+
+            for exponent in range(31, -1, -1):
+                if binCode == 0:
+                    continue
+
+                #
+                # Handle overflow
+                #
+
+                elif binCode > 0:
+                    binCode = -(2147483648 - binCode) - 2147483648
+
+                if binCode <= -(2**exponent):
+                    binCode = binCode + 2**exponent
+                    totalExponent = 32 * i + exponent
+                    row = totalExponent % 10
+                    col = totalExponent / 10
+
+                    try:
+                        #
+                        # TODO: Why is this necessary?!?! Discuss with Jens...
+                        #
+                        if len(assignments) == 2:
+                            assignmentMatrix[row][col] = 0
+                        elif len(assignments) == 3:
+                            assignmentMatrix[col][row] = 0
+
+                    except:
+                        print("WARNING: problem with assignment matrix!")
+                        print(self.peakNum, assignmentMatrix, row, col)
+
+        #
+        # Make a list of allowed combinations...
+        #
+
+        for i in range(0, len(assignmentMatrix)):
+            for j in range(0, len(assignmentMatrix[i])):
+                if assignmentMatrix[i][j] == 1:
+                    self.assignCombinations.append([self.assignments[0][i], self.assignments[1][j]])
+
+    def getBinaryCodes(self):
+
+        #
+        # Setup the assignment list for figuring out the binary codes
+        #
+
+        self.assignments = []
+
+        for i in range(0, 2):
+            self.assignments.append([])
+
+        for i in range(0, len(self.assignCombinations)):
+            for j in range(0, 2):
+                if self.assignments[j].count(self.assignCombinations[i][j]) == 0:
+                    self.assignments[j].append(self.assignCombinations[i][j])
+
+        #
+        # Set up assignment matrix
+        #
+
+        # Hack (see setAssignCombinations) for switching col/row
+        if self.parent.numDim == 2:
+            assiRow = 0
+            assiCol = 1
         else:
-          matrixElement = 0
-          
-        assignmentMatrix[-1].append(matrixElement)
-        
-    
-    #
-    # Get the binary code (based on calculation method Jens Linge - see higher)
-    #
-    
-    binCodes = [-1, -1, -1, -1]
-    
-    for row in range(0, len(self.assignments[assiRow])):
-      for col in range(0, len(self.assignments[assiCol])):
-        if assignmentMatrix[row][col] == 0:  #1 means assigned
-        
-          findBinCode = 10 * col + row
-          if findBinCode < 32:
-              binCodeEl = 0
-          elif findBinCode < 64:
-              binCodeEl = 1
-          elif findBinCode < 96:
-              binCodeEl = 2
-          elif findBinCode < 128:
-              binCodeEl = 3
-              
-          exponent = findBinCode - 32 * binCodeEl
-          
-          #
-          # Deal with overflow
-          #
-          
-          if binCodes[binCodeEl] - 2 ** exponent > -2147483469:
-            binCodes[binCodeEl] = binCodes[binCodeEl] - 2 ** exponent
-          else:
-            binCodes[binCodeEl] = binCodes[binCodeEl] + 2 ** exponent
-      
-    return binCodes
-  
+            assiRow = 1
+            assiCol = 0
+
+        assignmentMatrix = []
+
+        for i in range(0, len(self.assignments[assiRow])):
+            assignmentMatrix.append([])
+            for j in range(0, len(self.assignments[assiCol])):
+                if (
+                    assiRow < assiCol
+                    and self.assignCombinations.count([self.assignments[0][i], self.assignments[1][j]]) != 0
+                ):
+                    matrixElement = 1
+                elif (
+                    assiRow > assiCol
+                    and self.assignCombinations.count([self.assignments[0][j], self.assignments[1][i]]) != 0
+                ):
+                    matrixElement = 1
+                else:
+                    matrixElement = 0
+
+                assignmentMatrix[-1].append(matrixElement)
+
+        #
+        # Get the binary code (based on calculation method Jens Linge - see higher)
+        #
+
+        binCodes = [-1, -1, -1, -1]
+
+        for row in range(0, len(self.assignments[assiRow])):
+            for col in range(0, len(self.assignments[assiCol])):
+                if assignmentMatrix[row][col] == 0:  # 1 means assigned
+                    findBinCode = 10 * col + row
+                    if findBinCode < 32:
+                        binCodeEl = 0
+                    elif findBinCode < 64:
+                        binCodeEl = 1
+                    elif findBinCode < 96:
+                        binCodeEl = 2
+                    elif findBinCode < 128:
+                        binCodeEl = 3
+
+                    exponent = findBinCode - 32 * binCodeEl
+
+                    #
+                    # Deal with overflow
+                    #
+
+                    if binCodes[binCodeEl] - 2**exponent > -2147483469:
+                        binCodes[binCodeEl] = binCodes[binCodeEl] - 2**exponent
+                    else:
+                        binCodes[binCodeEl] = binCodes[binCodeEl] + 2**exponent
+
+        return binCodes
+
+
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
-                                                                                                            
-  files = [['../reference/xeasy/2d.1.assign','local/paf1.test'],
-           ['../reference/xeasy/2d.2.assign','local/paf2.test'],
-           ['../reference/xeasy/n15.assign','local/paf3.test'],
-           ['../reference/xeasy/3d.1.assign','local/paf4.test']
-          ]
+if __name__ == "__main__":
+    files = [
+        ["../reference/xeasy/2d.1.assign", "local/paf1.test"],
+        ["../reference/xeasy/2d.2.assign", "local/paf2.test"],
+        ["../reference/xeasy/n15.assign", "local/paf3.test"],
+        ["../reference/xeasy/3d.1.assign", "local/paf4.test"],
+    ]
 
-  for (inFile,outFile) in files:
-    
-    assignFile = XEasyPeakAssignmentFile(os.path.join(getTopDirectory(),inFile))
-    
-    assignFile.read(verbose = 1)
+    for inFile, outFile in files:
+        assignFile = XEasyPeakAssignmentFile(os.path.join(getTopDirectory(), inFile))
 
-    print(assignFile.assignmentsDim)
-    for pa in assignFile.peakAssignments:
-      
-      print(pa.peakNum, pa.assignments, pa.assignCombinations)
-        
-    # Writing tested on 19/03/2002 (Wim) - all OK
-    # Have to switch row/col for 3d compared to 2d: hacks included in script
-    assignFile.name = outFile
-    assignFile.write(verbose = 1)
-    
+        assignFile.read(verbose=1)
+
+        print(assignFile.assignmentsDim)
+        for pa in assignFile.peakAssignments:
+            print(pa.peakNum, pa.assignments, pa.assignCombinations)
+
+        # Writing tested on 19/03/2002 (Wim) - all OK
+        # Have to switch row/col for 3d compared to 2d: hacks included in script
+        assignFile.name = outFile
+        assignFile.write(verbose=1)

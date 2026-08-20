@@ -1,13 +1,14 @@
 # Obtained thru Tim Stevens.
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.helper import isInternetConnected
-import commands
-import mimetools
 import mimetypes
 import socket
 import urllib.request
 
+import commands
+import mimetools
+
+from cing.Libs.helper import isInternetConnected
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #########################################################################################
 # Initial code from http://www.voidspace.org.uk/python/cgi.shtml#upload                                                #
@@ -112,7 +113,7 @@ def putFileBySsh( fileName, targetUrl, ensureDirIsPresent = True, rsyncOptions =
             if 'File exists' in result:
                 pass # this is ok
             else:
-                nTerror("Failed to create remote directory %s by ssh to %s. Status: %s with result %s" % (userNameAtDomain, targetDir, 
+                nTerror("Failed to create remote directory %s by ssh to %s. Status: %s with result %s" % (userNameAtDomain, targetDir,
                                                                                                           status, result))
                 return True
             # end if
@@ -178,6 +179,6 @@ def get_local_ip_address(target='google.com'):
         s.close()
     except:
         nTwarning("Failed to get IP address because no connection to [%s] could be established." % target)
-    # end try    
-    return ipaddr 
+    # end try
+    return ipaddr
 # end def

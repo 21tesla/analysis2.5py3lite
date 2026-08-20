@@ -1,7 +1,7 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqProcheck import * #@UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
 from cing.core.parameters import plugins
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqProcheck import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
 
 
 # pylint: disable=R0902
@@ -86,7 +86,7 @@ class CingSummary( NTdict ):
         self.nucleicResidueCount = len( nucleicResidues )
 
         # rmsds
-        if project.molecule and project.molecule.has_key('rmsd'):
+        if project.molecule and 'rmsd' in project.molecule:
             rmsdObject = project.molecule.rmsd
             self.rmsdToMean_backboneAverage = getDeepByKeysOrAttributes(rmsdObject,BACKBONE_AVERAGE_STR)
             self.rmsdToMean_heavyAtomsAverage = getDeepByKeysOrAttributes(rmsdObject,HEAVY_ATOM_AVERAGE_STR)
@@ -104,7 +104,7 @@ class CingSummary( NTdict ):
             self.CING_residueROG.append( (residue.cName(-1), residue.rogScore) )
         #end for
         total = reduce(lambda x, y: x+y+0.0, rog) # total expressed as a float because of 0.0
-        for i, _x in enumerate(rog): 
+        for i, _x in enumerate(rog):
             rog[i] = rog[i]*100.0/total
         self.cing_red    = round(rog[0],1)
         self.cing_orange = round(rog[1],1)
@@ -128,7 +128,7 @@ class CingSummary( NTdict ):
         if hasattr(plugins, WHATIF_STR) and plugins[ WHATIF_STR ].isInstalled:
             if self.proteinResidueCount > 0 and project.whatifStatus.completed and project.whatifStatus.parsed:
                 for checkId in summaryCheckIdList:
-                    if project.molecule[WHATIF_STR].has_key(checkId):
+                    if checkId in project.molecule[WHATIF_STR]:
                         key = 'WI_' + cingCheckId(checkId)
                         self[key] = project.molecule[WHATIF_STR][checkId].average(fmt='%6.3f +/- %5.3f')
             #end if
@@ -148,7 +148,7 @@ class CingSummary( NTdict ):
         """
         return (drl.name, drl.status,
                 len(drl), len(drl.intraResidual), len(drl.sequential),len(drl.mediumRange),len(drl.longRange),len(drl.ambiguous),
-                NTvalue(drl.rmsdAv, drl.rmsdSd, fmt='%.4f +/ %.4f'), drl.violCountLower, 
+                NTvalue(drl.rmsdAv, drl.rmsdSd, fmt='%.4f +/ %.4f'), drl.violCountLower,
                 drl.violCount1, drl.violCount3, drl.violCount5, str(drl.rogScore)
                )
     #end def
@@ -194,7 +194,7 @@ class XMLCingSummaryHandler( XMLhandler ):
 
     def handle(self, node):
         attrs = self.handleDictElements(node)
-        if attrs == None: 
+        if attrs == None:
             return None
         result = CingSummary()
         result.update(attrs)

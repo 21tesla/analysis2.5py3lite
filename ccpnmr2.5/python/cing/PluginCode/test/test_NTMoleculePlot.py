@@ -2,29 +2,30 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_NTMoleculePlot.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import image2DdihedralWidth
-from cing.Libs.html import image2Ddihedralheight
-from cing.PluginCode.matplib import * #@UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.html import image2Ddihedralheight, image2DdihedralWidth
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.matplib import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
+
 #from pylab import * # preferred importing. Includes nx imports. #@UnusedWildImport
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Whatif import Whatif #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( WHATIF_STR, getCallerFileName() ))
     raise SkipTest(WHATIF_STR)
 # end try
 try:
-    from cing.PluginCode.dssp import Dssp #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( DSSP_STR, getCallerFileName() ))
     raise SkipTest(DSSP_STR)
@@ -74,11 +75,10 @@ class AllChecks(TestCase):
 #        project.validate(parseOnly=False, htmlOnly=True, doProcheck=False, doWhatif=False, doWattos=False, doTalos=False) # needed?
 
         self.assertFalse( project.molecule.setRanges(ranges) )
-        from cing.PluginCode.dssp import runDssp # Triggers checks. @UnusedImport # pylint: disable=W0612,W0404
 
         project.runDssp()
         if actuallyRunWhatif:
-            from cing.PluginCode.Whatif import runWhatif # Triggers checks. # pylint: disable=W0612,W0404
+            from cing.PluginCode.Whatif import runWhatif  # Triggers checks. # pylint: disable=W0612,W0404
             self.assertFalse(runWhatif(project))
         else:
             rangeList = project.molecule.getFixedRangeList(

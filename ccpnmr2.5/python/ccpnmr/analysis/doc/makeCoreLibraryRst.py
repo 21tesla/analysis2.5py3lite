@@ -38,57 +38,61 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import os
 
 from memops.universal.Io import getPythonDirectory
 
-RST_PATH = 'ccpnmr/analysis/doc/source/core/'
-CODE_PATH = 'ccpnmr/analysis/core/'
+RST_PATH = "ccpnmr/analysis/doc/source/core/"
+CODE_PATH = "ccpnmr/analysis/core/"
 TOP_DIR = getPythonDirectory()
+
 
 def makeCoreDoc():
 
-  docDir = os.path.join(TOP_DIR, RST_PATH)
-  if not os.path.exists(docDir):
-    os.makedirs(docDir)
+    docDir = os.path.join(TOP_DIR, RST_PATH)
+    if not os.path.exists(docDir):
+        os.makedirs(docDir)
 
-  files = [f for f in os.listdir(docDir) if f.endswith('.rst')]
-  for file in files:
-    fileName = os.path.join(docDir, file)
-    os.unlink(fileName)
+    files = [f for f in os.listdir(docDir) if f.endswith(".rst")]
+    for file in files:
+        fileName = os.path.join(docDir, file)
+        os.unlink(fileName)
 
-  codeDir = os.path.join(TOP_DIR, CODE_PATH)
-  #files = [f for f in os.listdir(codeDir) if f.endswith('.py') and not f.startswith('__')]
-  #names = [f.split('.')[0] for f in files]
-  names = ['AssignmentBasic',
-           'ChemicalShiftBasic',
-           'ConstraintBasic',
-           'ConstraintBasic',
-           'CouplingBasic',
-           'DataAnalysisBasic',
-           'ExperimentBasic',
-           'MarkBasic',
-           'MergeObjects',
-           'MoleculeBasic',
-           'PeakBasic',
-           'PrintBasic',
-           'QualityControlBasic',
-           'StructureBasic',
-           'ValidationBasic',
-           'WindowBasic',
-           'Util']
+    codeDir = os.path.join(TOP_DIR, CODE_PATH)
+    # files = [f for f in os.listdir(codeDir) if f.endswith('.py') and not f.startswith('__')]
+    # names = [f.split('.')[0] for f in files]
+    names = [
+        "AssignmentBasic",
+        "ChemicalShiftBasic",
+        "ConstraintBasic",
+        "ConstraintBasic",
+        "CouplingBasic",
+        "DataAnalysisBasic",
+        "ExperimentBasic",
+        "MarkBasic",
+        "MergeObjects",
+        "MoleculeBasic",
+        "PeakBasic",
+        "PrintBasic",
+        "QualityControlBasic",
+        "StructureBasic",
+        "ValidationBasic",
+        "WindowBasic",
+        "Util",
+    ]
 
-  for name in names:
-    fileName = os.path.join(docDir, name + '.rst')
-    fileObj = open(fileName, 'w')
+    for name in names:
+        fileName = os.path.join(docDir, name + ".rst")
+        fileObj = open(fileName, "w")
 
-    n = len(name)
-    head = '=' * n
+        n = len(name)
+        head = "=" * n
 
-    fileObj.write(head+'\n'+name+'\n'+head+'\n\n')
-    fileObj.write('.. automodule:: ccpnmr.analysis.core.'+name+'\n   :members:\n\n')
-    fileObj.close()
+        fileObj.write(head + "\n" + name + "\n" + head + "\n\n")
+        fileObj.write(".. automodule:: ccpnmr.analysis.core." + name + "\n   :members:\n\n")
+        fileObj.close()
 
-if __name__ == '__main__':
 
-  makeCoreDoc()
+if __name__ == "__main__":
+    makeCoreDoc()

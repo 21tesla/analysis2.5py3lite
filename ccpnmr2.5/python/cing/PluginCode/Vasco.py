@@ -1,11 +1,11 @@
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqVasco import * #@UnusedWildImport
-from cing.core.molecule import getAssignmentCountMapForResList
-from cing.core.parameters import plugins
 from glob import glob
 
+from cing.core.molecule import getAssignmentCountMapForResList
+from cing.core.parameters import plugins
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
+from cing.PluginCode.required.reqVasco import *  #@UnusedWildImport
 
 if True: # block
     if not getDeepByKeysOrAttributes(plugins, CCPN_STR, IS_INSTALLED_STR):
@@ -14,10 +14,7 @@ if True: # block
     switchOutput(False)
     # CCPN part
     try:
-        import ccpnmr #@UnusedImport
-        from memops.api import Implementation #@UnusedImport
-        from memops.general.Io import loadProject #@UnusedImport
-        from memops.universal.Util import returnInt, returnFloat #@UnusedImport
+        pass  #@UnusedImport
     except:
         switchOutput(True)
         raise ImportWarning(CCPN_STR)
@@ -26,7 +23,7 @@ if True: # block
     # VASCO part
 #    switchOutput(True)
     try:
-        from cing.Scripts.FC.vascoCingRefCheck import VascoCingReferenceCheck # will do the below
+        from cing.Scripts.FC.vascoCingRefCheck import VascoCingReferenceCheck  # will do the below
 #        from pdbe.software.vascoReferenceCheck import VascoReferenceCheck #@UnusedImport
 #        import Tkinter
     except:
@@ -109,7 +106,7 @@ class Vasco(NTdict):
         vascoReferenceCheck.checkAllShiftLists()
 
         #vascoReferenceCheck.ccpnProject.saveModified()
-    # end def    
+    # end def
 # end class
 
 

@@ -62,83 +62,82 @@ software development. Bioinformatics 21, 1678-1684.
 # so they can be used as Experiment methods
 
 
-
 def getAcqExpDim(experiment, ignorePreset=False):
-  """
-  ExpDim that corresponds to acquisition dimension. NB uses heuristics
+    """
+    ExpDim that corresponds to acquisition dimension. NB uses heuristics
 
-  .. describe:: Input
-  
-   Nmr.Experiment
-  
-  .. describe:: Output
-  
-  Nmr.ExpDim
-  """
-  
-  ll = experiment.findAllExpDims(isAcquisition=True)
-  if len(ll) == 1 and not ignorePreset:
-    # acquisition dimension set - return it
-    result = ll.pop()
-  
-  else:
-    # no reliable acquisition dimension set
-    result = None
-    
-    dataSources = experiment.sortedDataSources()
-    if dataSources:
-      dataSource = dataSources[0]
-      for ds in dataSources[1:]:
-        # more than one data source. Pick one of the largest.
-        if ds.numDim > dataSource.numDim:
-          dataSource = ds
-      
-      # Take dimension with most points
-      useDim = None
-      currentVal = -1
-      for dd in dataSource.sortedDataDims():
-        if hasattr(dd, 'numPointsOrig'):
-          val = dd.numPointsOrig
-        else:
-          val = dd.numPoints
-        if val > currentVal:
-          currentVal = val
-          useDim = dd
-      
-      if useDim is not None:
-        result = useDim.expDim
-  
-    if result is None:
-      # no joy so far - just take first ExpDim
-      ll = experiment.sortedExpDims()
-      if ll:
-        result = ll[0]
-      
-  #
-  return result
-  
-  
+    .. describe:: Input
+
+     Nmr.Experiment
+
+    .. describe:: Output
+
+    Nmr.ExpDim
+    """
+
+    ll = experiment.findAllExpDims(isAcquisition=True)
+    if len(ll) == 1 and not ignorePreset:
+        # acquisition dimension set - return it
+        result = ll.pop()
+
+    else:
+        # no reliable acquisition dimension set
+        result = None
+
+        dataSources = experiment.sortedDataSources()
+        if dataSources:
+            dataSource = dataSources[0]
+            for ds in dataSources[1:]:
+                # more than one data source. Pick one of the largest.
+                if ds.numDim > dataSource.numDim:
+                    dataSource = ds
+
+            # Take dimension with most points
+            useDim = None
+            currentVal = -1
+            for dd in dataSource.sortedDataDims():
+                if hasattr(dd, "numPointsOrig"):
+                    val = dd.numPointsOrig
+                else:
+                    val = dd.numPoints
+                if val > currentVal:
+                    currentVal = val
+                    useDim = dd
+
+            if useDim is not None:
+                result = useDim.expDim
+
+        if result is None:
+            # no joy so far - just take first ExpDim
+            ll = experiment.sortedExpDims()
+            if ll:
+                result = ll[0]
+
+    #
+    return result
+
+
 def getOnebondExpDimRefs(experiment):
-  """
-  Get pairs of experiment dimensions that are connected by onebond transfers
-  
-  .. describe:: Input
-  
-  Nmr.Experiment
-  
-  .. describe:: Output
+    """
+    Get pairs of experiment dimensions that are connected by onebond transfers
 
-  List of 2-List of Nmr.ExpDimRefs
-  """
+    .. describe:: Input
 
-  expDimRefs   = []
-  expTransfers = []
-  
-  for expTransfer in experiment.sortedExpTransfers():
-    if expTransfer.transferType in ('onebond',):
-      expTransfers.append(expTransfer)
-  
-  for expTransfer in expTransfers:
-    expDimRefs.append(expTransfer.sortedExpDimRefs())
-  
-  return expDimRefs
+    Nmr.Experiment
+
+    .. describe:: Output
+
+    List of 2-List of Nmr.ExpDimRefs
+    """
+
+    expDimRefs = []
+    expTransfers = []
+
+    for expTransfer in experiment.sortedExpTransfers():
+        if expTransfer.transferType in ("onebond",):
+            expTransfers.append(expTransfer)
+
+    for expTransfer in expTransfers:
+        expDimRefs.append(expTransfer.sortedExpDimRefs())
+
+    return expDimRefs

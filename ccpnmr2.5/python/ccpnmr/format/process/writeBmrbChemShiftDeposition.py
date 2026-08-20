@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,75 +54,67 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
-
-from ccpnmr.format.general.Constants import newline
-
-from ccpnmr.format.general.Util import getResName
-
 # Get format classes
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
+from ccpnmr.format.general.Constants import newline
 
 #############
 # Functions #
 #############
 
-def writeBmrbChemShiftDeposition(guiParent,chain,chemShiftList,outFile):
 
-  proj = chain.root
+def writeBmrbChemShiftDeposition(guiParent, chain, chemShiftList, outFile):
 
-  format = NmrStarFormat(proj,guiParent,verbose = 1)
+    proj = chain.root
 
-  fout = open(outFile,'w')
+    format = NmrStarFormat(proj, guiParent, verbose=1)
 
-  resSeq = newline
-  
-  for residue in chain.sortedResidues():
-    
-    code1Letter = residue.molResidue.chemComp.getCode1Letter()
-    
-    if code1Letter:
-      resSeq += code1Letter
-    else:
-      resSeq += 'X'
-    
-    chopOff = len(resSeq) / 41.0
-    
-    if chopOff == int(chopOff):
-      resSeq += newline
-    
-  
-  fout.write("_Mol_residue_sequence" + newline)
-  fout.write(";")
-  fout.write(resSeq + newline)
-  fout.write(";" + (newline * 2))
-  
-  fout.write("""
+    fout = open(outFile, "w")
+
+    resSeq = newline
+
+    for residue in chain.sortedResidues():
+        code1Letter = residue.molResidue.chemComp.getCode1Letter()
+
+        if code1Letter:
+            resSeq += code1Letter
+        else:
+            resSeq += "X"
+
+        chopOff = len(resSeq) / 41.0
+
+        if chopOff == int(chopOff):
+            resSeq += newline
+
+    fout.write("_Mol_residue_sequence" + newline)
+    fout.write(";")
+    fout.write(resSeq + newline)
+    fout.write(";" + (newline * 2))
+
+    fout.write("""
 loop_
         _Residue_seq_code
         _Residue_author_seq_code
         _Residue_label""")
-  
-  fout.write(newline * 2)  
-  
-  count = 0
-  
-  for residue in chain.sortedResidues():
-  
-    count += 1
-    
-    fout.write("%-3d %-3d %3s" % (residue.seqId, residue.seqCode, residue.ccpCode))
-    
-    if count / 5.0 == int(count / 5.0):
-      fout.write(newline)
-    else:
-      fout.write("     ")
-    
-  fout.write("stop_")
-  fout.write(newline)  
-  
-  fout.write("""
+
+    fout.write(newline * 2)
+
+    count = 0
+
+    for residue in chain.sortedResidues():
+        count += 1
+
+        fout.write("%-3d %-3d %3s" % (residue.seqId, residue.seqCode, residue.ccpCode))
+
+        if count / 5.0 == int(count / 5.0):
+            fout.write(newline)
+        else:
+            fout.write("     ")
+
+    fout.write("stop_")
+    fout.write(newline)
+
+    fout.write("""
 ###################################################################
 #      Chemical Shift Ambiguity Code Definitions                  #
 #                                                                 #
@@ -168,47 +160,48 @@ loop_
 #assign code    Label   Name    Type    ppm     ppm     Code
 #---------------------------------------------------------------
 #""")
-  
-  fout.write(newline * 2)
-  
-  # Using code originally written for XEasy output
 
-  format.getFormatNamingSystemName = getFormatNamingSystemName
-  format.writeShifts(outFile,measurementList = chemShiftList,chains = [chain],noWrite = True,compressResonances = False)
+    fout.write(newline * 2)
 
-  counter = 1
-  for chemShift in format.measurementFile.chemShifts:
-  
-    if chemShift.atomName[-1] == '*':
-      atomName = chemShift.atomName[:-1]
-    else:
-      atomName = chemShift.atomName
-       
-    fout.write("%-6d   %-5d  %-4s    %-5s   %-5s   %-7.3f %-7.3f %d" % (
+    # Using code originally written for XEasy output
 
-       counter,
-       chemShift.seqCode,
-       chemShift.resLabel,
-       atomName,
-       chemShift.atomType,
-       chemShift.value,
-       chemShift.valueError,
-       chemShift.ambCode
-    )
-                  )
-                  
-    counter += 1
+    format.getFormatNamingSystemName = getFormatNamingSystemName
+    format.writeShifts(outFile, measurementList=chemShiftList, chains=[chain], noWrite=True, compressResonances=False)
+
+    counter = 1
+    for chemShift in format.measurementFile.chemShifts:
+        if chemShift.atomName[-1] == "*":
+            atomName = chemShift.atomName[:-1]
+        else:
+            atomName = chemShift.atomName
+
+        fout.write(
+            "%-6d   %-5d  %-4s    %-5s   %-5s   %-7.3f %-7.3f %d"
+            % (
+                counter,
+                chemShift.seqCode,
+                chemShift.resLabel,
+                atomName,
+                chemShift.atomType,
+                chemShift.value,
+                chemShift.valueError,
+                chemShift.ambCode,
+            )
+        )
+
+        counter += 1
+
+        fout.write(newline)
 
     fout.write(newline)
+    fout.write("stop_")
+    fout.write(newline * 2)
 
-  fout.write(newline)
-  fout.write("stop_")
-  fout.write(newline*2)
-  
-  fout.close()
-  
-  return True
+    fout.close()
+
+    return True
+
 
 def getFormatNamingSystemName():
 
-  return 'IUPAC'
+    return "IUPAC"

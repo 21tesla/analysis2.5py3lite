@@ -1,6 +1,7 @@
 # Written by Tim J. Stevens
 import numpy
 
+
 def kMeans(data, k):
 
   indices = set()
@@ -22,18 +23,18 @@ def kMeans(data, k):
       clusters[closest].append(vector)
 
     change = 0
-    
+
     for i, cluster in enumerate(clusters):
       cluster = numpy.array(cluster)
       center = cluster.sum(axis=0)/len(cluster)
       diff = center - centers[i]
       change += (diff * diff).sum()
       centers[i] = center
-    
-    #print change  
-    
+
+    #print change
+
   return centers, clusters
-  
+
 if __name__ == '__main__':
 
   testDataA = numpy.random.random((1000,2)) # No clumps

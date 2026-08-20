@@ -38,157 +38,156 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import array
 
-from memops.universal.Io import splitPath
-from memops.universal.Util import isBigEndian
-from ccpnmr.analysis.core.Util import getAnalysisSpectrum
 
 # TODO: view --> spectrum, contourFile, xdim, ydim
 # indeed could just use block_file and get xdim, ydim, npoints, ndim from there
 # (and also contourFile)
 # saveViewContours for use when you want to contour existing view
-def saveViewContours(view, fileName, levels, firstInt, lastInt, isBigEndian = None):
+def saveViewContours(view, fileName, levels, firstInt, lastInt, isBigEndian=None):
 
-  from ccpnmr.c import ContourFile
-  from memops.c import StoreHandler
+    from ccpnmr.c import ContourFile
+    from memops.c import StoreHandler
 
-  if not hasattr(view, 'contourFile'):
-    return
+    if not hasattr(view, "contourFile"):
+        return
 
-  spectrum = view.analysisSpectrum.dataSource
-  if not hasattr(spectrum, 'block_file'):
-    return
+    spectrum = view.analysisSpectrum.dataSource
+    if not hasattr(spectrum, "block_file"):
+        return
 
-  if not spectrum.block_file:
-    return
+    if not spectrum.block_file:
+        return
 
-  try:
-    saveContours(spectrum, view.contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
-  except ContourFile.error as e:
-    raise Exception(str(e))
-  except StoreHandler.error as e:
-    raise Exception(str(e))
+    try:
+        saveContours(spectrum, view.contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
+    except ContourFile.error as e:
+        raise Exception(str(e))
+    except StoreHandler.error as e:
+        raise Exception(str(e))
+
 
 # saveSpectrumContours for use when you want to contour specified region
-def saveSpectrumContours(spectrum, fileName, xdim, ydim, levels,
-                         firstInt, lastInt, isBigEndian = None, mem_cache = None):
+def saveSpectrumContours(spectrum, fileName, xdim, ydim, levels, firstInt, lastInt, isBigEndian=None, mem_cache=None):
 
-  from ccpnmr.analysis.core.BlockUtil import getBlockFile
-  from ccpnmr.c import ContourFile
-  from memops.c import StoreHandler
-  from memops.c.MemCache import MemCache
-  from memops.general import Implementation
+    from ccpnmr.analysis.core.BlockUtil import getBlockFile
+    from ccpnmr.c import ContourFile
+    from memops.c import StoreHandler
+    from memops.c.MemCache import MemCache
 
-  if not mem_cache:
-    cache_size = 64 * 1024 * 1024
-    mem_cache = MemCache(cache_size)
+    if not mem_cache:
+        cache_size = 64 * 1024 * 1024
+        mem_cache = MemCache(cache_size)
 
-  if hasattr(spectrum, 'block_file') and spectrum.block_file:
-    block_file = spectrum.block_file
-  else:
-    block_file = getBlockFile(spectrum, mem_cache)
-  if not block_file:
-    raise Exception('could not get block file')
+    if hasattr(spectrum, "block_file") and spectrum.block_file:
+        block_file = spectrum.block_file
+    else:
+        block_file = getBlockFile(spectrum, mem_cache)
+    if not block_file:
+        raise Exception("could not get block file")
 
-  try:
-    # -1 because of dim convention
-    contourFile = ContourFile.ContourFile(xdim-1, ydim-1, block_file, mem_cache)
+    try:
+        # -1 because of dim convention
+        contourFile = ContourFile.ContourFile(xdim - 1, ydim - 1, block_file, mem_cache)
 
-    saveContours(spectrum, contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
-  except ContourFile.error as e:
-    raise Exception(str(e))
-  except StoreHandler.error as e:
-    raise Exception(str(e))
+        saveContours(spectrum, contourFile, fileName, levels, firstInt, lastInt, isBigEndian)
+    except ContourFile.error as e:
+        raise Exception(str(e))
+    except StoreHandler.error as e:
+        raise Exception(str(e))
+
 
 # saveContours internal, called by both saveViewContours and saveSpectrumContours
-def saveContours(spectrum, contourFile, fileName, levels, firstInt, lastInt, isBigEndian = None):
+def saveContours(spectrum, contourFile, fileName, levels, firstInt, lastInt, isBigEndian=None):
 
-  from memops.c.StoreHandler import StoreHandler
-  import ccpnmr.c.ContourStyle as ContourStyle
-  import ccpnmr.c.ContourLevels as ContourLevels
+    import ccpnmr.c.ContourLevels as ContourLevels
+    import ccpnmr.c.ContourStyle as ContourStyle
+    from memops.c.StoreHandler import StoreHandler
 
-  # set things up
+    # set things up
 
-  if isBigEndian is None or isBigEndian == isBigEndian():
-    swap = 0
-  else:
-    swap = 1
+    if isBigEndian is None or isBigEndian == isBigEndian():
+        swap = 0
+    else:
+        swap = 1
 
-  handler = StoreHandler(fileName, swap)
+    handler = StoreHandler(fileName, swap)
 
-  # below irrelevant but mandatory argument
-  pos_colors = neg_colors = [(0.0, 0.0, 0.0)]
-  contourStyle = ContourStyle.ContourStyle(pos_colors, neg_colors, 0, 0)
+    # below irrelevant but mandatory argument
+    pos_colors = neg_colors = [(0.0, 0.0, 0.0)]
+    contourStyle = ContourStyle.ContourStyle(pos_colors, neg_colors, 0, 0)
 
-  contourLevels = ContourLevels.ContourLevels(levels)
+    contourLevels = ContourLevels.ContourLevels(levels)
 
-  contourFile.draw(handler, firstInt, lastInt, contourLevels, contourStyle)
+    contourFile.draw(handler, firstInt, lastInt, contourLevels, contourStyle)
+
 
 # returns dict with keys: ndim, xdim, ydim, npoints, blockSize, levels
 def getStoredContourHeader(fileName):
 
-  # this needs to be kept consistent with memops/global/store_file.c and store_handler.c
-  n = 4
-  fp = open(fileName, 'rb')
-  s = fp.read(6*n)
-  x = array.array('i')
-  x.fromstring(s)
+    # this needs to be kept consistent with memops/global/store_file.c and store_handler.c
+    n = 4
+    fp = open(fileName, "rb")
+    s = fp.read(6 * n)
+    x = array.array("i")
+    x.fromstring(s)
 
-  magic = x[0]
-  if magic == 1789:
-    swap = False
-  else:
-    swap = True
-    x.byteswap()
     magic = x[0]
-    if magic != 1789:
-      raise Exception('magic number invalid')
+    if magic == 1789:
+        swap = False
+    else:
+        swap = True
+        x.byteswap()
+        magic = x[0]
+        if magic != 1789:
+            raise Exception("magic number invalid")
 
-  header = {}
-  header['ndim'] = ndim = x[3]
-  header['xdim'] = x[4] + 1  # + 1 because of dim convention
-  header['ydim'] = x[5] + 1
+    header = {}
+    header["ndim"] = ndim = x[3]
+    header["xdim"] = x[4] + 1  # + 1 because of dim convention
+    header["ydim"] = x[5] + 1
 
-  s = fp.read((4*ndim+1)*n)
-  x = array.array('i')
-  x.fromstring(s)
-  if swap:
-    x.byteswap()
+    s = fp.read((4 * ndim + 1) * n)
+    x = array.array("i")
+    x.fromstring(s)
+    if swap:
+        x.byteswap()
 
-  # x is an array object, so convert into ordinary lists
-  header['npoints'] = list(x[:ndim])
-  header['blockSize'] = list(x[3*ndim:4*ndim])
+    # x is an array object, so convert into ordinary lists
+    header["npoints"] = list(x[:ndim])
+    header["blockSize"] = list(x[3 * ndim : 4 * ndim])
 
-  nlevels = x[4*ndim]
+    nlevels = x[4 * ndim]
 
-  s = fp.read(nlevels*n)
-  x = array.array('f')
-  x.fromstring(s)
-  if swap:
-    x.byteswap()
+    s = fp.read(nlevels * n)
+    x = array.array("f")
+    x.fromstring(s)
+    if swap:
+        x.byteswap()
 
-  header['levels'] = list(x)
+    header["levels"] = list(x)
 
-  fp.close()
+    fp.close()
 
-  return header
+    return header
+
 
 # Note: in v1 fileName was absolute, now it is relative
 def createStoredContour(spectrum, fileName, xdim, ydim):
 
-  analysisSpectrum = spectrum.analysisSpectrum
-  if not analysisSpectrum:
-    print('Warning: analysisSpectrum not set for', spectrum)
-    return
+    analysisSpectrum = spectrum.analysisSpectrum
+    if not analysisSpectrum:
+        print("Warning: analysisSpectrum not set for", spectrum)
+        return
 
-  contourDir = analysisSpectrum.contourDir
-  if not contourDir:
-    print('Warning: contourDir not set for', analysisSpectrum)
-    return
+    contourDir = analysisSpectrum.contourDir
+    if not contourDir:
+        print("Warning: contourDir not set for", analysisSpectrum)
+        return
 
-  path = contourDir.dataLocation
-  if fileName.startswith(path):  # dangerous
-    fileName = fileName[len(path)+1:]
-  analysisSpectrum.newStoredContour(dims=(xdim, ydim), path=fileName)
-
+    path = contourDir.dataLocation
+    if fileName.startswith(path):  # dangerous
+        fileName = fileName[len(path) + 1 :]
+    analysisSpectrum.newStoredContour(dims=(xdim, ydim), path=fileName)

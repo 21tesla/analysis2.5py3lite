@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,210 +56,226 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import copy
 
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
 from ccp.format.general.Constants import defaultSeqInsertCode
+from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
 #
 # Add some information to IOkeywords...
 #
 
 IOkeywords = copy.deepcopy(IOkeywords)
-IOkeywords['readCoordinates']['mergeFunctionInfo'] = (None,False,"Tuple with function to merge in external info and file with source info.")
-IOkeywords['writeCoordinates']['addPdbHeader'] = (False,False,"Add a header with fake crystal information for wwPDB deposition purposes.")
+IOkeywords["readCoordinates"]["mergeFunctionInfo"] = (
+    None,
+    False,
+    "Tuple with function to merge in external info and file with source info.",
+)
+IOkeywords["writeCoordinates"]["addPdbHeader"] = (
+    False,
+    False,
+    "Add a header with fake crystal information for wwPDB deposition purposes.",
+)
+
 
 class PdbFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'pdb'
-    self.IOkeywords = IOkeywords
+        self.format = "pdb"
+        self.IOkeywords = IOkeywords
 
+    def setGenericImports(self):
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getCoordinates = self.getCoordinatesGeneric
-    self.createCoordinateFile = self.createCoordinateFileGeneric 
+        self.getSequence = self.getSequenceGeneric
 
-    self.getChemComps = self.getChemCompsGeneric
+        self.getCoordinates = self.getCoordinatesGeneric
+        self.createCoordinateFile = self.createCoordinateFileGeneric
 
-  #
-  # Deviations from generic import stuff
-  #
-      
-  def getSequenceSetFormatSpecificReadKeywds(self):  
-   
-    readKeywds = {}
+        self.getChemComps = self.getChemCompsGeneric
 
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
-
-  def getCoordinatesSetFormatSpecificReadKeywds(self):
-   
-    readKeywds = {}
-    
-    if self.ignoreResNames:
-      readKeywds['ignoreResNames'] = self.ignoreResNames
-    
-    return readKeywds
-    
-  def getCoordinatesFormatSpecific(self):
-   
-    if self.mergeFunctionInfo:
-      self.mergeFunctionInfo[0](self.coordinateFile,self.mergeFunctionInfo[1])
-
-  def getCoordinatesSetSequenceFile(self):
-    
-    self.setSequenceFileClass()
-    self.sequenceFile = self.SequenceFileClass(self.fileName)
-
-    readKeywds = self.getSequenceSetFormatSpecificReadKeywds()
-    self.sequenceFile.read(pdbFile = self.coordinateFile, **readKeywds)
-
-  def getPeopleAndCitations(self):
-  
-    # TODO HERE: have to figure out what to do if project file read...
-  
-    self.peopleAndCitationsFile = self.peopleAndCitationsIO.PdbPeopleAndCitationsFile(self.fileName)
-    self.peopleAndCitationsFile.read()
-
-    if self.verbose == 1:
-      print("Reading people and citation info from %s file %s" % (self.formatLabel,self.fileName))
-
-  #
-  # Code different from DataFormat
-  #
-
-  def getHeader(self):
-
-    self.headerFile = self.generalIO.PdbFile(self.fileName)
-    self.headerFile.readHeader()
-
-    if self.verbose == 1:
-      print("Reading header info from %s file %s" % (self.formatLabel,self.fileName))
-
-  def forceNonEmptyChainCode(self):
-    
-    returnValue = False
-    
-    if self.sequenceFile.version >= '3.0':
-      returnValue = True
-    
-    return returnValue
-
-  def getCode3Letter(self,sequenceElement):
-    
-    code3Letter = sequenceElement.code3Letter.strip().upper()
-    
-    # TODO THIS IS A HACK TO CONVERT +T, +C, .. (signifying 'a modified nucleotide') to T, C... .
-    # This should be cleared up in the actual PDB files eventually
-    if code3Letter[0] == '+' and code3Letter[1] in 'CGTUAI':
-      code3Letter = code3Letter[1:] 
-
-    return code3Letter
-
-  def duplicateChain(self):
-  
     #
-    # All chain info should be contained in PDB files...
+    # Deviations from generic import stuff
     #
-    
-    return 0   
 
-  def getSpecificPdbOneLetterCode(self,currentChainCode):
-    
-    pdbOneLetterCode = currentChainCode
-    
-    if self.sequence:
-      pdbOneLetterCode = self.sequence.chainCode
-      
-    # Currently not possible to be more than one letter, so reset to nothing.
-    # This restriction will likely change in the future.
-    if len(pdbOneLetterCode) > 1:
-      pdbOneLetterCode = ' '
-  
-    return pdbOneLetterCode
+    def getSequenceSetFormatSpecificReadKeywds(self):
 
-  def setCoordChainList(self):
-  
-    self.coordChainList = self.coordinateFile.chains + self.coordinateFile.hetGroups
+        readKeywds = {}
 
-  def createCoordinateFileFormatSpecific(self):
-    
-    if self.addPdbHeader:
-      self.writeKeywds['addPdbHeader'] = self.addPdbHeader
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
 
-  def resetCoordinateSerial(self,coordinateSerial):
-    
-    # Can use this to reset the coordinate serial used in the output file on a per-model basis
-    if self.version not in ('2.2',):
-      coordinateSerial = 0
-    
-    return coordinateSerial
-         
-  def setRawCoordinate(self):
-  
-    if not self.coordinateFile.modelCoordinates.has_key(self.modelId):
+        return readKeywds
 
-      self.coordinateFile.modelCoordinates[self.modelId] = []
-   
+    def getCoordinatesSetFormatSpecificReadKeywds(self):
+
+        readKeywds = {}
+
+        if self.ignoreResNames:
+            readKeywds["ignoreResNames"] = self.ignoreResNames
+
+        return readKeywds
+
+    def getCoordinatesFormatSpecific(self):
+
+        if self.mergeFunctionInfo:
+            self.mergeFunctionInfo[0](self.coordinateFile, self.mergeFunctionInfo[1])
+
+    def getCoordinatesSetSequenceFile(self):
+
+        self.setSequenceFileClass()
+        self.sequenceFile = self.SequenceFileClass(self.fileName)
+
+        readKeywds = self.getSequenceSetFormatSpecificReadKeywds()
+        self.sequenceFile.read(pdbFile=self.coordinateFile, **readKeywds)
+
+    def getPeopleAndCitations(self):
+
+        # TODO HERE: have to figure out what to do if project file read...
+
+        self.peopleAndCitationsFile = self.peopleAndCitationsIO.PdbPeopleAndCitationsFile(self.fileName)
+        self.peopleAndCitationsFile.read()
+
+        if self.verbose == 1:
+            print("Reading people and citation info from %s file %s" % (self.formatLabel, self.fileName))
+
     #
-    # Get correct code (use cifCode) and set hetFlag
+    # Code different from DataFormat
     #
-    
-    hetFlag = 0
-    
-    chemCompVar = self.residue.chemCompVar
-    chemComp = chemCompVar.chemComp
-    cifCode = self.findChemCompVarSysName('CIF',chemCompVar)
-    
-    if chemComp.className == 'NonStdChemComp':
-      hetFlag = 1
-    
-    if self.namingSystemName in ('PDB','PDB_REMED') and cifCode:
-      resName = cifCode
-    elif self.namingSystemName in ('PDB','PDB_REMED') and chemComp.code3Letter:
-      resName = chemComp.code3Letter
-    else:
-      resName = chemComp.ccpCode.upper()
 
-    if self.useOriginalData and self.origChainCode != None:
-      chainCode = self.origChainCode
-    else:
-      chainCode = self.exportChainCode
-  
-    if self.useOriginalData and self.origSeqCode != None:
-      seqCode = self.origSeqCode
-    else:
-      seqCode = self.seqCode
- 
-    if self.useOriginalData and self.origSeqInsertCode != None:
-      seqInsertCode = self.origSeqInsertCode
-    else:
-      seqInsertCode = defaultSeqInsertCode
- 
-    if self.useOriginalData and self.origAtomName != None and not self.forceNamingSystemName:
-      atomName = self.origAtomName
-    else:
-      atomName = self.atomName
+    def getHeader(self):
 
-    modelCoordinate = self.coordinatesIO.PdbCoordinate(self.coordinateFile,
-        self.coordinateSerial,atomName,resName,chainCode,seqCode,
-        self.x,self.y,self.z,self.occupancy,self.bFactor,
-        self.atomType,hetFlag,insertionCode=seqInsertCode)
-      
-    self.coordinateFile.modelCoordinates[self.modelId].append(modelCoordinate)
+        self.headerFile = self.generalIO.PdbFile(self.fileName)
+        self.headerFile.readHeader()
 
-  def getPresetChainMapping(self,chainList):
-  
-    mappingChainDict = {}
-    
-    for chain in chainList:
-    
-      mappingChainDict[chain] = (chain.code,1)
-    
-    return mappingChainDict
+        if self.verbose == 1:
+            print("Reading header info from %s file %s" % (self.formatLabel, self.fileName))
+
+    def forceNonEmptyChainCode(self):
+
+        returnValue = False
+
+        if self.sequenceFile.version >= "3.0":
+            returnValue = True
+
+        return returnValue
+
+    def getCode3Letter(self, sequenceElement):
+
+        code3Letter = sequenceElement.code3Letter.strip().upper()
+
+        # TODO THIS IS A HACK TO CONVERT +T, +C, .. (signifying 'a modified nucleotide') to T, C... .
+        # This should be cleared up in the actual PDB files eventually
+        if code3Letter[0] == "+" and code3Letter[1] in "CGTUAI":
+            code3Letter = code3Letter[1:]
+
+        return code3Letter
+
+    def duplicateChain(self):
+
+        #
+        # All chain info should be contained in PDB files...
+        #
+
+        return 0
+
+    def getSpecificPdbOneLetterCode(self, currentChainCode):
+
+        pdbOneLetterCode = currentChainCode
+
+        if self.sequence:
+            pdbOneLetterCode = self.sequence.chainCode
+
+        # Currently not possible to be more than one letter, so reset to nothing.
+        # This restriction will likely change in the future.
+        if len(pdbOneLetterCode) > 1:
+            pdbOneLetterCode = " "
+
+        return pdbOneLetterCode
+
+    def setCoordChainList(self):
+
+        self.coordChainList = self.coordinateFile.chains + self.coordinateFile.hetGroups
+
+    def createCoordinateFileFormatSpecific(self):
+
+        if self.addPdbHeader:
+            self.writeKeywds["addPdbHeader"] = self.addPdbHeader
+
+    def resetCoordinateSerial(self, coordinateSerial):
+
+        # Can use this to reset the coordinate serial used in the output file on a per-model basis
+        if self.version not in ("2.2",):
+            coordinateSerial = 0
+
+        return coordinateSerial
+
+    def setRawCoordinate(self):
+
+        if self.modelId not in self.coordinateFile.modelCoordinates:
+            self.coordinateFile.modelCoordinates[self.modelId] = []
+
+        #
+        # Get correct code (use cifCode) and set hetFlag
+        #
+
+        hetFlag = 0
+
+        chemCompVar = self.residue.chemCompVar
+        chemComp = chemCompVar.chemComp
+        cifCode = self.findChemCompVarSysName("CIF", chemCompVar)
+
+        if chemComp.className == "NonStdChemComp":
+            hetFlag = 1
+
+        if self.namingSystemName in ("PDB", "PDB_REMED") and cifCode:
+            resName = cifCode
+        elif self.namingSystemName in ("PDB", "PDB_REMED") and chemComp.code3Letter:
+            resName = chemComp.code3Letter
+        else:
+            resName = chemComp.ccpCode.upper()
+
+        if self.useOriginalData and self.origChainCode != None:
+            chainCode = self.origChainCode
+        else:
+            chainCode = self.exportChainCode
+
+        if self.useOriginalData and self.origSeqCode != None:
+            seqCode = self.origSeqCode
+        else:
+            seqCode = self.seqCode
+
+        if self.useOriginalData and self.origSeqInsertCode != None:
+            seqInsertCode = self.origSeqInsertCode
+        else:
+            seqInsertCode = defaultSeqInsertCode
+
+        if self.useOriginalData and self.origAtomName != None and not self.forceNamingSystemName:
+            atomName = self.origAtomName
+        else:
+            atomName = self.atomName
+
+        modelCoordinate = self.coordinatesIO.PdbCoordinate(
+            self.coordinateFile,
+            self.coordinateSerial,
+            atomName,
+            resName,
+            chainCode,
+            seqCode,
+            self.x,
+            self.y,
+            self.z,
+            self.occupancy,
+            self.bFactor,
+            self.atomType,
+            hetFlag,
+            insertionCode=seqInsertCode,
+        )
+
+        self.coordinateFile.modelCoordinates[self.modelId].append(modelCoordinate)
+
+    def getPresetChainMapping(self, chainList):
+
+        mappingChainDict = {}
+
+        for chain in chainList:
+            mappingChainDict[chain] = (chain.code, 1)
+
+        return mappingChainDict

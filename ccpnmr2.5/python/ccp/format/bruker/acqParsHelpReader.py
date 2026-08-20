@@ -1,5 +1,3 @@
-
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -13,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,61 +51,58 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
 
-from memops.universal.Util import joinUnquote
-
 from ccp.format.bruker.generalIO import BrukerGenericFile
-
 from memops.universal.Io import getTopDirectory
+from memops.universal.Util import joinUnquote
 
 #####################
 # Class definitions #
 #####################
 
+
 class BrukerParHelp(BrukerGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.readParsHelpFile()
+        self.readParsHelpFile()
 
-  def readParsHelpFile(self):
+    def readParsHelpFile(self):
 
-    self.tags = {}
-    
-    fileLocation = os.path.join(getTopDirectory(),'data','ccp','bruker','parhelp.txt')
+        self.tags = {}
 
-    fin = open(fileLocation)
-    line = fin.readline()
+        fileLocation = os.path.join(getTopDirectory(), "data", "ccp", "bruker", "parhelp.txt")
 
-    while line:
-    
-      if not (self.patt['emptyline'].search(line) or self.patt['hash'].search(line)):
-        cols = line.split()
-        if len(cols) < 3 or cols[1] != '=':
-          print("Error parsing following line:" + self.newline + line + self.newline)
-        else:
-          # Sort out tag
-          tag = cols[0]
+        fin = open(fileLocation)
+        line = fin.readline()
 
-          # Sort out value (remove ' and rejoin with single spaces)
-          value = joinUnquote(cols[2:],"'")
+        while line:
+            if not (self.patt["emptyline"].search(line) or self.patt["hash"].search(line)):
+                cols = line.split()
+                if len(cols) < 3 or cols[1] != "=":
+                    print("Error parsing following line:" + self.newline + line + self.newline)
+                else:
+                    # Sort out tag
+                    tag = cols[0]
 
-          # Check if multivalue line (eg. SFO1, SFO2, ...)
-          searchobj = self.patt[self.format + 'BracketMultiValue'].search(tag)
-          if searchobj:
-            for i in range(int(searchobj.group(1)),int(searchobj.group(2))+1):
-              curTag = self.patt[self.format + 'BracketMultiValue'].sub(str(i),tag)
-              curValue = self.patt[self.format + 'BracketMultiValue'].sub(str(i),value)
-              self.tags[curTag] = curValue
-          else:
-            self.tags[tag] = value
+                    # Sort out value (remove ' and rejoin with single spaces)
+                    value = joinUnquote(cols[2:], "'")
 
-      line=fin.readline()
+                    # Check if multivalue line (eg. SFO1, SFO2, ...)
+                    searchobj = self.patt[self.format + "BracketMultiValue"].search(tag)
+                    if searchobj:
+                        for i in range(int(searchobj.group(1)), int(searchobj.group(2)) + 1):
+                            curTag = self.patt[self.format + "BracketMultiValue"].sub(str(i), tag)
+                            curValue = self.patt[self.format + "BracketMultiValue"].sub(str(i), value)
+                            self.tags[curTag] = curValue
+                    else:
+                        self.tags[tag] = value
+
+            line = fin.readline()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    aqhelp = BrukerParHelp("help")
 
-  aqhelp = BrukerParHelp('help')
-  
-  print(aqhelp.tags)
+    print(aqhelp.tags)

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,173 +53,182 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 import time
-import tkinter
 
+from memops.editor.BasePopup import BasePopup
+from memops.format.xml.Util import doesRepositoryContainProject, getPossibleProjectFiles
 from memops.general.Implementation import ApiError
 from memops.general.Io import loadProject
-from memops.format.xml.Util import doesRepositoryContainProject, getPossibleProjectFiles
-
-from memops.universal.Io import joinPath, printExceptionAndTrace
-
 from memops.gui.DataEntry import askDir, askFile
 from memops.gui.FileSelect import FileSelect, FileType
 from memops.gui.Label import Label
 from memops.gui.MessageReporter import showError, showWarning
 from memops.gui.Util import createDismissHelpButtonList
+from memops.universal.Io import printExceptionAndTrace
 
-from memops.editor.BasePopup import BasePopup
 
 class OpenProjectPopup(BasePopup):
+    def __init__(
+        self, parent, title="Project : Open", callback=None, help_msg="", help_url="", load_project=None, *args, **kw
+    ):
 
-  def __init__(self, parent, title = 'Project : Open', callback = None,
-               help_msg = '', help_url = '', load_project = None, *args, **kw):
+        self.callback = callback
+        self.help_msg = help_msg
+        self.help_url = help_url
+        self.project = None
 
-    self.callback = callback
-    self.help_msg = help_msg
-    self.help_url = help_url
-    self.project = None
+        if not load_project:
+            askdir = lambda title, prompt, initial_value: askDir(
+                title, prompt, initial_value, parent=self, extra_dismiss_text="Skip"
+            )
+            askfile = lambda title, prompt, initial_value: askFile(
+                title, prompt, initial_value, parent=self, extra_dismiss_text="Skip"
+            )
+            load_project = lambda path: loadProject(path, showWarning=showWarning, askDir=askdir, askFile=askfile)
 
-    if not load_project:
+        self.load_project = load_project
 
-      askdir = lambda title, prompt, initial_value: askDir(title, prompt,
-                      initial_value, parent=self, extra_dismiss_text='Skip')
-      askfile = lambda title, prompt, initial_value: askFile(title, prompt,
-                         initial_value, parent=self, extra_dismiss_text='Skip')
-      load_project = lambda path: loadProject(path, showWarning=showWarning,
-                                              askDir=askdir, askFile=askfile)
+        BasePopup.__init__(self, parent=parent, title=title, *args, **kw)
 
-    self.load_project = load_project
+    def body(self, master):
 
-    BasePopup.__init__(self, parent=parent, title=title, *args, **kw)
+        self.geometry("600x500")
+        master.grid_rowconfigure(1, weight=1)
+        master.grid_columnconfigure(0, weight=1)
 
-  def body(self, master):
+        label = Label(master, text="Select Project Directory")
+        label.grid(row=0, column=0, sticky=Tkinter.W)
 
-    self.geometry('600x500')
-    master.grid_rowconfigure(1, weight=1)
-    master.grid_columnconfigure(0, weight=1)
+        file_types = [FileType("Project", ["*.xml"]), FileType("All", ["*"])]
+        self.file_select = FileSelect(
+            master,
+            file_types=file_types,
+            show_file=False,
+            double_callback=self.ok,
+            getRowColor=self.getEntryColor,
+            getExtraCell=self.getProjectFileText,
+            extraHeadings=("Status",),
+            extraJustifies=("left",),
+        )
+        self.file_select.grid(row=1, column=0, sticky=Tkinter.NSEW)
 
-    label = Label(master, text='Select Project Directory')
-    label.grid(row=0, column=0, sticky=Tkinter.W)
+        texts = ["Open"]
+        commands = [self.ok]
+        buttons = createDismissHelpButtonList(
+            master,
+            texts=texts,
+            commands=commands,
+            dismiss_text="Cancel",
+            help_msg=self.help_msg,
+            help_url=self.help_url,
+        )
+        buttons.grid(row=2, column=0, sticky=Tkinter.EW)
 
-    file_types = [ FileType('Project', ['*.xml']), FileType('All', ['*']) ]
-    self.file_select = FileSelect(master, file_types=file_types, show_file=False,
-                                  double_callback=self.ok, getRowColor=self.getEntryColor,
-                                  getExtraCell=self.getProjectFileText,
-                                  extraHeadings=('Status',), extraJustifies=('left',))
-    self.file_select.grid(row=1, column=0, sticky=Tkinter.NSEW)
+        self.ok_button = buttons.buttons[0]
 
-    texts = [ 'Open' ]
-    commands = [ self.ok ]
-    buttons = createDismissHelpButtonList(master, texts=texts, commands=commands,
-                dismiss_text='Cancel', help_msg=self.help_msg, help_url=self.help_url)
-    buttons.grid(row=2, column=0, sticky=Tkinter.EW)
+    def getEntryColor(self, fileName):
 
-    self.ok_button = buttons.buttons[0]
+        # this function returns background color for entry
 
-  def getEntryColor(self, fileName):
+        if doesRepositoryContainProject(fileName):
+            color = "#C0FFC0"  # green
+        elif getPossibleProjectFiles(fileName):
+            color = "#FFFFC0"  # yellow
+        else:
+            color = None  # default
 
-    # this function returns background color for entry
+        return color
 
-    if doesRepositoryContainProject(fileName):
-      color = '#C0FFC0'  # green
-    elif getPossibleProjectFiles(fileName):
-      color = '#FFFFC0'  # yellow
-    else:
-      color = None  # default
+    def getProjectFileText(self, fileName):
 
-    return color
+        if doesRepositoryContainProject(fileName):
+            tt = time.localtime(os.path.getmtime(fileName))
+            tt = "%4d-%02d-%02d %02d:%02d:%02d" % tt[:6]
+            data = "OK (%s)" % tt
+        else:
+            files = getPossibleProjectFiles(fileName)
+            nfiles = len(files)
+            if nfiles == 1:
+                data = "%s" % os.path.basename(files[0])
+            elif nfiles:
+                data = "%d possible" % nfiles
+            else:
+                data = None
+        data = (data,)
 
-  def getProjectFileText(self, fileName):
+        return data
 
-    if doesRepositoryContainProject(fileName):
-      tt = time.localtime(os.path.getmtime(fileName))
-      tt = '%4d-%02d-%02d %02d:%02d:%02d' % tt[:6]
-      data = 'OK (%s)' % tt
-    else:
-      files =  getPossibleProjectFiles(fileName)
-      nfiles = len(files)
-      if nfiles == 1:
-        data = '%s' % os.path.basename(files[0])
-      elif nfiles:
-        data = '%d possible' % nfiles
-      else:
-        data = None
-    data = (data,)
+    def disableOk(self):
 
-    return data
+        self.file_select.double_callback = None
+        self.ok_button.config(state=Tkinter.DISABLED)
 
-  def disableOk(self):
+    def enableOk(self):
 
-    self.file_select.double_callback = None
-    self.ok_button.config(state=Tkinter.DISABLED)
+        self.file_select.double_callback = self.ok
+        self.ok_button.config(state=Tkinter.NORMAL)
 
-  def enableOk(self):
+    def apply(self):
 
-    self.file_select.double_callback = self.ok
-    self.ok_button.config(state=Tkinter.NORMAL)
+        # protect against repeated double-clicking
 
-  def apply(self):
+        if self.project:
+            return False
 
-    # protect against repeated double-clicking
+        path = self.file_select.getDirectory()
+        if not doesRepositoryContainProject(path) and not getPossibleProjectFiles(path):
+            self.file_select.changeDir(path)
+            return False
 
-    if (self.project):
-      return False
+        self.disableOk()
 
-    path = self.file_select.getDirectory()
-    if not doesRepositoryContainProject(path) and not getPossibleProjectFiles(path):
-      self.file_select.changeDir(path)
-      return False
+        self.project = None
 
-    self.disableOk()
+        if not path:
+            showError("No path", "Need to select path", self)
+            self.enableOk()
+            return False
 
-    self.project = None
+        try:
+            self.project = self.load_project(path)
+        except ApiError as e:
+            showError("Loading project", e.error_msg, self)
+            self.enableOk()
+            return False
 
-    if not path:
-      showError('No path', 'Need to select path', self)
-      self.enableOk()
-      return False
+        except OSError as e:
+            showError("Loading project", str(e), self)
+            self.enableOk()
+            return False
 
-    try:
-      self.project = self.load_project(path)
-    except ApiError as e:
-      showError('Loading project', e.error_msg, self)
-      self.enableOk()
-      return False
+        except Exception as e:
+            showError("Loading project", str(e), self)
+            self.enableOk()
+            return False
 
-    except OSError as e:
-      showError('Loading project', str(e), self)
-      self.enableOk()
-      return False
+        except:
+            showError("Loading project", "Unknown exception", self)
+            self.enableOk()
+            return False
 
-    except Exception as e:
-      showError('Loading project', str(e), self)
-      self.enableOk()
-      return False
+        if self.project:
+            try:
+                if self.callback:
+                    self.callback(self.project)
+                ok = True
+            except:
+                ok = False
+                printExceptionAndTrace()
+            self.enableOk()
+            return ok
+        else:
+            self.enableOk()
+            return False
 
-    except:
-      showError('Loading project', 'Unknown exception', self)
-      self.enableOk()
-      return False
 
-    if self.project:
-      try:
-        if self.callback:
-          self.callback(self.project)
-        ok = True
-      except:
-        ok = False
-        printExceptionAndTrace()
-      self.enableOk()
-      return ok
-    else:
-      self.enableOk()
-      return False
+if __name__ == "__main__":
+    r = Tkinter.Tk()
 
-if (__name__ == '__main__'):
-
-  r = Tkinter.Tk()
-
-  p = OpenProjectPopup(r, transient=True, modal=True)
-  if (p.project):
-    print(p.project.name)
-  p.destroy()
+    p = OpenProjectPopup(r, transient=True, modal=True)
+    if p.project:
+        print(p.project.name)
+    p.destroy()

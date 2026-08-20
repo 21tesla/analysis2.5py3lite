@@ -54,43 +54,24 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import traceback, sys, os, time, string, copy
+import copy
+import string
 
-from pdbe.nmrStar.IO import nmrStarDict
-
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
-from ccpnmr.format.general.Util import getResName
-from ccpnmr.format.general.Util import getNameInfo
-from ccpnmr.format.general.Util import getApplResNames
-from ccpnmr.format.general.Constants import assign_kw
-
-
-from memops.universal.Util import returnInt
-from memops.general.Util import returnMemopsLine
-
+import ccp.api.molecule.Molecule as Molecule
 from ccp.format.nmrStar.generalIO import NmrStarFile, SaveFrame
 from ccp.format.nmrStar.util import getNmrStarValue
-
-from ccp.format.general.Constants import defaultSeqInsertCode
-from ccp.format.general.Util import getSeqAndInsertCode
-
-from ccpnmr.format.general.Constants import tagSep, defaultMolCode
-
-from ccpnmr.format.general.Util import getOriginalData, setOriginalData, getOriginalDataValue
-
-import memops.api.Implementation as Implementation
-import ccp.api.nmr.Nmr as Nmr
-import ccp.api.molecule.Molecule as Molecule
-import ccp.api.molecule.ChemComp as ChemComp
+from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
+from ccpnmr.format.general.Constants import defaultMolCode
+from ccpnmr.format.general.Util import getOriginalDataValue, setOriginalData
+from memops.general.Util import returnMemopsLine
+from pdbe.nmrStar.IO import nmrStarDict
 
 # Specific for nmrStar!
-import ccp.api.nmr.NmrEntry as NmrEntry
 
 # CHANGE START
 #
 # Import generic reader stuff
-# 
+#
 
 #from pdbe.nmrStar.IO import generalIO
 #from pdbe.nmrStar.IO import read
@@ -116,38 +97,38 @@ IOkeywords['writeProject']['exportAll'] = (False,False,'Export all information (
 class NmrStarFormat(DataFormat):
 
   ccpn2NmrStarMolTypes = {
-        
+
         'protein': 'polypeptide(L)',
         'DNA':     'polydeoxyribonucleotide',
         'RNA':     'polyribonucleotide',
         'DNA/RNA': 'DNA/RNA hybrid',
         'carbohydrate': 'carbohydrates'
-                        
+
                         }
-                        
+
   chainIdToCcpn = {}
-  
+
   # TODO SET THIS CORRECTLY!
   version = '3.0'
 
   def setFormat(self):
-  
+
     self.format = 'nmrStar'
     self.IOkeywords = IOkeywords
 
   def getSequence(self):
-  
+
     # TODO HERE: have to figure out what to do if project file read...
-  
+
     #self.sequenceFile = self.generalIO.NmrStarFile(self.fileName)
     #self.sequenceFile.read()
-    
+
     #
     # Some special gynmastics to make single access to sequences...
     #
-    
+
     #self.sequenceFile.sequences = []
-    
+
     #for sequenceFile in self.sequenceFile.sequenceFiles:
     #  for sequence in sequenceFile.sequences:
     #    self.sequenceFile.sequences.append(sequence)
@@ -156,14 +137,14 @@ class NmrStarFormat(DataFormat):
       self.file = generalIO.NmrStarFile(self.fileName)
       self.file.setCategory('sequence') # This will limit the saveframes that are read
       self.file.readGeneric()
-    
+
     componentDict = read.importData(self.file,readStarDict,nmrStarDict)
-    
+
     # TODO: check if more than one found! Shouldn't happen...
-    self.sequenceFile = componentDict[definitions.NmrStarSequenceFile][0] 
-    
+    self.sequenceFile = componentDict[definitions.NmrStarSequenceFile][0]
+
     self.setCcpnMolTypes()
-    
+
     if self.verbose == 1:
       print("Reading sequence from %s file %s" % (self.formatLabel,self.fileName))
 
@@ -171,35 +152,35 @@ class NmrStarFormat(DataFormat):
   #
   # Functions different to default functions in DataFormat
   #
-  
+
   def createMolecule(self,molName,createMoleculeInfo):
-        
+
     molecule = Molecule.Molecule(self.project, name = molName)
-    
+
     if hasattr(self.sequenceFile,'commonName'):
       molecule.longName = self.sequenceFile.commonName
-        
+
     # TODO; abbreviation doesn't fit in data model...
-    
+
     if hasattr(self.sequenceFile,'otherNames'):
       # TODO: this not correct... how are multiple names stored in star?
       for commonName in self.sequenceFile.otherNames:
         molecule.addCommonName(returnMemopsLine(commonName))
-   
+
     return molecule
-    
+
   def setChainInfo(self,chain):
-  
+
     #
     # Use this to track ID later if mapping to this chain from within the NMR-STAR file...
     #
-    
+
     setOriginalData(self.format,chain,self.sequence,'Id')
 
   def getChainOrRefChainId(self,coordOrChain,isChain = False):
-  
+
     chainCode = None
-    
+
     if isChain:
       for chain in self.molSystem.sortedChains():
         starChainId = getOriginalDataValue(self.format,chain,'Id')
@@ -207,15 +188,15 @@ class NmrStarFormat(DataFormat):
         if starChainId == coordOrChain.chainId:
           chainCode = chain.code
           self.chainIdToCcpn[starChainId] = chainCode
-          coordOrChain.refChainId = chainCode 
-   
+          coordOrChain.refChainId = chainCode
+
     else:
       chainCode = self.chainIdToCcpn[coordOrChain.entityAssemblyId]
-    
+
     return chainCode
-   
+
   def setCcpnMolTypes(self):
-      
+
     #
     # Reset original polymerType!
     #
@@ -231,11 +212,11 @@ class NmrStarFormat(DataFormat):
           sequence.polymerType = 'protein'
 
   def getShiftAmbiguityCode(self,chemShiftValue,resonanceToAtom,shiftList):
-        
+
     ambCode = 1
-    
+
     chemAtom = resonanceToAtom.chemAtom
-    
+
     # Check prochiral and aromatic chemAtoms
     if chemAtom:
       chemAtomSet = chemAtom.chemAtomSet
@@ -243,63 +224,63 @@ class NmrStarFormat(DataFormat):
         # Get info for 'deep' chemAtomSets
         if chemAtomSet.isEquivalent and chemAtomSet.chemAtomSet:
           chemAtomSet = chemAtomSet.chemAtomSet
-      
+
         if chemAtomSet.isProchiral and resonanceToAtom.otherGroupResonances:
           refResonance = resonanceToAtom.resonance
-      
-          for resonance in resonanceToAtom.otherGroupResonances:          
-          
+
+          for resonance in resonanceToAtom.otherGroupResonances:
+
             shift = resonance.findFirstShift(parentList = shiftList)
-        
+
             if shift and shift.value != chemShiftValue:
               ambCode = 2
               break
-          
+
         elif chemAtomSet.isProchiral == False and chemAtomSet.isEquivalent == None:
           # Should be aromatic!
           ambCode = 3
-          
+
     return ambCode
 
   def getPresetChainMapping(self,chainList):
-  
+
     mappingChainDict = {}
-    
+
     for chain in chainList:
-    
+
       mappingChainDict[chain] = (chain.code,1)
-    
+
     return mappingChainDict
 
 
 class NmrStarFullReaderFile(NmrStarFile):
 
   def setGeneric(self):
-  
+
     self.format = 'nmrStar'
     self.defaultMolCode = defaultMolCode
     self.version = '3.0' # is default
     self.tagSep = '.'
     self.tagStart = '_'
-  
+
   def initialize(self):
-  
+
     self.components = ['all']
     self.setComponents()
 
   # TODO HOW CAN I BUILD THIS IN?
   #def setCategory(self,category):
-  
+
   #  self.components = [] # TODO: or append to existing? No... should be addCategory...
-    
+
   #  for sfCatName in readStarDict.sfList:
-  #    if readStarDict.sfDict[sfCatName].has_key('category') and readStarDict.sfDict[sfCatName]['category'] == category:
+  #    if 'category' in readStarDict.sfDict[sfCatName] and readStarDict.sfDict[sfCatName]['category'] == category:
   #      self.components.append(sfCatName)
-        
+
   #  self.setComponents()
-      
+
   def setSfDict(self,component):
-  
+
     #
     # Keep track of component order
     #
@@ -317,64 +298,64 @@ class NmrStarFullReaderFile(NmrStarFile):
     ###################################
 
     if self.version == '3.0':
-      
+
       """
       
       NOTE: all Jurgen's stuff will be added to the dictionary!
       
       """
-      
+
       for sfName in nmrStarDict.sfList:
 
         if component == sfName or component == 'all':
- 
+
           self.componentList.append(sfName)
           self.sfDict[sfName] = nmrStarDict.sfDict[sfName]
 
     else:
-    
+
       print("ERROR UNRECOGNIZED VERSION '%s'" % (str(self.version)))
 
-  
+
   def setupSaveFrame(self,saveFrameName,title):
-  
+
     keywds = {}
-  
-    if not self.sfDict.has_key(saveFrameName):
+
+    if saveFrameName not in self.sfDict:
       print("  Warning: saveframe name %s not in reference data!" % (saveFrameName))
 
     else:
       keywds['prefix'] = self.getPrefix(saveFrameName)
 
-    if not self.sfs.has_key(saveFrameName):
+    if saveFrameName not in self.sfs:
       self.sfs[saveFrameName] = []
-      
+
     self.sfs[saveFrameName].append(SaveFrame(title,saveFrameName,**keywds))
-    
+
     return self.sfs[saveFrameName][-1]
 
   def getPrefix(self,saveFrameName):
-  
+
     prefix = self.tagStart + self.sfDict[saveFrameName]['name']
-  
+
     return prefix
-    
+
   #
   # Redefinitions for read stuff
   #
 
   def setVersion(self,versionHits):
-  
+
     if versionHits['3.0'] > versionHits['2.1.1'] and self.version != '3.0':
-     
+
       print("  Warning: setting nmrStar version to 3.0 for reading.")
       self.version = '3.0'
-         
+
     elif versionHits['2.1.1'] > versionHits['3.0'] and self.version != '2.1.1':
-     
+
       print("  Error: no full version 2.1.1 nmrStar reader available - use version 3.0 files.")
       return False
-    
+
     return True
 
 

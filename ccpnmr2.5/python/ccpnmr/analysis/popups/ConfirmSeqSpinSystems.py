@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,525 +38,537 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
-from memops.general import Implementation
-
-from memops.gui.ButtonList          import UtilityButtonList
-from memops.gui.Label               import Label
-from memops.gui.Frame               import Frame
-from memops.gui.LabelFrame          import LabelFrame
-from memops.gui.MessageReporter     import showYesNo
+from ccpnmr.analysis.core.AssignmentBasic import (
+    assignSpinSystemResidue,
+    findConnectedSpinSystem,
+    makeSeqSpinSystemLink,
+    mergeSpinSystems,
+)
+from ccpnmr.analysis.core.MoleculeBasic import getResidueCode
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import UtilityButtonList
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.MessageReporter import showYesNo
 from memops.gui.PartitionedSelector import PartitionedSelector
-from memops.gui.PulldownMenu        import PulldownMenu
-from memops.gui.ScrolledMatrix      import ScrolledMatrix
-
-
-from ccpnmr.analysis.popups.BasePopup     import BasePopup
-from ccpnmr.analysis.core.ExperimentBasic import getSpectrumIsotopes
-from ccpnmr.analysis.core.MoleculeBasic   import getResidueCode
-from ccpnmr.analysis.core.AssignmentBasic import assignSpinSystemResidue, makeSeqSpinSystemLink, \
-                                            findConnectedSpinSystem, mergeSpinSystems
-
-
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
 # TBD merge resonances
 
+
 class ConfirmSeqSpinSystemsPopup(BasePopup):
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        self.guiParent = parent
+        self.spinSystems = []
+        self.spectrum = None
+        self.spectra = []
+        self.waiting = 0
+        self.shiftList = None
+        self.spinSystem = None
+        self.link = "-1"
 
-    self.guiParent   = parent
-    self.spinSystems = []
-    self.spectrum    = None
-    self.spectra     = []
-    self.waiting     = 0 
-    self.shiftList   = None
-    self.spinSystem  = None
-    self.link        = '-1'
+        BasePopup.__init__(self, parent=parent, title="Confirm Sequential Spin System", **kw)
 
-    BasePopup.__init__(self, parent=parent, title="Confirm Sequential Spin System", **kw)
+    def body(self, guiFrame):
 
+        guiFrame.grid_columnconfigure(0, weight=1)
 
-  def body(self, guiFrame):
+        row = 0
 
-    guiFrame.grid_columnconfigure(0, weight=1)   
-    
-    row = 0
+        frame = Frame(guiFrame)
+        frame.grid(row=row, column=0, sticky="nsew")
+        frame.grid_columnconfigure(3, weight=1)
 
-    frame = Frame(guiFrame)
-    frame.grid(row=row, column=0, sticky='nsew')
-    frame.grid_columnconfigure(3, weight=1)
-     
-    label = Label(frame, text='Shift List:')
-    label.grid(row=0, column=0, sticky='w')
-    
-    self.shiftListPulldown = PulldownMenu(frame, callback=self.setShiftList)
-    self.shiftListPulldown.grid(row=0, column=1, sticky='w')
+        label = Label(frame, text="Shift List:")
+        label.grid(row=0, column=0, sticky="w")
 
-    label = Label(frame, text='Sequential Link Type:')
-    label.grid(row=0, column=2, sticky='w')
-    
-    entries = ['-1','-1,+1','+1']
-    self.linkPulldown = PulldownMenu(frame, callback=self.setLink, entries=entries, do_initial_callback=False, selected_index=entries.index(self.link))
-    self.linkPulldown.grid(row=0, column=3, sticky='w')
-      
-    row += 1
-    frame = LabelFrame(guiFrame, text='Link Atoms:')
-    frame.grid(row=row, column=0, sticky='nsew')
-    frame.grid_columnconfigure(0, weight=1)
-    frame.grid_rowconfigure(0, weight=1)
+        self.shiftListPulldown = PulldownMenu(frame, callback=self.setShiftList)
+        self.shiftListPulldown.grid(row=0, column=1, sticky="w")
 
-    labels   = ['C','CA','CB','CG','CD','H','HA','HB','HG','HD']
-    selected = ['CA','CB']
-    self.atomSelector = PartitionedSelector(frame, objects=labels, labels=labels, selected=selected, toggledBg='#808080',
-                                            callback=self.changeAtoms, maxRowObjects=10)
-    self.atomSelector.grid(row=0, column=0, sticky='ew')
+        label = Label(frame, text="Sequential Link Type:")
+        label.grid(row=0, column=2, sticky="w")
 
-    row += 1
-    guiFrame.grid_rowconfigure(row, weight=1)
+        entries = ["-1", "-1,+1", "+1"]
+        self.linkPulldown = PulldownMenu(
+            frame,
+            callback=self.setLink,
+            entries=entries,
+            do_initial_callback=False,
+            selected_index=entries.index(self.link),
+        )
+        self.linkPulldown.grid(row=0, column=3, sticky="w")
 
-    frame = LabelFrame(guiFrame, text='Predicted Residue Assignments')
-    frame.grid(row=row, column=0, sticky='nsew')
-    frame.grid_columnconfigure(0, weight=1)
-    frame.grid_rowconfigure(0, weight=1)
+        row += 1
+        frame = LabelFrame(guiFrame, text="Link Atoms:")
+        frame.grid(row=row, column=0, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
 
-    headingList = ['#','Predicted\nResidue','Prob.','Links','CA','CA -1','CB','CB -1']
-    self.spinSystemMatrix = ScrolledMatrix(frame, headingList=headingList, callback=self.selectSpinSystem, multiSelect=1)
-    self.spinSystemMatrix.grid(row=0, column=0, sticky='nsew')
+        labels = ["C", "CA", "CB", "CG", "CD", "H", "HA", "HB", "HG", "HD"]
+        selected = ["CA", "CB"]
+        self.atomSelector = PartitionedSelector(
+            frame,
+            objects=labels,
+            labels=labels,
+            selected=selected,
+            toggledBg="#808080",
+            callback=self.changeAtoms,
+            maxRowObjects=10,
+        )
+        self.atomSelector.grid(row=0, column=0, sticky="ew")
 
-    row += 1
-    texts = ['Link Selected','Link All','Commit Assignment']
-    commands = [self.linkSelectedSpinSystems,self.linkAllSpinSystems,self.commitAssignments]
-    buttonList = UtilityButtonList(guiFrame, texts=texts,
-                                   commands=commands, helpUrl=self.help_url)
-    buttonList.grid(row=row, column=0, sticky='ew')
-    
-    self.buttons = buttonList.buttons
+        row += 1
+        guiFrame.grid_rowconfigure(row, weight=1)
 
-    for func in ('__init__', 'delete'):
-      for clazz in ('ccp.nmr.Nmr.ShiftList',):
-        self.registerNotify(self.updateShiftLists, clazz, func)
+        frame = LabelFrame(guiFrame, text="Predicted Residue Assignments")
+        frame.grid(row=row, column=0, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
 
-    for func in ('__init__', 'delete', 'setNmrChains', 'setResidue',
-                 'setResonances','addResonance','removeResonance'):
-      self.registerNotify(self.updateSpinSystemsAfter, 'ccp.nmr.Nmr.ResonanceGroup', func)
-    
-    self.updateShiftLists()
-  
-  def setLink(self, index, name):
-  
-    self.link = name
-    self.updateSpinSystemsAfter()
-  
-  
-  def updateButtons(self):
-  
-    if len(self.spinSystemMatrix.currentObjects) > 1:
-      self.buttons[0].enable()
-    else:
-      self.buttons[0].disable()
-    
-    if self.spinSystemMatrix.objectList:
-      self.buttons[1].enable()
-    else:
-      self.buttons[1].disable()
-   
-    if self.spinSystem:
-      self.buttons[2].enable()
-    else:
-      self.buttons[2].disable()
-    
-    
-  def changeAtoms(self, *opt):
-  
-    self.updateSpinSystemsAfter()
+        headingList = ["#", "Predicted\nResidue", "Prob.", "Links", "CA", "CA -1", "CB", "CB -1"]
+        self.spinSystemMatrix = ScrolledMatrix(
+            frame, headingList=headingList, callback=self.selectSpinSystem, multiSelect=1
+        )
+        self.spinSystemMatrix.grid(row=0, column=0, sticky="nsew")
 
+        row += 1
+        texts = ["Link Selected", "Link All", "Commit Assignment"]
+        commands = [self.linkSelectedSpinSystems, self.linkAllSpinSystems, self.commitAssignments]
+        buttonList = UtilityButtonList(guiFrame, texts=texts, commands=commands, helpUrl=self.help_url)
+        buttonList.grid(row=row, column=0, sticky="ew")
 
-  def getShiftListNames(self,shiftLists):
-    
-    shiftListNames = []
-    for shiftList in shiftLists:
-      if not hasattr(shiftList, 'name'):
-        shiftList.name = "ShiftList "+ str(shiftList.serial)
-      elif not shiftList.name:
-        shiftList.name = "ShiftList "+ str(shiftList.serial)
-      shiftListNames.append(shiftList.name)
+        self.buttons = buttonList.buttons
 
-    return shiftListNames
+        for func in ("__init__", "delete"):
+            for clazz in ("ccp.nmr.Nmr.ShiftList",):
+                self.registerNotify(self.updateShiftLists, clazz, func)
 
-  def updateShiftLists(self, *opt):
-  
-    shiftLists     = list(self.nmrProject.findAllMeasurementLists(className = 'ShiftList'))
-    shiftListNames = self.getShiftListNames(shiftLists)
-    shiftList      = None
-    index          = -1
-    
-    if shiftListNames:
-      
-      if self.shiftList in shiftLists:
-        shiftList = self.shiftList
-      else:
-        shiftList = shiftLists[0]  
-      
-      index = shiftLists.index(shiftList)
-    
-    self.shiftList = shiftList
-    self.shiftListPulldown.setup(shiftListNames,index)
+        for func in (
+            "__init__",
+            "delete",
+            "setNmrChains",
+            "setResidue",
+            "setResonances",
+            "addResonance",
+            "removeResonance",
+        ):
+            self.registerNotify(self.updateSpinSystemsAfter, "ccp.nmr.Nmr.ResonanceGroup", func)
 
+        self.updateShiftLists()
 
-  def setShiftList(self, index, name=None):
+    def setLink(self, index, name):
 
-    shiftLists = list(self.nmrProject.findAllMeasurementLists(className = 'ShiftList'))
-    if shiftLists:
-      self.shiftList = shiftLists[index]
-    else:
-      self.shiftList = None
-    
-    self.updateSpinSystemsAfter()
-  
-  def linkSelectedSpinSystems(self):
+        self.link = name
+        self.updateSpinSystemsAfter()
 
-    spinSystems = self.spinSystemMatrix.currentObjects
-    self.linkSpinSystems(spinSystems)
+    def updateButtons(self):
 
-  def linkAllSpinSystems(self):
+        if len(self.spinSystemMatrix.currentObjects) > 1:
+            self.buttons[0].enable()
+        else:
+            self.buttons[0].disable()
 
-    spinSystems = self.spinSystemMatrix.objectList
-    self.linkSpinSystems(spinSystems)
+        if self.spinSystemMatrix.objectList:
+            self.buttons[1].enable()
+        else:
+            self.buttons[1].disable()
 
-  def linkSpinSystems(self, spinSystems):
-    
-    data = []
-    
-    for spinSystem in spinSystems:
-      residue, p = self.getProbableResidue(spinSystem)
-      key = '%s%s%4.4d' % (residue.chain.molSystem.code,residue.chain.code,residue.seqCode)
-      data.append([key,residue.seqCode, residue, spinSystem])
-    
-    data.sort()
-    seqCodes    = [x[1] for x in data]
-    residues    = [x[2] for x in data]
-    spinSystems = [x[3] for x in data]
-    
-    N = len(data)
-    for i in range(N):
-      
-      if i > 0:
-        delta = seqCodes[i] - seqCodes[i-1]
-        if delta == 1 and (residues[i].chain is  residues[i-1].chain): 
-          ss = findConnectedSpinSystem( spinSystems[i], delta=-1)
-          if ss:
-            mergeSpinSystems(ss, spinSystems[i-1]) # copy resonances across & delete
-        
-          makeSeqSpinSystemLink(spinSystems[i-1], spinSystems[i], delta=1)
-      
-      if i < N-1:
-        delta = seqCodes[i+1] - seqCodes[i]
-        if delta == 1 and (residues[i].chain is  residues[i+1].chain):
-          ss = findConnectedSpinSystem( spinSystems[i], delta=1)
-          if ss:
-            mergeSpinSystems(ss, spinSystems[i+1])# copy resonances across & delete
-            
-          makeSeqSpinSystemLink(spinSystems[i], spinSystems[i+1], delta=1)
-             
-    self.updateSpinSystemsAfter()
+        if self.spinSystem:
+            self.buttons[2].enable()
+        else:
+            self.buttons[2].disable()
 
-  def commitAssignments(self):
+    def changeAtoms(self, *opt):
 
-    merge = showYesNo('Query','Merge with any existing spin systems?', self)
+        self.updateSpinSystemsAfter()
 
-    for spinSystem in self.spinSystemMatrix.currentObjects:
-      if not spinSystem.residue:
-        residue, p = self.getProbableResidue(spinSystem)
-        assignSpinSystemResidue(spinSystem, residue, warnMerge=merge)
+    def getShiftListNames(self, shiftLists):
 
-  def getProbableResidue(self, spinSystem):
+        shiftListNames = []
+        for shiftList in shiftLists:
+            if not hasattr(shiftList, "name"):
+                shiftList.name = "ShiftList " + str(shiftList.serial)
+            elif not shiftList.name:
+                shiftList.name = "ShiftList " + str(shiftList.serial)
+            shiftListNames.append(shiftList.name)
 
-    residue     = None
-    probability = 0.0
+        return shiftListNames
 
-    if spinSystem.residue:
-      return spinSystem.residue, 1.0
+    def updateShiftLists(self, *opt):
 
-    data = []
-    for residueProb in spinSystem.residueProbs:
-      data.append( (residueProb.weight,residueProb.possibility) )
-    data.sort()
+        shiftLists = list(self.nmrProject.findAllMeasurementLists(className="ShiftList"))
+        shiftListNames = self.getShiftListNames(shiftLists)
+        shiftList = None
+        index = -1
 
-    if data:
-      residue, probability = data[-1]
+        if shiftListNames:
+            if self.shiftList in shiftLists:
+                shiftList = self.shiftList
+            else:
+                shiftList = shiftLists[0]
 
-    return residue, probability
+            index = shiftLists.index(shiftList)
 
-  def getTentativeSpinSystems(self):
+        self.shiftList = shiftList
+        self.shiftListPulldown.setup(shiftListNames, index)
 
-   spinSystemsList = []
-   
-   if self.project:
-     
-    for spinSystem in self.nmrProject.sortedResonanceGroups():
-      if spinSystem.residueProbs and not spinSystem.residue:
-      #if spinSystem.residue:
-        residue, p = self.getProbableResidue(spinSystem)
-        key = '%s%s%4.4d' % (residue.chain.molSystem.code,residue.chain.code,residue.seqCode)
-        spinSystemsList.append( (key,spinSystem) )
-   
-   spinSystemsList.sort()
-   
-   return [x[1] for x in spinSystemsList]
+    def setShiftList(self, index, name=None):
 
-  def updateSpinSystemsAfter(self, spinSystem=None):
+        shiftLists = list(self.nmrProject.findAllMeasurementLists(className="ShiftList"))
+        if shiftLists:
+            self.shiftList = shiftLists[index]
+        else:
+            self.shiftList = None
 
-    if self.waiting:
-      return
-    else:
-      if spinSystem:
-        if not spinSystem.residueProbs:
-          return
+        self.updateSpinSystemsAfter()
+
+    def linkSelectedSpinSystems(self):
+
+        spinSystems = self.spinSystemMatrix.currentObjects
+        self.linkSpinSystems(spinSystems)
+
+    def linkAllSpinSystems(self):
+
+        spinSystems = self.spinSystemMatrix.objectList
+        self.linkSpinSystems(spinSystems)
+
+    def linkSpinSystems(self, spinSystems):
+
+        data = []
+
+        for spinSystem in spinSystems:
+            residue, p = self.getProbableResidue(spinSystem)
+            key = "%s%s%4.4d" % (residue.chain.molSystem.code, residue.chain.code, residue.seqCode)
+            data.append([key, residue.seqCode, residue, spinSystem])
+
+        data.sort()
+        seqCodes = [x[1] for x in data]
+        residues = [x[2] for x in data]
+        spinSystems = [x[3] for x in data]
+
+        N = len(data)
+        for i in range(N):
+            if i > 0:
+                delta = seqCodes[i] - seqCodes[i - 1]
+                if delta == 1 and (residues[i].chain is residues[i - 1].chain):
+                    ss = findConnectedSpinSystem(spinSystems[i], delta=-1)
+                    if ss:
+                        mergeSpinSystems(ss, spinSystems[i - 1])  # copy resonances across & delete
+
+                    makeSeqSpinSystemLink(spinSystems[i - 1], spinSystems[i], delta=1)
+
+            if i < N - 1:
+                delta = seqCodes[i + 1] - seqCodes[i]
+                if delta == 1 and (residues[i].chain is residues[i + 1].chain):
+                    ss = findConnectedSpinSystem(spinSystems[i], delta=1)
+                    if ss:
+                        mergeSpinSystems(ss, spinSystems[i + 1])  # copy resonances across & delete
+
+                    makeSeqSpinSystemLink(spinSystems[i], spinSystems[i + 1], delta=1)
+
+        self.updateSpinSystemsAfter()
+
+    def commitAssignments(self):
+
+        merge = showYesNo("Query", "Merge with any existing spin systems?", self)
+
+        for spinSystem in self.spinSystemMatrix.currentObjects:
+            if not spinSystem.residue:
+                residue, p = self.getProbableResidue(spinSystem)
+                assignSpinSystemResidue(spinSystem, residue, warnMerge=merge)
+
+    def getProbableResidue(self, spinSystem):
+
+        residue = None
+        probability = 0.0
+
         if spinSystem.residue:
-          return
-    
-      self.waiting = True
-      self.after_idle(self.updateSpinSystems)
-  
-  def getHeadings(self):
-  
-    headingList = ['#','Predicted\nResidue','Prob.','Links']
-  
-    atoms = self.atomSelector.getSelected()
-  
-    for atom in atoms:
-      
-      headingList.append( atom )
-      
-      if self.link == '-1':
-        headingList.append( '%s -1' % atom )
-        headingList.append( 'D %s -1' % atom )
-      
-      elif self.link == '+1':
-        headingList.append( '%s +1' % atom )
-        headingList.append( 'D %s +1' % atom )
-      
-      else:
-        headingList.append( '%s -1' % atom )
-        headingList.append( 'D %s -1' % atom )
-        headingList.append( '%s +1' % atom )
-        headingList.append( 'D %s +1' % atom )
-  
-    return headingList    
-  
-  def addShiftData(self,spinSystem,datum):
-  
-    prevSS, nextSS = self.getConnectedSpinSystems(spinSystem)
-    atoms = self.atomSelector.getSelected()
-    dict  = {}
-  
-    residue,p = self.getProbableResidue(spinSystem)
-    prevRes   = residue.chain.findFirstResidue(seqCode=residue.seqCode-1)
-    nextRes   = residue.chain.findFirstResidue(seqCode=residue.seqCode+1)
-    prevSS0   = None
-    nextSS0   = None
-    for ss in self.getTentativeSpinSystems():
-      if self.getProbableResidue(ss)[0] is prevRes:
-        prevSS0 = ss
-      if self.getProbableResidue(ss)[0] is nextRes:
-        nextSS0 = ss
-      if nextSS0 and prevSS0:
-        break  
-  
-    for atom in atoms:
-    
-      resonances = []
-      resonancesPrev  = []
-      resonancesNext  = []
-      resonancesPrev0 = []
-      resonancesNext0 = []
-      for resonance0 in spinSystem.sortedResonances():
-        for name in resonance0.assignNames:
-          if name[:2] == atom:
-            resonances.append(resonance0)
-            break
-    
-      text = ''
-      if resonances:
-        text = self.getResonanceText(resonances)
-      datum.append(text)
+            return spinSystem.residue, 1.0
 
-      if prevSS and ('-1' in self.link):
-        for resonance0 in prevSS.sortedResonances():
-          for name in resonance0.assignNames:
-            if name[:2] == atom:
-              resonancesPrev.append(resonance0)
-              break
+        data = []
+        for residueProb in spinSystem.residueProbs:
+            data.append((residueProb.weight, residueProb.possibility))
+        data.sort()
 
-      deltasPrev = []
-      if prevSS0 and resonancesPrev:
-        for resonance1 in prevSS0.sortedResonances():
-          for name1 in resonance1.assignNames:
-            if name1[:2] == atom:
-              shift1 = resonance1.findFirstShift(parentList = self.shiftList)
-              deltas = []
-              for resonance2 in resonancesPrev:
-                shift2 = resonance2.findFirstShift(parentList = self.shiftList)
-                if shift1 and shift2:
-                  deltas.append(abs(shift1.value-shift2.value))
-              
-              if deltas:
-                deltas.sort()
-                deltasPrev.append('%.2f' % deltas[0])
-              break
+        if data:
+            residue, probability = data[-1]
 
-      if nextSS and ('+1' in self.link):
-        for resonance0 in nextSS.sortedResonances():
-          for name in resonance0.assignNames:
-            if name[:2] == atom:
-              resonancesNext.append(resonance0)
-              break
+        return residue, probability
 
-      deltasNext = []
-      if nextSS0 and resonancesNext:
-        for resonance1 in nextSS0.sortedResonances():
-          for name1 in resonance1.assignNames:
-            if name1[:2] == atom:
-              shift1 = resonance1.findFirstShift(parentList = self.shiftList)
-              deltas = []
-              for resonance2 in resonancesNext:
-                shift2 = resonance2.findFirstShift(parentList = self.shiftList)
-                if shift1 and shift2:
-                  deltas.append(abs(shift1.value-shift2.value))
-              
-              if deltas:
-                deltas.sort()
-                deltasNext.append('%.2f' % deltas[0])
-              break
-           
-      if self.link == '-1':
-        ppms = ''
-        diff = ''
-        if resonancesPrev:
-          ppms = self.getResonanceText(resonancesPrev)
-          diff = ','.join(deltasPrev)
-        datum.append( ppms )
-        datum.append( diff )
-      
-      elif self.link == '+1':
-        ppms = ''
-        diff = ''
-        if resonancesNext:
-          ppms = self.getResonanceText(resonancesNext)
-          diff = ','.join(deltasNext)
-        datum.append( ppms )
-        datum.append( diff )
-      
-      else:
-        ppms = ''
-        diff = ''
-        if resonancesPrev:
-          ppms = self.getResonanceText(resonancesPrev)
-          diff = ','.join(deltasPrev)
-        datum.append( ppms )
-        datum.append( diff )
-          
-        ppms = ''
-        diff = ''
-        if resonancesNext:
-          ppms = self.getResonanceText(resonancesNext)
-          diff = ','.join(deltasNext)
-        datum.append( ppms )
-        datum.append( diff )
-  
-  def updateSpinSystems(self):
+    def getTentativeSpinSystems(self):
 
-    textMatrix  = []
-    objectList  = []
-    colorMatrix = []
-    headingList = self.getHeadings()
+        spinSystemsList = []
 
-    for spinSystem in self.getTentativeSpinSystems():
-      
-      residueText = None
-      residue, probability  = self.getProbableResidue(spinSystem)
-      if residue:
-        residueText = '%d%s' % (residue.seqCode, getResidueCode(residue)) 
+        if self.project:
+            for spinSystem in self.nmrProject.sortedResonanceGroups():
+                if spinSystem.residueProbs and not spinSystem.residue:
+                    # if spinSystem.residue:
+                    residue, p = self.getProbableResidue(spinSystem)
+                    key = "%s%s%4.4d" % (residue.chain.molSystem.code, residue.chain.code, residue.seqCode)
+                    spinSystemsList.append((key, spinSystem))
 
-      links = []
-      color = '#D04040'
-      
-      if findConnectedSpinSystem(spinSystem, delta=-1):
-        links.append('-1')
-      
-      if findConnectedSpinSystem(spinSystem, delta=1):
-        links.append('+1')
+        spinSystemsList.sort()
 
-      if len(links) == 2:
-        color = '#40B040'
-      elif len(links) == 1:      
-        color = '#B0B040'
+        return [x[1] for x in spinSystemsList]
 
-      datum = []
-      datum.append(spinSystem.serial)
-      datum.append(residueText)
-      datum.append(probability)
-      datum.append(' '.join(links))
-      
-      self.addShiftData(spinSystem, datum)
-      
-      colors    = [None] * len(headingList)
-      colors[3] = color
-      
-      objectList.append(spinSystem)
-      textMatrix.append(datum)
-      colorMatrix.append(colors)
+    def updateSpinSystemsAfter(self, spinSystem=None):
 
-    if self.spinSystem not in objectList:
-      self.spinSystem = None
+        if self.waiting:
+            return
+        else:
+            if spinSystem:
+                if not spinSystem.residueProbs:
+                    return
+                if spinSystem.residue:
+                    return
 
-    self.spinSystemMatrix.update(headingList=headingList, objectList=objectList, textMatrix=textMatrix, colorMatrix=colorMatrix)
-    self.updateButtons()
-    self.waiting = False
+            self.waiting = True
+            self.after_idle(self.updateSpinSystems)
 
+    def getHeadings(self):
 
-  def getResonanceText(self, resonances):
+        headingList = ["#", "Predicted\nResidue", "Prob.", "Links"]
 
-    shifts = []
-    
-    for resonance in resonances:
-      shift = resonance.findFirstShift(parentList=self.shiftList)
-      if shift:
-        shifts.append('%.2f' % shift.value)
+        atoms = self.atomSelector.getSelected()
 
-    return ','.join(shifts)
+        for atom in atoms:
+            headingList.append(atom)
 
-  def getConnectedSpinSystems(self, spinSystem):
+            if self.link == "-1":
+                headingList.append("%s -1" % atom)
+                headingList.append("D %s -1" % atom)
 
-    if self.link == '-1':
-      prevSS = findConnectedSpinSystem(spinSystem, delta=-1)
-      nextSS = None
-    elif self.link == '+1':
-      prevSS = None
-      nextSS = findConnectedSpinSystem(spinSystem, delta=1)
-    else:
-      prevSS = findConnectedSpinSystem(spinSystem, delta=-1)
-      nextSS = findConnectedSpinSystem(spinSystem, delta=1)
-    
-    return prevSS, nextSS
+            elif self.link == "+1":
+                headingList.append("%s +1" % atom)
+                headingList.append("D %s +1" % atom)
 
-  def selectSpinSystem(self, object, row, col):
-  
-    self.spinSystem = object
-    self.updateButtons()
+            else:
+                headingList.append("%s -1" % atom)
+                headingList.append("D %s -1" % atom)
+                headingList.append("%s +1" % atom)
+                headingList.append("D %s +1" % atom)
 
-  def destroy(self):
-  
-    for func in ('__init__', 'delete'):
-      for clazz in ('ccp.nmr.Nmr.ShiftList',):
-        self.unregisterNotify(self.updateShiftLists, clazz, func)
+        return headingList
 
-    for func in ('__init__', 'delete', 'setNmrChains', 'setResidue',
-                 'setResonances', 'addResonance','removeResonance'):
-      self.unregisterNotify(self.updateSpinSystemsAfter, 'ccp.nmr.Nmr.ResonanceGroup', func)
+    def addShiftData(self, spinSystem, datum):
 
-    BasePopup.destroy(self)
+        prevSS, nextSS = self.getConnectedSpinSystems(spinSystem)
+        atoms = self.atomSelector.getSelected()
+        dict = {}
 
+        residue, p = self.getProbableResidue(spinSystem)
+        prevRes = residue.chain.findFirstResidue(seqCode=residue.seqCode - 1)
+        nextRes = residue.chain.findFirstResidue(seqCode=residue.seqCode + 1)
+        prevSS0 = None
+        nextSS0 = None
+        for ss in self.getTentativeSpinSystems():
+            if self.getProbableResidue(ss)[0] is prevRes:
+                prevSS0 = ss
+            if self.getProbableResidue(ss)[0] is nextRes:
+                nextSS0 = ss
+            if nextSS0 and prevSS0:
+                break
 
+        for atom in atoms:
+            resonances = []
+            resonancesPrev = []
+            resonancesNext = []
+            resonancesPrev0 = []
+            resonancesNext0 = []
+            for resonance0 in spinSystem.sortedResonances():
+                for name in resonance0.assignNames:
+                    if name[:2] == atom:
+                        resonances.append(resonance0)
+                        break
+
+            text = ""
+            if resonances:
+                text = self.getResonanceText(resonances)
+            datum.append(text)
+
+            if prevSS and ("-1" in self.link):
+                for resonance0 in prevSS.sortedResonances():
+                    for name in resonance0.assignNames:
+                        if name[:2] == atom:
+                            resonancesPrev.append(resonance0)
+                            break
+
+            deltasPrev = []
+            if prevSS0 and resonancesPrev:
+                for resonance1 in prevSS0.sortedResonances():
+                    for name1 in resonance1.assignNames:
+                        if name1[:2] == atom:
+                            shift1 = resonance1.findFirstShift(parentList=self.shiftList)
+                            deltas = []
+                            for resonance2 in resonancesPrev:
+                                shift2 = resonance2.findFirstShift(parentList=self.shiftList)
+                                if shift1 and shift2:
+                                    deltas.append(abs(shift1.value - shift2.value))
+
+                            if deltas:
+                                deltas.sort()
+                                deltasPrev.append("%.2f" % deltas[0])
+                            break
+
+            if nextSS and ("+1" in self.link):
+                for resonance0 in nextSS.sortedResonances():
+                    for name in resonance0.assignNames:
+                        if name[:2] == atom:
+                            resonancesNext.append(resonance0)
+                            break
+
+            deltasNext = []
+            if nextSS0 and resonancesNext:
+                for resonance1 in nextSS0.sortedResonances():
+                    for name1 in resonance1.assignNames:
+                        if name1[:2] == atom:
+                            shift1 = resonance1.findFirstShift(parentList=self.shiftList)
+                            deltas = []
+                            for resonance2 in resonancesNext:
+                                shift2 = resonance2.findFirstShift(parentList=self.shiftList)
+                                if shift1 and shift2:
+                                    deltas.append(abs(shift1.value - shift2.value))
+
+                            if deltas:
+                                deltas.sort()
+                                deltasNext.append("%.2f" % deltas[0])
+                            break
+
+            if self.link == "-1":
+                ppms = ""
+                diff = ""
+                if resonancesPrev:
+                    ppms = self.getResonanceText(resonancesPrev)
+                    diff = ",".join(deltasPrev)
+                datum.append(ppms)
+                datum.append(diff)
+
+            elif self.link == "+1":
+                ppms = ""
+                diff = ""
+                if resonancesNext:
+                    ppms = self.getResonanceText(resonancesNext)
+                    diff = ",".join(deltasNext)
+                datum.append(ppms)
+                datum.append(diff)
+
+            else:
+                ppms = ""
+                diff = ""
+                if resonancesPrev:
+                    ppms = self.getResonanceText(resonancesPrev)
+                    diff = ",".join(deltasPrev)
+                datum.append(ppms)
+                datum.append(diff)
+
+                ppms = ""
+                diff = ""
+                if resonancesNext:
+                    ppms = self.getResonanceText(resonancesNext)
+                    diff = ",".join(deltasNext)
+                datum.append(ppms)
+                datum.append(diff)
+
+    def updateSpinSystems(self):
+
+        textMatrix = []
+        objectList = []
+        colorMatrix = []
+        headingList = self.getHeadings()
+
+        for spinSystem in self.getTentativeSpinSystems():
+            residueText = None
+            residue, probability = self.getProbableResidue(spinSystem)
+            if residue:
+                residueText = "%d%s" % (residue.seqCode, getResidueCode(residue))
+
+            links = []
+            color = "#D04040"
+
+            if findConnectedSpinSystem(spinSystem, delta=-1):
+                links.append("-1")
+
+            if findConnectedSpinSystem(spinSystem, delta=1):
+                links.append("+1")
+
+            if len(links) == 2:
+                color = "#40B040"
+            elif len(links) == 1:
+                color = "#B0B040"
+
+            datum = []
+            datum.append(spinSystem.serial)
+            datum.append(residueText)
+            datum.append(probability)
+            datum.append(" ".join(links))
+
+            self.addShiftData(spinSystem, datum)
+
+            colors = [None] * len(headingList)
+            colors[3] = color
+
+            objectList.append(spinSystem)
+            textMatrix.append(datum)
+            colorMatrix.append(colors)
+
+        if self.spinSystem not in objectList:
+            self.spinSystem = None
+
+        self.spinSystemMatrix.update(
+            headingList=headingList, objectList=objectList, textMatrix=textMatrix, colorMatrix=colorMatrix
+        )
+        self.updateButtons()
+        self.waiting = False
+
+    def getResonanceText(self, resonances):
+
+        shifts = []
+
+        for resonance in resonances:
+            shift = resonance.findFirstShift(parentList=self.shiftList)
+            if shift:
+                shifts.append("%.2f" % shift.value)
+
+        return ",".join(shifts)
+
+    def getConnectedSpinSystems(self, spinSystem):
+
+        if self.link == "-1":
+            prevSS = findConnectedSpinSystem(spinSystem, delta=-1)
+            nextSS = None
+        elif self.link == "+1":
+            prevSS = None
+            nextSS = findConnectedSpinSystem(spinSystem, delta=1)
+        else:
+            prevSS = findConnectedSpinSystem(spinSystem, delta=-1)
+            nextSS = findConnectedSpinSystem(spinSystem, delta=1)
+
+        return prevSS, nextSS
+
+    def selectSpinSystem(self, object, row, col):
+
+        self.spinSystem = object
+        self.updateButtons()
+
+    def destroy(self):
+
+        for func in ("__init__", "delete"):
+            for clazz in ("ccp.nmr.Nmr.ShiftList",):
+                self.unregisterNotify(self.updateShiftLists, clazz, func)
+
+        for func in (
+            "__init__",
+            "delete",
+            "setNmrChains",
+            "setResidue",
+            "setResonances",
+            "addResonance",
+            "removeResonance",
+        ):
+            self.unregisterNotify(self.updateSpinSystemsAfter, "ccp.nmr.Nmr.ResonanceGroup", func)
+
+        BasePopup.destroy(self)

@@ -1,6 +1,6 @@
 
-from ccp.util import NmrCalc as nmrCalcUtil
 from ccp.api.nmr import NmrCalc
+from ccp.util import NmrCalc as nmrCalcUtil
 
 ISD = 'ISD'
 STRING = 'STRING'
@@ -14,7 +14,7 @@ STRINGDICT = 'STRINGDICT'
 PROVISIONAL = 'provisional'
 
 translate32charLimit = {'ccpn.export.ms_name':'ccpn.export.molecular_system_name'}
- 
+
 SIM_ATTRS = [('name',STRING),
              ('working_path',STRING),
              ('temp_path',STRING),
@@ -83,7 +83,7 @@ SIM_ATTRS = [('name',STRING),
              ('analysis.dssp.binary',STRING),
              ('analysis.dssp.enabled',BOOL),
              ('use_xterm',BOOL)]
-            
+
 EXP_DATA_GEN_ATTRS = [('data_type',STRING),
                       ('filename',STRING),
                       ('format',STRING),
@@ -116,7 +116,7 @@ EXP_DATA_ATTR_DICT = {'noesy':(('theory.scale.update',BOOL),
                    'disulfide':(('distance',FLOAT),
                                 ('error_model.error.update',BOOL),
                                 ('error_model.error.initial',FLOAT))}
-                                  
+
 GET_RUN_PARAM_FUNCS = {INT:nmrCalcUtil.getRunIntParameter,
                        FLOAT:nmrCalcUtil.getRunFloatParameter,
                        BOOL:nmrCalcUtil.getRunBooleanParameter,
@@ -124,7 +124,7 @@ GET_RUN_PARAM_FUNCS = {INT:nmrCalcUtil.getRunIntParameter,
                        INTLIST:nmrCalcUtil.getRunIntParameterList,
                        STRINGLIST:nmrCalcUtil.getRunTextParameterList,
                        STRINGDICT:nmrCalcUtil.getRunTextParameterDict}
- 
+
 SET_RUN_PARAM_FUNCS = {INT:nmrCalcUtil.setRunIntParameter,
                        FLOAT:nmrCalcUtil.setRunFloatParameter,
                        BOOL:nmrCalcUtil.setRunBooleanParameter,
@@ -148,66 +148,67 @@ GET_DATA_PARAM_FUNCS = {INT:nmrCalcUtil.getDataIntParameter,
                         INTLIST:nmrCalcUtil.getDataIntParameterList,
                         STRINGLIST:nmrCalcUtil.getDataTextParameterList,
                         STRINGDICT:nmrCalcUtil.getDataTextParameterDict}
-                                
+
 def nmrCalcRunToIsd(run):
-  from cambridge.isd.isd_project_template import sim
-  from Isd.setup import setup_data, CCPN
   from CCPNReader import getObjectKeyString
+  from Isd.setup import CCPN, setup_data
+
+  from cambridge.isd.isd_project_template import sim
 
   sim.data_sets = []
   sim.isd_version = 1.2 # Will be filled in properly after data model change
   sim.ccpn.nmr_project_name = run.nmrCalcStore.nmrProject.name
   sim.ccpn.export.project.key = getObjectKeyString(run)
-                  
+
   for attrName, attrType in SIM_ATTRS:
-  
+
     value = GET_RUN_PARAM_FUNCS[attrType](run, attrName)
     attrName = translate32charLimit.get(attrName, attrName)
-    
+
     if value is not None:
       dotPath = attrName.split('.')
-      
+
       subAttrName = dotPath.pop(0)
       obj = sim
-      
+
       while dotPath:
         obj = getattr(obj, subAttrName)
         subAttrName = dotPath.pop(0)
-    
+
       setattr(obj, subAttrName, value)
-  
-  
+
+
   for datum in run.inputs:
     if isinstance(datum, NmrCalc.ExternalData):
       nmrObjs = [None,]
-      
+
     elif isinstance(datum, NmrCalc.ConstraintStoreData):
       nmrObjs = datum.constraintLists # Extant lists
 
     elif isinstance(datum, NmrCalc.MolSystemData):
       chains = datum.chains
-      
+
       if chains:
         msCode = datum.molSystemCode
         chainCode = chains[0].code
         sim.ccpn.export.molecular_system_name = msCode
         sim.molecule.key = '%s|%s' % (msCode,chainCode)
         sim.molecule.format = CCPN
-      
+
       continue
-  
+
     else:
       continue
-  
+
     values = []
     for attrName, attrType in EXP_DATA_GEN_ATTRS:
       value = GET_DATA_PARAM_FUNCS[attrType](datum, attrName)
       values.append(value)
-    
+
     dataType, dataFileName, dataFormat, dataKey, dataName = values
-    
+
     for nmrObj in nmrObjs:
-      
+
       if nmrObj:
         key = getObjectKeyString(nmrObj)
         format = CCPN
@@ -218,55 +219,55 @@ def nmrCalcRunToIsd(run):
         fileName = dataFileName
 
       specs = setup_data(dataType, fileName, dataName, key, format)
-      
+
       for attrName, attrType in EXP_DATA_ATTR_DICT[dataType]:
         value = GET_DATA_PARAM_FUNCS[attrType](datum, attrName)
- 
+
         if value is not None:
           dotPath = attrName.split('.')
- 
+
           subAttrName = dotPath.pop(0)
           obj = specs
- 
+
           while dotPath:
             obj = getattr(obj, subAttrName)
             subAttrName = dotPath.pop(0)
- 
+
           setattr(obj, subAttrName, value)
-          
+
       sim.data_sets.append(specs)
- 
+
   return sim
-  
+
 def getIsdNmrCalcStore(ccpnProject):
 
   nmrProject = ccpnProject.currentNmrProject
   calcStore = ccpnProject.findFirstNmrCalcStore(name=ISD, nmrProject=nmrProject) or \
               ccpnProject.newNmrCalcStore(name=ISD, nmrProject=nmrProject)
-  
+
   return calcStore
 
- 
+
 def isdToNmrCalcRun(sim, ccpnProject, run=None):
- 
-  from Isd.setup import DISULFIDE, CCPN
+
   from CCPNReader import getKeysFromString, getObjectKeyString
- 
+  from Isd.setup import CCPN, DISULFIDE
+
   if run:
     calcStore = run.nmrCalcStore
- 
+
     for datum in run.inputs:
       for param in datum.runParameters:
         param.delete()
       datum.delete()
- 
+
   else:
     calcStore = getIsdNmrCalcStore(ccpnProject)
     runs = [r for r in calcStore.sortedRuns() if r.status == PROVISIONAL]
- 
+
     if runs:
       run = runs[-1]
-      
+
       for datum in run.input:
         for param in datum.runParameters:
           param.delete()
@@ -274,51 +275,51 @@ def isdToNmrCalcRun(sim, ccpnProject, run=None):
 
     else:
       run = calcStore.newRun(status=PROVISIONAL)
- 
+
   nmrProject = calcStore.nmrProject
   sim.ccpn.nmr_project_name = nmrProject.name
   sim.ccpn.export.project.key = getObjectKeyString(run)
- 
+
   for attrName1, attrType in SIM_ATTRS:
     attrName = translate32charLimit.get(attrName1, attrName1)
- 
+
     dotPath = attrName.split('.')
- 
+
     subAttrName = dotPath.pop(0)
     value = getattr(sim, subAttrName)
- 
+
     while dotPath:
       subAttrName = dotPath.pop(0)
       value = getattr(value, subAttrName)
- 
+
     SET_RUN_PARAM_FUNCS[attrType](run, attrName1, value)
- 
+
   if (sim.molecule.format) == CCPN and sim.molecule.key:
     msCode, chainCode = sim.molecule.key.split('|')
     molSystem = ccpnProject.findFirstMolSystem(code=msCode)
- 
+
     if molSystem:
       chain = molSystem.findFirstChain(code=chainCode)
- 
+
       if chain:
         run.newMolSystemData(molSystemCode=msCode, chainCodes=[chainCode,])
- 
+
   getCStore = ccpnProject.findFirstNmrConstraintStore
- 
+
   for specs in sim.data_sets:
      dataType = specs.data_type
      dataName = specs.name
- 
+
      if specs.format == CCPN:
        if dataType == DISULFIDE: # Not supported, yet
          continue
- 
+
        csSerial, clSerial = getKeysFromString(specs.key)
 
        cStore = getCStore(serial=csSerial, nmrProject=nmrProject)
        if not cStore:
          continue
- 
+
        constraintList = cStore.findFirstConstraintList(serial=clSerial)
        if not constraintList:
          continue
@@ -326,7 +327,7 @@ def isdToNmrCalcRun(sim, ccpnProject, run=None):
        if not dataName:
          dataName = '%s %d:%d' % (constraintList.className[:-14],
                                   csSerial, clSerial)
- 
+
        datum = run.newConstraintStoreData(constraintStoreSerial=csSerial,
                                           constraintListSerials=[clSerial,],
                                           name=dataName)
@@ -334,22 +335,22 @@ def isdToNmrCalcRun(sim, ccpnProject, run=None):
      else:
        if not dataName:
          dataName = '%s format' % specs.format
- 
+
        datum = run.newExternalData(name=dataName)
 
      for attrName, attrType in EXP_DATA_GEN_ATTRS:
        value = getattr(specs, attrName) or ''
        SET_DATA_PARAM_FUNCS[attrType](datum, attrName, value)
- 
-     for attrName, attrType in EXP_DATA_ATTR_DICT[dataType]:       
+
+     for attrName, attrType in EXP_DATA_ATTR_DICT[dataType]:
        dotPath = attrName.split('.')
        subAttrName = dotPath.pop(0)
        value = getattr(specs, subAttrName)
- 
+
        while dotPath:
          subAttrName = dotPath.pop(0)
          value = getattr(value, subAttrName)
- 
+
        SET_DATA_PARAM_FUNCS[attrType](datum, attrName, value)
- 
+
   return run

@@ -2,18 +2,18 @@
 # python -u $CINGROOT/python/cing/Libs/test/test_Forkoff.py
 # In order to test killing capabilities try (replacing 9999 by pid):
 # kill -2 9999 (twice)
-from cing import cingDirTmp
-from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp, header
+from cing.Libs.forkoff import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
+
 
 def my_sleep(arg):
     ## Check types
-    if type(arg) == types.TupleType:
+    if type(arg) == tuple:
         nTerror("Type of args [%s] is tuple" % arg)
         nTerror("This can happen when supplied with more than 1 argument")
         return 1

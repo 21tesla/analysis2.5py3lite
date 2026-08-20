@@ -1,7 +1,7 @@
 # python -u $CINGROOT/python/cing/NRG/runQueenyAll.py
 
 from cing import cingPythonDir
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.PDBEntryLists import writeEntryListToFile
 from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
 

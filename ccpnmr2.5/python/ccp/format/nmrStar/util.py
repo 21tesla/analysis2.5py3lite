@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,13 +51,14 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import re
 
-from memops.universal.Util import returnInt, returnFloat
+from memops.universal.Util import returnFloat, returnInt
 
-anySpacePatt = re.compile("\s")
-multiSpacePatt = re.compile("\s{2,}")
-bracketsPatt = re.compile("[\(\)]")
+anySpacePatt = re.compile(r"\s")
+multiSpacePatt = re.compile(r"\s{2,}")
+bracketsPatt = re.compile(r"[\(\)]")
 yesPatt = re.compile("^[yYtT]")
 noPatt = re.compile("^[nNfF]")
 
@@ -66,140 +66,154 @@ noPatt = re.compile("^[nNfF]")
 # Functions #
 #############
 
+
 def removeMultiSpaces(value):
 
-  value = str(value.strip())
+    value = str(value.strip())
 
-  if multiSpacePatt.search(value):
-    (value,numSubs) = multiSpacePatt.subn(' ',value)
+    if multiSpacePatt.search(value):
+        (value, numSubs) = multiSpacePatt.subn(" ", value)
 
-  return value
+    return value
 
-def getNmrStarValue(tagtable,tagname,valueIndex = 0):
 
-  if tagtable.tagnames.count(tagname):
-    tagIndex = tagtable.tagnames.index(tagname)
-    return tagtable.tagvalues[tagIndex][valueIndex]
-    
-  else:
-    return None
-       
+def getNmrStarValue(tagtable, tagname, valueIndex=0):
+
+    if tagtable.tagnames.count(tagname):
+        tagIndex = tagtable.tagnames.index(tagname)
+        return tagtable.tagvalues[tagIndex][valueIndex]
+
+    else:
+        return None
+
+
 def returnStarInt(value):
 
-  if value in ('.','?') or value is None:
-    return None
-  else:
-    return returnInt(value)
+    if value in (".", "?") or value is None:
+        return None
+    else:
+        return returnInt(value)
+
 
 def returnStarFloat(value):
 
-  if value in ('.','?') or value is None:
-    return None
-  else:
-    return returnFloat(value)
+    if value in (".", "?") or value is None:
+        return None
+    else:
+        return returnFloat(value)
 
-def returnStarString(value,strip = 0, length = None):
 
-  value = str(value)
-  
-  if strip:
+def returnStarString(value, strip=0, length=None):
+
+    value = str(value)
+
+    if strip:
+        value = value.strip()
+
+    # if value.count("\n"):
+    #  value = value.replace("\n"," ")
+
+    value = removeMultiSpaces(value)
+
+    if length:
+        origValue = value
+        value = value[:length]
+        if len(origValue) > length:
+            print("  Warning: shortened value '%s' to '%s' for NMR-STAR export!" % (origValue, value))
+
+    if value in (".", "?") or not value:
+        return None
+    else:
+        return value
+
+
+def returnStarDateTime(value, length=None):
+    # TODO need to do this correctly...
+    return returnStarString(value, length=length)
+
+
+def returnStarAtCode(value, length=None):
+    # Basically accepts more or less anything, just do default.
+    return returnStarString(value, length=length)
+
+
+def returnStarCode(value, length=None):
+
+    value = str(value)
+
+    value = removeMultiSpaces(value)
+
+    if anySpacePatt.search(value):
+        (value, numSubs) = anySpacePatt.subn("_", value)
+
+    return returnStarString(value, length=length)
+
+
+def returnStarLine(value, length=None):
+
+    value = str(value)
+
+    # values = value.split("\n")
+    # values = [ val.strip() for val in values ]
+    # value = "\n".join(values)
+
+    # if value.count("\n"):
+    #  value = value.replace("\n"," ")
+
+    value = removeMultiSpaces(value)
+
     value = value.strip()
-  
-  #if value.count("\n"):
-  #  value = value.replace("\n"," ")
 
-  value = removeMultiSpaces(value)
+    return returnStarString(value, length=length)
 
-  if length:
-    origValue = value
-    value = value[:length]
-    if len(origValue) > length:
-      print("  Warning: shortened value '%s' to '%s' for NMR-STAR export!" % (origValue,value))
 
-  if value in ('.','?') or not value:
-    return None
-  else:
+def returnStarName(value, length=None):
+
+    if not value[0] == "_":
+        value = "_" + value
+
+    return returnStarCode(value, length=length)
+
+
+def returnStarIdName(value, length=None):
+
+    return returnStarCode(value, length=length)
+
+
+def returnStarYesNo(value, length=None):
+
+    if value:
+        searchObj1 = yesPatt.search(str(value))
+        searchObj2 = noPatt.search(str(value))
+        if searchObj1:
+            value = "yes"
+        elif searchObj2:
+            value = "no"
+        else:
+            value = "yes"
+
+    else:
+        value = "no"
+
     return value
 
-def returnStarDateTime(value, length = None):
-  # TODO need to do this correctly...
-  return returnStarString(value,length = length)
 
-def returnStarAtCode(value,length = None):
-  # Basically accepts more or less anything, just do default.
-  return returnStarString(value,length = length)
+def returnStarFaxPhoneEmail(value, length=None):
 
-def returnStarCode(value,length = None):
+    value = str(value)
 
-  value = str(value)
-  
-  value = removeMultiSpaces(value)
+    #  if bracketsPatt.search(value):
+    #    (value,numSubs) = bracketsPatt.subn('_',value)
 
-  if anySpacePatt.search(value):
-    (value,numSubs) = anySpacePatt.subn('_',value)
+    return returnStarString(value, length=length)
 
-  return returnStarString(value,length = length)
 
-def returnStarLine(value,length = None):
+def returnStarLabel(value, length=None):
 
-  value = str(value)
+    if not value or value in (".",):
+        value = ""
 
-  #values = value.split("\n")
-  #values = [ val.strip() for val in values ]
-  #value = "\n".join(values)
+    elif not value[0] == "$":
+        value = "$" + value
 
-  #if value.count("\n"):
-  #  value = value.replace("\n"," ")
-
-  value = removeMultiSpaces(value)
-
-  value = value.strip()
-
-  return returnStarString(value,length = length)
-
-def returnStarName(value,length = None):
-
-  if not value[0] == '_':
-    value = '_' + value
-  
-  return returnStarCode(value,length = length)
-    
-def returnStarIdName(value,length = None):
-
-  return returnStarCode(value,length = length)
-    
-def returnStarYesNo(value,length = None):
-
-  if value:
-    searchObj1 = yesPatt.search(str(value) )
-    searchObj2 = noPatt.search(str(value) )
-    if searchObj1:
-      value = 'yes'
-    elif searchObj2:
-      value = 'no'
-    else:
-      value = 'yes'
-
-  else:
-    value = 'no'
-
-  return value
-
-def returnStarFaxPhoneEmail(value,length = None):
-
-  value = str(value)
-
-#  if bracketsPatt.search(value):
-#    (value,numSubs) = bracketsPatt.subn('_',value)
-    
-  return returnStarString(value,length = length)
-
-def returnStarLabel(value,length = None):
-
-  if not value or value in ('.',):
-    value =  ''
-
-  elif not value[0] == '$':
-    value = '$' + value
-
-  return returnStarCode(value,length = length)
+    return returnStarCode(value, length=length)

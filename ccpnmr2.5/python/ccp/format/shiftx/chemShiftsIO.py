@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,14 +52,10 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import string
-
 # Import general functions
-from memops.universal.Util import returnFloats, returnFloat
-from memops.universal.Util import returnInt
-from ccp.format.shiftx.generalIO import ShiftxGenericFile
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.shiftx.generalIO import ShiftxGenericFile
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
@@ -67,194 +63,201 @@ from ccp.format.general.Util import getSeqAndInsertCode
 
 
 class ShiftxChemShift:
+    def __init__(self, parent, value, atomName, seqCode, resLabel, molCode):
 
-  def __init__(self,parent,value,atomName,seqCode,resLabel,molCode):
-  
-    self.resLabel = resLabel
-    self.value = value
-    self.atomNameOrig = atomName
-    self.atomName = self.checkAtomName(atomName)
-    #self.atomType = atomType
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.molCode = molCode
-    
-    if not parent.chemShiftsBySeqCodeAndAtomName.has_key(self.seqCode):
-      parent.chemShiftsBySeqCodeAndAtomName[self.seqCode] = {}
-    
-    if not parent.chemShiftsBySeqCodeAndAtomName[self.seqCode].has_key(self.atomNameOrig):
-      parent.chemShiftsBySeqCodeAndAtomName[self.seqCode][self.atomNameOrig] = self
+        self.resLabel = resLabel
+        self.value = value
+        self.atomNameOrig = atomName
+        self.atomName = self.checkAtomName(atomName)
+        # self.atomType = atomType
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.molCode = molCode
 
-  def checkAtomName(self,atomName):
+        if self.seqCode not in parent.chemShiftsBySeqCodeAndAtomName:
+            parent.chemShiftsBySeqCodeAndAtomName[self.seqCode] = {}
 
-    # Need to handle GLY differently...
-    if self.resLabel == 'G' and atomName == 'HA':
-      atomName = "QA"
-    
-    return atomName
+        if self.atomNameOrig not in parent.chemShiftsBySeqCodeAndAtomName[self.seqCode]:
+            parent.chemShiftsBySeqCodeAndAtomName[self.seqCode][self.atomNameOrig] = self
+
+    def checkAtomName(self, atomName):
+
+        # Need to handle GLY differently...
+        if self.resLabel == "G" and atomName == "HA":
+            atomName = "QA"
+
+        return atomName
+
 
 class ShiftxChemShiftFile(ShiftxGenericFile):
-  """
-  Information on file level
-  """
-  
-  shiftClass = ShiftxChemShift
-  
-  def initialize(self):
-  
-    self.chemShifts = []
-    
-    self.chemShiftsBySeqCodeAndAtomName = {}
-    self.seqCodeLabels = {}
-    
-  def read(self,isOutputFile = False, headerCols = None, verbose = 0):
-  
-    if verbose == 1:
-      print("Reading %s chemical shift list %s" % (self.format,self.name))
+    """
+    Information on file level
+    """
 
-    fin = open(self.name)
+    shiftClass = ShiftxChemShift
 
-    headerCols = []
-    colLen = 0
-    
-    line = fin.readline()
-    
-    while line:
+    def initialize(self):
 
-      if self.patt['emptyline'].search(line):
+        self.chemShifts = []
+
+        self.chemShiftsBySeqCodeAndAtomName = {}
+        self.seqCodeLabels = {}
+
+    def read(self, isOutputFile=False, headerCols=None, verbose=0):
+
+        if verbose == 1:
+            print("Reading %s chemical shift list %s" % (self.format, self.name))
+
+        fin = open(self.name)
+
+        headerCols = []
+        colLen = 0
 
         line = fin.readline()
-        continue
-              
-      #
-      # Get the info... 
-      #
-      
-      cols = line.split()
-      
-      if cols[0].upper().count('NUM'):
-        headerCols = line.split()
-        colLen = len(headerCols)
-        
-      elif len(cols) == colLen and not cols[0].count("-"):
-        
-        badShifts = False
-        
-        # These are fishy shifts, need to remove the *!
-        if cols[0][0] == '*':
-          cols[0] = cols[0][1:]
-          badShifts = True
-        
-        seqCode = returnInt(cols[0],default=None,verbose=False)
-        resLabel = cols[1]
-        
-        if seqCode != None:
-          self.seqCodeLabels[seqCode] = resLabel
-          
-          for i in range(2,colLen):
-            atomName = headerCols[i]
-            value = returnFloat(cols[i],default=0.00,verbose=False)
-            
-            # Ignore if value is 0.00. This is not good but has to be done because format is set up this way.
-            if value != 0.00:
 
-              self.chemShifts.append(self.shiftClass(self,value,atomName,seqCode,resLabel,self.defaultMolCode))
+        while line:
+            if self.patt["emptyline"].search(line):
+                line = fin.readline()
+                continue
 
-      line = fin.readline()
+            #
+            # Get the info...
+            #
 
-    fin.close()
+            cols = line.split()
 
-  def write(self,verbose = 0):
+            if cols[0].upper().count("NUM"):
+                headerCols = line.split()
+                colLen = len(headerCols)
 
-    if verbose == 1:
-      print("Writing %s chemical shift list %s" % (self.format,self.name))
+            elif len(cols) == colLen and not cols[0].count("-"):
+                badShifts = False
 
+                # These are fishy shifts, need to remove the *!
+                if cols[0][0] == "*":
+                    cols[0] = cols[0][1:]
+                    badShifts = True
 
-    fout = open(self.name,'w')
+                seqCode = returnInt(cols[0], default=None, verbose=False)
+                resLabel = cols[1]
 
-    #
-    # Write out chem shifts
-    #
+                if seqCode != None:
+                    self.seqCodeLabels[seqCode] = resLabel
 
-    # This should be ints
-    seqCodes = self.chemShiftsBySeqCodeAndAtomName.keys()
-    seqCodes.sort()
+                    for i in range(2, colLen):
+                        atomName = headerCols[i]
+                        value = returnFloat(cols[i], default=0.00, verbose=False)
 
-    if seqCodes:
+                        # Ignore if value is 0.00. This is not good but has to be done because format is set up this way.
+                        if value != 0.00:
+                            self.chemShifts.append(
+                                self.shiftClass(self, value, atomName, seqCode, resLabel, self.defaultMolCode)
+                            )
 
-      seqCodeRange = range(seqCodes[0],seqCodes[-1]+1)
+            line = fin.readline()
 
-      # Write backbone specific info
-      fout.write("  NUM RES   HA     H       N        CA      CB       C" + self.newline)
-      fout.write("--- --- ------ ------ -------- ------- ------- --------" + self.newline)
+        fin.close()
 
-      for seqCode in seqCodeRange:
+    def write(self, verbose=0):
 
-        if not self.seqCodeLabels.has_key(seqCode):
-          print("  Warning: no Shiftx output for sequence code %d - no information available." % seqCode)
-          continue
+        if verbose == 1:
+            print("Writing %s chemical shift list %s" % (self.format, self.name))
 
-        resLabel = self.seqCodeLabels[seqCode]
-        fout.write(" %-6s%-2s" % (str(seqCode),resLabel))
+        fout = open(self.name, "w")
 
-        for atomName in ("HA","H","N","CA","CB","C"):
+        #
+        # Write out chem shifts
+        #
 
-          #if resLabel == 'G' and atomName == 'HA':
-          #  searchAtomName = atomName + '*'
-          #else:
-          #  searchAtomName = atomName
+        # This should be ints
+        seqCodes = self.chemShiftsBySeqCodeAndAtomName.keys()
+        seqCodes.sort()
 
-          if self.chemShiftsBySeqCodeAndAtomName.has_key(seqCode) and \
-             self.chemShiftsBySeqCodeAndAtomName[seqCode].has_key(atomName):
+        if seqCodes:
+            seqCodeRange = range(seqCodes[0], seqCodes[-1] + 1)
 
-            value = self.chemShiftsBySeqCodeAndAtomName[seqCode][atomName].value
+            # Write backbone specific info
+            fout.write("  NUM RES   HA     H       N        CA      CB       C" + self.newline)
+            fout.write("--- --- ------ ------ -------- ------- ------- --------" + self.newline)
 
-          else:
+            for seqCode in seqCodeRange:
+                if seqCode not in self.seqCodeLabels:
+                    print("  Warning: no Shiftx output for sequence code %d - no information available." % seqCode)
+                    continue
 
-            value = 0.0
+                resLabel = self.seqCodeLabels[seqCode]
+                fout.write(" %-6s%-2s" % (str(seqCode), resLabel))
 
-          fout.write(" %6.4f" % (value))
+                for atomName in ("HA", "H", "N", "CA", "CB", "C"):
+                    # if resLabel == 'G' and atomName == 'HA':
+                    #  searchAtomName = atomName + '*'
+                    # else:
+                    #  searchAtomName = atomName
 
-        fout.write(self.newline)
-      
-      fout.write(self.newline)
-      
-      # Write out all atom info
-      fout.write(" NUM RES  ")
-      headerAtomNames = ("H","HA","HB","HB2","HB3","HD1","HD2","HD21","HD22","HD3","HE","HE1","HE2","HE21","HE22","HE3","HG","HG1","HG12","HG13","HG2","HG3","HZ")
-      for headerAtomName in headerAtomNames:
-        fout.write("%-5s" % headerAtomName)
-      fout.write(self.newline)
-      
-      
-      for seqCode in seqCodeRange:
-      
-        if not self.seqCodeLabels.has_key(seqCode):
-          continue
-          
-        resLabel = self.seqCodeLabels[seqCode]
-        fout.write(" %-6s%-2s" % (str(seqCode),resLabel))
+                    if seqCode in self.chemShiftsBySeqCodeAndAtomName and atomName in self.chemShiftsBySeqCodeAndAtomName[seqCode]:
+                        value = self.chemShiftsBySeqCodeAndAtomName[seqCode][atomName].value
 
-        for atomName in headerAtomNames:
+                    else:
+                        value = 0.0
 
-          #if resLabel == 'G' and atomName == 'HA':
-          #  searchAtomName = atomName + '*'
-          #else:
-          #  searchAtomName = atomName
+                    fout.write(" %6.4f" % (value))
 
-          if self.chemShiftsBySeqCodeAndAtomName.has_key(seqCode) and \
-             self.chemShiftsBySeqCodeAndAtomName[seqCode].has_key(atomName):
+                fout.write(self.newline)
 
-            value = self.chemShiftsBySeqCodeAndAtomName[seqCode][atomName].value
+            fout.write(self.newline)
 
-          else:
+            # Write out all atom info
+            fout.write(" NUM RES  ")
+            headerAtomNames = (
+                "H",
+                "HA",
+                "HB",
+                "HB2",
+                "HB3",
+                "HD1",
+                "HD2",
+                "HD21",
+                "HD22",
+                "HD3",
+                "HE",
+                "HE1",
+                "HE2",
+                "HE21",
+                "HE22",
+                "HE3",
+                "HG",
+                "HG1",
+                "HG12",
+                "HG13",
+                "HG2",
+                "HG3",
+                "HZ",
+            )
+            for headerAtomName in headerAtomNames:
+                fout.write("%-5s" % headerAtomName)
+            fout.write(self.newline)
 
-            value = 0.0
+            for seqCode in seqCodeRange:
+                if seqCode not in self.seqCodeLabels:
+                    continue
 
-          fout.write(" %4.2f" % (value))
+                resLabel = self.seqCodeLabels[seqCode]
+                fout.write(" %-6s%-2s" % (str(seqCode), resLabel))
 
-        fout.write(self.newline)
-        
-    
-    else:
-      
-      print("  Error: no sequence codes set for %s export. Aborting." % self.format)
+                for atomName in headerAtomNames:
+                    # if resLabel == 'G' and atomName == 'HA':
+                    #  searchAtomName = atomName + '*'
+                    # else:
+                    #  searchAtomName = atomName
+
+                    if seqCode in self.chemShiftsBySeqCodeAndAtomName and atomName in self.chemShiftsBySeqCodeAndAtomName[seqCode]:
+                        value = self.chemShiftsBySeqCodeAndAtomName[seqCode][atomName].value
+
+                    else:
+                        value = 0.0
+
+                    fout.write(" %4.2f" % (value))
+
+                fout.write(self.newline)
+
+        else:
+            print("  Error: no sequence codes set for %s export. Aborting." % self.format)

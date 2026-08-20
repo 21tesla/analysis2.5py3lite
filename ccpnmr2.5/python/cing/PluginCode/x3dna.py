@@ -2,15 +2,12 @@
 Adds x3dna method to analyze DNA structures. The x3dna program is included as binaries for Mac OSX in the bin directory.
 """
 from cing import osType
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.classes import Coplanar, CoplanarList
+from cing.core.parameters import cingPaths, plugins, validationSubDirectories
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqMatplib import MATPLIB_STR
-from cing.PluginCode.required.reqX3dna import * #@UnusedWildImport
-from cing.core.classes import Coplanar
-from cing.core.classes import CoplanarList
-from cing.core.parameters import cingPaths
-from cing.core.parameters import plugins
-from cing.core.parameters import validationSubDirectories
+from cing.PluginCode.required.reqX3dna import *  #@UnusedWildImport
 
 useModule = True
 if osType == OS_TYPE_MAC: # only installed for mac os currently.
@@ -38,7 +35,7 @@ class X3dna(NTdict):
         '''Detailed H-bond information: atom-name pair and length [ON]''',
 
         'polygonOverlapArea':
-        '''
+        r'''
         Overlap area in Angstrom^2 between polygons defined by atoms on successive
         bases. Polygons projected in the mean plane of the designed base-pair step.
 
@@ -358,7 +355,7 @@ class X3dna(NTdict):
 #                nTdebug("Working on entity: %s" % entity)
                 valueList = getDeepByKeysOrDefault(x3dnaCoplanar, nTfill(None, self.modelCount), entity)
                 valueList[modelNum] = results[coplanarIdStr][entity]
-#                nTdebug("Set value for coplanarIdStr %s entity %s modelNum: %s to be: %s" % (coplanarIdStr, 
+#                nTdebug("Set value for coplanarIdStr %s entity %s modelNum: %s to be: %s" % (coplanarIdStr,
 #entity, modelNum, valueList[modelNum]))
             # end for entity
         # end for coplanar
@@ -606,7 +603,7 @@ def createHtmlX3dna(project, ranges = None):
     if not getDeepByKeysOrAttributes(plugins, MATPLIB_STR, IS_INSTALLED_STR):
         nTdebug('Skipping createHtmlWattos because no matplib installed.')
         return
-    from cing.PluginCode.matplib import MoleculePlotSet #@UnresolvedImport
+    from cing.PluginCode.matplib import MoleculePlotSet  #@UnresolvedImport
 
     # The following object will be responsible for creating a (png/pdf) file with
     # possibly multiple pages

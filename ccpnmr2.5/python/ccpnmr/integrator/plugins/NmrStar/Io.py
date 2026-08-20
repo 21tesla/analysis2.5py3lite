@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,47 +53,45 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
-import operator
-
-#from ccpnmr.analysis.core import AssignmentBasic
-#from ccp.util import Assignment as AssignmentUtil
+# from ccpnmr.analysis.core import AssignmentBasic
+# from ccp.util import Assignment as AssignmentUtil
 from pdbe.nmrStar.IO import Ccpn2NmrStar
 
-entryName = '_ccpn_temp'
+entryName = "_ccpn_temp"
+
 
 class NmrStarWrapper:
-  """ Adapter class to allow IO without explicit creation of Entry
-  """
-  
-  def __init__(self, project):
-    self.project = project
-    self.IOkeywords = {}
-  
-  def writeShifts(self, filePath, measurementList, **kw):
-    """ Write talos format shift list
-    """
-    
-    # first make temporary entry
-    entryStore = (self.project.findFirstNmrEntryStore(name=entryName) or
-                  self.project.newNmrEntryStore(name=entryName))
-    try:
-      entry = entryStore.newEntry(name=entryName)
-      entry.measurementLists = (measurementList,)
-      entry.molSystem = getMolSystem(measurementList)
-      Ccpn2NmrStar.writeNmrStarFile(entry, filePath, nmrStarVersion='3.0')
-    finally:
-      entryStore.delete()
-    
+    """Adapter class to allow IO without explicit creation of Entry"""
+
+    def __init__(self, project):
+        self.project = project
+        self.IOkeywords = {}
+
+    def writeShifts(self, filePath, measurementList, **kw):
+        """Write talos format shift list"""
+
+        # first make temporary entry
+        entryStore = self.project.findFirstNmrEntryStore(name=entryName) or self.project.newNmrEntryStore(
+            name=entryName
+        )
+        try:
+            entry = entryStore.newEntry(name=entryName)
+            entry.measurementLists = (measurementList,)
+            entry.molSystem = getMolSystem(measurementList)
+            Ccpn2NmrStar.writeNmrStarFile(entry, filePath, nmrStarVersion="3.0")
+        finally:
+            entryStore.delete()
+
+
 def getMolSystem(measurementList):
-  """ Get MolSystem the fits MeasurementList
-  """
-  for shift in measurementList.sortedMeasurements():
-    resSet = shift.resonance.resonanceSet
-    if resSet is not None:
-      molSystem = resSet.findFirstAtomSet().findFirstAtom().topObject
-      break
-  else:
-    molSystem = None
-  
-  #
-  return molSystem
+    """Get MolSystem the fits MeasurementList"""
+    for shift in measurementList.sortedMeasurements():
+        resSet = shift.resonance.resonanceSet
+        if resSet is not None:
+            molSystem = resSet.findFirstAtomSet().findFirstAtom().topObject
+            break
+    else:
+        molSystem = None
+
+    #
+    return molSystem

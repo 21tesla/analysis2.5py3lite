@@ -1,10 +1,9 @@
-from cing import cingDirTmp
-from cing import cingRoot
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import globLast
-from cing.Libs.disk import tail
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp, cingRoot
+from cing.Libs.disk import globLast, tail
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 
 class AllChecks(TestCase):

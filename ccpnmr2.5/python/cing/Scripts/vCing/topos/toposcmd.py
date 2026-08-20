@@ -5,10 +5,13 @@ Run e.g.:
 $CINGROOT/python/cing/Scripts/vCing/topos/toposcmd.py --realm https://topos.grid.sara.nl/4.1 --pool vCing --timeout 30 get-token-url
 $CINGROOT/python/cing/Scripts/vCing/topos/toposcmd.py --realm https://topos.grid.sara.nl/4.1 --pool vCing --timeout 30 get-num-tokens
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-import StringIO
 import getopt
+
 import pycurl
+from io import StringIO
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def usage():
     nTerror( """usage:
@@ -43,7 +46,7 @@ class Toposcmd:
         self.curl.setopt(pycurl.NOPROGRESS,1)
         self.curl.setopt(pycurl.FAILONERROR,1)
         self.curl.setopt(pycurl.HTTPHEADER,["Content-type: text/plain", "Accept: text/plain"])
-        self.curl.result = StringIO.StringIO()
+        self.curl.result = StringIO()
         self.curl.setopt(pycurl.WRITEFUNCTION, self.curl.result.write)
 
     def show(self):
@@ -145,7 +148,7 @@ args:      %s""" % (self.realm, self.pool,self.timeout,self.token,self.url,self.
             self.check(self.pool,"pool")
             self.url  = self.realm+"/pools/"+self.pool+"/nextToken"
         for d in self.args[1:] :
-            data = StringIO.StringIO(d)
+            data = StringIO(d)
             data.seek(0)
             self.curl.setopt(pycurl.READFUNCTION,data.read)
             self.curl.setopt(pycurl.UPLOAD,1)

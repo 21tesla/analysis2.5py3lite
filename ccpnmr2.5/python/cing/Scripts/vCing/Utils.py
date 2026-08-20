@@ -4,8 +4,10 @@ Execute like: $CINGROOT/python/cing/Scripts/vCing/Utils.py
 or execute from vCing.py
 '''
 
-from cing.Libs.disk import * #@UnusedWildImport
 import commands
+
+from cing.Libs.disk import *  #@UnusedWildImport
+
 
 def prepareMaster(master_target_dir, doClean=False):
     "Return True on error."
@@ -34,7 +36,7 @@ def prepareMaster(master_target_dir, doClean=False):
 # end def
 
 def onEachSlave( cmd='uptime', slaveListFile="slaveList.py"):
-    
+
     slaveList = []
     slaveList += [ '145.100.57.%s' % x for x in range(6,7) ]
 #    slaveList += [ '145.100.58.%s' % x for x in range(41,46) ]
@@ -58,7 +60,7 @@ def onEachSlave( cmd='uptime', slaveListFile="slaveList.py"):
     i = 0
     for slave in slaveList:
         i += 1
-        cmdComplete = 'ssh %(sshOptionList)s i@%(slave)s %(cmd)s' % {                                                             
+        cmdComplete = 'ssh %(sshOptionList)s i@%(slave)s %(cmd)s' % {
                 'sshOptionList':sshOptionList, 'slave':slave, 'cmd':cmd}
         status, result = commands.getstatusoutput(cmdComplete)
         if not status:
@@ -67,20 +69,19 @@ def onEachSlave( cmd='uptime', slaveListFile="slaveList.py"):
         # end if
         print("%3d %s %s" % (i, slave, "ERROR: Failed command: %s with status: %s with result: %s, now sleeping a short while." % (
             cmd, status, result)))
-        time.sleep(1)        
-    # end for    
+        time.sleep(1)
+    # end for
 # end def
-    
+
 if __name__ == "__main__":
     if False:
         if prepareMaster(sys.argv[1]):
             print("ERROR: Failed to prepareMaster")
         # end if
     # end if
-    if 1:    
+    if 1:
         if onEachSlave():
             print("ERROR: Failed to prepareMaster")
         # end if
     # end if
 # end if
-        

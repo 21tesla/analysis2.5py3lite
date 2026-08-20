@@ -1,9 +1,10 @@
-from cing import verbosityDebug
-from cing import verbosityError
-from cing.Libs.fpconst import * #@UnusedWildImport
-from unittest import TestCase
-import cing
 import unittest
+from unittest import TestCase
+
+import cing
+from cing import verbosityDebug, verbosityError
+from cing.Libs.fpconst import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

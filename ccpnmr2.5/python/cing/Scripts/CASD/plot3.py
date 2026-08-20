@@ -21,7 +21,7 @@ def plotMethods(title, ylabel):
     #convienience method to initiate plot
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     plt.title(title)
 
     xtickNames = plt.setp(ax1, xticklabels=results.methods)
@@ -45,10 +45,10 @@ def plotMethodsAdd( ax1, target, par, color):
 
 def plotRmsd(target):
     fig,ax1 = plotMethods(target,'pairwise bb rmsd')
-    
+
     plotMethodsAdd(ax1, target, 'rmsd', 'blue')
     x,values = plotMethodsAdd(ax1, target, 'rmsdToTarget', 'red')
-    
+
     plt.ylim(0.0,max(values)+0.2)
     doShow(fig,target + '_rmsd')
 #end def
@@ -56,8 +56,8 @@ def plotRmsd(target):
 def plotRmsdBox(target):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
-    x,rmsd=results.getValues(target, 'rmsd')    
+
+    x,rmsd=results.getValues(target, 'rmsd')
     x2,rmsdToTarget=results.getValues(target, 'rmsdToTarget')
     bp = ax1.boxplot([rmsd,rmsdToTarget[1:]], notch=False, sym='+', vert=True, whis=1.5) # skip the original in rmsdToTarget as this has 0.0 by definition
     plt.setp(bp['boxes'], color='black', lw=2)
@@ -65,7 +65,7 @@ def plotRmsdBox(target):
     plt.setp(bp['caps'], color='black', lw=2)
     plt.setp(bp['medians'], color='blue', lw=2)
     plt.setp(bp['fliers'], color='red', marker='D', lw=2,  markersize=8)
-    
+
     plt.title(target)
     xtickNames = plt.setp(ax1, xticklabels=['ensemble','toTarget'])
     plt.ylabel('pairwise bb rmsd', fontsize=14)
@@ -77,9 +77,9 @@ def plotRmsdBox(target):
 def plotRmsdBoxAll():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     values = []
-    for target in results.targets:        
+    for target in results.targets:
         x,rmsdToTarget=results.getValues(target, 'rmsdToTarget')
         values.append( rmsdToTarget[1:] ) # skip the original Targets as these al have 0.0
     bp = ax1.boxplot(values, notch=False, sym='+', vert=True, whis=1.5)
@@ -88,7 +88,7 @@ def plotRmsdBoxAll():
     plt.setp(bp['caps'], color='black', lw=2)
     plt.setp(bp['medians'], color='blue', lw=2)
     plt.setp(bp['fliers'], color='red', marker='D', lw=2,  markersize=8)
-    
+
     plt.title('RMSDs to Target')
     xtickNames = plt.setp(ax1, xticklabels=results.targets)
     plt.setp(xtickNames, rotation=90, fontsize=12)
@@ -99,37 +99,37 @@ def plotRmsdBoxAll():
 
 def plotROG(target):
     fig,ax1 = plotMethods(target,'ROG (%)')
-    
+
     plotMethodsAdd(ax1, target, 'cing_red', 'red')
     plotMethodsAdd(ax1, target, 'cing_orange', 'orange')
     plotMethodsAdd(ax1, target, 'cing_green', 'green')
-    
+
     plt.ylim(0,100)
-    
+
     doShow(fig,target + '_ROG')
 #end def
 
 def plotProcheck(target):
     fig,ax1 = plotMethods(target,'Procheck (%)')
-    
+
     plotMethodsAdd(ax1, target, 'pc_disallowed', 'red')
     plotMethodsAdd(ax1, target, 'pc_generous', 'orange')
     plotMethodsAdd(ax1, target, 'pc_allowed', 'blue')
     plotMethodsAdd(ax1, target, 'pc_core', 'green')
-    
+
     plt.ylim(0,100)
-    
+
     doShow(fig,target + '_Procheck')
 #end def
 
 def plotQuality(target):
     fig,ax1 = plotMethods(target,'Quality scores')
-    
+
     plotMethodsAdd(ax1, target, 'WI_ramachandran', 'blue')
     plotMethodsAdd(ax1, target, 'WI_bbNormality', 'green')
     plotMethodsAdd(ax1, target, 'WI_janin', 'violet')
     plotMethodsAdd(ax1, target, 'pc_gf', 'red')
-    
+
     #plt.ylim(0.0,max(values)+0.2)
     doShow(fig,target + '_quality')
 #end def
@@ -137,7 +137,7 @@ def plotQuality(target):
 def plotStatsTargets():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     plt.title('Submissons per target')
 
     xtickNames = plt.setp(ax1, xticklabels=results.targets)
@@ -148,7 +148,7 @@ def plotStatsTargets():
 
     ax1.yaxis.set_label_text('count', fontsize=14)
     ax1.grid(True)
-    
+
     l = len(results.targets)
     x = np.zeros(l)
     v = np.zeros(l)
@@ -157,14 +157,14 @@ def plotStatsTargets():
         v[i] = float(len(results.byTarget[t]))
     tmp = ax1.plot(x,v)
     plt.setp(tmp, color='black', label='targets', marker='s', markersize=8)
-    
+
     doShow(fig, 'stats_' + 'targets')
 #end def
 
 def plotStatsGroups():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     plt.title('Submissions per group')
 
     xtickNames = plt.setp(ax1, xticklabels=results.groups)
@@ -175,7 +175,7 @@ def plotStatsGroups():
 
     ax1.yaxis.set_label_text('count', fontsize=14)
     ax1.grid(True)
-    
+
     l = len(results.groups)
     x = np.zeros(l)
     v = np.zeros(l)
@@ -184,14 +184,14 @@ def plotStatsGroups():
         v[i] = float(len(results.byGroup[t]))
     tmp = ax1.plot(x,v)
     plt.setp(tmp, color='black', label='groups', marker='s', markersize=8)
-    
+
     doShow(fig, 'stats_' + 'groups')
 #end def
 
 def plotStatsMethods():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     plt.title('Submissions per method')
 
     xtickNames = plt.setp(ax1, xticklabels=results.methods)
@@ -202,7 +202,7 @@ def plotStatsMethods():
 
     ax1.yaxis.set_label_text('count', fontsize=14)
     ax1.grid(True)
-    
+
     l = len(results.methods)
     x = np.zeros(l)
     v = np.zeros(l)
@@ -211,16 +211,16 @@ def plotStatsMethods():
         v[i] = float(len(results.byMethod[t]))
     tmp = ax1.plot(x,v)
     plt.setp(tmp, color='black', label='methods', marker='s', markersize=8)
-    
+
     doShow(fig, 'stats_' + 'methods')
 #end def
 
 def plotByMethodBox(par, title, ylabel):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     _tmp = NTvalue(0.0, 0.0)
-    
+
     values = []
     for method in results.methods:
         l = len(results.byMethod[method])
@@ -236,14 +236,14 @@ def plotByMethodBox(par, title, ylabel):
         #end for
         values.append( v )
     #end for
-        
+
     bp = ax1.boxplot(values, notch=False, sym='+', vert=True, whis=1.5)
     plt.setp(bp['boxes'], color='black', lw=2)
     plt.setp(bp['whiskers'], color='black', lw=2)
     plt.setp(bp['caps'], color='black', lw=2)
     plt.setp(bp['medians'], color='blue', lw=2)
     plt.setp(bp['fliers'], color='red', marker='D', lw=2,  markersize=8)
-    
+
     plt.title(title)
     xtickNames = plt.setp(ax1, xticklabels=results.methods)
     plt.setp(xtickNames, rotation=90, fontsize=12)
@@ -255,9 +255,9 @@ def plotByMethodBox(par, title, ylabel):
 def plotQualVrsRmsdWI(allEntries=True):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     _tmp = NTvalue(0.0, 0.0)
-    
+
     l = len(results)
     rmsd = np.zeros(l)
     if allEntries:
@@ -276,20 +276,20 @@ def plotQualVrsRmsdWI(allEntries=True):
             values[i] = float(e[par].value)
         #end for
         tmp=ax1.plot(rmsd,values)
-        plt.setp(tmp, color=color, label=par, ls=' ', marker='s', markersize=8)        
+        plt.setp(tmp, color=color, label=par, ls=' ', marker='s', markersize=8)
     #end for
     plt.xlabel('rmsd to target', fontsize=14)
     plt.ylabel('Z-score', fontsize=14)
     ax1.grid(True)
     doShow(fig,'qualVrsRmsd_WI_'+ str(allEntries) )
-#end def    
+#end def
 
 def plotQualVrsRmsdCING(allEntries=True):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     _tmp = NTvalue(0.0, 0.0)
-    
+
     l = len(results)
     rmsd = np.zeros(l)
     if allEntries:
@@ -308,7 +308,7 @@ def plotQualVrsRmsdCING(allEntries=True):
             values[i] = float(e[par])
         #end for
         tmp=ax1.plot(rmsd,values)
-        plt.setp(tmp, color=color, label=par, ls=' ', marker='s', markersize=8)        
+        plt.setp(tmp, color=color, label=par, ls=' ', marker='s', markersize=8)
     #end for
     plt.xlabel('rmsd to target', fontsize=14)
     plt.ylabel('fraction (%)', fontsize=14)
@@ -319,9 +319,9 @@ def plotQualVrsRmsdCING(allEntries=True):
 def plotQualVrsRmsdCINGdiff():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    
+
     _tmp = NTvalue(0.0, 0.0)
-    
+
     l = len(results)
     rmsd = np.zeros(l)
     values = np.zeros(l)
@@ -331,7 +331,7 @@ def plotQualVrsRmsdCINGdiff():
         values[i] = float(e['cing_green']-e['cing_red'])
     #end for
     tmp=ax1.plot(rmsd,values)
-    plt.setp(tmp, color='violet', label='diff', ls=' ', marker='s', markersize=8)        
+    plt.setp(tmp, color='violet', label='diff', ls=' ', marker='s', markersize=8)
     #end for
     plt.ylabel('green-red (%)', fontsize=14)
     ax1.grid(True)
@@ -341,7 +341,7 @@ def plotQualVrsRmsdCINGdiff():
 def plotAll():
     global show
     show = False
-    
+
     plotStatsTargets()
     plotStatsGroups()
     plotStatsMethods()
@@ -353,7 +353,7 @@ def plotAll():
     plotByMethodBox('cing_red', 'CING red', 'fraction (%)')
     plotByMethodBox('cing_green', 'CING green','fraction (%)')
 
-    
+
     for target in results.targets:
         print(target)
         plotRmsd(target)
@@ -378,7 +378,7 @@ def findMatches():
                     e1.truncated == e2.truncated and
                     #((e1.peaklist == 'Refined' and e2.peaklist=='Unrefined') or
                     # (e1.peaklist == 'Unrefined' and e2.peaklist=='Refined')
-                    #) 
+                    #)
                     (e1.peaklist == 'Refined' and e2.peaklist=='Unrefined') # only take one of the two combinations
                     ):
                     matches.append((e1,e2))
@@ -393,7 +393,7 @@ def plotMatches():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
     plt.title('Refined vrs Unrefined peak lists')
-    
+
     m = findMatches()
     l = len(m)
     refined = np.zeros(l)
@@ -406,21 +406,21 @@ def plotMatches():
         unrefined[i] = e[1].rmsdToTarget.value
         unrefined_errs[i] = e[1].rmsdToTarget.error
     #end for
-    
-    plotline, caplines, barlinecols = ax1.errorbar(refined, unrefined, xerr=refined_errs, yerr=unrefined_errs, color='black', lw=2)    
-    plt.setp(plotline, color='black', ls=' ')    
-#    plt.setp(caplines, color='black', label='rmsd to target')    
-#    tmp = ax1.errorbar(refined, unrefined, xerr=refined_errs)    
+
+    plotline, caplines, barlinecols = ax1.errorbar(refined, unrefined, xerr=refined_errs, yerr=unrefined_errs, color='black', lw=2)
+    plt.setp(plotline, color='black', ls=' ')
+#    plt.setp(caplines, color='black', label='rmsd to target')
+#    tmp = ax1.errorbar(refined, unrefined, xerr=refined_errs)
 #    plt.setp(tmp, color='black', label='rmsd to target', ls=' ', marker='s', markersize=8)
     xmax = max(refined)+1.0
     plt.xlim(0, xmax)
     plt.ylim(0, max(unrefined)+1.0)
-    
+
     x=np.arange(0,xmax,0.01)
     y=x
     tmp = ax1.plot(x,y)
-    plt.setp(tmp, color='blue', lw=1)    
-   
+    plt.setp(tmp, color='blue', lw=1)
+
     ax1.grid(True)
     plt.ylabel('rmsd unrefined', fontsize=14)
     plt.xlabel('rmsd refined', fontsize=14)
@@ -456,7 +456,7 @@ def mkHtml():
         b = b + '</ul>'
     #end for
     code = html % b
-    
+
     f = open( dataPath / 'index.html', 'w')
     f.write( code )
     f.close()

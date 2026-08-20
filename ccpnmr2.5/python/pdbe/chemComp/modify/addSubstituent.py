@@ -72,7 +72,7 @@ class CreateCcpnObject:
       
       if type(linkResult) in (type(set()),type(frozenset()),type(tuple())):
         for linkedObject in linkResult:
-          if not substToBaseDict.has_key(linkedObject):
+          if linkedObject not in substToBaseDict:
             print("  Warning: aborting %s creation - %s object does not exist." % (self.className,linkedObject))
             useLink = False
             break
@@ -80,7 +80,7 @@ class CreateCcpnObject:
             linkedObjects.append(substToBaseDict[linkedObject])
 
       elif linkResult:
-        if not substToBaseDict.has_key(linkResult):
+        if linkResult not in substToBaseDict:
           print("  Warning: aborting %s creation - %s object does not exist." % (self.className,linkResult))
           useLink = False
           break
@@ -150,7 +150,7 @@ class CreateChemAtomOrSet(CreateCcpnObject):
       if chemAtomOrSet.chemAtoms:
         self.creationKeywds['chemAtoms'] = []
         for chemAtom in chemAtomOrSet.chemAtoms:
-          if ignoreUnmapped and not substToBaseDict.has_key(chemAtom):
+          if ignoreUnmapped and chemAtom not in substToBaseDict:
             return None
           self.creationKeywds['chemAtoms'].append(substToBaseDict[chemAtom])
 
@@ -224,7 +224,7 @@ def deleteVoidChemCompVar(chemCompVar,changeAttrName,atomName,baseUnit,baseUnitC
         deleteLinkAtoms = True
 
     for attrElementValue in attrElementValues:
-      if changeAttrDict.has_key(attrElement) and attrElementValue in changeAttrDict[attrElement]:
+      if attrElement in changeAttrDict and attrElementValue in changeAttrDict[attrElement]:
         changeAttrDict[attrElement].pop(changeAttrDict[attrElement].index(attrElementValue))
         changeAttr = getDescriptorFromDict(changeAttrDict)
 
@@ -262,7 +262,7 @@ def deleteVoidChemCompVar(chemCompVar,changeAttrName,atomName,baseUnit,baseUnitC
           chemCompVar.parent.__dict__['chemCompVars'][(chemCompVar.linking,chemCompVar.descriptor)] = chemCompVar
           
           if chemCompVarCoord:
-            if chemCompVarCoord.parent.__dict__['chemCompVarCoords'].has_key(oldKey):
+            if oldKey in chemCompVarCoord.parent.__dict__['chemCompVarCoords']:
               del(chemCompVarCoord.parent.__dict__['chemCompVarCoords'][oldKey])
             chemCompVarCoord.__dict__[changeAttrName] = changeAttr
             chemCompVarCoord.parent.__dict__['chemCompVarCoords'][(chemCompVar.linking,chemCompVar.descriptor)] = chemCompVarCoord
@@ -675,7 +675,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
                   baseBoundCoord = (removeBaseAtomCoord.x,removeBaseAtomCoord.y,removeBaseAtomCoord.z)
                   jointCoords = (baseCoord,baseBoundCoord)
                   
-                  if not baseAtomCoords[baseBindingAtom].has_key(jointCoords):
+                  if jointCoords not in baseAtomCoords[baseBindingAtom]:
                     baseAtomCoords[baseBindingAtom][jointCoords] = []
                   baseAtomCoords[baseBindingAtom][jointCoords].append(chemCompVarCoord)
         
@@ -745,7 +745,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
       
       createChemAtomOrSet = CreateChemAtomOrSet(chemAtomOrSet)
       
-      if renameSubstituentAtomNames.has_key(chemAtomOrSet.name):
+      if chemAtomOrSet.name in renameSubstituentAtomNames:
         createChemAtomOrSet.setForcedName(renameSubstituentAtomNames[chemAtomOrSet.name])
       else:
         createChemAtomOrSet.setName(substUnitIndex)
@@ -781,7 +781,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
     for chemAtomSet in redoChemAtomSets:
       createChemAtomOrSet = CreateChemAtomOrSet(chemAtomSet)
 
-      if renameSubstituentAtomNames.has_key(chemAtomSet.name):
+      if chemAtomSet.name in renameSubstituentAtomNames:
         createChemAtomOrSet.setForcedName(renameSubstituentAtomNames[chemAtomSet.name])
       else:
         createChemAtomOrSet.setName(substUnitIndex)
@@ -834,7 +834,7 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
       
       coordsForChemCompVar = {}
       
-      if baseAtomCoords.has_key(baseBindingAtom):
+      if baseBindingAtom in baseAtomCoords:
         for jointCoords in baseAtomCoords[baseBindingAtom]:
           newSubstCoords = tuple([tuple(coord) for coord in superposeNewVectorsOnOld(jointCoords,substCoords)])
           coordsForChemCompVar[newSubstCoords] = baseAtomCoords[baseBindingAtom][jointCoords]
@@ -872,11 +872,10 @@ def addSubstituentToBaseUnit(baseUnitCcpCode,
         
         
       print("  Connected new substituent chemAtom %s,%s to base unit atom %s,%s, and included in relevant chemCompVars" % (
-)
-                        baseSubstBindingAtom.name,
-                        baseSubstBindingAtom.subType,
-                        baseBindingAtom.name,
-                        baseBindingAtom.subType)
+            baseSubstBindingAtom.name,
+            baseSubstBindingAtom.subType,
+            baseBindingAtom.name,
+            baseBindingAtom.subType))
     
     #
     # NEXT ON LIST: make sure the chemCompVars make sense if there are any for the substituent!!!

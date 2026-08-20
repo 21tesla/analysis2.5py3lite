@@ -2,14 +2,13 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_WhyNot.py
 """
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG.WhyNot import FAILED_TO_BE_VALIDATED_CING
-from cing.NRG.WhyNot import NOT_NMR_ENTRY
-from cing.NRG.WhyNot import WhyNot
-from cing.NRG.WhyNot import WhyNotEntry
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.WhyNot import FAILED_TO_BE_VALIDATED_CING, NOT_NMR_ENTRY, WhyNot, WhyNotEntry
+
 
 class AllChecks(TestCase):
 
@@ -29,7 +28,7 @@ class AllChecks(TestCase):
             whyNotEntry.comment = FAILED_TO_BE_VALIDATED_CING
         whyNotStr = '%s' % whyNot
         nTdebug("whyNotStr: ["+ whyNotStr +"]")
-        writeTextToFile("NRG-CING.txt", whyNotStr)    
+        writeTextToFile("NRG-CING.txt", whyNotStr)
     # end def
 # end class
 

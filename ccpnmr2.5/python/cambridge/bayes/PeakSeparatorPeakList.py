@@ -13,8 +13,8 @@ dimWrapped   isFreqDim    dataDimRefs  minHeight
 
 """
 
-from ccp.api.nmr.Nmr                        import FreqDataDim
-from ccpnmr.analysis.core.ExperimentBasic   import getPrimaryDataDimRef
+from ccp.api.nmr.Nmr import FreqDataDim
+from ccpnmr.analysis.core.ExperimentBasic import getPrimaryDataDimRef
 
 
 def getPeakListParams( params ):

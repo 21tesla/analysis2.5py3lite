@@ -1,12 +1,15 @@
 #import matplotlib # to pop-up a xwindow with command 'show()'
 #matplotlib.use('GTKAgg') # enable this line and above.
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import hPlot
-from cing.Libs.numpyInterpolation import * #@UnusedWildImport
-from numpy import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from numpy import *  #@UnusedWildImport
+
+from cing import cingDirTmp
+from cing.Libs.html import hPlot
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.numpyInterpolation import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

@@ -3,18 +3,16 @@ Original from Wim Vranken.
 Used for eNMR/weNMR workshop data sets.
 """
 
-from ccpnmr.format.converters.CnsFormat import CnsFormat
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import do_cmd
-from cing.Scripts.FC.constants import * #@UnusedWildImport
-from cing.Scripts.FC.utils import importPseudoPdb
-from glob import glob
-from memops.api import Implementation
-import tkinter
 import shutil
+from glob import glob
 
+from ccpnmr.format.converters.CnsFormat import CnsFormat
+from cing import cingDirTestsData, cingDirTmp
+from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.FC.constants import *  #@UnusedWildImport
+from cing.Scripts.FC.utils import importPseudoPdb
+from memops.api import Implementation
 
 __author__ = cing.__author__ + "Wim Vranken <wim@ebi.ac.uk>"
 
@@ -66,11 +64,11 @@ def convertXplor2Ccpn(projectName, rootDir, inputDir="XPLOR", outputDir="CCPN"):
     guiRoot.destroy()
 
 
-def importXplorCoorAndRes(ccpnProject, inputDir, guiRoot, replaceCoordinates=1, replaceRestraints=1, 
+def importXplorCoorAndRes(ccpnProject, inputDir, guiRoot, replaceCoordinates=1, replaceRestraints=1,
                           allowPopups=1, minimalPrompts=0, verbose=1, **presets):
 
     if replaceCoordinates:
-        status = importPseudoPdb(ccpnProject, inputDir, guiRoot, allowPopups=allowPopups, minimalPrompts=minimalPrompts, 
+        status = importPseudoPdb(ccpnProject, inputDir, guiRoot, allowPopups=allowPopups, minimalPrompts=minimalPrompts,
                                  verbose=verbose, **presets)
         if status:
             nTerror("Failed importXplorCoorAndRes")

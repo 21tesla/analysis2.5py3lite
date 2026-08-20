@@ -5,6 +5,7 @@ Created on Jun 24, 2011
 '''
 
 import nose
+
 if nose.run():
     print("Nose ran fine")
 else:

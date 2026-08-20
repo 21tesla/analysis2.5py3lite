@@ -2,11 +2,13 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Database/Scripts/test/test_createStarUserLib.py
 """
+import unittest
+from unittest import TestCase
+
 from cing import cingDirTmp
 from cing.Database.Scripts.createStarUserLib import createStarUserLib
-from cing.Libs.NTutils import * #@UnusedWildImport
-from unittest import TestCase
-import unittest
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

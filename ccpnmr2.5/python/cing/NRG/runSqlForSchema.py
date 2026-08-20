@@ -14,8 +14,8 @@ $C/python/cing/NRG/runSqlForSchema.py nmr_redo  $C/python/cing/NRG/sql/createDB-
 """
 
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
 
 schemaIdOrg = CASD_DB_NAME # this should match the input SQL.
 db_name = PDBJ_DB_NAME
@@ -23,7 +23,7 @@ user_name = PDBJ_DB_USER_NAME
 
 
 def runSqlForSchema(sqlFile, schemaId = CASD_DB_NAME, rootPath=None):
-    
+
     if schemaId == SCHEMA_ID_ALL_STR:
         for schemaIdSpecific in schemaIdList:
             if runSqlForSchema(sqlFile, schemaId = schemaIdSpecific, rootPath=rootPath):

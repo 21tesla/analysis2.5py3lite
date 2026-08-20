@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,152 +54,153 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string, re
+import os
+import re
+import string
 
 from ccp.general.Io import getDataPath
-
 from memops.universal.Io import joinPath
 
-
 patt = {}
-patt['dollar'] = re.compile("^\s*\$")
+patt["dollar"] = re.compile(r"^\s*\$")
 
-xplorCodes = ['%','*','+']
+xplorCodes = ["%", "*", "+"]
 
 #############
 # Functions #
 #############
 
-def readAquaFormats(file,format,chemCompCodes):
 
-  fin = open(file)
+def readAquaFormats(file, format, chemCompCodes):
 
-  # Read in reference information (quick and dirty)
-  line = fin.readline()
-  
-  while line:
-    cols = line.split()
-    
-    if len(cols) == 0 or patt['dollar'].search(line):
-      pass
-    
-    #
-    # Using - and + codes as well
-    #
+    fin = open(file)
 
-    elif cols[0] == 'def':
-      chemCompCode = cols[1]
-        
-      formatAtomName = cols[3]
-      aquaAtomName = cols[4]
-      
-      if not chemCompCodes.has_key(chemCompCode):
-        chemCompCodes[chemCompCode] = {}
-      
-      if not chemCompCodes[chemCompCode].has_key(aquaAtomName):
-        chemCompCodes[chemCompCode][aquaAtomName] = {}
-      
-      if not chemCompCodes[chemCompCode][aquaAtomName].has_key(format):
-        chemCompCodes[chemCompCode][aquaAtomName][format] = [formatAtomName]
-        
-        # HACK FOR XPLOR ONLY!
-        # For aqua xplor names ending in hash '#',
-        # will add same name but with '*','%','+' (see xplorCodes)
-        # These should go in altSysNames in the data model
-        if format == 'xplor':
-          findHash = string.find(formatAtomName,'#')
-          if findHash == len(formatAtomName) - 1:
-            for xplorCode in xplorCodes:
-              newName = string.replace(formatAtomName,'#',xplorCode)
-              chemCompCodes[chemCompCode][aquaAtomName][format].append(newName)
-              
-            # For 'deep' matches, add ++, **, %% and ##
-            if chemCompCodes[chemCompCode][aquaAtomName].has_key('diana'):
-              if chemCompCodes[chemCompCode][aquaAtomName]['diana'][0][:2] == 'QQ':
-                for xplorCode in xplorCodes + ['#']:
-                  newName = string.replace(formatAtomName,'#',xplorCode)
-                  newName += xplorCode
-                  chemCompCodes[chemCompCode][aquaAtomName][format].append(newName)
-              
-      else:
-        if formatAtomName not in chemCompCodes[chemCompCode][aquaAtomName][format]:
-          chemCompCodes[chemCompCode][aquaAtomName][format].append(formatAtomName)
-
+    # Read in reference information (quick and dirty)
     line = fin.readline()
 
-  return chemCompCodes
-   
-def readAquaDefs(file,info,chemCompCodes):
-  
-  fin = open(file)
-  
-  # Read in reference information (quick and dirty)
-  line = fin.readline()
-  
-  while line:
-    cols = line.split()
- 
-    if len(cols) == 0 or patt['dollar'].search(line):
-      pass
-    
-    #
-    # Using - and + codes as well
-    #
-    
-    elif cols[0] == 'def':
-      chemCompCode = cols[1]
+    while line:
+        cols = line.split()
 
-      aquaAtomName = cols[3]
-      aquaCorrespondingAtoms = cols[5:]
-      
-      chemCompCodes[chemCompCode][aquaAtomName][info] = aquaCorrespondingAtoms
-    
+        if len(cols) == 0 or patt["dollar"].search(line):
+            pass
+
+        #
+        # Using - and + codes as well
+        #
+
+        elif cols[0] == "def":
+            chemCompCode = cols[1]
+
+            formatAtomName = cols[3]
+            aquaAtomName = cols[4]
+
+            if chemCompCode not in chemCompCodes:
+                chemCompCodes[chemCompCode] = {}
+
+            if aquaAtomName not in chemCompCodes[chemCompCode]:
+                chemCompCodes[chemCompCode][aquaAtomName] = {}
+
+            if format not in chemCompCodes[chemCompCode][aquaAtomName]:
+                chemCompCodes[chemCompCode][aquaAtomName][format] = [formatAtomName]
+
+                # HACK FOR XPLOR ONLY!
+                # For aqua xplor names ending in hash '#',
+                # will add same name but with '*','%','+' (see xplorCodes)
+                # These should go in altSysNames in the data model
+                if format == "xplor":
+                    findHash = string.find(formatAtomName, "#")
+                    if findHash == len(formatAtomName) - 1:
+                        for xplorCode in xplorCodes:
+                            newName = string.replace(formatAtomName, "#", xplorCode)
+                            chemCompCodes[chemCompCode][aquaAtomName][format].append(newName)
+
+                        # For 'deep' matches, add ++, **, %% and ##
+                        if "diana" in chemCompCodes[chemCompCode][aquaAtomName]:
+                            if chemCompCodes[chemCompCode][aquaAtomName]["diana"][0][:2] == "QQ":
+                                for xplorCode in xplorCodes + ["#"]:
+                                    newName = string.replace(formatAtomName, "#", xplorCode)
+                                    newName += xplorCode
+                                    chemCompCodes[chemCompCode][aquaAtomName][format].append(newName)
+
+            else:
+                if formatAtomName not in chemCompCodes[chemCompCode][aquaAtomName][format]:
+                    chemCompCodes[chemCompCode][aquaAtomName][format].append(formatAtomName)
+
+        line = fin.readline()
+
+    return chemCompCodes
+
+
+def readAquaDefs(file, info, chemCompCodes):
+
+    fin = open(file)
+
+    # Read in reference information (quick and dirty)
     line = fin.readline()
 
-  return chemCompCodes
+    while line:
+        cols = line.split()
 
-def getAquaAtomInfo(chemCompCodes = {}):
+        if len(cols) == 0 or patt["dollar"].search(line):
+            pass
 
-  aquaRefDir = getDataPath('ccp', 'aqua')
-  files = os.listdir(aquaRefDir)
+        #
+        # Using - and + codes as well
+        #
 
-  for file in files:
-    if file[0:8] == 'AtomLIB-':
-      format = file[8:]
-      
-      readAquaFormats(joinPath(aquaRefDir,file),format,chemCompCodes)
-  
-  for file in files:
-    if file[-8:] == 'LIB-aqua':
-      info = file[0:-8]
-      readAquaDefs(joinPath(aquaRefDir,file),info,chemCompCodes)
-  
-  return chemCompCodes
-  
+        elif cols[0] == "def":
+            chemCompCode = cols[1]
+
+            aquaAtomName = cols[3]
+            aquaCorrespondingAtoms = cols[5:]
+
+            chemCompCodes[chemCompCode][aquaAtomName][info] = aquaCorrespondingAtoms
+
+        line = fin.readline()
+
+    return chemCompCodes
+
+
+def getAquaAtomInfo(chemCompCodes={}):
+
+    aquaRefDir = getDataPath("ccp", "aqua")
+    files = os.listdir(aquaRefDir)
+
+    for file in files:
+        if file[0:8] == "AtomLIB-":
+            format = file[8:]
+
+            readAquaFormats(joinPath(aquaRefDir, file), format, chemCompCodes)
+
+    for file in files:
+        if file[-8:] == "LIB-aqua":
+            info = file[0:-8]
+            readAquaDefs(joinPath(aquaRefDir, file), info, chemCompCodes)
+
+    return chemCompCodes
+
+
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    chemCompCodes = getAquaAtomInfo()
 
-  chemCompCodes = getAquaAtomInfo()
+    chemCompCodeList = chemCompCodes.keys()
+    chemCompCodeList.sort()
 
-  
-  chemCompCodeList = chemCompCodes.keys()
-  chemCompCodeList.sort()
+    for chemCompCode in chemCompCodeList:
+        print(chemCompCode)
 
-  for chemCompCode in chemCompCodeList:
-    print(chemCompCode)
+        atomNameList = chemCompCodes[chemCompCode].keys()
+        atomNameList.sort()
 
-    atomNameList = chemCompCodes[chemCompCode].keys()
-    atomNameList.sort()
+        for aquaAtomName in atomNameList:
+            print("  " + aquaAtomName)
 
-    for aquaAtomName in atomNameList:
-      
-      print("  " + aquaAtomName)
-      
-      formatList = chemCompCodes[chemCompCode][aquaAtomName].keys()
-      formatList.sort()
-      
-      for format in formatList:
-        print("  " + str(chemCompCodes[chemCompCode][aquaAtomName][format]) + " (%s)" % format)
+            formatList = chemCompCodes[chemCompCode][aquaAtomName].keys()
+            formatList.sort()
+
+            for format in formatList:
+                print("  " + str(chemCompCodes[chemCompCode][aquaAtomName][format]) + " (%s)" % format)

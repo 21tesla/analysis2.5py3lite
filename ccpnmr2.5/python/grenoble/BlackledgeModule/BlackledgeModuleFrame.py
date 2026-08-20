@@ -1,37 +1,26 @@
 
+import glob
+import os
 import subprocess
-from multiprocessing import Process
+import tempfile
 
-import os, tempfile, glob
-
-import tkinter
-
-from memops.universal import Io as uniIo
-
-from memops.gui.DataEntry         import DataEntry
-from memops.gui.FileSelect        import FileType
-from memops.gui.FileSelectPopup   import FileSelectPopup
-from memops.gui.TabbedFrame       import TabbedFrame
-from memops.gui.PulldownList      import PulldownList
-from memops.gui.Button            import Button
-from memops.gui.ButtonList        import ButtonList, UtilityButtonList
-from memops.gui.Entry             import Entry
-from memops.gui.Label             import Label
-from memops.gui.LabelDivider      import LabelDivider
-from memops.gui.LabelFrame        import LabelFrame
-from memops.gui.MessageReporter   import showInfo, showOkCancel, showWarning, showMulti
-from memops.gui.ScrolledText      import ScrolledText
-from memops.gui.ScrolledMatrix    import ScrolledMatrix 
-from memops.gui.WebBrowser        import WebBrowser
-
-from memops.gui.Frame             import Frame
-
-from ccp.api.nmr                  import NmrCalc
-from ccp.util.NmrCalc             import setRunParameter, setRunTextParameter, getRunTextParameter
-
-from ccp.lib.StructureIo import makePdbFromStructure, getStructureFromFile
-
-from grenoble.BlackledgeModule    import Io as moduleIo
+from ccp.lib.StructureIo import getStructureFromFile, makePdbFromStructure
+from ccp.util.NmrCalc import setRunTextParameter
+from grenoble.BlackledgeModule import Io as moduleIo
+from memops.gui.Button import Button
+from memops.gui.ButtonList import ButtonList
+from memops.gui.Entry import Entry
+from memops.gui.FileSelect import FileType
+from memops.gui.FileSelectPopup import FileSelectPopup
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelDivider import LabelDivider
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.MessageReporter import showMulti, showWarning
+from memops.gui.PulldownList import PulldownList
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.ScrolledText import ScrolledText
+from memops.gui.TabbedFrame import TabbedFrame
 
 MODULE        = 'MODULE'
 MODULE_GREEN  = '#80FF80'
@@ -48,7 +37,7 @@ RDC_CONSTRAINT_DATA     = 'RdcConstraintStoreData'
 DIST_CONSTRAINT_DATA    = 'DistanceConstraintStoreData'
 USER_DESCRIPTION_DATA   = 'UserDescriptionData'
 
-# data to be sent to MODULE ?? 
+# data to be sent to MODULE ??
 DATA_TITLES = { MODULE_EXE:'MODULE Executable',
                 STRUCTURE_DATA:'Structure',
                 RDC_CONSTRAINT_DATA:'RDC Restraint List',
@@ -73,7 +62,7 @@ class BlackledgeModuleFrame(Frame):
     self.project                  = project
 
     try:
-      self.nmrProject               = (project.currentNmrProject 
+      self.nmrProject               = (project.currentNmrProject
                                       or project.newNmrProject(name='BLACKLEDGE_MODULE'))
     except:
       print('&&& Running MODULE popup from outside CCPN Analysis - debug only - no NmrCalc')
@@ -271,7 +260,7 @@ class BlackledgeModuleFrame(Frame):
     row += 4
     tipTexts  = ['Load Selected Run', 'Delete Selected Run']
     texts     = ['Load Selected Run', 'Delete Selected']
-    commands  = [self.loadRun, self.deleteRun] 
+    commands  = [self.loadRun, self.deleteRun]
     colours   = [MODULE_GREEN, MODULE_RED]
     self.runButtons = ButtonList(frameC, texts=texts, tipTexts=tipTexts,
                                       commands=commands, grid=(row,0), gridSpan=(1,4) )
@@ -464,7 +453,7 @@ class BlackledgeModuleFrame(Frame):
     def cancel(): moduleBvFileGood = False
 
     # back value files are helpfully appended '*.back'
-    possibleFiles  = glob.glob( os.path.join( os.getcwd(), '*.back' ) ) 
+    possibleFiles  = glob.glob( os.path.join( os.getcwd(), '*.back' ) )
     possibleFiles += glob.glob( os.path.join( self.moduleTempDir, '*.back' ) )
 
     if len( possibleFiles ) == 1:
@@ -538,12 +527,12 @@ class BlackledgeModuleFrame(Frame):
       rdcList = moduleIo.getBackValuesListFromFile( backValFile, chain, nmrConstraintStore )
 
       # rdcRawData = moduleIo.getRawBackValuesFromFile( backValFile )
-      # 
+      #
       # for run in runs:
       #   runText.append( [run.getSerial(), run.getDetails(), run.getStatus()] )
 
       self.rdcOutputTable.update(objectList=None, textMatrix=None)
-        
+
 
   # end OS interaction
   ####################
@@ -583,7 +572,7 @@ class BlackledgeModuleFrame(Frame):
 
   def loadRun(self):
     pass
-  
+
   def deleteRun(self):
     pass
 
@@ -703,7 +692,7 @@ class BlackledgeModuleFrame(Frame):
       for i, model in enumerate(structures):
         if model is None: continue
         ee = model.structureEnsemble
-        name = '%s:%d:%d' % (ee.molSystem.code,ee.ensembleId, model.serial) 
+        name = '%s:%d:%d' % (ee.molSystem.code,ee.ensembleId, model.serial)
         names.append(name)
 
       if self.inputStructure not in structures:
@@ -740,7 +729,7 @@ class BlackledgeModuleFrame(Frame):
       for constList in constraintLists:
         if constList is None: continue
         store = constList.nmrConstraintStore
-        name = '%d:%d' % (store.serial, constList.serial) 
+        name = '%d:%d' % (store.serial, constList.serial)
         names.append(name)
 
       if self.getInputConstraintList(className) not in constraintLists:

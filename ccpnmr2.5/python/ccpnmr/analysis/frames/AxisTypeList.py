@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,68 +45,67 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.ScrolledListbox import ScrolledListbox
 
 # do not need 'setName' since name is AxisType key
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class AxisTypeList(PulldownMenu):
- 
-  def __init__(self, parent, getAxisTypes, includeNone = False, *args, **kw):
- 
-    self.getAxisTypes = getAxisTypes
-    self.includeNone = includeNone
- 
-    PulldownMenu.__init__(self, parent, *args, **kw)
- 
-    popup = self.getPopup()
-    for func in notify_funcs:
-      popup.registerNotify(self.setAxisTypes, 'ccpnmr.Analysis.AxisType', func)
+    def __init__(self, parent, getAxisTypes, includeNone=False, *args, **kw):
 
-  def destroy(self):
+        self.getAxisTypes = getAxisTypes
+        self.includeNone = includeNone
 
-    #print 'AxisTypeList destroy'
-    popup = self.getPopup()
-    for func in notify_funcs:
-      popup.unregisterNotify(self.setAxisTypes, 'ccpnmr.Analysis.AxisType', func)
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.destroy(self)
- 
-  def setAxisTypes(self, *type):
- 
-    axisTypes = self.getAxisTypes()
-    names = []
-    if (self.includeNone):
-      names.append('None')
-    names.extend([ axisType.name for axisType in axisTypes ])
-    self.replace(names, self.selected_index)
+        popup = self.getPopup()
+        for func in notify_funcs:
+            popup.registerNotify(self.setAxisTypes, "ccpnmr.Analysis.AxisType", func)
+
+    def destroy(self):
+
+        # print 'AxisTypeList destroy'
+        popup = self.getPopup()
+        for func in notify_funcs:
+            popup.unregisterNotify(self.setAxisTypes, "ccpnmr.Analysis.AxisType", func)
+
+        PulldownMenu.destroy(self)
+
+    def setAxisTypes(self, *type):
+
+        axisTypes = self.getAxisTypes()
+        names = []
+        if self.includeNone:
+            names.append("None")
+        names.extend([axisType.name for axisType in axisTypes])
+        self.replace(names, self.selected_index)
+
 
 class AxisTypeScrolledList(ScrolledListbox):
- 
-  def __init__(self, parent, getAxisTypes):
- 
-    self.getAxisTypes = getAxisTypes
- 
-    ScrolledListbox.__init__(self, parent, xscroll=False, selectmode=Tkinter.MULTIPLE)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setAxisTypes, 'ccpnmr.Analysis.AxisType', func)
- 
-  def destroy(self):
- 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setAxisTypes, 'ccpnmr.Analysis.AxisType', func)
- 
-    ScrolledListbox.destroy(self)
- 
-  def setAxisTypes(self, *type):
- 
-    axisTypes = self.getAxisTypes()
-    names = [ axisType.name for axisType in axisTypes ]
-    items = self.getSelectedItems()
-    self.setItems(names)
-    self.setSelectedItems(items)
+    def __init__(self, parent, getAxisTypes):
+
+        self.getAxisTypes = getAxisTypes
+
+        ScrolledListbox.__init__(self, parent, xscroll=False, selectmode=Tkinter.MULTIPLE)
+
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setAxisTypes, "ccpnmr.Analysis.AxisType", func)
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setAxisTypes, "ccpnmr.Analysis.AxisType", func)
+
+        ScrolledListbox.destroy(self)
+
+    def setAxisTypes(self, *type):
+
+        axisTypes = self.getAxisTypes()
+        names = [axisType.name for axisType in axisTypes]
+        items = self.getSelectedItems()
+        self.setItems(names)
+        self.setSelectedItems(items)

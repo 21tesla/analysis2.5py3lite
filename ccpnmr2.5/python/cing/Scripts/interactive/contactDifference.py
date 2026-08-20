@@ -6,13 +6,14 @@ run -i '$C/python/cing/Scripts/interactive/contactDifference.py'
 for Sanne Nabuurs.
 '''
 
-from cing.PluginCode.matplib import NTplot
-from cing.PluginCode.matplib import NTplotSet
+from matplotlib.pyplot import *  #@UnusedWildImport
+from numpy import *  #@UnusedWildImport
+
 from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 from cing.core.molecule import nTdistanceOpt
-from matplotlib.pyplot import * #@UnusedWildImport
-from numpy import * #@UnusedWildImport
+from cing.PluginCode.matplib import NTplot, NTplotSet
+
 name = 'cbd12'
 pdbFile = 'cbd12.pdb'
 

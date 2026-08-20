@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,34 +45,35 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
-notify_funcs = ('__init__', 'delete', 'setName')
+notify_funcs = ("__init__", "delete", "setName")
+
 
 class ExperimentList(PulldownMenu):
+    def __init__(self, parent, getExperiments, extra_label="", *args, **kw):
 
-  def __init__(self, parent, getExperiments, extra_label = '', *args, **kw):
+        self.getExperiments = getExperiments
+        self.extra_label = extra_label
 
-    self.getExperiments = getExperiments
-    self.extra_label = extra_label
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.__init__(self, parent, *args, **kw)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
+    def destroy(self):
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
+        PulldownMenu.destroy(self)
 
-    PulldownMenu.destroy(self)
+    def setExperiments(self, *experiment):
 
-  def setExperiments(self, *experiment):
- 
-    experiments = self.getExperiments()
-    names = [ experiment.name for experiment in experiments ]
-    if (self.extra_label):
-      names = [self.extra_label] + names
-    self.replace(names, self.selected_index)
+        experiments = self.getExperiments()
+        names = [experiment.name for experiment in experiments]
+        if self.extra_label:
+            names = [self.extra_label] + names
+        self.replace(names, self.selected_index)

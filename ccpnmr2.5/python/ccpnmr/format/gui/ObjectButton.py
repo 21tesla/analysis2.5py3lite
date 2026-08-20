@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,70 +51,65 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 
 class ObjectButton(Tkinter.Button):
+    def __init__(self, parent, toggledDict={}, untoggledDict={}, command=None, toggled=False, *args, **kw):
 
-  def __init__(self, parent,  toggledDict = {}, untoggledDict = {},
-                       command = None, toggled = False, *args, **kw):
+        apply(Tkinter.Button.__init__, (self, parent) + args, kw)
 
-    apply(Tkinter.Button.__init__, (self, parent) + args, kw)
+        self.parent = parent
 
-    self.parent = parent
-    
-    self.toggledDict = toggledDict
-    self.untoggledDict = untoggledDict
+        self.toggledDict = toggledDict
+        self.untoggledDict = untoggledDict
 
-    self.command = command
+        self.command = command
 
-    self.toggled = toggled
-    
-    self.text = ""
+        self.toggled = toggled
 
-    self.config(command=self.callback)
-    
-    self.callback(True)
+        self.text = ""
 
-  def callback(self, first_pass = False):
+        self.config(command=self.callback)
 
-    # Don't change toggle state
-    
-    if (not first_pass):
+        self.callback(True)
 
-      self.toggled = not self.toggled
+    def callback(self, first_pass=False):
 
-      if (self.command):
-        self.command()        
+        # Don't change toggle state
 
-    if (self.toggled):
-      dict = self.toggledDict
-    else:
-      dict = self.untoggledDict
+        if not first_pass:
+            self.toggled = not self.toggled
 
-    self.config(**dict)
+            if self.command:
+                self.command()
 
-  def get(self):
-    
-    return self.text
-    
-  def set(self, text = ''):
-  
-    self.config(text = text)
-  
-if (__name__ == '__main__'):
+        if self.toggled:
+            dict = self.toggledDict
+        else:
+            dict = self.untoggledDict
 
-  import sys
+        self.config(**dict)
 
-  root = Tkinter.Tk()
+    def get(self):
 
-  button = ObjectButton(root, text='hit me')
-  button.command = button.get
-  button.set('lala')
-  button.grid()
-  button.get()
-  button = Tkinter.Button(root, text='quit', command=sys.exit)
-  button.grid()
+        return self.text
 
-  root.mainloop()
+    def set(self, text=""):
 
+        self.config(text=text)
+
+
+if __name__ == "__main__":
+    import sys
+
+    root = Tkinter.Tk()
+
+    button = ObjectButton(root, text="hit me")
+    button.command = button.get
+    button.set("lala")
+    button.grid()
+    button.get()
+    button = Tkinter.Button(root, text="quit", command=sys.exit)
+    button.grid()
+
+    root.mainloop()

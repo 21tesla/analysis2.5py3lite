@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,108 +52,102 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
+import os
 
-from memops.universal.Util import returnInt
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.general.Constants import defaultMolCode, defaultSeqInsertCode
-
+from ccp.format.general.Constants import defaultSeqInsertCode
+from ccp.format.general.formatIO import Sequence, SequenceElement
 from ccp.format.molmol.coordinatesIO import MolmolCoordinateFile
 from ccp.format.molmol.generalIO import MolmolGenericFile
-from ccp.format.general.formatIO import Sequence, SequenceElement
+from memops.universal.Io import getTopDirectory
 
 #####################
 # Class definitions #
 #####################
-      
+
+
 class MolmolSequenceFile(MolmolGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.sequences = []
+        self.sequences = []
 
-  def read(self, coordinateFile = None, verbose = 0):
-    
-    if not coordinateFile:
-      coordinateFile = MolmolCoordinateFile(self.name)
-      coordinateFile.read(maxNum = 1)
+    def read(self, coordinateFile=None, verbose=0):
 
-    seqCode = ""
-    seqInsertCode = defaultSeqInsertCode
-    segId = -1
-    residueName = ""
-    
-    modelNums = coordinateFile.modelCoordinates.keys()
-    modelNums.sort()
+        if not coordinateFile:
+            coordinateFile = MolmolCoordinateFile(self.name)
+            coordinateFile.read(maxNum=1)
 
-    for coordinate in coordinateFile.modelCoordinates[modelNums[0]]:
+        seqCode = ""
+        seqInsertCode = defaultSeqInsertCode
+        segId = -1
+        residueName = ""
 
-      if segId != coordinate.segId:
+        modelNums = coordinateFile.modelCoordinates.keys()
+        modelNums.sort()
 
-        #
-        # New sequence
-        #
-        
-        compoundName = None
-        
-        for coordChain in coordinateFile.chains:
-          if coordChain.chainId == coordinate.chainId and coordChain.compoundName:
-            compoundName = coordChain.compoundName
+        for coordinate in coordinateFile.modelCoordinates[modelNums[0]]:
+            if segId != coordinate.segId:
+                #
+                # New sequence
+                #
 
-        self.sequences.append(MolmolSequence(chainCode = coordinate.segId))
-        segId = coordinate.segId
+                compoundName = None
 
-      if seqCode != coordinate.seqCode or seqInsertCode != coordinate.insertionCode:
+                for coordChain in coordinateFile.chains:
+                    if coordChain.chainId == coordinate.chainId and coordChain.compoundName:
+                        compoundName = coordChain.compoundName
 
-        #
-        # New residue/item
-        # 
+                self.sequences.append(MolmolSequence(chainCode=coordinate.segId))
+                segId = coordinate.segId
 
-        seqCode = coordinate.seqCode
-        seqInsertCode = coordinate.insertionCode
-        residueName = coordinate.resName
+            if seqCode != coordinate.seqCode or seqInsertCode != coordinate.insertionCode:
+                #
+                # New residue/item
+                #
 
-        self.sequences[-1].elements.append(MolmolSequenceElement(str(seqCode) + seqInsertCode,residueName,compoundName = compoundName))
+                seqCode = coordinate.seqCode
+                seqInsertCode = coordinate.insertionCode
+                residueName = coordinate.resName
 
-      #
-      # Keep track of atom names...
-      #
-      
-      self.sequences[-1].elements[-1].addAtomName(coordinate.atomName)
-  
+                self.sequences[-1].elements.append(
+                    MolmolSequenceElement(str(seqCode) + seqInsertCode, residueName, compoundName=compoundName)
+                )
+
+            #
+            # Keep track of atom names...
+            #
+
+            self.sequences[-1].elements[-1].addAtomName(coordinate.atomName)
+
+
 class MolmolSequence(Sequence):
+    def setFormatSpecific(self, *args, **keywds):
 
-  def setFormatSpecific(self,*args,**keywds):
-  
-    if not self.molName and self.chainCode:
-      self.molName = self.chainCode
-    
-    self.compoundName = keywds.get('compoundName')
-    #self.compoundName = None
-    #if keywds.has_key('compoundName'):
-    #  self.compoundName = compoundName
-  
+        if not self.molName and self.chainCode:
+            self.molName = self.chainCode
+
+        self.compoundName = keywds.get("compoundName")
+        # self.compoundName = None
+        # if 'compoundName' in keywds:
+        #  self.compoundName = compoundName
+
+
 MolmolSequenceElement = SequenceElement
-  
+
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    files = ["../reference/ccpNmr/markNijmegen/nbd.pdb"]
 
-  files = ['../reference/ccpNmr/markNijmegen/nbd.pdb']
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-  for file in files:
+        molmolFile = MolmolSequenceFile(file)
 
-    file = os.path.join(getTopDirectory(),file)
+        molmolFile.read(verbose=1)
 
-    molmolFile = MolmolSequenceFile(file)
-  
-    molmolFile.read(verbose = 1)
-
-    for seq in molmolFile.sequences:
-      print("Chain: '%s'" % seq.chainCode)
-      for seqel in seq.elements:
-        print(seqel.seqCode, seqel.code3Letter)
-    
+        for seq in molmolFile.sequences:
+            print("Chain: '%s'" % seq.chainCode)
+            for seqel in seq.elements:
+                print(seqel.seqCode, seqel.code3Letter)

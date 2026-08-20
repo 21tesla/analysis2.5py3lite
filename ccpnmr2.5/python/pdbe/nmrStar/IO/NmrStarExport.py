@@ -1,15 +1,10 @@
-from pdbe.nmrStar.IO.NmrStarHandler import NmrStarFullReaderFile, NmrStarFormat
+import re
 
-from pdbe.nmrStar.IO.Util import getCcpnVersion, getLatestNmrStarVersion
-from pdbe.nmrStar.IO.Util import getCcpn2NmrStar, getNmrStarDict
-
-import os, re
-
-from memops.api import Implementation
-from ccp.format.general.Constants import defaultSeqInsertCode, defaultMolCode
+from ccp.format.general.Constants import defaultMolCode, defaultSeqInsertCode
 from ccp.general.Util import findAllSysNamesByChemAtomOrSet, findChemCompSysName
-
 from ccpnmr.format.general.Constants import assign_kw
+from pdbe.nmrStar.IO.NmrStarHandler import NmrStarFormat, NmrStarFullReaderFile
+from pdbe.nmrStar.IO.Util import getCcpn2NmrStar, getCcpnVersion, getLatestNmrStarVersion, getNmrStarDict
 
 #
 # Notes on conversion project (writing data read in with NmrStarFormat):
@@ -36,20 +31,20 @@ class NmrStarExport:
   """
 
   setAtomsTags = ("CUSTOM_setAtoms","CUSTOM_setAtoms_individual")
- 
+
   def __init__(self,nmrEntry, nmrStarVersion = None, forceEntryId = None):
 
     #
     # Get the relevant NMR-STAR dictionary and the relevant conversion class
     #
-    
+
     ccpnVersion = getCcpnVersion()
-    
+
     if not nmrStarVersion:
       nmrStarVersion = getLatestNmrStarVersion()
-    
+
     print("  Using CCPN version %s, NMR-STAR version %s." % (ccpnVersion,nmrStarVersion))
-    
+
     self.nmrEntry = nmrEntry
     self.ccpn2NmrStar = getCcpn2NmrStar(ccpnVersion,nmrStarVersion,exportClass = self)
     self.nmrStarDict = getNmrStarDict(nmrStarVersion)
@@ -58,19 +53,19 @@ class NmrStarExport:
     # Make sure chemElementStore is set - otherwise will crash eventually
     # TODO: this can be removed once the API does this automatically!
     #
-    
+
     if not self.nmrEntry.root.currentChemElementStore:
       self.nmrEntry.root.currentChemElementStore = self.nmrEntry.root.findFirstChemElementStore()
-    
+
     #
     # These are dictionaries that track CCPN object to STAR ID mapping
     #
     # starKeys: dictionary with the keys for the star tags.
-    #           
+    #
     #    Key: (tableName,tagName,). Multiple tagNames are possible as
     #         key, this is to handle tables/loops that correspond to
     #         multiple layers of CCPN data.
-    #                    
+    #
     #    Value: [(ccpnObject,starID,parentLoopDict),...]
     #           The parentLoopDict contains information about the 'parent' object
     #
@@ -88,77 +83,77 @@ class NmrStarExport:
     self.starKeyToCcpnVar = {}
     self.starTagToStarKey = {}
     self.messages = {}
-    
+
     self.titleList = []
-   
+
     #
     # Regular expression stuff
     #
-   
+
     self.patt = {}
-    self.patt['getLocalValue'] = re.compile("^(.+)\=LOCAL$")
+    self.patt['getLocalValue'] = re.compile(r"^(.+)\=LOCAL$")
     self.patt['customFlag'] = re.compile("^CUSTOM")
-    self.patt['insideBrackets'] = re.compile("(\(.*\))")
+    self.patt['insideBrackets'] = re.compile(r"(\(.*\))")
 
     #
     # This is for keeping track of CCPN objects
     #
     # Only the current relevant CCPN objects are stored in self.ccpnVar!
     #
-    
+
     self.ccpnVar = {'nmrEntry': nmrEntry,
                     'resonances': []}               # Special case!
-                    
+
     #
     # To keep track of application data objects
     #
-    
+
     self.origVar = {}
     self.resonanceAuthorPdbInfo = {}
     self.coordinateInfoMap = {}   # This is specific for tagging resonances with PDB atom name information
-                      
+
     #
     # Set up the main link (to the nmrEntry object)
     #
-  
+
     for nmrEntryLink in self.ccpn2NmrStar.nmrEntryLinkList:
       ccpnMap = 'nmrEntry.%s' % nmrEntryLink
       self.ccpnVar[nmrEntryLink] = self.getCcpnObject(ccpnMap)
-      
+
     #
     # Hardset the Entry ID if required
     #
-    
+
     if forceEntryId:
       # Is handled in special way in self.starKeys - topObject so effectively None
       matchKeyName = ('Entry', 'ID')
       self.starKeys[matchKeyName] = ({None: (forceEntryId,None)},nmrEntry)
       self.starKeyToCcpnVar[matchKeyName] = ''
-      
+
     #
     # Dictionaries to speed things up...
     #
-    
+
     self.chemAtomSysNamesDict = {}
-    
+
   def createFile(self,nmrStarFileName,verbose=True,profile=False,excludeSaveFrames=('distance_constraints',)):
-    
+
     if profile:
       import hotshot
-    
+
     self.verbose = verbose
-    
+
     if excludeSaveFrames:
       self.excludeSaveFrames = excludeSaveFrames
     else:
       self.excludeSaveFrames = []
-        
+
     #
     # Create the nmrStarFile object for writing
     #
 
     self.nmrStarFileName = nmrStarFileName
-    
+
     self.nmrStarFile = NmrStarFullReaderFile(self.nmrStarFileName)
 
     #
@@ -178,7 +173,7 @@ class NmrStarExport:
       prof.close()
     else:
       self.loopSaveFrameData(1)
-            
+
     #
     # Intermediate stage: handle the resonances. This goes VIA NmrStarFormat!!!
     #
@@ -192,14 +187,14 @@ class NmrStarExport:
     #
 
     #self.tempTagInfo = {}
-  
+
     if profile:
       prof = hotshot.Profile("%s.secondLoop.stats" % nmrStarFileName)
       prof.runcall(self.loopSaveFrameData,0)
       prof.close()
     else:
       self.loopSaveFrameData(0)
-    
+
     #
     # Finally set additional saveframes from any application data...
     # this hangs off entry.
@@ -215,18 +210,18 @@ class NmrStarExport:
     #
     # Print messages
     #
-  
+
     self.printMessages()
 
-  
+
   def writeFile(self,title = None, topComment = None, verbose = True):
-  
+
     #
     # Writes the star file
     #
-    
+
     keywds = {'verbose': verbose}
-    
+
     if title:
       keywds['title'] = title
 
@@ -241,44 +236,44 @@ class NmrStarExport:
   ##########################
 
   def printMessages(self):
-  
+
     #
     # Prints out the messages
     #
-    
+
     if self.verbose:
 
       messageKeys = self.messages.keys()
       messageKeys.sort()
-    
+
       for messageKey in messageKeys:
-      
+
         if self.messages[messageKey] > 1:
           timeString = " (%d times)" % self.messages[messageKey]
         else:
           timeString = ""
-      
+
         print(messageKey + "%s" % timeString)
 
   def loopSaveFrameData(self,keyFlag):
-  
+
     #
     # KeyFlag is 1 for first (source) run, 0 for second (setting) run
     #
-    
+
     self.keyFlag = keyFlag
-  
+
     #
     # Loop over the saveframes
     #
-    
+
     ccpn2NmrStarSfNames = self.ccpn2NmrStar.sfDict.keys()
-    
+
     for self.sfCatName in self.nmrStarDict.sfList:
-  
+
       if self.sfCatName not in self.ccpn2NmrStar.sfDict.keys():
         continue
-      
+
       if self.sfCatName in self.excludeSaveFrames:
         self.setMessage(" Excluding saveframe %s." % self.sfCatName)
         continue
@@ -287,57 +282,57 @@ class NmrStarExport:
       self.nmrStarSfDict = self.nmrStarDict.sfDict[self.sfCatName]
       ccpn2NmrStarSfNames.pop(ccpn2NmrStarSfNames.index(self.sfCatName) )
 
-      if self.writeStarSfDict.has_key('ccpnMap'):
+      if 'ccpnMap' in self.writeStarSfDict:
 
         self.setSaveFrameData(self.nmrStarSfDict['name'])
 
       elif self.keyFlag:
-      
+
         self.setMessage(" No ccpn mapping for %s" % self.sfCatName)
-        
+
     if ccpn2NmrStarSfNames:
       for sfCatName in ccpn2NmrStarSfNames:
         self.setMessage(" No NMR-STAR equivalent for saveframe %s in mapping file." % sfCatName)
-    
+
     if self.keyFlag:
-    
+
       #
       # This handles foreign keys that should be ignored - needs to be set up so that
       # the foreign keys are only ignored outside of their saveframe (for tables)
       #
-      
+
       self.ignoreForeignLinkStarElements = {}
       self.ignoreForeignLinks = self.ccpn2NmrStar.ignoreForeignLinks[:]
-      
+
       for ignoreForeignLink in self.ccpn2NmrStar.ignoreForeignLinks:
         self.setMessage("  Warning: ignoring foreign link '%s' for all tags." % ignoreForeignLink)
         (starElementName,tagName) = ignoreForeignLink.split('.') # TODO get this from somewhere official!
-        if not self.ignoreForeignLinkStarElements.has_key(starElementName):
+        if starElementName not in self.ignoreForeignLinkStarElements:
           self.ignoreForeignLinkStarElements[starElementName] = []
         self.ignoreForeignLinkStarElements[starElementName].append(ignoreForeignLink)
 
       self.ignorePrimaryKeyStarElements = {}
       self.ignorePrimaryKeys = self.ccpn2NmrStar.ignorePrimaryKeys[:]
-      
+
       for ignorePrimaryKey in self.ccpn2NmrStar.ignorePrimaryKeys:
         self.setMessage("  Warning: ignoring primary key '%s' for all tags." % ignorePrimaryKey)
         (starElementName,tagName) = ignorePrimaryKey.split('.') # TODO get this from somewhere official!
-        if not self.ignorePrimaryKeyStarElements.has_key(starElementName):
+        if starElementName not in self.ignorePrimaryKeyStarElements:
           self.ignorePrimaryKeyStarElements[starElementName] = []
         self.ignorePrimaryKeyStarElements[starElementName].append(ignorePrimaryKey)
 
 
   def createNmrStarFormat(self,initialise = False):
-  
+
     #
-    # Create an NmrStarFormat - this is ONLY for running 
+    # Create an NmrStarFormat - this is ONLY for running
     # the .getResonanceAtomLinks() code!
     #
     # Note that because rules are different for different saveframes.
     # In chemical shift saveframes, all individual atoms have to be written out
     # In constraint saveframes, atom sets can be used
     #
-  
+
     nmrStarFormat = NmrStarFormat(self.ccpnVar['nmrEntry'].root)
     nmrStarFormat.useOriginalResNames = False
     nmrStarFormat.molSystem = self.ccpnVar['molSystem']
@@ -351,7 +346,7 @@ class NmrStarExport:
             resonances.append(measurement.resonance)
           elif hasattr(measurement, "resonances"):
             resonances.extend(measurement.resonances)
-          
+
       nmrStarFormat.resonancesToLink = resonances
       nmrStarFormat.individualAtoms = True
       nmrStarFormat.individualAtomsIfNoSet = False
@@ -373,27 +368,27 @@ class NmrStarExport:
 
     matchKeyName = ('Entity_assembly', 'ID')
 
-    if self.starKeys.has_key(matchKeyName):
+    if matchKeyName in self.starKeys:
 
       for chain in self.starKeys[matchKeyName][0].keys():
         if chain.findFirstResidue().ccpCode == 'Hoh':
           (matchValue,parentDictInfo) = self.starKeys[matchKeyName][0][chain]
-        
+
           for wChain in chain.molecule.chains:
             if wChain != chain:
               self.starKeys[matchKeyName][0][wChain] = (matchValue,parentDictInfo)
-            
-    
+
+
   #########################################################################
   # Functions that set information on saveframe/table level (starElement) #
   #########################################################################
-  
+
   def setSaveFrameData(self,saveFrameName):
-  
+
     #
     # Set up mapping info and IDs
     #
-  
+
     ccpnMap = self.writeStarSfDict['ccpnMap']
     ccpnLoopInfo = self.setupCurrentIDs(ccpnMap,self.writeStarSfDict)
 
@@ -412,27 +407,27 @@ class NmrStarExport:
     #
     # Set up mapping info and IDs
     #
-  
-    if self.writeStarTableDict.has_key('CONDITIONAL'):
+
+    if 'CONDITIONAL' in self.writeStarTableDict:
       key = self.writeStarTableDict['CONDITIONAL']
-      
+
       value = self.getCcpnMapValue(key[0])
-      
+
       if value not in key[1]:
         return
-        
+
     ccpnMap = self.writeStarTableDict['ccpnMap']
     ccpnLoopInfo = self.setupCurrentIDs(ccpnMap,self.writeStarTableDict)
-    
+
     #
     # Set up the table at this level
     #
-    
+
     if not self.keyFlag and saveFrame is not None:
       table = saveFrame.setupTable(tableName)
-      
+
     else:
-      table = None       
+      table = None
 
     #
     # Loop over all ccpn objects on table level...
@@ -454,13 +449,13 @@ class NmrStarExport:
     ccpnVarKey = ccpnLoopInfo[0]
     nmrStarKey = ccpnLoopInfo[1]
     currentID = ccpnLoopInfo[2]
-    
+
     #
     # Set unique saveframe titles... for this saveframe category at least
     #
-            
+
     if level == 'saveFrame' and not self.keyFlag:
-    
+
       titleDict = {}
       saveFrameTitles = {}
 
@@ -477,20 +472,20 @@ class NmrStarExport:
         if not title:
 
           title = self.getCcpnMapValue(writeStarElementDict['title']) # TODO set labels as well?
-          
+
         #
         # Keep track of titles & corresponding objects...
         #
-        
-        if not titleDict.has_key(title):
+
+        if title not in titleDict:
           titleDict[title] = []
-        
+
         titleDict[title].append(ccpnObject)
 
       #
       # Now make sure all titles are unique...
       #
-      
+
       for title in titleDict:
 
         ccpnObjectList = titleDict[title]
@@ -500,7 +495,7 @@ class NmrStarExport:
             tmpTitle = "%s_%d" % (title,(i+1) )
           else:
             tmpTitle = title
-        
+
           if not tmpTitle or tmpTitle in self.titleList:
             for j in range(1,9999):
               tmpTitle = "%s_%d" % (title,j)
@@ -509,9 +504,9 @@ class NmrStarExport:
                 break
           else:
             title = tmpTitle
-        
+
           saveFrameTitles[ccpnObjectList[i]] = title
-          
+
           self.titleList.append(title)
 
     #
@@ -519,21 +514,21 @@ class NmrStarExport:
     #
 
     for i in range(0,len(ccpnLoopInfo[-1]) ):
-    
+
       (ccpnObject,lowerCcpnLoopInfo) = ccpnLoopInfo[-1][i]
       self.ccpnVar[ccpnVarKey] = ccpnObject
 
-      if writeStarElementDict.has_key('addCcpnMap'):
+      if 'addCcpnMap' in writeStarElementDict:
         additionalMappings = writeStarElementDict['addCcpnMap']
         # Setting additional mappings - important for giant saveframes like coordinates to speed things up
-        if additionalMappings.has_key(ccpnVarKey):
+        if ccpnVarKey in additionalMappings:
           for (addCcpnVarKey,addCcpnMapping) in additionalMappings[ccpnVarKey]:
             self.ccpnVar[addCcpnVarKey] = self.getCcpnMapValue(addCcpnMapping)
-      
+
       #
       # There is an inner loop... continue
       #
-      
+
       if lowerCcpnLoopInfo:
 
         if not parentCcpnLoopInfo:
@@ -542,10 +537,10 @@ class NmrStarExport:
           parentCcpnLoopInfo.append(ccpnLoopInfo)
 
         previousLowestCcpnLoopInfo = self.loopStarLevelObjects(level,starElementName,lowerCcpnLoopInfo,writeStarElementDict,nmrStarElementDict,parentCcpnLoopInfo = parentCcpnLoopInfo,starElement = starElement, previousLowestCcpnLoopInfo = previousLowestCcpnLoopInfo)
-        
+
         # Reset the previous loop info if a nmrStarKeyType given and equal to a ccpnVar name. This means the ID
         # count is reset at this level.
-        if writeStarElementDict.has_key('nmrStarKeyType') and writeStarElementDict['nmrStarKeyType'] == ccpnVarKey:
+        if 'nmrStarKeyType' in writeStarElementDict and writeStarElementDict['nmrStarKeyType'] == ccpnVarKey:
           previousLowestCcpnLoopInfo = None
 
       else:
@@ -553,7 +548,7 @@ class NmrStarExport:
         #
         # Now on the lowest level - need to set everything for this one...
         #
-        
+
         #
         # Saveframe only - saveframe object has to be created in this loop
         #
@@ -563,7 +558,7 @@ class NmrStarExport:
         if (ccpnLoopInfo[0] == '' or self.ccpnVar[ccpnLoopInfo[0] ] is not None):
           printSFFlag = True
 
-        if nmrStarElementDict.has_key('name'):
+        if 'name' in nmrStarElementDict:
           if nmrStarElementDict['name'] == 'Chem_shift_reference':
 
             #keywds = {'application': self.format,
@@ -615,9 +610,9 @@ class NmrStarExport:
             printSFFlag = False
 
             for nmrLinks in ('derivedDataLists','experiments','measurementLists'):
-      
+
               nmrLinkedObjects = getattr(self.ccpnVar['nmrEntry'], nmrLinks)
-      
+
               for nmrLinkedObject in nmrLinkedObjects:
                 if nmrLinkedObject:
                   if nmrLinkedObject.className == 'NmrProject':
@@ -664,12 +659,12 @@ class NmrStarExport:
         # Saveframe only - sets the tables, handles ignoring foreign links correctly (should not happen in loops inside the saveframe itself)...
         #
 
-        if level == 'saveFrame' and writeStarElementDict.has_key('tables'):
-        
+        if level == 'saveFrame' and 'tables' in writeStarElementDict:
+
           #
           # Make sure foreign tags belonging to this SF are *not* ignored - necessary
           #
-          
+
           if not self.keyFlag:
             self.ignoreForeignLinks = self.ccpn2NmrStar.ignoreForeignLinks[:]
             if starElementName in self.ignoreForeignLinkStarElements.keys():
@@ -693,17 +688,17 @@ class NmrStarExport:
             self.writeStarTableDict = writeStarElementDict['tables'][tableName]
             self.nmrStarTableDict = nmrStarElementDict['tables'][tableName]
 
-            if self.writeStarTableDict.has_key('ccpnMap'):
+            if 'ccpnMap' in self.writeStarTableDict:
               if not self.setTableData(tableName,saveFrame = starElement):
                 continue
 
             elif self.keyFlag:
-              self.setMessage(" No ccpn mapping for %s" % tableName)  
+              self.setMessage(" No ccpn mapping for %s" % tableName)
 
         #
         # Track this level for setting global IDs
         #
-        
+
         previousLowestCcpnLoopInfo = ccpnLoopInfo
 
         # CJP - set Custom AppData stuff
@@ -724,7 +719,7 @@ class NmrStarExport:
   ########################
   # Set up the star keys #
   ########################
-  
+
   def setStarKeys(self,ccpnLoopInfo,parentCcpnLoopInfo,writeStarElementDict,nmrStarElementDict,starElementName,previousLowestCcpnLoopInfo):
 
     fullItemKey = ccpnLoopInfo[1]
@@ -736,17 +731,17 @@ class NmrStarExport:
 
     keyNames = nmrStarElementDict['sourcePrimaryKeys']
 
-    if writeStarElementDict.has_key('tags'):
+    if 'tags' in writeStarElementDict:
       writeTags = writeStarElementDict['tags']
     else:
       writeTags = {}
 
     for keyName in keyNames:
-      
+
       #
       # Get the information from the nmrStar dictionary
       #
-      
+
       (default,returnFunc,foreignKey,obligatory) = nmrStarElementDict['tags'][keyName]
 
       value = None
@@ -754,69 +749,69 @@ class NmrStarExport:
       #
       # Set matchKeyName (for matching items with a composite key)
       #
-      
+
       currentCcpnLoopInfo = None
-      
+
       if not fullItemKey:
-      
+
         # No nested loop info
-      
+
         matchKeyName = (starElementName,keyName,)
         currentCcpnLoopInfo = ccpnLoopInfo
 
       elif fullItemKey[-1] == keyName:
-        
+
         # Are at the bottom (ccpnLoopInfo) level
-        
+
         matchKeyName = (starElementName,) + fullItemKey
         currentCcpnLoopInfo = ccpnLoopInfo
 
         #print 'MAT KEY: [' + str(matchKeyName) + ']'
-      
+
       else:
-      
+
         # Determine the parent level we're at...
-      
+
         matchKeyName = (starElementName,)
-        
+
         for i in range(0,len(fullItemKey) ):
-          
+
           matchKeyName += (fullItemKey[i],)
-        
+
           if fullItemKey[i] == keyName:
-            
+
             currentCcpnLoopInfo = parentCcpnLoopInfo[i]
             break
-      
+
       #
       # Keep track of mapping to relevant star tag...
       #
-      
+
       self.starTagToStarKey[starElementName + self.nmrStarFile.tagSep + keyName] = matchKeyName
-      
+
       #
       # Set variables...
       #
-      
+
       if not currentCcpnLoopInfo:
         self.setMessage("  Warning: %s loop has no information for tag %s." % (starElementName,keyName) )
         continue
- 
+
       ccpnVarKey = currentCcpnLoopInfo[0]
-      
+
       #
       # Set the current ID. If the nmrStarKeyType is set, the ID will be continued from the previous 'lowest'
       # level loop. This is, for example, to set the Atom ID in Atom_site
       #
-            
-      if writeStarElementDict.has_key('nmrStarKeyType'):
+
+      if 'nmrStarKeyType' in writeStarElementDict:
         if previousLowestCcpnLoopInfo and currentCcpnLoopInfo == ccpnLoopInfo and currentCcpnLoopInfo != previousLowestCcpnLoopInfo:
           currentID = previousLowestCcpnLoopInfo[2]
         else:
           currentID = currentCcpnLoopInfo[2]
       else:
         currentID = currentCcpnLoopInfo[2]
-            
+
       #
       # Handle source keys...
       #
@@ -829,18 +824,18 @@ class NmrStarExport:
         # Set up starKeys if new matchKeyName
         #
 
-        if not self.starKeys.has_key(matchKeyName):
+        if matchKeyName not in self.starKeys:
           self.starKeys[matchKeyName] = ({},ccpnObject) # Tracking as reference object
 
         #
         # Check if there's a default value available
         #
-        
+
         value = None
 
-        if writeTags.has_key(keyName):
+        if keyName in writeTags:
 
-          ccpnTagMapping = writeTags[keyName]       
+          ccpnTagMapping = writeTags[keyName]
           value = self.getCcpnMapValue(ccpnTagMapping)
 
         #
@@ -848,7 +843,7 @@ class NmrStarExport:
         #
 
         (matchFound,matchValue) = self.findStarKeyMatch(matchKeyName,ccpnObject)
-       
+
         if not value:
 
           #
@@ -857,13 +852,13 @@ class NmrStarExport:
 
           if not matchFound:
             currentCcpnLoopInfo[2] = currentID + 1  # This is the currentID! But have to set directly...
-            
-          value = currentCcpnLoopInfo[2]    
+
+          value = currentCcpnLoopInfo[2]
 
         #
         # Finally set all the key and ID information...
         #
-        
+
         if not matchFound:
           #print 'OBJ: [%s] [%s] [%s]' % (ccpnObject, value, matchKeyName)
           if fullItemKey and fullItemKey[0] != keyName:
@@ -879,7 +874,7 @@ class NmrStarExport:
           pass
           #print 'OBJ FOUND: [%s] [%s] [%s]' % (ccpnObject, value, matchKeyName)
 
-        #print 'VAR: [%s] [%s] [%s]' % (ccpnVarKey, matchKeyName, value)    
+        #print 'VAR: [%s] [%s] [%s]' % (ccpnVarKey, matchKeyName, value)
 
     #
     # For custom code, sometimes have to map the relevant objects - is done here
@@ -890,10 +885,10 @@ class NmrStarExport:
     #
     # NOTE/TODO: currently only useful for 'normal' resonances. When handled by individual atom other mechanism is in place!!!
     #
-    
+
     for setAtomsTag in self.setAtomsTags:
 
-      if writeTags.has_key(setAtomsTag):
+      if setAtomsTag in writeTags:
 
         #
         # This creates a list of all the resonances for linking. Note that this is
@@ -908,9 +903,9 @@ class NmrStarExport:
           objectMap = writeTags[setAtomsTag]
           measurementByIndividualAtom = self.getCcpnObject(objectMap)
           resonances = measurementByIndividualAtom.resonance
-          
+
         else:
-          ccpnMap = writeTags[setAtomsTag]       
+          ccpnMap = writeTags[setAtomsTag]
           resonances = self.getCcpnObject(ccpnMap)
 
         if type(resonances) not in [type([]),type( frozenset() ), type(tuple())]:
@@ -919,12 +914,12 @@ class NmrStarExport:
         for resonance in resonances:
           if resonance not in self.ccpnVar['resonances']:
             self.ccpnVar['resonances'].append(resonance)
-                        
+
     #
     # Nodes for distance constraints are a special case...
     #
 
-    if writeTags.has_key('CUSTOM_setNodes'):
+    if 'CUSTOM_setNodes' in writeTags:
       # TODO: also check code in setStarTagPresets!!
 
 
@@ -935,9 +930,9 @@ class NmrStarExport:
         # Have to handle first node differently depending on whether there's multiple items...
         #
 
-        constraintItem = self.ccpnVar['constraintItem'] 
+        constraintItem = self.ccpnVar['constraintItem']
         constraint = ccpnObject.parent
-        
+
         # TODO: using matchKeyName here because should be last one in list?!?!
 
         if len(constraint.items) > 1:
@@ -949,21 +944,21 @@ class NmrStarExport:
 
 
   def setupCurrentIDs(self,ccpnMap,ccpn2Star):
-    
+
     #
-    # Creates a fresh currentID set 
+    # Creates a fresh currentID set
     #
-    
+
     ccpnLoopInfo = []
 
-    if ccpn2Star.has_key('ccpnLoop'):
+    if 'ccpnLoop' in ccpn2Star:
 
       ccpnLoop = ccpn2Star['ccpnLoop']
 
       if type(ccpnLoop) == type([]):
-      
+
         additionalMappings = {}
-        if ccpn2Star.has_key('addCcpnMap'):
+        if 'addCcpnMap' in ccpn2Star:
           additionalMappings = ccpn2Star['addCcpnMap']
 
         self.getCcpnNestedLoopValues(ccpnLoop[:],ccpnMap[:],ccpnLoopInfo,additionalMappings)
@@ -973,41 +968,41 @@ class NmrStarExport:
         ccpnLoopObjects = self.getCcpnMapValue(ccpnLoop)
 
         ccpnLoopInfo = [ccpnVarKey,None,0,[] ]
-        
+
         if not ccpnLoopObjects:
           self.setMessage("No loop objects found for ccpnMap '%s', ccpnLoop '%s'!" % (ccpnMap,ccpnLoop) )
-        
+
         else:
           for ccpnLoopObject in ccpnLoopObjects:
             ccpnLoopInfo[-1].append( (ccpnLoopObject,None) )
 
-    else:      
+    else:
       ccpnVarKey = ccpnMap.split('.')[-1]
       ccpnLoopInfo = [ccpnVarKey,None,0,[(self.getCcpnObject(ccpnMap),None)] ]
-      
-    return ccpnLoopInfo  
+
+    return ccpnLoopInfo
 
 
   def getCcpnNestedLoopValues(self,ccpnLoop,ccpnMap,ccpnLoopInfo,additionalMappings,nmrStarFullKey = None):
-  
+
     #
     # Go through nested loop to get a list of all objects
     #
     # WARNING: THIS IS A RECURSIVE FUNCTION!
     #
-    
+
     ccpnLoopObjects = self.getCcpnMapValue(ccpnLoop[0])
 
     if not ccpnLoopObjects:
       ccpnLoopObjects = []
-    
+
     ccpnVarKey = ccpnMap[0][0]
 
     if not nmrStarFullKey:
       nmrStarFullKey = (ccpnMap[0][1],)
     else:
       nmrStarFullKey += (ccpnMap[0][1],)
-         
+
     ccpnLoopInfo.extend([ccpnVarKey,nmrStarFullKey,0,[] ])
 
     for ccpnLoopObject in ccpnLoopObjects:
@@ -1016,26 +1011,26 @@ class NmrStarExport:
         ccpnLowerLoopInfo = []
       else:
         ccpnLowerLoopInfo = None
-        
+
       ccpnLoopInfo[-1].append( (ccpnLoopObject,ccpnLowerLoopInfo) )
-        
+
       self.ccpnVar[ccpnVarKey] = ccpnLoopObject
-      
+
       # Setting additional mappings - important for giant saveframes like coordinates to speed things up
-      if additionalMappings.has_key(ccpnVarKey):
+      if ccpnVarKey in additionalMappings:
         for (addCcpnVarKey,addCcpnMapping) in additionalMappings[ccpnVarKey]:
           self.ccpnVar[addCcpnVarKey] = self.getCcpnMapValue(addCcpnMapping)
-      
+
       if len(ccpnLoop) > 1:
         self.getCcpnNestedLoopValues(ccpnLoop[1:],ccpnMap[1:],ccpnLowerLoopInfo,additionalMappings,nmrStarFullKey = nmrStarFullKey[:])
 
-  
+
   #########################
   # Set the star tag info #
   #########################
 
   def setStarTags(self,starElement,starElementName,tagNames,writeTags,conditionalTags,presetValues,ccpnLoopInfo,parentCcpnLoopInfo,writeStarElementDict,nmrStarElementDict):
-    
+
     #
     # Loop over the tag names
     #
@@ -1054,10 +1049,10 @@ class NmrStarExport:
       if tagName in presetValues:
 
         value = presetValues[tagName]
-      
+
       elif foreignTag and foreignTag not in self.ignoreForeignLinks:
 
-        # Only ignore the foreign key if the keyFlag 
+        # Only ignore the foreign key if the keyFlag
 
         value = self.getForeignValue(foreignTag, tagName, writeTags, starElementName, starTagName)
 
@@ -1071,17 +1066,17 @@ class NmrStarExport:
 
         matchKeyName = self.starTagToStarKey[starTagName]
         ccpnObject = self.ccpnVar[self.starKeyToCcpnVar[matchKeyName] ]
-        
+
         (matchFound,value) = self.findStarKeyMatch(matchKeyName,ccpnObject)
 
         if not value:
           self.setMessage("  Error: in '%s', key %s has not been set." % (starElementName,starTagName) )
 
-      elif default and not (writeTags and writeTags.has_key(tagName) ):
+      elif default and not (writeTags and tagName in writeTags ):
 
         value = default
 
-      elif writeTags.has_key(tagName):
+      elif tagName in writeTags:
 
         ccpnTagMapping = writeTags[tagName]
         value = self.getCcpnMapValue(ccpnTagMapping)
@@ -1096,20 +1091,20 @@ class NmrStarExport:
             if conditionValue == checkConditionValue:
               conditionalWriteTags = writeTags['CONDITIONAL'][condition][conditionValue]
 
-              if conditionalWriteTags.has_key(tagName):
-                ccpnTagMapping = conditionalWriteTags[tagName]       
+              if tagName in conditionalWriteTags:
+                ccpnTagMapping = conditionalWriteTags[tagName]
                 value = self.getCcpnMapValue(ccpnTagMapping)
                 break
-                
+
           #
           # Handle 'DEFAULT' tag...
           #
-          
-          if value == None and writeTags['CONDITIONAL'][condition].has_key('DEFAULT'):
+
+          if value == None and 'DEFAULT' in writeTags['CONDITIONAL'][condition]:
             conditionalWriteTags = writeTags['CONDITIONAL'][condition]['DEFAULT']
 
-            if conditionalWriteTags.has_key(tagName):             
-              ccpnTagMapping = conditionalWriteTags[tagName]       
+            if tagName in conditionalWriteTags:
+              ccpnTagMapping = conditionalWriteTags[tagName]
               value = self.getCcpnMapValue(ccpnTagMapping)
 
       elif obligatory:
@@ -1130,10 +1125,10 @@ class NmrStarExport:
 
       if setTag:
 
-        #if not self.tempTagInfo.has_key(starElementName):
+        #if starElementName not in self.tempTagInfo:
         #  self.tempTagInfo[starElementName] = {}
 
-        #if not self.tempTagInfo[starElementName].has_key(starTagName):
+        #if starTagName not in self.tempTagInfo[starElementName]:
         #  self.tempTagInfo[starElementName][starTagName] = 0
 
         #self.tempTagInfo[starElementName][starTagName] += 1
@@ -1165,10 +1160,10 @@ class NmrStarExport:
     tagNames = nmrStarElementDict['tagNames']
 
     #
-    # Set the 'write' tags for mapping from CCPN 
+    # Set the 'write' tags for mapping from CCPN
     #
 
-    if writeStarElementDict.has_key('tags'):
+    if 'tags' in writeStarElementDict:
       writeTags = writeStarElementDict['tags']
     else:
       writeTags = {}
@@ -1179,14 +1174,14 @@ class NmrStarExport:
 
     conditionalTags = []
 
-    if writeTags.has_key('CONDITIONAL'):
+    if 'CONDITIONAL' in writeTags:
       for condition in writeTags['CONDITIONAL'].keys():
         for conditionValue in writeTags['CONDITIONAL'][condition]:
           for conditionalTag in writeTags['CONDITIONAL'][condition][conditionValue]:
-            if not conditionalTag in conditionalTags:
+            if conditionalTag not in conditionalTags:
               conditionalTags.append(conditionalTag)
 
-    return (tagNames,writeTags,conditionalTags)  
+    return (tagNames,writeTags,conditionalTags)
 
 
   def setStarTagPresets(self,starElement,starElementName,tagNames,writeTags,conditionalTags,ccpnLoopInfo,parentCcpnLoopInfo,writeStarElementDict,nmrStarElementDict):
@@ -1206,14 +1201,14 @@ class NmrStarExport:
       if searchObj:
         starTagValue = searchObj.group(1)
         value = writeTags[writeTagKey]
-        
+
         presetValues[starTagValue] = value
-       
+
     #
     # Run application data setter if required...
     #
-    
-    if writeTags.has_key('CUSTOM_setApplDataNames'):
+
+    if 'CUSTOM_setApplDataNames' in writeTags:
       ccpnMap = writeTags['CUSTOM_setApplDataNames']
       self.setApplDataNames(ccpnMap,presetValues,nmrStarElementDict,parentCcpnLoopInfo)
 
@@ -1223,7 +1218,7 @@ class NmrStarExport:
 
     for setAtomsTag in self.setAtomsTags:
 
-      if writeTags.has_key(setAtomsTag):
+      if setAtomsTag in writeTags:
 
         if setAtomsTag.count('individual'):
           # Can only handle single cases!!
@@ -1233,12 +1228,12 @@ class NmrStarExport:
           ccpnMap = objectMap + '.resonance.void'
 
           self.setAtomPresetValues(measurementByIndividualAtom,presetValues,'',nmrStarElementDict,atomHandling)
-          
+
         else:
           atomHandling = 'sets'
-          ccpnMap = writeTags[setAtomsTag]       
+          ccpnMap = writeTags[setAtomsTag]
           resonances = self.getCcpnObject(ccpnMap)
-                    
+
           if type(resonances) in [type([]),type( () )]:
 
             # Make sure to get them ordered, if possible! Only relevant for constraintItems(?)
@@ -1256,16 +1251,16 @@ class NmrStarExport:
             self.setAtomPresetValues(resonances,presetValues,'',nmrStarElementDict,atomHandling)
 
         self.setApplDataNames(ccpnMap,presetValues,nmrStarElementDict,parentCcpnLoopInfo)
-        
+
         break
 
     #
     # Nodes for distance constraints are a special case...
     #
 
-    if writeTags.has_key('CUSTOM_setNodes'):
+    if 'CUSTOM_setNodes' in writeTags:
 
-      ccpnMap = writeTags['CUSTOM_setNodes']       
+      ccpnMap = writeTags['CUSTOM_setNodes']
       constraintItem = self.ccpnVar['constraintItem']
       constraint = constraintItem.parent
       constraintItems = constraint.sortedItems()
@@ -1284,7 +1279,7 @@ class NmrStarExport:
         self.setStarTags(starElement,starElementName,tagNames,writeTags,conditionalTags,presetValues,ccpnLoopInfo,parentCcpnLoopInfo,writeStarElementDict,nmrStarElementDict)
 
         del(presetValues['Node_ID'])
-          
+
       presetValues['Down_node_ID'] = None
       presetValues['Logic_operation'] = None
 
@@ -1292,23 +1287,23 @@ class NmrStarExport:
         presetValues['Right_node_ID'] = None
       else:
         presetValues['Right_node_ID'] = constraintItems.index(constraintItem) + 3
-        
+
     return presetValues
 
 
   def setAtomPresetValues(self,infoObject,presetValues,starCode,nmrStarElementDict,atomHandling):
-  
+
     if atomHandling == 'individual':
       nmrStarFormat = self.ccpnVar['nmrStarFormatIndividual']
       measurementByIndividualAtom = infoObject
       resonanceToAtom = measurementByIndividualAtom.resonanceToAtom
       resonance = resonanceToAtom.resonance
-      
+
     else:
       nmrStarFormat = self.ccpnVar['nmrStarFormatSet']
-      resonance = infoObject      
-      
-      if not nmrStarFormat.resonanceToAtoms.has_key(resonance):
+      resonance = infoObject
+
+      if resonance not in nmrStarFormat.resonanceToAtoms:
 
         #
         # TODO: STILL HAVE TO WRITE OUT AUTHOR CODE IF AVAILABLE!!!
@@ -1319,7 +1314,7 @@ class NmrStarExport:
           self.setSimplePresetValue(presetValues,tagName + starCode,None)
 
         self.setResonanceAuthorPdbInfo(resonance,None,None,"")
-        
+
         return
 
       #
@@ -1340,9 +1335,9 @@ class NmrStarExport:
       resonanceToAtom = resonanceToAtoms[0]
 
     #TODO: if unrecognized chemComp?? 'Entry_atom_ID_1': [None,returnStarString,'Atom.Entry_atom_ID',None],
-    
+
     #
-    # TODO: use 'Assembly_atom_ID' if available? Direct link to atom inside NMR-STAR, but need to 
+    # TODO: use 'Assembly_atom_ID' if available? Direct link to atom inside NMR-STAR, but need to
     # have this info for all atoms in molecular system...
     #
 
@@ -1354,7 +1349,7 @@ class NmrStarExport:
     chain = resonanceToAtom.chain
 
     (default,returnFunc,foreignKey,obligatory) = nmrStarElementDict['tags'][tagName]
-    
+
     (matchFound,matchValue) = self.findStarKeyMatch(self.starTagToStarKey[foreignKey],chain)
     presetValues[tagName] = matchValue
 
@@ -1372,7 +1367,7 @@ class NmrStarExport:
     #
     # Tag Seq_ID
     #
-    
+
     seqId = resonanceToAtom.seqId
     self.setSimplePresetValue(presetValues,'Seq_ID' + starCode,seqId)
 
@@ -1397,10 +1392,10 @@ class NmrStarExport:
     #
     # Tag Atom_ID
     #
-    
+
     atomName = resonanceToAtom.atomName
     atomType = resonanceToAtom.atomType
-    
+
     # If direct resonance-atom connection, use this info (if resonanceToAtom didn't get it)
     # TODO: if this is something that often occurs, probably need to either do something on the
     # resonanceToAtom level, or make code below more complex.
@@ -1414,7 +1409,7 @@ class NmrStarExport:
             if len(atoms) == 1:
               atomName = self.ccpn2NmrStar.getPdbAtomName(atoms[0])
             atomType = atoms[0].chemAtom.elementSymbol
-    
+
       if not atomName:
         print("  Error: no single atom name found for resonance %d" % (resonanceToAtom.resonance.serial))
       if not atomType:
@@ -1427,13 +1422,13 @@ class NmrStarExport:
     #
 
     self.setSimplePresetValue(presetValues,'Atom_type' + starCode,atomType)
-    
+
     #
     # Here pre-set information for author (nmrStar derived) and PDB identifiers, so only have to do this once!
     #
-    
+
     self.setResonanceAuthorPdbInfo(resonance,chain,residue,atomName)
-    
+
     """
     BELOW NOT NECESSARY ANY MORE!
     
@@ -1460,33 +1455,33 @@ class NmrStarExport:
       
       self.setSimplePresetValue(presetValues,'Auth_comp_ID' + starCode,findChemCompSysName('CIF',molResidue.chemCompVar.chemComp), default = molResidue.ccpCode)
     """
-    
+
   def setResonanceAuthorPdbInfo(self,resonance,chain,residue,atomName):
-    
-    if not self.resonanceAuthorPdbInfo.has_key(resonance):
-      
-      authorResonanceNames = [appData.value for appData in resonance.findAllApplicationData(application = self.format, keyword = assign_kw)] 
+
+    if resonance not in self.resonanceAuthorPdbInfo:
+
+      authorResonanceNames = [appData.value for appData in resonance.findAllApplicationData(application = self.format, keyword = assign_kw)]
 
       #
       # Note: this will only work if a single structure ensemble is available... custom for wwPDB stuff.
       #
       # Could speed up with dictionary, but probably not that much difference!
       #
-      
+
       pdbResonanceInfo = None
-      
-      if not self.coordinateInfoMap.has_key(chain):
+
+      if chain not in self.coordinateInfoMap:
         pdbChainCode = cChain = None
-        if self.ccpnVar.has_key('structureEnsemble'):
+        if 'structureEnsemble' in self.ccpnVar:
           structureEnsemble = self.ccpnVar['structureEnsemble']
-        
+
           if structureEnsemble:
             # Or by code?
             cChain = structureEnsemble.findFirstCoordChain(chain = chain)
-            
+
             if cChain:
               origChainCodeApplData = cChain.findFirstApplicationData(application = 'pdb', keyword = 'originalChainCode')
-            
+
               if origChainCodeApplData:
                 pdbChainCode = origChainCodeApplData.value
 
@@ -1494,47 +1489,47 @@ class NmrStarExport:
 
       else:
         (pdbChainCode,cChain) = self.coordinateInfoMap[chain]
-        
+
       # Only do something if coordinates exist
       if pdbChainCode:
-        if not self.coordinateInfoMap.has_key(residue):
+        if residue not in self.coordinateInfoMap:
           pdbResidueInfo = None
-        
+
           # TODO or by seqId?
           cResidue = cChain.findFirstResidue(residue = residue)
-          
+
           if cResidue:
             origSeqCodeApplData = cResidue.findFirstApplicationData(application = 'pdb', keyword = 'originalSeqCode')
             origSeqInsertCodeApplData = cResidue.findFirstApplicationData(application = 'pdb', keyword = 'originalSeqInsertCode')
             origLabelApplData = cResidue.findFirstApplicationData(application = 'pdb', keyword = 'originalResLabel')
-          
+
             if origSeqCodeApplData:
               if origSeqInsertCodeApplData:
                 pdbSeqInsertCode = origSeqInsertCodeApplData.value
               else:
                 pdbSeqInsertCode = None
-                
+
               if origLabelApplData:
                 pdbResLabel = origLabelApplData.value
               else:
                 pdbResLabel = None
-                            
+
               pdbResidueInfo = (origSeqCodeApplData.value,pdbSeqInsertCode,pdbResLabel)
-          
+
           self.coordinateInfoMap[residue] = (pdbResidueInfo,cResidue)
-        
+
         else:
           (pdbResidueInfo,cResidue) = self.coordinateInfoMap[residue]
-          
+
         if pdbResidueInfo:
           #origAtomName = coordAtom.findFirstApplicationData(application = formatName, keyword = 'originalName')
-         
+
           pdbResonanceInfo = (pdbChainCode,pdbResidueInfo,atomName)
-  
+
       #
       # Set the dictionary...
       #
-    
+
       self.resonanceAuthorPdbInfo[resonance] = (authorResonanceNames,pdbResonanceInfo)
 
 
@@ -1543,22 +1538,22 @@ class NmrStarExport:
   #######################
 
   def setSimplePresetValue(self,presetValues,tagName,value,default = None,emptyOverwrite = True):
-    
+
     if not value:
       value = default
 
-    if emptyOverwrite or value or not presetValues.has_key(tagName) or not presetValues[tagName]:
+    if emptyOverwrite or value or tagName not in presetValues or not presetValues[tagName]:
       presetValues[tagName] = value
 
   def searchDataTitle(self,ccpnObject,nmrStarElementDict):
-  
+
     title = None
-    
+
     #
     # First find out if obligatory name - use that if so...
     #
 
-    if nmrStarElementDict.has_key("saveFrameCode"):
+    if "saveFrameCode" in nmrStarElementDict:
       title = nmrStarElementDict["saveFrameCode"]
 
     #
@@ -1566,8 +1561,8 @@ class NmrStarExport:
     #
 
     elif ccpnObject and hasattr(ccpnObject, 'findFirstApplicationData'):
-        
-      if self.ccpn2NmrStar.mapAppDataSaveFrames.has_key(self.sfCatName):
+
+      if self.sfCatName in self.ccpn2NmrStar.mapAppDataSaveFrames:
         useSfName = self.ccpn2NmrStar.mapAppDataSaveFrames[self.sfCatName][0]
       else:
         useSfName = self.sfCatName
@@ -1577,27 +1572,27 @@ class NmrStarExport:
       if applData:
 
         sfKey = applData.value
-        
+
         keyword = useSfName +  '_title_' + sfKey
         titleAppData = ccpnObject.findFirstApplicationData(application = self.format, keyword = keyword)
 
         if titleAppData:
           title = titleAppData.value
-          
+
     return title
 
 
   def setApplDataNames(self,ccpnMap,presetValues,nmrStarElementDict,parentCcpnLoopInfo):
-  
+
     #
     # Check if anything special has to be done, or if just direct match to object
     #
-    
+
     if ccpnMap.count('.'):
       ccpnObjectMap = '.'.join(ccpnMap.split('.')[:-1])
     else:
       ccpnObjectMap = ccpnMap
-      
+
     ccpnObject = self.getCcpnObject(ccpnObjectMap)
 
     if not ccpnObject:
@@ -1605,21 +1600,21 @@ class NmrStarExport:
 
     ccpnObjectClassName = ccpnObject.className
     usingParentObject = False
-    
+
     #
     # This for handling one single resonance coming off a loop parent .resonances link
     #
-    
+
     if ccpnObjectClassName == 'FixedResonance' and parentCcpnLoopInfo:
-      ccpnObject = self.ccpnVar[parentCcpnLoopInfo[-1][0] ]      
+      ccpnObject = self.ccpnVar[parentCcpnLoopInfo[-1][0] ]
       usingParentObject = True
-        
+
     if ccpnObject and type(ccpnObject) != str:
-      
+
       #
       # Resonances and fixedResonances original name information
       #
-      
+
       if ccpnObjectClassName == 'Resonance' or hasattr(ccpnObject,'resonances'):
 
         # This only matches resonance info if it was ordered. For PairwiseItem stuff this is done automatically now (November 2007 - Wim)
@@ -1639,23 +1634,23 @@ class NmrStarExport:
           #
           # Reorganize - only select correct resonance in case of single resonance coming from .resonances link
           #
-          
+
           resonance = self.ccpnVar['resonance']
-          
+
           resonanceList = []
           if hasattr(ccpnObject,'orderedResonances'):
             resonanceList = list(ccpnObject.orderedResonances)
-          
+
           if not resonanceList and hasattr(ccpnObject,'sortedResonances'):
             resonanceList = ccpnObject.sortedResonances()
-            
+
           if not resonanceList:
             resonanceList = list(ccpnObject.resonances)
 
           # Warning: this will only work if this list is ordered!! See code above
           resonanceIndex = resonanceList.index(resonance)
-          
-          (resonanceNames,pdbResonanceInfo) = self.resonanceAuthorPdbInfo[resonance]         
+
+          (resonanceNames,pdbResonanceInfo) = self.resonanceAuthorPdbInfo[resonance]
           # TODO To speed up, make this dictionary so don't always have to re-search values
           #resonanceNames = [appData.value for appData in resonance.findAllApplicationData(application = self.format, keyword = assign_kw)] # TODO [remove this comment] per resonance; self.format - always nmrstar - look for res names
 
@@ -1681,36 +1676,36 @@ class NmrStarExport:
             origResLabelApplData = None
 
           origDataItems = len(origAssignApplData)
-       
+
         #
         # Special case for dihedral angles where only the angle and residue are given - need to propagate this info...
         #
-        
+
         if not origAssignApplData and ccpnObjectClassName == 'DihedralConstraint':
           origSeqCodeApplData = ccpnObject.findFirstApplicationData(application = self.format, keyword = 'origSeqCode')
           origChainCodeApplData = ccpnObject.findFirstApplicationData(application = self.format, keyword = 'origChainCode')
           origDataItems = 4
         else:
           origSeqCodeApplData = None
-        
+
         #
         # Make sure cleanup done - can't have None in there.
         #
-        
+
         if origAssignApplData.count(None):
           origAssignApplData = None
-        
+
         #
         # Now find out which values to use, whether available or not
-        #  
-          
+        #
+
         origAssignValueList = []
         pdbAssignValueList = []
-        
+
         if origAssignApplData or origSeqCodeApplData:
 
           #print 'ORIG: [' + str(origAssignApplData) + ']'
-        
+
           if ccpnObjectClassName == 'Resonance':
             resonanceList = [ccpnObject]                 # Direct resonance match
           elif origDataItems == 1:
@@ -1719,13 +1714,13 @@ class NmrStarExport:
             resonanceList = ccpnObject.sortedResonances() # Distance constraint item case (new saveframe)
           else:
             resonanceList = list(ccpnObject.resonances)  # Dihedral constraint
-            
+
           for i in range(len(resonanceList)):
-          
+
             resonance = resonanceList[i]
 
-            (resonanceNames,pdbResonanceInfo) = self.resonanceAuthorPdbInfo[resonance]         
-                        
+            (resonanceNames,pdbResonanceInfo) = self.resonanceAuthorPdbInfo[resonance]
+
             # Because application data is now in no particular order, need to find specific match...
             origResLabelApplDataMatch = None
             if origSeqCodeApplData:
@@ -1733,25 +1728,25 @@ class NmrStarExport:
               if origChainCodeApplData:
                 origChainCode = origChainCodeApplData.value
               else:
-                origChainCode = defaultMolCode                
+                origChainCode = defaultMolCode
 
               origAssignApplDataValue = "%s.%d.XXX" % (origChainCode,origSeqCodeApplData.value)
               #print origAssignApplDataValue
 
               if origResLabelApplData != None:
                 origResLabelApplDataMatch = origResLabelApplData[0]
-                
+
             elif len(origAssignApplData) == 1 and origAssignApplData[0]:
               origAssignApplDataValue = origAssignApplData[0].value
               if origResLabelApplData:
                 origResLabelApplDataMatch = origResLabelApplData[0]
-                
+
             else:
               origAssignApplDataValue = None
-              
+
               # These are the original resonance names, even when data was merged, so one of these has to match the
               # resonance name that's listed as appData on the parent item (e.g. a DistanceConstraintItem)
-              resonanceNames = [appData.value for appData in resonance.findAllApplicationData(application = self.format, keyword = assign_kw)] 
+              resonanceNames = [appData.value for appData in resonance.findAllApplicationData(application = self.format, keyword = assign_kw)]
               #print resonanceNames
               for resonanceName in resonanceNames:
                 for j in range(len(origAssignApplData) ):
@@ -1759,23 +1754,23 @@ class NmrStarExport:
                     origAssignApplDataValue = origAssignApplData.pop(j).value
                     if origResLabelApplData != None and j < len(origResLabelApplData):
                       origResLabelApplDataMatch = origResLabelApplData.pop(j)
-                    
+
                     #print 'RES NAME: [' + str(resonanceName) + '] [' + str(origAssignApplDataValue) + ']'
                     break
-                
+
                 # Added Wim 19/10/2009
                 if origAssignApplDataValue:
                   break
-                
+
             if origAssignApplDataValue:
               origAssignApplDataSplit = origAssignApplDataValue.split('.')
-            
+
             if not origAssignApplDataValue or len(origAssignApplDataSplit) != 3:
               # Could try to set values 3 and 4 into just 3.  But data types seem wrong for 1l8c
-              (chainCode,seqCode,atomName) = (None,None,None)  
+              (chainCode,seqCode,atomName) = (None,None,None)
             else:
               (chainCode,seqCode,atomName) = origAssignApplDataSplit
-              
+
               # Special case for dihedrals
               if atomName == 'XXX':
                 atomName = None
@@ -1795,18 +1790,18 @@ class NmrStarExport:
 
             origAssignValueList.append( (chainCode,seqCode,atomName,resLabel) )
             pdbAssignValueList.append(pdbResonanceInfo)
-            
+
         else:
-          
+
           defaultValues = (None,None,None,None)
-          
+
           origDataItems = 1
           if not usingParentObject and hasattr(ccpnObject,'resonances'):
             origDataItems = len(ccpnObject.resonances)
-          
+
           for i in range(origDataItems):
-            origAssignValueList.append(defaultValues)   
-            pdbAssignValueList.append(None)         
+            origAssignValueList.append(defaultValues)
+            pdbAssignValueList.append(None)
 
         #
         # And finally set them for NMR-STAR writing...
@@ -1823,7 +1818,7 @@ class NmrStarExport:
           (chainCode,seqCode,atomName,resLabel) = origAssignValueList[i]
 
           #print 'BEFORE SET: [' + str(origAssignValueList[i]) + '] _' + starCode
-          
+
           # Will now not overwrite if set already (Wim 19/10/2009)
 
           self.setSimplePresetValue(presetValues,'Auth_asym_ID' + starCode,chainCode,emptyOverwrite = False)
@@ -1831,15 +1826,15 @@ class NmrStarExport:
           self.setSimplePresetValue(presetValues,'Auth_seq_ID' + starCode,seqCode,emptyOverwrite = False)
           self.setSimplePresetValue(presetValues,'Auth_atom_ID' + starCode,atomName,emptyOverwrite = False)
           self.setSimplePresetValue(presetValues,'Auth_comp_ID' + starCode,resLabel,emptyOverwrite = False)
-      
+
           # Now set PDB stuff, if available...
           if pdbAssignValueList[i]:
-            
+
             pdbResonanceInfo = pdbAssignValueList[i]
 
             (pdbChainCode,pdbResidueInfo,pdbAtomName) = pdbResonanceInfo
             (pdbSeqCode,pdbSeqInsertCode,pdbResLabel) = pdbResidueInfo
-            
+
             self.setSimplePresetValue(presetValues,'PDB_strand_ID' + starCode,pdbChainCode)
             self.setSimplePresetValue(presetValues,'PDB_residue_no' + starCode,pdbSeqCode)
             self.setSimplePresetValue(presetValues,'PDB_ins_code' + starCode,pdbSeqInsertCode)
@@ -1874,11 +1869,11 @@ class NmrStarExport:
       #
       # Fully updated for use with coordinate NMR-STAR files and remediated PDB atom naming (Wim 19/02/2008)
       #
-      
+
       elif ccpnObjectClassName == 'Atom':
 
         namingSystemName = 'PDB_REMED'
-                
+
         coordAtom = ccpnObject
         residue =   self.ccpnVar['coordResidue']
         chain =     self.ccpnVar['coordChain']
@@ -1886,16 +1881,16 @@ class NmrStarExport:
         #
         # Try and get information for both PDB and NMRSTAR.
         #
-        
+
         for formatName in ('pdb','nmrStar'):
 
-          if not self.origVar.has_key(formatName):
+          if formatName not in self.origVar:
             self.origVar[formatName] = {'chain': (None,), 'residue': (None,)}
-                    
+
           #
           # Set chain level info (speed issue)
           #
-  
+
           if self.origVar[formatName]['chain'][0] != chain:
             origChainCodeApplData = chain.findFirstApplicationData(application = formatName, keyword = 'originalChainCode')
             if origChainCodeApplData:
@@ -1904,72 +1899,72 @@ class NmrStarExport:
               value = None
             else:
               value = -99999
-  
+
             self.origVar[formatName]['chain'] = (chain,value)
-          
+
           # Continue if no data available!
           if self.origVar[formatName]['chain'][1] == -99999:
-            continue  
-          
-  
+            continue
+
+
           #
           # Set residue level info (speed issue)
           #
-  
+
           if self.origVar[formatName]['residue'][0] != residue:
-  
+
             origSeqCodeApplData = residue.findFirstApplicationData(application = formatName, keyword = 'originalSeqCode')
             origSeqInsertCodeApplData = residue.findFirstApplicationData(application = formatName, keyword = 'originalSeqInsertCode')
-  
+
             origLabelApplData = residue.findFirstApplicationData(application = formatName, keyword = 'originalResLabel')
-  
+
             seqCodeValue = None
             if origSeqCodeApplData:
               seqCodeValue = str(origSeqCodeApplData.value)
-            
+
             seqInsertCodeValue = None
             if origSeqInsertCodeApplData:
               if origSeqInsertCodeApplData.value != defaultSeqInsertCode:
                 seqInsertCodeValue = origSeqInsertCodeApplData.value
-  
+
             labelValue = None
             if origLabelApplData:
               labelValue = origLabelApplData.value
-  
+
             chemCompVar = residue.residue.chemCompVar
-  
-            if not self.chemAtomSysNamesDict.has_key(chemCompVar):
+
+            if chemCompVar not in self.chemAtomSysNamesDict:
               chemAtomSysNames = findAllSysNamesByChemAtomOrSet(chemCompVar.chemComp,chemCompVar.chemAtoms,namingSystemName)
               self.chemAtomSysNamesDict[chemCompVar] = chemAtomSysNames
             else:
               chemAtomSysNames = self.chemAtomSysNamesDict[chemCompVar]
-  
+
             self.origVar[formatName]['residue'] = (residue,seqCodeValue,seqInsertCodeValue,labelValue,chemAtomSysNames)
-  
+
           #
           # Get atom name info, or find it from the chemAtomSysNames
           #
-  
+
           origAtomName = coordAtom.findFirstApplicationData(application = formatName, keyword = 'originalName')
-  
+
           if not origAtomName:
-  
+
             for origChemAtomSysName in self.origVar[formatName]['residue'][4]:
-  
+
               if origChemAtomSysName.atomName == coordAtom.name:
-  
+
                 origAtomName = origChemAtomSysName.sysName
                 break
-  
+
             if not origAtomName:
               origAtomName = None
-  
+
           else:
-  
+
             origAtomName = origAtomName.value
-          
-          starCode = '' # Can use this to add _1, ... tags 
-          
+
+          starCode = '' # Can use this to add _1, ... tags
+
           # This is so PDB-specific, will always set these values for this from now on...
           if formatName == 'pdb':
             #PDB_model_num set this as well?
@@ -1978,24 +1973,24 @@ class NmrStarExport:
             self.setSimplePresetValue(presetValues,'PDB_ins_code' + starCode,self.origVar[formatName]['residue'][2])
             self.setSimplePresetValue(presetValues,'PDB_residue_name' + starCode,self.origVar[formatName]['residue'][3])
             self.setSimplePresetValue(presetValues,'PDB_atom_name' + starCode,origAtomName)
-            
-          elif formatName == 'nmrStar':  
+
+          elif formatName == 'nmrStar':
             self.setSimplePresetValue(presetValues,'Auth_asym_ID' + starCode,self.origVar[formatName]['chain'][1])
             #self.setSimplePresetValue(presetValues,'Auth_entity_assembly_ID' + starCode,self.origVar[formatName]['chain'][1])
-            
+
             seqCode = self.origVar[formatName]['residue'][1]
             if self.origVar[formatName]['residue'][2]:
-              seqCode += self.origVar[formatName]['residue'][2] 
-              
+              seqCode += self.origVar[formatName]['residue'][2]
+
             self.setSimplePresetValue(presetValues,'Auth_seq_ID' + starCode,seqCode)
             self.setSimplePresetValue(presetValues,'Auth_comp_ID' + starCode,self.origVar[formatName]['residue'][3])
             self.setSimplePresetValue(presetValues,'Auth_atom_ID' + starCode,origAtomName)
-          
+
           #TODO ??? 'Auth_atom_ID': None,
 
 
   def returnOrigValue(self,value):
-  
+
     #
     # Bit dangerous but unlikely that a variable is present with the star name...
     # is mostly for setting None!
@@ -2003,7 +1998,7 @@ class NmrStarExport:
 
     if value == 'None':
       value = None
-      
+
     else:
       value = value
 
@@ -2011,36 +2006,36 @@ class NmrStarExport:
 
 
   def setMessage(self,message):
-    
+
     #
     # Adds/counts messages
     #
-  
-    if self.messages.has_key(message):
+
+    if message in self.messages:
       self.messages[message] += 1
     else:
-      self.messages[message] = 1   
+      self.messages[message] = 1
 
 
   def findStarKeyMatch(self,matchKeyName,ccpnObject):
-    
+
     #
     # This creates small speedup
     #
-    
+
     (starKeyDict,refCcpnObject) = self.starKeys[matchKeyName]
-    
+
     #
     # Generic function to find a match for a key in self.starKeys
     #
-  
+
     matchFound = 0
     matchValue = None
-    
+
     #if not hasattr(ccpnObject,'className'):
     #  print matchKeyName, ccpnObject
     #  print len(starKeyDict)
-     
+
     # Speedup, instead of has_key
     result = starKeyDict.get(ccpnObject)
 
@@ -2049,19 +2044,19 @@ class NmrStarExport:
       matchFound = 1
 
       if parentDictInfo:
-                    
+
         parentCcpnKey = parentDictInfo.keys()[0]
         parentCcpnObject = parentDictInfo[parentCcpnKey]
-        
+
         if parentCcpnObject != self.ccpnVar[parentCcpnKey]:
           # TODO: What does this mean?
           matchFound = 0
-    
+
     # Try to catch 'mismapping' errors - sped up because reference object now directly available from self.starKeys
     elif starKeyDict and type(refCcpnObject) != type(ccpnObject):
-        
+
       self.setMessage("  Warning: for NMR-STAR key %s, trying to find %s object, but could be %s object!" % (matchKeyName,type(ccpnObject),type(refCcpnObject) ) )
-         
+
     return (matchFound,matchValue)
 
 
@@ -2069,11 +2064,11 @@ class NmrStarExport:
 
     value = None
 
-    if self.starTagToStarKey.has_key(foreignTag):
-        
+    if foreignTag in self.starTagToStarKey:
+
       foreignKey = self.starTagToStarKey[foreignTag]
 
-      if writeTags is not None and writeTags.has_key(tagName):
+      if writeTags is not None and tagName in writeTags:
 
         ccpnTagMapping = writeTags[tagName]
 
@@ -2095,7 +2090,7 @@ class NmrStarExport:
       if not value:
         self.setMessage("  Error: in '%s', foreign tag %s does not have CCPN object." % (starElementName,starTagName) )
 
-    elif writeTags is not None and writeTags.has_key(tagName):
+    elif writeTags is not None and tagName in writeTags:
 
       #
       # This is only necessary if there was no previous mapping available!
@@ -2116,15 +2111,15 @@ class NmrStarExport:
   #
   # Functions for decoding the mapping dictionary
   #
-  
+
   def getAttrOrFunc(self,obj,attrOrFunc):
-  
+
     returnObj = None
-  
+
     if obj:
-      
+
       # Don't bother if object is None (possible)
-      
+
       funcSearch = self.patt['insideBrackets'].search(attrOrFunc)
 
       if funcSearch:
@@ -2137,17 +2132,17 @@ class NmrStarExport:
         returnObj = getattr(obj,attrOrFunc)
 
     return returnObj
-  
+
 
   def getCcpnObject(self,ccpnMap):
 
     findObject = None
-  
+
     if ccpnMap:
 
       ccpnObjectStrings = ccpnMap.split('.')
-    
-      if not self.ccpnVar.has_key(ccpnObjectStrings[0]):
+
+      if ccpnObjectStrings[0] not in self.ccpnVar:
         raise('  Error: No definition for %s yet in ccpnVar dictionary!' % ccpnObjectStrings[0])
 
       else:
@@ -2182,9 +2177,9 @@ class NmrStarExport:
       except:
         print("  Cannot CCPN map value for %s, function %s" % (ccpnVarName,getFunc))
         raise
-        
+
     elif ccpnMap == None:
-    
+
       pass
 
     else:
@@ -2243,7 +2238,7 @@ class NmrStarExport:
           for tableName in appDataDict[mainKey][otherKey]['tableNames']:
             starTable = starElement.setupTable(tableName)
 
-            if not appDataDict[mainKey][otherKey].has_key(tableName):
+            if tableName not in appDataDict[mainKey][otherKey]:
               continue
 
             tableTagNames = appDataDict[mainKey][otherKey][tableName]['tableTagNames']
@@ -2259,43 +2254,43 @@ class NmrStarExport:
                 starTable.setTag(starTableTagName, tableValue)
 
   def getAppDataForSaveFrame(self,ccpnObject,saveFrameName):
-    
+
     #
     # This allows mapping of a saveframe name to another one to get at application data.
     # Introduced for general_distance_constraints (Wim 29/09/09)
     #
-    
-    if self.ccpn2NmrStar.mapAppDataSaveFrames.has_key(saveFrameName):
+
+    if saveFrameName in self.ccpn2NmrStar.mapAppDataSaveFrames:
       searchSaveFrameName = self.ccpn2NmrStar.mapAppDataSaveFrames[saveFrameName][0]
       mapTableNames = self.ccpn2NmrStar.mapAppDataSaveFrames[saveFrameName][1]
     else:
       searchSaveFrameName = saveFrameName
       mapTableNames = {}
-      
+
     #
     # Now start to look for application data, put in dictionary
     #
 
     AppDataDict = {}
-    
+
     if not ccpnObject or not hasattr(ccpnObject, 'findAllApplicationData'):
       return AppDataDict
 
     appDataList = ccpnObject.findAllApplicationData(application = self.format,keyword = searchSaveFrameName)
-    
+
     if not appDataList:
       return AppDataDict
     else:
       self.setupAllAppDataDict(ccpnObject)
       self.curAppDataCcpnObject = ccpnObject
-    
+
     appDataValues = [int(appData.value) for appData in appDataList]
 
     appDataValues.sort()
 
     mainKey = '%s' % saveFrameName
 
-    if not mainKey in AppDataDict:
+    if mainKey not in AppDataDict:
       AppDataDict[mainKey] = {}
 
     mainDict = self.nmrStarDict.sfDict[mainKey]
@@ -2331,10 +2326,10 @@ class NmrStarExport:
       for tagName in mainExtraKeys:
         pos = mainExtraKeys[tagName][0]
         foreignTag = mainExtraKeys[tagName][2]
-        
+
         saveFrameTagNames2[pos] = tagName
         saveFrameTagValues2[pos] = None
-        
+
         # Fixed to set foreign tags if they exist. Wim 09/01/15
         if foreignTag and foreignTag not in self.ignoreForeignLinks:
           value = self.getForeignValue(foreignTag, tagName)
@@ -2344,14 +2339,14 @@ class NmrStarExport:
           if tagName not in saveFrameTagNames:
             value = mainExtraKeys[tagName][1]
             saveFrameTagValues2[pos] = value
-  
+
           else:
-            tagIndex = saveFrameTagNames.index(tagName)     
+            tagIndex = saveFrameTagNames.index(tagName)
             saveFrameTagValues2[pos] = saveFrameTagValues[tagIndex]
 
       otherKey = '%s' % sfTempId
 
-      if not otherKey in AppDataDict[mainKey]:
+      if otherKey not in AppDataDict[mainKey]:
         AppDataDict[mainKey][otherKey] = {}
 
       #print 'KEYS: [' + mainKey + '] [' + otherKey +']'
@@ -2359,7 +2354,7 @@ class NmrStarExport:
       AppDataDict[mainKey][otherKey]['title'] = saveFrameTitle
       AppDataDict[mainKey][otherKey]['tagNames'] = saveFrameTagNames2
       AppDataDict[mainKey][otherKey]['tagValues'] = saveFrameTagValues2
-      
+
       saveFrameTableNamesAppData = self.getAppDataValueSfLevelList(searchSaveFrameName,'','tables', verbose = 0)
 
       #print '[' + sfTempId + '] [' + str(saveFrameTableNames) + ']'
@@ -2368,82 +2363,82 @@ class NmrStarExport:
         continue
 
       else:
-        
+
         for saveFrameTableNameStringList in saveFrameTableNamesAppData:
-          
+
           saveFrameTableNames = eval(saveFrameTableNameStringList)
-          
+
           for saveFrameTableName in saveFrameTableNames:
-          
+
             # In case of application data saveFrame name mapping, also have to convert table names!
-            if mapTableNames.has_key(saveFrameTableName[1:]):
+            if saveFrameTableName[1:] in mapTableNames:
               actualSaveFrameTableName = "_" + mapTableNames[saveFrameTableName[1:]]
             else:
               actualSaveFrameTableName = saveFrameTableName
-              
+
             #
             # Now continue with getting app data
             #
-  
-            if not 'tableNames' in AppDataDict[mainKey][otherKey]:
+
+            if 'tableNames' not in AppDataDict[mainKey][otherKey]:
               AppDataDict[mainKey][otherKey]['tableNames'] = []
-  
+
             AppDataDict[mainKey][otherKey]['tableNames'].append(actualSaveFrameTableName)
-  
+
             #print 'TABLE1: [%s] [%s]' % (saveFrameTableName, sorted(self.nmrStarDict.sfDict[saveFrameName]['tables'].keys() ) )
-  
-            if not self.nmrStarDict.sfDict[mainKey]['tables'].has_key(actualSaveFrameTableName[1:]):
+
+            if actualSaveFrameTableName[1:] not in self.nmrStarDict.sfDict[mainKey]['tables']:
               continue
-  
+
             mainTableDict = self.nmrStarDict.sfDict[mainKey]['tables'][actualSaveFrameTableName[1:]]
-  
+
             tableKey = "%s_table_%s%s" % (searchSaveFrameName,sfTempId,saveFrameTableName)
-  
+
             tmpSfTag = self.getAppDataValueTableLevel(tableKey,'tagNames')
-  
+
             saveFrameTableTagNames = []
-  
+
             if tmpSfTag:
               saveFrameTableTagNames = eval(tmpSfTag)
-  
+
             maxTablePos, mainExtraTableKeys = self.getExtraKeys(mainTableDict)
-  
+
             saveFrameTableTagNames2 = [None] * maxTablePos
-  
+
             #print 'TABLE: [' + str(saveFrameTableTagNames) + ']'
-  
+
             for tTagName in mainExtraTableKeys:
               pos = mainExtraTableKeys[tTagName][0]
               saveFrameTableTagNames2[pos] = tTagName
-  
-            if not actualSaveFrameTableName in AppDataDict[mainKey][otherKey]:
+
+            if actualSaveFrameTableName not in AppDataDict[mainKey][otherKey]:
               AppDataDict[mainKey][otherKey][actualSaveFrameTableName] = {}
-  
-            if not 'tableTagNames' in AppDataDict[mainKey][otherKey][actualSaveFrameTableName]:
+
+            if 'tableTagNames' not in AppDataDict[mainKey][otherKey][actualSaveFrameTableName]:
               AppDataDict[mainKey][otherKey][actualSaveFrameTableName]['tableTagNames'] = eval(str(saveFrameTableTagNames2) )
-  
+
             tableRow = 1
-  
-            if not 'tableTagValues' in AppDataDict[mainKey][otherKey][actualSaveFrameTableName]:
+
+            if 'tableTagValues' not in AppDataDict[mainKey][otherKey][actualSaveFrameTableName]:
               AppDataDict[mainKey][otherKey][actualSaveFrameTableName]['tableTagValues'] = []
-  
+
             while(tableRow):
-  
+
               tableRowAppData = self.getAppDataValueTableLevel(tableKey,str(tableRow) )
-  
+
               if not tableRowAppData:
                 break
-  
+
               tableRowValues = eval(tableRowAppData)
-  
+
               tableRowValues2 = [None] * maxTablePos
-  
+
               for tTagName in mainExtraTableKeys:
                 tpos = mainExtraTableKeys[tTagName][0]
                 foreignTag = mainExtraTableKeys[tTagName][2]
-                
+
                 tableRowValues2[tpos] = None
-          
+
                 # Fixed to set foreign tags if they exist. Wim 09/01/15
                 if foreignTag and foreignTag not in self.ignoreForeignLinks:
                   value = self.getForeignValue(foreignTag, tTagName)
@@ -2453,13 +2448,13 @@ class NmrStarExport:
                   if tTagName not in saveFrameTableTagNames:
                     value = mainExtraTableKeys[tTagName][1]
                     tableRowValues2[tpos] = value
-    
+
                   else:
                     tTagIndex = saveFrameTableTagNames.index(tTagName)
                     tableRowValues2[tpos] = tableRowValues[tTagIndex]
-                    
+
               AppDataDict[mainKey][otherKey][actualSaveFrameTableName]['tableTagValues'].append(tableRowValues2)
-  
+
               tableRow += 1
 
     #print AppDataDict
@@ -2467,22 +2462,22 @@ class NmrStarExport:
     return AppDataDict
 
   def setupAllAppDataDict(self,ccpnObject):
-    
+
     """
     This function grabs all application data from a ccpnObject and organises it into a dictionary.
     Solely done for speedup reasons, so can avoid findFirst() functions.
     """
-    
+
     self.allAppDataDict = {}
-    
+
     allAppData = ccpnObject.findAllApplicationData(application = self.format)
-    
+
     for appData in allAppData:
       keyword = appData.keyword
       value = appData.value
-      if not self.allAppDataDict.has_key(keyword):
+      if keyword not in self.allAppDataDict:
         self.allAppDataDict[keyword] = []
-        
+
       self.allAppDataDict[keyword].append(value)
 
   def getAppDataValueSfLevel(self,saveFrameName,saveFrameKey,insertText, verbose = True):
@@ -2520,14 +2515,14 @@ class NmrStarExport:
 
 
   def getAppDataValue(self,keyword, verbose = True):
- 
-    if self.allAppDataDict.has_key(keyword):
+
+    if keyword in self.allAppDataDict:
       # This should always be single value, if things are set up correctly at least
       value = self.allAppDataDict.pop(keyword)[0]
-      
+
     else:
       value = None
-      
+
       # Necessary to distinguish between local and global verbosity!
       if verbose and self.verbose:
         print("  Error: no %s appData for ccpn object %s!" % (keyword,self.curAppDataCcpnObject))
@@ -2537,12 +2532,12 @@ class NmrStarExport:
 
   def getAppDataValueList(self,keyword, verbose = True):
 
-    if self.allAppDataDict.has_key(keyword):
+    if keyword in self.allAppDataDict:
       value = self.allAppDataDict.pop(keyword)
-      
+
     else:
       value = []
-      
+
       # Necessary to distinguish between local and global verbosity!
       if verbose and self.verbose:
         print("  Error: no %s appDataList for ccpn object %s!" % (keyword,self.curAppDataCcpnObject))

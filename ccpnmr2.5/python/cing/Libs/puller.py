@@ -8,9 +8,11 @@ Usage: python $CINGROOT/cing/python/Libs/RDBpuller.py -f source_server -t destin
 '''
 import getopt
 import sys
-from sqlalchemy import create_engine, MetaData, Table
-from sqlalchemy.orm import sessionmaker
+
+from sqlalchemy import MetaData, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
 
 def make_session(connection_string):
     engine = create_engine(connection_string, echo=False, convert_unicode=True)
@@ -53,7 +55,7 @@ Example: %s -f oracle://someuser:PaSsWd@db1/TSH1 \\
     """ % (myName, myName, myName))
 
 def quick_mapper(table):
-    base = declarative_base()    
+    base = declarative_base()
     # pylint: disable=R0903
     class GenericMapper(base): # pylint: disable=W0232
         __table__ = table

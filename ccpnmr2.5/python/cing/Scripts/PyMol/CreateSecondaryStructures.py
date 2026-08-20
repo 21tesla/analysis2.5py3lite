@@ -14,12 +14,15 @@
 
 # Next line is a pymol directive
 #python #@UndefinedVariable
-from pymol import cmd #@UnresolvedImport
-from pymol import editor #@UnresolvedImport
 import os
-import pymol #@UnusedImport @UnresolvedImport
 import string
 import urllib
+
+from pymol import (
+    cmd,  #@UnresolvedImport
+    editor,  #@UnresolvedImport
+)
+
 #editor=editor #@UndefinedVariable
 
 # Well I guess one can build a protein with it but the vdw contacts would be horrible.
@@ -81,7 +84,7 @@ def set_phipsi(sel,phi,psi):
             if not at.chain == "":
                 unit_select = "chain "+str(at.chain)+" and "
             # end if
-            
+
             try:
                 # Define residue selections
                 rdef_prev = unit_select+'resi '+str(int(at.resi)-1)
@@ -118,7 +121,7 @@ def getTableFromCsvFile(urlLocation):
         if dataLine:
             result.append( dataLine.split(',') )
         # end if
-    # end for            
+    # end for
     return result
 
 # next line is a pymol directive. Enable it when executing at pymol gui.

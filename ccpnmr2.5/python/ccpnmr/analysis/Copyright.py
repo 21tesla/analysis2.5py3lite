@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,21 +38,21 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.general.Version import getVersion
-from ccpnmr.analysis.Version import version, timestamp
 
+from ccpnmr.analysis.Version import timestamp, version
+from memops.general.Version import getVersion
 from memops.universal.Util import isWindowsOS
 
 if isWindowsOS():
-  from ccpnmr.analysis.Version import build
+    from ccpnmr.analysis.Version import build
 else:
-  build = ''
+    build = ""
 
-suite = 'CcpNmr'
-program = 'Analysis'
-copyright = 'Copyright 2003-2020 CCPN'
+suite = "CcpNmr"
+program = "Analysis"
+copyright = "Copyright 2003-2020 CCPN"
 version = getVersion(version, timestamp, name=program)
-vendorAddress = 'Department of Biochemistry, Cambridge CB2 1GA, UK'
-vendorName = 'CCPN'
-vendorWebAddress = 'http://www.ccpn.ac.uk'
-details = 'The CCPN NMR assignment and data analysis application'
+vendorAddress = "Department of Biochemistry, Cambridge CB2 1GA, UK"
+vendorName = "CCPN"
+vendorWebAddress = "http://www.ccpn.ac.uk"
+details = "The CCPN NMR assignment and data analysis application"

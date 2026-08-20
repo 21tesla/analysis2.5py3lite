@@ -1,4 +1,3 @@
- 
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,78 +50,72 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
- 
- 
-from memops.general.Constants import infinity, apiSubDirs
-from memops.general import Implementation
- 
-from memops.gui.ButtonList import ButtonList
-from memops.gui.MessageReporter import showError
 
 from memops.editor.BasePopup import BasePopup
 from memops.editor.ObjectTable import ObjectTable
 from memops.editor.Util import getAllObjects
+from memops.gui.ButtonList import ButtonList
+from memops.gui.MessageReporter import showError
+
 
 class ObjectTablePopup(BasePopup):
+    def __init__(self, parent, root, metaclass, onlyShow=False, *args, **kw):
 
-  def __init__(self, parent, root, metaclass, onlyShow = False, *args, **kw):
+        self.root = root
+        self.metaclass = metaclass
+        self.onlyShow = onlyShow
 
-    self.root = root
-    self.metaclass = metaclass
-    self.onlyShow = onlyShow
+        BasePopup.__init__(
+            self, parent, title="Browser for %s objects" % metaclass.name, location="+50+50", *args, **kw
+        )
 
-    BasePopup.__init__(self, parent, title='Browser for %s objects' % metaclass.name,
-                       location='+50+50', *args, **kw)
- 
-  def body(self, master):
- 
-    master.grid_rowconfigure(0, weight=1)
-    master.grid_columnconfigure(0, weight=1)
+    def body(self, master):
 
-    self.table = ObjectTable(master, self.metaclass)
-    self.table.grid(row=0, column=0, sticky=Tkinter.NSEW)
+        master.grid_rowconfigure(0, weight=1)
+        master.grid_columnconfigure(0, weight=1)
 
-    if (self.onlyShow):
-      texts = [ 'Close' ]
-      commands = [ self.close ]
-    else:
-      texts = [ 'Ok', 'Cancel' ]
-      commands = [ self.ok, self.close ]
+        self.table = ObjectTable(master, self.metaclass)
+        self.table.grid(row=0, column=0, sticky=Tkinter.NSEW)
 
-    self.buttons = ButtonList(master, texts=texts, commands=commands,
-                              direction=Tkinter.HORIZONTAL, expands=True)
-    self.buttons.grid(row=1, column=0, sticky=Tkinter.EW)
+        if self.onlyShow:
+            texts = ["Close"]
+            commands = [self.close]
+        else:
+            texts = ["Ok", "Cancel"]
+            commands = [self.ok, self.close]
 
-    self.selected = None
+        self.buttons = ButtonList(master, texts=texts, commands=commands, direction=Tkinter.HORIZONTAL, expands=True)
+        self.buttons.grid(row=1, column=0, sticky=Tkinter.EW)
 
-    self.setObjects()
+        self.selected = None
 
-    self.doRegisters()
+        self.setObjects()
 
-  def doRegisters(self):
+        self.doRegisters()
 
-    # do not need '' since dealing with keys
-    #for func in ('', '__init__', 'delete'):
-    for func in ('__init__', 'delete'):
-      self.registerNotify(self.setObjects, self.metaclass.qualifiedName(), func)
+    def doRegisters(self):
 
-  # unregisters dealt with by BasePopup
+        # do not need '' since dealing with keys
+        # for func in ('', '__init__', 'delete'):
+        for func in ("__init__", "delete"):
+            self.registerNotify(self.setObjects, self.metaclass.qualifiedName(), func)
 
-  def apply(self):
+    # unregisters dealt with by BasePopup
 
-    selected = self.table.currentObject
+    def apply(self):
 
-    if (not selected):
-      showError('No selection', "No object selected", parent=self)
-      return False
+        selected = self.table.currentObject
 
-    self.selected = selected
+        if not selected:
+            showError("No selection", "No object selected", parent=self)
+            return False
 
-    return True
+        self.selected = selected
 
-  def setObjects(self, *extra):
+        return True
 
-    objects = getAllObjects(self.root, self.metaclass)
+    def setObjects(self, *extra):
 
-    self.table.setObjects(objects)
+        objects = getAllObjects(self.root, self.metaclass)
+
+        self.table.setObjects(objects)

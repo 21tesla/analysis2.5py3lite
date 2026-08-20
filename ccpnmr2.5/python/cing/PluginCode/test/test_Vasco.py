@@ -2,28 +2,25 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/PluginCode/test/test_Vasco.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+import unittest
+from shutil import rmtree
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
 from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG import ARCHIVE_NRG_ID
 from cing.NRG.storeCING2db import doStoreCING2db
 from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqWattos import * #@UnusedWildImport
-from cing.core.classes import Project
-from nose.plugins.skip import SkipTest
-from shutil import rmtree
-from unittest import TestCase
-import unittest
+from cing.PluginCode.required.reqWattos import *  #@UnusedWildImport
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
-    from cing.PluginCode.Vasco import Vasco #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
-    from cing.Scripts.FC.utils import printSequenceFromCcpnProject
-    from cing.Scripts.FC.utils import swapCheck
-    from memops.general.Io import loadProject
-    from memops.general.Io import saveProject
+    from cing.Scripts.FC.utils import printSequenceFromCcpnProject, swapCheck
+    from memops.general.Io import loadProject, saveProject
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -189,7 +186,6 @@ class AllChecks(TestCase):
                 self.assertTrue(project, 'Failed reopening project: ' + entryId)
             if doStoreCheck:
                 # pylint: disable=W0612
-                from cing.PluginCode.sqlAlchemy import CsqlAlchemy #@UnusedImport
                 if doStoreCING2db( entryId, ARCHIVE_NRG_ID, project=project):
                     nTerror("Failed to store CING project's data to DB but continuing.")
         # end for

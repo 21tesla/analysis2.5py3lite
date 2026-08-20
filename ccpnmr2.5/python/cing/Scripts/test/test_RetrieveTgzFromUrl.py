@@ -2,14 +2,13 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_RetrieveTgzFromUrl.py
 """
-from cing import cingDirTestsData #@UnusedImport
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_ENTRY
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_FLAT #@UnusedImport
-from cing.Scripts.validateEntry import retrieveTgzFromUrl
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_ENTRY, retrieveTgzFromUrl
+
 
 class AllChecks(TestCase):
 

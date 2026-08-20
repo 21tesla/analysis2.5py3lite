@@ -1,28 +1,24 @@
-import os, sys, string
-import tkinter
+import os
+import string
+import sys
 
-from memops.gui.Button          import Button
-from memops.gui.ButtonList      import ButtonList
-from memops.gui.CheckButton     import CheckButton
-from memops.gui.Entry           import Entry
+from cambridge.isd.NmrCalcExchange import PROVISIONAL, getIsdNmrCalcStore, isdToNmrCalcRun, nmrCalcRunToIsd
+from memops.general.Io import saveProject
+from memops.gui.ButtonList import ButtonList
+from memops.gui.CheckButton import CheckButton
+from memops.gui.Entry import Entry
+from memops.gui.FileSelect import FileType
 from memops.gui.FileSelectPopup import FileSelectPopup
-from memops.gui.FileSelect      import FileType
-from memops.gui.FloatEntry      import FloatEntry
-from memops.gui.Frame           import Frame
-from memops.gui.IntEntry        import IntEntry
-from memops.gui.Label           import Label
+from memops.gui.FloatEntry import FloatEntry
+from memops.gui.Frame import Frame
+from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
 from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
-from memops.gui.MultiWidget     import MultiWidget
-from memops.gui.PulldownMenu    import PulldownMenu
-from memops.gui.PulldownList    import PulldownList
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-from memops.gui.TabbedFrame     import TabbedFrame
-from memops.gui.Util            import createDismissHelpButtonList
-from memops.editor.BasePopup    import BasePopup
-from memops.general.Io          import saveProject
-from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists
-
-from cambridge.isd.NmrCalcExchange import nmrCalcRunToIsd, isdToNmrCalcRun, getIsdNmrCalcStore, PROVISIONAL
+from memops.gui.MultiWidget import MultiWidget
+from memops.gui.PulldownList import PulldownList
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.TabbedFrame import TabbedFrame
 
 redColor   = '#FF8080'
 greenColor = '#80FF80'
@@ -104,7 +100,7 @@ class IsdFrame(Frame):
     commands = [self.newRun, self.deleteRunSettings]
     buttons = ButtonList(self.topFrame1, texts=texts, commands=commands,
                          grid=(0,4), sticky='e')
-    
+
     self.newButton, self.deleteButton = buttons.buttons
 
     self.topFrame2 = Frame(self)
@@ -325,7 +321,7 @@ class IsdFrame(Frame):
 
     ## ISD project data is stores as an NmrCalc.run
 
-    from threading import Lock, Event
+    from threading import Event, Lock
 
     self.busylock = Lock()
     self.halted = Event()
@@ -376,7 +372,7 @@ class IsdFrame(Frame):
     self.cleanProject()
     if self.haveIsdInstalled:
       self.updateRunPulldown()
-        
+
     self.updateAll()
 
     return True
@@ -397,13 +393,13 @@ class IsdFrame(Frame):
       calcStore = getIsdNmrCalcStore(self.ccpnProject)
       runs  += [r for r in calcStore.sortedRuns() if r.status == PROVISIONAL]
       names += ['Run %d' % r.serial for r in runs]
-      
+
       if runs:
         if run not in runs:
           run = runs[-1]
-          
+
         index = runs.index(run)
-          
+
       else:
         run = None
 
@@ -444,7 +440,7 @@ class IsdFrame(Frame):
 
     ## TODO: not pretty...
 
-    if not 'gnuplot' in self.sim.analysis:
+    if 'gnuplot' not in self.sim.analysis:
       self.sim.analysis.gnuplot = 'gnuplot'
 
     import Isd.gnuplot as g
@@ -475,10 +471,10 @@ class IsdFrame(Frame):
 
     if self.isRunning() or self.busylock.locked():
       return
-    
+
     if not run:
       return
-    
+
     if run is not self.run:
       self.updateNmrCalc()
       self.run = run
@@ -533,9 +529,9 @@ class IsdFrame(Frame):
         return False
 
   def saveSettings(self):
-  
+
     from Isd.setup import CCPN
-    
+
     if self.sim.molecule.format == CCPN:
 
       if not self.sim.ccpn.export.molecular_system_name:
@@ -569,7 +565,7 @@ class IsdFrame(Frame):
     if self.ccpnProject:
       calcStore = getIsdNmrCalcStore(self.ccpnProject)
       run = calcStore.newRun(status=PROVISIONAL)
-      self.selectIsdRun(run) 
+      self.selectIsdRun(run)
 
   def deleteRunSettings(self):
 
@@ -712,7 +708,7 @@ class IsdFrame(Frame):
       return
 
     modules = os.path.join(isdRootDir, 'src', 'py')
-    if not modules in sys.path:
+    if modules not in sys.path:
       sys.path.insert(0, os.path.join(isdRootDir, 'src', 'py'))
 
     try:
@@ -723,7 +719,7 @@ class IsdFrame(Frame):
       Label(self, text='Reported error: "%s"' % msg, grid=(2,0))
       if str(msg) == 'No module named _isd':
          Label(self, text='C code may not be properly compiled', grid=(3,0))
-      
+
       return
 
     self.haveIsdInstalled = True
@@ -737,7 +733,7 @@ class IsdFrame(Frame):
     try:
       ns = get_nameserver(nshost)
 
-    except Exception as msg:
+    except Exception:
       print('ERROR: Nameserver was not found on %s' % nshost)
 
       showWarning('Failure', 'PyRO nameserver is not found. Please start the nameserver first '+\
@@ -755,9 +751,9 @@ class IsdFrame(Frame):
 
   def generateReport(self):
 
-    from Isd import report
+    from Isd import report, setup
+
     from cambridge.isd.isd_project_template import modify_simulation
-    from Isd import setup
 
     try:
       simulation = self.simulation
@@ -778,9 +774,10 @@ class IsdFrame(Frame):
 
   def __create(self):
 
-    from cambridge.isd.isd_project_template import modify_simulation
-    from Isd.generate_project_template import generate_template
     from Isd import setup
+    from Isd.generate_project_template import generate_template
+
+    from cambridge.isd.isd_project_template import modify_simulation
 
     ## write project file in working_path/isd.py
     ## (should be called before manager.create_simulation to
@@ -920,7 +917,7 @@ Results are written to %s'''
       return
 
     from Isd.gnuplot import plot
-    from numpy import sum, clip
+    from numpy import clip, sum
 
     _min=-1.e100
     _max=1.e100
@@ -1153,8 +1150,7 @@ Results are written to %s'''
     self.updateExpData()
 
   def getDataKey(self, dataSet):
-    from Isd import CCPNReader
-    from Isd import setup
+    from Isd import CCPNReader, setup
 
     if dataSet.format == setup.CCPN:
       widget = self.dataKeyPulldown
@@ -1167,7 +1163,7 @@ Results are written to %s'''
 
       if dataType == setup.NOESY:
         # These are simply distance restraints with peak intensity information (constraint.origData)
-      
+
 #         peakLists = getThroughSpacePeakLists(self.ccpnProject)
 
 #         i = 0
@@ -1769,7 +1765,7 @@ Results are written to %s'''
 
     if text:
 
-      blocks = [x for x in text.split(',') if x is not '']
+      blocks = [x for x in text.split(',') if x != '']
 
       values = []
 
@@ -1848,7 +1844,7 @@ Results are written to %s'''
       ns = []
 
       for h in host_list:
-        if not h in hosts:
+        if h not in hosts:
           hosts.append(h)
           ns.append(1)
         else:
@@ -1874,7 +1870,7 @@ Results are written to %s'''
 
     if text:
 
-      blocks = [x for x in text.split(',') if x is not '']
+      blocks = [x for x in text.split(',') if x != '']
 
       host_list = []
 
@@ -1961,7 +1957,7 @@ Results are written to %s'''
 
     if project and (project is not self.ccpnProject):
       self.ccpnProject = project
-    
+
     self.updateRunPulldown()
     self.updateNames()
     self.updateButtons()
@@ -1970,9 +1966,9 @@ Results are written to %s'''
     self.updateMonteCarlo()
     self.updateAnalyses()
     self.updateExpData()
-    
+
   def updateNmrCalc(self):
-  
+
     if self.run:
       isdToNmrCalcRun(self.sim, self.ccpnProject, self.run)
 
@@ -2095,7 +2091,6 @@ Results are written to %s'''
 
     # Add colour rules here
 
-    from Isd import setup
 
     if self.sim.working_path == './':
       colorMatrix[1][2] = redColor
@@ -2592,6 +2587,7 @@ def allRemoteHostsReady(sampler):
 def cleanup(simulation, sampler):
 
     from time import sleep
+
     from Isd.utils import SpinWheel
 
     wheel = SpinWheel()

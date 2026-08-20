@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,127 +54,121 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 
-# Import general functions
-from memops.universal.Util import returnFloat, returnFloats
-from memops.universal.Util import returnInt
+from ccp.format.general.Util import getSeqAndInsertCode
 from ccp.format.xeasy.generalIO import XEasyGenericFile
 from memops.universal.Io import getTopDirectory
 
-from ccp.format.general.Util import getSeqAndInsertCode
+# Import general functions
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class XEasyChemShiftFile(XEasyGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.chemShifts = []
+    """
+    Information on file level
+    """
 
-  def read(self,verbose=False,readAll=False):
+    def initialize(self):
 
-    if verbose == 1:
-      print("Reading xeasy chemical shift list %s" % self.name)
+        self.chemShifts = []
 
-    fin = open(self.name)
+    def read(self, verbose=False, readAll=False):
 
-    line = fin.readline()
-    # Read rest file
-    while line:
+        if verbose == 1:
+            print("Reading xeasy chemical shift list %s" % self.name)
 
-      if not self.patt['hash'].search(line):
-      
-        # Get rid of trailing hash info if present
-        if line.count('#'):
-          line = line[:line.index('#')]
-      
-        cols = line.split()
+        fin = open(self.name)
 
-        if len(cols) == 5:
-          atomSerial = cols[0]
-          chemShift = cols[1]
-          chemShiftError = cols[2]
-          atomName = cols[3]
-          seqCode = cols[4]
+        line = fin.readline()
+        # Read rest file
+        while line:
+            if not self.patt["hash"].search(line):
+                # Get rid of trailing hash info if present
+                if line.count("#"):
+                    line = line[: line.index("#")]
 
-          # TODO: could keep these in and remove at importChemShifts stage...
-          if chemShift != '999.000':
-            chemShift = XEasyChemShift(self,atomSerial,chemShift,chemShiftError,atomName,seqCode,verbose=False)
-            
-            if not None in (chemShift.atomSerial,chemShift.value,chemShift.valueError):
-              self.chemShifts.append(chemShift)
-              
-          elif readAll:
-            # In case need all atom serials...
-            chemShift = XEasyChemShift(self,atomSerial,None,None,atomName,seqCode,verbose=False)  
-            self.chemShifts.append(chemShift)          
+                cols = line.split()
 
-      line = fin.readline()
+                if len(cols) == 5:
+                    atomSerial = cols[0]
+                    chemShift = cols[1]
+                    chemShiftError = cols[2]
+                    atomName = cols[3]
+                    seqCode = cols[4]
 
-    fin.close()
-    
-    #
-    # Crash if nothing read - wrong kind of file
-    #
-    
-    if not self.chemShifts:
-      
-      raise self.FileParseError("Invalid chemical shift file - no values were read.")
+                    # TODO: could keep these in and remove at importChemShifts stage...
+                    if chemShift != "999.000":
+                        chemShift = XEasyChemShift(
+                            self, atomSerial, chemShift, chemShiftError, atomName, seqCode, verbose=False
+                        )
 
-  def write(self,verbose = 0):
+                        if None not in (chemShift.atomSerial, chemShift.value, chemShift.valueError):
+                            self.chemShifts.append(chemShift)
 
-    if verbose == 1:
-      print("Writing xeasy chemical shift list %s" % self.name)
+                    elif readAll:
+                        # In case need all atom serials...
+                        chemShift = XEasyChemShift(self, atomSerial, None, None, atomName, seqCode, verbose=False)
+                        self.chemShifts.append(chemShift)
 
+            line = fin.readline()
 
-    fout = open(self.name,'w')
+        fin.close()
 
-    #
-    # Write three letter codes (one per line), with seqIndex
-    #
+        #
+        # Crash if nothing read - wrong kind of file
+        #
 
-    for chemShift in self.chemShifts:
+        if not self.chemShifts:
+            raise self.FileParseError("Invalid chemical shift file - no values were read.")
 
-      fout.write("%4d %7.3f %5.3f %-5s%4d" % (chemShift.atomSerial,
-                                              chemShift.value,
-                                              chemShift.valueError,
-                                              chemShift.atomName,
-                                              chemShift.seqCode))
-      fout.write(self.newline)
+    def write(self, verbose=0):
+
+        if verbose == 1:
+            print("Writing xeasy chemical shift list %s" % self.name)
+
+        fout = open(self.name, "w")
+
+        #
+        # Write three letter codes (one per line), with seqIndex
+        #
+
+        for chemShift in self.chemShifts:
+            fout.write(
+                "%4d %7.3f %5.3f %-5s%4d"
+                % (chemShift.atomSerial, chemShift.value, chemShift.valueError, chemShift.atomName, chemShift.seqCode)
+            )
+            fout.write(self.newline)
+
 
 class XEasyChemShift:
+    def __init__(self, parent, atomSerial, value, valueError, atomName, seqCode, verbose=False):
 
-  def __init__(self,parent,atomSerial,value,valueError,atomName,seqCode,verbose=False):
-  
-    self.atomSerial = returnInt(atomSerial,default=None,verbose=verbose)
-    self.value = returnFloat(value,default=None,verbose=verbose)
-    self.valueError = returnFloat(valueError,default=None,verbose=verbose)
-    self.atomName = atomName
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.molCode = parent.defaultMolCode
+        self.atomSerial = returnInt(atomSerial, default=None, verbose=verbose)
+        self.value = returnFloat(value, default=None, verbose=verbose)
+        self.valueError = returnFloat(valueError, default=None, verbose=verbose)
+        self.atomName = atomName
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.molCode = parent.defaultMolCode
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
-                                                                                                            
-  files = [['../reference/xeasy/3d.1.chemShifts','local/cs.test1']
-          ]
+if __name__ == "__main__":
+    files = [["../reference/xeasy/3d.1.chemShifts", "local/cs.test1"]]
 
-  for (inFile,outFile) in files:
-    
-    chemShiftFile = XEasyChemShiftFile(os.path.join(getTopDirectory(),inFile))
+    for inFile, outFile in files:
+        chemShiftFile = XEasyChemShiftFile(os.path.join(getTopDirectory(), inFile))
 
-    chemShiftFile.read(verbose = 1)
+        chemShiftFile.read(verbose=1)
 
-    for chemShift in chemShiftFile.chemShifts:
-      print(chemShift.seqCode, chemShift.atomName, chemShift.value)
+        for chemShift in chemShiftFile.chemShifts:
+            print(chemShift.seqCode, chemShift.atomName, chemShift.value)
 
+        chemShiftFile.name = outFile
 
-    chemShiftFile.name = outFile
-
-    chemShiftFile.write(verbose = 1)
+        chemShiftFile.write(verbose=1)

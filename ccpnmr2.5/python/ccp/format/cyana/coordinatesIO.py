@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,43 +51,40 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
+
+from ccp.format.cyana.generalIO import getFormat
+from ccp.format.dyana.coordinatesIO import DyanaChain, DyanaCoordinate, DyanaCoordinateFile
 from memops.universal.Io import getTopDirectory
 
 
-from ccp.format.dyana.coordinatesIO import DyanaCoordinateFile
-from ccp.format.dyana.coordinatesIO import DyanaChain
-from ccp.format.dyana.coordinatesIO import DyanaCoordinate
-from ccp.format.cyana.generalIO import getFormat
-
 class CyanaCoordinateFile(DyanaCoordinateFile):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = getFormat()
 
-    self.format = getFormat()
-    
+
 class CyanaChain(DyanaChain):
+    pass
 
-  pass
-    
+
 class CyanaCoordinate(DyanaCoordinate):
+    pass
 
-  pass
-    
-if __name__ == "__main__":  
 
-  file = os.path.join(getTopDirectory(),'../reference/diana/example.cor')
-  cyanaFile = CyanaCoordinateFile(file)
-  
-  cyanaFile.read(maxNum = 1)
+if __name__ == "__main__":
+    file = os.path.join(getTopDirectory(), "../reference/diana/example.cor")
+    cyanaFile = CyanaCoordinateFile(file)
 
-  for mc in cyanaFile.modelCoordinates:
-  
-    for coo in cyanaFile.modelCoordinates[mc]:
-      print(coo.serial, coo.resName, coo.x, coo.y, coo.z)
-      
-  for chain in cyanaFile.chains:
-    print(chain.chainId)
+    cyanaFile.read(maxNum=1)
 
-  cyanaFile.name = 'local/test.coord'  
-  cyanaFile.write()
+    for mc in cyanaFile.modelCoordinates:
+        for coo in cyanaFile.modelCoordinates[mc]:
+            print(coo.serial, coo.resName, coo.x, coo.y, coo.z)
+
+    for chain in cyanaFile.chains:
+        print(chain.chainId)
+
+    cyanaFile.name = "local/test.coord"
+    cyanaFile.write()

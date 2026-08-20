@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -58,31 +57,54 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # This '3 letter code' is used by Cns.
 #
 
-#nuclAcidCodes = {
+# nuclAcidCodes = {
 bioPolymerCodes = {
+    "RNA": [["A", "C", "G", "U"], ["ADE", "CYT", "GUA", "URA"]],
+    "DNA": [
+        ["A", "DA", "C", "DC", "G", "DG", "T", "DT", "U", "DU"],
+        ["ADE", "ADE", "CYT", "CYT", "GUA", "GUA", "THY", "THY", "URA", "URA"],
+    ],
+    "protein": [
+        ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"],
+        [
+            "ALA",
+            "CYS",
+            "ASP",
+            "GLU",
+            "PHE",
+            "GLY",
+            "HIS",
+            "ILE",
+            "LYS",
+            "LEU",
+            "MET",
+            "ASN",
+            "PRO",
+            "GLN",
+            "ARG",
+            "SER",
+            "THR",
+            "VAL",
+            "TRP",
+            "TYR",
+        ],
+    ],
+}
 
-     'RNA': [['A','C','G','U'],
-             ['ADE','CYT','GUA','URA']],
-     'DNA': [['A','DA','C','DC','G','DG','T','DT','U','DU'],
-             ['ADE','ADE','CYT','CYT','GUA','GUA','THY','THY','URA','URA']],
-     'protein': [['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','W','Y'],
-                 ['ALA','CYS','ASP','GLU','PHE','GLY','HIS','ILE','LYS','LEU','MET','ASN','PRO','GLN','ARG','SER','THR','VAL','TRP','TYR']]     
-            }
+nucleotideList = ["RNA", "DNA"]
 
-nucleotideList = ['RNA','DNA']
-
-defaultMolCode = ' '
+defaultMolCode = " "
 
 defaultLowerDist = 1.8
 
-defaultSeqInsertCode = ' '
-defaultAltLoc = ' '
+defaultSeqInsertCode = " "
+defaultAltLoc = " "
 
 indent = "  "
 
-atomOrder = ['A','B','G','D','E','Z','H']
+atomOrder = ["A", "B", "G", "D", "E", "Z", "H"]
 
-chainCodeString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+chainCodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-stableBondTypes = ('covalent','disulfide','link')
-bondTypes = stableBondTypes + ('hydrogen','salt')
+stableBondTypes = ("covalent", "disulfide", "link")
+bondTypes = stableBondTypes + ("hydrogen", "salt")

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,63 +38,62 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from ccp.gui.ViewChemCompVarFrame import ViewChemCompVarFrame
-from ccp.gui.ViewStructureFrame import symbolColor, symbolMultiplier, symbolSize
+from ccp.gui.ViewStructureFrame import symbolMultiplier
 from ccp.util.LabeledMolecule import getIsotopomerSingleAtomFractions
 from ccpnmr.analysis.core.MoleculeBasic import DEFAULT_ISOTOPES
 
+
 class ViewIsotopomerFrame(ViewChemCompVarFrame):
+    def __init__(self, parent, isotopomers, *args, **kw):
 
-  def __init__(self, parent, isotopomers, *args, **kw):
-  
-    self.chemCompVar = None
-    self.atomLabelDict = {}
-    
-    ViewChemCompVarFrame.__init__(self, parent, self.chemCompVar, *args, **kw)
+        self.chemCompVar = None
+        self.atomLabelDict = {}
 
-    self.setIsotopomers(isotopomers)
+        ViewChemCompVarFrame.__init__(self, parent, self.chemCompVar, *args, **kw)
 
-  def setIsotopomers(self, isotopomers=None):
-    
-    if isotopomers:
-      chemComp = isotopomers[0].chemCompLabel.chemComp
-      for isotopomer in isotopomers[1:]:
-        if isotopomer.chemCompLabel.chemComp is not chemComp:
-          raise Exception('Isotopomers from different ChemComps')
- 
-      chemCompVar = chemComp.findFirstChemCompVar(isDefaultVar=True) \
-                     or chemComp.findFirstChemCompVar(linking='none') \
-                     or chemComp.findFirstChemCompVar()
- 
-      self.chemCompVar = chemCompVar
-    
-    else:
-      self.chemCompVar = None
-        
-    self.isotopomers = isotopomers
-    self.displayStructure()
-  
-  
-  def getAtomDisplayScheme(self, atom):
-  
-    fracDict = getIsotopomerSingleAtomFractions(self.isotopomers,
-                                                atom.name, atom.subType)
-    
-    symbol = atom.elementSymbol
-    default = DEFAULT_ISOTOPES.get(symbol)
-    
-    if default:
-      v = fracDict.get(default, 0.0)
-      r = 0.3 + (v*0.5)
-      g = 0.3 + (v*0.7)
-      color = (r, g, 0.3) 
-      
-    else:
-      color = (0.3, 0.3, 0.3)
-      
-    label  = atom.name
-    size   = self.radiiScale * symbolMultiplier.get(symbol, 1.0)
-    
-    return color, label, size
+        self.setIsotopomers(isotopomers)
 
-  
+    def setIsotopomers(self, isotopomers=None):
+
+        if isotopomers:
+            chemComp = isotopomers[0].chemCompLabel.chemComp
+            for isotopomer in isotopomers[1:]:
+                if isotopomer.chemCompLabel.chemComp is not chemComp:
+                    raise Exception("Isotopomers from different ChemComps")
+
+            chemCompVar = (
+                chemComp.findFirstChemCompVar(isDefaultVar=True)
+                or chemComp.findFirstChemCompVar(linking="none")
+                or chemComp.findFirstChemCompVar()
+            )
+
+            self.chemCompVar = chemCompVar
+
+        else:
+            self.chemCompVar = None
+
+        self.isotopomers = isotopomers
+        self.displayStructure()
+
+    def getAtomDisplayScheme(self, atom):
+
+        fracDict = getIsotopomerSingleAtomFractions(self.isotopomers, atom.name, atom.subType)
+
+        symbol = atom.elementSymbol
+        default = DEFAULT_ISOTOPES.get(symbol)
+
+        if default:
+            v = fracDict.get(default, 0.0)
+            r = 0.3 + (v * 0.5)
+            g = 0.3 + (v * 0.7)
+            color = (r, g, 0.3)
+
+        else:
+            color = (0.3, 0.3, 0.3)
+
+        label = atom.name
+        size = self.radiiScale * symbolMultiplier.get(symbol, 1.0)
+
+        return color, label, size

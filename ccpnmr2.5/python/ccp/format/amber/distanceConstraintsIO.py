@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,64 +52,54 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
-
-from memops.universal.Io import getTopDirectory
-
-from memops.universal.Util import returnInt, returnFloat
-
-from ccp.format.amber.generalIO import AmberGenericFile
-from ccp.format.amber.generalIO import AmberGenericConstraint
-
 from ccp.format.amber.coordinatesIO import AmberCoordinateFile
+from ccp.format.amber.generalIO import AmberGenericConstraint, AmberGenericFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class AmberDistanceConstraintFile(AmberGenericFile):
+    infoType = "distance"
 
-  infoType = 'distance'
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.constraints = []
-    self.constraintElements = 2
+        self.constraints = []
+        self.constraintElements = 2
 
-    self.constraintType = None
-    
-    self.constraintFileType = 'distance_restraints'
-    
-  def read(self, coordFile=None, verbose=False):
+        self.constraintType = None
 
-    if verbose == 1:
-    
-      print("Reading %s %s constraint list %s" % (self.format,self.infoType,self.name))
-    
-    constraintInfoList = self.readConstraints()
-    
-    coordinateFile = AmberCoordinateFile(coordFile)
-    coordinateFile.read(maxNum = 1) # Only need one model!
-      
-    for i in range(len(constraintInfoList)):
-     
-      constraintInfo = constraintInfoList[i]
+        self.constraintFileType = "distance_restraints"
 
-      atomSerials = constraintInfo['iat']
-      coordinateAtoms = []
-      
-      for atomSerial in atomSerials:
-        coordinateAtoms.append(coordinateFile.serialToCoord[atomSerial])
-      
-      dihedralConstraint = AmberDistanceConstraint(self,i+1)
-      self.constraints.append(dihedralConstraint) 
-      
-      dihedralConstraint.addItem(coordinateAtoms)
-      dihedralConstraint.addDistance(constraintInfo)
-    
+    def read(self, coordFile=None, verbose=False):
+
+        if verbose == 1:
+            print("Reading %s %s constraint list %s" % (self.format, self.infoType, self.name))
+
+        constraintInfoList = self.readConstraints()
+
+        coordinateFile = AmberCoordinateFile(coordFile)
+        coordinateFile.read(maxNum=1)  # Only need one model!
+
+        for i in range(len(constraintInfoList)):
+            constraintInfo = constraintInfoList[i]
+
+            atomSerials = constraintInfo["iat"]
+            coordinateAtoms = []
+
+            for atomSerial in atomSerials:
+                coordinateAtoms.append(coordinateFile.serialToCoord[atomSerial])
+
+            dihedralConstraint = AmberDistanceConstraint(self, i + 1)
+            self.constraints.append(dihedralConstraint)
+
+            dihedralConstraint.addItem(coordinateAtoms)
+            dihedralConstraint.addDistance(constraintInfo)
+
+
 class AmberDistanceConstraint(AmberGenericConstraint):
-  
-  def addDistance(self,constraintInfo):
-  
-    self.lowerDist = constraintInfo['r2'][0]
-    self.upperDist = constraintInfo['r3'][0]
+    def addDistance(self, constraintInfo):
+
+        self.lowerDist = constraintInfo["r2"][0]
+        self.upperDist = constraintInfo["r3"][0]

@@ -1,5 +1,5 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #Attribute name in e.g. residue object.
 rogScoreStr = 'rogScore'
@@ -115,7 +115,7 @@ class ROGscore(NTdict):
         Only ORANGE and RED levels can add comments.
         Parameter comment may also be a list of comments.
         """
-    #    if not o.has_key( 'colorLabel' ):# NTlist doesn't have 'has_key'.
+    #    if  'colorLabel'  not in o:# NTlist doesn't have 'has_key'.
     #    if not hasattr(o,'colorLabel'):
     #        o.colorLabel = COLOR_GREEN
 
@@ -164,7 +164,7 @@ class CingResult( NTdict ):
 #                         comment = Whatif.explain(checkID),
                        )
 #        # Initialize the lists
-#        if Whatif.cingNameDict.has_key(checkID):
+#        if checkID in Whatif.cingNameDict:
 #            self.alternate = Whatif.cingNameDict[checkID]
 #        for c  in  [ VALUE_LIST_STR, QUAL_LIST_STR]:
         for c  in  [ VALUE_LIST_STR ]:
@@ -202,7 +202,7 @@ class XMLROGscoreHandler( XMLhandler ):
 
     def handle(self, node):
         attrs = self.handleDictElements(node)
-        if attrs == None: 
+        if attrs == None:
             return None
         result = ROGscore()
         result.update(attrs)

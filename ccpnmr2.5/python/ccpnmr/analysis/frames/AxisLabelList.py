@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,30 +45,31 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class AxisLabelList(PulldownMenu):
- 
-  def __init__(self, parent, getAxisLabels, *args, **kw):
- 
-    self.getAxisLabels = getAxisLabels
- 
-    PulldownMenu.__init__(self, parent, *args, **kw)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setAxisLabels, 'ccpnmr.Analysis.AxisPanel', func)
- 
-  def destroy(self):
- 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setAxisLabels, 'ccpnmr.Analysis.AxisPanel', func)
+    def __init__(self, parent, getAxisLabels, *args, **kw):
 
-    PulldownMenu.destroy(self)
+        self.getAxisLabels = getAxisLabels
 
-  def setAxisLabels(self, *axisLabel):
- 
-    axisLabels = self.getAxisLabels()
-    self.replace(axisLabels, self.selected_index)
+        PulldownMenu.__init__(self, parent, *args, **kw)
+
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setAxisLabels, "ccpnmr.Analysis.AxisPanel", func)
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setAxisLabels, "ccpnmr.Analysis.AxisPanel", func)
+
+        PulldownMenu.destroy(self)
+
+    def setAxisLabels(self, *axisLabel):
+
+        axisLabels = self.getAxisLabels()
+        self.replace(axisLabels, self.selected_index)

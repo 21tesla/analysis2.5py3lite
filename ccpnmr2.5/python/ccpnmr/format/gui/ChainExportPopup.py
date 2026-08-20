@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,220 +51,217 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
-from memops.universal.Io import joinPath
-
-from memops.gui.Label import Label
-from memops.gui.Util import createHelpButtonList
-from memops.gui.MessageReporter import showError
-from memops.gui.Entry import Entry
-
-from memops.universal.Util import returnInt
 from ccpnmr.format.general.Io import getHelpUrlDir
-
 from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
+from memops.gui.Entry import Entry
+from memops.gui.Label import Label
+from memops.gui.MessageReporter import showError
+from memops.gui.Util import createHelpButtonList
+from memops.universal.Io import joinPath
+from memops.universal.Util import returnInt
+
 
 class ChainExportPopup(TemporaryBasePopup):
- 
-  help_url = joinPath(getHelpUrlDir(),'ChainExport.html')
-  
-  def __init__(self, parent, ccpChainLabelDict, ccpChainSeqIDCodes, requireChainCode):
+    help_url = joinPath(getHelpUrlDir(), "ChainExport.html")
 
-    # Constructor doesn't do much except call body
-    # The parent is self.parent (parent of the popup)
-   
-    self.chain = None
+    def __init__(self, parent, ccpChainLabelDict, ccpChainSeqIDCodes, requireChainCode):
 
-    self.ccpChainLabelDict = ccpChainLabelDict
-    self.ccpChainSeqIDCodes = ccpChainSeqIDCodes
+        # Constructor doesn't do much except call body
+        # The parent is self.parent (parent of the popup)
 
-    self.requireChainCode = requireChainCode    
+        self.chain = None
 
-    self.exportChainCode = {}
-    self.exportFirstSeqCode = {}
+        self.ccpChainLabelDict = ccpChainLabelDict
+        self.ccpChainSeqIDCodes = ccpChainSeqIDCodes
 
-    project = self.ccpChainLabelDict.values()[0].root
+        self.requireChainCode = requireChainCode
 
-    # modal = true means that it won't continue unless this one returns value
-    TemporaryBasePopup.__init__(self, parent=parent, title="Project '%s': " % project.name + 'Export chains', modal=False, transient=True)
+        self.exportChainCode = {}
+        self.exportFirstSeqCode = {}
 
-  def body(self, master):
-    
-    #
-    # Setup header 
-    #
+        project = self.ccpChainLabelDict.values()[0].root
 
-    row = 0
+        # modal = true means that it won't continue unless this one returns value
+        TemporaryBasePopup.__init__(
+            self, parent=parent, title="Project '%s': " % project.name + "Export chains", modal=False, transient=True
+        )
 
-    label = Label(master, text= "Data model", fg = 'blue')
-    label.grid(row=row, column=0, columnspan = 3, sticky=Tkinter.EW)
+    def body(self, master):
 
-    label = Label(master, text= "Export")
-    label.grid(row=row, column=3, columnspan = 2, sticky=Tkinter.EW)
-
-    row += 1
-
-    label = Label(master, text= "Sequence ID (code)", fg = 'blue')
-    label.grid(row=row, column=1, columnspan = 2, sticky=Tkinter.EW)
-    
-    row += 1
-
-    label = Label(master, text= "Ccp chain code", fg = 'blue')
-    label.grid(row=row, column=0, sticky=Tkinter.W)
-
-    label = Label(master, text= "start", fg = 'blue')
-    label.grid(row=row, column=1, sticky=Tkinter.EW)
-
-    label = Label(master, text= "end", fg = 'blue')
-    label.grid(row=row, column=2, sticky=Tkinter.EW)
-    
-    column = 3
-    columnspan = 2
-    
-    if self.requireChainCode:
-
-      label = Label(master, text= self.requireChainCode)
-      label.grid(row=row, column=column, sticky=Tkinter.W)
-      
-      column += 1
-      columnspan -= 1
-
-    label = Label(master, text= "Sequence code start")
-    label.grid(row=row, column=column,columnspan = columnspan, sticky=Tkinter.W)
-
-    #
-    # Setup list of ccp chains labels
-    # 
-   
-    ccpChainLabels = self.ccpChainLabelDict.keys()
-    ccpChainLabels.sort()
-                  
-    #
-    # Currently only linking start in ccp chain (ONLY ONE!) to start in chain read in from file
-    # Assuming sequential order thereafter.
-    #
-
-    for ccpChainLabel in ccpChainLabels:
-
-      row = row + 1
-      
-      chain = self.ccpChainLabelDict[ccpChainLabel]
-
-      ccpCodeLow = "%d (%d)" % (self.ccpChainSeqIDCodes[ccpChainLabel][0][0],self.ccpChainSeqIDCodes[ccpChainLabel][1][0])
-      ccpCodeHigh = "%d (%d)" % (self.ccpChainSeqIDCodes[ccpChainLabel][0][-1],self.ccpChainSeqIDCodes[ccpChainLabel][1][-1])
-
-      label = Label(master, text= ccpChainLabel, fg = 'blue')
-      label.grid(row=row, column=0, sticky=Tkinter.W)
-      
-      label = Label(master, text= ccpCodeLow, fg = 'blue')
-      label.grid(row=row, column=1, sticky=Tkinter.W)
-
-      label = Label(master, text= ccpCodeHigh, fg = 'blue')
-      label.grid(row=row, column=2, sticky=Tkinter.W)
-
-      column = 3
-      columnspan = 2
-      
-      suggestedFirstSeqCode = str(self.ccpChainSeqIDCodes[ccpChainLabel][1][0])
-    
-      if self.requireChainCode:
-      
-        if self.requireChainCode == 'molecule name':
-          chainCodeText = chain.molecule.name
-          width = 20
-        else:
-          chainCodeText = chain.code
-          width = 4
-
-        self.exportChainCode[chain] = Entry(master, text = chainCodeText, width = width)
-        self.exportChainCode[chain].grid(row=row, column=column, sticky=Tkinter.W)
-      
-        column += 1
-        columnspan -= 1
-        
-        suggestedFirstSeqCode = '1'
-
-      self.exportFirstSeqCode[chain] = Entry(master, text = suggestedFirstSeqCode, width = 4)
-      self.exportFirstSeqCode[chain].grid(row=row, column=column,columnspan = columnspan, sticky=Tkinter.W)
-      
-    row = row + 1
-
-    texts = [ 'OK' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
-    buttons.grid(row=row, column=0, columnspan = 4)
-
-  def apply(self):
-  
-    self.chainDict = {}
-    
-    exportSeqCodeRanges = {}
-    
-    for ccpChainLabel in self.ccpChainLabelDict.keys():
-      
-      chain = self.ccpChainLabelDict[ccpChainLabel]
-
-      #
-      # Get the first seq code for export (always necessary)
-      #
-        
-      exportFirstSeqCode = self.exportFirstSeqCode[chain].get()
-      
-      #
-      # Check if integer
-      #
-      
-      if str(returnInt(exportFirstSeqCode)) == exportFirstSeqCode:
-      
-        exportFirstSeqCode = returnInt(exportFirstSeqCode)
-        
-      else:
-        showError("Error","Sequence codes have to be integers!",self)
-        return False
-        
-      #
-      # If single chain export or chain already used, make sure doesn't fall within range other seqCodes
-      #
-      
-      
-      if self.requireChainCode:
-
-        exportChainCode = self.exportChainCode[chain].get()
-        
-      else:
-      
-        exportChainCode = None
-
-      #
-      # Set ranges
-      #
-      
-      seqLength = len(self.ccpChainSeqIDCodes[ccpChainLabel][0])
-
-      if not exportSeqCodeRanges.has_key(exportChainCode):
-        exportSeqCodeRanges[exportChainCode] = [[exportFirstSeqCode,exportFirstSeqCode + seqLength - 1]]
-        checkChainCodes = 0
-          
-      else:
-        
         #
-        # Check chain seqcodes
+        # Setup header
         #
-        
-        for (lowSeqID,highSeqID) in exportSeqCodeRanges[exportChainCode]:
-        
-          if highSeqID >= exportFirstSeqCode >= lowSeqID:
-          
+
+        row = 0
+
+        label = Label(master, text="Data model", fg="blue")
+        label.grid(row=row, column=0, columnspan=3, sticky=Tkinter.EW)
+
+        label = Label(master, text="Export")
+        label.grid(row=row, column=3, columnspan=2, sticky=Tkinter.EW)
+
+        row += 1
+
+        label = Label(master, text="Sequence ID (code)", fg="blue")
+        label.grid(row=row, column=1, columnspan=2, sticky=Tkinter.EW)
+
+        row += 1
+
+        label = Label(master, text="Ccp chain code", fg="blue")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
+
+        label = Label(master, text="start", fg="blue")
+        label.grid(row=row, column=1, sticky=Tkinter.EW)
+
+        label = Label(master, text="end", fg="blue")
+        label.grid(row=row, column=2, sticky=Tkinter.EW)
+
+        column = 3
+        columnspan = 2
+
+        if self.requireChainCode:
+            label = Label(master, text=self.requireChainCode)
+            label.grid(row=row, column=column, sticky=Tkinter.W)
+
+            column += 1
+            columnspan -= 1
+
+        label = Label(master, text="Sequence code start")
+        label.grid(row=row, column=column, columnspan=columnspan, sticky=Tkinter.W)
+
+        #
+        # Setup list of ccp chains labels
+        #
+
+        ccpChainLabels = self.ccpChainLabelDict.keys()
+        ccpChainLabels.sort()
+
+        #
+        # Currently only linking start in ccp chain (ONLY ONE!) to start in chain read in from file
+        # Assuming sequential order thereafter.
+        #
+
+        for ccpChainLabel in ccpChainLabels:
+            row = row + 1
+
+            chain = self.ccpChainLabelDict[ccpChainLabel]
+
+            ccpCodeLow = "%d (%d)" % (
+                self.ccpChainSeqIDCodes[ccpChainLabel][0][0],
+                self.ccpChainSeqIDCodes[ccpChainLabel][1][0],
+            )
+            ccpCodeHigh = "%d (%d)" % (
+                self.ccpChainSeqIDCodes[ccpChainLabel][0][-1],
+                self.ccpChainSeqIDCodes[ccpChainLabel][1][-1],
+            )
+
+            label = Label(master, text=ccpChainLabel, fg="blue")
+            label.grid(row=row, column=0, sticky=Tkinter.W)
+
+            label = Label(master, text=ccpCodeLow, fg="blue")
+            label.grid(row=row, column=1, sticky=Tkinter.W)
+
+            label = Label(master, text=ccpCodeHigh, fg="blue")
+            label.grid(row=row, column=2, sticky=Tkinter.W)
+
+            column = 3
+            columnspan = 2
+
+            suggestedFirstSeqCode = str(self.ccpChainSeqIDCodes[ccpChainLabel][1][0])
+
+            if self.requireChainCode:
+                if self.requireChainCode == "molecule name":
+                    chainCodeText = chain.molecule.name
+                    width = 20
+                else:
+                    chainCodeText = chain.code
+                    width = 4
+
+                self.exportChainCode[chain] = Entry(master, text=chainCodeText, width=width)
+                self.exportChainCode[chain].grid(row=row, column=column, sticky=Tkinter.W)
+
+                column += 1
+                columnspan -= 1
+
+                suggestedFirstSeqCode = "1"
+
+            self.exportFirstSeqCode[chain] = Entry(master, text=suggestedFirstSeqCode, width=4)
+            self.exportFirstSeqCode[chain].grid(row=row, column=column, columnspan=columnspan, sticky=Tkinter.W)
+
+        row = row + 1
+
+        texts = ["OK"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
+        buttons.grid(row=row, column=0, columnspan=4)
+
+    def apply(self):
+
+        self.chainDict = {}
+
+        exportSeqCodeRanges = {}
+
+        for ccpChainLabel in self.ccpChainLabelDict.keys():
+            chain = self.ccpChainLabelDict[ccpChainLabel]
+
             #
-            # Illegal! For same chain anyway...
+            # Get the first seq code for export (always necessary)
             #
-            
-            showError("Error","Overlapping sequence code numbers within the same export chain - try changing them.",self)
-            return False
-            
-        exportSeqCodeRanges[exportChainCode].append([exportFirstSeqCode,exportFirstSeqCode + seqLength - 1])
-        
-      self.chainDict[chain] = [exportChainCode,exportFirstSeqCode]
-        
-    return True
+
+            exportFirstSeqCode = self.exportFirstSeqCode[chain].get()
+
+            #
+            # Check if integer
+            #
+
+            if str(returnInt(exportFirstSeqCode)) == exportFirstSeqCode:
+                exportFirstSeqCode = returnInt(exportFirstSeqCode)
+
+            else:
+                showError("Error", "Sequence codes have to be integers!", self)
+                return False
+
+            #
+            # If single chain export or chain already used, make sure doesn't fall within range other seqCodes
+            #
+
+            if self.requireChainCode:
+                exportChainCode = self.exportChainCode[chain].get()
+
+            else:
+                exportChainCode = None
+
+            #
+            # Set ranges
+            #
+
+            seqLength = len(self.ccpChainSeqIDCodes[ccpChainLabel][0])
+
+            if exportChainCode not in exportSeqCodeRanges:
+                exportSeqCodeRanges[exportChainCode] = [[exportFirstSeqCode, exportFirstSeqCode + seqLength - 1]]
+                checkChainCodes = 0
+
+            else:
+                #
+                # Check chain seqcodes
+                #
+
+                for lowSeqID, highSeqID in exportSeqCodeRanges[exportChainCode]:
+                    if highSeqID >= exportFirstSeqCode >= lowSeqID:
+                        #
+                        # Illegal! For same chain anyway...
+                        #
+
+                        showError(
+                            "Error",
+                            "Overlapping sequence code numbers within the same export chain - try changing them.",
+                            self,
+                        )
+                        return False
+
+                exportSeqCodeRanges[exportChainCode].append([exportFirstSeqCode, exportFirstSeqCode + seqLength - 1])
+
+            self.chainDict[chain] = [exportChainCode, exportFirstSeqCode]
+
+        return True

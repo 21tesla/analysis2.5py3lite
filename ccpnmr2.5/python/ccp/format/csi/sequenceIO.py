@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,94 +53,91 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 # Import general functions
-from memops.universal.Util import returnInt
 from ccp.format.csi.generalIO import CsiGenericFile
 from ccp.format.general.formatIO import Sequence, SequenceElement
+from memops.universal.Util import returnInt
 
 #####################
 # Class definitions #
 #####################
-      
+
+
 class CsiSequenceFile(CsiGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.sequences = []
+    """
+    Information on file level
+    """
 
-  def read(self,verbose = 0):
+    def initialize(self):
 
-    if verbose == 1:
-      print("Reading %s sequence file %s" % (self.format,self.name))
+        self.sequences = []
 
-    self.sequences.append(CsiSequence())
+    def read(self, verbose=0):
 
-    fin = open(self.name)
-    
-    headerCols = []
-    lineErrors = []
-    validLines = 0
+        if verbose == 1:
+            print("Reading %s sequence file %s" % (self.format, self.name))
 
-    # Read, look for first line
-    line = fin.readline()
+        self.sequences.append(CsiSequence())
 
-    while line:
+        fin = open(self.name)
 
-      if self.patt['%sComment' % self.format].search(line) or self.patt['emptyline'].search(line):
+        headerCols = []
+        lineErrors = []
+        validLines = 0
 
+        # Read, look for first line
         line = fin.readline()
-        continue
-              
-      #
-      # Get the info... 
-      #
-      
-      cols = line.split()
-      
-      if not headerCols:
 
-        validLines += 1
-        headerCols = line.split()
-        colLen = len(headerCols)
-        self.headerAtomNames = headerCols[2:]
-        
-      elif len(cols) == colLen:
-        
-        validLines += 1
-        seqCode = returnInt(cols[0])
-        resLabel = cols[1]
-        
-        self.sequences[-1].elements.append(CsiSequenceElement(seqCode,resLabel))
-        
-      else:
-      
-        lineErrors.append(line)
+        while line:
+            if self.patt["%sComment" % self.format].search(line) or self.patt["emptyline"].search(line):
+                line = fin.readline()
+                continue
 
-      line = fin.readline()
+            #
+            # Get the info...
+            #
 
-    fin.close()
-      
-    #
-    # Check
-    #
-    
-    if len(lineErrors) > min(5,validLines * 0.5):
-      self.sequences = []
-      print("  Bad %s format lines:%s" % (self.format,self.newline))
-      for lineError in lineErrors:
-        print(lineError)
+            cols = line.split()
 
-    
+            if not headerCols:
+                validLines += 1
+                headerCols = line.split()
+                colLen = len(headerCols)
+                self.headerAtomNames = headerCols[2:]
+
+            elif len(cols) == colLen:
+                validLines += 1
+                seqCode = returnInt(cols[0])
+                resLabel = cols[1]
+
+                self.sequences[-1].elements.append(CsiSequenceElement(seqCode, resLabel))
+
+            else:
+                lineErrors.append(line)
+
+            line = fin.readline()
+
+        fin.close()
+
+        #
+        # Check
+        #
+
+        if len(lineErrors) > min(5, validLines * 0.5):
+            self.sequences = []
+            print("  Bad %s format lines:%s" % (self.format, self.newline))
+            for lineError in lineErrors:
+                print(lineError)
+
+
 CsiSequence = Sequence
 
-class CsiSequenceElement(SequenceElement):
 
-  def setResidueCode(self,*args):
-  
-    code1Letter = args[0]
-    
-    if code1Letter:
-      self.code1Letter = code1Letter.upper()
-    else:
-      self.code1Letter = 'X'
+class CsiSequenceElement(SequenceElement):
+    def setResidueCode(self, *args):
+
+        code1Letter = args[0]
+
+        if code1Letter:
+            self.code1Letter = code1Letter.upper()
+        else:
+            self.code1Letter = "X"

@@ -62,17 +62,17 @@ and contains original contributions embedded in the framework
 
 ===========================REFERENCE END===============================
 """
-from memops.general.Constants import baseDataTypeModule as basicDataTypes
-# 
+#
 #  Current package api
 import cambridge.api.Dangle
+from memops.general.Constants import baseDataTypeModule as basicDataTypes
+
 
 def makeMapping(globalMap):
   """
   generates XML I/O mapping for package DANG, adding it to globalMap
   """
-  
-  from memops.xml.Implementation import bool2str, str2bool
+
 
   # Set up top level dictionaries
   loadMaps = globalMap.get('loadMaps')

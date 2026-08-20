@@ -2,12 +2,13 @@
 Unit test execute as:
 python $CINGROOT/python/cing/STAR/test/test_SaveFrame.py
 """
+import unittest
+from unittest import TestCase
+
 from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.STAR.SaveFrame import SaveFrame
 from cing.STAR.TagTable import TagTable
-from unittest import TestCase
-import unittest
 
 
 class AllChecks(TestCase):
@@ -31,7 +32,7 @@ class AllChecks(TestCase):
 #        starTextExpected.replac(' \n', new)
         starText = self.sf.star_text()
         self.assertEqual(starText, starTextExpected)
-        
+
     def test_getSaveFrameCategory(self):
         sfCategory = "file_characteristics"
         self.assertEqual(self.sf.getSaveFrameCategory(), sfCategory)

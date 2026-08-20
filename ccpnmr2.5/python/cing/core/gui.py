@@ -1,29 +1,26 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-import os, sys
+import os
+import sys
 
 import cing
+from cing.Libs.NTutils import nTerror, nTmessage, nTpath, sprintf
+from memops.editor.BasePopup import BasePopup  #@UnresolvedImport
+from memops.gui.Button import Button  #@UnresolvedImport
+from memops.gui.ButtonList import ButtonList  #@UnresolvedImport
+from memops.gui.CheckButton import CheckButton  #@UnresolvedImport
+from memops.gui.Entry import Entry  #@UnresolvedImport
+from memops.gui.FileSelect import FileType  #@UnresolvedImport
+from memops.gui.FileSelectPopup import FileSelectPopup  #@UnresolvedImport
+from memops.gui.Label import Label  #@UnresolvedImport
+from memops.gui.Menu import Menu  #@UnresolvedImport
 
-from memops.gui.Button          import Button #@UnresolvedImport
-from memops.gui.RadioButtons    import RadioButtons #@UnresolvedImport
-from memops.gui.CheckButton     import CheckButton #@UnresolvedImport
-from memops.gui.ButtonList      import ButtonList #@UnresolvedImport
-from memops.gui.Entry           import Entry #@UnresolvedImport
-from memops.gui.FileSelect      import FileType #@UnresolvedImport
-from memops.gui.FileSelectPopup import FileSelectPopup #@UnresolvedImport
-from memops.gui.Frame           import Frame #@UnusedImport @UnresolvedImport
-from memops.gui.Label           import Label #@UnresolvedImport
-from memops.gui.Menu            import Menu #@UnresolvedImport
 #from memops.gui.LabelFrame      import LabelFrame
-from memops.gui.MessageReporter import showWarning, showOkCancel #@UnusedImport @UnresolvedImport
-from memops.gui.PulldownMenu    import PulldownMenu #@UnusedImport @UnresolvedImport
-from memops.gui.ScrolledText    import ScrolledText #@UnresolvedImport
-from memops.gui.ScrolledText    import Text #@UnresolvedImport
-
-from memops.editor.BasePopup    import BasePopup #@UnresolvedImport
-from memops.editor.Util         import createDismissHelpButtonList #@UnusedImport @UnresolvedImport
-
-from cing.Libs.NTutils          import nTpath, nTerror, nTmessage, sprintf
-
+from memops.gui.MessageReporter import showWarning  #@UnusedImport @UnresolvedImport
+from memops.gui.RadioButtons import RadioButtons  #@UnresolvedImport
+from memops.gui.ScrolledText import (
+    ScrolledText,  #@UnresolvedImport
+    Text,  #@UnresolvedImport
+)
 
 largeFont = 'Helvetica 14 bold'
 medFont   = 'Helvetica 12 bold'
@@ -42,7 +39,6 @@ labelFrameAttributes = dict(
     foreground = 'steelblue'
 )
 
-import tkinter
 
 # pylint: disable=R0904
 class LabelFrame(Tkinter.LabelFrame):
@@ -167,9 +163,9 @@ class CingGui(BasePopup):
                                              )
         self.projOptionsSelect.grid(row=srow,column=0,rowspan=len(self.projectOptions),columnspan=2, sticky='w')
 
-        if self.options.name: 
+        if self.options.name:
             text = self.options.name
-        else: 
+        else:
             text=''
         # end if
         self.projEntry = Entry(frame, bd=1, text=text, returnCallback=self.updateGui)
@@ -693,13 +689,13 @@ class CingGui(BasePopup):
 
     def openProject(self ):
         projOption = self.projOptionsSelect.get()
-        if projOption == self.projectOptions[0]: 
+        if projOption == self.projectOptions[0]:
             self.openOldProject()
-        elif projOption == self.projectOptions[1]: 
+        elif projOption == self.projectOptions[1]:
             self.initPdb()
         # end if
 
-        if self.project: 
+        if self.project:
             self.project.gui = self
         # end if
         self.updateGui()
@@ -711,7 +707,7 @@ class CingGui(BasePopup):
             nTerror('Error: file "%s" does not exist\n', fName)
         #end if
 
-        if self.project: 
+        if self.project:
             self.closeProject()
         # end if
         self.project = cing.Project.open( name=fName, status='old', verbose=False )
@@ -727,7 +723,7 @@ class CingGui(BasePopup):
     #end def
 
     def closeProject(self):
-        if self.project: 
+        if self.project:
             self.project.close()
         # end if
         self.project = None

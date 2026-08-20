@@ -3,12 +3,12 @@ Create the macros that external programs such as Yasara, Molmol, and PyMol
 can read to work on CING data.
 """
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqProcheck import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.main import getStartMessage
+from cing.PluginCode.required.reqProcheck import *  #@UnusedWildImport
 
 try:
-    import yasaramodule as yasara #@UnresolvedImport
+    import yasaramodule as yasara  #@UnresolvedImport
 except:
     pass
 #    nTdebug("Yasara is not available for interactive work in CING; no problem have a homebrew")
@@ -222,7 +222,7 @@ def makePyMolByResidueMacro(project, keys,
     """From http://pymolwiki.org/index.php/Color#Reassigning_B-Factors_and_Coloring
     http://pymolwiki.org/index.php/Command_Line_Options
     """
-#    nTdebug('makePyMolByResidueMacro: keys: %s, minValue: %s maxValue: %s reverseColorScheme: %s', keys, minValue, 
+#    nTdebug('makePyMolByResidueMacro: keys: %s, minValue: %s maxValue: %s reverseColorScheme: %s', keys, minValue,
 #maxValue, reverseColorScheme)
 
     # Just for testing:
@@ -388,7 +388,7 @@ def makeMolmolByResidueMacro(project, keys,
                             path = None
                            ):
 
-#    nTdebug('makeMolmolByResidueMacro: keys: %s, minValue: %s maxValue: %s reverseColorScheme: %s', 
+#    nTdebug('makeMolmolByResidueMacro: keys: %s, minValue: %s maxValue: %s reverseColorScheme: %s',
 #keys, minValue, maxValue, reverseColorScheme)
     macroTxt = \
 """%s
@@ -407,7 +407,7 @@ DefPropBond 'prev_sel' 'selected'
         value = getDeepByKeysOrAttributes(res, *keys)
 #            value = random() * 4. - 3
 #        if testing:
-#        if res.has_key(property) and res[property] != None and not isNaN(res[property]):
+#        if property in res and res[property] != None and not isNaN(res[property]):
         if value != None and not isNaN(value):
             molmolColor = mapValueToMolmolColor(value, minValue, maxValue, reverseColorScheme, msgHol=msgHol)
             macroTxt += \
@@ -461,7 +461,7 @@ def mkYasaraByResidueMacro(project, keys,
 
     for res in project.molecule.allResidues():
         value = getDeepByKeysOrAttributes(res, *keys)
-#        if res.has_key(property) and res[property] != None and not isNaN(res[property]):
+#        if property in res and res[property] != None and not isNaN(res[property]):
         if value != None and not isNaN(value):
             fprintf(stream, 'PropRes Residue %d,%.4f\n', res.resNum, value)
     #end for

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,38 +45,38 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.general import Implementation
 
+from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
 
-separator = ':'
+separator = ":"
+
 
 class PeakListList(PulldownMenu):
+    def __init__(self, parent, getPeakLists, extra_label="", *args, **kw):
 
-  def __init__(self, parent, getPeakLists, extra_label = '', *args, **kw):
+        self.getPeakLists = getPeakLists
+        self.extra_label = extra_label
 
-    self.getPeakLists = getPeakLists
-    self.extra_label = extra_label
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.__init__(self, parent, *args, **kw)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setPeakLists, "ccp.nmr.Nmr.PeakList", func)
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setPeakLists, 'ccp.nmr.Nmr.PeakList', func)
+    def destroy(self):
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setPeakLists, "ccp.nmr.Nmr.PeakList", func)
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setPeakLists, 'ccp.nmr.Nmr.PeakList', func)
+        PulldownMenu.destroy(self)
 
-    PulldownMenu.destroy(self)
+    def setPeakLists(self, *peakList):
 
-  def setPeakLists(self, *peakList):
- 
-    peak_lists = self.getPeakLists()
-    # TBD: modify if ever get name in PeakList
-    names = [ str(peak_list.serial) for peak_list in peak_lists ]
-    if (self.extra_label and (len(names) != 1)):
-      names = [self.extra_label] + names
-    self.replace(names, self.selected_index)
+        peak_lists = self.getPeakLists()
+        # TBD: modify if ever get name in PeakList
+        names = [str(peak_list.serial) for peak_list in peak_lists]
+        if self.extra_label and (len(names) != 1):
+            names = [self.extra_label] + names
+        self.replace(names, self.selected_index)

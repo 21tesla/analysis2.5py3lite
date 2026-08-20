@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,163 +52,158 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from memops.universal.Util import returnInt
-from memops.universal.Util import returnFloat
-
 from ccp.format.cns.generalIO import CnsGenericFile
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class CnsRdcConstraintFile(CnsGenericFile):
+    def initialize(self):
 
-  def initialize(self):
+        self.constraints = []
 
-    self.constraints = []
-    
-    self.constraintElements = 6
+        self.constraintElements = 6
 
-  def checkLinePattern(self,line):
-  
-    return True
+    def checkLinePattern(self, line):
 
-  def read(self,verbose = False):
+        return True
 
-    if verbose:
-      print("Reading cns rdc constraint list %s" % self.name)
-      
-    #
-    # Sometimes there is no reference to the RDC reference coordinate system, in this case reset the constraintElements
-    #
+    def read(self, verbose=False):
 
-    fin = open(self.name)
-    lines = fin.read()
-    fin.close()
-    
-    if not lines.count(" X") or not lines.count(" Y") or not lines.count(" OO") or not lines.count(" Z"):
-      self.constraintElements = 2
-    
-    #
-    # Now read the file
-    #
+        if verbose:
+            print("Reading cns rdc constraint list %s" % self.name)
 
-    return self.readGeneric(CnsRdcConstraint)
+        #
+        # Sometimes there is no reference to the RDC reference coordinate system, in this case reset the constraintElements
+        #
 
-  def write(self,includeWeight = False, verbose = 0):
+        fin = open(self.name)
+        lines = fin.read()
+        fin.close()
 
-    #
-    # Output format is (example following):
-    #
-    # ASSIGN  (resid 500  and name OO  )
-    #         (resid 500  and name Z   )
-    #         (resid 500  and name X   )
-    #         (resid 500  and name Y   )
-    #         (resid 83   and name N   )
-    #         (resid 83   and name HN  )  8.1130  1.0000  1.0000
-    #
-    # ...
+        if not lines.count(" X") or not lines.count(" Y") or not lines.count(" OO") or not lines.count(" Z"):
+            self.constraintElements = 2
 
-    if verbose == 1:
-      print("Writing cns rdc constraint list %s" % self.name)
+        #
+        # Now read the file
+        #
 
-    fout = open(self.name,'w')
+        return self.readGeneric(CnsRdcConstraint)
 
-    for constraint in self.constraints:
+    def write(self, includeWeight=False, verbose=0):
 
-      fout.write(" ASSIGN ")
+        #
+        # Output format is (example following):
+        #
+        # ASSIGN  (resid 500  and name OO  )
+        #         (resid 500  and name Z   )
+        #         (resid 500  and name X   )
+        #         (resid 500  and name Y   )
+        #         (resid 83   and name N   )
+        #         (resid 83   and name HN  )  8.1130  1.0000  1.0000
+        #
+        # ...
 
-      for i in range(0,len(constraint.items)): # Should be only 1
+        if verbose == 1:
+            print("Writing cns rdc constraint list %s" % self.name)
 
-        item = constraint.items[i] 
+        fout = open(self.name, "w")
 
-        for j in range(0,len(item.members)):
+        for constraint in self.constraints:
+            fout.write(" ASSIGN ")
 
-          member = item.members[j]
+            for i in range(0, len(constraint.items)):  # Should be only 1
+                item = constraint.items[i]
 
-          if member.chainCode != self.defaultMolCode:
-            # TODO: this is not correct! Contact Jens!!
-            segIdString = "segid \"%4s\" and " % member.chainCode
-          else:
-            segIdString = ""
+                for j in range(0, len(item.members)):
+                    member = item.members[j]
 
-          if j >= 1:
-            startSpace = '        '
-          else:
-            startSpace = ''
+                    if member.chainCode != self.defaultMolCode:
+                        # TODO: this is not correct! Contact Jens!!
+                        segIdString = 'segid "%4s" and ' % member.chainCode
+                    else:
+                        segIdString = ""
 
-          fout.write("%s %s%sresid %-4d and name %-4s%s" % (startSpace,
-                                        	'(',
-                                        	segIdString,
-            member.seqCode,
-            member.atomName,
-            ')'))
-          if j < 5:
+                    if j >= 1:
+                        startSpace = "        "
+                    else:
+                        startSpace = ""
+
+                    fout.write(
+                        "%s %s%sresid %-4d and name %-4s%s"
+                        % (startSpace, "(", segIdString, member.seqCode, member.atomName, ")")
+                    )
+                    if j < 5:
+                        fout.write(self.newline)
+
+                    if j == 5:
+                        fout.write(
+                            " %7.4f %7.4f"
+                            % (
+                                constraint.value,
+                                constraint.error,
+                            )
+                        )
+
+                        if includeWeight:
+                            fout.write(" %7.4f" % constraint.weight)
+
+                        fout.write(self.newline)
+
             fout.write(self.newline)
 
-          if j == 5:
-            fout.write(" %7.4f %7.4f" % (constraint.value,
-                                         constraint.error,
-                                         ))
-            
-            if includeWeight:
-              fout.write(" %7.4f" % constraint.weight)
-            
-            fout.write(self.newline)
+        fout.close()
 
-      fout.write(self.newline)
-
-    fout.close()
 
 class CnsRdcConstraint:
+    def __init__(self, Id, origId, patt=None, format=None):
 
-  def __init__(self,Id,origId,patt=None,format=None):
-    
-    self.Id = returnInt(Id)
-    
-    if origId != None:
-      self.origId = returnInt(origId)
-    else:
-      self.origId = None
-    
-    self.items = []
-    
-    self.patt = patt
-    self.format = format
-    
-  def setRdcData(self,value,error,weight):
-  
-    self.value = returnFloat(value)
-    
-    if error == None:
-      self.error = 1.0
-    else:     
-      self.error = returnFloat(error)
-    
-    if weight == None:
-      self.weight = 1.0
-    else:
-      self.weight = returnFloat(weight)
-        
-  def getSpecificInfo(self,assiLine): 
+        self.Id = returnInt(Id)
 
-    #
-    # Get distances and peaknum, ...
-    #
-  
-    couplingPatt = self.patt[self.format + 'RestrRdc'].search(assiLine)
-  
-    lineRead = False
-    
-    if couplingPatt:
+        if origId != None:
+            self.origId = returnInt(origId)
+        else:
+            self.origId = None
 
-      value = couplingPatt.group(1)
-      error = couplingPatt.group(2)
-      weight = couplingPatt.group(3)
+        self.items = []
 
-      self.setRdcData(value,error,weight)
-    
-      lineRead = True
-      
-    return lineRead
-  
+        self.patt = patt
+        self.format = format
+
+    def setRdcData(self, value, error, weight):
+
+        self.value = returnFloat(value)
+
+        if error == None:
+            self.error = 1.0
+        else:
+            self.error = returnFloat(error)
+
+        if weight == None:
+            self.weight = 1.0
+        else:
+            self.weight = returnFloat(weight)
+
+    def getSpecificInfo(self, assiLine):
+
+        #
+        # Get distances and peaknum, ...
+        #
+
+        couplingPatt = self.patt[self.format + "RestrRdc"].search(assiLine)
+
+        lineRead = False
+
+        if couplingPatt:
+            value = couplingPatt.group(1)
+            error = couplingPatt.group(2)
+            weight = couplingPatt.group(3)
+
+            self.setRdcData(value, error, weight)
+
+            lineRead = True
+
+        return lineRead

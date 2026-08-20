@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,158 +45,154 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.general import Implementation
-
-from memops.gui.Label import Label
-from memops.gui.Frame import Frame
 
 from ccpnmr.analysis.core.ExperimentBasic import getExperimentSpectra
 from ccpnmr.analysis.frames.ExperimentList import ExperimentList
 from ccpnmr.analysis.frames.PeakListList import PeakListList
 from ccpnmr.analysis.frames.SpectrumList import SpectrumList
+from memops.general import Implementation
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
 
-notify_funcs = ('__init__', 'delete', 'setName')
+notify_funcs = ("__init__", "delete", "setName")
+
 
 class ExptSpectrumPeakList(Frame):
+    def __init__(self, parent, analysis, callback=None, *args, **kw):
 
-  def __init__(self, parent, analysis, callback = None, *args, **kw):
+        self.analysis = analysis
+        self.callback = callback
 
-    self.analysis = analysis
-    self.callback = callback
+        apply(Frame.__init__, (self, parent) + args, kw)
 
-    apply(Frame.__init__, (self, parent) + args, kw)
+        label = Label(self, text="Experiment:")
+        label.grid(row=0, column=0, sticky="ne")
+        self.expt_list = ExperimentList(self, self.analysis.getExperiments, callback=self.setSpectra)
+        self.expt_list.grid(row=0, column=1, sticky="nw")
 
-    label = Label(self, text='Experiment:')
-    label.grid(row=0, column=0, sticky='ne')
-    self.expt_list = ExperimentList(self, self.analysis.getExperiments,
-                                    callback=self.setSpectra)
-    self.expt_list.grid(row=0, column=1, sticky='nw')
- 
-    label = Label(self, text='Spectrum:')
-    label.grid(row=0, column=2, sticky='ne')
-    self.spectrum_list = SpectrumList(self, self.getSpectra,
-                                      callback=self.setPeakLists)
-    self.spectrum_list.grid(row=0, column=3, sticky='nw')
- 
-    label = Label(self, text='PeakList:')
-    label.grid(row=0, column=4, sticky='ne')
-    self.peak_list_list = PeakListList(self, self.getPeakLists,
-                                      callback=self.doCallback)
-    self.peak_list_list.grid(row=0, column=5, sticky='nw')
+        label = Label(self, text="Spectrum:")
+        label.grid(row=0, column=2, sticky="ne")
+        self.spectrum_list = SpectrumList(self, self.getSpectra, callback=self.setPeakLists)
+        self.spectrum_list.grid(row=0, column=3, sticky="nw")
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
-      Implementation.registerNotify(self.setSpectra, 'ccp.nmr.Nmr.DataSource', func)
-      if func != 'setName':
-        Implementation.registerNotify(self.setPeakLists, 'ccp.nmr.Nmr.PeakList', func)
+        label = Label(self, text="PeakList:")
+        label.grid(row=0, column=4, sticky="ne")
+        self.peak_list_list = PeakListList(self, self.getPeakLists, callback=self.doCallback)
+        self.peak_list_list.grid(row=0, column=5, sticky="nw")
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
+            Implementation.registerNotify(self.setSpectra, "ccp.nmr.Nmr.DataSource", func)
+            if func != "setName":
+                Implementation.registerNotify(self.setPeakLists, "ccp.nmr.Nmr.PeakList", func)
 
-    self.peak_list_list.destroy()
-    self.spectrum_list.destroy()
-    self.expt_list.destroy()
+    def destroy(self):
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
-      Implementation.unregisterNotify(self.setSpectra, 'ccp.nmr.Nmr.DataSource', func)
-      if func != 'setName':
-        Implementation.unregisterNotify(self.setPeakLists, 'ccp.nmr.Nmr.PeakList', func)
+        self.peak_list_list.destroy()
+        self.spectrum_list.destroy()
+        self.expt_list.destroy()
 
-  def doCallback(self, *extra):
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
+            Implementation.unregisterNotify(self.setSpectra, "ccp.nmr.Nmr.DataSource", func)
+            if func != "setName":
+                Implementation.unregisterNotify(self.setPeakLists, "ccp.nmr.Nmr.PeakList", func)
 
-    peakList = self.getPeakList()
+    def doCallback(self, *extra):
 
-    if (self.callback):
-      self.callback(peakList)
- 
-  def setExperiments(self, *extra):
+        peakList = self.getPeakList()
 
-    self.expt_list.setExperiments()
+        if self.callback:
+            self.callback(peakList)
 
-  def setSpectra(self, *extra):
- 
-    self.spectrum_list.setSpectra()
+    def setExperiments(self, *extra):
 
-  def setPeakLists(self, *extra):
+        self.expt_list.setExperiments()
 
-    self.peak_list_list.setPeakLists()
+    def setSpectra(self, *extra):
 
-  def getExperiment(self):
- 
-    ind = self.expt_list.getSelectedIndex()
-    if (ind >= 0):
-      project = self.analysis.getProject()
-      try:
-        experiment = project.currentNmrProject.experiments[ind]
-      except: # if no experiments for some reason ind = 0 rather than -1
-        experiment = None
-    else:
-      experiment = None
- 
-    return experiment
- 
-  def getSpectra(self):
- 
-    experiment = self.getExperiment()
-    if (experiment):
-      return getExperimentSpectra(experiment)
-    else:
-      return []
- 
-  def getPeakLists(self):
+        self.spectrum_list.setSpectra()
 
-    spectrum = self.getSpectrum()
-    if (spectrum):
-      return spectrum.peakLists
-    else:
-      return []
+    def setPeakLists(self, *extra):
 
-  def getSpectrum(self):
+        self.peak_list_list.setPeakLists()
 
-    spectra = self.getSpectra()
-    ind = self.spectrum_list.getSelectedIndex()
-    if (ind >= 0 and (ind < len(spectra))):
-      spectrum = spectra[ind]
-    else:
-      spectrum = None
- 
-    return spectrum
+    def getExperiment(self):
 
-  def setSpectrum(self, spectrum):
+        ind = self.expt_list.getSelectedIndex()
+        if ind >= 0:
+            project = self.analysis.getProject()
+            try:
+                experiment = project.currentNmrProject.experiments[ind]
+            except:  # if no experiments for some reason ind = 0 rather than -1
+                experiment = None
+        else:
+            experiment = None
 
-    if (not spectrum):
-      return
+        return experiment
 
-    experiments = list(self.analysis.getExperiments())
-    expt_index = experiments.index(spectrum.experiment)
-    spectra = getExperimentSpectra(spectrum.experiment)
-    spectrum_index = spectra.index(spectrum)
+    def getSpectra(self):
 
-    self.expt_list.setSelectedIndex(expt_index)
-    self.spectrum_list.setSelectedIndex(spectrum_index)
+        experiment = self.getExperiment()
+        if experiment:
+            return getExperimentSpectra(experiment)
+        else:
+            return []
 
-  def getPeakList(self):
+    def getPeakLists(self):
 
-    peakLists = self.getPeakLists()
-    ind = self.peak_list_list.getSelectedIndex()
-    if (ind >= 0 and (ind < len(peakLists))):
-      peakList = peakLists[ind]
-    else:
-      peakList = None
- 
-    return peakList
+        spectrum = self.getSpectrum()
+        if spectrum:
+            return spectrum.peakLists
+        else:
+            return []
 
-  def setPeakList(self, peakList):
+    def getSpectrum(self):
 
-    if (not peakList):
-      return
+        spectra = self.getSpectra()
+        ind = self.spectrum_list.getSelectedIndex()
+        if ind >= 0 and (ind < len(spectra)):
+            spectrum = spectra[ind]
+        else:
+            spectrum = None
 
-    spectrum = peakList.spectrum
-    experiments = list(self.analysis.getExperiments())
-    expt_index = experiments.index(spectrum.experiment)
-    spectra = getExperimentSpectra(spectrum.experiment)
-    spectrum_index = spectra.index(spectrum)
+        return spectrum
 
-    self.expt_list.setSelectedIndex(expt_index)
-    self.spectrum_list.setSelectedIndex(spectrum_index)
-    self.peak_list_list.setSelected(peakList.serial)
+    def setSpectrum(self, spectrum):
+
+        if not spectrum:
+            return
+
+        experiments = list(self.analysis.getExperiments())
+        expt_index = experiments.index(spectrum.experiment)
+        spectra = getExperimentSpectra(spectrum.experiment)
+        spectrum_index = spectra.index(spectrum)
+
+        self.expt_list.setSelectedIndex(expt_index)
+        self.spectrum_list.setSelectedIndex(spectrum_index)
+
+    def getPeakList(self):
+
+        peakLists = self.getPeakLists()
+        ind = self.peak_list_list.getSelectedIndex()
+        if ind >= 0 and (ind < len(peakLists)):
+            peakList = peakLists[ind]
+        else:
+            peakList = None
+
+        return peakList
+
+    def setPeakList(self, peakList):
+
+        if not peakList:
+            return
+
+        spectrum = peakList.spectrum
+        experiments = list(self.analysis.getExperiments())
+        expt_index = experiments.index(spectrum.experiment)
+        spectra = getExperimentSpectra(spectrum.experiment)
+        spectrum_index = spectra.index(spectrum)
+
+        self.expt_list.setSelectedIndex(expt_index)
+        self.spectrum_list.setSelectedIndex(spectrum_index)
+        self.peak_list_list.setSelected(peakList.serial)

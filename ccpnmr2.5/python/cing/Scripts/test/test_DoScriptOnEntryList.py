@@ -2,15 +2,14 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Scripts/test/test_DoScriptOnEntryList.py
 """
-from cing import cingDirScripts
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.doScriptOnEntryList import doFunctionOnEntryList
-from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23
-from cing.Scripts.validateEntry import PROJECT_TYPE_PDB
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirScripts, cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.doScriptOnEntryList import doFunctionOnEntryList, doScriptOnEntryList
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23, PROJECT_TYPE_PDB
+
 
 def sleepy(sleepTime, bogusArgumentList = [] ):
     nTdebug("Will sleep for %s ignoring bogusArgumentList: %s" % (sleepTime, str(bogusArgumentList)))
@@ -44,7 +43,7 @@ class AllChecks(TestCase):
                             extraArgList = extraArgList,
                             shuffleBeforeSelecting = True ))
     # end def
-    
+
     def test_DoFunctionOnEntryList(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
@@ -52,7 +51,7 @@ class AllChecks(TestCase):
             "Failed to change to test directory for files: " + cingDirTmpTest)
         entryListFileName = 'entryListFileName.csv'
         writeTextToFile(entryListFileName, '\n'.join('0.1 0.2'.split()))
-        doFunctionOnEntryList(sleepy, entryListFileName)        
+        doFunctionOnEntryList(sleepy, entryListFileName)
     # end def
 
 if __name__ == "__main__":

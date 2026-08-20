@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,137 +51,147 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+
 class DocumentationException(Exception):
-  pass
+    pass
+
 
 class WidgetDoc:
+    def __init__(self, name, documentation=""):
 
-  def __init__(self, name, documentation=''):
+        self.name = name
+        self.documentation = documentation
+        self.parentDoc = None
 
-    self.name = name
-    self.documentation = documentation
-    self.parentDoc = None
 
 class ButtonDoc(WidgetDoc):
+    pass
 
-  pass
 
 class ColumnDoc(WidgetDoc):
+    def __init__(self, name, documentation="", isEditable=True):
 
-  def __init__(self, name, documentation='', isEditable=True):
+        WidgetDoc.__init__(self, name, documentation)
+        self.isEditable = isEditable
 
-    WidgetDoc.__init__(self, name, documentation)
-    self.isEditable = isEditable
 
 class TableDoc(WidgetDoc):
+    def __init__(self, name, documentation="", columns=None):
 
-  def __init__(self, name, documentation='', columns=None):
+        if columns is None:
+            columns = ()
 
-    if columns is None:
-      columns = ()
+        WidgetDoc.__init__(self, name, documentation)
+        self.columnDocs = []
+        self.columnDict = {}
 
-    WidgetDoc.__init__(self, name, documentation)
-    self.columnDocs = []
-    self.columnDict = {}
+        for column in columns:
+            column = tuple(column)
+            self.addColumn(*column)
 
-    for column in columns:
-      column = tuple(column)
-      self.addColumn(*column)
+    def addColumn(self, name, documentation="", isEditable=True):
 
-  def addColumn(self, name, documentation='', isEditable=True):
+        columnDoc = ColumnDoc(name, documentation, isEditable)
 
-    columnDoc = ColumnDoc(name, documentation, isEditable)
+        keys = set(self.columnDict.keys())
+        n = 0
+        while (name, n) in keys:
+            n += 1
+        self.columnDocs.append(columnDoc)
+        self.columnDict[(name, n)] = columnDoc
+        columnDoc.parentDoc = self
 
-    keys = set(self.columnDict.keys())
-    n = 0
-    while (name, n) in keys:
-      n += 1
-    self.columnDocs.append(columnDoc)
-    self.columnDict[(name, n)] = columnDoc
-    columnDoc.parentDoc = self
+    def get(self, key):
 
-  def get(self, key):
+        return self.columnDict.get(key)
 
-    return self.columnDict.get(key)
+    def __getitem__(self, key):
 
-  def __getitem__(self, key):
+        return self.columnDict[key]
 
-    return self.columnDict[key]
 
 class ContainerDoc(WidgetDoc):
+    def __init__(self, name=None, documentation="", widgetDocs=None):
 
-  def __init__(self, name=None, documentation='', widgetDocs=None):
-    
-    if widgetDocs is None:
-      widgetDocs = ()
+        if widgetDocs is None:
+            widgetDocs = ()
 
-    WidgetDoc.__init__(self, name, documentation)
+        WidgetDoc.__init__(self, name, documentation)
 
-    self.parentDoc = None
+        self.parentDoc = None
 
-    self.widgetDocs = []
-    self.widgetDict = {}
+        self.widgetDocs = []
+        self.widgetDict = {}
 
-    for widgetDoc in widgetDocs:
-      self.addWidgetDoc(widgetDoc)
+        for widgetDoc in widgetDocs:
+            self.addWidgetDoc(widgetDoc)
 
-  def addWidgetDoc(self, widgetDoc):
+    def addWidgetDoc(self, widgetDoc):
 
-    if not isinstance(widgetDoc, WidgetDoc):
-      raise DocumentationException('widgetDoc = %s, must be a WidgetDoc')
+        if not isinstance(widgetDoc, WidgetDoc):
+            raise DocumentationException("widgetDoc = %s, must be a WidgetDoc")
 
-    name = widgetDoc.name
-    if name in self.widgetDict:
-      raise DocumentationException('repeated widgetDoc name "%s"' % name)
+        name = widgetDoc.name
+        if name in self.widgetDict:
+            raise DocumentationException('repeated widgetDoc name "%s"' % name)
 
-    self.widgetDocs.append(widgetDoc)
-    self.widgetDict[name] = widgetDoc
-    widgetDoc.parentDoc = self
+        self.widgetDocs.append(widgetDoc)
+        self.widgetDict[name] = widgetDoc
+        widgetDoc.parentDoc = self
 
-  def get(self, key):
+    def get(self, key):
 
-    return self.widgetDict.get(key)
+        return self.widgetDict.get(key)
 
-  def __getitem__(self, key):
+    def __getitem__(self, key):
 
-    return self.widgetDict[key]
+        return self.widgetDict[key]
+
 
 class TabDoc(ContainerDoc):
+    pass
 
-  pass
 
 class PopupDoc(ContainerDoc):
+    pass
 
-  pass
 
-cloneDoc = ButtonDoc('Clone', 'Clone popup window')
-helpDoc = ButtonDoc('Help', 'Show popup help document')
-closeDoc = ButtonDoc('Close', 'Close popup')
-cancelDoc = ButtonDoc('Cancel', 'Cancel operation and close popup')
+cloneDoc = ButtonDoc("Clone", "Clone popup window")
+helpDoc = ButtonDoc("Help", "Show popup help document")
+closeDoc = ButtonDoc("Close", "Close popup")
+cancelDoc = ButtonDoc("Cancel", "Cancel operation and close popup")
 
-if __name__ == '__main__':
-
-  popupDoc = PopupDoc(name='Edit Spectra',
-    documentation='Allows the user to edit various details and parameters of the spectra within the current project',
-    widgetDocs=(
-      ButtonDoc('Delete Spectrum', 'Deletes the selected spectrum or spectra'),
-      cloneDoc, helpDoc, closeDoc,
-      TabDoc(name='Spectra',
-        documentation='',
+if __name__ == "__main__":
+    popupDoc = PopupDoc(
+        name="Edit Spectra",
+        documentation="Allows the user to edit various details and parameters of the spectra within the current project",
         widgetDocs=(
-          TableDoc(
-            name=None,
-            columns=(
-              ('#', 'Row number', False),
-              ('Experiment', 'Experiment name', True),
-              ('Spectrum', 'Spectrum name', True),
-              ('Dims', 'Number of dimensions', False),
-              ('Active Peaklist', 'The active peaklist, for example the peaklist into which picked peaks are put', False),
+            ButtonDoc("Delete Spectrum", "Deletes the selected spectrum or spectra"),
+            cloneDoc,
+            helpDoc,
+            closeDoc,
+            TabDoc(
+                name="Spectra",
+                documentation="",
+                widgetDocs=(
+                    TableDoc(
+                        name=None,
+                        columns=(
+                            ("#", "Row number", False),
+                            ("Experiment", "Experiment name", True),
+                            ("Spectrum", "Spectrum name", True),
+                            ("Dims", "Number of dimensions", False),
+                            (
+                                "Active Peaklist",
+                                "The active peaklist, for example the peaklist into which picked peaks are put",
+                                False,
+                            ),
+                        ),
+                    ),
+                ),
             ),
-          ),
+            TabDoc(
+                name="Display Options",
+            ),
         ),
-      ),
-      TabDoc(name='Display Options',
-      ),
-    ),
-  )
+    )

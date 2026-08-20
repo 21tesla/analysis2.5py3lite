@@ -20,9 +20,10 @@ How to copy VC on nmr (production machine):
 =====================================================================
 @author: jd
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.forkoff import do_cmd
-from cing.NRG.settings import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.settings import *  #@UnusedWildImport
+
 cing.verbosity = cing.verbosityDebug
 
 workLocally = 0 # fails on nmr now.

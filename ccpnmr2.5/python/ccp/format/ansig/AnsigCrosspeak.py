@@ -1,181 +1,214 @@
 import array
 
+
 class AnsigResonance:
+    def __init__(self, project):
 
-  def __init__(self, project):
+        # links
+        self.project = project
+        project.resonances.add(self)
+        self.crosspeakDims = set()
+        self.residue = None
+        self.atname = None
 
-    # links
-    self.project = project
-    project.resonances.add(self)
-    self.crosspeakDims = set()
-    self.residue = None
-    self.atname = None
+    def mergeWith(self, other):
 
-  def mergeWith(self, other):
+        if self == other:
+            return
 
-    if self == other:
-      return
+        self.crosspeakDims.update(other.crosspeakDims)
+        for crosspeak, dim in other.crosspeakDims:
+            crosspeak.resonances[dim] = self
+        self.project.resonances.remove(other)
 
-    self.crosspeakDims.update(other.crosspeakDims)
-    for (crosspeak, dim) in other.crosspeakDims:
-      crosspeak.resonances[dim] = self
-    self.project.resonances.remove(other)
 
 class AnsigCrosspeak:
+    def __init__(
+        self,
+        project,
+        ndim,
+        number,
+        spectrumName,
+        shifts,
+        intensity,
+        resid,
+        resname,
+        atname,
+        symmetryConnection,
+        prevConnection,
+        nextConnection,
+        prevCorrConnection,
+        nextCorrConnection,
+        spectrum=None,
+    ):
 
-  def __init__(self, project, ndim, number, spectrumName, shifts, intensity, resid, resname, atname,
-      symmetryConnection, prevConnection, nextConnection, prevCorrConnection, nextCorrConnection, spectrum=None):
+        # attributes
+        self.ndim = ndim
+        self.number = number
+        self.spectrumName = spectrumName
+        self.shifts = shifts
+        self.intensity = intensity
+        self.resid = resid
+        self.resname = resname
+        self.atname = atname
+        self.symmetryConnection = symmetryConnection
+        # the next two seem to be a linked list of crosspeaks that are really the same in one dim
+        # so this is a list of length ndim
+        self.prevConnection = prevConnection
+        self.nextConnection = nextConnection
+        # the next two seem to be a linked list of crosspeaks that are really the same in all dims
+        self.prevCorrConnection = prevCorrConnection
+        self.nextCorrConnection = nextCorrConnection
 
-    # attributes
-    self.ndim = ndim
-    self.number = number
-    self.spectrumName = spectrumName
-    self.shifts = shifts
-    self.intensity = intensity
-    self.resid = resid
-    self.resname = resname
-    self.atname = atname
-    self.symmetryConnection = symmetryConnection
-    # the next two seem to be a linked list of crosspeaks that are really the same in one dim
-    # so this is a list of length ndim
-    self.prevConnection = prevConnection
-    self.nextConnection = nextConnection
-    # the next two seem to be a linked list of crosspeaks that are really the same in all dims
-    self.prevCorrConnection = prevCorrConnection
-    self.nextCorrConnection = nextCorrConnection
+        # links
+        self.project = project
+        self.spectrum = None
+        self.symmetryCrosspeak = None
+        self.resonances = ndim * [None]
 
-    # links
-    self.project = project
-    self.spectrum = None
-    self.symmetryCrosspeak = None
-    self.resonances = ndim*[None]
+        self.setSpectrum(spectrum)
 
-    self.setSpectrum(spectrum)
+        project.crosspeaks.append(self)
 
-    project.crosspeaks.append(self)
+    def setSpectrum(self, spectrum):
 
-  def setSpectrum(self, spectrum):
+        if self.spectrum:
+            spectrum.crosspeaks.remove(self)
+        self.spectrum = spectrum
+        if spectrum:
+            spectrum.crosspeaks.append(self)
 
-    if self.spectrum:
-      spectrum.crosspeaks.remove(self)
-    self.spectrum = spectrum
-    if spectrum:
-      spectrum.crosspeaks.append(self)
+    def setResonance(self, resonance, dim):
 
-  def setResonance(self, resonance, dim):
+        self.resonances[dim] = resonance
+        resonance.crosspeakDims.add((self, dim))
 
-    self.resonances[dim] = resonance
-    resonance.crosspeakDims.add((self, dim))
 
 def readCrosspeakFile(project, verbose=False):
 
-  def cleanString(s):
-    s = s.replace('\x00', ' ')
-    s = s.strip()
-    return s
+    def cleanString(s):
+        s = s.replace("\x00", " ")
+        s = s.strip()
+        return s
 
-  if verbose:
-    print('Reading Ansig crosspeaks file "%s"' % project.crosspeaksFile)
+    if verbose:
+        print('Reading Ansig crosspeaks file "%s"' % project.crosspeaksFile)
 
-  fp = open(project.crosspeaksFile, 'rb')
-  s = fp.read()
-  fp.close()
+    fp = open(project.crosspeaksFile, "rb")
+    s = fp.read()
+    fp.close()
 
-  #title = s[:12]
+    # title = s[:12]
 
-  x = array.array('i')
-  y = array.array('f')
-  x.fromstring(s)
-  y.fromstring(s)
+    x = array.array("i")
+    y = array.array("f")
+    x.fromstring(s)
+    y.fromstring(s)
 
-  ndim = x[3]
+    ndim = x[3]
 
-  if ndim < 1 or ndim > 4:
-    x.byteswap()
-    nd = x[3]
-    if nd >= 1 and nd <= 4:
-      ndim = nd
-      y.byteswap()
-    else: # put back, but probably in trouble
-      x.byteswap()
+    if ndim < 1 or ndim > 4:
+        x.byteswap()
+        nd = x[3]
+        if nd >= 1 and nd <= 4:
+            ndim = nd
+            y.byteswap()
+        else:  # put back, but probably in trouble
+            x.byteswap()
 
-  npeaks = x[4]
-  recordLength = 6*ndim + 7
+    npeaks = x[4]
+    recordLength = 6 * ndim + 7
 
-  if verbose:
-    deletedCount = 0
-    unknownSpectrumCount = {}
+    if verbose:
+        deletedCount = 0
+        unknownSpectrumCount = {}
 
-  project.crosspeaks = []
-  for i in range(npeaks):
-    ind = (i+2) * recordLength
-    shifts = y[ind:ind+ndim]
-    ind += ndim
-    intensity = y[ind]
-    ind += 1
-    spectrumName = cleanString(s[4*ind:4*(ind+3)])
-    ind += 3
-    connection = x[ind:ind+2*ndim+3]
-    ind += 2*ndim+3
-    resid = []
-    for j in range(ndim):
-      resid.append(cleanString(s[4*ind:4*(ind+1)]))
-      ind += 1
-    resname = []
-    for j in range(ndim):
-      resname.append(cleanString(s[4*ind:4*(ind+1)]))
-      ind += 1
-    atname = []
-    for j in range(ndim):
-      atname.append(cleanString(s[4*ind:4*(ind+1)]))
-      ind += 1
+    project.crosspeaks = []
+    for i in range(npeaks):
+        ind = (i + 2) * recordLength
+        shifts = y[ind : ind + ndim]
+        ind += ndim
+        intensity = y[ind]
+        ind += 1
+        spectrumName = cleanString(s[4 * ind : 4 * (ind + 3)])
+        ind += 3
+        connection = x[ind : ind + 2 * ndim + 3]
+        ind += 2 * ndim + 3
+        resid = []
+        for j in range(ndim):
+            resid.append(cleanString(s[4 * ind : 4 * (ind + 1)]))
+            ind += 1
+        resname = []
+        for j in range(ndim):
+            resname.append(cleanString(s[4 * ind : 4 * (ind + 1)]))
+            ind += 1
+        atname = []
+        for j in range(ndim):
+            atname.append(cleanString(s[4 * ind : 4 * (ind + 1)]))
+            ind += 1
 
-    nd = ndim
-    spectrum = None
-    if spectrumName:
-      spectrum = project.findSpectrum(spectrumName)
-      if spectrum:
-        nd = spectrum.ndim
-      elif verbose:
-        if not unknownSpectrumCount.has_key(spectrumName):
-          unknownSpectrumCount[spectrumName] = 0
-        unknownSpectrumCount[spectrumName] += 1
-    else:
-      if verbose:
-        deletedCount += 1
-      continue
+        nd = ndim
+        spectrum = None
+        if spectrumName:
+            spectrum = project.findSpectrum(spectrumName)
+            if spectrum:
+                nd = spectrum.ndim
+            elif verbose:
+                if spectrumName not in unknownSpectrumCount:
+                    unknownSpectrumCount[spectrumName] = 0
+                unknownSpectrumCount[spectrumName] += 1
+        else:
+            if verbose:
+                deletedCount += 1
+            continue
 
-    shifts = shifts[:nd]
-    resid = resid[:nd]
-    resname = resname[:nd]
-    atname = atname[:nd]
-    symmetryConnection = connection[0]
-    prevConnection = nd * [None]
-    nextConnection = nd * [None]
-    prevCorrConnection = None
-    nextCorrConnection = None
-    for j in range(nd):
-      prevConnection[j] = connection[2*j+1]
-      nextConnection[j] = connection[2*j+2]
-    prevCorrConnection = connection[-2]
-    nextCorrConnection = connection[-1]
+        shifts = shifts[:nd]
+        resid = resid[:nd]
+        resname = resname[:nd]
+        atname = atname[:nd]
+        symmetryConnection = connection[0]
+        prevConnection = nd * [None]
+        nextConnection = nd * [None]
+        prevCorrConnection = None
+        nextCorrConnection = None
+        for j in range(nd):
+            prevConnection[j] = connection[2 * j + 1]
+            nextConnection[j] = connection[2 * j + 2]
+        prevCorrConnection = connection[-2]
+        nextCorrConnection = connection[-1]
 
-    # Ansig has dimensions backwards
-    shifts.reverse()
-    resid.reverse()
-    resname.reverse()
-    atname.reverse()
-    prevConnection.reverse()
-    nextConnection.reverse()
+        # Ansig has dimensions backwards
+        shifts.reverse()
+        resid.reverse()
+        resname.reverse()
+        atname.reverse()
+        prevConnection.reverse()
+        nextConnection.reverse()
 
-    AnsigCrosspeak(project, nd, i+1, spectrumName, shifts, intensity, resid, resname, atname,
-      symmetryConnection, prevConnection, nextConnection, prevCorrConnection, nextCorrConnection, spectrum)
+        AnsigCrosspeak(
+            project,
+            nd,
+            i + 1,
+            spectrumName,
+            shifts,
+            intensity,
+            resid,
+            resname,
+            atname,
+            symmetryConnection,
+            prevConnection,
+            nextConnection,
+            prevCorrConnection,
+            nextCorrConnection,
+            spectrum,
+        )
 
-  if verbose:
-    print('Number of deleted peaks = %d (ignoring these)' % deletedCount)
-    print('Number of non-deleted peaks = %d (retaining these)' % len(project.crosspeaks))
-    for key in sorted(unknownSpectrumCount.keys()):
-      print('Unknown spectrum "%s" with %d crosspeaks' % (key, unknownSpectrumCount[key]))
+    if verbose:
+        print("Number of deleted peaks = %d (ignoring these)" % deletedCount)
+        print("Number of non-deleted peaks = %d (retaining these)" % len(project.crosspeaks))
+        for key in sorted(unknownSpectrumCount.keys()):
+            print('Unknown spectrum "%s" with %d crosspeaks' % (key, unknownSpectrumCount[key]))
+
 
 """ below was copied in but is far from ready
 def setupCrosspeaks(project):

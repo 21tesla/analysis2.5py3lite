@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,107 +51,106 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
-from memops.universal.Io import joinPath
-
-from memops.gui.BasePopup import BasePopup
-from memops.gui.Label import Label
-from memops.gui.Util import createDismissHelpButtonList
-from memops.gui.ScrolledListbox import ScrolledListbox
-from memops.gui.MessageReporter import showInfo, showError
-
-from ccpnmr.format.gui.FormatFilePopup import FormatFilePopup
-
+from ccpnmr.format.general.Constants import allFormatsDict, ccpNmr_kw
 from ccpnmr.format.general.Io import getHelpUrlDir
-from ccpnmr.format.general.Constants import allFormatsDict
-from ccpnmr.format.general.Constants import ccpNmr_kw
+from ccpnmr.format.gui.FormatFilePopup import FormatFilePopup
 
 #
 # Get script to write mapping file for resonances -> atoms
 #
-
 from ccpnmr.format.process.writeMappingFile import writeMappingFile
+from memops.gui.BasePopup import BasePopup
+from memops.gui.Label import Label
+from memops.gui.MessageReporter import showError, showInfo
+from memops.gui.ScrolledListbox import ScrolledListbox
+from memops.gui.Util import createDismissHelpButtonList
+from memops.universal.Io import joinPath
+
 
 class WriteMappingPopup(BasePopup):
- 
-  help_url = joinPath(getHelpUrlDir(),'WriteMapping.html')
+    help_url = joinPath(getHelpUrlDir(), "WriteMapping.html")
 
-  def __init__(self, parent, project):
+    def __init__(self, parent, project):
 
-    self.project = project
-    self.selectedFormats = []
-    self.defaultText = 'Select file'
-    
-    self.formats = allFormatsDict.keys()
-    self.formats.sort()
-     
-    BasePopup.__init__(self, parent=parent, title= "Project '%s': " % project.name +  'Write ccpNmr mapping file', modal=False, transient=True)
+        self.project = project
+        self.selectedFormats = []
+        self.defaultText = "Select file"
 
-  def body(self, master):
-      
-    row = 0
-    
-    label = Label(master, text= "CcpNmr resonance -> atom mapping file writer.")
-    label.grid(row=row, column=0, columnspan = 2, sticky=Tkinter.W)
-    
-    row += 1
-    
-    label = Label(master, text= "File formats:")
-    label.grid(row=row, column=0, sticky=Tkinter.W)
+        self.formats = allFormatsDict.keys()
+        self.formats.sort()
 
-    self.formatListBox = ScrolledListbox(master, width = 50, height = 5, selectmode = Tkinter.MULTIPLE,
-                                       initial_list = self.formats)
-    self.formatListBox.grid(row=row, column=1, sticky=Tkinter.EW)
-    
-    # Default is all formats selected...
-    self.formatListBox.setSelectedItems(self.formatListBox.getItems())
+        BasePopup.__init__(
+            self,
+            parent=parent,
+            title="Project '%s': " % project.name + "Write ccpNmr mapping file",
+            modal=False,
+            transient=True,
+        )
 
-    row += 1
-    
-    label = Label(master, text= "Mapping output file:")
-    label.grid(row=row, column=0, sticky=Tkinter.W)
+    def body(self, master):
 
-    self.fileButton = Tkinter.Button(master, text = self.defaultText, command = self.selectFile)
-    self.fileButton.grid(row=row, column=1, sticky=Tkinter.W)
+        row = 0
 
-    row += 1
+        label = Label(master, text="CcpNmr resonance -> atom mapping file writer.")
+        label.grid(row=row, column=0, columnspan=2, sticky=Tkinter.W)
 
-    texts = [ 'Write mapping' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createDismissHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
-    buttons.grid(row=row, columnspan = 2, column=0)
+        row += 1
 
-  def selectFile(self):
-   
-    fileName = self.fileButton.__getitem__('text')
-    
-    if fileName == self.defaultText:
-      fileName = 'ccpNmr.map'
-    
-    popup = FormatFilePopup(self, file = fileName, component = 'mapping', format = ccpNmr_kw)
-    
-    if popup.fileSelected:
-    
-      self.fileButton.config(text = popup.file)      
-      popup.destroy()
+        label = Label(master, text="File formats:")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
 
-  def apply(self):
-    
-    self.selectedFormats = self.formatListBox.getSelectedItems()
-    
-    fileName = self.fileButton.__getitem__('text')
-    
-    if fileName == self.defaultText:
-      return False
-    
-    fileCreated = writeMappingFile(self.project,fileName,originalFormats = self.selectedFormats)
-    
-    if fileCreated:
-      showInfo("Success","Succesfully wrote mapping file")
-    else:
-      showError("Not written","Error writing file %s. File not written" % fileName)
-      return False
-          
-    return True
+        self.formatListBox = ScrolledListbox(
+            master, width=50, height=5, selectmode=Tkinter.MULTIPLE, initial_list=self.formats
+        )
+        self.formatListBox.grid(row=row, column=1, sticky=Tkinter.EW)
 
+        # Default is all formats selected...
+        self.formatListBox.setSelectedItems(self.formatListBox.getItems())
+
+        row += 1
+
+        label = Label(master, text="Mapping output file:")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
+
+        self.fileButton = Tkinter.Button(master, text=self.defaultText, command=self.selectFile)
+        self.fileButton.grid(row=row, column=1, sticky=Tkinter.W)
+
+        row += 1
+
+        texts = ["Write mapping"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createDismissHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
+        buttons.grid(row=row, columnspan=2, column=0)
+
+    def selectFile(self):
+
+        fileName = self.fileButton.__getitem__("text")
+
+        if fileName == self.defaultText:
+            fileName = "ccpNmr.map"
+
+        popup = FormatFilePopup(self, file=fileName, component="mapping", format=ccpNmr_kw)
+
+        if popup.fileSelected:
+            self.fileButton.config(text=popup.file)
+            popup.destroy()
+
+    def apply(self):
+
+        self.selectedFormats = self.formatListBox.getSelectedItems()
+
+        fileName = self.fileButton.__getitem__("text")
+
+        if fileName == self.defaultText:
+            return False
+
+        fileCreated = writeMappingFile(self.project, fileName, originalFormats=self.selectedFormats)
+
+        if fileCreated:
+            showInfo("Success", "Succesfully wrote mapping file")
+        else:
+            showError("Not written", "Error writing file %s. File not written" % fileName)
+            return False
+
+        return True

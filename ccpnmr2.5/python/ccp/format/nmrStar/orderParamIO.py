@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,189 +52,180 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.nmrStar.generalIO import NmrStarGenericFile
-from ccp.format.nmrStar.generalIO import NmrStarFile
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.nmrStar.generalIO import NmrStarFile, NmrStarGenericFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class NmrStarFile(NmrStarFile):
+    def initialize(self, version="3.1"):
 
-  def initialize(self, version = '3.1'):
+        self.orderParamFiles = []
 
-    self.orderParamFiles = []
-    
-    self.files = self.orderParamFiles
-    
-    if not self.version:
-      self.version = version
-    
-    if self.version[0] == '3':
-      self.saveFrameName = 'order_parameters'
-    else:
-      self.saveFrameName = 'S2_parameters'
-      
-    self.DataClassFile = NmrStarOrderParamFile
-   
-    self.components = [self.saveFrameName]
-    self.setComponents()
+        self.files = self.orderParamFiles
 
-  def read(self,verbose = 0):
+        if not self.version:
+            self.version = version
 
-    self.readComponent(verbose = verbose) 
+        if self.version[0] == "3":
+            self.saveFrameName = "order_parameters"
+        else:
+            self.saveFrameName = "S2_parameters"
+
+        self.DataClassFile = NmrStarOrderParamFile
+
+        self.components = [self.saveFrameName]
+        self.setComponents()
+
+    def read(self, verbose=0):
+
+        self.readComponent(verbose=verbose)
+
 
 class NmrStarOrderParamFile(NmrStarGenericFile):
+    """
+    Information on file level
+    """
 
-  """
-  Information on file level
-  """
-  
-  def initialize(self,parent,saveFrame = None):
-    
-    # Warning: should in principle be version specific, this is 3.1
-    self.attrToTagMappings = (
-      
-        ('details','Details',None),
+    def initialize(self, parent, saveFrame=None):
 
-    )
-  
-    self.orderParamValues = []
-    
-    self.saveFrame = saveFrame
-    
-    self.parent = parent
-    self.version = parent.version
+        # Warning: should in principle be version specific, this is 3.1
+        self.attrToTagMappings = (("details", "Details", None),)
 
-    if self.saveFrame:
-      self.parseSaveFrame()
+        self.orderParamValues = []
 
-  def parseSaveFrame(self):
+        self.saveFrame = saveFrame
 
-    if not self.checkVersion():
-      return
-    
-    #
-    # Set version-specific info
-    #
-        
-    if self.version == '2.1.1':
-      
-      orderParamTableTags = self.saveFrame.tables['_Residue_seq_code'].tags
-      numOrderParamValues = len(orderParamTableTags['_Residue_seq_code'])
+        self.parent = parent
+        self.version = parent.version
 
-    else:
-      
-      if self.attrToTagMappings:
+        if self.saveFrame:
+            self.parseSaveFrame()
 
-        for (attrName,tagName,default) in self.attrToTagMappings:
-          if self.saveFrame.tags.has_key(tagName):
-            attrValue = self.saveFrame.tags[tagName]
-          else:
-            attrValue = default
+    def parseSaveFrame(self):
 
-          if not hasattr(self,attrName) or not self.attrName:
-            setattr(self,attrName,attrValue)          
+        if not self.checkVersion():
+            return
 
-      tableName = '_Order_param'
+        #
+        # Set version-specific info
+        #
 
-      orderParamTableTags = self.saveFrame.tables[tableName].tags
-      numOrderParamValues = len(orderParamTableTags['ID'])
-      
-    
-    #
-    # Read the table with the measurements
-    #
+        if self.version == "2.1.1":
+            orderParamTableTags = self.saveFrame.tables["_Residue_seq_code"].tags
+            numOrderParamValues = len(orderParamTableTags["_Residue_seq_code"])
 
-    for i in range(numOrderParamValues):
+        else:
+            if self.attrToTagMappings:
+                for attrName, tagName, default in self.attrToTagMappings:
+                    if tagName in self.saveFrame.tags:
+                        attrValue = self.saveFrame.tags[tagName]
+                    else:
+                        attrValue = default
 
-      if self.version == '2.1.1':
-        tmpMolCode = str(self.saveFrame.tags['_Mol_system_component_name'])      
-      else:
-        tmpMolCode = str(orderParamTableTags['Entity_assembly_ID'][i])
+                    if not hasattr(self, attrName) or not self.attrName:
+                        setattr(self, attrName, attrValue)
 
-      self.orderParamValues.append(NmrStarOrderParam(tmpMolCode,self))       
-      self.orderParamValues[-1].setData(orderParamTableTags,i)
-    
-    #
-    # Set additional info (V3 only)
-    #
-    
-    tableName = '_Order_parameter_experiment'
-    self.setMeasureExperiments(tableName)
+            tableName = "_Order_param"
 
-    tableName = '_Order_parameter_software'
-    self.setMeasureSoftwares(tableName)
+            orderParamTableTags = self.saveFrame.tables[tableName].tags
+            numOrderParamValues = len(orderParamTableTags["ID"])
+
+        #
+        # Read the table with the measurements
+        #
+
+        for i in range(numOrderParamValues):
+            if self.version == "2.1.1":
+                tmpMolCode = str(self.saveFrame.tags["_Mol_system_component_name"])
+            else:
+                tmpMolCode = str(orderParamTableTags["Entity_assembly_ID"][i])
+
+            self.orderParamValues.append(NmrStarOrderParam(tmpMolCode, self))
+            self.orderParamValues[-1].setData(orderParamTableTags, i)
+
+        #
+        # Set additional info (V3 only)
+        #
+
+        tableName = "_Order_parameter_experiment"
+        self.setMeasureExperiments(tableName)
+
+        tableName = "_Order_parameter_software"
+        self.setMeasureSoftwares(tableName)
+
 
 class NmrStarOrderParam:
+    def __init__(self, molCode, parent):
 
-  def __init__(self,molCode,parent):
+        self.molCode = molCode
+        self.parent = parent
 
-    self.molCode = molCode
-    self.parent = parent
-  
-  def setData(self,orderParamTableTags,i):
+    def setData(self, orderParamTableTags, i):
 
-    if self.parent.version == '2.1.1':
+        if self.parent.version == "2.1.1":
+            assignList = [
+                ["Id", "SET", i + 1],
+                ["seqCode", "_Residue_seq_code", None],
+                ["resLabel", "_Residue_label", None],
+                ["atomName", "_Atom_name", None],
+                ["s2Value", "_S2_value", None],
+                ["s2Error", "_S2_value_fit_error", 0.0],
+                ["tauEValue", "_Tau_e_value", None],
+                ["tauEError", "_Tau_e_value_fit_error", 0.0],
+            ]
 
-      assignList = [['Id',            'SET', i+1],
-                    ['seqCode',       '_Residue_seq_code',None],
-                    ['resLabel',      '_Residue_label',None],
-                    ['atomName',      '_Atom_name',None],
-                    ['s2Value',       '_S2_value',None],
-                    ['s2Error',       '_S2_value_fit_error',0.0],
-                    ['tauEValue',     '_Tau_e_value',None],
-                    ['tauEError',     '_Tau_e_value_fit_error',0.0],
-                    ]
-    
-    else:
-    
-      assignList = [['Id',            'ID',None],
-                    ['seqCode',       'Seq_ID',None],
-                    ['resLabel',      'Comp_ID',None],
-                    ['atomName',      'Atom_ID',None],
-                    ['atomType',      'Atom_type',None],
-                    ['tauEValue',     'Tau_e_val',None],
-                    ['tauEError',      'Tau_e_val_fit_err',0.0],
-                    ['authorSeqCode', 'Author_seq_ID',None]
-                    ]
-
-    for (attrName,tagName,default) in assignList:
-
-      if orderParamTableTags.has_key(tagName):
-        if orderParamTableTags[tagName][i] != None:
-          setattr(self,attrName,orderParamTableTags[tagName][i])
         else:
-          setattr(self,attrName,default)
+            assignList = [
+                ["Id", "ID", None],
+                ["seqCode", "Seq_ID", None],
+                ["resLabel", "Comp_ID", None],
+                ["atomName", "Atom_ID", None],
+                ["atomType", "Atom_type", None],
+                ["tauEValue", "Tau_e_val", None],
+                ["tauEError", "Tau_e_val_fit_err", 0.0],
+                ["authorSeqCode", "Author_seq_ID", None],
+            ]
 
-      elif tagName == 'SET':
-        setattr(self,attrName,default)
-          
-    # For completeness...
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+        for attrName, tagName, default in assignList:
+            if tagName in orderParamTableTags:
+                if orderParamTableTags[tagName][i] != None:
+                    setattr(self, attrName, orderParamTableTags[tagName][i])
+                else:
+                    setattr(self, attrName, default)
+
+            elif tagName == "SET":
+                setattr(self, attrName, default)
+
+        # For completeness...
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    files = ["/data/work/archives/bmrb/data/bmr15536/bmr15536_21.str"]
 
-  files = ['/data/work/archives/bmrb/data/bmr15536/bmr15536_21.str']
-  
-  for file in files:
-    
-    #file = os.path.join(getTopDirectory(), file)
-    
-    nmrStarFile = NmrStarFile(file, version='2.1.1')
+    for file in files:
+        # file = os.path.join(getTopDirectory(), file)
 
-    nmrStarFile.read(verbose = 1)
+        nmrStarFile = NmrStarFile(file, version="2.1.1")
 
-    for orderParamFile in nmrStarFile.orderParamFiles:
-      for orderParam in orderParamFile.orderParamValues:
-        print(orderParam.Id, orderParam.seqCode, orderParam.resLabel, orderParam.atomName, orderParam.s2Value, orderParam.tauEValue, orderParam.tauEError)
+        nmrStarFile.read(verbose=1)
+
+        for orderParamFile in nmrStarFile.orderParamFiles:
+            for orderParam in orderParamFile.orderParamValues:
+                print(
+                    orderParam.Id,
+                    orderParam.seqCode,
+                    orderParam.resLabel,
+                    orderParam.atomName,
+                    orderParam.s2Value,
+                    orderParam.tauEValue,
+                    orderParam.tauEError,
+                )

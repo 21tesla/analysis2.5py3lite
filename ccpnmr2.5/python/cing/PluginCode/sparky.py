@@ -8,10 +8,10 @@ Methods:
         Export resonances and peaks in sparky format
 
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 from cing.core.molecule import allAtoms
 from cing.core.parameters import directories
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 
 #-----------------------------------------------------------------------------

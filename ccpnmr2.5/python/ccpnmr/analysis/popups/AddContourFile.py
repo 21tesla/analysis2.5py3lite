@@ -38,11 +38,13 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import os
 import shutil
 
-from memops.universal.Io import normalisePath
-
+from ccp.api.general.DataLocation import BlockedBinaryMatrix
+from ccpnmr.analysis.core.ContourStore import createStoredContour, getStoredContourHeader
+from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.Entry import Entry
@@ -50,203 +52,212 @@ from memops.gui.FileSelectPopup import FileSelectPopup
 from memops.gui.Label import Label
 from memops.gui.MessageReporter import showError, showInfo
 from memops.gui.PulldownList import PulldownList
+from memops.universal.Io import normalisePath
 
-from ccp.api.general.DataLocation import BlockedBinaryMatrix
-
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-from ccpnmr.analysis.core.ContourStore import getStoredContourHeader, createStoredContour
 
 class AddContourFilePopup(BasePopup):
+    """
+    **Add Existing Contour Files to Project**
 
-  """
-  **Add Existing Contour Files to Project**
+    The purpose of this dialog is to allow the user to add pre-existing
+    contour files to the project.  Contour files only depend on the spectrum
+    data so the same contour files can be used across multiple projects,
+    and that is the reason this dialog might be used.
 
-  The purpose of this dialog is to allow the user to add pre-existing
-  contour files to the project.  Contour files only depend on the spectrum
-  data so the same contour files can be used across multiple projects,
-  and that is the reason this dialog might be used.
+    See also: str(Spectrum Contour Files)_, str(Creating Contour Files)_.
 
-  See also: str(Spectrum Contour Files)_, str(Creating Contour Files)_.
+    .. _str(Spectrum Contour Files): EditContourFilesPopup.html
+    .. _str(Creating Contour Files): CreateContourFilePopup.html
+    """
 
-  .. _str(Spectrum Contour Files): EditContourFilesPopup.html
-  .. _str(Creating Contour Files): CreateContourFilePopup.html
-"""
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        self.spectrum = None
 
-    self.spectrum = None
+        BasePopup.__init__(self, parent=parent, title="Add existing contour file", **kw)
 
-    BasePopup.__init__(self, parent=parent, title='Add existing contour file', **kw)
+    def body(self, master):
 
-  def body(self, master):
+        self.geometry("600x130")
+        master.grid_columnconfigure(1, weight=1)
+        for n in range(5):
+            master.grid_rowconfigure(n, weight=1)
 
-    self.geometry('600x130')
-    master.grid_columnconfigure(1, weight=1)
-    for n in range(5):
-      master.grid_rowconfigure(n, weight=1)
+        row = 0
+        label = Label(master, text="Spectrum: ")
+        label.grid(row=row, column=0, sticky="e")
+        tipText = "The spectrum for which the contour file is being added"
+        self.expt_spectrum = PulldownList(master, callback=self.updateContourDir, tipText=tipText)
+        self.expt_spectrum.grid(row=row, column=1, sticky="w")
 
-    row = 0
-    label = Label(master, text='Spectrum: ')
-    label.grid(row=row, column=0, sticky='e')
-    tipText = 'The spectrum for which the contour file is being added'
-    self.expt_spectrum = PulldownList(master, callback=self.updateContourDir,
-                                      tipText=tipText)
-    self.expt_spectrum.grid(row=row, column=1, sticky='w')
+        row = row + 1
+        tipText = "The location of the directory where contour files are stored on disk"
+        label = Label(master, text="Contour dir: ")
+        label.grid(row=row, column=0, sticky="e")
+        self.dir_label = Label(master, text="", tipText=tipText)
+        self.dir_label.grid(row=row, column=1, sticky="w")
 
-    row = row + 1
-    tipText = 'The location of the directory where contour files are stored on disk'
-    label = Label(master, text='Contour dir: ')
-    label.grid(row=row, column=0, sticky='e')
-    self.dir_label = Label(master, text='', tipText=tipText)
-    self.dir_label.grid(row=row, column=1, sticky='w')
+        row = row + 1
+        label = Label(master, text="(file will be copied into Contour dir if it is not already in there)")
+        label.grid(row=row, column=1, sticky="w")
 
-    row = row + 1
-    label = Label(master, text='(file will be copied into Contour dir if it is not already in there)')
-    label.grid(row=row, column=1, sticky='w')
+        row = row + 1
+        tipText = "Browse for a file store contour data"
+        button = Button(master, text="File name: ", command=self.selectFile, tipText=tipText)
+        button.grid(row=row, column=0, sticky="e")
+        tipText = "Enter the name of the file to store contour data"
+        self.file_entry = Entry(master, tipText=tipText)
+        self.file_entry.grid(row=row, column=1, sticky="ew")
 
-    row = row + 1
-    tipText = 'Browse for a file store contour data'
-    button = Button(master, text='File name: ', command=self.selectFile, tipText=tipText)
-    button.grid(row=row, column=0, sticky='e')
-    tipText = 'Enter the name of the file to store contour data'
-    self.file_entry = Entry(master, tipText=tipText)
-    self.file_entry.grid(row=row, column=1, sticky='ew')
+        row = row + 1
+        texts = ["Add File"]
+        commands = [self.addFile]
+        tipTexts = [
+            "Use the selected contour file in the current project, copying it to the contour directory if required",
+        ]
+        self.buttons = UtilityButtonList(
+            master, texts=texts, doClone=False, tipTexts=tipTexts, commands=commands, helpUrl=self.help_url
+        )
+        self.buttons.grid(row=row, column=0, columnspan=2, sticky="ew")
 
-    row = row + 1
-    texts = [ 'Add File' ]
-    commands = [ self.addFile ]
-    tipTexts = ['Use the selected contour file in the current project, copying it to the contour directory if required',]
-    self.buttons = UtilityButtonList(master, texts=texts, doClone=False, tipTexts=tipTexts,
-                                     commands=commands, helpUrl=self.help_url)
-    self.buttons.grid(row=row, column=0, columnspan=2, sticky='ew')
+        self.curateNotifiers(self.registerNotify)
+        self.updateSpectrum()
 
-    self.curateNotifiers(self.registerNotify)
-    self.updateSpectrum()
+    def destroy(self):
 
-  def destroy(self):
+        self.curateNotifiers(self.unregisterNotify)
 
-    self.curateNotifiers(self.unregisterNotify)
+        BasePopup.destroy(self)
 
-    BasePopup.destroy(self)
+    def curateNotifiers(self, notifyFunc):
 
-  def curateNotifiers(self, notifyFunc):
+        for clazz in ("Experiment", "DataSource"):
+            for func in ("__init__", "delete", "setName"):
+                notifyFunc(self.updateNotifier, "ccp.nmr.Nmr.%s" % clazz, func)
 
-    for clazz in ('Experiment', 'DataSource'):
-      for func in ('__init__', 'delete', 'setName'):
-        notifyFunc(self.updateNotifier, 'ccp.nmr.Nmr.%s' % clazz, func)
+    def updateSpectrum(self, spectrum=None):
 
-  def updateSpectrum(self, spectrum=None):
+        if not spectrum:
+            spectrum = self.spectrum
 
-    if not spectrum:
-      spectrum = self.spectrum
+        spectra = self.parent.getSpectra()
+        if spectra:
+            if spectrum not in spectra:
+                spectrum = spectra[0]
+            index = spectra.index(spectrum)
+            names = ["%s:%s" % (x.experiment.name, x.name) for x in spectra]
+        else:
+            index = 0
+            names = []
 
-    spectra = self.parent.getSpectra()
-    if spectra:
-      if spectrum not in spectra:
-        spectrum = spectra[0]
-      index = spectra.index(spectrum)
-      names = ['%s:%s' % (x.experiment.name, x.name) for x in spectra]
-    else:
-      index = 0
-      names = []
+        self.expt_spectrum.setup(names, spectra, index)
 
-    self.expt_spectrum.setup(names, spectra, index)
+        self.updateContourDir(spectrum)
 
-    self.updateContourDir(spectrum)
+    def updateNotifier(self, *extra):
 
-  def updateNotifier(self, *extra):
+        self.updateSpectrum()
 
-    self.updateSpectrum()
+    def updateContourDir(self, spectrum):
 
-  def updateContourDir(self, spectrum):
+        if spectrum is self.spectrum:
+            return
 
-    if spectrum is self.spectrum:
-      return
+        self.spectrum = spectrum
 
-    self.spectrum = spectrum
+        if spectrum:
+            path = spectrum.analysisSpectrum.contourDir.dataLocation
+        else:
+            path = ""
+        self.dir_label.set(path)
 
-    if spectrum:
-      path = spectrum.analysisSpectrum.contourDir.dataLocation
-    else:
-      path = ''
-    self.dir_label.set(path)
+    def selectFile(self):
 
-  def selectFile(self):
+        spectrum = self.spectrum
+        if spectrum:
+            directory = spectrum.analysisSpectrum.contourDir.dataLocation
+        else:
+            directory = os.getcwd()
+        popup = FileSelectPopup(self, directory=directory)
+        fileName = popup.getFile()
+        popup.destroy()
+        if fileName:
+            self.file_entry.set(fileName)
 
-    spectrum = self.spectrum
-    if spectrum:
-      directory = spectrum.analysisSpectrum.contourDir.dataLocation
-    else:
-      directory = os.getcwd()
-    popup = FileSelectPopup(self, directory=directory)
-    fileName = popup.getFile()
-    popup.destroy()
-    if fileName:
-      self.file_entry.set(fileName)
+    def addFile(self):
 
-  def addFile(self):
+        spectrum = self.spectrum
+        if not spectrum:
+            return
 
-    spectrum = self.spectrum
-    if not spectrum:
-      return
+        dataStore = spectrum.dataStore
+        if not dataStore:
+            showError("No dataStore", "Spectrum does not have associated dataStore", parent=self)
+            return
 
-    dataStore = spectrum.dataStore
-    if not dataStore:
-      showError('No dataStore', 'Spectrum does not have associated dataStore', parent=self)
-      return
+        if not isinstance(dataStore, BlockedBinaryMatrix):
+            showError("No blockedBinaryMatrix", "Spectrum dataStore is not a blockedBinaryMatrix", parent=self)
+            return
 
-    if not isinstance(dataStore, BlockedBinaryMatrix):
-      showError('No blockedBinaryMatrix', 'Spectrum dataStore is not a blockedBinaryMatrix', parent=self)
-      return
+        if not dataStore.blockSizes:
+            showError("No blockSize", "Spectrum dataStore does not have blockSize set", parent=self)
+            return
 
-    if not dataStore.blockSizes:
-      showError('No blockSize', 'Spectrum dataStore does not have blockSize set', parent=self)
-      return
+        blockSize = list(dataStore.blockSizes)
 
-    blockSize = list(dataStore.blockSizes)
+        fileName = self.file_entry.get()
+        if not fileName:
+            showError("No filename", "No filename given", parent=self)
+            return
 
-    fileName = self.file_entry.get()
-    if not fileName:
-      showError('No filename', 'No filename given', parent=self)
-      return
+        fileName = normalisePath(fileName, makeAbsolute=True)
 
-    fileName = normalisePath(fileName, makeAbsolute=True)
+        contourDir = spectrum.analysisSpectrum.contourDir.dataLocation
+        if fileName.startswith(contourDir):
+            path = fileName[len(contourDir) + 1 :]
+        else:
+            path = os.path.basename(fileName)
+            if not os.path.exists(contourDir):
+                os.makedirs(contourDir)
+            print("Copying %s to %s" % (fileName, contourDir))
+            shutil.copy(fileName, contourDir)
 
-    contourDir = spectrum.analysisSpectrum.contourDir.dataLocation
-    if fileName.startswith(contourDir):
-      path = fileName[len(contourDir)+1:]
-    else:
-      path = os.path.basename(fileName)
-      if not os.path.exists(contourDir):
-        os.makedirs(contourDir)
-      print('Copying %s to %s' % (fileName, contourDir))
-      shutil.copy(fileName, contourDir)
+        try:
+            header = getStoredContourHeader(fileName)
+        except Exception as e:
+            showError("File error", str(e), parent=self)
+            return
 
-    try:
-      header = getStoredContourHeader(fileName)
-    except Exception as e:
-      showError('File error', str(e), parent=self)
-      return
+        if header["ndim"] != spectrum.numDim:
+            showError(
+                "Number of dimensions",
+                "Number of dimensions in file (%d) does not match spectrum (%d)" % (header["ndim"], spectrum.numDim),
+                parent=self,
+            )
+            return
 
-    if header['ndim'] != spectrum.numDim:
-      showError('Number of dimensions', 'Number of dimensions in file (%d) does not match spectrum (%d)' % (header['ndim'], spectrum.numDim), parent=self)
-      return
+        dataDims = spectrum.sortedDataDims()
+        npoints = [x.numPoints for x in dataDims]
+        if header["npoints"] != npoints:
+            showError(
+                "Number of points",
+                "Number of points in file (%s) does not match spectrum (%s)" % (header["npoints"], npoints),
+                parent=self,
+            )
+            return
 
-    dataDims = spectrum.sortedDataDims()
-    npoints = [x.numPoints for x in dataDims]
-    if header['npoints'] != npoints:
-      showError('Number of points', 'Number of points in file (%s) does not match spectrum (%s)' % (header['npoints'], npoints), parent=self)
-      return
+        if header["blockSize"] != blockSize:
+            showError(
+                "Block size",
+                "Block size in file (%s) does not match spectrum (%s)" % (header["blockSize"], blockSize),
+                parent=self,
+            )
+            return
 
-    if header['blockSize'] != blockSize:
-      showError('Block size', 'Block size in file (%s) does not match spectrum (%s)' % (header['blockSize'], blockSize), parent=self)
-      return
+        createStoredContour(spectrum, path, header["xdim"], header["ydim"])
 
-    createStoredContour(spectrum, path, header['xdim'], header['ydim'])
+        showInfo("Added file", "Successfully added stored contour file", parent=self)
 
-    showInfo('Added file', 'Successfully added stored contour file', parent=self)
+    def setSpectrum(self, spectrum):
 
-  def setSpectrum(self, spectrum):
-
-    self.expt_spectrum.set(spectrum, doCallback=True)
-
+        self.expt_spectrum.set(spectrum, doCallback=True)

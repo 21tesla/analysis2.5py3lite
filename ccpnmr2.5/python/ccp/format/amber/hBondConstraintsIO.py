@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,17 +52,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
-from memops.universal.Io import getTopDirectory
-
 from ccp.format.amber.distanceConstraintsIO import AmberDistanceConstraintFile
-from ccp.format.amber.distanceConstraintsIO import AmberDistanceConstraint
 
 #####################
 # Class definitions #
 #####################
 
-class AmberHBondConstraintFile(AmberDistanceConstraintFile):
 
-  infoType = 'H bond'
+class AmberHBondConstraintFile(AmberDistanceConstraintFile):
+    infoType = "H bond"

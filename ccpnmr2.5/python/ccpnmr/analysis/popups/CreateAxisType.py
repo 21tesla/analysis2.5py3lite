@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,147 +38,152 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
-
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.BooleanPulldownMenu import BooleanPulldownMenu
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.CheckButtons import CheckButtons
-from memops.gui.BooleanPulldownMenu import BooleanPulldownMenu
-from memops.gui.Label import Label
 from memops.gui.Entry import Entry
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
 from memops.gui.MessageReporter import showError
 from memops.gui.PulldownList import PulldownList
-from memops.gui.Separator import Separator
 
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from ccpnmr.api import Analysis
 
 class CreateAxisTypePopup(BasePopup):
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        self.measurementType = None
 
-    self.measurementType = None
+        BasePopup.__init__(self, parent=parent, title="Create axis type", modal=True, **kw)
 
-    BasePopup.__init__(self, parent=parent,
-                       title='Create axis type', modal=True, **kw)
+    def body(self, master):
 
-  def body(self, master):
+        master.grid_columnconfigure(1, weight=1)
 
-    master.grid_columnconfigure(1, weight=1)
+        row = 0
+        label = Label(master, text="Axis name: ", grid=(row, 0))
+        tipText = 'Short text name for new type of axis e.g. "17O"'
+        self.name_entry = Entry(master, width=15, grid=(row, 1), tipText=tipText)
 
-    row = 0
-    label = Label(master, text='Axis name: ', grid=(row, 0))
-    tipText = 'Short text name for new type of axis e.g. "17O"'
-    self.name_entry = Entry(master, width=15, grid=(row, 1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Axis region: ", grid=(row, 0))
+        tipText = "Comma separated values for the upper and lower bound of the axis allowed range of values"
+        self.region_entry = FloatEntry(master, text=[0.0, 1.0], isArray=True, width=15, grid=(row, 1), tipText=tipText)
 
-    row += 1
-    label = Label(master, text='Axis region: ', grid=(row, 0))
-    tipText = 'Comma separated values for the upper and lower bound of the axis allowed range of values'
-    self.region_entry = FloatEntry(master, text=[0.0, 1.0], isArray=True,
-                                   width=15, grid=(row, 1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Measurement type:", grid=(row, 0))
+        tipText = "The physical entity that is being measured along the axis"
+        self.measurement_list = PulldownList(master, tipText=tipText)
+        self.measurement_list.grid(row=row, column=1, sticky="w")
 
-    row += 1
-    label = Label(master, text='Measurement type:', grid=(row, 0))
-    tipText = 'The physical entity that is being measured along the axis'
-    self.measurement_list = PulldownList(master, tipText=tipText)
-    self.measurement_list.grid(row=row, column=1, sticky='w')
+        row += 1
+        label = Label(master, text="Dimension is sampled: ", grid=(row, 0))
+        tipText = "Whether the axis is discretely sampled or a continuous range (albeit on a grid)"
+        self.sampled_popup = BooleanPulldownMenu(master, grid=(row, 1), tipText=tipText)
 
-    row += 1
-    label = Label(master, text='Dimension is sampled: ', grid=(row, 0))
-    tipText = 'Whether the axis is discretely sampled or a continuous range (albeit on a grid)'
-    self.sampled_popup = BooleanPulldownMenu(master, grid=(row, 1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Decimal places: ", grid=(row, 0))
+        tipText = "The number of decimal places that the axis values are rounded to for display purposes"
+        self.decimals_entry = IntEntry(master, text=0, width=15, grid=(row, 1), tipText=tipText)
 
-    row += 1
-    label = Label(master, text='Decimal places: ', grid=(row, 0))
-    tipText = 'The number of decimal places that the axis values are rounded to for display purposes'
-    self.decimals_entry = IntEntry(master, text=0, width=15,
-                                   grid=(row, 1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Peak size: ", grid=(row, 0))
+        tipText = 'The relative scale for the peak symbol (i.e the "X" shape) size compared to other axes'
+        self.peak_size_entry = FloatEntry(master, text=1.0, width=15, grid=(row, 1), tipText=tipText)
 
-    row += 1
-    label = Label(master, text='Peak size: ', grid=(row, 0))
-    tipText = 'The relative scale for the peak symbol (i.e the "X" shape) size compared to other axes'
-    self.peak_size_entry = FloatEntry(master, text=1.0, width=15,
-                                      grid=(row, 1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Allowed axis units:", grid=(row, 0))
+        tipTexts = [
+            "Units of measurement allowed for this kind of axis",
+        ]
+        units = [au.unit for au in self.parent.getAxisUnits()]
+        selected = [True] * len(units)
+        self.units_list = CheckButtons(
+            master, units, selected=selected, direction="vertical", grid=(row, 1), tipTexts=tipTexts
+        )
 
-    row += 1
-    label = Label(master, text='Allowed axis units:', grid=(row, 0))
-    tipTexts = ['Units of measurement allowed for this kind of axis',]
-    units = [au.unit for au in self.parent.getAxisUnits()]
-    selected = [True] * len(units)
-    self.units_list = CheckButtons(master, units, selected=selected,
-                                   direction='vertical',
-                                   grid=(row, 1), tipTexts=tipTexts)
+        row += 1
+        tipTexts = ["Make a new axis specification of the selected type and close this popup"]
+        texts = ["Create"]
+        commands = [self.ok]
+        buttons = UtilityButtonList(
+            master,
+            texts=texts,
+            commands=commands,
+            doClone=False,
+            closeText="Cancel",
+            helpUrl=self.help_url,
+            grid=(row, 0),
+            gridSpan=(1, 2),
+            tipTexts=tipTexts,
+        )
 
-    row += 1
-    tipTexts = ['Make a new axis specification of the selected type and close this popup']
-    texts = [ 'Create' ]
-    commands = [ self.ok ]
-    buttons = UtilityButtonList(master, texts=texts, commands=commands, doClone=False,
-                                closeText='Cancel', helpUrl=self.help_url, grid=(row, 0),
-                                gridSpan=(1,2), tipTexts=tipTexts)
+        master.grid_rowconfigure(row, weight=1)
 
-    master.grid_rowconfigure(row, weight=1)
+        self.update()
 
-    self.update()
+    def update(self, *extra):
 
-  def update(self, *extra):
+        measurementType = self.measurementType
+        measurementTypes = self.parent.getMeasurementTypes()
+        if measurementTypes:
+            if measurementType not in measurementTypes:
+                self.measurementType = measurementType = measurementTypes[0]
+            index = measurementTypes.index(measurementType)
+        else:
+            index = 0
+            self.measurementType = None
 
-    measurementType = self.measurementType
-    measurementTypes = self.parent.getMeasurementTypes()
-    if measurementTypes:
-      if measurementType not in measurementTypes:
-        self.measurementType = measurementType = measurementTypes[0]
-      index = measurementTypes.index(measurementType)
-    else:
-      index = 0
-      self.measurementType = None
+        self.measurement_list.setup(measurementTypes, None, index)
 
-    self.measurement_list.setup(measurementTypes, None, index)
+    def apply(self):
 
-  def apply(self):
+        name = self.name_entry.get()
+        if not name:
+            showError("No name", "Need to enter name", self)
+            return False
 
-    name = self.name_entry.get()
-    if (not name):
-      showError('No name', 'Need to enter name', self)
-      return False
+        names = [axisType.name for axisType in self.analysisProject.axisTypes]
+        if name in names:
+            showError("Repeated name", "Name already used", self)
+            return False
 
-    names = [ axisType.name for axisType in self.analysisProject.axisTypes ]
-    if (name in names):
-      showError('Repeated name', 'Name already used', self)
-      return False
+        region = self.region_entry.get()
+        if (region is None) or (len(region) != 2):
+            showError("Region error", "Region must be float array of length two", self)
+            return False
 
-    region = self.region_entry.get()
-    if ((region is None) or (len(region) != 2)):
-      showError('Region error', 'Region must be float array of length two', self)
-      return False
+        if region[0] >= region[1]:
+            showError("Region error", "Region must have first number < second number", self)
+            return False
 
-    if (region[0] >= region[1]):
-      showError('Region error', 'Region must have first number < second number', self)
-      return False
+        measurementType = self.measurement_list.getText()
+        isSampled = self.sampled_popup.getSelected()
 
-    measurementType = self.measurement_list.getText()
-    isSampled = self.sampled_popup.getSelected()
+        numDecimals = self.decimals_entry.get()
+        if (numDecimals is None) or (numDecimals < 0):
+            showError("Decimals error", "Number of decimal places must be >= 0", self)
+            return False
 
-    numDecimals = self.decimals_entry.get()
-    if ((numDecimals is None) or (numDecimals < 0)):
-      showError('Decimals error', 'Number of decimal places must be >= 0', self)
-      return False
+        peakSize = self.peak_size_entry.get()
+        if (peakSize is None) or (peakSize <= 0):
+            showError("Peak size error", "Peak size must be > 0", self)
+            return False
 
-    peakSize = self.peak_size_entry.get()
-    if ((peakSize is None) or (peakSize <= 0)):
-      showError('Peak size error', 'Peak size must be > 0', self)
-      return False
+        selected = self.units_list.getSelected()
+        allUnits = self.parent.getAxisUnits()
+        axisUnits = [au for au in allUnits if au.unit in selected]
 
-    selected = self.units_list.getSelected()
-    allUnits = self.parent.getAxisUnits()
-    axisUnits = [au for au in allUnits if au.unit in selected]
-    
-    self.analysisProject.newAxisType(name=name, region=region,
-                      isSampled=isSampled, axisUnits=axisUnits,
-                      numDecimals=numDecimals, peakSize=peakSize,
-                      measurementType=measurementType)
- 
-    return True
+        self.analysisProject.newAxisType(
+            name=name,
+            region=region,
+            isSampled=isSampled,
+            axisUnits=axisUnits,
+            numDecimals=numDecimals,
+            peakSize=peakSize,
+            measurementType=measurementType,
+        )
+
+        return True

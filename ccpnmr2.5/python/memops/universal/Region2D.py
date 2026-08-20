@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,44 +52,44 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.universal.Region1D import Region1D
 
+
 class Region2D:
+    def __init__(self, x_region=None, y_region=None):
 
-  def __init__(self, x_region = None, y_region = None):
+        if x_region is None:
+            x_region = Region1D()
 
-    if (x_region is None):
-      x_region = Region1D()
+        if y_region is None:
+            y_region = Region1D()
 
-    if (y_region is None):
-      y_region = Region1D()
+        self.x_region = x_region
+        self.y_region = y_region
 
-    self.x_region = x_region
-    self.y_region = y_region
+    def copy(self):
 
-  def copy(self):
+        return Region2D(self.x_region, self.y_region)
 
-    return Region2D(self.x_region, self.y_region)
+    def get(self):
 
-  def get(self):
+        return (self.x_region[0], self.y_region[0], self.x_region[1], self.y_region[1])
 
-    return (self.x_region[0], self.y_region[0], self.x_region[1], self.y_region[1])
+    def __getitem__(self, key):
 
-  def __getitem__(self, key):
+        try:
+            n = int(key)
+        except:
+            raise TypeError("sequence index must be integer")
 
-    try:
-      n = int(key)
-    except:
-      raise TypeError('sequence index must be integer')
+        if n == 0:
+            return self.x_region[0]
+        elif n == 1:
+            return self.y_region[0]
+        elif n == 2:
+            return self.x_region[1]
+        elif n == 3:
+            return self.y_region[1]
 
-    if (n == 0):
-      return self.x_region[0]
-    elif (n == 1):
-      return self.y_region[0]
-    elif (n == 2):
-      return self.x_region[1]
-    elif (n == 3):
-      return self.y_region[1]
-
-    raise IndexError('list index out of range')
-
+        raise IndexError("list index out of range")

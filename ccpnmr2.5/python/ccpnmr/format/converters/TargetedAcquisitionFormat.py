@@ -1,7 +1,7 @@
 """
 ======================COPYRIGHT/LICENSE START==========================
 
-TargetedAcquisitionFormat.py: Contains functions specific to 
+TargetedAcquisitionFormat.py: Contains functions specific to
 TargetedAcquisition
 
 Copyright (C) 2011 Maxim Mayzel
@@ -12,14 +12,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,36 +53,32 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import copy
+
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
-from memops.api import Implementation
-from ccp.api.nmr import Nmr
-
-import copy, os
-
 IOkeywords = copy.deepcopy(IOkeywords)
-IOkeywords['readShifts']['createNewMolSystem'] = (False,False,"Create new molecular system from the assignment file")
-IOkeywords['readShifts']['minimalProbability']=(0.25,True,"Set the minimum assignment probability threshold.")
-IOkeywords['readShifts']['chain'] = (None,True,'The chain to be populated with imported shifts.')
+IOkeywords["readShifts"]["createNewMolSystem"] = (False, False, "Create new molecular system from the assignment file")
+IOkeywords["readShifts"]["minimalProbability"] = (0.25, True, "Set the minimum assignment probability threshold.")
+IOkeywords["readShifts"]["chain"] = (None, True, "The chain to be populated with imported shifts.")
+
 
 class TargetedAcquisitionFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = "targetedAcquisition"
+        self.IOkeywords = IOkeywords
 
-    self.format = 'targetedAcquisition'
-    self.IOkeywords = IOkeywords
+    def setGenericImports(self):
 
-  def setGenericImports(self):
+        self.getMeasurements = self.getMeasurementsGeneric
 
-    self.getMeasurements = self.getMeasurementsGeneric
+    def thisAssignmentValid(self):
 
-  def thisAssignmentValid(self):
-    
-    isValid = False
-    
-    #print self.rawMeasurement.__dict__
-    if self.rawMeasurement.figOfMerit > self.minimalProbability:
-      isValid = True
-    
-    return isValid
-  
+        isValid = False
+
+        # print self.rawMeasurement.__dict__
+        if self.rawMeasurement.figOfMerit > self.minimalProbability:
+            isValid = True
+
+        return isValid

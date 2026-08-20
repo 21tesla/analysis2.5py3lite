@@ -1,6 +1,6 @@
-__author__    = "$Author: wfv20 $"
+__author__ = "$Author: wfv20 $"
 ___revision__ = "$Revision: 1.1 $"
-___date__     = "$Date: 2003-07-01 12:56:12 $"
+___date__ = "$Date: 2003-07-01 12:56:12 $"
 
 """
 Goal of these routines are to provide a Python interface to writting, reading,
@@ -84,4 +84,4 @@ J. Westbrook and P. E. Bourne. STAR/mmCIF: An ontologoy for macromolecular struc
 """
 
 ## Public attributes
-verbosity               = 2
+verbosity = 2

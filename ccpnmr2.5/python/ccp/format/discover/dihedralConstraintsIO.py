@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,103 +54,105 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os,string
+import os
+import string
+
+from ccp.format.discover.generalIO import DiscoverGenericConstraint, DiscoverGenericFile
+from memops.universal.Io import getTopDirectory
 
 # Import general functions
 from memops.universal.Util import returnFloat
-from memops.universal.Util import returnInt
-from ccp.format.discover.generalIO import DiscoverGenericFile, DiscoverGenericConstraint
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.general.Util import getSeqAndInsertCode
-from ccp.format.general.Constants import defaultMolCode
 
 #####################
 # Class definitions #
 #####################
-    
+
+
 class DiscoverDihedralConstraintFile(DiscoverGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.constraints = []
-    self.constraintElements = 4
+    """
+    Information on file level
+    """
 
-    self.constraintType = None
+    def initialize(self):
 
-  def read(self,verbose = 0):
+        self.constraints = []
+        self.constraintElements = 4
 
-    if verbose == 1:
-    
-      print("Reading %s distance constraint list %s" % (self.format,self.name))
-    
-    fin = open(self.name)
-     
-    #
-    # Start reading...
-    #
-    
-    line = fin.readline()
-        
-    constraintNum = 0
-    
-    while line:
+        self.constraintType = None
 
-      if self.patt['emptyline'].search(line) or self.patt['exclamation'].search(line):
+    def read(self, verbose=0):
+
+        if verbose == 1:
+            print("Reading %s distance constraint list %s" % (self.format, self.name))
+
+        fin = open(self.name)
+
+        #
+        # Start reading...
+        #
+
         line = fin.readline()
-        continue
-      
-      elif self.patt['hash'].search(line):
-        
-        (void,self.constraintType) = string.split(line,'#')
-        line = fin.readline()
-        continue
 
-      cols = string.split(line)
+        constraintNum = 0
 
-      if cols[0] != '+':
-        constraintNum += 1
-      
-        constraint = DiscoverDihedralConstraint(self,constraintNum)
-        self.constraints.append(constraint)
-        
-        constraint.addInfo(cols[self.constraintElements:])
-        constraint.addItem(cols)
-      
-      else:
-        constraint.addItem(cols[1:])
-      
-      line = fin.readline()
+        while line:
+            if self.patt["emptyline"].search(line) or self.patt["exclamation"].search(line):
+                line = fin.readline()
+                continue
+
+            elif self.patt["hash"].search(line):
+                (void, self.constraintType) = string.split(line, "#")
+                line = fin.readline()
+                continue
+
+            cols = string.split(line)
+
+            if cols[0] != "+":
+                constraintNum += 1
+
+                constraint = DiscoverDihedralConstraint(self, constraintNum)
+                self.constraints.append(constraint)
+
+                constraint.addInfo(cols[self.constraintElements :])
+                constraint.addItem(cols)
+
+            else:
+                constraint.addItem(cols[1:])
+
+            line = fin.readline()
+
 
 class DiscoverDihedralConstraint(DiscoverGenericConstraint):
-   
-  def addInfo(self,cols):
-  
-    self.JValue = returnFloat(cols[0])
-    
-    self.lowerAngle = returnFloat(cols[5])
-    self.upperAngle = returnFloat(cols[6])
-  
+    def addInfo(self, cols):
+
+        self.JValue = returnFloat(cols[0])
+
+        self.lowerAngle = returnFloat(cols[5])
+        self.upperAngle = returnFloat(cols[6])
+
+
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
-                                                      
-  files = ['../../reference/discover/1ad7.dihed']
-  
-  for inFile in files:
-    
-    constraintFile = DiscoverDihedralConstraintFile(os.path.join(getTopDirectory(),inFile))
+if __name__ == "__main__":
+    files = ["../../reference/discover/1ad7.dihed"]
 
-    constraintFile.read(verbose = 1)
-    
-    for constraint in constraintFile.constraints:
-      print(constraint.Id,)
-      print(constraint.upperAngle, constraint.lowerAngle)
-      for constraintItem in constraint.items:
-        for constraintMember in constraintItem.members:
-          print(constraintMember.chainCode, constraintMember.seqCode, constraintMember.atomName,)
-        print()
+    for inFile in files:
+        constraintFile = DiscoverDihedralConstraintFile(os.path.join(getTopDirectory(), inFile))
+
+        constraintFile.read(verbose=1)
+
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+            )
+            print(constraint.upperAngle, constraint.lowerAngle)
+            for constraintItem in constraint.items:
+                for constraintMember in constraintItem.members:
+                    print(
+                        constraintMember.chainCode,
+                        constraintMember.seqCode,
+                        constraintMember.atomName,
+                    )
+                print()

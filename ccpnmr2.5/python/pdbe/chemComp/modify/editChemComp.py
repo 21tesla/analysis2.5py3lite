@@ -1,21 +1,16 @@
-import tkinter
-
-from memops.api import Implementation
-from memops.gui.Button import Button
-from memops.gui.MessageReporter import showInfo
 
 from ccp.general.Util import setCurrentStore
-from ccp.gui.ChemCompFrame import ChemCompFrame
 from ccp.gui.ChemCompEditor import ChemCompEditPopup
-
-from pdbe.chemComp.Constants import editChemCompDataDir
+from ccp.gui.ChemCompFrame import ChemCompFrame
+from memops.api import Implementation
+from memops.gui.Button import Button
 
 if (__name__ == '__main__'):
 
 
   project = Implementation.MemopsRoot(name='edit')
   setCurrentStore(project,'ChemElementStore')
-   
+
   root = Tkinter.Tk()
   root.top = root
 
@@ -28,9 +23,9 @@ if (__name__ == '__main__'):
   def getSelected():
 
     chemComp = frame.getSelectedChemComp()
-    
+
     ChemCompEditPopup(root, chemComp)
-    
+
   button = Button(root, text='Edit selected', command=getSelected)
   button.grid()
 

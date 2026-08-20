@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,7 +50,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Base import Base
 from memops.gui.Color import getIntRgb
@@ -60,103 +58,108 @@ from memops.gui.Color import getIntRgb
 # or IntVar to change scale
 # if you have a variable to hand you can pass it in using kw['variable']
 
+
 class Scale(Tkinter.Scale, Base):
+    def __init__(self, parent, value=None, oddNumbers=False, docKey=None, tipText=None, *args, **kw):
 
-  def __init__(self, parent, value=None, oddNumbers=False, docKey=None, tipText=None, *args, **kw):
+        self.var = kw.get("variable", Tkinter.DoubleVar())
+        kw["variable"] = self.var
+        kw["bg"] = "grey90"
 
-    self.var = kw.get('variable', Tkinter.DoubleVar())
-    kw['variable'] = self.var
-    kw['bg'] = 'grey90'
-    
-    if oddNumbers:
-      self._userCallback = kw.get('command')
-      kw['command'] = self.odd
- 
-    Tkinter.Scale.__init__(self, parent, *args, **kw)
-    Base.__init__(self, docKey=docKey, tipText=tipText)
+        if oddNumbers:
+            self._userCallback = kw.get("command")
+            kw["command"] = self.odd
 
-    self.parent = parent
+        Tkinter.Scale.__init__(self, parent, *args, **kw)
+        Base.__init__(self, docKey=docKey, tipText=tipText)
 
-    if value is not None:
-      self.set(value)
+        self.parent = parent
 
-    self.determineFgs()
+        if value is not None:
+            self.set(value)
 
-  def determineFgs(self):
+        self.determineFgs()
 
-    fg = self.cget('fg')
-    bg = self.cget('bg')
+    def determineFgs(self):
 
-    (r1, b1, g1) = getIntRgb(self, fg)
-    (r2, b2, g2) = getIntRgb(self, bg)
+        fg = self.cget("fg")
+        bg = self.cget("bg")
 
-    r = (r1 + r2) / 2
-    g = (g1 + g2) / 2
-    b = (b1 + b2) / 2
+        (r1, b1, g1) = getIntRgb(self, fg)
+        (r2, b2, g2) = getIntRgb(self, bg)
 
-    self.enableFg = fg
-    self.disableFg = '#%02x%02x%02x' % (r, g, b)
+        r = (r1 + r2) / 2
+        g = (g1 + g2) / 2
+        b = (b1 + b2) / 2
 
-  def get(self):
+        self.enableFg = fg
+        self.disableFg = "#%02x%02x%02x" % (r, g, b)
 
-    return self.var.get()
+    def get(self):
 
-  def set(self, value):
+        return self.var.get()
 
-    self.var.set(value)
+    def set(self, value):
 
-  def disable(self):
+        self.var.set(value)
 
-    self.config(fg=self.disableFg, state=Tkinter.DISABLED)
+    def disable(self):
 
-  def enable(self):
+        self.config(fg=self.disableFg, state=Tkinter.DISABLED)
 
-    self.config(fg=self.enableFg, state=Tkinter.NORMAL)
+    def enable(self):
 
-  def odd(self, arg):
+        self.config(fg=self.enableFg, state=Tkinter.NORMAL)
 
-    value = self.var.get()
-    value = 2*int(value/2)+1
-    self.set(value)
-    if self._userCallback:
-      self._userCallback(str(value))
+    def odd(self, arg):
+
+        value = self.var.get()
+        value = 2 * int(value / 2) + 1
+        self.set(value)
+        if self._userCallback:
+            self._userCallback(str(value))
 
 
-if (__name__ == '__main__'):
+if __name__ == "__main__":
+    from memops.gui.Button import Button
 
-  from memops.gui.Button import Button
+    d = 10
+    scale = None
 
-  d = 10
-  scale = None
+    def func():
+        global d
+        v = scale.get()
+        if v > (float(scale["to"]) - d):
+            d = -d
+        elif v < (float(scale["from"]) - d):
+            d = -d
+        scale.set(v + d)
 
-  def func():
-    global d
-    v = scale.get()
-    if (v > (float(scale['to'])-d)):
-      d = -d
-    elif (v < (float(scale['from'])-d)):
-      d = -d
-    scale.set(v+d)
+    root = Tkinter.Tk()
 
-  root = Tkinter.Tk()
- 
-  def func(args):
-    print(args)
- 
-  scale = Scale(root, orient=Tkinter.HORIZONTAL, value=50.0,
-                from_=1.0, to=99, oddNumbers=True, command=func,
-                tipText='Some advice')
-  
-  scale.grid()
-  
-  scale.set(3)
-  
-  button = Button(root, text='hit me', command=func)
-  button.grid()
-  button = Button(root, text='Enable', command=scale.enable)
-  button.grid()
-  button = Button(root, text='Disable', command=scale.disable)
-  button.grid()
+    def func(args):
+        print(args)
 
-  root.mainloop()
+    scale = Scale(
+        root,
+        orient=Tkinter.HORIZONTAL,
+        value=50.0,
+        from_=1.0,
+        to=99,
+        oddNumbers=True,
+        command=func,
+        tipText="Some advice",
+    )
 
+    scale.grid()
+
+    scale.set(3)
+
+    button = Button(root, text="hit me", command=func)
+    button.grid()
+    button = Button(root, text="Enable", command=scale.enable)
+    button.grid()
+    button = Button(root, text="Disable", command=scale.disable)
+    button.grid()
+
+    root.mainloop()

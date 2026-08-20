@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,82 +54,74 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
+import string
 
 # Import general functions
-from memops.universal.Util import returnFloat, returnInt
 from ccp.format.monte.generalIO import MonteGenericFile
 
-from ccp.format.monte.chemShiftsIO import MonteChemShiftFile
-#from ccp.format.monte.sequenceIO import MonteSequenceFile
+# from ccp.format.monte.sequenceIO import MonteSequenceFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class MonteProjectFile(MonteGenericFile):
+    # Information on file level
 
-  # Information on file level
+    def initialize(self):
 
-  def initialize(self):
-    
-    self.rootFileName = None
-    self.subDirPath = None
-    self.headerCols = None
-    
-    self.chemShiftFiles = []
-    #self.sequenceFile = None
+        self.rootFileName = None
+        self.subDirPath = None
+        self.headerCols = None
 
-  def read(self,verbose = 0):
+        self.chemShiftFiles = []
+        # self.sequenceFile = None
 
-    if verbose == 1:
-      print("Reading %s project file %s" % (self.format,self.name))
-    
+    def read(self, verbose=0):
 
-    fin = open(self.name)
+        if verbose == 1:
+            print("Reading %s project file %s" % (self.format, self.name))
 
-    # Read, look for first line
-    line = fin.readline()
+        fin = open(self.name)
 
-    while line:
-      cols = line.split()
+        # Read, look for first line
+        line = fin.readline()
 
-      if self.patt['%sComment' % self.format].search(line) or self.patt['emptyline'].search(line):
-        pass
-
-      else:
-      
-        if line.find('Root Filename:') > -1:
-        
-          line = fin.readline()
-          self.rootFileName = string.strip(line)
-
-        elif line.find('Subdirectory path:') > -1:
-        
-          line = fin.readline()
-          self.subDirPath = string.strip(line)
-        
-        elif line.find('shift table column definitions') > -1 and not line.find('old solution') > -1:
-        
-          # Depending on fixed par file output here!!
-          line = fin.readline()
-          numCols = len(line.split())
-          self.headerCols = [None] * numCols
-          
-          line = fin.readline()
-          line = fin.readline()
-
-          while not self.patt['emptyline'].search(line):
-          
+        while line:
             cols = line.split()
-            atomInfo = cols.pop(0)
-            
-            if cols.count('1'):
-              colIndex = cols.index('1')
-              self.headerCols[colIndex] = atomInfo
-            
-            line = fin.readline()                
 
-      line = fin.readline()
+            if self.patt["%sComment" % self.format].search(line) or self.patt["emptyline"].search(line):
+                pass
 
-    fin.close()
+            else:
+                if line.find("Root Filename:") > -1:
+                    line = fin.readline()
+                    self.rootFileName = string.strip(line)
+
+                elif line.find("Subdirectory path:") > -1:
+                    line = fin.readline()
+                    self.subDirPath = string.strip(line)
+
+                elif line.find("shift table column definitions") > -1 and not line.find("old solution") > -1:
+                    # Depending on fixed par file output here!!
+                    line = fin.readline()
+                    numCols = len(line.split())
+                    self.headerCols = [None] * numCols
+
+                    line = fin.readline()
+                    line = fin.readline()
+
+                    while not self.patt["emptyline"].search(line):
+                        cols = line.split()
+                        atomInfo = cols.pop(0)
+
+                        if cols.count("1"):
+                            colIndex = cols.index("1")
+                            self.headerCols[colIndex] = atomInfo
+
+                        line = fin.readline()
+
+            line = fin.readline()
+
+        fin.close()

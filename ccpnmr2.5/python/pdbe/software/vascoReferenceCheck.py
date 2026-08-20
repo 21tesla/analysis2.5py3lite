@@ -1,54 +1,54 @@
 # TODO: Necessary or can get from stats?
 #from pdbe.analysis.shifts.reref import make_selection, make_sel3
 
-import os, random
-import sys #@UnusedImport
-
-from memops.general.Io import getTopDirectory
-from memops.general.Io import loadProject
-from memops.universal.Util import drawBox
+import os
+import random
 
 from ccpnmr.format.general.Conversion import FormatConversion
 
-from ccpnmr.format.general.Util import createSelection
-
-from pdbe.analysis.Util import getPickledDict
-from pdbe.analysis.Constants import protonToHeavyAtom
-from pdbe.analysis.shifts.reref.estimateReferences import estimate_reference_single, make_selection, make_sel3, select_entries
-
 # User interaction classes
-from ccpnmr.format.general.userInteraction import setupDataEntry
-from ccpnmr.format.general.userInteraction import setupMessageReporter
-from ccpnmr.format.general.userInteraction import setupMultiDialog
+from ccpnmr.format.general.userInteraction import setupDataEntry, setupMessageReporter, setupMultiDialog
+from ccpnmr.format.general.Util import createSelection
+from memops.general.Io import getTopDirectory, loadProject
+from memops.universal.Util import drawBox
+from pdbe.analysis.Constants import protonToHeavyAtom
+from pdbe.analysis.shifts.reref.estimateReferences import (
+  estimate_reference_single,
+  make_sel3,
+  make_selection,
+  select_entries,
+)
+from pdbe.analysis.Util import getPickledDict
+
 
 class VascoReferenceCheck:
 
   tempPath = 'tmp'
   ccpnDir = None
-  
+
   vascoRefDataPath = os.path.join(getTopDirectory(),'python','pdbe','analysis','shifts','reref','data')
 
   # TODO: Make executable command line script?
   class VascoReferenceCheckError(StandardError):
-    
+
     pass
 
   def __init__(self,guiParent=None,dataEntry=None,messageReporter=None,multiDialog=None):
-  
+
     self.guiParent = guiParent
-  
+
     if not dataEntry:
       dataEntry = setupDataEntry(guiParent)
     self.dataEntry = dataEntry
-      
+
     if not messageReporter:
       messageReporter = setupMessageReporter(guiParent)
     self.messageReporter = messageReporter
-    
+
     if not multiDialog:
       multiDialog = setupMultiDialog(guiParent)
     self.multiDialog = multiDialog
-    
+
   def checkProject(self,ccpnProject=None,ccpnDir=None,structureEnsembleId=None,shiftListSerial=None):
 
     print(drawBox(" VASCO: calculating rereferencing..."))
@@ -56,7 +56,7 @@ class VascoReferenceCheck:
     #
     # Get info from CCPN project
     #
-    
+
     if ccpnProject:
       self.ccpnProject = ccpnProject
     elif ccpnDir:
@@ -66,52 +66,52 @@ class VascoReferenceCheck:
     else:
       from memops.editor.OpenProjectPopup import OpenProjectPopup
       _popup = OpenProjectPopup(self.guiParent, callback = self.initProject, modal=True)
-    
+
     #
     # Get the relevant structureEnsemble
     #
-    
+
     self.selectStructureEnsemble(structureEnsembleId=structureEnsembleId)
-      
+
     #
     # Get the right shift list
     #
-    
+
     self.selectShiftList(shiftListSerial=shiftListSerial)
-          
+
     #
     # Prep the data
     #
-    
+
     self.prepareData()
-    
+
     #
     # Create a dictionary to run VASCO on
     #
 
     self.createEntryDict()
-    
+
     #
     # Get VASCO reref data
     #
-    
-    self.getVascoRerefInfo()    
-    
-    
+
+    self.getVascoRerefInfo()
+
+
   def initProject(self,project=None):
-  
+
     self.ccpnProject = project
-    
+
   def selectStructureEnsemble(self, structureEnsembleId=None):
-    
+
     self.structureEnsemble = None
-    
+
     if self.ccpnProject.structureEnsembles:
       if len(self.ccpnProject.structureEnsembles) == 1:
         self.structureEnsemble = self.ccpnProject.findFirstStructureEnsemble()
       elif structureEnsembleId != None:
         self.structureEnsemble = self.ccpnProject.findFirstStructureEnsemble(ensembleId=structureEnsembleId)
-      
+
       if not self.structureEnsemble:
 
         (selectionList,selectionDict) = createSelection(self.ccpnProject.sortedStructureEnsembles())
@@ -127,23 +127,23 @@ class VascoReferenceCheck:
 
         if interaction.isSelected:
           self.structureEnsemble = interaction.selection
-        
-      
+
+
     if not self.structureEnsemble:
       raise self.VascoReferenceCheckError("No structures available in, or selected from, project - cannot run VASCO without coordinates.")
 
   def selectShiftList(self, shiftListSerial=None):
-  
+
     self.shiftList = None
-    
+
     shiftLists = list(self.ccpnProject.currentNmrProject.findAllMeasurementLists(className='ShiftList'))
-    
+
     if shiftLists:
       if len(shiftLists) == 1:
         self.shiftList = shiftLists[0]
       elif shiftListSerial != None:
         self.shiftList = self.ccpnProject.currentNmrProject.findFirstMeasurementList(className='ShiftList',serial=shiftListSerial)
-      
+
       if not self.shiftList:
 
         (selectionList,selectionDict) = createSelection(shiftLists)
@@ -159,23 +159,23 @@ class VascoReferenceCheck:
 
         if interaction.isSelected:
           self.shiftList = interaction.selection
-        
+
     if not self.shiftList:
       raise self.VascoReferenceCheckError("No shift list available in, or selected from, project - cannot run VASCO without chemical shifts.")
-    
+
   def prepareData(self):
 
     self.createResMapping()
-    
+
     self.writePdbFile()
-    
+
     self.createSsInfo()
-    
+
     self.createAsaInfo()
-    
+
   def createSsInfo(self):
 
-    from pdbe.analysis.external.stride.Util import StrideInfo #@UnresolvedImport
+    from pdbe.analysis.external.stride.Util import StrideInfo  #@UnresolvedImport
 
     print("Calculating STRIDE secondary structure info...")
     strideInfo = StrideInfo(self.tmpFilePath)
@@ -184,12 +184,12 @@ class VascoReferenceCheck:
 
   def createAsaInfo(self):
 
-    from pdbe.adatah.WhatIf import getWhatIfInfo #@UnresolvedImport
+    from pdbe.adatah.WhatIf import getWhatIfInfo  #@UnresolvedImport
 
     print("Fetching WHATIF data...")
     self.whatIfInfo = getWhatIfInfo(None,inputFile=self.tmpFilePath,outputWhatIfFile="tmp/%s.pp" % self.tmpFileName)
     #print self.whatIfInfo
-    
+
   def createResMapping(self):
 
     """
@@ -197,9 +197,9 @@ class VascoReferenceCheck:
     Function that maps resonances to residues and actual atom names (not sets)
 
     """
-    
+
     self.nmrProject = self.ccpnProject.currentNmrProject
-    nmrResonances = self.nmrProject.sortedResonances()    
+    nmrResonances = self.nmrProject.sortedResonances()
 
     resMapping = {}
 
@@ -252,12 +252,12 @@ class VascoReferenceCheck:
         resMapping[resonance] = [residue,atomNameList]
 
     self.resMapping = resMapping
-  
+
   def writePdbFile(self):
- 
+
     self.tmpFileName = "tmp.%d.pdb" % random.randint(0,10000000)
     self.tmpFilePath = os.path.join(self.tempPath,self.tmpFileName)
-    
+
     if not os.path.exists(self.tempPath):
       os.mkdir(self.tempPath)
 
@@ -283,7 +283,7 @@ class VascoReferenceCheck:
 
       molType = 'protein'
       protonToHeavyAtomDict = protonToHeavyAtom[molType]
-      
+
       seqKeys = self.whatIfInfo['chains'][chainCode].keys()
       seqKeys.sort()
 
@@ -292,7 +292,7 @@ class VascoReferenceCheck:
         whatIfResInfo = self.whatIfInfo['chains'][chainCode][seqKey]
 
         ssCode = 'C'
-        if self.ssInfo.has_key(chainCode) and self.ssInfo[chainCode].has_key(seqKey):
+        if chainCode in self.ssInfo and seqKey in self.ssInfo[chainCode]:
           ssCode = self.ssInfo[chainCode][seqKey]
         else:
            print("  No secondary structure info for chain %s, residue %s" % (chainCode,str(seqKey)))
@@ -334,21 +334,21 @@ class VascoReferenceCheck:
               if otherShift and otherShift.value != shiftValues[0]:
                 shiftValues.append(otherShift.value)
 
-            """          
+            """
             #
             # Get atom name for getting exposure value
-            #      
+            #
 
             if atomNameTuple[0][0] == 'H':
-              if protonToHeavyAtomDict[ccpCode].has_key(atomNameTuple):
+              if atomNameTuple in protonToHeavyAtomDict[ccpCode]:
                 heavyAtomNameKey = protonToHeavyAtomDict[ccpCode][atomNameTuple]
-              elif  protonToHeavyAtomDict[ccpCode].has_key(atomNameTuple[0]):
+              elif  atomNameTuple[0] in protonToHeavyAtomDict[ccpCode]:
                 heavyAtomNameKey = protonToHeavyAtomDict[ccpCode][atomNameTuple[0]]
               elif atomNameTuple[0] == 'H1':
                 heavyAtomNameKey = protonToHeavyAtomDict[ccpCode]['H']
               else:
                 atomSetKey = "%s*" % atomNameTuple[0][:-1]
-                try:           
+                try:
                   heavyAtomNameKey = protonToHeavyAtomDict[ccpCode][atomSetKey]
                 except:
                   print(protonToHeavyAtomDict[ccpCode].keys())
@@ -365,11 +365,11 @@ class VascoReferenceCheck:
             else:
               raise self.VascoReferenceCheckError("%s.%s.%s %s, %s" % (chainCode,ccpCode,residue.seqCode,heavyAtomNameKey,str(whatIfResInfo['atoms'].keys())))
 
-            if not self.entry.has_key(ccpCode):
+            if ccpCode not in self.entry:
               self.entry[ccpCode] = {}
 
             # Will this work for all? Confusing mix of names/tuples in code!!
-            if not self.entry[ccpCode].has_key(atomNameTuple):
+            if atomNameTuple not in self.entry[ccpCode]:
               self.entry[ccpCode][atomNameTuple] = ([],[],[])
 
             # Create entry dictionary information for rereferencing...
@@ -393,12 +393,12 @@ class VascoReferenceCheck:
                 self.entry[ccpCode][atomNameTuple][0].insert(0,correctedShiftValue)
                 self.entry[ccpCode][atomNameTuple][1].insert(0,exposure)
                 self.entry[ccpCode][atomNameTuple][2].insert(0,shortSecStruc)
-  
+
   def findResidue(self,chain,seqKey):
-  
+
     # TODO: is it seqId or seqCode here? Depends on the input probably, dangerous!
     return chain.findFirstResidue(seqId=seqKey[0],seqInsertCode=seqKey[1])
-  
+
   def getVascoRerefInfo(self):
 
     #
@@ -409,13 +409,13 @@ class VascoReferenceCheck:
 
     stats = getPickledDict(os.path.join(self.vascoRefDataPath,"stats_%s.pp" % dateStamp))
     bounds = getPickledDict(os.path.join(self.vascoRefDataPath,"bounds_%s.pp" % dateStamp))
-    
+
     self.rerefInfo = {}
 
     for molType in ('protein',):#'RNA'):
 
       if molType == 'protein':
-        
+
         group0 = {'arg': ('cz',), #@UnusedVariable
                   'asn': ('cg',),
                   'asp': ('cg',),
@@ -461,7 +461,7 @@ class VascoReferenceCheck:
         full_set = getPickledDict(os.path.join("../originalData/results/",database))
 
         for entry in full_set.keys():
-          if full_set[entry].has_key(molType):
+          if molType in full_set[entry]:
             full_set[entry] = full_set[entry][molType]
           else:
             del(full_set[entry])
@@ -496,7 +496,7 @@ class VascoReferenceCheck:
           groups = {None: self.entry}
 
         for i, group in groups.items():
-        
+
           if atom_type == 'C' and molType == 'protein':
             useBounds = bounds[atom_type][i]
             useStats = stats[atom_type][i]
@@ -504,28 +504,28 @@ class VascoReferenceCheck:
             useBounds = bounds[atom_type]
             useStats = stats[atom_type]
 
-          if group.has_key('tmpEntry'):
+          if 'tmpEntry' in group:
             group = group['tmpEntry']
 
           (rerefValue,rerefError,_void) =  estimate_reference_single(group, useStats, useBounds, entry_name='temp', atom_type=atom_type,
                                           exclude_outliers=False,molType=molType,verbose=False)
-                                          
+
           #print atom_type, i
           if rerefValue != None:
               rerefValue = -rerefValue
           self.rerefInfo[(atom_type,i)] = (rerefValue,rerefError)
-    
+
     #
     # Print out info
     #
-    
+
     atomKeys = self.rerefInfo.keys()
     atomKeys.sort()
-    
+
     for atomKey in atomKeys:
       print(atomKey,)
       print(self.rerefInfo[atomKey])
-      
+
 if __name__ == '__main__':
 
   import Tkinter

@@ -8,8 +8,8 @@ Rather temporary code for learning the Analysis API
 @author: jd
 '''
 from UtilsAnalysis.Utils import getPeakLists
-from ccp.api.nmr.Nmr import Peak
-from ccp.api.nmr.Nmr import PeakIntensity
+
+from ccp.api.nmr.Nmr import Peak, PeakIntensity
 
 # pylint: disable=E0601
 top = top #@UndefinedVariable

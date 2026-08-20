@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,158 +54,154 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 
-from memops.universal.Util import returnFloat, returnInt
 from ccp.format.ccpNmr.generalIO import CcpNmrGenericFile
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
-            
+
 class CcpNmrPeakFile(CcpNmrGenericFile):
-  
-  """
-  Information on file level
-  """
-  
-  def initialize(self,assignTagSep = ' '):
-  
-    self.peaks = []
-    
-    self.hasAssignItems = True
-    
-    # Dictionary key is column value (after space split!).
-    # Values are:
-    #  - Attribute name
-    #  - Extra header columns besides this one (e.g. is 2 for 'Assign F1')
-    #  - Modifier function
-    #
-      
-    self.columnInfo = {
-    
-      'Number':   ('rowNum',    returnInt),
-      '#':        ('num',       returnInt),
-      'Position': ('ppm',       returnFloat),
-      'Shift':    ('ppm',       returnFloat),
-      'Assign':   ('assign',    None),
-      'Assign.':  ('assign',    None),
-      'Height':   ('intensity', returnFloat),
-      'Volume':   ('volume',    returnFloat),
-      'Line':     ('width',     returnFloat),
-      'Merit':    ('status',    returnFloat),
-      'Details':  ('details',   None),
-      'Fit':      ('heightFit', None),
-      'Vol.':     ('volumeFit', None)
-      
-    }
+    """
+    Information on file level
+    """
 
-  def setSpectrumInfo(self,specName,ndim):
-  
-    self.specNames = [specName]
-    self.numDims = [ndim]
+    def initialize(self, assignTagSep=" "):
 
-    self.dimCodes = ndim * ['']
+        self.peaks = []
 
-  def read(self,verbose = False):
+        self.hasAssignItems = True
 
-    if verbose:
-      print("Reading %s peak list %s" % (self.format,self.name))
-      
-    #
-    # Open and read the file
-    #
+        # Dictionary key is column value (after space split!).
+        # Values are:
+        #  - Attribute name
+        #  - Extra header columns besides this one (e.g. is 2 for 'Assign F1')
+        #  - Modifier function
+        #
 
-    fin = open(self.name)
-    lines = fin.readlines()
-    fin.close()
-    
-    #
-    # Get header information, determine number of dimensions
-    #
-    
-    self.headerInfo = []
-    colIndex = 0
-    cols = lines[0].split("\t")
-    
-    numDim = 0
-    
-    while(True):
-    
-      headerCol = cols[colIndex]
-      
-      firstColItem = headerCol.split()[0]
-      
-      if self.columnInfo.has_key(firstColItem):
-        (attributeName,convertFunc) = self.columnInfo[firstColItem]
-        
-        # Track number of dimensions
-        if firstColItem in ('Position','Shift'):
-          numDim += 1
-      
-      else:
-        print("  Error: unrecognized column heading %s - will be ignored" % (headerCol))
-        attributeName = convertFunc = None
-      
-      self.headerInfo.append((attributeName,convertFunc))
-      
-      colIndex += 1
-      
-      # Exit when done
-      if colIndex > len(cols) - 1:
-        break
-    
-    #
-    # Set spectrum info
-    #
-    
-    (path,specName) = os.path.split(self.name)
-    self.setSpectrumInfo(specName,numDim)
-    
-    #
-    # Read peak information
-    #
-    
-    headerLen = len(self.headerInfo)
-    
-    for line in lines[1:]:
-       
-      cols = line.split("\t")
-      
-      if len(cols) == headerLen:
-        
-        peak = CcpNmrPeak(self,cols)
+        self.columnInfo = {
+            "Number": ("rowNum", returnInt),
+            "#": ("num", returnInt),
+            "Position": ("ppm", returnFloat),
+            "Shift": ("ppm", returnFloat),
+            "Assign": ("assign", None),
+            "Assign.": ("assign", None),
+            "Height": ("intensity", returnFloat),
+            "Volume": ("volume", returnFloat),
+            "Line": ("width", returnFloat),
+            "Merit": ("status", returnFloat),
+            "Details": ("details", None),
+            "Fit": ("heightFit", None),
+            "Vol.": ("volumeFit", None),
+        }
 
-        self.peaks.append(peak)
+    def setSpectrumInfo(self, specName, ndim):
 
-      else:
-      
-        print("  Error: Could not read peak line, has %d columns should be %d according to header." % (len(cols),headerLen))
+        self.specNames = [specName]
+        self.numDims = [ndim]
+
+        self.dimCodes = ndim * [""]
+
+    def read(self, verbose=False):
+
+        if verbose:
+            print("Reading %s peak list %s" % (self.format, self.name))
+
+        #
+        # Open and read the file
+        #
+
+        fin = open(self.name)
+        lines = fin.readlines()
+        fin.close()
+
+        #
+        # Get header information, determine number of dimensions
+        #
+
+        self.headerInfo = []
+        colIndex = 0
+        cols = lines[0].split("\t")
+
+        numDim = 0
+
+        while True:
+            headerCol = cols[colIndex]
+
+            firstColItem = headerCol.split()[0]
+
+            if firstColItem in self.columnInfo:
+                (attributeName, convertFunc) = self.columnInfo[firstColItem]
+
+                # Track number of dimensions
+                if firstColItem in ("Position", "Shift"):
+                    numDim += 1
+
+            else:
+                print("  Error: unrecognized column heading %s - will be ignored" % (headerCol))
+                attributeName = convertFunc = None
+
+            self.headerInfo.append((attributeName, convertFunc))
+
+            colIndex += 1
+
+            # Exit when done
+            if colIndex > len(cols) - 1:
+                break
+
+        #
+        # Set spectrum info
+        #
+
+        (path, specName) = os.path.split(self.name)
+        self.setSpectrumInfo(specName, numDim)
+
+        #
+        # Read peak information
+        #
+
+        headerLen = len(self.headerInfo)
+
+        for line in lines[1:]:
+            cols = line.split("\t")
+
+            if len(cols) == headerLen:
+                peak = CcpNmrPeak(self, cols)
+
+                self.peaks.append(peak)
+
+            else:
+                print(
+                    "  Error: Could not read peak line, has %d columns should be %d according to header."
+                    % (len(cols), headerLen)
+                )
+
 
 class CcpNmrPeak:
+    def __init__(self, parent, dataCols):
 
-  def __init__(self,parent,dataCols):
-  
-    self.parent = parent
-    
-    # Lists have to be set here so values can be appended to them
-    self.ppm = []
-    self.assign = []
-    self.width = []
-    
-    for i in range(len(dataCols)):
-      (attrName,convertFunc) = self.parent.headerInfo[i]
-      
-      if not attrName:
-        continue
-      
-      value = dataCols[i].strip()
-      if value == 'None':
-        value = None
-      
-      if convertFunc and value:
-        value = convertFunc(dataCols[i])
-        
-      if hasattr(self,attrName) and type(getattr(self,attrName)) == type([]):
-        getattr(self,attrName).append(value)
-      else:
-        setattr(self,attrName,value)
+        self.parent = parent
+
+        # Lists have to be set here so values can be appended to them
+        self.ppm = []
+        self.assign = []
+        self.width = []
+
+        for i in range(len(dataCols)):
+            (attrName, convertFunc) = self.parent.headerInfo[i]
+
+            if not attrName:
+                continue
+
+            value = dataCols[i].strip()
+            if value == "None":
+                value = None
+
+            if convertFunc and value:
+                value = convertFunc(dataCols[i])
+
+            if hasattr(self, attrName) and type(getattr(self, attrName)) == type([]):
+                getattr(self, attrName).append(value)
+            else:
+                setattr(self, attrName, value)

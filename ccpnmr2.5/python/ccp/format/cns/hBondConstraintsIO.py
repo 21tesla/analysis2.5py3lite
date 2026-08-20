@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,68 +56,76 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 
+from ccp.format.cns.distanceConstraintsIO import CnsDistanceConstraint, CnsDistanceConstraintFile
 from memops.universal.Io import getTopDirectory
-
-from ccp.format.cns.distanceConstraintsIO import CnsDistanceConstraintFile
-from ccp.format.cns.distanceConstraintsIO import CnsDistanceConstraint
 
 #####################
 # Class definitions #
 #####################
 
+
 class CnsHBondConstraintFile(CnsDistanceConstraintFile):
+    def checkLinePattern(self, line):
 
-  def checkLinePattern(self,line):
+        return 1
 
-    return 1
+    def read(self, verbose=0):
 
-  def read(self,verbose = 0):
+        if verbose == 1:
+            print("Reading cns H bonds constraint list %s" % self.name)
 
-    if verbose == 1:
-      print("Reading cns H bonds constraint list %s" % self.name)
+        return self.readGeneric(CnsHBondConstraint)
 
-    return self.readGeneric(CnsHBondConstraint)
-    
-  def printWriteText(self):
-  
-      print("Writing cns H bonds constraint list %s" % self.name)
+    def printWriteText(self):
+
+        print("Writing cns H bonds constraint list %s" % self.name)
+
 
 class CnsHBondConstraint(CnsDistanceConstraint):
+    def setOtherData(self, *args):
 
-  def setOtherData(self,*args):
+        pass
 
-    pass
-  
+
 ###################
 # Main of program #
 ###################
 
 if __name__ == "__main__":
+    # NO REAL EXAMPLE FILE AVAILABLE!
+    files = ["../reference/aria/ambig.restraints"]
 
-  # NO REAL EXAMPLE FILE AVAILABLE!
-  files = ['../reference/aria/ambig.restraints']
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = CnsHBondConstraintFile(file)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    constraintFile.read(verbose = 1)
-  
-    for constraint in constraintFile.constraints:
-      print(constraint.Id, constraint.origId,)
-    
-      print(constraint.targetDist, constraint.minusDist, constraint.plusDist,)
-    
-      for item in constraint.items:
-        for member in item.members:
-          print(member.seqCode, member.atomName,)
-        print("|",)
-      
-      print()
-  
-    constraintFile.name = 'local/hbond.testout'
-  
-    constraintFile.write(verbose = 1)
-  
+        constraintFile = CnsHBondConstraintFile(file)
+
+        constraintFile.read(verbose=1)
+
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+                constraint.origId,
+            )
+
+            print(
+                constraint.targetDist,
+                constraint.minusDist,
+                constraint.plusDist,
+            )
+
+            for item in constraint.items:
+                for member in item.members:
+                    print(
+                        member.seqCode,
+                        member.atomName,
+                    )
+                print(
+                    "|",
+                )
+
+            print()
+
+        constraintFile.name = "local/hbond.testout"
+
+        constraintFile.write(verbose=1)

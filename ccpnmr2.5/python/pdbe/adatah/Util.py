@@ -1,15 +1,15 @@
 import sys
-
 from subprocess import Popen
 from time import sleep
 
-from pdbe.adatah.Constants import pythonCommand, numCpu
+from pdbe.adatah.Constants import numCpu, pythonCommand
+
 
 def runConversionJobs(pdbCodes,addOptions,scriptName,useNumCpu = None, isPython = True, sleepTime = 3):
-    
+
   startCode = 'start'
 
-  if not '-noGui' in addOptions:
+  if '-noGui' not in addOptions:
     addOptions.append('-noGui')
 
   if '-reverse' in addOptions:
@@ -20,10 +20,10 @@ def runConversionJobs(pdbCodes,addOptions,scriptName,useNumCpu = None, isPython 
   currentProcesses = {startCode: None}
   currentIndex = -1
   endPdbCode = pdbCodes[-1]
-  
+
   if not useNumCpu:
     useNumCpu = numCpu
-  
+
   scriptArgs = []
   if isPython:
     scriptArgs.append(pythonCommand)
@@ -74,7 +74,7 @@ def runConversionJobs(pdbCodes,addOptions,scriptName,useNumCpu = None, isPython 
       # Finished...
       if currentProcesses[pdbCode].poll() != None:
         del(currentProcesses[pdbCode])
-        outputHandle.write("\n *** Job %s finished ***\n" % pdbCode) 
+        outputHandle.write("\n *** Job %s finished ***\n" % pdbCode)
         if not currentProcesses:
           currentProcesses = {startCode: None}
 
@@ -99,7 +99,7 @@ class AlignNeedlemanWunsch:
     to find the alignment with highest score (in O(nm) time).   
     The algorithm is outlined through comments to the source.
     """
-    
+
     self.output = output
     if not output:
       self.output = sys.stdout
@@ -111,18 +111,18 @@ class AlignNeedlemanWunsch:
       self.cols = self.rows = 0
       self.seq1 = self.seq2 = self.aseq1 = self.aseq2 = ""
       self.align = None
- 
+
     else:
       self.verbosity = verbosity
       if verbosity:
         self.output.write('Calculating alignment...\n')
-  
+
       self.rows=len(seq1)+1
       self.cols=len(seq2)+1
-      
+
       self.seq1 = seq1
       self.seq2 = seq2
-  
+
       try:
         #use fast numerical arrays if we can
         from numpy import zeros
@@ -132,44 +132,44 @@ class AlignNeedlemanWunsch:
         self.align=[]
         for i in range(self.rows):
           self.align+=[[0.]*self.cols]
-  
+
       #################################################
       ##              Needleman-Wunsch               ##
       #################################################
-  
+
       self.match=1.
       self.halfMatch = 0.5
       self.mismatch=-1.
-      
+
       # Not sure if this is going to be OK overall...
       if not compareToUncertain:
         self.gap=-1.
       else:
         self.gap=-0.1
-  
+
       # Set up and modify similarity matrix (ADAPTED WIM!)
       self.similarity = {}
       chars = "ABCDEFGHIJKLMNOPQRSTUVWYZ"
-      
+
       if not compareToUncertain:
         chars += 'X'
-      
+
       for char1 in chars:
         for char2 in chars:
           if char1 == char2:
             self.similarity[char1 + char2] = self.match
-            
+
             if compareToUncertain:
               self.similarity[char1 + char2.lower()] = self.halfMatch
               self.similarity[char1.lower() + char2] = self.halfMatch
-                        
+
           else:
             self.similarity[char1 + char2] = self.mismatch
-            
+
             if compareToUncertain:
               self.similarity[char1 + char2.lower()] = self.mismatch
               self.similarity[char1.lower() + char2] = self.mismatch
-      
+
       # No penalty for X?
       if compareToUncertain:
         for char1 in chars:
@@ -177,17 +177,17 @@ class AlignNeedlemanWunsch:
           self.similarity['X' + char1] = 0.
           self.similarity[char1.lower() + 'X'] = 0.
           self.similarity['X' + char1.lower()] = 0.
-  
+
         self.similarity['XX'] = 0.5
         self.similarity['tV'] = 0. # Reset, t is possibly a Val if a CG1 is missing somehow.
         self.similarity['Vt'] = 0. # Reset, t is possibly a Val if a CG1 is missing somehow.
-        
+
       else:
         self.similarity['XX'] = 0.
-        
+
       self.similarity['CM'] = 0.
       self.similarity['MC'] = 0.
-  
+
       # Original matrix
       #s={
       #'AA':     match,'AG':mismatch,'AC':mismatch,'AT':mismatch,\
@@ -195,7 +195,7 @@ class AlignNeedlemanWunsch:
       #'CA':mismatch,'CG':mismatch,'CC':     match,'CT':mismatch,\
       #'TA':mismatch,'TG':mismatch,'TC':mismatch,'TT':     match,\
       #}
-  
+
       for i in range(self.rows):
         self.align[i][0] = 0
       for j in range(self.cols):
@@ -204,39 +204,39 @@ class AlignNeedlemanWunsch:
         for j in range(1,self.cols):
           # Dynamic programing -- aka. divide and conquer:
           # Since gap penalties are linear in gap size
-          # the score of an alignmet of length l only depends on the   
+          # the score of an alignmet of length l only depends on the
           # the l-th characters in the alignment (match - mismatch - gap)
           # and the score of the one shorter (l-1) alignment,
           # i.e. we can calculate how to extend an arbritary alignment
-          # soley based on the previous score value.  
+          # soley based on the previous score value.
           choice1 = self.align[i-1][j-1] + self.similarity[(seq1[i-1] + seq2[j-1])]
           choice2 = self.align[i-1][j] + self.gap
           choice3 = self.align[i][j-1] + self.gap
-          
+
           #if i == j: # Or whatever alignment you're looking for...
           #  print i, j, choice1, choice2, choice3, (seq1[i-1],seq2[j-1])
-          
+
           self.align[i][j] = max(choice1, choice2, choice3)
-  
-  
+
+
       aseq1 = ''
       aseq2 = ''
-      #We reconstruct the alignment into aseq1 and aseq2, 
+      #We reconstruct the alignment into aseq1 and aseq2,
       i = len(seq1)
       j = len(seq2)
       while i>0 and j>0:
         if i%10==0 and verbosity:
           self.output.write('.')
-  
+
         #by preforming a traceback of how the matrix was filled out above,
         #i.e. we find a shortest path from a[n,m] to a[0,0]
         score = self.align[i][j]
         score_diag = self.align[i-1][j-1]
         score_up = self.align[i][j-1]
         score_left = self.align[i-1][j]
-        
+
         #print i, j, i-j, score, score_diag, score_up, score_left
-        
+
         if score == score_diag + self.similarity[seq1[i-1] + seq2[j-1]]:
           aseq1 = seq1[i-1] + aseq1
           aseq2 = seq2[j-1] + aseq2
@@ -260,20 +260,20 @@ class AlignNeedlemanWunsch:
         #If we hit j==0 before i==0 we keep going in i.
         aseq1 = seq1[i-1] + aseq1
         aseq2 = '_' + aseq2
-        i -= 1                
-  
+        i -= 1
+
       while j>0:
-        #If we hit i==0 before i==0 we keep going in j. 
+        #If we hit i==0 before i==0 we keep going in j.
         aseq1 = '_' + aseq1
         aseq2 = seq2[j-1] + aseq2
         j -= 1
-          
+
       self.aseq1 = aseq1
       self.aseq2 = aseq2
-      
+
       if verbosity:
         self.output.write("\n")
-    
+
   #################################################
   #################################################
   ##              Full backtrack                 ##
@@ -281,7 +281,7 @@ class AlignNeedlemanWunsch:
 
   #To reconstruct all alinghments is somewhat tedious..
   def make_graph(self):
-  #the simpilest way is to make a graph of the possible constructions of the values in a 
+  #the simpilest way is to make a graph of the possible constructions of the values in a
     graph={}
     for i in range(1,self.cols)[::-1]:
       graph[(i,0)] = [(i-1,0)]
@@ -302,39 +302,39 @@ class AlignNeedlemanWunsch:
     self.graph = graph
 
   def searchPaths(self):
-  
+
     self.tracks = self.find_all_paths((self.cols-1,self.rows-1),(0,0))
 
   def find_all_paths(self, start, end, path=[], depth = 0):
-  
+
     if depth == 30:
       if self.verbosity:
         print("  ERROR: recursive loop problem. Aborting at depth 30.")
       return []
-      
-  #and then to recursivly find all paths 
+
+  #and then to recursivly find all paths
   #from bottom right to top left..
     path = path + [start]
   #    print start
     if start == end:
       return [path]
-    if not self.graph.has_key(start):
+    if start not in self.graph:
       return []
     paths = []
     for node in self.graph[start]:
       if node not in path:
         newpaths = self.find_all_paths(node, end, path,depth = depth + 1)
         for newpath in newpaths:
-          paths.append(newpath)    
-          
+          paths.append(newpath)
+
     return paths
-  
+
   def printScores(self,verbosity = 2):
-  
+
     baseqs1=[]
     baseqs2=[]
     for track in self.tracks:
-    #using these we can reconstruct all optimal alig.-s 
+    #using these we can reconstruct all optimal alig.-s
       baseq1 = ''
       baseq2 = ''
       last_step=(self.cols-1,self.rows-1)
@@ -354,7 +354,7 @@ class AlignNeedlemanWunsch:
       baseqs1+=[baseq1]
       baseqs2+=[baseq2]
     #################################################
-    
+
     if verbosity > 1:
 
       print('')
@@ -365,7 +365,7 @@ class AlignNeedlemanWunsch:
       print(self.aseq1)
       print(self.aseq2)
       print('')
-      
+
     gaps=0
     mms=0
     ms=0
@@ -396,14 +396,14 @@ class AlignNeedlemanWunsch:
         print(baseqs2[i])
 
   def getBestMatchInfo(self,verbosity = 0):
-  
+
     self.make_graph()
     self.searchPaths()
-    
+
     baseqs1=[]
     baseqs2=[]
     for track in self.tracks:
-    #using these we can reconstruct all optimal alig.-s 
+    #using these we can reconstruct all optimal alig.-s
       baseq1 = ''
       baseq2 = ''
       last_step=(self.cols-1,self.rows-1)
@@ -423,7 +423,7 @@ class AlignNeedlemanWunsch:
       baseqs1+=[baseq1]
       baseqs2+=[baseq2]
     #################################################
-      
+
     gaps=0
     mismatches=0
     matches=0
@@ -442,15 +442,15 @@ class AlignNeedlemanWunsch:
       print(self.aseq1)
       print(self.aseq2)
       print('')
-    
-    
+
+
     if self.align is not None:
       score = self.align[self.rows-2][self.cols-2]
       total = min(len(self.seq1),len(self.seq2))
       degeneracy = len(self.tracks)
     else:
       score = total = degeneracy = 0
-    
+
     return (score, total, degeneracy, matches, mismatches, gaps,(self.aseq1,self.aseq2))
 
 def getAlignmentInfo(seqAlignInfo):
@@ -462,7 +462,7 @@ def getAlignmentInfo(seqAlignInfo):
   WARNING: is *swapping* the output, PDB first, then BMRB! Need to sort this out!!
   
   """
-          
+
   #
   # The PDB sequence is the reference one used to create the molecular system! Always starts at 1
   #
@@ -472,11 +472,11 @@ def getAlignmentInfo(seqAlignInfo):
   pdbIndex = bmrbIndex = 1
 
   (bmrbAlignInfo,pdbAlignInfo) = seqAlignInfo
-  
+
   totalAlignLen = len(bmrbAlignInfo)
 
   for i in range(totalAlignLen):
-  
+
     bmrbStatus = bmrbAlignInfo[i]
     pdbStatus = pdbAlignInfo[i]
 
@@ -502,6 +502,7 @@ def getAlignmentInfo(seqAlignInfo):
 
 from memops.api import Implementation
 
+
 def copyOriginalEntryInfoToNewEntry(originalEntry,newEntry):
 
   #
@@ -525,7 +526,7 @@ def copyOriginalEntryInfoToNewEntry(originalEntry,newEntry):
   return newEntry
 
 #
-# 
+#
 # duplicateResonances.py: Duplicates a set of FixedResonances (e.g. for other chain in homodimer)
 #
 # TODO IS THIS THE RIGHT PLACE FOR THIS CODE?!?!
@@ -535,11 +536,10 @@ def copyOriginalEntryInfoToNewEntry(originalEntry,newEntry):
 # General API imports...
 #
 
-from ccp.api.nmr import NmrConstraint
 from ccp.general.Copy import copyAttributeInfo, copyResonanceInfo
-from ccpnmr.format.general.Util import getNameInfo, getResName
 from ccpnmr.format.general.Constants import assign_kw
-from ccpnmr.format.general.Util import updateResonanceNamesDict, getResNameText
+from ccpnmr.format.general.Util import getNameInfo, getResName, getResNameText
+
 
 def getMappedResonances(constraintOrItem,resonanceMappingDict,newChainCode):
 
@@ -548,8 +548,8 @@ def getMappedResonances(constraintOrItem,resonanceMappingDict,newChainCode):
 
   for resonance in constraintOrItem.resonances:
     newResonance = resonance
-    if resonanceMappingDict.has_key(resonance):
-      if resonanceMappingDict[resonance].has_key(newChainCode):
+    if resonance in resonanceMappingDict:
+      if newChainCode in resonanceMappingDict[resonance]:
         newResonance = resonanceMappingDict[resonance][newChainCode]
         oldToNewResonanceDict[resonance] = newResonance
 
@@ -558,13 +558,13 @@ def getMappedResonances(constraintOrItem,resonanceMappingDict,newChainCode):
   return (newResonances, oldToNewResonanceDict)
 
 def duplicateResonances(nmrConstraintStore,format,mappingDict):
-  
+
   #
   # Check which resonances have to be copied, and copy...
   #
-  
+
   resonanceMappingDict = {}
-  
+
   copyResonances = []
   resonanceDict = {}
 
@@ -573,33 +573,33 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
 
   copyConstraintItems = {}
   copyConstraintItemsList = []
-  
+
   #
   # First determine which resonances are eligible for copying, and create a dictionary with resNames...
   #
-  
+
   for resonance in nmrConstraintStore.sortedFixedResonances():
-         
+
     applData = resonance.findFirstApplicationData(application = format, keyword = assign_kw)
 
     if applData:
 
       resName = applData.value
-      
+
       resonanceDict[resName] = resonance
 
       (chain,seqCode,spinSystemId,seqInsertCode,atomName) = getNameInfo(resName)
-              
-      if mappingDict.has_key(chain):
-        
+
+      if chain in mappingDict:
+
         copyResonances.append(resonance)
-        
+
   #
   # Then determine which constraint/items have to be copied (all resonances have to have the same chainCode!!)
   #
-  
+
   for resonance in copyResonances:
-    
+
     #
     # Constraints
     #
@@ -611,7 +611,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
           if otherRes not in copyResonances:
             copyConstraint = 0
             break
-        
+
         if copyConstraint and constr not in copyConstraints:
           j = 0
           constrKey = (constr.parent.serial,constr.serial)
@@ -622,7 +622,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
           listLen = len(copyConstraints)
           if j == (listLen - 1) or listLen == 0:
             copyConstraints.append(constr)
-            
+
 
     #
     # ConstraintItems
@@ -637,7 +637,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
           break
 
       if copyConstraintItem:
-        if not copyConstraintItems.has_key(constrItem.constraint):
+        if constrItem.constraint not in copyConstraintItems:
           copyConstraintItems[constrItem.constraint] = []
           j = 0
 
@@ -658,20 +658,20 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
   #
   # Now copy the resonances or find an existing resonance...
   #
-  
+
   for resonance in copyResonances:
-         
+
     applData = resonance.findFirstApplicationData(application = format, keyword = assign_kw)
     applDataClass = applData.__class__
 
     resName = applData.value
 
     (chain,seqCode,spinSystemId,seqInsertCode,atomName) = getNameInfo(resName)
-      
+
     resonanceMappingDict[resonance] = {}
-    
+
     resonance.removeApplicationData(applData)
-    
+
     newValue = getResName(mappingDict[chain][0],seqCode,atomName,seqInsertCode = seqInsertCode)
     resonance.addApplicationData(applDataClass(application = format, keyword = assign_kw, value = newValue))
 
@@ -679,8 +679,8 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
 
       newChainCode = mappingDict[chain][i]
       newResName = getResName(newChainCode,seqCode,atomName,seqInsertCode = seqInsertCode)
-      
-      if resonanceDict.has_key(newResName):
+
+      if newResName in resonanceDict:
         newResonance = resonanceDict[newResName]
         print("  Using existing resonance %s..." % newResName)
 
@@ -702,7 +702,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
         #
         # Constraints and constraint items have to be deleted and recreated later...
         #
-        
+
         for constrLink in constrLinks:
           for constr in getattr(newResonance,constrLink):
             constr.delete()
@@ -715,28 +715,28 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
   #
   # Loop over the 'new' chain codes...
   #
-  
+
   print()
   print("########################## ")
   print("# Duplicating resonances # ")
   print("########################## ")
   print()
-  
+
   for i in range(1,len(mappingDict[chain])):
 
     newChainCode = mappingDict[chain][i]
-  
+
     #
     # Copy the relevant dihedral constraints...
     #
 
     for constraint in copyConstraints:
-    
+
       print("  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial))
       print("    Resonances %s" % ', '.join([getResNameText(res) for res in constraint.resonances]))
 
       (newResonances, oldToNewResonanceDict) = getMappedResonances(constraint,resonanceMappingDict,newChainCode)
-      
+
       print("            to %s" % ', '.join([getResNameText(res) for res in newResonances]))
 
       newConstr = constraint.__class__(constraint.parent,resonances = newResonances)
@@ -746,7 +746,7 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
 
         newConstrItem = constrItem.__class__(newConstr, upperLimit = 1.0, lowerLimit = 0.0)
         copyAttributeInfo(constrItem,newConstrItem)
-      
+
       print()
 
     #
@@ -754,28 +754,28 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
     #
 
     for constraint in copyConstraintItemsList:
-   
+
       print("  Copying constraint %d.%d" % (constraint.parent.serial,constraint.serial))
 
       newConstr = constraint.__class__(constraint.parent)
       copyAttributeInfo(constraint,newConstr)
-      
+
       if hasattr(constraint,'weight'):
         newConstr.weight = constraint.weight
 
       for constrItem in constraint.sortedItems():
         print("    Copying item with resonances %s" %  ', '.join([getResNameText(res) for res in constrItem.resonances]))
-      
+
         if constrItem in copyConstraintItems[constraint]:
 
           (newResonances, oldToNewResonanceDict) = getMappedResonances(constrItem,resonanceMappingDict,newChainCode)
-        
+
         else:
-        
+
           newResonances = constrItem.resonances
           oldToNewResonanceDict = {}
 
-      
+
         print("                              to %s" % ', '.join([getResNameText(res) for res in newResonances]))
 
         newConstrItem = constrItem.__class__(newConstr,resonances = newResonances)
@@ -783,12 +783,12 @@ def duplicateResonances(nmrConstraintStore,format,mappingDict):
         if constrItem.className in ('DistanceConstraintItem', 'HBondConstraintItem', 'JCouplingConstraintItem', 'RdcConstraintItem'):
           firstResonance = constrItem.firstResonance
           if oldToNewResonanceDict:
-            firstResonance = oldToNewResonanceDict[firstResonance] 
+            firstResonance = oldToNewResonanceDict[firstResonance]
 
           newConstrItem.firstResonance = firstResonance
- 
+
         copyAttributeInfo(constrItem,newConstrItem)
-      
+
       print()
 
   print("###################### ")

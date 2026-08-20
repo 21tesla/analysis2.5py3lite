@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,49 +51,47 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-from ccp.format.general.formatIO import FormatFile
-
-from ccp.format.general.Constants import defaultMolCode
 
 import string
+
+from ccp.format.general.Constants import defaultMolCode
+from ccp.format.general.formatIO import FormatFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class SparkyGenericFile(FormatFile):
+    def setGeneric(self):
 
-  def setGeneric(self):
-    
-    self.format = 'sparky'
-    self.defaultMolCode = defaultMolCode
+        self.format = "sparky"
+        self.defaultMolCode = defaultMolCode
 
-    self.resonanceSep = '|'
+        self.resonanceSep = "|"
 
-  def getAssignCode(self,assign):
-  
-    resName = 3 * self.resonanceSep
-    
-    if assign:
-    
-      assignString = self.patt[self.format + 'LabelCodeName'].search(assign)
+    def getAssignCode(self, assign):
 
-      if assignString:
-        resLabel = assignString.group(1)
-        resCode = assignString.group(2)
-        atomName = assignString.group(4)
+        resName = 3 * self.resonanceSep
 
-        resName = self.resonanceSep.join(('',resLabel+resCode,atomName,''))
-        
-    return resName
+        if assign:
+            assignString = self.patt[self.format + "LabelCodeName"].search(assign)
 
+            if assignString:
+                resLabel = assignString.group(1)
+                resCode = assignString.group(2)
+                atomName = assignString.group(4)
 
-  def getExportAssignCode(self,resLabel,seqCode,atomName):
-  
-    residueCode = resLabel
-    
-    if seqCode != None:
-      residueCode += str(seqCode)
-      
-    resonanceCode = string.join(('',residueCode,atomName,''),self.resonanceSep)
-    return resonanceCode
+                resName = self.resonanceSep.join(("", resLabel + resCode, atomName, ""))
+
+        return resName
+
+    def getExportAssignCode(self, resLabel, seqCode, atomName):
+
+        residueCode = resLabel
+
+        if seqCode != None:
+            residueCode += str(seqCode)
+
+        resonanceCode = string.join(("", residueCode, atomName, ""), self.resonanceSep)
+        return resonanceCode

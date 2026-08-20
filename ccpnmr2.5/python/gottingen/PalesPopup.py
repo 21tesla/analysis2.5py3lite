@@ -3,6 +3,7 @@
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from gottingen.PalesFrame import PalesFrame
 
+
 class PalesPopup(BasePopup):
 
 
@@ -19,5 +20,5 @@ class PalesPopup(BasePopup):
 
     guiFrame.grid_columnconfigure(0, weight=1)
     guiFrame.grid_rowconfigure(0, weight=1)
-    
+
     self.frame = PalesFrame(self, self.project, grid=(0,0))

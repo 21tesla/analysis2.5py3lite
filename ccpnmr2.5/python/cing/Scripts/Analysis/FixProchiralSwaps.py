@@ -1,7 +1,8 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
 'Routines from Wim'
 
-from ccpnmr.analysis.core.AssignmentBasic import assignResToDim #@UnresolvedImport
+from ccpnmr.analysis.core.AssignmentBasic import assignResToDim  #@UnresolvedImport
+
 
 def fixProchiralSwapsMacro(argServer):
 
@@ -118,6 +119,7 @@ def fixProchiralSwaps(project, sdt=0.04):
   return nSwaps
 
 from numpy import array, random, vstack
+
 
 def kMeansPlusPlus(data, k):
 

@@ -58,19 +58,17 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
@@ -113,7 +111,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCriteria(self):
     """
     Get for cambridge.WmsQuery.AbstractQuery.criteria
@@ -121,7 +119,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('criteria')
     return result
-  
+
   def getDate(self):
     """
     Get for cambridge.WmsQuery.AbstractQuery.date
@@ -149,7 +147,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getUser(self):
     """
     getter for derived link 'user'
@@ -159,7 +157,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
     if result is not None:
       result = result.findFirstUser(name=self.userName)
     return result
-  
+
   def getUserName(self):
     """
     Get for cambridge.WmsQuery.AbstractQuery.userName
@@ -173,7 +171,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCriteria(self, value):
     """
     Set for cambridge.WmsQuery.AbstractQuery.criteria
@@ -228,13 +226,13 @@ class AbstractQuery(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCriteria')
       if ll:
         for notify in ll:
@@ -295,13 +293,13 @@ class AbstractQuery(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDate')
       if ll:
         for notify in ll:
@@ -376,13 +374,13 @@ class AbstractQuery(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUserName')
       if ll:
         for notify in ll:
@@ -394,11 +392,11 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   criteria = property(getCriteria, setCriteria, None,
   r"""
   """)
-  
+
   date = property(getDate, setDate, None,
   r"""Date quety was made
   """)
@@ -416,7 +414,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   userName = property(getUserName, setUserName, None,
   r"""User name - key for derived link to User
   """)
@@ -428,7 +426,7 @@ class AbstractQuery(memops.api.Implementation.DataObject):
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   user = property(getUser, None, None,
   r"""User making query
   """)
@@ -442,9 +440,9 @@ class ProjectResult(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'projectName', 'qualifiedName', 'serial', 'wmsSegmentName', 'access', 'activeAccess', 'parent', 'project', 'projectQuery', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.ProjectResult
@@ -487,7 +485,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -555,7 +553,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -581,7 +579,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.ProjectResult:   deletes
@@ -592,11 +590,11 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     projectQuery = dataDict.get('projectQuery')
-    if (not (projectQuery in objsToBeDeleted)):
+    if (projectQuery not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -608,14 +606,14 @@ class ProjectResult(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.ProjectResult
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsQuery.ProjectResult
@@ -636,7 +634,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('projectQuery')
         dd = value.__dict__.get('projectResults')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'projectQuery' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -776,7 +774,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -784,7 +782,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -802,7 +800,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -820,7 +818,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: project:
            Link project between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -868,7 +866,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.ProjectResult
@@ -881,7 +879,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.ProjectResult
@@ -934,7 +932,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.ProjectResult
@@ -958,7 +956,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.ProjectResult
@@ -972,7 +970,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.ProjectResult.parent
@@ -980,7 +978,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('projectQuery')
     return result
-  
+
   def getProject(self):
     """
     getter for derived link "project"
@@ -988,7 +986,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = cambridge.api.Wms.Project.getByKey(self.root, (self.wmsSegmentName, self.projectName))
     return result
-  
+
   def getProjectName(self):
     """
     Get for cambridge.WmsQuery.ProjectResult.projectName
@@ -996,7 +994,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('projectName')
     return result
-  
+
   def getProjectQuery(self):
     """
     Get for cambridge.WmsQuery.ProjectResult.projectQuery
@@ -1008,7 +1006,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.ProjectResult.serial
@@ -1018,7 +1016,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsSegmentName(self):
     """
     Get for cambridge.WmsQuery.ProjectResult.wmsSegmentName
@@ -1028,7 +1026,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.ProjectResult
@@ -1039,7 +1037,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setProject(self, value):
     """
     setter for derived link "project".
@@ -1162,13 +1160,13 @@ class ProjectResult(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setProjectName')
       if ll:
         for notify in ll:
@@ -1232,7 +1230,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setWmsSegmentName(self, value):
     """
     Set for cambridge.WmsQuery.ProjectResult.wmsSegmentName
@@ -1306,13 +1304,13 @@ class ProjectResult(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWmsSegmentName')
       if ll:
         for notify in ll:
@@ -1336,20 +1334,20 @@ class ProjectResult(memops.api.Implementation.DataObject):
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   projectName = property(getProjectName, setProjectName, None,
   r"""Name of project referred to
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   wmsSegmentName = property(getWmsSegmentName, setWmsSegmentName, None,
   r"""Name of relevant WmsSegment
   """)
@@ -1357,15 +1355,15 @@ class ProjectResult(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for projectQuery
   """)
-  
+
   project = property(getProject, setProject, None,
   r"""Project found as result of query
   """)
-  
+
   projectQuery = property(getProjectQuery,  None, None,
   r"""parent link
   """)
@@ -1383,9 +1381,9 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'projectName', 'qualifiedName', 'serial', 'versionTag', 'wmsSegmentName', 'access', 'activeAccess', 'parent', 'projectVersion', 'projectVersionQuery', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.ProjectVersionResult
@@ -1429,7 +1427,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1497,7 +1495,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1523,7 +1521,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.ProjectVersionResult:   deletes
@@ -1534,11 +1532,11 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     projectVersionQuery = dataDict.get('projectVersionQuery')
-    if (not (projectVersionQuery in objsToBeDeleted)):
+    if (projectVersionQuery not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -1550,14 +1548,14 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.ProjectVersionResult
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsQuery.ProjectVersionResult
@@ -1578,7 +1576,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('projectVersionQuery')
         dd = value.__dict__.get('projectVersionResults')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'projectVersionQuery' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1746,7 +1744,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1754,7 +1752,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1772,7 +1770,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1790,7 +1788,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: projectVersion:
            Link projectVersion between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1845,7 +1843,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.ProjectVersionResult
@@ -1858,7 +1856,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.ProjectVersionResult
@@ -1911,7 +1909,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.ProjectVersionResult
@@ -1935,7 +1933,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.ProjectVersionResult
@@ -1949,7 +1947,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.parent
@@ -1957,7 +1955,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('projectVersionQuery')
     return result
-  
+
   def getProjectName(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.projectName
@@ -1965,7 +1963,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('projectName')
     return result
-  
+
   def getProjectVersion(self):
     """
     getter for derived link projectVersion
@@ -1973,7 +1971,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = cambridge.api.Wms.ProjectVersion.getByKey(self.root, (self.wmsSegmentName, self.projectName, self.versionTag))
     return result
-  
+
   def getProjectVersionQuery(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.projectVersionQuery
@@ -1985,7 +1983,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.serial
@@ -1995,7 +1993,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getVersionTag(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.versionTag
@@ -2003,7 +2001,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('versionTag')
     return result
-  
+
   def getWmsSegmentName(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionResult.wmsSegmentName
@@ -2013,7 +2011,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.ProjectVersionResult
@@ -2024,7 +2022,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setProjectName(self, value):
     """
     Set for cambridge.WmsQuery.ProjectVersionResult.projectName
@@ -2091,7 +2089,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict['projectName'] = value
 
     # doNotifies
-  
+
   def setProjectVersion(self, value):
     """
     setter for derived link projectVersion
@@ -2200,7 +2198,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setVersionTag(self, value):
     """
     Set for cambridge.WmsQuery.ProjectVersionResult.versionTag
@@ -2267,7 +2265,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
     dataDict['versionTag'] = value
 
     # doNotifies
-  
+
   def setWmsSegmentName(self, value):
     """
     Set for cambridge.WmsQuery.ProjectVersionResult.wmsSegmentName
@@ -2352,24 +2350,24 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   projectName = property(getProjectName, setProjectName, None,
   r"""Name of relevant project
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   versionTag = property(getVersionTag, setVersionTag, None,
   r"""Version tag of Project version referred to
   """)
-  
+
   wmsSegmentName = property(getWmsSegmentName, setWmsSegmentName, None,
   r"""Name of relevant WmsSegment
   """)
@@ -2377,15 +2375,15 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for projectVersionQuery
   """)
-  
+
   projectVersion = property(getProjectVersion, setProjectVersion, None,
   r"""ProjectVersion found as result of query
   """)
-  
+
   projectVersionQuery = property(getProjectVersionQuery,  None, None,
   r"""parent link
   """)
@@ -2403,9 +2401,9 @@ class TaskResult(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'taskSerial', 'wmsSegmentName', 'access', 'activeAccess', 'parent', 'root', 'task', 'taskQuery', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.TaskResult
@@ -2448,7 +2446,7 @@ class TaskResult(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -2516,7 +2514,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -2542,7 +2540,7 @@ class TaskResult(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.TaskResult:   deletes
@@ -2553,11 +2551,11 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     taskQuery = dataDict.get('taskQuery')
-    if (not (taskQuery in objsToBeDeleted)):
+    if (taskQuery not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -2569,14 +2567,14 @@ class TaskResult(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.TaskResult
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsQuery.TaskResult
@@ -2597,7 +2595,7 @@ class TaskResult(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('taskQuery')
         dd = value.__dict__.get('taskResults')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'taskQuery' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2720,7 +2718,7 @@ class TaskResult(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2728,7 +2726,7 @@ class TaskResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2746,7 +2744,7 @@ class TaskResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2764,7 +2762,7 @@ class TaskResult(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: task:
            Link task between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2812,7 +2810,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.TaskResult
@@ -2825,7 +2823,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.TaskResult
@@ -2878,7 +2876,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.TaskResult
@@ -2902,7 +2900,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.TaskResult
@@ -2916,7 +2914,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.TaskResult.parent
@@ -2928,7 +2926,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.TaskResult.serial
@@ -2936,7 +2934,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getTask(self):
     """
     getter for derived link "task"
@@ -2944,7 +2942,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = cambridge.api.Wms.Task.getByKey(self.root, (self.wmsSegmentName, self.taskSerial))
     return result
-  
+
   def getTaskQuery(self):
     """
     Get for cambridge.WmsQuery.TaskResult.taskQuery
@@ -2952,7 +2950,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('taskQuery')
     return result
-  
+
   def getTaskSerial(self):
     """
     Get for cambridge.WmsQuery.TaskResult.taskSerial
@@ -2962,7 +2960,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsSegmentName(self):
     """
     Get for cambridge.WmsQuery.TaskResult.wmsSegmentName
@@ -2972,7 +2970,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.TaskResult
@@ -2983,7 +2981,7 @@ class TaskResult(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsQuery.TaskResult.serial
@@ -3041,7 +3039,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setTask(self, value):
     """
     setter for derived link "task"
@@ -3140,7 +3138,7 @@ class TaskResult(memops.api.Implementation.DataObject):
     dataDict['taskSerial'] = value
 
     # doNotifies
-  
+
   def setWmsSegmentName(self, value):
     """
     Set for cambridge.WmsQuery.TaskResult.wmsSegmentName
@@ -3227,18 +3225,18 @@ class TaskResult(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   taskSerial = property(getTaskSerial, setTaskSerial, None,
   r"""Serial number of task referred to
   """)
-  
+
   wmsSegmentName = property(getWmsSegmentName, setWmsSegmentName, None,
   r"""Name of relevant WmsSegment. 
   """)
@@ -3246,17 +3244,17 @@ class TaskResult(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for taskQuery
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   task = property(getTask, setTask, None,
   r"""Task found as result of query
   """)
-  
+
   taskQuery = property(getTaskQuery,  None, None,
   r"""parent link
   """)
@@ -3272,9 +3270,9 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'createdBy', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'access', 'activeAccess', 'activeRepositories', 'memopsRoot', 'packageLocator', 'parent', 'projectQueries', 'projectVersionQueries', 'root', 'taskQueries', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.WmsQueryStore
@@ -3332,7 +3330,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3426,7 +3424,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3460,25 +3458,25 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
     projectQueries = dataDict.get('projectQueries').values()
     for projectQuery in projectQueries:
-      if (not (projectQuery in objsToBeDeleted)):
+      if (projectQuery not in objsToBeDeleted):
         objsToBeDeleted.add(projectQuery)
         objsToBeChecked.append(projectQuery)
 
     projectVersionQueries = dataDict.get('projectVersionQueries').values()
     for projectVersionQuery in projectVersionQueries:
-      if (not (projectVersionQuery in objsToBeDeleted)):
+      if (projectVersionQuery not in objsToBeDeleted):
         objsToBeDeleted.add(projectVersionQuery)
         objsToBeChecked.append(projectVersionQuery)
 
     taskQueries = dataDict.get('taskQueries').values()
     for taskQuery in taskQueries:
-      if (not (taskQuery in objsToBeDeleted)):
+      if (taskQuery not in objsToBeDeleted):
         objsToBeDeleted.add(taskQuery)
         objsToBeChecked.append(taskQuery)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.WmsQueryStore:   deletes
@@ -3493,11 +3491,11 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsQueryStore'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3515,7 +3513,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.WmsQueryStore
@@ -3557,7 +3555,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('wmsQueryStores')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3655,7 +3653,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3755,7 +3753,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3763,7 +3761,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3781,7 +3779,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3812,7 +3810,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3828,7 +3826,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsQueryStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projectQueries:
            non-reciprocal link projectQueries from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3843,7 +3841,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsQueryStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projectVersionQueries:
            non-reciprocal link projectVersionQueries from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3858,7 +3856,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsQueryStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: taskQueries:
            non-reciprocal link taskQueries from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3911,7 +3909,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProjectQueries(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.WmsQueryStore.projectQueries
@@ -3931,7 +3929,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projectQueries').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3942,28 +3940,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3972,7 +3970,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllProjectVersionQueries(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
@@ -3992,7 +3990,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projectVersionQueries').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4003,28 +4001,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4033,7 +4031,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllTaskQueries(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.WmsQueryStore.taskQueries
@@ -4053,7 +4051,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('taskQueries').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4064,28 +4062,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4098,7 +4096,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProjectQuery(self, **conditions):
     """
     FindFirst for cambridge.WmsQuery.WmsQueryStore.projectQueries
@@ -4140,7 +4138,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('projectQueries').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4151,28 +4149,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4181,7 +4179,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstProjectVersionQuery(self, **conditions):
     """
     FindFirst for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
@@ -4223,7 +4221,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('projectVersionQueries').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4234,28 +4232,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4264,7 +4262,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstTaskQuery(self, **conditions):
     """
     FindFirst for cambridge.WmsQuery.WmsQueryStore.taskQueries
@@ -4306,7 +4304,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('taskQueries').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4317,28 +4315,28 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4347,7 +4345,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.WmsQueryStore
@@ -4362,7 +4360,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.WmsQueryStore
@@ -4395,7 +4393,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.WmsQueryStore
@@ -4425,7 +4423,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.WmsQueryStore
@@ -4433,7 +4431,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.memopsRoot
@@ -4449,7 +4447,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.parent
@@ -4457,7 +4455,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('memopsRoot')
     return result
-  
+
   def getProjectQueries(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.projectQueries
@@ -4469,7 +4467,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     tempVar = dataDict.get('projectQueries').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getProjectVersionQueries(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
@@ -4485,7 +4483,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.serial
@@ -4493,7 +4491,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getTaskQueries(self):
     """
     Get for cambridge.WmsQuery.WmsQueryStore.taskQueries
@@ -4511,19 +4509,19 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newProjectQuery(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.ProjectQuery
     """
     return ProjectQuery(self, **attrlinks)
-  
+
   def newProjectVersionQuery(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.ProjectVersionQuery
     """
     return ProjectVersionQuery(self, **attrlinks)
-  
+
   def newTaskQuery(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.TaskQuery
@@ -4539,7 +4537,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.WmsQueryStore
@@ -4558,7 +4556,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsQuery.WmsQueryStore.serial
@@ -4619,7 +4617,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def sortedProjectQueries(self):
     """
     Sorted for cambridge.WmsQuery.WmsQueryStore.projectQueries
@@ -4629,12 +4627,12 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('projectQueries')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedProjectVersionQueries(self):
     """
     Sorted for cambridge.WmsQuery.WmsQueryStore.projectVersionQueries
@@ -4644,12 +4642,12 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('projectVersionQueries')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedTaskQueries(self):
     """
     Sorted for cambridge.WmsQuery.WmsQueryStore.taskQueries
@@ -4659,7 +4657,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('taskQueries')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -4700,7 +4698,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -4713,27 +4711,27 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
-  
+
   projectQueries = property(getProjectQueries,  None, None,
   r"""child link to class ProjectQuery
   """)
-  
+
   projectVersionQueries = property(getProjectVersionQueries,  None, None,
   r"""child link to class ProjectVersionQuery
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   taskQueries = property(getTaskQueries,  None, None,
   r"""child link to class TaskQuery
   """)
@@ -4749,9 +4747,9 @@ class TaskQuery(AbstractQuery):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'criteria', 'date', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'userName', 'access', 'activeAccess', 'parent', 'root', 'taskResults', 'topObject', 'user', 'wmsQueryStore',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.TaskQuery
@@ -4798,7 +4796,7 @@ class TaskQuery(AbstractQuery):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -4870,7 +4868,7 @@ class TaskQuery(AbstractQuery):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -4896,13 +4894,13 @@ class TaskQuery(AbstractQuery):
 
     taskResults = dataDict.get('taskResults').values()
     for taskResult in taskResults:
-      if (not (taskResult in objsToBeDeleted)):
+      if (taskResult not in objsToBeDeleted):
         objsToBeDeleted.add(taskResult)
         objsToBeChecked.append(taskResult)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.TaskQuery:   deletes
@@ -4913,11 +4911,11 @@ class TaskQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
-    if (not (wmsQueryStore in objsToBeDeleted)):
+    if (wmsQueryStore not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -4929,7 +4927,7 @@ class TaskQuery(AbstractQuery):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.TaskQuery
@@ -4960,7 +4958,7 @@ class TaskQuery(AbstractQuery):
       else:
         value = dataDict.get('wmsQueryStore')
         dd = value.__dict__.get('taskQueries')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsQueryStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5091,7 +5089,7 @@ class TaskQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5099,7 +5097,7 @@ class TaskQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5117,7 +5115,7 @@ class TaskQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5133,7 +5131,7 @@ class TaskQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('taskQuery')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: taskResults:
            non-reciprocal link taskResults from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5150,7 +5148,7 @@ class TaskQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: user:
            Link user between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5198,7 +5196,7 @@ class TaskQuery(AbstractQuery):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllTaskResults(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.TaskQuery.taskResults
@@ -5212,7 +5210,7 @@ class TaskQuery(AbstractQuery):
     else:
       currentValues = dataDict.get('taskResults').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5223,28 +5221,28 @@ class TaskQuery(AbstractQuery):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5255,7 +5253,7 @@ class TaskQuery(AbstractQuery):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstTaskResult(self, **conditions):
     """
     FindFirst for cambridge.WmsQuery.TaskQuery.taskResults
@@ -5288,7 +5286,7 @@ class TaskQuery(AbstractQuery):
         currentValues = dataDict.get('taskResults').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5299,28 +5297,28 @@ class TaskQuery(AbstractQuery):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5329,7 +5327,7 @@ class TaskQuery(AbstractQuery):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.TaskQuery
@@ -5342,7 +5340,7 @@ class TaskQuery(AbstractQuery):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.TaskQuery
@@ -5395,7 +5393,7 @@ class TaskQuery(AbstractQuery):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.TaskQuery
@@ -5417,7 +5415,7 @@ class TaskQuery(AbstractQuery):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.TaskQuery
@@ -5431,7 +5429,7 @@ class TaskQuery(AbstractQuery):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.TaskQuery.parent
@@ -5443,7 +5441,7 @@ class TaskQuery(AbstractQuery):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.TaskQuery.serial
@@ -5451,7 +5449,7 @@ class TaskQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getTaskResults(self):
     """
     Get for cambridge.WmsQuery.TaskQuery.taskResults
@@ -5466,7 +5464,7 @@ class TaskQuery(AbstractQuery):
   getUser = AbstractQuery.getUser
 
   getUserName = AbstractQuery.getUserName
-  
+
   def getWmsQueryStore(self):
     """
     Get for cambridge.WmsQuery.TaskQuery.wmsQueryStore
@@ -5474,7 +5472,7 @@ class TaskQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('wmsQueryStore')
     return result
-  
+
   def newTaskResult(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.TaskResult
@@ -5482,7 +5480,7 @@ class TaskQuery(AbstractQuery):
     return TaskResult(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.TaskQuery
@@ -5497,7 +5495,7 @@ class TaskQuery(AbstractQuery):
   setCriteria = AbstractQuery.setCriteria
 
   setDate = AbstractQuery.setDate
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsQuery.TaskQuery.serial
@@ -5557,14 +5555,14 @@ class TaskQuery(AbstractQuery):
     # doNotifies
 
   setUserName = AbstractQuery.setUserName
-  
+
   def sortedTaskResults(self):
     """
     Sorted for cambridge.WmsQuery.TaskQuery.taskResults
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('taskResults')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -5593,7 +5591,7 @@ class TaskQuery(AbstractQuery):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -5606,13 +5604,13 @@ class TaskQuery(AbstractQuery):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsQueryStore
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   taskResults = property(getTaskResults,  None, None,
   r"""child link to class TaskResult
   """)
@@ -5620,7 +5618,7 @@ class TaskQuery(AbstractQuery):
   topObject = memops.api.Implementation.DataObject.topObject
 
   user = AbstractQuery.user
-  
+
   wmsQueryStore = property(getWmsQueryStore,  None, None,
   r"""parent link
   """)
@@ -5634,9 +5632,9 @@ class ProjectVersionQuery(AbstractQuery):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'criteria', 'date', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'userName', 'access', 'activeAccess', 'parent', 'projectVersionResults', 'root', 'topObject', 'user', 'wmsQueryStore',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.ProjectVersionQuery
@@ -5683,7 +5681,7 @@ class ProjectVersionQuery(AbstractQuery):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -5755,7 +5753,7 @@ class ProjectVersionQuery(AbstractQuery):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -5781,13 +5779,13 @@ class ProjectVersionQuery(AbstractQuery):
 
     projectVersionResults = dataDict.get('projectVersionResults').values()
     for projectVersionResult in projectVersionResults:
-      if (not (projectVersionResult in objsToBeDeleted)):
+      if (projectVersionResult not in objsToBeDeleted):
         objsToBeDeleted.add(projectVersionResult)
         objsToBeChecked.append(projectVersionResult)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.ProjectVersionQuery:   deletes
@@ -5798,11 +5796,11 @@ class ProjectVersionQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
-    if (not (wmsQueryStore in objsToBeDeleted)):
+    if (wmsQueryStore not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -5814,7 +5812,7 @@ class ProjectVersionQuery(AbstractQuery):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.ProjectVersionQuery
@@ -5845,7 +5843,7 @@ class ProjectVersionQuery(AbstractQuery):
       else:
         value = dataDict.get('wmsQueryStore')
         dd = value.__dict__.get('projectVersionQueries')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsQueryStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5976,7 +5974,7 @@ class ProjectVersionQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5984,7 +5982,7 @@ class ProjectVersionQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6002,7 +6000,7 @@ class ProjectVersionQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6018,7 +6016,7 @@ class ProjectVersionQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('projectVersionQuery')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projectVersionResults:
            non-reciprocal link projectVersionResults from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6035,7 +6033,7 @@ class ProjectVersionQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: user:
            Link user between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6083,7 +6081,7 @@ class ProjectVersionQuery(AbstractQuery):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProjectVersionResults(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.ProjectVersionQuery.projectVersionResults
@@ -6097,7 +6095,7 @@ class ProjectVersionQuery(AbstractQuery):
     else:
       currentValues = dataDict.get('projectVersionResults').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6108,28 +6106,28 @@ class ProjectVersionQuery(AbstractQuery):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6140,7 +6138,7 @@ class ProjectVersionQuery(AbstractQuery):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProjectVersionResult(self, **conditions):
     """
     FindFirst for
@@ -6174,7 +6172,7 @@ class ProjectVersionQuery(AbstractQuery):
         currentValues = dataDict.get('projectVersionResults').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6185,28 +6183,28 @@ class ProjectVersionQuery(AbstractQuery):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6215,7 +6213,7 @@ class ProjectVersionQuery(AbstractQuery):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.ProjectVersionQuery
@@ -6228,7 +6226,7 @@ class ProjectVersionQuery(AbstractQuery):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.ProjectVersionQuery
@@ -6281,7 +6279,7 @@ class ProjectVersionQuery(AbstractQuery):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.ProjectVersionQuery
@@ -6303,7 +6301,7 @@ class ProjectVersionQuery(AbstractQuery):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.ProjectVersionQuery
@@ -6317,7 +6315,7 @@ class ProjectVersionQuery(AbstractQuery):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionQuery.parent
@@ -6325,7 +6323,7 @@ class ProjectVersionQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('wmsQueryStore')
     return result
-  
+
   def getProjectVersionResults(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionQuery.projectVersionResults
@@ -6338,7 +6336,7 @@ class ProjectVersionQuery(AbstractQuery):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionQuery.serial
@@ -6352,7 +6350,7 @@ class ProjectVersionQuery(AbstractQuery):
   getUser = AbstractQuery.getUser
 
   getUserName = AbstractQuery.getUserName
-  
+
   def getWmsQueryStore(self):
     """
     Get for cambridge.WmsQuery.ProjectVersionQuery.wmsQueryStore
@@ -6360,7 +6358,7 @@ class ProjectVersionQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('wmsQueryStore')
     return result
-  
+
   def newProjectVersionResult(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.ProjectVersionResult
@@ -6368,7 +6366,7 @@ class ProjectVersionQuery(AbstractQuery):
     return ProjectVersionResult(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.ProjectVersionQuery
@@ -6383,7 +6381,7 @@ class ProjectVersionQuery(AbstractQuery):
   setCriteria = AbstractQuery.setCriteria
 
   setDate = AbstractQuery.setDate
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsQuery.ProjectVersionQuery.serial
@@ -6443,14 +6441,14 @@ class ProjectVersionQuery(AbstractQuery):
     # doNotifies
 
   setUserName = AbstractQuery.setUserName
-  
+
   def sortedProjectVersionResults(self):
     """
     Sorted for cambridge.WmsQuery.ProjectVersionQuery.projectVersionResults
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('projectVersionResults')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -6479,7 +6477,7 @@ class ProjectVersionQuery(AbstractQuery):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -6492,11 +6490,11 @@ class ProjectVersionQuery(AbstractQuery):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsQueryStore
   """)
-  
+
   projectVersionResults = property(getProjectVersionResults,  None, None,
   r"""child link to class ProjectVersionResult
   """)
@@ -6506,7 +6504,7 @@ class ProjectVersionQuery(AbstractQuery):
   topObject = memops.api.Implementation.DataObject.topObject
 
   user = AbstractQuery.user
-  
+
   wmsQueryStore = property(getWmsQueryStore,  None, None,
   r"""parent link
   """)
@@ -6520,9 +6518,9 @@ class ProjectQuery(AbstractQuery):
   _packageName = 'cambridge.WmsQuery'
   _packageShortName = 'WMSQ'
   _fieldNames = ('applicationData', 'className', 'criteria', 'date', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'userName', 'access', 'activeAccess', 'parent', 'projectResults', 'root', 'topObject', 'user', 'wmsQueryStore',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsQuery.ProjectQuery
@@ -6569,7 +6567,7 @@ class ProjectQuery(AbstractQuery):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -6641,7 +6639,7 @@ class ProjectQuery(AbstractQuery):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -6667,13 +6665,13 @@ class ProjectQuery(AbstractQuery):
 
     projectResults = dataDict.get('projectResults').values()
     for projectResult in projectResults:
-      if (not (projectResult in objsToBeDeleted)):
+      if (projectResult not in objsToBeDeleted):
         objsToBeDeleted.add(projectResult)
         objsToBeChecked.append(projectResult)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsQuery.ProjectQuery:   deletes
@@ -6684,11 +6682,11 @@ class ProjectQuery(AbstractQuery):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsQueryStore = dataDict.get('wmsQueryStore')
-    if (not (wmsQueryStore in objsToBeDeleted)):
+    if (wmsQueryStore not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -6700,7 +6698,7 @@ class ProjectQuery(AbstractQuery):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsQuery.ProjectQuery
@@ -6731,7 +6729,7 @@ class ProjectQuery(AbstractQuery):
       else:
         value = dataDict.get('wmsQueryStore')
         dd = value.__dict__.get('projectQueries')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsQueryStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6862,7 +6860,7 @@ class ProjectQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6870,7 +6868,7 @@ class ProjectQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6888,7 +6886,7 @@ class ProjectQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6904,7 +6902,7 @@ class ProjectQuery(AbstractQuery):
           )
 
         oldSelf = value.__dict__.get('projectQuery')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projectResults:
            non-reciprocal link projectResults from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6921,7 +6919,7 @@ class ProjectQuery(AbstractQuery):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: user:
            Link user between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6969,7 +6967,7 @@ class ProjectQuery(AbstractQuery):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProjectResults(self, **conditions):
     """
     FindAll for cambridge.WmsQuery.ProjectQuery.projectResults
@@ -6983,7 +6981,7 @@ class ProjectQuery(AbstractQuery):
     else:
       currentValues = dataDict.get('projectResults').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6994,28 +6992,28 @@ class ProjectQuery(AbstractQuery):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -7026,7 +7024,7 @@ class ProjectQuery(AbstractQuery):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProjectResult(self, **conditions):
     """
     FindFirst for cambridge.WmsQuery.ProjectQuery.projectResults
@@ -7059,7 +7057,7 @@ class ProjectQuery(AbstractQuery):
         currentValues = dataDict.get('projectResults').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -7070,28 +7068,28 @@ class ProjectQuery(AbstractQuery):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -7100,7 +7098,7 @@ class ProjectQuery(AbstractQuery):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsQuery.ProjectQuery
@@ -7113,7 +7111,7 @@ class ProjectQuery(AbstractQuery):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsQuery.ProjectQuery
@@ -7166,7 +7164,7 @@ class ProjectQuery(AbstractQuery):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsQuery.ProjectQuery
@@ -7188,7 +7186,7 @@ class ProjectQuery(AbstractQuery):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsQuery.ProjectQuery
@@ -7202,7 +7200,7 @@ class ProjectQuery(AbstractQuery):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsQuery.ProjectQuery.parent
@@ -7210,7 +7208,7 @@ class ProjectQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('wmsQueryStore')
     return result
-  
+
   def getProjectResults(self):
     """
     Get for cambridge.WmsQuery.ProjectQuery.projectResults
@@ -7223,7 +7221,7 @@ class ProjectQuery(AbstractQuery):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsQuery.ProjectQuery.serial
@@ -7237,7 +7235,7 @@ class ProjectQuery(AbstractQuery):
   getUser = AbstractQuery.getUser
 
   getUserName = AbstractQuery.getUserName
-  
+
   def getWmsQueryStore(self):
     """
     Get for cambridge.WmsQuery.ProjectQuery.wmsQueryStore
@@ -7245,7 +7243,7 @@ class ProjectQuery(AbstractQuery):
     dataDict = self.__dict__
     result = dataDict.get('wmsQueryStore')
     return result
-  
+
   def newProjectResult(self, **attrlinks):
     """
     Factory function to create cambridge.WmsQuery.ProjectResult
@@ -7253,7 +7251,7 @@ class ProjectQuery(AbstractQuery):
     return ProjectResult(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsQuery.ProjectQuery
@@ -7268,7 +7266,7 @@ class ProjectQuery(AbstractQuery):
   setCriteria = AbstractQuery.setCriteria
 
   setDate = AbstractQuery.setDate
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsQuery.ProjectQuery.serial
@@ -7328,14 +7326,14 @@ class ProjectQuery(AbstractQuery):
     # doNotifies
 
   setUserName = AbstractQuery.setUserName
-  
+
   def sortedProjectResults(self):
     """
     Sorted for cambridge.WmsQuery.ProjectQuery.projectResults
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('projectResults')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -7364,7 +7362,7 @@ class ProjectQuery(AbstractQuery):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -7377,11 +7375,11 @@ class ProjectQuery(AbstractQuery):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsQueryStore
   """)
-  
+
   projectResults = property(getProjectResults,  None, None,
   r"""child link to class ProjectResult
   """)
@@ -7391,7 +7389,7 @@ class ProjectQuery(AbstractQuery):
   topObject = memops.api.Implementation.DataObject.topObject
 
   user = AbstractQuery.user
-  
+
   wmsQueryStore = property(getWmsQueryStore,  None, None,
   r"""parent link
   """)

@@ -1,11 +1,13 @@
-import os, stat
+import os
+import stat
+
 
 def getDayStamp():
 
   import time
-  
+
   dayStamp = time.strftime("%Y-%b-%d", time.gmtime(time.time()))
-  
+
   return dayStamp
 
 def getFileFromFtp(ftpSite,ftpDir,ftpFileName,localFileName):
@@ -25,9 +27,9 @@ def getFileFromFtp(ftpSite,ftpDir,ftpFileName,localFileName):
   ftp.quit()
 
 def getDataFromHttp(urlLocation):
-  
+
   import urllib
-  
+
   r1 = urllib.urlopen(urlLocation)
   code = r1.getcode()
   if (code < 400):
@@ -40,89 +42,89 @@ def getDataFromHttp(urlLocation):
   return data
 
 def getTextFromHttp(urlLocation):
-  
+
   data = getDataFromHttp(urlLocation)
   text = data.split("\n")
-  
+
   return text
 
 def getReferenceFileFromFtp(ftpSite,ftpDir,ftpFileName,localFtpFileName):
 
   # Might need to create this, based on function below... probably best to plug in code for file download, keep one def for workflow.
   pass
-  
+
 def getReferenceTextFileFromHttp(urlLocation,localFilePath, refText = "", isGzipped = False):
-  
+
   """
   Function tries to get info online if required (updates every day), if this does not
   work it will use the latest available data from a locally saved file...
   """
-  
+
   useLocalFile = False
   stampedLocalFilePath = "%s_%s" % (localFilePath,getDayStamp())
-  
+
   if os.path.exists(stampedLocalFilePath):
 
     print("Using up-to-date local %s file..." % refText)
-  
+
   else:
-    
+
     #
     # Get latest file - either to be used as information source or be deleted...
     #
-    
+
     (path,baseName) = os.path.split(localFilePath)
     baseName = "%s_" % baseName
-    
+
     lastStampedLocalFilePath = None
-    
+
     localFiles = os.listdir(path)
-    
+
     for localFile in localFiles:
       if localFile[:len(baseName)] == baseName:
         lastStampedLocalFilePath = os.path.join(path,localFile)
         break
-  
+
     #
     # Now try to download, and save latest file
     #
-    
-    
+
+
     try:
       data = getDataFromHttp(urlLocation)
     except:
       data = None
 
     if data:
-      
+
       if isGzipped:
         saveLocalFilePath = "%s.gz" % stampedLocalFilePath
       else:
         saveLocalFilePath = stampedLocalFilePath
-      
+
       fout = open(saveLocalFilePath,'w')
       fout.write(data)
       fout.close()
-      
+
       if lastStampedLocalFilePath:
         os.remove(lastStampedLocalFilePath)
         addText = ' (removed old file)'
       else:
         addText = ''
-        
+
       print("Downloaded up-to-date file for %s, saved locally%s..." % (refText,addText))
-      
+
       # Unpack
       if isGzipped:
         os.spawnlp(os.P_WAIT, 'gunzip', 'gunzip', saveLocalFilePath)
-    
+
     else:
 
       if lastStampedLocalFilePath:
         stampedLocalFilePath = lastStampedLocalFilePath
         lastDayStamp = localFile[len(baseName):]
         print("Download failed for %s, using file stamped on day %s" % (refText,lastDayStamp))
-      
+
       else:
         print("Error: could not get reference data for %s!" % refText)
         return None
@@ -130,11 +132,11 @@ def getReferenceTextFileFromHttp(urlLocation,localFilePath, refText = "", isGzip
   #
   # Now get the data from the file
   #
-  
+
   fin = open(stampedLocalFilePath)
   dataLines = fin.readlines()
   fin.close()
-  
+
   return dataLines
 
 
@@ -162,7 +164,7 @@ def post_multipart(host, selector, fields, files):
   Return the server's response page.
   """
   content_type, body = encode_multipart_formdata(fields, files)
-  
+
   """
   # TODO replace by urllib.request!?!? See http://docs.python.org/library/urllib.request.html
   import urllib.request
@@ -216,7 +218,7 @@ def encode_multipart_formdata(fields, files):
 def get_content_type(filename):
 
   import mimetypes
-  
+
   return mimetypes.guess_type(filename)[0] or 'application/octet-stream'
 
 
@@ -227,23 +229,26 @@ Code below from http://peerit.blogspot.com/2007/07/multipartposthandler-doesnt-w
 """
 ####
 # 02/2006 Will Holcomb <wholcomb@gmail.com>
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
 #
-# 7/26/07 Slightly modified by Brian Schneider  
+# 7/26/07 Slightly modified by Brian Schneider
 
+import mimetypes
 import urllib
 import urllib.request
-import mimetools, mimetypes
 from io import StringIO
+
+import mimetools
+
 
 class Callable:
     def __init__(self, anycallable):
@@ -283,7 +288,7 @@ class MultipartPostHandler(urllib.request.BaseHandler):
                 request.add_unredirected_header('Content-Type', contenttype)
 
             request.add_data(data)
-        
+
         return request
 
     def multipart_encode(vars, files, boundary = None, buf = None):

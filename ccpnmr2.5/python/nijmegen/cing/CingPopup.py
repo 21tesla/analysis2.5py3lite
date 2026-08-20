@@ -1,6 +1,6 @@
 from memops.editor.BasePopup import BasePopup
-
 from nijmegen.cing.CingFrame import CingFrame
+
 
 def testCingPopup(argServer):
 
@@ -75,11 +75,11 @@ class CingPopup(BasePopup):
     self.parent = parent
 
     BasePopup.__init__(self, parent=parent, title='CING Setup', **kw)
-    
+
   def body(self, guiFrame):
 
     self.geometry('740x600')
-  
+
     guiFrame.grid_rowconfigure(0, weight=1)
     guiFrame.grid_columnconfigure(0, weight=1)
 
@@ -90,21 +90,21 @@ class CingPopup(BasePopup):
     # not sure why, but need below as well as grid above or otherwise
     # just get blank dialog until it is resized
     self.after_idle(lambda: self.frame.grid(row=0, column=0, sticky='nsew'))
-  
+
   def open(self):
-  
+
     BasePopup.open(self)
-   
-   
+
+
   def close(self):
-  
+
     BasePopup.close(self)
-    
-    
+
+
   def destroy(self):
-  
-    BasePopup.destroy(self)     
-     
+
+    BasePopup.destroy(self)
+
 if __name__ == '__main__':
 
   print("Run testCingPopup() as a CcpNmr Analysis macro")

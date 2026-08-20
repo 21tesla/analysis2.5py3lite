@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,116 +52,108 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, traceback, sys
-
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
-from ccpnmr.format.general.Util import getResName
-
+from ccpnmr.format.converters.DataFormat import DataFormat
 from ccpnmr.format.general.Constants import defaultMolCode
 
-import ccp.api.nmr.Nmr as Nmr
 
 class CsiFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'csi'
-    
-    self.allowedAtoms = ['HA','CA','CB','CO']
+        self.format = "csi"
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getMeasurements = self.getMeasurementsGeneric
-    self.createMeasurementFile = self.createMeasurementFileGeneric
+        self.allowedAtoms = ["HA", "CA", "CB", "CO"]
 
-  #
-  # Deviations from generic import stuff
-  #
+    def setGenericImports(self):
 
-    
-  #
-  # Functions different to default functions in DataFormat
-  #
-    
-  def initChemShiftFileResidue(self):
-    
-    """
-    
-    Different from DataFormat because have to set self.seqCodeLabel dictionary
-    
-    Use seqCode of residue to write out to chemical shift file
-    Use seqId for identification
-    
-    """
-    
-    self.seqId = self.residue.seqId
-    self.seqCode = self.getExportSeqCode(self.chainDict[self.chain][1],self.residue)
-    
-    residueLabel = self.residue.molResidue.chemComp.code1Letter
-    
-    if not residueLabel:
-      residueLabel = 'X'
-    
-    self.measurementFile.seqCodeLabels[self.seqCode] = residueLabel
+        self.getSequence = self.getSequenceGeneric
 
-  def setChemShiftFileValue(self):
-    
-    if self.atomNamesDict.has_key(self.atomName):
-    
-      resonanceToAtom = self.atomNamesDict[self.atomName]
-      residueLabel = self.getResidueLabelOneLetter(resonanceToAtom)
+        self.getMeasurements = self.getMeasurementsGeneric
+        self.createMeasurementFile = self.createMeasurementFileGeneric
 
-      # Need some special handling for HA values.
-      searchMatch = False
-      if residueLabel == 'G' and self.atomName[:2] == 'HA':
-        csiAtomName = 'HA'
-        if self.atomName in ('HA2','HA3'):
-          searchMatch = True
-      elif self.atomName == 'C':
-        csiAtomName = 'CO'
-      else:
-        csiAtomName = self.atomName
-      
-      #
-      # Only write if an atom that is used by CSI
-      #
-      
-      if csiAtomName in self.allowedAtoms:
-    
-        measurement = self.origAtomMeasurements[resonanceToAtom]
-        
-        if searchMatch:
-          searchMatch = False
-          for rawMeasurement in self.measurementFileValues:
-            if rawMeasurement.seqCode == self.seqCode and rawMeasurement.atomName == csiAtomName:
-              rawMeasurement.value = (rawMeasurement.value + measurement.value) / 2
-              searchMatch = True
-              break
+    #
+    # Deviations from generic import stuff
+    #
 
-        if not searchMatch:
-              
-          self.measurementFileValues.append(
+    #
+    # Functions different to default functions in DataFormat
+    #
 
-                 self.rawMeasurementClass(self.measurementFile,
-                                          measurement.value,
-                                          csiAtomName,
-                                          self.seqCode,
-                                          residueLabel,
-                                          defaultMolCode))
-        
-        # Add atomname to headerlist for CSI, and put HA in front...
-        if not csiAtomName in self.measurementFile.headerAtomNames:
-          self.measurementFile.headerAtomNames.append(csiAtomName)
-          self.measurementFile.headerAtomNames.sort()
-          if 'HA' in self.measurementFile.headerAtomNames:
-            self.measurementFile.headerAtomNames = self.measurementFile.headerAtomNames[-1:] + self.measurementFile.headerAtomNames[:-1]
-        
-      if self.atomMeasurements.has_key(resonanceToAtom):
-        del(self.atomMeasurements[resonanceToAtom])
-                           
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)
+    def initChemShiftFileResidue(self):
+        """
+
+        Different from DataFormat because have to set self.seqCodeLabel dictionary
+
+        Use seqCode of residue to write out to chemical shift file
+        Use seqId for identification
+
+        """
+
+        self.seqId = self.residue.seqId
+        self.seqCode = self.getExportSeqCode(self.chainDict[self.chain][1], self.residue)
+
+        residueLabel = self.residue.molResidue.chemComp.code1Letter
+
+        if not residueLabel:
+            residueLabel = "X"
+
+        self.measurementFile.seqCodeLabels[self.seqCode] = residueLabel
+
+    def setChemShiftFileValue(self):
+
+        if self.atomName in self.atomNamesDict:
+            resonanceToAtom = self.atomNamesDict[self.atomName]
+            residueLabel = self.getResidueLabelOneLetter(resonanceToAtom)
+
+            # Need some special handling for HA values.
+            searchMatch = False
+            if residueLabel == "G" and self.atomName[:2] == "HA":
+                csiAtomName = "HA"
+                if self.atomName in ("HA2", "HA3"):
+                    searchMatch = True
+            elif self.atomName == "C":
+                csiAtomName = "CO"
+            else:
+                csiAtomName = self.atomName
+
+            #
+            # Only write if an atom that is used by CSI
+            #
+
+            if csiAtomName in self.allowedAtoms:
+                measurement = self.origAtomMeasurements[resonanceToAtom]
+
+                if searchMatch:
+                    searchMatch = False
+                    for rawMeasurement in self.measurementFileValues:
+                        if rawMeasurement.seqCode == self.seqCode and rawMeasurement.atomName == csiAtomName:
+                            rawMeasurement.value = (rawMeasurement.value + measurement.value) / 2
+                            searchMatch = True
+                            break
+
+                if not searchMatch:
+                    self.measurementFileValues.append(
+                        self.rawMeasurementClass(
+                            self.measurementFile,
+                            measurement.value,
+                            csiAtomName,
+                            self.seqCode,
+                            residueLabel,
+                            defaultMolCode,
+                        )
+                    )
+
+                # Add atomname to headerlist for CSI, and put HA in front...
+                if csiAtomName not in self.measurementFile.headerAtomNames:
+                    self.measurementFile.headerAtomNames.append(csiAtomName)
+                    self.measurementFile.headerAtomNames.sort()
+                    if "HA" in self.measurementFile.headerAtomNames:
+                        self.measurementFile.headerAtomNames = (
+                            self.measurementFile.headerAtomNames[-1:] + self.measurementFile.headerAtomNames[:-1]
+                        )
+
+            if resonanceToAtom in self.atomMeasurements:
+                del self.atomMeasurements[resonanceToAtom]
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

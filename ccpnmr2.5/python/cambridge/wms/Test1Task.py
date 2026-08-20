@@ -13,13 +13,13 @@ class Test1Task(Task):
         # the disadvantages of this approach. Presumably we could
         # write a small utility that queries the model and produces
         # GUI widgets?
-        
+
 
         self.role1InputFile = None
         self.role2InputFile = None
 
         self.role1OutputFile = None
         self.role2OutputFile = None
-        
 
-    
+
+

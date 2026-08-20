@@ -287,10 +287,10 @@ class TagTable (Lister):
             if len( self.tagvalues[ tag_id ] ) != column_length_first:
                 print("ERROR: length column[%s](%s) is not the same as" % (
                             self.tagnames[ tag_id],
-                            len( self.tagvalues[ tag_id ] ) )
+                            len( self.tagvalues[ tag_id ] )))
                 print("ERROR: length column[%s](%s)" % (
                             self.tagnames[ 0],
-                            column_length_first )
+                            column_length_first ))
                 return 1
 
         if check_type >= 9:
@@ -299,7 +299,7 @@ class TagTable (Lister):
             for row_id in rows:
                 for col_id in cols:
                     val_type = type(self.tagvalues[col_id][row_id])
-                    if val_type !=  types.StringType:
+                    if val_type !=  str:
                         print("ERROR: type %s is not allowed as a value in a tagtable" % val_type)
                         print("ERROR: found for tagtable[%s][%s]" % ( self.tagnames[ col_id ], row_id ))
                         return 1
@@ -381,9 +381,9 @@ class TagTable (Lister):
             pos_end = pos_tagname + 1
 
         if self.verbosity >= 9:
-            print'pos_tagtable_loop:', pos_tagtable_loop
-            print'pos_tagtable_stop:', pos_tagtable_stop
-            print'pos_tagname      :', pos_tagname
+            print('pos_tagtable_loop:', pos_tagtable_loop)
+            print('pos_tagtable_stop:', pos_tagtable_stop)
+            print('pos_tagname      :', pos_tagname)
             print('Will parse tagtable text to end at position: [%s]' % pos_end)
 
         ## Just checking
@@ -555,10 +555,10 @@ class TagTable (Lister):
         col_length = len( self.tagvalues[-1] )
         if tag_id != 0:
             print("ERROR: not correct number of tag values read")
-            print("Read [%s] tag(s) that is:" \)
-                  % ( col_length * names_length + tag_id )
-            print("[%s] row(s) complete and [%s] tag value(s) in last row that is incomplete." \)
-                  % ( col_length, tag_id )
+            print("Read [%s] tag(s) that is:"
+                  % ( col_length * names_length + tag_id ))
+            print("[%s] row(s) complete and [%s] tag value(s) in last row that is incomplete."
+                  % ( col_length, tag_id ))
             print("Tag names of this table are:")
             print(self.tagnames)
             for xxx in range(0,len(self.tagvalues[0])):

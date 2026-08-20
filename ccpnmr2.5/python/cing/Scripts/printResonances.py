@@ -11,8 +11,8 @@
    Can be easily adapted
 
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.core.molecule import translateTopology
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.main import project
 
 #===========================================================================

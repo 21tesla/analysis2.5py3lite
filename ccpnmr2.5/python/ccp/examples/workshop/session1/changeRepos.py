@@ -19,56 +19,51 @@
 
 import os
 
-# Import the loadProject() function.
+# Import the Url class.
+from memops.api.Implementation import Url
 
+# Import the loadProject() function.
 from memops.general.Io import loadProject
 from memops.universal import Io as uniIo
 
-# Import the Url class.
+if __name__ == "__main__":
+    # Load the old project - need to specify the correct directory name.
 
-from memops.api.Implementation import Url
+    project = loadProject("topObjectTest")
 
-if __name__ == '__main__':
+    print("Project: [%s]\n" % project)
 
-  # Load the old project - need to specify the correct directory name.
+    # Find the right repository that contains the project data.
 
-  project = loadProject('topObjectTest')
+    projectRepos = project.findFirstRepository(name="userData")
 
-  print('Project: [%s]\n' % project)
+    # Specify a new location to save the project in.
 
-  # Find the right repository that contains the project data.
+    newPath = uniIo.normalisePath(os.path.join(os.path.abspath("."), "newDir", "newSubDir"))
 
-  projectRepos = project.findFirstRepository(name = 'userData')
+    # Make a new Url pointing to the new location and link it to the
+    # 'userData' repository.
 
-  # Specify a new location to save the project in.
+    projectRepos.url = Url(path=newPath)
 
-  newPath = uniIo.normalisePath(os.path.join(os.path.abspath('.'), 
-                                             'newDir', 'newSubDir'))
+    # Print the location of all project repositories.
 
-  # Make a new Url pointing to the new location and link it to the
-  # 'userData' repository.
+    print(
+        "Repositories:\n%s" % ("\n".join(repos.name + ": " + repos.url.path for repos in project.sortedRepositories()))
+    )
 
-  projectRepos.url = Url(path = newPath)
+    carbDataPath = uniIo.normalisePath(os.path.join(os.path.abspath(".."), "data"))
 
-  # Print the location of all project repositories.
+    print("\nLocation of local carbohydrate ChemComps: [%s]" % carbDataPath)
 
-  print('Repositories:\n%s' % (
-    '\n'.join(repos.name + ': ' + repos.url.path
-              for repos in project.sortedRepositories() ) ))
+    carbDataUrl = Url(path=carbDataPath)
 
-  carbDataPath = uniIo.normalisePath(os.path.join(os.path.abspath('..'), 'data'))
+    carbDataRepos = project.newRepository(name="carbData", url=carbDataUrl)
 
-  print('\nLocation of local carbohydrate ChemComps: [%s]' % carbDataPath)
+    chemPackLoc = project.findFirstPackageLocator(targetName="ccp.molecule.ChemComp")
 
-  carbDataUrl = Url(path = carbDataPath)
+    chemPackLoc.addRepository(carbDataRepos)
 
-  carbDataRepos = project.newRepository(name = 'carbData',
-                                        url = carbDataUrl)
+    # Save the project to the new location.
 
-  chemPackLoc = project.findFirstPackageLocator(targetName = 'ccp.molecule.ChemComp')
-
-  chemPackLoc.addRepository(carbDataRepos)
-
-  # Save the project to the new location.
-
-  #project.saveAll()
+    # project.saveAll()

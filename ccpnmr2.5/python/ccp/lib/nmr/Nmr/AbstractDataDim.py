@@ -62,27 +62,26 @@ software development. Bioinformatics 21, 1678-1684.
 # so they can be used as AbstractDataDim methods
 
 
-   
 # NB change from getDataDimIsotopes
-#def getDataDimIsotopes(dataDim):
+# def getDataDimIsotopes(dataDim):
 def getIsotopeCodes(dataDim):
-  """
-  Get the shift measurement isotopes for a spectrum data dim
-  
-  .. describe:: Input
-  
-  Nmr.AbstarctDataDim (or subtypes)
-  
-  .. describe:: Output
+    """
+    Get the shift measurement isotopes for a spectrum data dim
 
-  Set of Words (Nmr.ExpDimRef.isotopeCodes)
-  """
+    .. describe:: Input
 
-  isotopes = set()
-    
-  for expDimRef in dataDim.expDim.expDimRefs:
-    if expDimRef.measurementType in ('Shift','shift'):
-      for isotopeCode in expDimRef.isotopeCodes:
-        isotopes.add(isotopeCode)
- 
-  return isotopes
+    Nmr.AbstarctDataDim (or subtypes)
+
+    .. describe:: Output
+
+    Set of Words (Nmr.ExpDimRef.isotopeCodes)
+    """
+
+    isotopes = set()
+
+    for expDimRef in dataDim.expDim.expDimRefs:
+        if expDimRef.measurementType in ("Shift", "shift"):
+            for isotopeCode in expDimRef.isotopeCodes:
+                isotopes.add(isotopeCode)
+
+    return isotopes

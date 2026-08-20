@@ -7,11 +7,10 @@ Residues obtain attribute 'information' with information value that is averaged 
 
 """
 
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.sml import obj2SML, sML2obj
 from cing.Libs.cython.superpose import Rm6dist
-from cing.PluginCode.required.reqQueeny import * #@UnusedWildImport
-from cing.core.sml import sML2obj
-from cing.core.sml import obj2SML
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqQueeny import *  #@UnusedWildImport
 
 storedPropList = [QUEENY_UNCERTAINTY1_STR, QUEENY_UNCERTAINTY2_STR, QUEENY_INFORMATION_STR ]
 
@@ -82,7 +81,7 @@ class Queeny( Odict ):
         return Odict.__getitem__(self, key)
     #end def
 
-    # W0222 Signature differs from overridden method 
+    # W0222 Signature differs from overridden method
     # pylint: disable=W0222
     def setdefault(self, key, defaultValue):
         if key[0] > key[1]:
@@ -93,7 +92,7 @@ class Queeny( Odict ):
     def has_key(self, key):
         if key[0] > key[1]:
             key = (key[1],key[0])
-        return dict.has_key( self, key)
+        return  self, key in dict
     #end def
 
     def __call__(self, index):
@@ -119,7 +118,7 @@ class Queeny( Odict ):
         optionally set lower and upper
         return dme
         """
-        if not self.has_key((atm1.atomIndex,atm2.atomIndex)):
+        if (atm1.atomIndex,atm2.atomIndex not in self):
             dme = DmElement(atm1, atm2)
             self[(atm1.atomIndex,atm2.atomIndex)] = dme
         else:
@@ -136,7 +135,7 @@ class Queeny( Odict ):
         for atm in self.molecule.allAtoms():
             for atmN in atm.topology():
 
-                if self.has_key((atm.atomIndex,atmN.atomIndex)):
+                if (atm.atomIndex,atmN.atomIndex in self):
                     continue
 
                 dme = DmElement(atm, atmN)
@@ -392,7 +391,7 @@ class Queeny( Odict ):
             return
 
         #print '>', atm1, atm2, atm3
-        if self.has_key((atm1.atomIndex,atm3.atomIndex)):
+        if (atm1.atomIndex,atm3.atomIndex in self):
             dme13 = self[(atm1.atomIndex,atm3.atomIndex)]
             if dme13.flagged:
                 return
@@ -501,7 +500,7 @@ class Queeny( Odict ):
             atm1 = atms[i]
             for j in range(i+1,n):
                 atm2 = atms[j]
-                if self.has_key((atm1.atomIndex,atm2.atomIndex)):
+                if (atm1.atomIndex,atm2.atomIndex in self):
                     dme = self[(atm1.atomIndex,atm2.atomIndex)]
                     atm1[key] += dme.uncertainty
                     atm2[key] += dme.uncertainty
@@ -535,13 +534,13 @@ class Queeny( Odict ):
         """
 #        nTdebug('Queeny.setInformation: starting')
         for atm in self.molecule.allAtoms():
-            if atm.has_key(key1) and atm.has_key(key2):
+            if key1 in atm and key2 in atm:
                 atm[informationKey] = atm[key1]-atm[key2]
             else:
                 atm[informationKey] = 0.0
         #end for
         for res in self.molecule.allResidues():
-            if res.has_key(key1) and res.has_key(key2):
+            if key1 in res and key2 in res:
                 res[informationKey] = res[key1]-res[key2]
             else:
                 res[informationKey] = 0.0
@@ -655,10 +654,10 @@ def saveQueeny( project, tmp=None ):
     myList = NTlist()
     for res in project.molecule.allResidues():
         for storedProp in storedPropList:
-            if res.has_key(storedProp):
+            if storedProp in res:
                 myList.append( (res.nameTuple(), storedProp, res[storedProp]))
             for atm in res:
-                if atm.has_key(storedProp):
+                if storedProp in atm:
                     myList.append( (atm.nameTuple(), storedProp, atm[storedProp]))
         #end for
     #end for
@@ -720,8 +719,8 @@ def restoreQueeny( project, tmp=None ):
             obj = project.molecule.decodeNameTuple(nameTuple)
             if not obj:
                 atomName = nameTuple[3]
-                if not (atomName in ATOM_LIST_TO_IGNORE_REPORTING):
-                    nTerror('restoreQueeny: error decoding "%s"', nameTuple) 
+                if atomName not in ATOM_LIST_TO_IGNORE_REPORTING:
+                    nTerror('restoreQueeny: error decoding "%s"', nameTuple)
                     # Was reporting terminal atoms eg. in "('1buq', 'A', 39, 'H2', None, None, 'INTERNAL_1')"
             else:
                 obj[storedProp] = info

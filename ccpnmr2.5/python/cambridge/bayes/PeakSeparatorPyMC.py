@@ -6,7 +6,7 @@ Created by Daniel O'Donovan on 2010-11-22.
 Copyright (c) 2010 University of Cambridge. All rights reserved.
 """
 
-import sys, math
+import sys
 
 try:
   import numpy as np
@@ -23,16 +23,16 @@ except ImportError:
   #     return peakModelNonPyMC(params.peakShape, h, s, m, size, nsignals)
 # def peakModelNonPyMC(shape, h, s, m, size, nsignals):
 #   """ Peak model function - pymc free """
-# 
+#
 #   ndim = len( size )
 #   x = [ np.zeros(size[i], dtype=np.float32) for i in range(ndim) ]
-# 
+#
 #   for i in range(ndim):
 #     x_range = np.arange( size[i], dtype=np.float32 )
 #     if   shape == 3:
 #       """ Shape 3 - Gaussian """
 #       for n in range( nsignals ):
-# 
+#
 #         s_array = np.array( s[n][i] )
 #         one_over_s_squared = np.array( (-1. / np.power( s_array, 2 ) ) )
 #         print one_over_s_squared
@@ -40,14 +40,14 @@ except ImportError:
 #         x_minus_m_squared  = np.array( np.power( x_range - m_array, 2 ) )
 #         print x_minus_m_squared
 #         x[i] += [h[n] * math.exp(one_over_s_squared[ii] * x_minus_m_squared[ii]) for ii in range(size[i])]
-#     
+#
 #     elif shape == 4:
 #       """ Shape 4 - Lorentzian """
 #       for n in range( nsignals ):
 #         s_array = np.asarray( s[n][i] )
 #         m_array = np.asarray( m[n][i] )
 #         x[i] += h[n] * np.power( s_array, 2 ) / (np.power( x_range - m_array, 2 ) + np.power( s_array, 2 ))
-# 
+#
 #   r = np.ones( shape=[1] )
 #   for v in x:
 #     r = np.kron( v, r )
@@ -60,20 +60,20 @@ except ImportError:
 #   x_range = np.arange( size[0], dtype=np.float32 )
 #   y_range = np.arange( size[1], dtype=np.float32 )
 #   data = [ np.zeros(size[i], dtype=np.float32) for i in range(ndim) ]
-# 
+#
 #   if   shape == 3:
 #     """ Shape 3 - Gaussian """
 #     for n in range( nsignals ):
 #       # OMG this is an annoying way to avoid crappy PyMC bugs
 #       data[0] += h[n] * np.exp( (-1. / np.power( sx[n], 2 ) ) * np.power( x_range - mx[n], 2 ) )
 #       data[1] += h[n] * np.exp( (-1. / np.power( sy[n], 2 ) ) * np.power( y_range - my[n], 2 ) )
-# 
+#
 #   elif shape == 4:
 #     """ Shape 4 - Lorentzian """
 #     for n in range( nsignals ):
 #       data[0] += h[n] * np.power( sx[n], 2 ) / (np.power( x_range - mx[n], 2 ) + np.power( sx[n], 2 ))
 #       data[1] += h[n] * np.power( sy[n], 2 ) / (np.power( y_range - my[n], 2 ) + np.power( sy[n], 2 ))
-# 
+#
 #   # this will work in N dim, but was getting other bugs
 #   r = np.ones( shape=[1] )
 #   for v in data:
@@ -88,7 +88,7 @@ except ImportError:
 #     def s_j( value=midSigma[i], lower=params.minSigma[i], upper=params.maxSigma[i] ):
 #       return pymc.uniform_like( value, lower, upper )
 #     s['%1d_n%1d' % (i, n)] = s_j
-# 
+#
 #     # mean position prior
 #     @pymc.stochastic( name = 'm_%1d_n%1d' % (i, n) )
 #     def m_j( value=midPos[i], lower=0., upper=size[i] ):
@@ -106,7 +106,7 @@ def PeakSeparatorPyMC( params ):
   size = params.sampleSize
 
   peakList = params.peakList
-  
+
   # all this just to get the baseLevel (lowest contour level)
   dataSource        = peakList.dataSource
   block_file        = dataSource.block_file

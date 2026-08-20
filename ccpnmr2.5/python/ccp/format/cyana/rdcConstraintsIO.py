@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,53 +51,61 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
+
+from ccp.format.cyana.generalIO import getFormat
+from ccp.format.dyana.rdcConstraintsIO import DyanaRdcConstraint, DyanaRdcConstraintFile
 from memops.universal.Io import getTopDirectory
 
-from ccp.format.dyana.rdcConstraintsIO import DyanaRdcConstraintFile
-from ccp.format.dyana.rdcConstraintsIO import DyanaRdcConstraint
-from ccp.format.cyana.generalIO import getFormat
 
 class CyanaRdcConstraintFile(DyanaRdcConstraintFile):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = getFormat()
 
-    self.format = getFormat()
 
 class CyanaRdcConstraint(DyanaRdcConstraint):
+    pass
 
-  pass
- 
+
 ###################
 # Main of program #
 ###################
 
 if __name__ == "__main__":
+    files = ["../reference/ccpNmr/jurgenBmrb/1jwe/diana.rdc"]
 
-  files = ['../reference/ccpNmr/jurgenBmrb/1jwe/diana.rdc']
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = CyanaRdcConstraintFile(file)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    constraintFile.read(verbose = 1)
+        constraintFile = CyanaRdcConstraintFile(file)
 
-    for constraint in constraintFile.constraints:
-      print(constraint.Id,)
+        constraintFile.read(verbose=1)
 
-      print(constraint.value, constraint.error,)
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+            )
 
-      for item in constraint.items:
-        for member in item.members:
+            print(
+                constraint.value,
+                constraint.error,
+            )
 
-          print(member.seqCode, member.atomName,)
+            for item in constraint.items:
+                for member in item.members:
+                    print(
+                        member.seqCode,
+                        member.atomName,
+                    )
 
-        print("|",)
+                print(
+                    "|",
+                )
 
-      print()
-    
-    constraintFile.name = 'local/rdc.testout'
+            print()
 
-    constraintFile.write(verbose = 1)
+        constraintFile.name = "local/rdc.testout"
+
+        constraintFile.write(verbose=1)

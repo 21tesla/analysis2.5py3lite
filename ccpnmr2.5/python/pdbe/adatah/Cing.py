@@ -1,6 +1,8 @@
-import sys, os, re
+import os
+import re
 
 from pdbe.adatah.Io import getDataFromHttp
+
 
 def getCingSummaryTextInfo(filePath):
 
@@ -13,35 +15,35 @@ def getCingSummaryTextInfo(filePath):
   fin = open(filePath)
   lines = fin.readlines()
   fin.close()
-  
-  
+
+
   cingSummary = {'distanceRestraints': {}, 'dihedralRestraints': {}}
-  
+
   curDict = None
   curType = None
-  
+
   for line in lines:
-    
+
     cols = line.split()
-    
+
     if line.count(" DistanceRestraintList "):
-   
+
       distanceRestraintListName = cols[2][1:-1]
-      
+
       curType = 'distanceRestraints'
       cingSummary[curType][distanceRestraintListName] = {'violations': {}}
       curDict = cingSummary[curType][distanceRestraintListName]
 
     elif line.count(" DihedralRestraintList "):
-   
+
       dihedralRestraintListName = cols[2][1:-1]
-      
+
       curType = 'dihedralRestraints'
       cingSummary[curType][dihedralRestraintListName] = {'violations': {}}
       curDict = cingSummary[curType][dihedralRestraintListName]
-      
+
     elif line.count(" RDCRestraintList "):
-   
+
       curType = 'rdcRestraints'
       #cingSummary[curType][dihedralRestraintListName] = {'violations': {}}
       #curDict = cingSummary[curType][dihedralRestraintListName]
@@ -49,7 +51,7 @@ def getCingSummaryTextInfo(filePath):
     elif line.count("CING ROG analysis "):
       curType = 'cingRog'
       curDict = cingSummary[curType] = {}
-      
+
     elif line.count(" WHAT IF Summary "):
       curType = 'whatIf'
       curDict = cingSummary[curType] = {}
@@ -61,20 +63,20 @@ def getCingSummaryTextInfo(filePath):
     elif line.count(" Wattos Summary "):
       curType = 'wattos'
       curDict = cingSummary[curType] = {}
-    
+
     elif curType == 'distanceRestraints' and cols:
-    
+
       if cols[0] == 'rmsd:':
         if cols[1] == '.':
           average = None
         else:
           average = float(cols[1])
-        
+
         if cols[3] == '.':
           dev = None
         else:
           dev = float(cols[3])
-       
+
         curDict['rmsd'] = (average,dev)
 
       elif line.count("total all"):
@@ -89,13 +91,13 @@ def getCingSummaryTextInfo(filePath):
             curDict['violations']['medium'] = int(cols[3])
           elif cols[1] == '0.5':
             curDict['violations']['large'] = int(cols[3])
-            
+
     elif curType == 'dihedralRestraints' and cols:
-    
+
       if cols[0] == 'rmsd:':
         (part1,value2) = line.split("+-")
         (crap,value1) = part1.split()
-        
+
         curDict['rmsd'] = (float(value1.strip()),float(value2.strip()))
 
       elif line.count(" degree: "):
@@ -105,23 +107,23 @@ def getCingSummaryTextInfo(filePath):
           curDict['violations']['medium'] = int(cols[3])
         elif cols[1] == '>5':
           curDict['violations']['large'] = int(cols[3])
-            
+
     elif curType == 'cingRog' and cols:
-    
+
       if not line.count('---'):
         if cols[0][-1] == ':':
           cols[0] = cols[0][:-1]
         curDict[cols[0]] = int(line[15:18])
-        
+
     elif curType == 'whatIf' and cols:
-    
+
       if line.count('+/-'):
         index = cols.index('+/-')
         chkType = ' '.join(cols[:index-2])
         curDict[chkType] = (getCingTextFloat(cols[index-1]),getCingTextFloat(cols[index+1]))
-        
+
     elif curType == 'wattos' and cols:
-    
+
       if cols[0] == 'Overall':
         curDict['completeness'] = float(cols[4])
 
@@ -133,25 +135,25 @@ def getCingTextFloat(value):
     value = None
   else:
     value = float(value)
-    
+
   return value
-  
+
 def getCingCcpnTgzFileList(nrgCingCcpnUrl=None):
-  
+
   print("Getting information about current NRG-CING files...")
-  
+
   from pdbe.adatah.Io import getTextFromHttp
-  
-  dirNamePatt = re.compile("\<a href\=\"[a-z0-9]+\/\"\>([a-z0-9]+)\/\<\/a\>")
-  ccpnProjPatt = re.compile("\<a href\=\"[a-z0-9]+\.tgz\"\>([a-z0-9]+)\.tgz\<\/a\>\s+\<\/td\>\<td align\=\"right\"\>(\d+-\w+-\d+ \d+:\d+)\s+\<\/td\>")
-  
+
+  dirNamePatt = re.compile("\\<a href\\=\"[a-z0-9]+\\/\"\\>([a-z0-9]+)\\/\\<\\/a\\>")
+  ccpnProjPatt = re.compile("\\<a href\\=\"[a-z0-9]+\\.tgz\"\\>([a-z0-9]+)\\.tgz\\<\\/a\\>\\s+\\<\\/td\\>\\<td align\\=\"right\"\\>(\\d+-\\w+-\\d+ \\d+:\\d+)\\s+\\<\\/td\\>")
+
   if not nrgCingCcpnUrl:
     nrgCingCcpnUrl = "http://nmr.cmbi.ru.nl/NRG-CING/input/"
-  
+
   #
   # Get the list of directories containing the CCPN projects
   #
-  
+
   directoriesHttpPageLines = getTextFromHttp(nrgCingCcpnUrl)
 
   directoryList = []
@@ -159,18 +161,18 @@ def getCingCcpnTgzFileList(nrgCingCcpnUrl=None):
     dirNameSearch = dirNamePatt.search(line)
     if dirNameSearch:
       directoryList.append(dirNameSearch.group(1))
-  
+
   #
   # Get the actual locations of the CCPN project .tgz files
   #
-  
-  ccpnProjects = {}  
+
+  ccpnProjects = {}
   for pdbCodeDirectory in directoryList:
-    
+
     nrgCingCcpnProjectsUrl = os.path.join(nrgCingCcpnUrl,pdbCodeDirectory)
-    
+
     directoriesHttpPageLines = getTextFromHttp(nrgCingCcpnProjectsUrl)
-    
+
     for line in directoriesHttpPageLines:
       ccpnProjSearch = ccpnProjPatt.search(line)
       if ccpnProjSearch:
@@ -182,7 +184,7 @@ def getCingCcpnTgzFileList(nrgCingCcpnUrl=None):
 
 
 # Note: needs to move or available to PDBe before this can work there!
-try:  
+try:
   from sbb.Io import Pickler
 
   class CingWeeklyDownload(Pickler):
@@ -210,7 +212,7 @@ try:
 
         (date,pdbCodeDirectory,downloadUrl) = newNrgCingPdbCodes[pdbCode]
 
-        if not self.nrgCingPdbCodes.has_key(pdbCode):
+        if pdbCode not in self.nrgCingPdbCodes:
           downloadTgz = True
 
         elif self.nrgCingPdbCodes[pdbCode][0] != date:
@@ -253,9 +255,9 @@ try:
 
 except:
   print("  Warning need to install sbb/ directory for NRG-CING downloads!")
-  
+
 if __name__ == '__main__':
 
   cd = getCingSummaryTextInfo("summary.txt")
-  
+
   print(cd)

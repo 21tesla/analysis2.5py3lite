@@ -66,8 +66,8 @@ axis: 'N'
 #===========================================================================
 # imports
 #===========================================================================
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.core.molecule import translateTopology
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #===========================================================================
 # Dictionary with experiment names
@@ -298,7 +298,7 @@ class CCONH( ExperimentDef ):
 
     def definePeaks( self ):
         previous = self.residue.sibling( -1 )
-        if not previous: 
+        if not previous:
             return
 
         # I don't have in the database yet what are aliphatic and aromatic atoms

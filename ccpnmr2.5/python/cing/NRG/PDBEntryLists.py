@@ -4,15 +4,14 @@ Author: Jurgen F. Doreleijers
 python -u $CINGROOT/python/cing/NRG/PDBEntryLists.py
 """
 #from ccp.format.nmrStar.projectIO import NmrStarProjectFile
-from cing import cingDirData
-from cing import cingPythonDir
-from cing.Libs.DBMS import DBMS
-from cing.Libs.DBMS import getRelationFromCsvFile
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG.nrgCingRdb import getPdbIdList
-from cing.NRG.settings import matchBmrbPdbDir
 import urllib
 import urllib.request
+
+from cing import cingDirData, cingPythonDir
+from cing.Libs.DBMS import DBMS, getRelationFromCsvFile
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.nrgCingRdb import getPdbIdList
+from cing.NRG.settings import matchBmrbPdbDir
 
 urlDB2 = "http://restraintsgrid.bmrb.wisc.edu/servlet_data/viavia/mr_mysql_backup/"
 #urlDB2 = "http://restraintsgrid.bmrb.wisc.edu/servlet_data/viavia/mr_mysql_backupAn_2009-08-03/"
@@ -203,7 +202,7 @@ def getPdbEntries(onlyNmr=False, mustHaveExperimentalNmrData=False, onlySolidSta
     for _i, record in enumerate(f.readlines()):
         entry_code = record.rstrip().lower()
         if not is_pdb_code(entry_code):
-#            nTwarning("In %s found an invalid entry code: %s from record (%s) '%s'" % (getCallerName(), str(entry_code), i, record)) 
+#            nTwarning("In %s found an invalid entry code: %s from record (%s) '%s'" % (getCallerName(), str(entry_code), i, record))
 # Reported to Wolfgang on April 24, 2011.
             continue
         result.append( entry_code )
@@ -233,7 +232,7 @@ def getPdbEntriesOca(onlyNmr=False):
     r1 = urllib.urlopen(urlLocation)
     data = r1.read()
     r1.close()
-    
+
     dataLines = data.split("\n")
     for dataLine in dataLines:
         if dataLine:
@@ -289,7 +288,7 @@ def findMissingPdbjEntries():
     pdbRcsbMissingEntryNtList = pdbjEntryNtList.difference(pdbRcsbEntryNtList)
     NTmessage("Found RCSB-PDB missing entries count: %s %s" % (len(pdbRcsbMissingEntryNtList), pdbRcsbMissingEntryNtList))
 # end def
-    
+
 if __name__ == '__main__':
 #    cing.verbosity = cing.verbosityDebug
     findMissingPdbjEntries()

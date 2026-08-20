@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,41 +45,42 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
+import memops.gui.Color as Color
 from memops.general import Implementation
 from memops.gui.PulldownList import PulldownList
-import memops.gui.Color as Color
 
 # do not need for 'setName' since name is Color key
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class ColorList(PulldownList):
- 
-  def __init__(self, parent, getColors, extra_label = '', *args, **kw):
- 
-    self.getColors = getColors
-    self.extra_label = extra_label
- 
-    PulldownList.__init__(self, parent, *args, **kw)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setColors, 'ccpnmr.Analysis.Color', func)
- 
-    self.setColors()
+    def __init__(self, parent, getColors, extra_label="", *args, **kw):
 
-  def destroy(self):
- 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setColors, 'ccpnmr.Analysis.Color', func)
+        self.getColors = getColors
+        self.extra_label = extra_label
 
-    PulldownList.destroy(self)
+        PulldownList.__init__(self, parent, *args, **kw)
 
-  def setColors(self, *color):
- 
-    colors = self.getColors()
-    names = [ color.name for color in colors ]
-    #names.sort()
-    if (self.extra_label):
-      names = names + [self.extra_label]
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setColors, "ccpnmr.Analysis.Color", func)
 
-    hexColors = [Color.hexRepr(color.r,color.g,color.b) for color in colors]
-    self.setup(names, colors, self.index, colors=hexColors)
+        self.setColors()
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setColors, "ccpnmr.Analysis.Color", func)
+
+        PulldownList.destroy(self)
+
+    def setColors(self, *color):
+
+        colors = self.getColors()
+        names = [color.name for color in colors]
+        # names.sort()
+        if self.extra_label:
+            names = names + [self.extra_label]
+
+        hexColors = [Color.hexRepr(color.r, color.g, color.b) for color in colors]
+        self.setup(names, colors, self.index, colors=hexColors)

@@ -1,4 +1,6 @@
-import sys, os
+import os
+import sys
+
 
 def writeConstraintList(stream, constraintList):
   """ Write out a MODULE format constraint list, 
@@ -11,15 +13,15 @@ def writeConstraintList(stream, constraintList):
   atomDict = {
     'H' : 'HN',
   }
-  
-  if constraintList.className not in ('DistanceConstraintList', 
-                                      'HBondConstraintList', 
-                                      'JCouplingConstraintList', 
+
+  if constraintList.className not in ('DistanceConstraintList',
+                                      'HBondConstraintList',
+                                      'JCouplingConstraintList',
                                       'RdcConstraintList'):
     raise Exception(
      "writeConstraintList: incorrect type of input constraint list: %s"
      % constraintList.className)
-  
+
   # make data arrays, and get MolSystem
   iAtoms = []
   jAtoms = []
@@ -27,7 +29,7 @@ def writeConstraintList(stream, constraintList):
   molSystems = set()
   for constraint in constraintList.sortedConstraints():
 
-    # get non-ambiuous ConstraintItem 
+    # get non-ambiuous ConstraintItem
     items = constraint.sortedItems()
     if len(items) != 1:
       # skip ambiguous constraints
@@ -180,18 +182,18 @@ def getRawBackValuesFromFile( rdcFile ):
   rdcData = []
 
   fp = open( rdcFile )
-  
+
   for line in fp.readlines():
     splitline = line.strip().split()
 
-    if len(splitline) > 8: 
+    if len(splitline) > 8:
 
       (seq1, at1, seq2, at2, dist, back, diff, err ) = [t.strip() for t in splitline][:8]
-  
+
       rdcData.append( (seq1, at1, seq2, at2, dist, back, diff, err ) )
-  
+
   fp.close()
-  
+
   return rdcData
 
 

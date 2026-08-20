@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,57 +53,54 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 # Import general functions
-from ccp.format.amber.generalIO import AmberGenericFile, AmberGenericConstraint
 from ccp.format.amber.coordinatesIO import AmberCoordinateFile
-
-from ccp.format.general.Util import getSeqAndInsertCode
-from ccp.format.general.Constants import defaultMolCode
+from ccp.format.amber.generalIO import AmberGenericConstraint, AmberGenericFile
 
 #####################
 # Class definitions #
 #####################
-    
+
+
 class AmberDihedralConstraintFile(AmberGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.constraints = []
-    self.constraintElements = 4
+    """
+    Information on file level
+    """
 
-    self.constraintType = None
+    def initialize(self):
 
-  def read(self, coordFile=None, verbose=False):
+        self.constraints = []
+        self.constraintElements = 4
 
-    if verbose == 1:
-    
-      print("Reading %s dihedral constraint list %s" % (self.format,self.name))
-    
-    constraintInfoList = self.readConstraints()
-    
-    coordinateFile = AmberCoordinateFile(coordFile)
-    coordinateFile.read(maxNum = 1) # Only need one model!
-      
-    for i in range(len(constraintInfoList)):
-     
-      constraintInfo = constraintInfoList[i]
+        self.constraintType = None
 
-      atomSerials = constraintInfo['iat']
-      coordinateAtoms = []
-      
-      for atomSerial in atomSerials:
-        coordinateAtoms.append(coordinateFile.serialToCoord[atomSerial])
-      
-      dihedralConstraint = AmberDihedralConstraint(self,i+1)
-      self.constraints.append(dihedralConstraint) 
-      
-      dihedralConstraint.addItem(coordinateAtoms)
-      dihedralConstraint.setAngles(constraintInfo)
+    def read(self, coordFile=None, verbose=False):
+
+        if verbose == 1:
+            print("Reading %s dihedral constraint list %s" % (self.format, self.name))
+
+        constraintInfoList = self.readConstraints()
+
+        coordinateFile = AmberCoordinateFile(coordFile)
+        coordinateFile.read(maxNum=1)  # Only need one model!
+
+        for i in range(len(constraintInfoList)):
+            constraintInfo = constraintInfoList[i]
+
+            atomSerials = constraintInfo["iat"]
+            coordinateAtoms = []
+
+            for atomSerial in atomSerials:
+                coordinateAtoms.append(coordinateFile.serialToCoord[atomSerial])
+
+            dihedralConstraint = AmberDihedralConstraint(self, i + 1)
+            self.constraints.append(dihedralConstraint)
+
+            dihedralConstraint.addItem(coordinateAtoms)
+            dihedralConstraint.setAngles(constraintInfo)
+
 
 class AmberDihedralConstraint(AmberGenericConstraint):
-   
-  def setAngles(self,constraintInfo):
-    
-    self.lowerAngle = constraintInfo['r2'][0]
-    self.upperAngle = constraintInfo['r3'][0]
+    def setAngles(self, constraintInfo):
+
+        self.lowerAngle = constraintInfo["r2"][0]
+        self.upperAngle = constraintInfo["r3"][0]

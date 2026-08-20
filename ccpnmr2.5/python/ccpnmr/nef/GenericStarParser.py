@@ -104,37 +104,36 @@ DataBlocks, SaveFrames, and Loops, to prepend to item and column names.
 
 # NB must be Python 2.7 and 3.x compatible
 
-
-
-#=========================================================================================
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: CCPN $"
 __dateModified__ = "$dateModified: 2017-07-07 16:33:01 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: Rasmus Fogh $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
-import sys
-import re
 import math
+import re
+import sys
 from collections import OrderedDict
-
 
 try:
     # Python 3
@@ -142,72 +141,71 @@ try:
 except:
     # python 2.7
     from itertools import izip_longest as zip_longest
-from .StarTokeniser import getTokenIterator
-
-from .StarTokeniser import TOKEN_MULTILINE
-from .StarTokeniser import TOKEN_COMMENT
-from .StarTokeniser import TOKEN_GLOBAL
-from .StarTokeniser import TOKEN_SAVE_FRAME
-from .StarTokeniser import TOKEN_SAVE_FRAME_REF
-from .StarTokeniser import TOKEN_LOOP_STOP
-from .StarTokeniser import TOKEN_DATA_BLOCK
-from .StarTokeniser import TOKEN_LOOP
-from .StarTokeniser import TOKEN_BAD_CONSTRUCT
-from .StarTokeniser import TOKEN_DATA_NAME
-from .StarTokeniser import TOKEN_SQUOTE_STRING
-from .StarTokeniser import TOKEN_DQUOTE_STRING
-from .StarTokeniser import TOKEN_NULL
-from .StarTokeniser import TOKEN_UNKNOWN
-from .StarTokeniser import TOKEN_SQUARE_BRACKET
-from .StarTokeniser import TOKEN_STRING
-from .StarTokeniser import TOKEN_BAD_TOKEN
-
+from .StarTokeniser import (
+    TOKEN_BAD_CONSTRUCT,
+    TOKEN_BAD_TOKEN,
+    TOKEN_COMMENT,
+    TOKEN_DATA_BLOCK,
+    TOKEN_DATA_NAME,
+    TOKEN_DQUOTE_STRING,
+    TOKEN_GLOBAL,
+    TOKEN_LOOP,
+    TOKEN_LOOP_STOP,
+    TOKEN_MULTILINE,
+    TOKEN_NULL,
+    TOKEN_SAVE_FRAME,
+    TOKEN_SAVE_FRAME_REF,
+    TOKEN_SQUARE_BRACKET,
+    TOKEN_SQUOTE_STRING,
+    TOKEN_STRING,
+    TOKEN_UNKNOWN,
+    getTokenIterator,
+)
 
 # Constants for converting values to string
 # NB - these can be overridden by pre-converting all values to
 # UnquotedValue containing proper quotation marks
-_quoteStartStrings = [
-    '_', '[', ']', '$', '"', "'", 'save_', 'loop_', 'stop_', 'data_', 'global_'
-    ]
-startComment = '#'
-_quoteStrings = ['true', 'false', 'NaN', 'Infinity', '-Infinity', '']
-_containsWhiteSpace = re.compile('\s').search
-_containsSingleEndQuote = re.compile("'\s").search
-_containsDoubleEndQuote = re.compile('"\s').search
+_quoteStartStrings = ["_", "[", "]", "$", '"', "'", "save_", "loop_", "stop_", "data_", "global_"]
+startComment = "#"
+_quoteStrings = ["true", "false", "NaN", "Infinity", "-Infinity", ""]
+_containsWhiteSpace = re.compile(r"\s").search
+_containsSingleEndQuote = re.compile(r"'\s").search
+_containsDoubleEndQuote = re.compile(r'"\s').search
 # _floatingPointFormat = '%.3g'
-_floatingPointFormat = '%.10g'
-_defaultIndent = ' ' * 3
-_defaultSeparator = ' ' * 2
+_floatingPointFormat = "%.10g"
+_defaultIndent = " " * 3
+_defaultSeparator = " " * 2
 
 # Options corresponding to the supported parser modes: 'standard', 'lenient', 'strict', and 'IUCr'
 _parserModeOptions = {
-    'lenient' : {
-        'enforceSaveFrameStop'     : False,
-        'enforceLoopStop'          : False,
-        'padIncompleteLoops'       : True,
-        'allowSquareBracketStrings': True
-        },
-    'strict'  : {
-        'enforceSaveFrameStop'     : True,
-        'enforceLoopStop'          : True,
-        'padIncompleteLoops'       : False,
-        'allowSquareBracketStrings': False
-        },
-    'standard': {
-        'enforceSaveFrameStop'     : True,
-        'enforceLoopStop'          : False,
-        'padIncompleteLoops'       : False,
-        'allowSquareBracketStrings': True
-        },
-    'IUCr'    : {
-        'enforceSaveFrameStop'     : True,
-        'enforceLoopStop'          : False,
-        'padIncompleteLoops'       : False,
-        'allowSquareBracketStrings': False},
-    }
+    "lenient": {
+        "enforceSaveFrameStop": False,
+        "enforceLoopStop": False,
+        "padIncompleteLoops": True,
+        "allowSquareBracketStrings": True,
+    },
+    "strict": {
+        "enforceSaveFrameStop": True,
+        "enforceLoopStop": True,
+        "padIncompleteLoops": False,
+        "allowSquareBracketStrings": False,
+    },
+    "standard": {
+        "enforceSaveFrameStop": True,
+        "enforceLoopStop": False,
+        "padIncompleteLoops": False,
+        "allowSquareBracketStrings": True,
+    },
+    "IUCr": {
+        "enforceSaveFrameStop": True,
+        "enforceLoopStop": False,
+        "padIncompleteLoops": False,
+        "allowSquareBracketStrings": False,
+    },
+}
 
 
-def parse(text, mode='standard'):
+def parse(text, mode="standard"):
     """Parse STAR text string 'text'.
     Standard settings allow skipping 'stop_' tags and strings starting with '[' or ']',
     but require 'save_' termination of SaveFrames and throw an error if the number of loop
@@ -223,15 +221,14 @@ def parse(text, mode='standard'):
         options = _parserModeOptions[mode]
     except KeyError:
         raise ValueError(
-                "illegal parser mode : %s  Only modes 'lenient', 'strict', 'standard', 'IUCr' allowed"
-                % repr(mode)
-                )
+            "illegal parser mode : %s  Only modes 'lenient', 'strict', 'standard', 'IUCr' allowed" % repr(mode)
+        )
 
     #
     return GeneralStarParser(text, **options).parse()
 
 
-def parseFile(fileName, mode='standard'):
+def parseFile(fileName, mode="standard"):
     """load generic STAR file and parse the contents"""
 
     with open(fileName) as fp:
@@ -243,17 +240,18 @@ class UnquotedValue(str):
     """A plain string - the only difference is the type: 'UnquotedValue'.
     Used to distinguish values from STAR files that were not quoted.
     STAR special values (like null,  unknown, ...) are only recognised if unquoted strings"""
+
     pass
 
 
 # Constants for I/O of standard values
-NULLSTRING = UnquotedValue('.')
-UNKNOWNSTRING = UnquotedValue('?')
-TRUESTRING = UnquotedValue('true')
-FALSESTRING = UnquotedValue('false')
-NANSTRING = UnquotedValue('NaN')
-PLUSINFINITYSTRING = UnquotedValue('Infinity')
-MINUSINFINITYSTRING = UnquotedValue('-Infinity')
+NULLSTRING = UnquotedValue(".")
+UNKNOWNSTRING = UnquotedValue("?")
+TRUESTRING = UnquotedValue("true")
+FALSESTRING = UnquotedValue("false")
+NANSTRING = UnquotedValue("NaN")
+PLUSINFINITYSTRING = UnquotedValue("Infinity")
+MINUSINFINITYSTRING = UnquotedValue("-Infinity")
 
 
 class StarSyntaxError(ValueError):
@@ -261,16 +259,15 @@ class StarSyntaxError(ValueError):
 
 
 class NamedOrderedDict(OrderedDict):
-
     def __init__(self, name=None):
         super().__init__()
         self.name = name
 
     def __str__(self):
-        return '%s(name=%s)' % (self.__class__.__name__, self.name)
+        return "%s(name=%s)" % (self.__class__.__name__, self.name)
 
     def __repr__(self):
-        return '%s(%s, name=%s)' % (self.__class__.__name__, list(tt for tt in self.items()), self.name)
+        return "%s(%s, name=%s)" % (self.__class__.__name__, list(tt for tt in self.items()), self.name)
 
     def addItem(self, tag, value):
         if tag in self:
@@ -299,8 +296,7 @@ class StarContainer(NamedOrderedDict):
                 # All columns match a single loop (or nothing) return the loop data
                 return tuple(testSet.pop().data)
             else:
-                raise ValueError("%s columns %s must match either multiple items or a single loop"
-                                 % (self, columns))
+                raise ValueError("%s columns %s must match either multiple items or a single loop" % (self, columns))
         else:
             # No column matches a loop. return a single dict
             return (valueDict,)
@@ -317,13 +313,12 @@ class StarContainer(NamedOrderedDict):
         tagPrefix = self.tagPrefix
         if tagPrefix:
             # tagwidth += len(tagPrefix)
-            itemFormat = '%s%s%%-%ss%s%%s\n' % (indent, tagPrefix, tagwidth, separator)
+            itemFormat = "%s%s%%-%ss%s%%s\n" % (indent, tagPrefix, tagwidth, separator)
         else:
-            itemFormat = '%s%%-%ss%s%%s\n' % (indent, tagwidth, separator)
+            itemFormat = "%s%%-%ss%s%%s\n" % (indent, tagwidth, separator)
 
         # convert contents
         for tag, obj in self.items():
-
             if isinstance(obj, SaveFrame):
                 lines.append(obj.toString(indent=indent + _defaultIndent, separator=separator))
 
@@ -336,17 +331,17 @@ class StarContainer(NamedOrderedDict):
             else:
                 lines.append(itemFormat % (tag, valueToStarString(obj)))
         #
-        return ''.join(lines)
+        return "".join(lines)
 
 
 class DataExtent(NamedOrderedDict):
     """Top level container for general STAR object tree"""
 
-    def __init__(self, name='Root'):
+    def __init__(self, name="Root"):
         super().__init__(name=name)
 
-    def toString(self, indent='', separator=_defaultSeparator):
-        blockSeparator = '\n\n\n\n'
+    def toString(self, indent="", separator=_defaultSeparator):
+        blockSeparator = "\n\n\n\n"
         return blockSeparator.join(x.toString(indent=indent, separator=separator) for x in self.values())
 
 
@@ -360,6 +355,7 @@ sentinel = DataExtent()
 # parse.__annotations__['return'] = DataExtent
 # parseFile.__annotations__['return'] = DataExtent
 
+
 class DataBlock(StarContainer):
     """DataBlock for general STAR object tree"""
 
@@ -367,15 +363,13 @@ class DataBlock(StarContainer):
     # Can be set in subclass instances
     tagPrefix = None
 
-    def toString(self, indent='', separator=_defaultSeparator):
+    def toString(self, indent="", separator=_defaultSeparator):
         """Convert DataBlock to string, for writing"""
 
         name = self.name
-        if not name.startswith('data_'):
-            name = 'data_' + name
-        return ('%s\n\n%s\n# End of %s\n'
-                % (name, self._contentToString(indent=indent,
-                                               separator=separator), name))
+        if not name.startswith("data_"):
+            name = "data_" + name
+        return "%s\n\n%s\n# End of %s\n" % (name, self._contentToString(indent=indent, separator=separator), name)
 
 
 class SaveFrame(StarContainer):
@@ -389,11 +383,14 @@ class SaveFrame(StarContainer):
         """Convert SaveFrame to string, for writing"""
 
         name = self.name
-        if not name.startswith('save_'):
-            name = 'save_' + name
-        return ('\n%s%s\n\n%s%ssave_\n\n'
-                % (indent, name, self._contentToString(indent=indent + _defaultIndent,
-                                                       separator=separator), indent))
+        if not name.startswith("save_"):
+            name = "save_" + name
+        return "\n%s%s\n\n%s%ssave_\n\n" % (
+            indent,
+            name,
+            self._contentToString(indent=indent + _defaultIndent, separator=separator),
+            indent,
+        )
 
 
 class LoopRow(OrderedDict):
@@ -403,9 +400,9 @@ class LoopRow(OrderedDict):
         """Returns value of attribute 'name', or None if attribute is not defined
 
         Will treat a series of attributes 'foo_1', 'foo_2', 'foo_3', etc. as a single
-        tuple attribute 'foo' """
+        tuple attribute 'foo'"""
 
-        if not name in self and (name + '_1') in self:
+        if name not in self and (name + "_1") in self:
             tags = extractMatchingNameSequence(name, list(self.keys()))
             if tags:
                 return tuple(self.get(x) for x in tags)
@@ -416,13 +413,13 @@ class LoopRow(OrderedDict):
         """Sets attribute 'name' to value
 
         Will treat a series of attributes 'foo_1', 'foo_2', 'foo_3', etc. as a single
-        tuple attribute 'foo' """
+        tuple attribute 'foo'"""
 
         if name in self:
             self[name] = value
             return
 
-        elif (name + '_1') in self:
+        elif (name + "_1") in self:
             tags = extractMatchingNameSequence(name, list(self.keys()))
             if tags and len(tags) == len(value):
                 for ii, val in enumerate(value):
@@ -443,7 +440,7 @@ class Loop:
 
     - columns:  List of string column headers
 
-    - data: List-of-rows, where rows are OrderedDicts """
+    - data: List-of-rows, where rows are OrderedDicts"""
 
     # Tag prefix for string output, which is prefixed to column names before writing.
     # Can be set in subclass instances.
@@ -461,7 +458,7 @@ class Loop:
             self._columns = []
 
     def __str__(self):
-        return '<%s:%s>' % (self.__class__.__name__, self.name)
+        return "<%s:%s>" % (self.__class__.__name__, self.name)
 
     @property
     def columns(self):
@@ -479,8 +476,7 @@ class Loop:
 
         elif isinstance(values, dict):
             if any(x for x in values if x not in columns):
-                raise ValueError("Illegal fields in row input: %s"
-                                 % list(x for x in values if x not in columns))
+                raise ValueError("Illegal fields in row input: %s" % list(x for x in values if x not in columns))
             else:
                 row = LoopRow((x, values.get(x)) for x in columns)
 
@@ -530,10 +526,10 @@ class Loop:
         In all cases the values must be in the order given by the columns attribute"""
 
         # main body format
-        lineFormat = indent + _defaultIndent + '%s\n'
+        lineFormat = indent + _defaultIndent + "%s\n"
 
         # Start tag
-        lines = ['\n' + indent + 'loop_\n']
+        lines = ["\n" + indent + "loop_\n"]
 
         # Write column headers
         if self.tagPrefix:
@@ -542,12 +538,11 @@ class Loop:
         else:
             for col in self._columns:
                 lines.append(lineFormat % col)
-        lines.append('\n')
+        lines.append("\n")
 
         # write data
         data = self.data
         if data:
-
             # First convert to strings to get correct columns widths
             if isinstance((data[0]), OrderedDict):
                 data = [[valueToStarString(y) for y in list(x.values())] for x in self.data]
@@ -557,21 +552,19 @@ class Loop:
 
             columnWidths = [max(len(x) for x in col) for col in zip(*data)]
             for row in data:
-                ll = list('%-*s' % (wdth, row[ii]) for ii, wdth in enumerate(columnWidths))
+                ll = list("%-*s" % (wdth, row[ii]) for ii, wdth in enumerate(columnWidths))
                 # Remove trailing spaces from last column:
                 ll[-1] = ll[-1].rstrip()
-                lines.append(lineFormat %
-                             separator.join(ll)
-                             )
+                lines.append(lineFormat % separator.join(ll))
 
         # Add stop_
-        lines.append(indent + 'stop_\n')
+        lines.append(indent + "stop_\n")
 
-        return ''.join(lines)
+        return "".join(lines)
 
 
 def valueToStarString(value, quoteNumberStrings=False):
-    """ Convert value to properly quoted STAR string
+    """Convert value to properly quoted STAR string
 
     if quoteNumberStrings, strings that evaluate to a float (e.g. '1', '2.7e5', ...)
     are put in quotes"""
@@ -589,7 +582,6 @@ def valueToStarString(value, quoteNumberStrings=False):
         return value
 
     elif isinstance(value, float):
-
         if math.isnan(value):
             return NANSTRING
 
@@ -620,13 +612,17 @@ def valueToStarString(value, quoteNumberStrings=False):
         else:
             matchesNumber = False
 
-        if '\n' not in value:
-
-            if (_containsWhiteSpace(value) or matchesNumber or value in _quoteStrings or
-                    startComment in value or any(value.startswith(x) for x in _quoteStartStrings)):
-                if not "'" in value:
+        if "\n" not in value:
+            if (
+                _containsWhiteSpace(value)
+                or matchesNumber
+                or value in _quoteStrings
+                or startComment in value
+                or any(value.startswith(x) for x in _quoteStartStrings)
+            ):
+                if "'" not in value:
                     value = "'%s'" % value
-                elif not '"' in value:
+                elif '"' not in value:
                     value = '"%s"' % value
                 elif not _containsSingleEndQuote(value):
                     # E.g. string like """ "say" 'what'?"""
@@ -637,26 +633,26 @@ def valueToStarString(value, quoteNumberStrings=False):
                 else:
                     # Cannot be quoted on one line (e.g. """ 'say' "what" """)
                     # CHANGE VALUE to make it writable as multiline quote
-                    value += '\n'
+                    value += "\n"
 
-        if '\n' in value:
+        if "\n" in value:
             # Multiline quote. Done at the end to allow for modified values
-            if ';' in value:
+            if ";" in value:
                 # Fix strings with ';' starting line
                 lines = value.splitlines()
-                if any(x and x[0] == ';' for x in lines):
+                if any(x and x[0] == ";" for x in lines):
                     # NB CHANGES VALUE
-                    value = '\n'.join(' ' + x for x in lines)
-            if value[-1] == '\n':
-                value = '\n;%s; ' % value
+                    value = "\n".join(" " + x for x in lines)
+            if value[-1] == "\n":
+                value = "\n;%s; " % value
             else:
-                value = '\n;%s\n; ' % value
+                value = "\n;%s\n; " % value
         #
         return value
 
 
 class GeneralStarParser:
-    """ Parser for text corresponding to a STAR file with one or more data blocks,
+    """Parser for text corresponding to a STAR file with one or more data blocks,
     producing a nested object structure matching the file (see module documentation for details:
 
     ::
@@ -685,8 +681,15 @@ class GeneralStarParser:
 
     """
 
-    def __init__(self, text, enforceSaveFrameStop=True, enforceLoopStop=False,
-                 padIncompleteLoops=False, allowSquareBracketStrings=False, lowerCaseTags=True):
+    def __init__(
+        self,
+        text,
+        enforceSaveFrameStop=True,
+        enforceLoopStop=False,
+        padIncompleteLoops=False,
+        allowSquareBracketStrings=False,
+        lowerCaseTags=True,
+    ):
 
         self.enforceSaveFrameStop = enforceSaveFrameStop
         self.enforceLoopStop = enforceLoopStop
@@ -728,17 +731,18 @@ class GeneralStarParser:
             raise StarSyntaxError(self._errorMessage(" loop lacks column names", value))
 
         if data:
-
             if len(data) % columnCount:
                 if self.padIncompleteLoops:
-                    print("WARNING Token %s: %s in %s is missing %s values. Last row was: %s"
-                          % (self.counter, loop, self.stack[-2],
-                             columnCount - (len(data) % columnCount), data[-1]))
+                    print(
+                        "WARNING Token %s: %s in %s is missing %s values. Last row was: %s"
+                        % (self.counter, loop, self.stack[-2], columnCount - (len(data) % columnCount), data[-1])
+                    )
                 else:
                     raise StarSyntaxError(
-                            self._errorMessage("loop %s is missing %s values"
-                                               % (loop, (columnCount - (len(data) % columnCount))), value)
-                            )
+                        self._errorMessage(
+                            "loop %s is missing %s values" % (loop, (columnCount - (len(data) % columnCount))), value
+                        )
+                    )
 
             # Make rows:
             args = [iter(data)] * columnCount
@@ -756,9 +760,7 @@ class GeneralStarParser:
         data = stack[-1]
         if data:
             if self.enforceLoopStop:
-                raise StarSyntaxError(
-                        self._errorMessage("Illegal token %s in unclosed loop" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("Illegal token %s in unclosed loop" % value, value))
             else:
                 # Dataname among loop values. Interpreted as loop stop followed by new item start
                 self._closeLoop(value)
@@ -794,18 +796,14 @@ class GeneralStarParser:
         # Terminate open elements
         if isinstance(stack[-1], list):
             if self.enforceLoopStop:
-                raise StarSyntaxError(
-                        self._errorMessage("Loop terminated by %s instead of stop_" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("Loop terminated by %s instead of stop_" % value, value))
             else:
                 # Close loop and pop it off the stack
                 self._closeLoop(value)
 
         if isinstance(stack[-1], SaveFrame):
             if self.enforceSaveFrameStop:
-                raise StarSyntaxError(
-                        self._errorMessage("SaveFrame terminated by %s instead of save_" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("SaveFrame terminated by %s instead of save_" % value, value))
             else:
                 stack.pop()
 
@@ -829,16 +827,14 @@ class GeneralStarParser:
         # Terminate loop
         if isinstance(stack[-1], list):
             if self.enforceLoopStop:
-                raise StarSyntaxError(
-                        self._errorMessage("Loop terminated by %s instead of stop_" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("Loop terminated by %s instead of stop_" % value, value))
             else:
                 # Close loop and pop it off the stack
                 self._closeLoop(value)
 
         # terminate saveframe
         if isinstance(stack[-1], SaveFrame):
-            if lowerValue == 'save_':
+            if lowerValue == "save_":
                 # Simple terminator. Close save frame
                 stack.pop()  #
 
@@ -850,7 +846,7 @@ class GeneralStarParser:
                 stack.pop()
 
         if not isinstance((stack[-1]), DataBlock):
-            if lowerValue == 'save_':
+            if lowerValue == "save_":
                 raise StarSyntaxError(self._errorMessage("'%s' found out of context" % value, value))
 
     def _openSaveFrame(self, value):
@@ -863,9 +859,7 @@ class GeneralStarParser:
         if isinstance(stack[-1], DataBlock):
             self._addSaveFrame(value)
         else:
-            raise StarSyntaxError(
-                    self._errorMessage("saveframe start out of context: %s" % value, value)
-                    )
+            raise StarSyntaxError(self._errorMessage("saveframe start out of context: %s" % value, value))
 
     def _openLoop(self, value):
 
@@ -875,20 +869,16 @@ class GeneralStarParser:
         if isinstance(stack[-1], list):
             if not stack[-1]:
                 # NB, nested loops are not supported
-                raise StarSyntaxError(
-                        self._errorMessage("Loop terminated by %s instead of stop_" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("Loop terminated by %s instead of stop_" % value, value))
             elif self.enforceLoopStop:
-                raise StarSyntaxError(
-                        self._errorMessage("Loop terminated b+y %s instead of stop_" % value, value)
-                        )
+                raise StarSyntaxError(self._errorMessage("Loop terminated b+y %s instead of stop_" % value, value))
             else:
                 # Close loop and pop it off the stack
                 self._closeLoop(value)
 
         if isinstance(stack[-1], (SaveFrame, DataBlock)):
             # NB Loop naming and adding to container is done when first column name is read
-            stack.append(Loop(name='loop_'))
+            stack.append(Loop(name="loop_"))
             stack.append(list())
 
         else:
@@ -907,9 +897,11 @@ class GeneralStarParser:
         elif isinstance(stack[-1], list):
             self._addLoopField(useValue)
         else:
-            raise StarSyntaxError(self._errorMessage(
-                    "Found item name %s: Must be in DataBlock, SaveFrame, or Loop header)" % value, value)
-                    )
+            raise StarSyntaxError(
+                self._errorMessage(
+                    "Found item name %s: Must be in DataBlock, SaveFrame, or Loop header)" % value, value
+                )
+            )
 
     def processValue(self, value):
         stack = self.stack
@@ -922,8 +914,7 @@ class GeneralStarParser:
             try:
                 func = last.append
             except AttributeError:
-                raise StarSyntaxError(self._errorMessage("Data value %s must be in item or loop_" % value,
-                                                         value))
+                raise StarSyntaxError(self._errorMessage("Data value %s must be in item or loop_" % value, value))
             func(value)
 
     def parse(self):
@@ -966,7 +957,6 @@ class GeneralStarParser:
                     func = processFunctions[typ]
 
                     if func is None:
-
                         if typ == TOKEN_SAVE_FRAME:
                             # save_ string
                             self._closeSaveFrame(value)
@@ -992,7 +982,7 @@ class GeneralStarParser:
                 raise StarSyntaxError(self._errorMessage("File ends with item name", value))
 
             if isinstance(stack[-1], list):
-                self._closeLoop('<End-of-File>')
+                self._closeLoop("<End-of-File>")
 
             if isinstance(stack[-1], SaveFrame):
                 stack.pop()
@@ -1043,7 +1033,7 @@ def extractMatchingNameSequence(name, matchNames):
 
     ll = []
     for tag in matchNames:
-        tt = tag.rsplit('_', 1)
+        tt = tag.rsplit("_", 1)
         if name == tt[0] and tt[-1].isdigit():
             ll.append((int(tt[1]), tag))
     ll.sort()

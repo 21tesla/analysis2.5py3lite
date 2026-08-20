@@ -1,8 +1,9 @@
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.STAR.TagTable import TagTable
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.STAR.TagTable import TagTable
 
 
 class AllChecks(TestCase):

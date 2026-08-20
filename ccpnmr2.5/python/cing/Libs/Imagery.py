@@ -1,5 +1,6 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.core.parameters import cingPaths
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def convertImageMagick(inputPath,outputPath,options,extraOptions=None):
     if not cingPaths.convert:
@@ -228,7 +229,7 @@ def convert2Web(path, outputDir=None, doFull=True, doPrint=True, doMontage=False
     return None
 
 def removeTrailingNumbers(fileName):
-    p = re.compile( '\d+$' ) # I didn't get this to work with string.replace()
+    p = re.compile( r'\d+$' ) # I didn't get this to work with string.replace()
     return p.sub('', fileName)
 
 def montage(pathList, outputFileName, extraOptions = None ):

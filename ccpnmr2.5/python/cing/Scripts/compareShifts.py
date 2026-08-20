@@ -3,9 +3,9 @@
 #
 #  compare shifts of two projects
 #
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.core.classes import Project
 from cing.core.molecule import mapMolecules
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #------------------------------------------------------------------------------------
 # PARAMETERS ed.
@@ -113,10 +113,10 @@ def compareShifts(projectA, projectB):
 
 # define, open, read the files
 projectA = Project.open(defsA[0], 'old')
-if not projectA: 
+if not projectA:
     exit(1)
 projectB = Project.open(defsB[0], 'old')
-if not projectB: 
+if not projectB:
     exit(1)
 
 # compare A,B

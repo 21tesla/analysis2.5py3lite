@@ -6,11 +6,13 @@ much like the code in Wattos.Database.DBMS.
 @author: jd
 '''
 
-from StringIO import StringIO
-from cing.Libs.NTutils import * #@UnusedWildImport
 import csv
 import operator
 import urllib
+
+from io import StringIO
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 DEFAULT_COLUMN_LABEL = 'COLUMN_' # a number will be added.
 ROW_WITHOUT_COLUMNS_STRING   = "No columns present"
@@ -33,10 +35,10 @@ class Relation:
         if lol:
             self.fromLol( lol )
         # end if
-        
+
     # end def
-            
-    def insertColumn(self, index=-1, label=None, 
+
+    def insertColumn(self, index=-1, label=None,
 #                     foreignKeyConstr=None
                      ):
         """
@@ -116,7 +118,7 @@ class Relation:
             column[idx] = apply(func,(v,))
         return column
 
-    def readCsvFile(self, file_name, containsHeaderRow, 
+    def readCsvFile(self, file_name, containsHeaderRow,
 #                    dtd_file_name=None
                     ):
         """
@@ -225,7 +227,7 @@ class Relation:
 
         duplicateKeyFound = False
         for idx, k in enumerate(keyColumn):
-            if dic.has_key(k):
+            if k in dic:
                 duplicateKeyFound = 'Last duplicate key found was for row idx: %s with key: %s' % ( idx, k )
                 continue
             if useSingleValueOfColumn >= 0:
@@ -526,19 +528,19 @@ class DBMS:
         self.tables = {}
 
     def readCsvRelationList(self, relationNames, csvFileDir='.',
-#            csvDtdFileDir=None, checkConsistency=False, showChecks=False, 
+#            csvDtdFileDir=None, checkConsistency=False, showChecks=False,
             containsHeaderRow=True):
         'return True on error'
         csvFilesRead = len(relationNames)
         for i in range(csvFilesRead):
-            if self.readCsvRelation( relationNames[i], csvFileDir=csvFileDir, 
-#                                     csvDtdFileDir=csvDtdFileDir, checkConsistency=checkConsistency, showChecks=showChecks, 
+            if self.readCsvRelation( relationNames[i], csvFileDir=csvFileDir,
+#                                     csvDtdFileDir=csvDtdFileDir, checkConsistency=checkConsistency, showChecks=showChecks,
                                      containsHeaderRow=containsHeaderRow):
                 nTerror("Failed to read relation: " + relationNames[i])
                 return True
 
     def readCsvRelation(self, relationName, csvFileDir='.',
-#            csvDtdFileDir=None, checkConsistency=False, showChecks=False, 
+#            csvDtdFileDir=None, checkConsistency=False, showChecks=False,
             containsHeaderRow=True, showMessages=0):
         'return True on error'
         relation = Relation(relationName, self)

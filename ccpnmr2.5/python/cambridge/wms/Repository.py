@@ -27,14 +27,11 @@
 
 import os
 
-from memops.general.Io import loadProject
-
-from cambridge.wms.Project import Project
-from cambridge.wms.Task import Task
-
 # required for WS layer
 from SharedBeanService_services import *
 from WSString import *
+
+from memops.general.Io import loadProject
 
 
 class Repository:
@@ -45,7 +42,7 @@ class Repository:
         self.name = name
         self.connect = connect
         self.type = type
-        
+
         # it is not clear whether this belongs here or not.
         # yes, I think that we do somehow need to associate all
         # the connection and password information for the repository
@@ -61,7 +58,7 @@ class Repository:
         # If we are going to have a very thin client then we need
         # something more like this. These should be read in from a
         # local config file and saved on exit
-        
+
         self.currentVersionTag = None
         self.currentProjectName = None
         self.currentTask = None
@@ -71,7 +68,7 @@ class Repository:
         self.fullDisplay = True
 
         # for knitting together reference data. This should be read in
-        # from a local data file and saved on exit        
+        # from a local data file and saved on exit
         self.refDataLocations = []
 
 
@@ -99,12 +96,12 @@ class Repository:
         print('in import project with initial response', reponse1._return)
 
         # FIXME
-        # need lots more logic here once we have decided on a standard        
+        # need lots more logic here once we have decided on a standard
         if proj_ver == None:
             proj_ver = '1.1'
 
         # now actually store the file
-        req2 = storeDocWithParams();
+        req2 = storeDocWithParams()
 
         # it seems as though the best practice is to just find all the files
         # in the directory and copy them across. We are not bothering with
@@ -128,14 +125,14 @@ class Repository:
 
             f = open(file)
             f_str = f.read()
-    
+
             size = 100000
             offset = 0
             send = True
-            
+
             while (send):
                 start = (offset * size)
-                end = ((offset + 1) * size ) 
+                end = ((offset + 1) * size )
                 if (end >= len(f_str)):
                     end = len(f_str)
                     send = False
@@ -147,9 +144,9 @@ class Repository:
                       'check': 'none_yet',
                       'projectName': proj_name,
                       'versionTag': proj_ver,
-                      'segment': 'jionides',             
+                      'segment': 'jionides',
                       'raw': False}
-                
+
                 wsstr2 = WSString(h2)
 
                 print('sending hash ', h2)
@@ -162,7 +159,7 @@ class Repository:
                 resp2 = port.storeDocWithParams(req2)
 
                 offset += 1
-        
+
             f.close()
 
 
@@ -174,7 +171,7 @@ class Repository:
 
             # need to know whether the project should already exist or
             # not !!
-    
+
             hm3 = {'name': proj_name,
                    'location': '/home/jionides/work/CCPN/test_WMS_archive/jionides'}
             wsstr3 = WSString(hm3)
@@ -187,8 +184,8 @@ class Repository:
             req3._arg1 = 'record'
             req3._arg2 = wsstr3.str
             resp3 = port.record(req3)
-      
-            
+
+
             hm4 = {'parent': {'name' : proj_name},
                    'versionTag': proj_ver,
                    'status': 'AVAILABLE',
@@ -202,7 +199,7 @@ class Repository:
             # need to get this name from either popup or directory name
             req4._arg1 = 'record'
             req4._arg2 = wsstr4.str
-            resp4 = port.record(req4)        
+            resp4 = port.record(req4)
 
 
     def export_project(self, projectName, versionTag, expDir):
@@ -211,65 +208,65 @@ class Repository:
 
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
-        
+
         # first get a list of all the files required
-        
+
         req1 = getList()
-        
+
         hm1 = {'projectName': projectName,
                'versionTag': versionTag,
                'segment': 'jionides' }
         wsstr1 = WSString(hm1)
-        
+
         # these are actually static
-        req1._arg0 = 'org.pimslims.applet.server.CcpnFileBean';
-        req1._arg1 = 'getList';
+        req1._arg0 = 'org.pimslims.applet.server.CcpnFileBean'
+        req1._arg1 = 'getList'
         req1._arg2 = wsstr1.str
-        
+
         # get the response
         resp1 = port.getList(req1)
-        
+
         # this is a hack at present. It needs to be written properly
         wsstr = WSString(resp1._return)
         ss = wsstr.getStruct()
-        
+
         print('got array ', ss)
-        
+
         for strg in ss:
-            
+
             print('trying to handle file ', strg)
-            
+
             hm2 = {'projectName': projectName,
                    'versionTag': versionTag,
                    'segment': 'jionides',
                    'fileName' : '/' + strg.__str__(),
                    'random' : 'test',
                    'raw' : False}
-                
+
             print('trying to handle file 2 ', strg)
             print('trying to handle file 2 ', hm2)
-                
+
             req2 = getDocWithParams()
-                
+
             wsstr2 = WSString(hm2)
-            
+
             # these are actually static
-            req2._arg0 = 'org.pimslims.applet.server.CcpnFileBean';
+            req2._arg0 = 'org.pimslims.applet.server.CcpnFileBean'
             req2._arg1 = 'getDocWithParams'
             req2._arg2 = wsstr2.str
-            
+
             # get the response
             resp2 = port.getDocWithParams(req2)
-            
+
             local_file_path = expDir + '/' + projectName + '/' + strg
-            
+
             idx = local_file_path.rfind('/')
             local_dir = local_file_path[:idx]
             print('trying to create ', local_dir)
 
             if (os.path.exists(local_dir) == 0):
                 os.makedirs(local_dir)
-            
+
             print('writing to local area; ', local_file_path)
 
             f = open(local_file_path, 'w')
@@ -291,10 +288,10 @@ class Repository:
 
     # This is a quick hack. Needs to be done properly once we
     # decide on a proper versioning system
- 
+
     def increment_version(self, versionTag):
 
         r = versionTag[:-1]
         l = int(versionTag[-1:]) + 1
         return r + l.__str__()
-           
+

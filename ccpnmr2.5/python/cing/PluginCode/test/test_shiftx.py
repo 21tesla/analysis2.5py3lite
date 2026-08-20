@@ -1,18 +1,19 @@
 """python $CINGROOT/python/cing/PluginCode/test/test_shiftx.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqShiftx import SHIFTX_STR
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqShiftx import SHIFTX_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.shiftx import runShiftx #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( SHIFTX_STR, getCallerFileName() ))
     raise SkipTest(SHIFTX_STR)

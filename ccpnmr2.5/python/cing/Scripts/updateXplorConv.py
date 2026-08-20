@@ -7,9 +7,8 @@ script to update xplor N-terminal and C-terminal name conventions
 
 '''
 from cing import cingPythonCingDir
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.database import NTdb
-from cing.core.database import saveToSML
+from cing.core.database import NTdb, saveToSML
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 cing.verbosity = cing.verbosityDebug
 

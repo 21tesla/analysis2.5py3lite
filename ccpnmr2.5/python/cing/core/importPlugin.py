@@ -1,9 +1,9 @@
-from cing import cingPythonCingDir
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.parameters import cingPaths
-from cing.core.parameters import plugins
 # from nose.plugins.skip import SkipTest
 import glob
+
+from cing import cingPythonCingDir
+from cing.core.parameters import cingPaths, plugins
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 # NB This routine gets executed before main.py gets a chance to set the verbosity.
 #     If you need to debug this; (getting debug messages) then set verbosity = verbosityDebug in the __init__.py
@@ -23,14 +23,14 @@ def importPlugin( pluginName ):
 
     pluginCodeModule = 'cing.' + cingPaths.plugins
 #    moduleName = cingPaths.plugins + '.' + pluginName
-    if plugins.has_key(pluginName):
+    if pluginName in plugins:
         try:
             plugin = plugins[pluginName]
 #            nTdebug("reloading same module just to see it change")
             reload( plugin.module )
         except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
             nTmessage("Skipping reload of an optional compound (please recode to use SkipTest): %s" % extraInfo)
-            # Internally we need to know if we're called by nosetests or by regular call.           
+            # Internally we need to know if we're called by nosetests or by regular call.
         # except SkipTest, extraInfo:
         #     nTmessage("Skipping reload report of an optional compound: %s" % extraInfo)
         except Exception:

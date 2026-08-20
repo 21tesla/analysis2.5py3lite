@@ -3,16 +3,18 @@ Generic class to connect to any db using sqlAlchemy
 and specific class for cings RDB.
 '''
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
-from cing.PluginCode.required.reqOther import *
 import gc
-import numpy
 import warnings
+
+import numpy
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
+from cing.PluginCode.required.reqOther import *
 
 DB_TYPE_MYSQL = 'mysql'
 #DB_TYPE_PSQL = 'postgres'
-DB_TYPE_PSQL = 'postgresql' # changed in 
+DB_TYPE_PSQL = 'postgresql' # changed in
 DB_TYPE_DEFAULT = DB_TYPE_PSQL
 
 if True: # for easy blocking of data, preventing the code to be resorted with imports above.
@@ -20,13 +22,12 @@ if True: # for easy blocking of data, preventing the code to be resorted with im
     try:
         # All sql imports here and not above.
         import sqlalchemy
+        from psycopg2.extensions import AsIs, register_adapter
         from sqlalchemy import create_engine
-        from sqlalchemy.orm.session import sessionmaker
-        from sqlalchemy.schema import MetaData
-        from sqlalchemy.schema import Table
-        from sqlalchemy.sql.expression import func
         from sqlalchemy.exc import SAWarning
-        from psycopg2.extensions import register_adapter, AsIs
+        from sqlalchemy.orm.session import sessionmaker
+        from sqlalchemy.schema import MetaData, Table
+        from sqlalchemy.sql.expression import func
         versionTuple = sqlalchemy.__version__.split('.')
         if not (versionTuple[0] > '0' or versionTuple[1] >= '5'):
             switchOutput(True)
@@ -48,7 +49,7 @@ register_adapter(numpy.float64, adapt_numpy_float64)
 
 class CgenericSql(NTdict): # pylint: disable=R0902
     "Class for connecting to any MySql database."
-    def __init__(self, db_type=DB_TYPE_DEFAULT, host='localhost', user='nobody@noaddress.no', passwd='', 
+    def __init__(self, db_type=DB_TYPE_DEFAULT, host='localhost', user='nobody@noaddress.no', passwd='',
                  unix_socket='/tmp/mysql.sock', db="", schema=None, echo=False):
         NTdict.__init__(self)
 #        nTdebug("Initializing CgenericSql with user/db: %s/%s" % (user,db))
@@ -107,7 +108,7 @@ class CgenericSql(NTdict): # pylint: disable=R0902
         )
 #        nTdebug("Using connectionString %s" % connectionString)
         self.engine = create_engine(connectionString, echo=self.echo)
-        
+
         ntries = 0
         while ntries < maxTries:
             ntries += 1
@@ -119,7 +120,7 @@ class CgenericSql(NTdict): # pylint: disable=R0902
                 # end if
             except:
                 nTtracebackError()
-                nTerror("Failed to connect to DB for try %s" % ntries)                
+                nTerror("Failed to connect to DB for try %s" % ntries)
             # end try
             nTdebug("Now sleeping %s seconds.")
             time.sleep(retryInitialDelaySeconds)
@@ -168,12 +169,12 @@ class CgenericSql(NTdict): # pylint: disable=R0902
 #            columnNameList = [c.name for c in table.columns]
 #            nTdebug("Loaded table %s with columns %s" % (tableName, columnNameList))
         #The MetaData object supports some handy methods, such as getting a list of Tables in the order (or reverse) of their dependency:
-#        with warnings.catch_warnings(): 
+#        with warnings.catch_warnings():
 # can't use the python 2.5 feature since it's not always enabled. Update when no longer supporting 2.5
         if False: # DEFAULT: False
             warnings.simplefilter("ignore")
 #            for _t in self.metadata.table_iterator(reverse=False): # obsoleted
-            for t in self.metadata.sorted_tables:                
+            for t in self.metadata.sorted_tables:
                 nTdebug("Table: %s" % t.name)
             warnings.simplefilter("default") # reset to default warning behavior.
 #            warnings.warn("depreciated 123", DeprecationWarning)
@@ -183,10 +184,10 @@ class CgenericSql(NTdict): # pylint: disable=R0902
 
 class CsqlAlchemy(CgenericSql): # pylint: disable=R0902
     """AKA the Queen's English"""
-    def __init__(self, db_type=DB_TYPE_DEFAULT, host='localhost', user='nrgcing1', passwd='4I4KMS', 
+    def __init__(self, db_type=DB_TYPE_DEFAULT, host='localhost', user='nrgcing1', passwd='4I4KMS',
                     unix_socket='/tmp/mysql.sock', db="nrgcing", schema=None, echo=False):
 #        nTdebug("Initializing CsqlAlchemy with user/db: %s/%s" % (user,db))
-        CgenericSql.__init__(self, db_type=db_type, host=host, user=user, passwd=passwd, 
+        CgenericSql.__init__(self, db_type=db_type, host=host, user=user, passwd=passwd,
                     unix_socket=unix_socket, db=db, schema=schema, echo=echo)
         # be explicit here to take advantage of code analysis.
         self.tableNameList = """
@@ -247,7 +248,7 @@ if __name__ == '__main__':
     s = NRG_DB_NAME
     if False:
         db_name = CASD_DB_NAME
-        user_name = CASD_DB_USER_NAME        
+        user_name = CASD_DB_USER_NAME
 
     csql = CsqlAlchemy(user=user_name, db=db_name,schema=s)
     csql.connect()

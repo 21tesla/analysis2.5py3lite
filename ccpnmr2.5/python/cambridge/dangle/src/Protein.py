@@ -53,8 +53,6 @@ secondary structure. J Magn Reson. 202(2010):223-233.
 """
 
 
-import sys, string
-from Reference import Reference
 
 
 class Protein:
@@ -62,32 +60,32 @@ class Protein:
   def __init__(self, ref):
 
     self.reference  = ref
-    
+
     self.res0                = None
     self.sequence            = None
     self.chain               = None
     self.chemShiftsDict      = {}
     self.secondaryShiftsDict = None
     self.anglesDict          = None
-    
-    
+
+
   def readShiftsFromXml(self, xml):
-    
+
     self.xmlFile = xml
-    
+
     try:
       fopen = open(xml)
     except:
       print('Error: Cannot open input xml file %s.' % xml)
       #sys.exit(0)
-      
+
     lines = fopen.readlines()
     for i in range(len(lines)):
-      
+
       line = lines[i]
       if (line == '\n')or(line[0] == '#'):
         continue
-    
+
       if (line.find('<res_0>') != -1):
         i, self.res0 = self.getString(i, lines, '<res_0>', '</res_0>')
         self.res0 = int(self.res0)
@@ -103,68 +101,68 @@ class Protein:
       elif (line.find('<cs_data>') != -1):
         i, shiftsDict = self.getShifts(i+1, lines)
         self.chemShiftsDict = shiftsDict
-    
+
     fopen.close()
-    
+
     self.calculateSecondaryShifts(self.chemShiftsDict)
-    
-    
+
+
   def getString(self, i, lines, startTag, endTag):
-    
+
     line = lines[i]
     startIndex = line.index(startTag) + len(startTag)
     string = line[startIndex:]
-    
+
     endIndex = string.find(endTag)
     while (endIndex == -1):  # not found
       i += 1
       line = lines[i]
       string += line
       endIndex = string.find(endTag)
-    
-    string = string[:endIndex]    
+
+    string = string[:endIndex]
     string = ''.join(string.split('\n'))
     return (i+1, string)
-      
-      
+
+
   def getShifts(self, i, lines):
-    
+
     dict = {}
-    
-    line = lines[i]    
-    while (line.find('</cs_data>') == -1):   
-      if not ((line == '\n')or(line[0] == '#')or(line.find('<!--') != -1)):       
+
+    line = lines[i]
+    while (line.find('</cs_data>') == -1):
+      if not ((line == '\n')or(line[0] == '#')or(line.find('<!--') != -1)):
         array = line.split()
         resNum, resName, atomName, shift = array
         if len(resName) == 1:
           resName = self.reference.code1to3[resName]
         if (atomName == 'CO'):
           atomName = 'C'
-        if atomName in ['C','N','HA','CA','CB','CG']:  
+        if atomName in ['C','N','HA','CA','CB','CG']:
           if not dict.get(int(resNum)):
-            dict[int(resNum)] = {} 
+            dict[int(resNum)] = {}
           dict[int(resNum)][atomName] = float(shift)
         if (resName == 'GLY')and(atomName in ['HA2','HA3']):
           if not dict.get(int(resNum)):
-            dict[int(resNum)] = {} 
+            dict[int(resNum)] = {}
           if not dict[int(resNum)].get('HA'):
             dict[int(resNum)]['HA'] = float(shift)
           else:
             dict[int(resNum)]['HA'] = (float(shift)+dict[int(resNum)]['HA'])/2.0
-      
+
       i += 1
       if (i >= len(lines)):
         break
       line = lines[i]
-    
+
     return (i+1, dict)
-  
-  
+
+
   def calculateSecondaryShifts(self, shiftsDict):
-      
+
     self.secondaryShiftsDict = {}
     ref = self.reference
-    
+
     for resNum in shiftsDict:
       self.secondaryShiftsDict[resNum] = {}
       resName = self.getResidueOneLetterCode(resNum)
@@ -183,9 +181,9 @@ class Protein:
 
             cs2 = shiftsDict[resNum][atomName] - (randomCoilShift + correction)
             self.secondaryShiftsDict[resNum][atomName] = cs2
-        
-        
-      
+
+
+
   def getResidueOneLetterCode(self, resNum):
 
     index = resNum-self.res0

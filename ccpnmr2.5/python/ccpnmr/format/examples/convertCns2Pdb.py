@@ -15,143 +15,139 @@ Contact: Wim Vranken <wim@ebi.ac.uk>
 # These are standard Python libraries
 #
 
-import os, re, shutil
+import os
+import re
+import shutil
+
+from ccpnmr.format.converters.CnsFormat import CnsFormat
+
+#
+# Get Pdb and CnsFormat classes for format conversion
+#
+from ccpnmr.format.converters.PdbFormat import PdbFormat
 
 #
 # Get the Implementation package to create a project
 #
-
 from memops.api import Implementation
-
-# 
-# Get Pdb and CnsFormat classes for format conversion
-# 
-
-from ccpnmr.format.converters.PdbFormat import PdbFormat
-from ccpnmr.format.converters.CnsFormat import CnsFormat
 
 #
 # Get Tkinter for popups
 #
 
-import tkinter
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    #
+    # Variables...
+    #
 
-  #
-  # Variables...
-  #
-  
-  dataDir = 'data/'
-  cnsFileMatchRegExp = "cns_(\d+)\.pdb$"
+    dataDir = "data/"
+    cnsFileMatchRegExp = r"cns_(\d+)\.pdb$"
 
-  currentDir = os.path.abspath('.')
-  projectDir = os.path.join(currentDir,'local')
-  projectName = 'testCns2PdbConversion'
-  
-  outputDir = os.path.join(currentDir,'local')
-  outputPdbFileName = 'test.pdb'
-  
-  #
-  # Make sure the projectDir exists and delete existing data
-  #
-  
-  if not os.path.exists(projectDir):
-    os.mkdir(projectDir)
+    currentDir = os.path.abspath(".")
+    projectDir = os.path.join(currentDir, "local")
+    projectName = "testCns2PdbConversion"
 
-  projectPath = os.path.join(projectDir,projectName)
-  if os.path.exists(projectPath):
-    shutil.rmtree(projectPath)
+    outputDir = os.path.join(currentDir, "local")
+    outputPdbFileName = "test.pdb"
 
-  #
-  # Open a CCPN project and make an NMR structure generation to link the structures to
-  #
-  
-  #
-  # Easiest way to make sure project is saved in a particular directory is to make it
-  # the active one. Otherwise have to change repository paths.
-  #
-  
-  curDir = os.getcwd()
-  os.chdir(projectDir)
-  project = Implementation.MemopsRoot(name = projectName)    
-  os.chdir(curDir)
-  
-  nmrProject = project.newNmrProject(name = project.name)
-  structureGeneration = nmrProject.newStructureGeneration()
-  
-  #
-  # Start Tkinter for user interaction
-  #
+    #
+    # Make sure the projectDir exists and delete existing data
+    #
 
-  guiRoot = Tkinter.Tk()
+    if not os.path.exists(projectDir):
+        os.mkdir(projectDir)
 
-  #
-  # Get the CNS files from the data directory and sort them
-  #
+    projectPath = os.path.join(projectDir, projectName)
+    if os.path.exists(projectPath):
+        shutil.rmtree(projectPath)
 
-  files = os.listdir(dataDir)
-  fileDict = {}
-  strucNumList = []
+    #
+    # Open a CCPN project and make an NMR structure generation to link the structures to
+    #
 
-  cnsMultipleFileMatch = re.compile(cnsFileMatchRegExp)
+    #
+    # Easiest way to make sure project is saved in a particular directory is to make it
+    # the active one. Otherwise have to change repository paths.
+    #
 
-  for file in files:
+    curDir = os.getcwd()
+    os.chdir(projectDir)
+    project = Implementation.MemopsRoot(name=projectName)
+    os.chdir(curDir)
 
-    searchObj = cnsMultipleFileMatch.search(file)
+    nmrProject = project.newNmrProject(name=project.name)
+    structureGeneration = nmrProject.newStructureGeneration()
 
-    if searchObj:
+    #
+    # Start Tkinter for user interaction
+    #
 
-      strucNum = int(searchObj.group(1))
+    guiRoot = Tkinter.Tk()
 
-      fileDict[strucNum] = file
-      strucNumList.append(strucNum)
+    #
+    # Get the CNS files from the data directory and sort them
+    #
 
-  strucNumList.sort()
+    files = os.listdir(dataDir)
+    fileDict = {}
+    strucNumList = []
 
-  fileList = []
+    cnsMultipleFileMatch = re.compile(cnsFileMatchRegExp)
 
-  for strucNum in strucNumList:
+    for file in files:
+        searchObj = cnsMultipleFileMatch.search(file)
 
-    fileList.append(os.path.join(dataDir,fileDict[strucNum]))
+        if searchObj:
+            strucNum = int(searchObj.group(1))
 
-  #
-  # Create the format converter CNS format
-  #
+            fileDict[strucNum] = file
+            strucNumList.append(strucNum)
 
-  cnsFormat = CnsFormat(project,guiRoot,verbose = 1)
+    strucNumList.sort()
 
-  #
-  # Now read in the structures... this will also create the Molecules and Molecular system via readSequence()
-  #
+    fileList = []
 
-  cnsFormat.readCoordinates(fileList,strucGen = structureGeneration, minimalPrompts = 1, linkAtoms = 0)
+    for strucNum in strucNumList:
+        fileList.append(os.path.join(dataDir, fileDict[strucNum]))
 
-  #
-  # Create the format converter PDB format
-  #
+    #
+    # Create the format converter CNS format
+    #
 
-  pdbFormat = PdbFormat(project,guiRoot,verbose = 1)
+    cnsFormat = CnsFormat(project, guiRoot, verbose=1)
 
-  #
-  # Make sure the outputDir exists...
-  #
-  
-  if not os.path.exists(outputDir):
-    os.mkdir(outputDir)
+    #
+    # Now read in the structures... this will also create the Molecules and Molecular system via readSequence()
+    #
 
-  #
-  # Now write the structures...
-  #
+    cnsFormat.readCoordinates(fileList, strucGen=structureGeneration, minimalPrompts=1, linkAtoms=0)
 
-  structureList = list(structureGeneration.structureEnsemble.models)
+    #
+    # Create the format converter PDB format
+    #
 
-  outputPdbFile = os.path.join(outputDir,outputPdbFileName)
+    pdbFormat = PdbFormat(project, guiRoot, verbose=1)
 
-  pdbFormat.writeCoordinates(outputPdbFile,structures = structureList, minimalPrompts = 1)
+    #
+    # Make sure the outputDir exists...
+    #
 
-  #
-  # Save the CCPN project...
-  #
-  
-  project.saveModified()
+    if not os.path.exists(outputDir):
+        os.mkdir(outputDir)
+
+    #
+    # Now write the structures...
+    #
+
+    structureList = list(structureGeneration.structureEnsemble.models)
+
+    outputPdbFile = os.path.join(outputDir, outputPdbFileName)
+
+    pdbFormat.writeCoordinates(outputPdbFile, structures=structureList, minimalPrompts=1)
+
+    #
+    # Save the CCPN project...
+    #
+
+    project.saveModified()

@@ -16,11 +16,11 @@ $C/scripts/cing/manualUpdatePdbjMine.csh
 @author: jd
 '''
 from cing.Libs.DBMS import DBMS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
 
 try:
-    from cing.NRG.localConstants import tmpPdbj_dir # pylint: disable=E0611 
+    from cing.NRG.localConstants import tmpPdbj_dir  # pylint: disable=E0611
 except:
     nTtracebackError()
 # end try
@@ -58,7 +58,7 @@ def getNumberOfEntries():
     if exitCode:
         nTerrorT("Failed to run psql program with command: [%s]" % command)
         return True
-    # end if    
+    # end if
     if not os.path.exists( psqlTmpCsvFile ):
         nTerror('Csv file %s not found' % psqlTmpCsvFile)
         return True
@@ -140,7 +140,7 @@ def run():
         getNumberOfEntries()
     # end if
 # end def
-    
+
 if __name__ == '__main__':
 #    cing.verbosity = cing.verbosityDebug
     if run():

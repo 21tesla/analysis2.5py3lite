@@ -82,37 +82,36 @@ Citing:          If you are using this software for academic purposes, we
 """
 import os
 
-from memops.general.Io import loadProject
+from HaddockBasic import addDaniParam, addRdcParam, getStructureFromFile
+from HaddockExportClassic import exportClassic
+from HaddockExportParam import exportParam
+from HaddockImportRunCns import runCnsImporter
+from HaddockLocal import *
+from HaddockServerUpload import ServerUpload
 
-from HaddockExportClassic    import    exportClassic
-from HaddockExportParam        import    exportParam
-from HaddockImportRunCns    import    runCnsImporter
-from HaddockServerUpload    import     ServerUpload
-from HaddockBasic            import  getStructureFromFile, addRdcParam, addDaniParam
-from HaddockLocal            import  *
 
 class HaddockApi:
-    
+
     """Description: API for operation of the Haddock package from within a Python script.
        Input      : A valid ccpnProject instance
        Output      : None
        Arguments  : Set debug to True for additional info
     """
     def __init__(self, ccpnProject=None, debug=False):
-        
-        if ccpnProject: 
+
+        if ccpnProject:
             self.ccpnProject = ccpnProject
         else:
             if self.debug: print("ERROR: compulsary ccpn project argument missing.")
             return
-        
+
         self.debug         = debug
         self.projects     = []
-    
+
         self.__initStoredProjects()
-    
+
     def __initStoredProjects(self):
-        
+
         """Description: Instantiates 'HaddockProject' instances from all stored projects
                          in the ccpnProject
            Input      : self.ccpnProject instance as supplied to 'HaddockApi'
@@ -123,9 +122,9 @@ class HaddockApi:
             self.projects.append(HaddockProject(hProject=hProject,
                                                 ccpnProject=self.ccpnProject,
                                                 debug=self.debug))
-    
+
     def removeHaddockProject(self,hProject=None,name=None):
-        
+
         """Description: Removes provided Haddock project
            Input      : HaddockApi.HaddockProject instance or the name of the project
            Output     : None
@@ -136,7 +135,7 @@ class HaddockApi:
                 self.projects.remove(hProject)
                 hProject.hProject.delete()
             else:
-                if self.debug: print("ERROR: Project : %s not in list, could not remove" % hProject.name)    
+                if self.debug: print("ERROR: Project : %s not in list, could not remove" % hProject.name)
         elif name:
             found = False
             for hProject in self.projects:
@@ -146,8 +145,8 @@ class HaddockApi:
                     hProject.hProject.delete()
                     found = True
             if not found:
-                if self.debug: print("ERROR: No project with name %s" % name)    
-                    
+                if self.debug: print("ERROR: No project with name %s" % name)
+
     def newHaddockProject(self,name='Default',workingDir='.'):
 
         """Description: Create new default Haddock project
@@ -160,31 +159,31 @@ class HaddockApi:
             if project.name == name:
                 if self.debug: print("ERROR: Haddock project with name %s already made" % name)
                 return
-        
+
         if self.debug: print("NOTE: Created new Haddock project with name: %s" % name)
         hProject = HaddockProject(self.ccpnProject.newHaddockProject(name=name,workingDir=workingDir),
                                   ccpnProject=self.ccpnProject,
                                   debug=self.debug)
-        
+
         self.projects.append(hProject)
         return hProject
-    
+
     def getHaddockProject(self,name=None):
-        
+
         """Description: Get Haddock project by name
            Input      : Project name
            Output      : HaddockApi.HaddockProject project instance
         """
         request = [project for project in self.projects if project.name == name]
-        
-        if len(request): 
+
+        if len(request):
             if self.debug: print("NOTE: getHaddockProject, return project with name %s" % name)
             return request[0]
         else:
             if self.debug: print("ERROR: getHaddockProject, no project with name %s" % name)
 
 class HaddockProject:
-    
+
     """Description: HaddockProject is a convenient storage class for Haddock projects.
                     It takes care of setting default, processing data and ensuring 
                     validitie while working with Haddock projects
@@ -194,29 +193,29 @@ class HaddockProject:
        Arguments  : Set debug to True for additional info
     """
     def __init__(self, hProject=None, ccpnProject=None, debug=False):
-        
+
         self.debug = debug
         self.hProject = hProject
         self.ccpnProject = ccpnProject
-        
+
         self.runs = []
         self.partners = []
         self.airUpperDistanceLimit = 2.000
-        
+
         self.__initStoredRuns()
         self.__initStoredPartners()
-    
+
     def __getattr__(self,name):
-        
+
         """Description: Ensures compatibility with the standard ccpn way of 
                          getting data.
            Input      : Ccpn argument name
            Output     : Ccpn argument output
         """
         return getattr(self.hProject,name)
-    
+
     def __initStoredRuns(self):
-        
+
         """Description: Retrieve all stored Haddock runs for the given project and create
                         a Haddock Api 'HaddockRun' instance of each of them.
                         Gets called by default when initiating a HaddockProject instance
@@ -228,11 +227,11 @@ class HaddockProject:
                                         ccpnProject=self.ccpnProject,
                                         airUpperDistanceLimit=self.airUpperDistanceLimit,
                                         debug=self.debug))
-        
-        if not len(self.runs): self.newHaddockRun()                            
-    
+
+        if not len(self.runs): self.newHaddockRun()
+
     def __initStoredPartners(self):
-        
+
         """Description: Retrieve all stored Haddock partners for the given project and create
                         a Haddock Api 'HaddockPartner' instance of each of them.
                         Gets called by default when initiating a HaddockProject instance
@@ -243,9 +242,9 @@ class HaddockProject:
             self.partners.append(HaddockPartner(hPartner=partner,
                                                   ccpnProject=self.ccpnProject,
                                                   debug=self.debug))
-            
+
     def newHaddockPartner(self,molSystem=None,pdb=None):
-        
+
         """Description: Create a new Haddock partner in the current project. 
            Input      : Create new Haddock partner from ccpn.molSystem instance using
                         the 'molSystem' argument or create new partner from a PDB file 
@@ -259,7 +258,7 @@ class HaddockProject:
             partner = HaddockPartner(ccpnProject=self.ccpnProject,
                                      debug=self.debug)
             partner.initDefaultPartner(molSystem=molSystem,hProject=self.hProject)
-                                    
+
             if partner.isValidPartner:
                 self.partners.append(partner)
                 if self.debug: print("NOTE: added new Haddock Partner with code: %s" % partner.code)
@@ -278,24 +277,24 @@ class HaddockProject:
                 molSystem = self.ccpnProject.newMolSystem(code=name,name=name)
             else:
                 molSystem = self.ccpnProject.newMolSystem(code=newMolsysName,name=newMolsysName)
-            
-            if self.debug: print("NOTE: created new molSystem with name: %s" % newMolsysName)    
-            structure = getStructureFromFile(molSystem, pdb, fileType='rough', doWarnings=True)    
-            
+
+            if self.debug: print("NOTE: created new molSystem with name: %s" % newMolsysName)
+            structure = getStructureFromFile(molSystem, pdb, fileType='rough', doWarnings=True)
+
             if structure:
                 partner = HaddockPartner(ccpnProject=self.ccpnProject,
                                           debug=self.debug)
                 partner.initDefaultPartner(molSystem=molSystem,hProject=self.hProject)
-                                    
+
                 if partner.isValidPartner:
                     self.partners.append(partner)
                     if self.debug: print("NOTE: added new Haddock Partner with code: %s" % partner.code)
-                    return partner    
+                    return partner
         else:
             if self.debug: print('ERROR: Provide ccpn molSystem instance or PDB file to create Haddock partner')
-    
+
     def removeHaddockPartner(self,partner=None,code=None):
-        
+
         """Description: Remove given Haddock Partner
            Input      : HaddockApi.HaddockProject.HaddockPartner instance or partner code
            Output      : None
@@ -317,24 +316,24 @@ class HaddockProject:
                     self.partners.remove(partner)
                     found = True
             if not found:
-                if self.debug: print("ERROR: removeHaddockPartner, no partner with code: %s" % code)    
-    
+                if self.debug: print("ERROR: removeHaddockPartner, no partner with code: %s" % code)
+
     def getHaddockPartner(self,code=None):
-        
+
         """Description: Get Haddock partner by code
            Input      : Partner code
            Output      : HaddockApi.HaddockProject.HaddockPartner instance
         """
         if code: code = code.upper()
         request = [partner for partner in self.partners if partner.code == code]
-        if len(request): 
+        if len(request):
             if self.debug: print("NOTE: getHaddockPartner, return Haddock Partner with code %s" % code)
             return request[0]
         else:
-            if self.debug: print("ERROR: getHaddockPartner, no partner with code %s" % code)        
-    
+            if self.debug: print("ERROR: getHaddockPartner, no partner with code %s" % code)
+
     def newHaddockRun(self):
-        
+
         """Description: Create a new default Haddock run in current project
            Input      : None
            Output      : HaddockApi.HaddockProject.HaddockRun instance
@@ -343,14 +342,14 @@ class HaddockProject:
                          ccpnProject=self.ccpnProject,
                          airUpperDistanceLimit=self.airUpperDistanceLimit,
                          debug=self.debug)
-        
+
         self.runs.append(run)
         if self.debug: print("NOTE: Create new Haddock run: %i" % run.serial)
-                        
+
         return run
-    
+
     def removeHaddockRun(self,run=None):
-        
+
         """Description: Remove the given Haddock run from the current project
            Input      : HaddockApi.HaddockProject.HaddockRun instance
            Output      : None
@@ -359,7 +358,7 @@ class HaddockProject:
             if self.debug: print("NOTE: Remove current Haddock run: %i" % run.serial)
             self.runs.remove(run)
             run.run.delete()
-    
+
     def copyHaddockRun(self,run=None, nmrConstraintStore=None):
 
         """Description: Copy a give run to a new run in the same project
@@ -407,9 +406,9 @@ class HaddockProject:
                                      airUpperDistanceLimit=self.airUpperDistanceLimit,
                                      debug=self.debug)
 
-                self.runs.append(copyrun)        
+                self.runs.append(copyrun)
                 return copyrun
-    
+
     def getHaddockRun(self,serial=None):
 
         """Description: Get Haddock Run by serial
@@ -417,14 +416,14 @@ class HaddockProject:
            Output      : HaddockApi.HaddockProject.HaddockRun instance
         """
         request = [run for run in self.runs if run.serial == serial]
-        if len(request): 
+        if len(request):
             if self.debug: print("NOTE: getHaddockRun, return Haddock Run %i" % serial)
             return request[0]
         else:
             if self.debug: print("ERROR: getHaddockPartner, no run with %s" % serial)
-    
+
     def importRunCns(self,runCns=None):
-        
+
         """Description: Import some settings from a Haddock run.cns file into a new Haddock run.
            Input      : Full path to run.cns file
            Output      : New HaddockApi.HaddockProject.HaddockRun instance
@@ -442,7 +441,7 @@ class HaddockProject:
             return run
 
 class HaddockPartner:
-    
+
     """Description: HaddockPartner is a convenient storage class for Haddock partners.
                     It takes care of setting default, processing data and ensuring 
                     validitie while working with Haddock partners
@@ -457,11 +456,11 @@ class HaddockPartner:
         if hPartner: self.hProject = hPartner.haddockProject
         self.ccpnProject = ccpnProject
         self.debug = debug
-    
+
         self.isValidPartner = False
-    
+
     def __getattr__(self,name):
-        
+
         """Description: Ensures compatibility with the standard ccpn way of 
                          getting data.
            Input      : Ccpn argument name
@@ -470,7 +469,7 @@ class HaddockPartner:
         return getattr(self.hPartner,name)
 
     def initDefaultPartner(self,molSystem=None,hProject=None):
-        
+
         """Description: Creates a new deafult partner. This function gets called by the 'newHaddockParter'
                         function in the HaddockProject class.
            Input      : ccpn.MolSystem instance representing the partner and HaddockApi.HaddockProject 
@@ -479,7 +478,7 @@ class HaddockPartner:
         """
         if hProject:
             self.hProject = hProject
-            if len(self.hProject.haddockPartners) < 6: 
+            if len(self.hProject.haddockPartners) < 6:
                 code = 'A'
                 while self.hProject.findFirstHaddockPartner(code=code): code = chr(ord(code)+1)
 
@@ -488,35 +487,35 @@ class HaddockPartner:
                 if self.debug: print("NOTE: Made new haddock partner:%s, code:%s" % (self.hPartner.molSystem.name,code))
 
                 self.setAutoHistidinePstate()            # Set pState to True by default
-            
+
                 ensembles = self.getHaddockEnsemble()
                 for ensemble in ensembles:                        # Set the default Haddock ensemble to all
                     self.setHaddockEnsemble(ensemble=ensemble)    # ensembles in the MolSystem
-                
+
                 self.isValidPartner = True
             else:
                 if self.debug: print('WARNING: Cannot set more than six molecular partners')
         else:
-            if self.debug: print('ERROR: Compulsary Haddock project not provided')                                        
+            if self.debug: print('ERROR: Compulsary Haddock project not provided')
 
     def getPartnerResidues(self):
-        
+
         """Description: Returns a list of all residues belonging to the Haddock partner
            Input      : None, uses self.hPartner
            Output      : List of ccp.molecule.MolSystem.Residue instances
         """
         residues = []
-        
+
         hChains = self.hPartner.sortedChains()
         for hChain in hChains:
             hResidues = [r for r in hChain.residues]
             residues += hResidues
-        
+
         residues.sort()
-        return residues    
+        return residues
 
     def setResidueFlexibility(self,residues=None,state='none'):
-        
+
         """Description: Set the flexibility state for the selected residue of the Haddock Partner
                         Flexibility is used during the (semi)-flexible refinement stage of Haddock.
                         If the partners 'semiFlexMode' parameter is set to 'automatic' (default) than
@@ -526,19 +525,19 @@ class HaddockPartner:
         """
         if residues:
             if not type(residues) == type([]): residues = [residues]
-            
+
             if state in ['none','semi','full']:
                 for residue in residues:
                     residue.flexibility = state
-                    if self.debug: print("NOTE: Set flexibility of residue: %s-%s to '%s'" % 
+                    if self.debug: print("NOTE: Set flexibility of residue: %s-%s to '%s'" %
                                         (residue.residue.ccpCode, residue.residue.seqCode, state))
             else:
-                if self.debug: print("ERROR: setResidueFlexibility. State %s not allowed (none,semi,full)" % state)        
+                if self.debug: print("ERROR: setResidueFlexibility. State %s not allowed (none,semi,full)" % state)
         else:
-            if self.debug: print("ERROR: setResidueFlexibility. No residues provides")            
-    
+            if self.debug: print("ERROR: setResidueFlexibility. No residues provides")
+
     def setSemiFlexMode(self,mode='automatic'):
-        
+
         """Description: Set the semi-flexibility mode to either manual or automatic
            Input      : String, 'manual' or 'automatic'.
            Output      : None, sets the semiFlexMode in the model
@@ -547,8 +546,8 @@ class HaddockPartner:
         if mode in ['manual','automatic']:
             self.hPartner.semiFlexMode = mode
             if self.debug: print("NOTE: set semiFlexMode to %s" % repr(mode))
-        
-    def setResidueAirState(self,residues=None,state='none'):            
+
+    def setResidueAirState(self,residues=None,state='none'):
 
         """Description: Set the AIR state for the selected residue of the Haddock Partner
            Input      : List of ccp.molecule.MolSystem.Residue instances. AIR state (none,active,passive)
@@ -556,28 +555,28 @@ class HaddockPartner:
         """
         if residues:
             if not type(residues) == type([]): residues = [residues]
-            
+
             if state in ['none','active','passive']:
                 for residue in residues:
                     residue.interaction = state
-                    if self.debug: print("NOTE: Set AIR state of residue: %s-%s to '%s'" % 
+                    if self.debug: print("NOTE: Set AIR state of residue: %s-%s to '%s'" %
                                         (residue.residue.ccpCode, residue.residue.seqCode, state))
             else:
-                if self.debug: print("ERROR: setResidueAirState. State %s not allowed (none,active,passive)" % state)        
+                if self.debug: print("ERROR: setResidueAirState. State %s not allowed (none,active,passive)" % state)
         else:
             if self.debug: print("ERROR: setResidueAirState. No residues provides")
 
     def setAutoHistidinePstate(self,pState=True):
-        
+
         """Description: Turn the 'autoHistidinePstate' option for the partner to on/off
            Input      : pState True or False
            Output      : None, writes to model
         """
         self.hPartner.autoHistidinePstate = pState
-        if self.debug: print("NOTE: AutoHistidinePstate set to :%s" % repr(pState))        
+        if self.debug: print("NOTE: AutoHistidinePstate set to :%s" % repr(pState))
 
     def setForceField(self,molType=None):
-        
+
         """Description: Defines the forfield type used in Haddock calculation based on the
                         molecule type of the Haddock partner. If partner is RNA or DNA
                         that 'forceFieldCode' is set to RNA or DNA else the code is set to
@@ -592,13 +591,13 @@ class HaddockPartner:
             self.hPartner.isDna = False
             self.hPartner.forceFieldCode = 'TOPALLHDG'
 
-        if self.debug: print("NOTE: Haddock Partner isDNA:%s, forcefield code set to:%s" % 
-                            (repr(self.hPartner.isDna),self.hPartner.forceFieldCode))        
-    
-    
-                            
+        if self.debug: print("NOTE: Haddock Partner isDNA:%s, forcefield code set to:%s" %
+                            (repr(self.hPartner.isDna),self.hPartner.forceFieldCode))
+
+
+
     def getHaddockEnsemble(self):
-        
+
         """Description: Returns a list of structures ensembles belonging to the Haddock partner
            Input      : None, uses self.hPartner
            Output       : List of ccpn.molecule.molStructure.StructureEnsemble instance
@@ -608,7 +607,7 @@ class HaddockPartner:
         if molSystem: return [e for e in ensembles if e.molSystem is molSystem]
 
     def setHaddockEnsemble(self,ensemble=None):
-        
+
         """Description: Define ensembles belonging to the Haddock partner
            Input      : (List of) ccpn.molecule.molStructure.StructureEnsemble instance
            Output     : None, adds to model
@@ -621,28 +620,28 @@ class HaddockPartner:
 
                 chains = [c.chain for c in ensemble.coordChains]
                 self.setHaddockPartnerChains(chains=chains)
-            if self.debug: print("NOTE: Set Haddock ensemble for partner: %s to %s" % 
+            if self.debug: print("NOTE: Set Haddock ensemble for partner: %s to %s" %
                                 (self.hPartner.code,ensemble.ensembleId))
         else:
-            self.setHaddockPartnerChains(chains=[])                            
+            self.setHaddockPartnerChains(chains=[])
 
     def getHaddockPartnerChains(self):
-        
+
         """Description: Return a list of chains belonging to the Haddock partner
            Input      : None, uses self.hPartner
            Output     : List of ccpn.molecule.MolSystem.Chain instances
         """
-        return [chain for chain in self.hPartner.molSystem.sortedChains()]            
+        return [chain for chain in self.hPartner.molSystem.sortedChains()]
 
     def setHaddockPartnerChains(self,chains=None):
-        
+
         """Description: Define the chains belonging to a Haddock partner
            Input      : ccpn.molSystem.chains instances. You get get the list using 
                         'getHaddockPartnerChains' function
            Output      : None, writes to model
-        """    
+        """
         if not type(chains) == type([]): chain = [chains]
-        
+
         for hChain in self.hPartner.chains:
             if hChain.chain not in chains: hChain.delete()
 
@@ -658,8 +657,8 @@ class HaddockPartner:
             if not hChain: self.hPartner.newChain(chain=chain)
 
             molType = chain.molecule.molType
-        
-        self.setForceField(molType=molType)    
+
+        self.setForceField(molType=molType)
 
         # Curate all haddock residue numbers and CCPN residue links
         hSeqId = 1
@@ -679,10 +678,10 @@ class HaddockPartner:
                 if hResidue is None: hResidue = hChain.newResidue(haddockSeqId=hSeqId,residue=residue)
                 else: hResidue.haddockSeqId = hSeqId
 
-                hSeqId += 1    
+                hSeqId += 1
 
 class HaddockRun:
-    
+
     """Description: HaddockRun is a convenient storage class for Haddock runs.
                     It takes care of setting default, processing data and ensuring 
                     validitie while working with Haddock runs
@@ -698,20 +697,20 @@ class HaddockRun:
         self.hProject = run.haddockProject
         self.ccpnProject = ccpnProject
         self.airUpperDistanceLimit = airUpperDistanceLimit
-    
+
         self.__initProtocolStores()
-    
+
     def __getattr__(self,name):
-        
+
         """Description: Ensures compatibility with the standard ccpn way of 
                          getting data. Can also be used to set most of the run parameters
            Input      : Ccpn argument name
            Output     : Ccpn argument output
         """
         return getattr(self.run,name)
-    
+
     def __initProtocolStores(self):
-        
+
         """Description: Initiates the energyProtocolStores that are not in the model by default
            Input      : None
            Output      : None
@@ -723,23 +722,23 @@ class HaddockRun:
             if not protocol:
                 protocol = eval(annealProtocolStore)
                 energyTermStore = self.run.newHaddockEnergyTerm(code=annealProtocolStore,termId=termId)
-                
+
                 terms = protocol['terms'].keys()
                 terms.sort()
                 for term in terms:
                     energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=protocol['terms'][term])
-        
+
                 termId += 1
-        
+
         stage_name = ['it0','it1','w']
         scoringWeights = [(sw.term, sw.stage, sw) for sw in self.run.scoringWeights]
         if not scoringWeights:
             for term in DEFAULT_SCORE:
                 for stage in range(len(DEFAULT_SCORE[term])):
                     scoringWeight = self.run.newScoringWeight(term=term,stage=stage,value=DEFAULT_SCORE[term][stage])
-                
+
     def exportClassicProject(self):
-        
+
         """Description: Exports current project and run as a 'classical' HADDOCK style project. This means
                            a root directory bearing the projects name containing all PDB structure files that
                         need to be docked, a new.html file, restraint files, a ensemble.list file if multiple 
@@ -749,13 +748,13 @@ class HaddockRun:
            Output:        The various files as described above.                
         """
         if self.debug:
-            print("NOTE: Export Haddock project:%s, run:%i as Classic project" % 
+            print("NOTE: Export Haddock project:%s, run:%i as Classic project" %
                  (self.hProject.name,self.run.serial))
             print("      Storage location: %s" % self.hProject.workingDir)
-        
+
         for partner in self.hProject.sortedHaddockPartners():
             if partner.isDna: self.run.useDnaRestraints = True
-            
+
         classic = exportClassic(hProject=self.hProject,
                                 latestRun=self.run,
                                 ccpnProject=self.ccpnProject)
@@ -769,39 +768,39 @@ class HaddockRun:
            Output:        Haddock project parameter file
         """
         if self.debug:
-            print("NOTE: Export Haddock project:%s, run:%i as Haddock parameter file" % 
+            print("NOTE: Export Haddock project:%s, run:%i as Haddock parameter file" %
                  (self.hProject.name,self.run.serial))
             print("      Storage location: %s" % self.hProject.workingDir)
-        
+
         for partner in self.hProject.sortedHaddockPartners():
             if partner.isDna: self.run.useDnaRestraints = True
-        
+
         paramfile = exportParam(hProject=self.hProject,
                                 latestRun=self.run,
                                 ccpnProject=self.ccpnProject)
         paramfile.writeToFile()
 
     def runOnHaddockServer(self,username=None,password=None):
-        
+
         """Description: Class for automatic upload of a HADDOCK webserver parameter file.
            Input      : Valid Hadddock web server username and password
            Output      : Server exeptance or rejection messages. Further communication via
                         users e-mail adress.
         """
-        if self.debug: print("NOTE: Prepaire Haddock project:%s, run:%i for server upload" % 
+        if self.debug: print("NOTE: Prepaire Haddock project:%s, run:%i for server upload" %
                             (self.hProject.name,self.run.serial))
 
         if not username or not password:
-            if self.debug: print("ERROR: No username or password set for server upload")                    
+            if self.debug: print("ERROR: No username or password set for server upload")
 
         paramfile = exportParam(hProject=self.hProject,
                                 latestRun=self.run,
-                                ccpnProject=self.ccpnProject)    
-        
-        server = ServerUpload(paramfile.filestring,self.hProject.name,self.run.serial,username,password)                            
+                                ccpnProject=self.ccpnProject)
+
+        server = ServerUpload(paramfile.filestring,self.hProject.name,self.run.serial,username,password)
 
     def newRestraintSet(self,termType=None,fileName=None,constraintList=None):
-        
+
         """Description: Add restraint sets to the current run. Supported types: UNAMBIG, RDC, HBOND, 
                         DIHEDRAL, AMBIG, DANI.
            Input      : Type of restraint (termType) and path to restraint file on disk (fileName) or
@@ -810,11 +809,11 @@ class HaddockRun:
         """
         termType = termType.upper()
         allowedTerms = ['UNAMBIG','RDC','HBOND','DIHEDRAL','AMBIG','DANI']
-        
+
         if not fileName and not constraintList:
             if self.debug: print("ERROR: newRestraintSet, no filName and no constraintList defined")
-            return    
-        
+            return
+
         if termType in allowedTerms:
             if termType in ['RDC','DANI']:
                 termlist = [ i.termId for i in self.run.sortedHaddockEnergyTerms() if i.code == termType ]
@@ -825,14 +824,14 @@ class HaddockRun:
                     energyTerm = self.run.newHaddockEnergyTerm(code=termType,termId=termId)
                     if termType == 'RDC': addRdcParam(self.run,termId)
                     if termType == 'DANI': addDaniParam(self.run,termId)
-                else: 
+                else:
                     if self.debug: print('WARNING: newRestraintSet, Only 5 %s parameter sets allowed' % termType)
                     return
             else:
                 termId = 1
                 while self.run.findFirstHaddockEnergyTerm(code=termType,termId=termId): termId +=1
                 energyTerm = self.run.newHaddockEnergyTerm(code=termType,termId=termId)
-            
+
             if fileName:
                 energyTerm.fileName = fileName
                 energyTerm.constraintList = None
@@ -840,10 +839,10 @@ class HaddockRun:
                 energyTerm.fileName = None
                 energyTerm.constraintList = constraintList
             else: pass
-            
-            return energyTerm    
+
+            return energyTerm
         else:
-            if self.debug: print("ERROR: newRestraintSet, termType %s not allowed, choose from %s" % 
+            if self.debug: print("ERROR: newRestraintSet, termType %s not allowed, choose from %s" %
                                  termType," ".join(allowedTypes))
-        
-        
+
+

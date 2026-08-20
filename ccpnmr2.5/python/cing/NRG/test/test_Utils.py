@@ -2,12 +2,13 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_Utils.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import ARCHIVE_NRG_ID
-from cing.NRG.Utils import getArchiveIdFromDirectoryName
-from unittest import TestCase
 import unittest
-from cing.NRG import ARCHIVE_NMR_REDO_ID
+from unittest import TestCase
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import ARCHIVE_NMR_REDO_ID, ARCHIVE_NRG_ID
+from cing.NRG.Utils import getArchiveIdFromDirectoryName
+
 
 class AllChecks(TestCase):
 
@@ -17,11 +18,11 @@ class AllChecks(TestCase):
             http://dodos.dyndns.org/NRG-CING/input/pc
             /var/NMR_REDO/x
         """.split()
-        expectedList = [ 
+        expectedList = [
             None,
             ARCHIVE_NRG_ID,
-            ARCHIVE_NMR_REDO_ID            
-        ] 
+            ARCHIVE_NMR_REDO_ID
+        ]
         for i, inputStr in enumerate(inputList):
             archive_id = getArchiveIdFromDirectoryName(inputStr)
 #            nTdebug("Found on iteration %s with input: %s the archive_id %s and expected %s" % ( i, inputStr, archive_id, expectedList[i]))

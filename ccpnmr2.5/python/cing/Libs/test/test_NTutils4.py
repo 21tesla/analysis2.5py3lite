@@ -3,9 +3,11 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils4.py
 """
 
-from cing.Libs.NTutils import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 
@@ -111,20 +113,20 @@ b
         x = NTdict(a=None)
         y = NTdict(b=x)
         self.assertEqual( y.lenRecursive(), 1)
-        x.cyclic = y        
-        self.assertRaises( RuntimeError, y.lenRecursive, max_depth = 999 ) # 99 is allowed and would fail this unit check.       
+        x.cyclic = y
+        self.assertRaises( RuntimeError, y.lenRecursive, max_depth = 999 ) # 99 is allowed and would fail this unit check.
         self.assertEqual( y.lenRecursive(max_depth = 0), 1) # y.b
         self.assertEqual( y.lenRecursive(max_depth = 1), 2) # y.b.a
         self.assertEqual( y.lenRecursive(max_depth = 2), 2) # y.b.a and y.b.cyclic ?
         self.assertEqual( y.lenRecursive(max_depth = 3), 3) # y.b.a, y.b.cyclic, and y.b.cyclic.b ?
-        self.assertEqual( y.lenRecursive(max_depth = 5), 4) 
-        self.assertEqual( y.lenRecursive(max_depth = 9), 6) 
-        self.assertEqual( y.lenRecursive(max_depth = 99),51) 
-        
+        self.assertEqual( y.lenRecursive(max_depth = 5), 4)
+        self.assertEqual( y.lenRecursive(max_depth = 9), 6)
+        self.assertEqual( y.lenRecursive(max_depth = 99),51)
+
         z = [[1,2],[3,4,5]]
-        self.assertEqual( lenRecursive(z, max_depth = 0),2) 
-        self.assertEqual( lenRecursive(z, max_depth = 1),5) 
-        self.assertEqual( lenRecursive(z, max_depth = 2),5) 
+        self.assertEqual( lenRecursive(z, max_depth = 0),2)
+        self.assertEqual( lenRecursive(z, max_depth = 1),5)
+        self.assertEqual( lenRecursive(z, max_depth = 2),5)
 
     def testGetDeepAvgByKeys(self):
         d=NTdict()
@@ -206,7 +208,7 @@ b
         nTdebug("3D done but first transposing")
         result = NTdict()
         inputTable = [['a','b'],['foo','bar'],['abba','waterloo'],]
-        expected = { 'a':{ 'foo':'abba'}, 'b':{ 'bar': 'waterloo'}}        
+        expected = { 'a':{ 'foo':'abba'}, 'b':{ 'bar': 'waterloo'}}
         result.appendFromTableGeneric(inputTable, *idxColumnKeyList, invertFirst=True)
         nTdebug("Created: %r" % result)
         self.assertTrue( result.isEquivalent( expected ))
@@ -216,7 +218,7 @@ b
         result = NTdict()
         x = 'abba' # Needs to evaluate to True
         inputTable = [['a','b'],['foo','bar']]
-        expected = { 'a':{ 'foo':x}, 'b':{ 'bar': x}}        
+        expected = { 'a':{ 'foo':x}, 'b':{ 'bar': x}}
         result.appendFromTableGeneric(inputTable, *idxColumnKeyList, invertFirst=True, appendBogusColumn=x)
         nTdebug("Created: %r" % result)
         self.assertTrue( result.isEquivalent( expected ))

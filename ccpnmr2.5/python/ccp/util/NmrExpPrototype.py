@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -57,27 +57,27 @@ software development. Bioinformatics 21, 1678-1684.
 """
 
 # Transfer types that may connect long range, non-local atoms
-#longRangeTransfers = ('through-space', 'NOESY', 'SpinDiff', 'DipDip', 'Jnonlocal')
+# longRangeTransfers = ('through-space', 'NOESY', 'SpinDiff', 'DipDip', 'Jnonlocal')
 # NBNB TBD obsolete, hardwire 'through-space' instead
-longRangeTransfers = ('through-space',)
+longRangeTransfers = ("through-space",)
 
 
 def nextFreeExpMeasurement(nmrExpPrototype, checkAttr):
-  """ get ExpMeasurement in nmrExpPrototype that has fewest links to checkAttr,
-  If there are several choose the one with the smallest serial.
-  nmrExpPrototype is the relevant nmrExpPrototype
-  checkAttr is the name of teh attribtue to check on.
-  """
-  expMeasurements = nmrExpPrototype.sortedExpMeasurements()
-  if expMeasurements:
-    # find first expMeasurement with fewest refExpDimRefs
-    dd = {}
-    for xx in expMeasurements:
-      length = len(getattr(xx, checkAttr))
-      if length not in dd:
-        dd[length] = xx
-    expMeasurement = dd[min(dd.keys())]
-  else:
-    expMeasurement = None
-  #
-  return expMeasurement
+    """get ExpMeasurement in nmrExpPrototype that has fewest links to checkAttr,
+    If there are several choose the one with the smallest serial.
+    nmrExpPrototype is the relevant nmrExpPrototype
+    checkAttr is the name of teh attribtue to check on.
+    """
+    expMeasurements = nmrExpPrototype.sortedExpMeasurements()
+    if expMeasurements:
+        # find first expMeasurement with fewest refExpDimRefs
+        dd = {}
+        for xx in expMeasurements:
+            length = len(getattr(xx, checkAttr))
+            if length not in dd:
+                dd[length] = xx
+        expMeasurement = dd[min(dd.keys())]
+    else:
+        expMeasurement = None
+    #
+    return expMeasurement

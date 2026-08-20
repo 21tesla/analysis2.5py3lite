@@ -173,41 +173,43 @@ Items are entered as a string key - string value pair.
                                     the string value can be a dictionary
 """
 
-
-
-#=========================================================================================
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: Ed Brooksbank $"
 __dateModified__ = "$dateModified: 2017-07-07 16:32:41 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: Ed Brooksbank $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
 
 import os
 import sys
-import numpy as np
 from collections import OrderedDict
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import numpy as np
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # this is a fix to get the import to work when running as a standalone
 # when importing into your own code, it can be safely removed
+
 
 def import_parents(level=1):
     global __package__
@@ -220,277 +222,290 @@ def import_parents(level=1):
     except ValueError:  # already removed
         pass
 
-    __package__ = '.'.join(parent.parts[len(top.parts):])
+    __package__ = ".".join(parent.parts[len(top.parts) :])
     importlib.import_module(__package__)  # won't be needed after that
 
 
-if __name__ == '__main__' and __package__ is None:
+if __name__ == "__main__" and __package__ is None:
     import importlib
     from pathlib import Path
 
     import_parents()
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-from . import StarIo
 from . import ErrorLog as el
-from . import Validator
-from . import Specification
+from . import Specification, StarIo, Validator
 
-
-MAJOR_VERSION = '0'
-MINOR_VERSION = '8'
-PATCH_LEVEL = '4'
-__nef_version__ = '.'.join((MAJOR_VERSION, MINOR_VERSION))
+MAJOR_VERSION = "0"
+MINOR_VERSION = "8"
+PATCH_LEVEL = "4"
+__nef_version__ = ".".join((MAJOR_VERSION, MINOR_VERSION))
 # __version__ = '.'.join( (__nef_version__, PATCH_LEVEL) )
 
 
-NEF_CATEGORIES = [('nef_nmr_meta_data', 'get_nmr_meta_data'),
-                  ('nef_molecular_system', 'get_molecular_systems'),
-                  ('nef_chemical_shift_list', 'get_chemical_shift_lists'),
-                  ('nef_distance_restraint_list', 'get_distance_restraint_lists'),
-                  ('nef_dihedral_restraint_list', 'get_dihedral_restraint_lists'),
-                  ('nef_rdc_restraint_list', 'get_rdc_restraint_lists'),
-                  ('nef_nmr_spectrum', 'get_nmr_spectra'),
-                  ('nef_peak_restraint_links', 'get_peak_restraint_links')]
+NEF_CATEGORIES = [
+    ("nef_nmr_meta_data", "get_nmr_meta_data"),
+    ("nef_molecular_system", "get_molecular_systems"),
+    ("nef_chemical_shift_list", "get_chemical_shift_lists"),
+    ("nef_distance_restraint_list", "get_distance_restraint_lists"),
+    ("nef_dihedral_restraint_list", "get_dihedral_restraint_lists"),
+    ("nef_rdc_restraint_list", "get_rdc_restraint_lists"),
+    ("nef_nmr_spectrum", "get_nmr_spectra"),
+    ("nef_peak_restraint_links", "get_peak_restraint_links"),
+]
 
-NEF_REQUIRED_SAVEFRAME_BY_FRAMECODE = ['nef_nmr_meta_data',
-                                       'nef_molecular_system']
-NEF_REQUIRED_SAVEFRAME_BY_CATEGORY = ['nef_chemical_shift_list', ]
+NEF_REQUIRED_SAVEFRAME_BY_FRAMECODE = ["nef_nmr_meta_data", "nef_molecular_system"]
+NEF_REQUIRED_SAVEFRAME_BY_CATEGORY = [
+    "nef_chemical_shift_list",
+]
 
-NEF_ALL_SAVEFRAME_REQUIRED_FIELDS = ['sf_category',
-                                     'sf_framecode', ]
+NEF_ALL_SAVEFRAME_REQUIRED_FIELDS = [
+    "sf_category",
+    "sf_framecode",
+]
 
-MD_REQUIRED_FIELDS = ['sf_category',
-                      'sf_framecode',
-                      'format_name',
-                      'format_version',
-                      'program_name',
-                      'program_version',
-                      'creation_date',
-                      'uuid']
-MD_OPTIONAL_FIELDS = ['coordinate_file_name', ]
-MD_OPTIONAL_LOOPS = ['nef_related_entries',
-                     'nef_program_script',
-                     'nef_run_history']
-MD_RE_REQUIRED_FIELDS = ['database_name',
-                         'database_accession_code']
-MD_PS_REQUIRED_FIELDS = ['program_name', ]
-MD_RH_REQUIRED_FIELDS = ['run_ordinal',
-                         'program_name']
-MD_RH_OPTIONAL_FIELDS = ['program_version',
-                         'script_name',
-                         'script']
+MD_REQUIRED_FIELDS = [
+    "sf_category",
+    "sf_framecode",
+    "format_name",
+    "format_version",
+    "program_name",
+    "program_version",
+    "creation_date",
+    "uuid",
+]
+MD_OPTIONAL_FIELDS = [
+    "coordinate_file_name",
+]
+MD_OPTIONAL_LOOPS = ["nef_related_entries", "nef_program_script", "nef_run_history"]
+MD_RE_REQUIRED_FIELDS = ["database_name", "database_accession_code"]
+MD_PS_REQUIRED_FIELDS = [
+    "program_name",
+]
+MD_RH_REQUIRED_FIELDS = ["run_ordinal", "program_name"]
+MD_RH_OPTIONAL_FIELDS = ["program_version", "script_name", "script"]
 
-MS_REQUIRED_FIELDS = ['sf_category',
-                      'sf_framecode']
-MS_REQUIRED_LOOPS = ['nef_sequence']
-MS_OPTIONAL_LOOPS = ['nef_covalent_links']
-MS_NS_REQUIRED_FIELDS = ['chain_code',
-                         'sequence_code',
-                         'residue_type',
-                         'linking',
-                         'residue_variant']
-MS_CL_REQUIRED_FIELDS = ['chain_code_1',
-                         'sequence_code_1',
-                         'residue_type_1',
-                         'atom_name_1',
-                         'chain_code_2',
-                         'sequence_code_2',
-                         'residue_type_2',
-                         'atom_name_2']
+MS_REQUIRED_FIELDS = ["sf_category", "sf_framecode"]
+MS_REQUIRED_LOOPS = ["nef_sequence"]
+MS_OPTIONAL_LOOPS = ["nef_covalent_links"]
+MS_NS_REQUIRED_FIELDS = ["chain_code", "sequence_code", "residue_type", "linking", "residue_variant"]
+MS_CL_REQUIRED_FIELDS = [
+    "chain_code_1",
+    "sequence_code_1",
+    "residue_type_1",
+    "atom_name_1",
+    "chain_code_2",
+    "sequence_code_2",
+    "residue_type_2",
+    "atom_name_2",
+]
 
-CSL_REQUIRED_FIELDS = ['sf_category',
-                       'sf_framecode',
-                       'atom_chem_shift_units']
-CSL_REQUIRED_LOOPS = ['nef_chemical_shift']
-CSL_CS_REQUIRED_FIELDS = ['chain_code',
-                          'sequence_code',
-                          'residue_type',
-                          'atom_name',
-                          'value']
-CSL_CS_OPTIONAL_FIELDS = ['value_uncertainty', ]
+CSL_REQUIRED_FIELDS = ["sf_category", "sf_framecode", "atom_chem_shift_units"]
+CSL_REQUIRED_LOOPS = ["nef_chemical_shift"]
+CSL_CS_REQUIRED_FIELDS = ["chain_code", "sequence_code", "residue_type", "atom_name", "value"]
+CSL_CS_OPTIONAL_FIELDS = [
+    "value_uncertainty",
+]
 
-DRL_REQUIRED_FIELDS = ['sf_category',
-                       'sf_framecode',
-                       'potential_type']
-DRL_REQUIRED_LOOPS = ['nef_distance_restraint']
-DRL_OPTIONAL_FIELDS = ['restraint_origin', ]
-DRL_DR_REQUIRED_FIELDS = ['ordinal',
-                          'restraint_id',
-                          'chain_code_1',
-                          'sequence_code_1',
-                          'residue_type_1',
-                          'atom_name_1',
-                          'chain_code_2',
-                          'sequence_code_2',
-                          'residue_type_2',
-                          'atom_name_2',
-                          'weight']
-DRL_DR_OPTIONAL_FIELDS = ['restraint_combination_id',
-                          'target_value',
-                          'target_value_uncertainty',
-                          'lower_linear_limit',
-                          'lower_limit',
-                          'upper_limit',
-                          'upper_linear_limit']
+DRL_REQUIRED_FIELDS = ["sf_category", "sf_framecode", "potential_type"]
+DRL_REQUIRED_LOOPS = ["nef_distance_restraint"]
+DRL_OPTIONAL_FIELDS = [
+    "restraint_origin",
+]
+DRL_DR_REQUIRED_FIELDS = [
+    "ordinal",
+    "restraint_id",
+    "chain_code_1",
+    "sequence_code_1",
+    "residue_type_1",
+    "atom_name_1",
+    "chain_code_2",
+    "sequence_code_2",
+    "residue_type_2",
+    "atom_name_2",
+    "weight",
+]
+DRL_DR_OPTIONAL_FIELDS = [
+    "restraint_combination_id",
+    "target_value",
+    "target_value_uncertainty",
+    "lower_linear_limit",
+    "lower_limit",
+    "upper_limit",
+    "upper_linear_limit",
+]
 
-DIHRL_REQUIRED_FIELDS = ['sf_category',
-                         'sf_framecode',
-                         'potential_type']
-DIHRL_REQUIRED_LOOPS = ['nef_dihedral_restraint']
-DIHRL_OPTIONAL_FIELDS = ['restraint_origin', ]
-DIHRL_DIHR_REQUIRED_FIELDS = ['ordinal',
-                              'restraint_id',
-                              'restraint_combination_id',
-                              'chain_code_1',
-                              'sequence_code_1',
-                              'residue_type_1',
-                              'atom_name_1',
-                              'chain_code_2',
-                              'sequence_code_2',
-                              'residue_type_2',
-                              'atom_name_2',
-                              'chain_code_3',
-                              'sequence_code_3',
-                              'residue_type_3',
-                              'atom_name_3',
-                              'chain_code_4',
-                              'sequence_code_4',
-                              'residue_type_4',
-                              'atom_name_4',
-                              'weight']
-DIHRL_DIHR_OPTIONAL_FIELDS = ['target_value',
-                              'target_value_uncertainty',
-                              'lower_linear_limit',
-                              'lower_limit',
-                              'upper_limit',
-                              'upper_linear_limit',
-                              'name']
+DIHRL_REQUIRED_FIELDS = ["sf_category", "sf_framecode", "potential_type"]
+DIHRL_REQUIRED_LOOPS = ["nef_dihedral_restraint"]
+DIHRL_OPTIONAL_FIELDS = [
+    "restraint_origin",
+]
+DIHRL_DIHR_REQUIRED_FIELDS = [
+    "ordinal",
+    "restraint_id",
+    "restraint_combination_id",
+    "chain_code_1",
+    "sequence_code_1",
+    "residue_type_1",
+    "atom_name_1",
+    "chain_code_2",
+    "sequence_code_2",
+    "residue_type_2",
+    "atom_name_2",
+    "chain_code_3",
+    "sequence_code_3",
+    "residue_type_3",
+    "atom_name_3",
+    "chain_code_4",
+    "sequence_code_4",
+    "residue_type_4",
+    "atom_name_4",
+    "weight",
+]
+DIHRL_DIHR_OPTIONAL_FIELDS = [
+    "target_value",
+    "target_value_uncertainty",
+    "lower_linear_limit",
+    "lower_limit",
+    "upper_limit",
+    "upper_linear_limit",
+    "name",
+]
 
-RRL_REQUIRED_FIELDS = ['sf_category',
-                       'sf_framecode',
-                       'potential_type']
-RRL_REQUIRED_LOOPS = ['nef_rdc_restraint']
-RRL_OPTIONAL_FIELDS = ['restraint_origin',
-                       'tensor_magnitude',
-                       'tensor_rhombicity',
-                       'tensor_chain_code',
-                       'tensor_sequence_code',
-                       'tensor_residue_type', ]
-RRL_RR_REQUIRED_FIELDS = ['ordinal',
-                          'restraint_id',
-                          'chain_code_1',
-                          'sequence_code_1',
-                          'residue_type_1',
-                          'atom_name_1',
-                          'chain_code_2',
-                          'sequence_code_2',
-                          'residue_type_2',
-                          'atom_name_2',
-                          'weight']
-RRL_RR_OPTIONAL_FIELDS = ['restraint_combination_id',
-                          'target_value',
-                          'target_value_uncertainty',
-                          'lower_linear_limit',
-                          'lower_limit',
-                          'upper_limit',
-                          'upper_linear_limit',
-                          'scale',
-                          'distance_dependent', ]
+RRL_REQUIRED_FIELDS = ["sf_category", "sf_framecode", "potential_type"]
+RRL_REQUIRED_LOOPS = ["nef_rdc_restraint"]
+RRL_OPTIONAL_FIELDS = [
+    "restraint_origin",
+    "tensor_magnitude",
+    "tensor_rhombicity",
+    "tensor_chain_code",
+    "tensor_sequence_code",
+    "tensor_residue_type",
+]
+RRL_RR_REQUIRED_FIELDS = [
+    "ordinal",
+    "restraint_id",
+    "chain_code_1",
+    "sequence_code_1",
+    "residue_type_1",
+    "atom_name_1",
+    "chain_code_2",
+    "sequence_code_2",
+    "residue_type_2",
+    "atom_name_2",
+    "weight",
+]
+RRL_RR_OPTIONAL_FIELDS = [
+    "restraint_combination_id",
+    "target_value",
+    "target_value_uncertainty",
+    "lower_linear_limit",
+    "lower_limit",
+    "upper_limit",
+    "upper_linear_limit",
+    "scale",
+    "distance_dependent",
+]
 
-PL_REQUIRED_FIELDS = ['sf_category',
-                      'sf_framecode',
-                      'num_dimensions',
-                      'chemical_shift_list']
-PL_REQUIRED_LOOPS = ['nef_spectrum_dimension',
-                     'nef_spectrum_dimension_transfer',
-                     'nef_peak']
-PL_OPTIONAL_FIELDS = ['experiment_classification',
-                      'experiment_type']
-PL_SD_REQUIRED_FIELDS = ['dimension_id',
-                         'axis_unit',
-                         'axis_code']
-PL_SD_OPTIONAL_FIELDS = ['spectrometer_frequency',
-                         'spectral_width',
-                         'value_first_point',
-                         'folding',
-                         'absolute_peak_positions',
-                         'is_acquisition', ]
-PL_SDT_REQUIRED_FIELDS = ['dimension_1',
-                          'dimension_2',
-                          'transfer_type']
-PL_SDT_OPTIONAL_FIELDS = ['is_indirect', ]
-PL_P_REQUIRED_FIELDS = ['ordinal',
-                        'peak_id']
-PL_P_REQUIRED_ALTERNATE_FIELDS = [['height', 'volume'], ]
-PL_P_REQUIRED_FIELDS_PATTERN = ['position_{}',
-                                'chain_code_{}',
-                                'sequence_code_{}',
-                                'residue_type_{}',
-                                'atom_name_{}', ]
-PL_P_OPTIONAL_ALTERNATE_FIELDS = {r'(height)'         : ['{}_uncertainty', ],
-                                  r'(volume)'         : ['{}_uncertainty', ],
-                                  r'position_([0-9]+)': ['position_uncertainty_{}', ],
-                                  }
-PL_P_OPTIONAL_FIELDS_PATTERN = ['position_uncertainty_{}', ]
+PL_REQUIRED_FIELDS = ["sf_category", "sf_framecode", "num_dimensions", "chemical_shift_list"]
+PL_REQUIRED_LOOPS = ["nef_spectrum_dimension", "nef_spectrum_dimension_transfer", "nef_peak"]
+PL_OPTIONAL_FIELDS = ["experiment_classification", "experiment_type"]
+PL_SD_REQUIRED_FIELDS = ["dimension_id", "axis_unit", "axis_code"]
+PL_SD_OPTIONAL_FIELDS = [
+    "spectrometer_frequency",
+    "spectral_width",
+    "value_first_point",
+    "folding",
+    "absolute_peak_positions",
+    "is_acquisition",
+]
+PL_SDT_REQUIRED_FIELDS = ["dimension_1", "dimension_2", "transfer_type"]
+PL_SDT_OPTIONAL_FIELDS = [
+    "is_indirect",
+]
+PL_P_REQUIRED_FIELDS = ["ordinal", "peak_id"]
+PL_P_REQUIRED_ALTERNATE_FIELDS = [
+    ["height", "volume"],
+]
+PL_P_REQUIRED_FIELDS_PATTERN = [
+    "position_{}",
+    "chain_code_{}",
+    "sequence_code_{}",
+    "residue_type_{}",
+    "atom_name_{}",
+]
+PL_P_OPTIONAL_ALTERNATE_FIELDS = {
+    r"(height)": [
+        "{}_uncertainty",
+    ],
+    r"(volume)": [
+        "{}_uncertainty",
+    ],
+    r"position_([0-9]+)": [
+        "position_uncertainty_{}",
+    ],
+}
+PL_P_OPTIONAL_FIELDS_PATTERN = [
+    "position_uncertainty_{}",
+]
 
-PRLS_REQUIRED_FIELDS = ['sf_category',
-                        'sf_framecode']
-PRLS_REQUIRED_LOOPS = ['nef_peak_restraint_link']
-PRLS_PRL_REQUIRED_FIELDS = ['nmr_spectrum_id',
-                            'peak_id',
-                            'restraint_list_id',
-                            'restraint_id']
+PRLS_REQUIRED_FIELDS = ["sf_category", "sf_framecode"]
+PRLS_REQUIRED_LOOPS = ["nef_peak_restraint_link"]
+PRLS_PRL_REQUIRED_FIELDS = ["nmr_spectrum_id", "peak_id", "restraint_list_id", "restraint_id"]
 
-NEF_CATEGORIES_REMOVEPREFIX = {'nef_distance_restraint'         : 'distance_restraint',
-                               'nef_molecular_system'           : 'molecular_system',
-                               'nef_covalent_links'             : 'covalent_links',
-                               'nef_peak_restraint_links'       : 'peak_restraint_links',
-                               'nef_run_history'                : 'run_history',
-                               'nef_nmr_meta_data'              : 'nmr_meta_data',
-                               'nef_rdc_restraint_list'         : 'rdc_restraint_list',
-                               'nef_peak_restraint_link'        : 'peak_restraint_link',
-                               'nef_nmr_spectrum'               : 'nmr_spectrum',
-                               'nef_spectrum_dimension'         : 'spectrum_dimension',
-                               'nef_chemical_shift_list'        : 'chemical_shift_list',
-                               'nef_sequence'                   : 'sequence',
-                               'nef_program_script'             : 'program_script',
-                               'nef_related_entries'            : 'related_entries',
-                               'nef_distance_restraint_list'    : 'distance_restraint_list',
-                               'nef_rdc_restraint'              : 'rdc_restraint',
-                               'nef_chemical_shift'             : 'chemical_shift',
-                               'nef_spectrum_dimension_transfer': 'spectrum_dimension_transfer',
-                               'nef_dihedral_restraint_list'    : 'dihedral_restraint_list',
-                               'nef_peak'                       : 'peak',
-                               'nef_dihedral_restraint'         : 'dihedral_restraint'}
+NEF_CATEGORIES_REMOVEPREFIX = {
+    "nef_distance_restraint": "distance_restraint",
+    "nef_molecular_system": "molecular_system",
+    "nef_covalent_links": "covalent_links",
+    "nef_peak_restraint_links": "peak_restraint_links",
+    "nef_run_history": "run_history",
+    "nef_nmr_meta_data": "nmr_meta_data",
+    "nef_rdc_restraint_list": "rdc_restraint_list",
+    "nef_peak_restraint_link": "peak_restraint_link",
+    "nef_nmr_spectrum": "nmr_spectrum",
+    "nef_spectrum_dimension": "spectrum_dimension",
+    "nef_chemical_shift_list": "chemical_shift_list",
+    "nef_sequence": "sequence",
+    "nef_program_script": "program_script",
+    "nef_related_entries": "related_entries",
+    "nef_distance_restraint_list": "distance_restraint_list",
+    "nef_rdc_restraint": "rdc_restraint",
+    "nef_chemical_shift": "chemical_shift",
+    "nef_spectrum_dimension_transfer": "spectrum_dimension_transfer",
+    "nef_dihedral_restraint_list": "dihedral_restraint_list",
+    "nef_peak": "peak",
+    "nef_dihedral_restraint": "dihedral_restraint",
+}
 
-NEF_CATEGORIES_INSERTPREFIX = {'distance_restraint'         : 'nef_distance_restraint',
-                               'molecular_system'           : 'nef_molecular_system',
-                               'covalent_links'             : 'nef_covalent_links',
-                               'peak_restraint_links'       : 'nef_peak_restraint_links',
-                               'run_history'                : 'nef_run_history',
-                               'nmr_meta_data'              : 'nef_nmr_meta_data',
-                               'rdc_restraint_list'         : 'nef_rdc_restraint_list',
-                               'peak_restraint_link'        : 'nef_peak_restraint_link',
-                               'nmr_spectrum'               : 'nef_nmr_spectrum',
-                               'spectrum_dimension'         : 'nef_spectrum_dimension',
-                               'chemical_shift_list'        : 'nef_chemical_shift_list',
-                               'sequence'                   : 'nef_sequence',
-                               'program_script'             : 'nef_program_script',
-                               'related_entries'            : 'nef_related_entries',
-                               'distance_restraint_list'    : 'nef_distance_restraint_list',
-                               'rdc_restraint'              : 'nef_rdc_restraint',
-                               'chemical_shift'             : 'nef_chemical_shift',
-                               'spectrum_dimension_transfer': 'nef_spectrum_dimension_transfer',
-                               'dihedral_restraint_list'    : 'nef_dihedral_restraint_list',
-                               'peak'                       : 'nef_peak',
-                               'dihedral_restraint'         : 'nef_dihedral_restraint'}
+NEF_CATEGORIES_INSERTPREFIX = {
+    "distance_restraint": "nef_distance_restraint",
+    "molecular_system": "nef_molecular_system",
+    "covalent_links": "nef_covalent_links",
+    "peak_restraint_links": "nef_peak_restraint_links",
+    "run_history": "nef_run_history",
+    "nmr_meta_data": "nef_nmr_meta_data",
+    "rdc_restraint_list": "nef_rdc_restraint_list",
+    "peak_restraint_link": "nef_peak_restraint_link",
+    "nmr_spectrum": "nef_nmr_spectrum",
+    "spectrum_dimension": "nef_spectrum_dimension",
+    "chemical_shift_list": "nef_chemical_shift_list",
+    "sequence": "nef_sequence",
+    "program_script": "nef_program_script",
+    "related_entries": "nef_related_entries",
+    "distance_restraint_list": "nef_distance_restraint_list",
+    "rdc_restraint": "nef_rdc_restraint",
+    "chemical_shift": "nef_chemical_shift",
+    "spectrum_dimension_transfer": "nef_spectrum_dimension_transfer",
+    "dihedral_restraint_list": "nef_dihedral_restraint_list",
+    "peak": "nef_peak",
+    "dihedral_restraint": "nef_dihedral_restraint",
+}
 
-NEF_RETURNALL = 'all'
-NEF_RETURNNEF = 'nef_'
-NEF_RETURNOTHER = 'other'
-NEF_PREFIX = 'nef_'
+NEF_RETURNALL = "all"
+NEF_RETURNNEF = "nef_"
+NEF_RETURNOTHER = "other"
+NEF_PREFIX = "nef_"
 
 
 class NefImporter(el.ErrorLog):
@@ -498,12 +513,15 @@ class NefImporter(el.ErrorLog):
 
     # put functions in here to read the contents of the dict.
     # superclassed from DataBlock which is of type StarContainer
-    def __init__(self, name=None,
-                 programName='Unknown',
-                 programVersion='Unknown',
-                 initialise=True,
-                 errorLogging=el.NEF_STANDARD,
-                 hidePrefix=True):
+    def __init__(
+        self,
+        name=None,
+        programName="Unknown",
+        programVersion="Unknown",
+        initialise=True,
+        errorLogging=el.NEF_STANDARD,
+        hidePrefix=True,
+    ):
 
         el.ErrorLog.__init__(self, loggingMode=errorLogging)
 
@@ -521,9 +539,9 @@ class NefImporter(el.ErrorLog):
             self.initialise()
 
     @el.ErrorLog(errorCode=el.NEFERROR_ERRORLOADINGFILE)
-    def loadValidateDictionary(self, fileName=None, mode='standard'):
+    def loadValidateDictionary(self, fileName=None, mode="standard"):
         if not os.path.isfile(fileName):
-            raise ValueError('Error: file does not exist')
+            raise ValueError("Error: file does not exist")
 
         with open(fileName) as fp:
             data = fp.read()
@@ -649,26 +667,26 @@ class NefImporter(el.ErrorLog):
         """
         Initialise a new NefImporter object with a starting saveFrame
         """
-        nefNmr = 'nef_nmr_meta_data'
-        nefMol = 'nef_molecular_system'
-        nefChem = 'nef_chemical_shift_list_1'
+        nefNmr = "nef_nmr_meta_data"
+        nefMol = "nef_molecular_system"
+        nefChem = "nef_chemical_shift_list_1"
 
         self._nefDict[nefNmr] = StarIo.NmrDataBlock()
-        self._nefDict[nefNmr].update({k: '' for k in MD_REQUIRED_FIELDS})
-        self._nefDict[nefNmr]['sf_category'] = 'nef_nmr_meta_data'
-        self._nefDict[nefNmr]['sf_framecode'] = 'nef_nmr_meta_data'
-        self._nefDict[nefNmr]['format_name'] = 'Nmr_Exchange_Format'
-        self._nefDict[nefNmr]['format_version'] = __nef_version__
-        self._nefDict[nefNmr]['program_name'] = self.programName
-        self._nefDict[nefNmr]['program_version'] = self.programVersion
+        self._nefDict[nefNmr].update({k: "" for k in MD_REQUIRED_FIELDS})
+        self._nefDict[nefNmr]["sf_category"] = "nef_nmr_meta_data"
+        self._nefDict[nefNmr]["sf_framecode"] = "nef_nmr_meta_data"
+        self._nefDict[nefNmr]["format_name"] = "Nmr_Exchange_Format"
+        self._nefDict[nefNmr]["format_version"] = __nef_version__
+        self._nefDict[nefNmr]["program_name"] = self.programName
+        self._nefDict[nefNmr]["program_version"] = self.programVersion
 
         self._nefDict[nefMol] = StarIo.NmrDataBlock()
-        self._nefDict[nefMol].update({k: '' for k in MS_REQUIRED_FIELDS})
-        self._nefDict[nefMol]['sf_category'] = 'nef_molecular_system'
-        self._nefDict[nefMol]['sf_framecode'] = 'nef_molecular_system'
+        self._nefDict[nefMol].update({k: "" for k in MS_REQUIRED_FIELDS})
+        self._nefDict[nefMol]["sf_category"] = "nef_molecular_system"
+        self._nefDict[nefMol]["sf_framecode"] = "nef_molecular_system"
         for l in MS_REQUIRED_LOOPS:
-            self._nefDict['nef_molecular_system'][l] = []
-            self.addChemicalShiftList(nefChem, 'ppm')
+            self._nefDict["nef_molecular_system"][l] = []
+            self.addChemicalShiftList(nefChem, "ppm")
 
         self._logError(errorCode=el.NEFVALID)
 
@@ -685,118 +703,123 @@ class NefImporter(el.ErrorLog):
 
         self._nefDict[name] = StarIo.NmrSaveFrame()
         if required_fields is not None:
-            self._nefDict[name].update({k: '' for k in required_fields})
-            self._nefDict[name]['sf_category'] = category
-            self._nefDict[name]['sf_framecode'] = name
+            self._nefDict[name].update({k: "" for k in required_fields})
+            self._nefDict[name]["sf_category"] = category
+            self._nefDict[name]["sf_framecode"] = name
         if required_loops is not None:
             for l in required_loops:
                 self._nefDict[name][l] = []
         return self._nefDict[name]
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
-    def addChemicalShiftList(self, name, cs_units='ppm'):
+    def addChemicalShiftList(self, name, cs_units="ppm"):
         name = self._insertPrefix(name)
 
-        category = 'nef_chemical_shift_list'
-        self.addSaveFrame(name=name, category=category,
-                          required_fields=CSL_REQUIRED_FIELDS,
-                          required_loops=CSL_REQUIRED_LOOPS)
-        self._nefDict[name]['atom_chem_shift_units'] = cs_units
+        category = "nef_chemical_shift_list"
+        self.addSaveFrame(
+            name=name, category=category, required_fields=CSL_REQUIRED_FIELDS, required_loops=CSL_REQUIRED_LOOPS
+        )
+        self._nefDict[name]["atom_chem_shift_units"] = cs_units
         return self._nefDict[name]
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
-    def addDistanceRestraintList(self, name, potential_type,
-                                 restraint_origin=None):
+    def addDistanceRestraintList(self, name, potential_type, restraint_origin=None):
         name = self._insertPrefix(name)
 
-        category = 'nef_distance_restraint_list'
-        self.addSaveFrame(name=name, category=category,
-                          required_fields=DRL_REQUIRED_FIELDS,
-                          required_loops=DRL_REQUIRED_LOOPS)
-        self._nefDict[name]['potential_type'] = potential_type
+        category = "nef_distance_restraint_list"
+        self.addSaveFrame(
+            name=name, category=category, required_fields=DRL_REQUIRED_FIELDS, required_loops=DRL_REQUIRED_LOOPS
+        )
+        self._nefDict[name]["potential_type"] = potential_type
         if restraint_origin is not None:
-            self._nefDict[name]['restraint_origin'] = restraint_origin
-
-        return self._nefDict[name]
-
-    @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
-    def addDihedralRestraintList(self, name, potential_type,
-                                 restraint_origin=None):
-        name = self._insertPrefix(name)
-
-        category = 'nef_dihedral_restraint_list'
-        self.addSaveFrame(name=name, category=category,
-                          required_fields=DIHRL_REQUIRED_FIELDS,
-                          required_loops=DIHRL_REQUIRED_LOOPS)
-        self._nefDict[name]['potential_type'] = potential_type
-        if restraint_origin is not None:
-            self._nefDict[name]['restraint_origin'] = restraint_origin
+            self._nefDict[name]["restraint_origin"] = restraint_origin
 
         return self._nefDict[name]
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
-    def addRdcRestraintList(self, name, potential_type,
-                            restraint_origin=None, tensor_magnitude=None,
-                            tensor_rhombicity=None, tensor_chain_code=None,
-                            tensor_sequence_code=None, tensor_residue_type=None):
+    def addDihedralRestraintList(self, name, potential_type, restraint_origin=None):
         name = self._insertPrefix(name)
 
-        category = 'nef_rdc_restraint_list'
-        self.addSaveFrame(name=name, category=category,
-                          required_fields=DIHRL_REQUIRED_FIELDS,
-                          required_loops=RRL_REQUIRED_LOOPS)
-        self._nefDict[name]['potential_type'] = potential_type
+        category = "nef_dihedral_restraint_list"
+        self.addSaveFrame(
+            name=name, category=category, required_fields=DIHRL_REQUIRED_FIELDS, required_loops=DIHRL_REQUIRED_LOOPS
+        )
+        self._nefDict[name]["potential_type"] = potential_type
         if restraint_origin is not None:
-            self._nefDict[name]['restraint_origin'] = restraint_origin
+            self._nefDict[name]["restraint_origin"] = restraint_origin
+
+        return self._nefDict[name]
+
+    @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
+    def addRdcRestraintList(
+        self,
+        name,
+        potential_type,
+        restraint_origin=None,
+        tensor_magnitude=None,
+        tensor_rhombicity=None,
+        tensor_chain_code=None,
+        tensor_sequence_code=None,
+        tensor_residue_type=None,
+    ):
+        name = self._insertPrefix(name)
+
+        category = "nef_rdc_restraint_list"
+        self.addSaveFrame(
+            name=name, category=category, required_fields=DIHRL_REQUIRED_FIELDS, required_loops=RRL_REQUIRED_LOOPS
+        )
+        self._nefDict[name]["potential_type"] = potential_type
+        if restraint_origin is not None:
+            self._nefDict[name]["restraint_origin"] = restraint_origin
         if tensor_magnitude is not None:
-            self._nefDict[name]['tensor_magnitude'] = tensor_magnitude
+            self._nefDict[name]["tensor_magnitude"] = tensor_magnitude
         if tensor_rhombicity is not None:
-            self._nefDict[name]['tensor_rhombicity'] = tensor_rhombicity
+            self._nefDict[name]["tensor_rhombicity"] = tensor_rhombicity
         if tensor_chain_code is not None:
-            self._nefDict[name]['tensor_chain_code'] = tensor_chain_code
+            self._nefDict[name]["tensor_chain_code"] = tensor_chain_code
         if tensor_sequence_code is not None:
-            self._nefDict[name]['tensor_sequence_code'] = tensor_sequence_code
+            self._nefDict[name]["tensor_sequence_code"] = tensor_sequence_code
         if tensor_residue_type is not None:
-            self._nefDict[name]['tensor_residue_type'] = tensor_residue_type
+            self._nefDict[name]["tensor_residue_type"] = tensor_residue_type
 
         return self._nefDict[name]
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
-    def addPeakList(self, name, num_dimensions, chemical_shift_list,
-                    experiment_classification=None,
-                    experiment_type=None):
+    def addPeakList(
+        self, name, num_dimensions, chemical_shift_list, experiment_classification=None, experiment_type=None
+    ):
         name = self._insertPrefix(name)
 
-        category = 'nef_nmr_spectrum'
+        category = "nef_nmr_spectrum"
         if chemical_shift_list in self:
-            if self._nefDict[chemical_shift_list]['sf_category'] == 'nef_chemical_shift_list':
-                self.addSaveFrame(name=name, category=category,
-                                  required_fields=PL_REQUIRED_FIELDS,
-                                  required_loops=PL_REQUIRED_LOOPS)
-                self._nefDict[name]['num_dimensions'] = num_dimensions
-                self._nefDict[name]['chemical_shift_list'] = chemical_shift_list
+            if self._nefDict[chemical_shift_list]["sf_category"] == "nef_chemical_shift_list":
+                self.addSaveFrame(
+                    name=name, category=category, required_fields=PL_REQUIRED_FIELDS, required_loops=PL_REQUIRED_LOOPS
+                )
+                self._nefDict[name]["num_dimensions"] = num_dimensions
+                self._nefDict[name]["chemical_shift_list"] = chemical_shift_list
                 if experiment_classification is not None:
-                    self._nefDict[name]['experiment_classification'] = experiment_classification
+                    self._nefDict[name]["experiment_classification"] = experiment_classification
                 if experiment_type is not None:
-                    self._nefDict[name]['experiment_type'] = experiment_type
+                    self._nefDict[name]["experiment_type"] = experiment_type
 
                 return self._nefDict[name]
-            raise Exception(f'{chemical_shift_list} is not a nef_chemical_shift_list.')
-        raise Exception(f'{chemical_shift_list} does not exist.')
+            raise Exception(f"{chemical_shift_list} is not a nef_chemical_shift_list.")
+        raise Exception(f"{chemical_shift_list} does not exist.")
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADADDSAVEFRAME)
     def addLinkageTable(self):
-        name = category = 'nef_peak_restraint_links'
-        return self.addSaveFrame(name=name, category=category,
-                                 required_fields=PRLS_REQUIRED_FIELDS,
-                                 required_loops=PL_REQUIRED_LOOPS)
+        name = category = "nef_peak_restraint_links"
+        return self.addSaveFrame(
+            name=name, category=category, required_fields=PRLS_REQUIRED_FIELDS, required_loops=PL_REQUIRED_LOOPS
+        )
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADTOSTRING)
     def toString(self):
         return self._nefDict.toString()
 
     @el.ErrorLog(errorCode=el.NEFERROR_BADFROMSTRING)
-    def fromString(self, text, mode='standard'):
+    def fromString(self, text, mode="standard"):
         # set the Nef from the contents of the string, opposite of toString
         dataExtent = StarIo.parseNef(text=text, mode=mode)
         if dataExtent:
@@ -808,18 +831,18 @@ class NefImporter(el.ErrorLog):
             self._nefDict = None
 
     @el.ErrorLog(errorCode=el.NEFERROR_ERRORLOADINGFILE)
-    def loadFile(self, fileName=None, mode='standard'):
+    def loadFile(self, fileName=None, mode="standard"):
         nefDataExtent = StarIo.parseNefFile(fileName=fileName, mode=mode)
         self._nefDict = list(nefDataExtent.values())
         if len(self._nefDict) > 1:
-            print('More than one datablock in a NEF file is not allowed.  Using the first and discarding the rest.')
+            print("More than one datablock in a NEF file is not allowed.  Using the first and discarding the rest.")
         self._nefDict = self._nefDict[0]
 
         return True
 
     @el.ErrorLog(errorCode=el.NEFERROR_ERRORSAVINGFILE)
     def saveFile(self, fileName=None):
-        with open(fileName, 'w') as op:
+        with open(fileName, "w") as op:
             op.write(self._nefDict.toString())
 
         return True
@@ -832,8 +855,7 @@ class NefImporter(el.ErrorLog):
     @el.ErrorLog(errorCode=el.NEFERROR_SAVEFRAMEDOESNOTEXIST)
     def getSaveFrameNames(self, returnType=NEF_RETURNALL):
         # return a list of the saveFrames in the file
-        names = [db for db in self._nefDict.keys()
-                 if isinstance(self._nefDict[db], StarIo.NmrSaveFrame)]
+        names = [db for db in self._nefDict.keys() if isinstance(self._nefDict[db], StarIo.NmrSaveFrame)]
 
         if returnType == NEF_RETURNNEF:
             names = [self._removePrefix(nm) for nm in names if nm and nm.startswith(NEF_PREFIX)]
@@ -858,8 +880,11 @@ class NefImporter(el.ErrorLog):
 
     @el.ErrorLog(errorCode=el.NEFERROR_READATTRIBUTENAMES)
     def getAttributeNames(self):
-        names = [self._removePrefix(db) for db in self._nefDict.keys()
-                 if not isinstance(self._nefDict[db], StarIo.NmrSaveFrame)]
+        names = [
+            self._removePrefix(db)
+            for db in self._nefDict.keys()
+            if not isinstance(self._nefDict[db], StarIo.NmrSaveFrame)
+        ]
         return tuple(names)
 
     @el.ErrorLog(errorCode=el.NEFERROR_READATTRIBUTE)
@@ -952,8 +977,9 @@ class NefDict(StarIo.NmrSaveFrame, el.ErrorLog):
         Return list of attributes in the saveFrame
         :return list or None:
         """
-        return tuple([self._removePrefix(db) for db in self._nefFrame.keys()
-                      if isinstance(self._nefFrame[db], StarIo.NmrLoop)])
+        return tuple(
+            [self._removePrefix(db) for db in self._nefFrame.keys() if isinstance(self._nefFrame[db], StarIo.NmrLoop)]
+        )
 
     @el.ErrorLog(errorCode=el.NEFERROR_GENERICGETTABLEERROR)
     def getTable(self, name=None, asPandas=False):
@@ -1016,7 +1042,7 @@ class NefDict(StarIo.NmrSaveFrame, el.ErrorLog):
     def setTable(self, name):
         # add the table 'name' to the saveFrame, or replace the existing
         # does this need to be here or in the main class?
-        print('Not implemented yet.')
+        print("Not implemented yet.")
 
     def _convertToPandas(self, sf):
         """
@@ -1027,7 +1053,7 @@ class NefDict(StarIo.NmrSaveFrame, el.ErrorLog):
             import pandas as pd
 
             df = pd.DataFrame(data=sf.data, columns=sf.columns)
-            df.replace({'.': np.NAN, 'true': True, 'false': False}, inplace=True)
+            df.replace({".": np.NAN, "true": True, "false": False}, inplace=True)
             return df
         except:
             return None
@@ -1038,8 +1064,13 @@ class NefDict(StarIo.NmrSaveFrame, el.ErrorLog):
         Return list of attributes in the saveFrame
         :return list or None:
         """
-        return tuple([self._removePrefix(db) for db in self._nefFrame.keys()
-                      if not isinstance(self._nefFrame[db], StarIo.NmrLoop)])
+        return tuple(
+            [
+                self._removePrefix(db)
+                for db in self._nefFrame.keys()
+                if not isinstance(self._nefFrame[db], StarIo.NmrLoop)
+            ]
+        )
 
     @el.ErrorLog(errorCode=el.NEFERROR_READATTRIBUTE)
     def getAttribute(self, name):
@@ -1079,15 +1110,14 @@ class NefDict(StarIo.NmrSaveFrame, el.ErrorLog):
             self._hidePrefix = newPrefix
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     # define the NefImporter with standard logging
     test = NefImporter(errorLogging=el.NEF_STANDARD)
-    testPath = os.path.join(os.getcwd(), 'NEF', 'data_1_1', 'CCPN_Commented_Example.nef')
-    testPathOut = os.path.join(os.getcwd(), 'NEF', 'data_1_1', 'CCPN_Commented_Example_Out.nef')
+    testPath = os.path.join(os.getcwd(), "NEF", "data_1_1", "CCPN_Commented_Example.nef")
+    testPathOut = os.path.join(os.getcwd(), "NEF", "data_1_1", "CCPN_Commented_Example_Out.nef")
 
     if not os.path.exists(testPath):
-        raise RuntimeError('Error: %s not found' % testPath)
+        raise RuntimeError("Error: %s not found" % testPath)
 
     # load a testFile
     test.loadFile(testPath)
@@ -1099,24 +1129,24 @@ if __name__ == '__main__':
     validNef = NefImporter(errorLogging=el.NEF_STANDARD)
 
     # oad the validation dictionary
-    infile = 'mmcif_nef.dic'
-    filePath = os.path.join(os.getcwd(), 'NEF', 'specification', infile)
+    infile = "mmcif_nef.dic"
+    filePath = os.path.join(os.getcwd(), "NEF", "specification", infile)
     if not os.path.exists(filePath):
-        raise RuntimeError('Error: %s not found' % infile)
+        raise RuntimeError("Error: %s not found" % infile)
 
     test.loadValidateDictionary(filePath)
     validCheck = test.isValid
 
     # print out any validation errors
-    print('~~~~~~~~~~~~~~~~~~~~~~\nValid Nef:', validCheck)
+    print("~~~~~~~~~~~~~~~~~~~~~~\nValid Nef:", validCheck)
     if not validCheck:
-        print('Error Nef:', test.validErrorLog)
-        print('Error Nef:')
+        print("Error Nef:", test.validErrorLog)
+        print("Error Nef:")
         for k, v in test.validErrorLog.items():
-            print('  >>>', k)
+            print("  >>>", k)
             for err in v:
-                print('  >>>        ', err)
-    print('~~~~~~~~~~~~~~~~~~~~~~')
+                print("  >>>        ", err)
+    print("~~~~~~~~~~~~~~~~~~~~~~")
 
     # examples of printing saveFrames information
     print(names)
@@ -1131,9 +1161,9 @@ if __name__ == '__main__':
     sf1 = None
     if names:
         sf1 = test.getSaveFrame(names[0])
-    sf2 = test.getSaveFrame('notFound')
+    sf2 = test.getSaveFrame("notFound")
 
-    print(test.hasSaveFrame('notFound'))
+    print(test.hasSaveFrame("notFound"))
     if names:
         print(test.hasSaveFrame(names[0]))
 
@@ -1142,45 +1172,44 @@ if __name__ == '__main__':
 
     # testing the different errors from searching for saveFrames
     if sf1 is not None:
-
         # get the list of tables
         print(sf1.name)
         print(sf1.getTableNames())
 
         # get a table as a pandas dataframe
         table = sf1.getTable()
-        sf1.getTable('nmr_atom', asPandas=True)
-        table = sf1.getTable('nmr_atom', asPandas=True)
+        sf1.getTable("nmr_atom", asPandas=True)
+        table = sf1.getTable("nmr_atom", asPandas=True)
 
         print(table)
 
-        print(sf1.hasTable('notFound'))
-        print(sf1.hasTable('nmr_residue'))
+        print(sf1.hasTable("notFound"))
+        print(sf1.hasTable("nmr_residue"))
 
         print(sf1.getAttributeNames())
-        print(sf1.hasAttribute('sf_framecode'))
-        print(sf1.hasAttribute('nothing'))
-        print(sf1.getAttribute('notHere'))
-        print(sf1.getAttribute('sf_category'))
+        print(sf1.hasAttribute("sf_framecode"))
+        print(sf1.hasAttribute("nothing"))
+        print(sf1.getAttribute("notHere"))
+        print(sf1.getAttribute("sf_category"))
 
-    print('Testing getTable')
+    print("Testing getTable")
     try:
-        print(test.getSaveFrame(name='ccpn_assignment').getTable())
+        print(test.getSaveFrame(name="ccpn_assignment").getTable())
     except Exception as es:
-        print('Error: %s' % str(es))
-
-    try:
-        print(test.getSaveFrame(name='ccpn_assignment').getTable(name='nmr_residue', asPandas=True))
-    except Exception as es:
-        print('Error: %s' % str(es))
+        print("Error: %s" % str(es))
 
     try:
-        print(test.getSaveFrame(name='ccpn_assignment').getTable(name='notFound', asPandas=True))
+        print(test.getSaveFrame(name="ccpn_assignment").getTable(name="nmr_residue", asPandas=True))
     except Exception as es:
-        print('Error: %s' % str(es))
+        print("Error: %s" % str(es))
 
-    print('Testing saveFile')
-    print('SAVE ', test.saveFile(testPathOut))
+    try:
+        print(test.getSaveFrame(name="ccpn_assignment").getTable(name="notFound", asPandas=True))
+    except Exception as es:
+        print("Error: %s" % str(es))
+
+    print("Testing saveFile")
+    print("SAVE ", test.saveFile(testPathOut))
     print(test.lastError)
 
     # test meta creation of category names
@@ -1208,5 +1237,5 @@ if __name__ == '__main__':
         print(test.loggingMode)
         print(test.hidePrefix)
 
-    print('Valid Nef:', test.isValid)
-    print('Valid Nef:', test.validErrorLog)
+    print("Valid Nef:", test.isValid)
+    print("Valid Nef:", test.validErrorLog)

@@ -3,11 +3,10 @@ Adds init/import of BMRB format
 
 Methods:
 """
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Chain, Molecule
 from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Chain
-from cing.core.molecule import Molecule
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 bmrbAtomType2spinTypeCingMap = { 'H': '1H', 'C': '13C', 'N': '15N', 'P': '31P' }
 bmrbResType2CingMap = { 'H': '1H', 'C': '13C', 'N': '15N', 'P': '31P' }

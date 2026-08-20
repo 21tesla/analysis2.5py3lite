@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,55 +50,61 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Base import Base
 
+
 class Frame(Tkinter.Frame, Base):
+    def __init__(
+        self,
+        parent,
+        grid=None,
+        gridSpan=(1, 1),
+        expandGrid=None,
+        sticky="nsew",
+        docKey=None,
+        tipText=None,
+        createToolTip=False,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, grid=None, gridSpan=(1,1), expandGrid=None,
-               sticky='nsew', docKey=None, tipText=None, createToolTip=False,
-               *args, **kw):
+        if not kw.get("bg"):
+            kw["bg"] = "grey90"
 
-    if not kw.get('bg'):
-      kw['bg'] = 'grey90'
-      
-    Tkinter.Frame.__init__(self, parent, *args, **kw)
-    Base.__init__(self, docKey=docKey, tipText=tipText, createToolTip=createToolTip)
+        Tkinter.Frame.__init__(self, parent, *args, **kw)
+        Base.__init__(self, docKey=docKey, tipText=tipText, createToolTip=createToolTip)
 
-    self.parent = parent
-    
-    if grid is not None:
-      row, col = grid
-      rowSpan, colSpan = gridSpan
-      self.grid(row=row, column=col, rowspan=rowSpan,
-                columnspan=colSpan, sticky=sticky)
+        self.parent = parent
 
-    if expandGrid:
-      if type(expandGrid[0]) is int:
-        row, col = expandGrid
-        self.expandGrid(row, col)
-      
-      else:
-        for row, col in expandGrid:
-          self.expandGrid(row, col)
+        if grid is not None:
+            row, col = grid
+            rowSpan, colSpan = gridSpan
+            self.grid(row=row, column=col, rowspan=rowSpan, columnspan=colSpan, sticky=sticky)
 
-  def expandGrid(self, row, col):
-  
-    if row is not None:
-      self.grid_rowconfigure(row, weight=1)
-    
-    if col is not None:
-      self.grid_columnconfigure(col, weight=1 )
-    
+        if expandGrid:
+            if type(expandGrid[0]) is int:
+                row, col = expandGrid
+                self.expandGrid(row, col)
 
-  def open(self):
+            else:
+                for row, col in expandGrid:
+                    self.expandGrid(row, col)
 
-    if (hasattr(self.parent, 'open')): # intended use: parent is a BasePopup
-      self.parent.open()
+    def expandGrid(self, row, col):
 
-  def close(self):
+        if row is not None:
+            self.grid_rowconfigure(row, weight=1)
 
-    if (hasattr(self.parent, 'close')): # intended use: parent is a BasePopup
-      self.parent.close()
+        if col is not None:
+            self.grid_columnconfigure(col, weight=1)
 
+    def open(self):
+
+        if hasattr(self.parent, "open"):  # intended use: parent is a BasePopup
+            self.parent.open()
+
+    def close(self):
+
+        if hasattr(self.parent, "close"):  # intended use: parent is a BasePopup
+            self.parent.close()

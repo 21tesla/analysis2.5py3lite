@@ -7,15 +7,13 @@ NB this script differs from validateForProteinsDotDynDnsDotOrg.py in that this o
     LAST TIME 2010-05-27 the other script was used.
     DO NOT UES!
 """
-from cing import cingDirScripts
-from cing import cingDirTestsData
-from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_FLAT
-from cing.Scripts.validateEntry import PROJECT_TYPE_CING
-from cing.core.constants import CV_RANGES_STR
-from cing.core.constants import DATA_STR
-import cing
 import os
+
+import cing
+from cing import cingDirScripts, cingDirTestsData
+from cing.core.constants import CV_RANGES_STR, DATA_STR
+from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_FLAT, PROJECT_TYPE_CING
 
 cing.verbosity = cing.verbosityDebug
 
@@ -33,7 +31,7 @@ pdbConvention         = '.'
 restraintsConvention  = '.'
 
 storeCING2db = "0"
-filterTopViolations = '0' 
+filterTopViolations = '0'
 filterVasco = '0'
 
 extraArgList = ( str(cing.verbosity),

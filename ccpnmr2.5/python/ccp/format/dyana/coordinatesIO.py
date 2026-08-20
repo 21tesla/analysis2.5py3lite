@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,10 +53,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 from ccp.format.dyana.generalIO import DyanaGenericFile
-
-from memops.universal.Util import returnInt, returnFloat
-
 from ccp.format.general.Constants import defaultSeqInsertCode
+from memops.universal.Util import returnFloat, returnInt
 
 """
 
@@ -113,200 +111,223 @@ Number of residues:    20 Number of atoms:     373
 #####################
 # Class definitions #
 #####################
-     
+
+
 class DyanaCoordinateFile(DyanaGenericFile):
-  # Information on file level
-  def initialize(self):
-  
-    self.modelCoordinates = {}
-    self.chains = []
+    # Information on file level
+    def initialize(self):
 
-  def read(self, maxNum = None, verbose = 0):
+        self.modelCoordinates = {}
+        self.chains = []
 
-    if verbose == 1:
-      print("Reading %s coordinate file %s" % (self.format,self.name))
-    
-    #
-    # One structure per file...
-    #
-    
-    modelNum = 1
-    self.modelCoordinates[modelNum] = []
-    self.chains.append(DyanaChain(self.defaultMolCode))
-    currentRefChainId = self.defaultMolCode
-    oldSerial = None
-    coordinateAddedToNewChain = False
-    modelAdded = False
-    
-    #
-    # Start reading file
-    #
-    
-    fin = open(self.name)
+    def read(self, maxNum=None, verbose=0):
 
-    # Read, look for first line
-    line = fin.readline()
+        if verbose == 1:
+            print("Reading %s coordinate file %s" % (self.format, self.name))
 
-    while line:
-      cols = line.split()
-      
-      coordFound = False
+        #
+        # One structure per file...
+        #
 
-      if len(cols) == 0 or self.patt['hash'].search(line):
-        pass
-        
-      elif self.patt[self.format + "NewModel"].search(line):
-      
-        newModelNum = returnInt(self.patt[self.format + "NewModel"].search(line).group(1))
-        
-        # Just safeguard...
-        if modelNum != newModelNum:
-          modelAdded = True
-          modelNum = newModelNum
-          self.modelCoordinates[modelNum] = []
-     
-      elif self.patt[self.format + 'CoordinateAtomLine'].search(line):
-        
-        serial = line[5:11]
-        atomName = line[12:17]
-        resName = line[17:20].strip()
-        chainCode = line[21:22]
-        seqCode = line[22:26]
-        insertionCode = line[26:27]
-        x = line[30:38]
-        y = line[38:46]
-        z = line[46:54]
-
-        coordFound = True
-
-      elif self.patt[self.format + 'CoordinateInfoLine'].search(line):
-        
-        #(6X,A5,I6,1X,A5,3F11.4)
-        serial = line[0:6]
-        atomName = line[6:11]
-        seqCode = line[11:17]
-        insertionCode = line[17:18]
-        resName = line[18:23].strip()
-        x = line[23:34]
-        y = line[34:45]
-        z = line[45:56]
-        chainCode = self.defaultMolCode
-        
-        coordFound = True
-      
-      #
-      # Set the coordinate info if found... 
-      #
-      
-      if coordFound:
-      
-        if oldSerial == None:
-          oldSerial = serial
-        
-        if oldSerial > serial and not modelAdded:
-          # This is for the 'old' format...
-          modelNum += 1
-          self.modelCoordinates[modelNum] = []
-        
+        modelNum = 1
+        self.modelCoordinates[modelNum] = []
+        self.chains.append(DyanaChain(self.defaultMolCode))
+        currentRefChainId = self.defaultMolCode
+        oldSerial = None
+        coordinateAddedToNewChain = False
         modelAdded = False
-        
-        # Remove linker residue coordinates - irrelevant for CCPN, and cannot be stored.
-        if resName in self.linkerResidueCodes:
-          print("  Warning: Removed %s linker residue" % resName)
-          
-          if coordinateAddedToNewChain:
-            currentRefChainId = self.chainCodesString[len(self.chains) - 1]
-            self.chains.append(DyanaChain(currentRefChainId))
-            coordinateAddedToNewChain = False
-            
-        else:
-        
-          # Now add the coordinate info...
-          coordinate = DyanaCoordinate(serial,atomName,seqCode,resName,chainCode,x,y,z,insertionCode = insertionCode,refChainId=currentRefChainId,verbose=False)
-          if not None in (coordinate.x,coordinate.y,coordinate.z):
-            self.modelCoordinates[modelNum].append(coordinate)
-            coordinateAddedToNewChain = True
 
-          oldSerial = serial
-        
-      line = fin.readline()
+        #
+        # Start reading file
+        #
 
-    fin.close()
+        fin = open(self.name)
+
+        # Read, look for first line
+        line = fin.readline()
+
+        while line:
+            cols = line.split()
+
+            coordFound = False
+
+            if len(cols) == 0 or self.patt["hash"].search(line):
+                pass
+
+            elif self.patt[self.format + "NewModel"].search(line):
+                newModelNum = returnInt(self.patt[self.format + "NewModel"].search(line).group(1))
+
+                # Just safeguard...
+                if modelNum != newModelNum:
+                    modelAdded = True
+                    modelNum = newModelNum
+                    self.modelCoordinates[modelNum] = []
+
+            elif self.patt[self.format + "CoordinateAtomLine"].search(line):
+                serial = line[5:11]
+                atomName = line[12:17]
+                resName = line[17:20].strip()
+                chainCode = line[21:22]
+                seqCode = line[22:26]
+                insertionCode = line[26:27]
+                x = line[30:38]
+                y = line[38:46]
+                z = line[46:54]
+
+                coordFound = True
+
+            elif self.patt[self.format + "CoordinateInfoLine"].search(line):
+                # (6X,A5,I6,1X,A5,3F11.4)
+                serial = line[0:6]
+                atomName = line[6:11]
+                seqCode = line[11:17]
+                insertionCode = line[17:18]
+                resName = line[18:23].strip()
+                x = line[23:34]
+                y = line[34:45]
+                z = line[45:56]
+                chainCode = self.defaultMolCode
+
+                coordFound = True
+
+            #
+            # Set the coordinate info if found...
+            #
+
+            if coordFound:
+                if oldSerial == None:
+                    oldSerial = serial
+
+                if oldSerial > serial and not modelAdded:
+                    # This is for the 'old' format...
+                    modelNum += 1
+                    self.modelCoordinates[modelNum] = []
+
+                modelAdded = False
+
+                # Remove linker residue coordinates - irrelevant for CCPN, and cannot be stored.
+                if resName in self.linkerResidueCodes:
+                    print("  Warning: Removed %s linker residue" % resName)
+
+                    if coordinateAddedToNewChain:
+                        currentRefChainId = self.chainCodesString[len(self.chains) - 1]
+                        self.chains.append(DyanaChain(currentRefChainId))
+                        coordinateAddedToNewChain = False
+
+                else:
+                    # Now add the coordinate info...
+                    coordinate = DyanaCoordinate(
+                        serial,
+                        atomName,
+                        seqCode,
+                        resName,
+                        chainCode,
+                        x,
+                        y,
+                        z,
+                        insertionCode=insertionCode,
+                        refChainId=currentRefChainId,
+                        verbose=False,
+                    )
+                    if None not in (coordinate.x, coordinate.y, coordinate.z):
+                        self.modelCoordinates[modelNum].append(coordinate)
+                        coordinateAddedToNewChain = True
+
+                    oldSerial = serial
+
+            line = fin.readline()
+
+        fin.close()
+
+    def write(self, verbose=0):
+
+        if verbose == 1:
+            print("Writing %s coordinate file %s" % (self.format, self.name))
+
+        fout = open(self.name, "w")
+
+        if len(self.modelCoordinates) > 1:
+            print("Warning: can only handle 1 model per file for %s! Writing 1st model in list..." % self.format)
+
+        modelNums = self.modelCoordinates.keys()
+        modelNums.sort()
+        modelNum = modelNums[0]
+
+        numResidues = 0
+        numAtoms = 0
+
+        oldSeqCode = None
+
+        for coord in self.modelCoordinates[modelNum]:
+            if coord.seqCode != oldSeqCode:
+                numResidues += 1
+                oldSeqCode = coord.seqCode
+
+            numAtoms += 1
+
+        fout.write("Structure 001 from CCPN, f=0.000" + self.newline)
+        fout.write("Number of residues: %5d Number of atoms: %7d " % (numResidues, numAtoms) + self.newline)
+
+        lineFormat = "%5d %-5s%6d%1s%-5s%11.4f%11.4f%11.4f "
+
+        #
+        # Write coordinates...
+        #
+
+        for coord in self.modelCoordinates[modelNum]:
+            fout.write(
+                lineFormat
+                % (
+                    coord.serial,
+                    coord.atomName,
+                    coord.seqCode,
+                    coord.insertionCode,
+                    coord.resName,
+                    coord.x,
+                    coord.y,
+                    coord.z,
+                )
+            )
+
+            fout.write(self.newline)
+
+        fout.close()
 
 
-  def write(self,verbose = 0):
-
-    if verbose == 1:
-      print("Writing %s coordinate file %s" % (self.format,self.name))
-
-    fout = open(self.name,'w')
-    
-    if len(self.modelCoordinates) > 1:
-      print("Warning: can only handle 1 model per file for %s! Writing 1st model in list..." % self.format)
-    
-    modelNums = self.modelCoordinates.keys()
-    modelNums.sort()
-    modelNum = modelNums[0]
-    
-    numResidues = 0
-    numAtoms = 0
-    
-    oldSeqCode = None
-    
-    for coord in self.modelCoordinates[modelNum]:
-    
-      if coord.seqCode != oldSeqCode:
-        numResidues += 1
-        oldSeqCode = coord.seqCode
-      
-      numAtoms += 1
-    
-    fout.write("Structure 001 from CCPN, f=0.000" + self.newline)
-    fout.write("Number of residues: %5d Number of atoms: %7d " % (numResidues,numAtoms) + self.newline)
-
-    lineFormat = "%5d %-5s%6d%1s%-5s%11.4f%11.4f%11.4f "
-
-    #
-    # Write coordinates...
-    #
-    
-    for coord in self.modelCoordinates[modelNum]:
-
-      fout.write(lineFormat % (coord.serial,
-                               coord.atomName,
-                               coord.seqCode,
-                               coord.insertionCode,
-                               coord.resName,
-                               coord.x,
-                               coord.y,
-                               coord.z))
-
-      fout.write(self.newline)
-
-    fout.close()
-    
 class DyanaChain:
+    def __init__(self, chainId):
 
-  def __init__(self,chainId):
+        self.chainId = chainId
 
-    self.chainId = chainId
 
 class DyanaCoordinate:
+    def __init__(
+        self,
+        serial,
+        atomName,
+        seqCode,
+        resName,
+        chainId,
+        x,
+        y,
+        z,
+        insertionCode=defaultSeqInsertCode,
+        refChainId=None,
+        verbose=False,
+    ):
 
-  def __init__(self,serial,atomName,seqCode,resName,chainId,x,y,z,insertionCode = defaultSeqInsertCode,refChainId=None,verbose=False):
-  
-    self.serial = returnInt(serial,verbose=verbose)
-    self.atomName = atomName.strip()
-    self.seqCode = returnInt(seqCode,verbose=verbose)
-    self.resName = resName.strip()
-    self.chainId = chainId
-    self.x = returnFloat(x,default=None,verbose=verbose)
-    self.y = returnFloat(y,default=None,verbose=verbose)
-    self.z = returnFloat(z,default=None,verbose=verbose)
-    self.segId = ''
-    self.insertionCode = insertionCode
-    
-    if refChainId:
-      self.refChainId = refChainId
-    else:
-      self.refChainId = chainId
+        self.serial = returnInt(serial, verbose=verbose)
+        self.atomName = atomName.strip()
+        self.seqCode = returnInt(seqCode, verbose=verbose)
+        self.resName = resName.strip()
+        self.chainId = chainId
+        self.x = returnFloat(x, default=None, verbose=verbose)
+        self.y = returnFloat(y, default=None, verbose=verbose)
+        self.z = returnFloat(z, default=None, verbose=verbose)
+        self.segId = ""
+        self.insertionCode = insertionCode
+
+        if refChainId:
+            self.refChainId = refChainId
+        else:
+            self.refChainId = chainId

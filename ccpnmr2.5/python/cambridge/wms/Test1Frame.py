@@ -1,46 +1,38 @@
-import os
 
 # required for WS layer
 from SharedBeanService_services import *
 from WSString import *
 
-# added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
-
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.Button import Button
 
 #from memops.gui.ScrolledFrame import ScrolledFrame
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
-from memops.gui.Text import Text
-from memops.gui.Button import Button
 
+# added jmci; do we need this??
 
-
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class Test1Popup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='Repository')
 
 
   # there is a slight logical problem here. This frame refers to a
   # single task whereas the GUI as a whole contains many, many
   # tasks. How is the task represented in this frame selected?
-                       
+
   def body(self, guiFrame):
 
     guiFrame.grid_rowconfigure(0, weight=1)
@@ -50,15 +42,15 @@ class Test1Popup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('200x50')
-    
+
     self.update_idletasks()
 
 
 class Test1Frame(Frame):
 
-  
+
   def __init__(self, guiParent, basePopup):
 
     self.guiParent = guiParent
@@ -80,9 +72,9 @@ class Test1Frame(Frame):
     # TODO
     # decide whether we really need this
     self.repository = self.basePopup.repList.currentRepository
-    
+
     Frame.__init__(self, guiParent)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -102,9 +94,9 @@ class Test1Frame(Frame):
     # grid manager to control the display thereafter
 
     # when no data
-    
+
     self.noData_widgets = []
-    
+
     self.null_task_label = Label(self, text='No Task selected')
     self.noData_widgets.append(self.null_task_label)
 
@@ -188,11 +180,11 @@ class Test1Frame(Frame):
 
       for widget in self.data_widgets:
         widget.grid_remove()
-      
+
       self.null_task_label.grid(row=1, column=1, columnspan=4, sticky='nswe')
-     
+
     else:
-    
+
       for widget in self.noData_widgets:
         widget.grid_remove()
 
@@ -203,8 +195,8 @@ class Test1Frame(Frame):
       hm1 = {'serial': int(self.task_id) }
       wsstr_in1 = WSString(hm1)
 
-      request1 = getFieldsWithMethod();
-      request1._arg0 = 'org.pimslims.applet.server.TaskBean';
+      request1 = getFieldsWithMethod()
+      request1._arg0 = 'org.pimslims.applet.server.TaskBean'
       request1._arg1 = 'getTest1Fields'
       request1._arg2 = wsstr_in1.str
 
@@ -215,12 +207,12 @@ class Test1Frame(Frame):
 
       print('RESULT ', hm_tv)
 
- 
+
       self.task_rep_title.set('Task: ' + self.task_id)
       self.task_rep_title.grid(row=1, column=1, columnspan=2, sticky='w')
 
       self.repository = self.basePopup.repList.currentRepository
-      self.task_rep_label.grid(row=2, column=1, sticky='w')     
+      self.task_rep_label.grid(row=2, column=1, sticky='w')
       self.task_rep_value.set(self.repository.user + '@' + self.repository.name + '  ( ' + self.repository.connect + ' )')
       self.task_rep_value.grid(row=2, column=2, columnspan=2, sticky='w')
 
@@ -251,7 +243,7 @@ class Test1Frame(Frame):
 
       # this will depend on the status
       #self.task_date_label.grid(row=4, column=1, columnspan=2, sticky='w')
-      #self.task_date_value.set('11 FEB 2009:11:36') 
+      #self.task_date_value.set('11 FEB 2009:11:36')
       #self.task_date_value.grid(row=4, column=2, columnspan=2, sticky='w')
 
       # FIXME JMCI
@@ -266,7 +258,7 @@ class Test1Frame(Frame):
       inputProject = 'N/A'
       # This needs to be populated from the fields hash
       # It is also going to be dependent on the precise task
-      if hm_tv.has_key('inputVersion'):
+      if 'inputVersion' in hm_tv:
         inputProjectName = hm_tv['inputVersion']['project']['name']
         inputVersionTag = hm_tv['inputVersion']['versionTag']
         inputProject = inputProjectName + '::' + inputVersionTag
@@ -280,7 +272,7 @@ class Test1Frame(Frame):
       outputProject = 'N/A'
       # This needs to be populated from the fields hash
       # It is also going to be dependent on the precise task
-      if hm_tv.has_key('generatedVersion'):
+      if 'generatedVersion' in hm_tv:
         outputProjectName = hm_tv['generatedVersion']['project']['name']
         outputVersionTag = hm_tv['generatedVersion']['versionTag']
         outputProject = outputProjectName + '::' + outputVersionTag
@@ -312,14 +304,14 @@ class Test1Frame(Frame):
 
     h2={'serial': int(self.task_id),
           'status': 'PENDING' }
-    
+
     loc = SharedBeanServiceLocator()
     self.port = loc.getSharedBean()
 
-    request2 = record();
-        
-    request2._arg0 = 'org.pimslims.applet.server.TaskBean';
-    request2._arg1 = 'updateStatus';
+    request2 = record()
+
+    request2._arg0 = 'org.pimslims.applet.server.TaskBean'
+    request2._arg1 = 'updateStatus'
 
     wsstr_in = WSString(h2)
 
@@ -330,9 +322,9 @@ class Test1Frame(Frame):
 
     # now need to redraw task-related frames
     self.drawFrame()
-    if self.basePopup.frameShortcuts.has_key('Tasks'):
+    if 'Tasks' in self.basePopup.frameShortcuts:
       self.basePopup.frameShortcuts['Tasks'].drawFrame()
-    
+
 
   def tmpCall(self):
 
@@ -354,23 +346,22 @@ class Test1Frame(Frame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     #self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = Test1Popup(root)
-  
+
   root.mainloop()

@@ -8,16 +8,17 @@ python -u $CINGROOT/python/cing/Scripts/spaceHeater.py
 
 @author: jd
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.helper import detectCPUs
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.Scripts.doScriptOnEntryList import doFunctionOnEntryList
+
 
 def generateHeat(bogusArgument=None):
     """
     Generate heat for space while waiting for Elfstedentocht.
     """
     i = 0
-    while True:        
+    while True:
         i += 1
         if i > 10:
             i = 0

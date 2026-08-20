@@ -12,7 +12,7 @@ class Task:
         # PENDING
         # FAILED
         # RUNNING
-        
+
         self.status = status
 
         # FIXME JMCI
@@ -22,4 +22,4 @@ class Task:
         self.input = input
         self.output= output
 
-    
+

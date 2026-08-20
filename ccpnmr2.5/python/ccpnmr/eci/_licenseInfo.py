@@ -5,9 +5,8 @@
 #   and license headers are inserted.
 # - Once a file is matched it is excluded from further checking
 # - Files that are left after all licenseInfo has been processed, are
-#   skipped, or cause a warning, depending on the parameters of the calling 
+#   skipped, or cause a warning, depending on the parameters of the calling
 #   function.
-
 
 
 # includeDirs is a list of directory names (must match exactly)
@@ -18,7 +17,7 @@ includeDirs = []
 
 # excludeDirs is 'all', or a list of directory names (must match exactly)
 # Unless includeDirs is set, all directories except those in excludeDirs, are treated
-excludeDirs = ['api','xml','model']
+excludeDirs = ["api", "xml", "model"]
 
 # excludeFiles is 'all',or a list of file names (must match exactly)
 excludeFiles = []
@@ -32,11 +31,11 @@ excludeFileMatches = []
 # - includeFiles is 'all', or a list of file names (must match exactly)
 # - includeFileMatches is a list of regular expressions matching file names
 # - format describes the format to be used when entering the license
-#   (i.e. how comments are delimited). It is from an enumerated list. 
+#   (i.e. how comments are delimited). It is from an enumerated list.
 #   if format is None the format is derived from the file extension
 # - author, organization, and useLicense must have a value, the rest are optional
-# - author, organization, programFunction, programType, extraContact, and 
-#   credits are strings that are entered directly in the license header 
+# - author, organization, programFunction, programType, extraContact, and
+#   credits are strings that are entered directly in the license header
 # - useLicense, stdContact, and the members of the references tuple refer to
 #   information defined elsewhere. The options are (were?):
 #     useLicense : ('GPL','LGPL','ccpn','restricted')
@@ -47,31 +46,32 @@ excludeFileMatches = []
 # - credits serve instead of or in addition to references. Both can be omitted.
 
 licenseInfo = (
-  {'includeFiles':[],
-   'includeFileMatches':[r'.*\.py$'],
-   'format':None,
-   'author':'Tim Stevens and Chris Penkett',
-   'organization':'University of Cambridge and EBI/PDBe',
-   'useLicense':'ccpn',
-   'programFunction':'NMR Deposition Entry Completion Interface',
-   'programType':None,
-   'stdContact':'ccpn-msd',
-   'extraContact':'- contact the authors: tjs23@cam.ac.uk, penkett@ebi.ac.uk',
-   'references':('CCPN2002','CCPNMR2004'),
-   'credits':None
-  },
-  {'includeFiles':['CompletenessCheck.py','AditMandFields.py'],
-   'includeFileMatches':[r'.*\.py$'],
-   'format':None,
-   'author':'Chris Penkett',
-   'organization':'EBI/PDBe',
-   'useLicense':'ccpn',
-   'programFunction':'NMR Deposition Entry Completion Interface',
-   'programType':None,
-   'stdContact':'msd',
-   'extraContact':'- contact the author: penkett@ebi.ac.uk',
-   'references':('CCPN2002','CCPNMR2004'),
-   'credits':None
-  },
+    {
+        "includeFiles": [],
+        "includeFileMatches": [r".*\.py$"],
+        "format": None,
+        "author": "Tim Stevens and Chris Penkett",
+        "organization": "University of Cambridge and EBI/PDBe",
+        "useLicense": "ccpn",
+        "programFunction": "NMR Deposition Entry Completion Interface",
+        "programType": None,
+        "stdContact": "ccpn-msd",
+        "extraContact": "- contact the authors: tjs23@cam.ac.uk, penkett@ebi.ac.uk",
+        "references": ("CCPN2002", "CCPNMR2004"),
+        "credits": None,
+    },
+    {
+        "includeFiles": ["CompletenessCheck.py", "AditMandFields.py"],
+        "includeFileMatches": [r".*\.py$"],
+        "format": None,
+        "author": "Chris Penkett",
+        "organization": "EBI/PDBe",
+        "useLicense": "ccpn",
+        "programFunction": "NMR Deposition Entry Completion Interface",
+        "programType": None,
+        "stdContact": "msd",
+        "extraContact": "- contact the author: penkett@ebi.ac.uk",
+        "references": ("CCPN2002", "CCPNMR2004"),
+        "credits": None,
+    },
 )
-

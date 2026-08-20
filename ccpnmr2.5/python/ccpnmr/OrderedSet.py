@@ -2,36 +2,38 @@
 By Raymond Hettinger, http://code.activestate.com/recipes/576694/
 
 """
-#=========================================================================================
+
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2020"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: Ed Brooksbank $"
 __dateModified__ = "$dateModified: 2020-05-15 13:16:29 +0100 (Fri, May 15, 2020) $"
 __version__ = "$Revision: 3.0.1 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: CCPN $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
 
 import collections
 
 
 class OrderedSet(collections.MutableSet):
-
     def __init__(self, iterable=None):
         self.end = end = []
         end += [None, end, end]  # sentinel node for doubly linked list
@@ -76,15 +78,15 @@ class OrderedSet(collections.MutableSet):
 
     def pop(self, last=True):
         if not self:
-            raise KeyError('set is empty')
+            raise KeyError("set is empty")
         key = self.end[1][0] if last else self.end[2][0]
         self.discard(key)
         return key
 
     def __repr__(self):
         if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
+            return "%s()" % (self.__class__.__name__,)
+        return "%s(%r)" % (self.__class__.__name__, list(self))
 
     def __eq__(self, other):
         if isinstance(other, (OrderedSet, FrozenOrderedSet)):
@@ -93,7 +95,6 @@ class OrderedSet(collections.MutableSet):
 
 
 class FrozenOrderedSet(collections.MutableSet):
-
     def __init__(self, iterable=None):
         self.end = end = []
         end += [None, end, end]  # sentinel node for doubly linked list
@@ -105,23 +106,23 @@ class FrozenOrderedSet(collections.MutableSet):
 
     def add(self, value):
         """Add an element."""
-        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
+        raise NotImplementedError(f"Operation not allowed on {self.__class__.__name__}")
 
     def discard(self, value):
         """Remove an element."""
-        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
+        raise NotImplementedError(f"Operation not allowed on {self.__class__.__name__}")
 
     def remove(self, value):
         """Remove an element."""
-        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
+        raise NotImplementedError(f"Operation not allowed on {self.__class__.__name__}")
 
     def pop(self, last=True):
         """Return the popped value."""
-        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
+        raise NotImplementedError(f"Operation not allowed on {self.__class__.__name__}")
 
     def clear(self):
         """Clear the OrderedSet."""
-        raise NotImplementedError(f'Operation not allowed on {self.__class__.__name__}')
+        raise NotImplementedError(f"Operation not allowed on {self.__class__.__name__}")
 
     def _frozenAdd(self, key):
         """Add elements during initial creation, frozen at all other times"""
@@ -152,8 +153,8 @@ class FrozenOrderedSet(collections.MutableSet):
 
     def __repr__(self):
         if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
+            return "%s()" % (self.__class__.__name__,)
+        return "%s(%r)" % (self.__class__.__name__, list(self))
 
     def __eq__(self, other):
         if isinstance(other, (OrderedSet, FrozenOrderedSet)):
@@ -161,37 +162,37 @@ class FrozenOrderedSet(collections.MutableSet):
         return set(self) == set(other)
 
 
-if __name__ == '__main__':
-    s = OrderedSet('abracadaba')
-    t = OrderedSet('simsalabim')
-    print(f'OR - {s | t}')
-    print(f'AND - {s & t}')
-    print(f'MINUS - {s - t}')
-    print(f'SAME - {s==t}')
+if __name__ == "__main__":
+    s = OrderedSet("abracadaba")
+    t = OrderedSet("simsalabim")
+    print(f"OR - {s | t}")
+    print(f"AND - {s & t}")
+    print(f"MINUS - {s - t}")
+    print(f"SAME - {s == t}")
 
-    print(f'SET s - {s}')
+    print(f"SET s - {s}")
     s.pop()
-    print(f'POP - {s}')
+    print(f"POP - {s}")
     s.pop(last=False)
-    print(f'POP - {s}')
+    print(f"POP - {s}")
 
-    s = OrderedSet('abracadaba')
-    t = FrozenOrderedSet('simsalabim')
-    print(f'OR - {s | t}')
-    print(f'AND - {s & t}')
-    print(f'MINUS - {s - t}')
+    s = OrderedSet("abracadaba")
+    t = FrozenOrderedSet("simsalabim")
+    print(f"OR - {s | t}")
+    print(f"AND - {s & t}")
+    print(f"MINUS - {s - t}")
 
-    print(f'SET s - {s}')
+    print(f"SET s - {s}")
     s.pop()
-    print(f'POP - {s}')
+    print(f"POP - {s}")
 
-    print(f'SET t - {s}')
+    print(f"SET t - {s}")
     try:
-        t |= 'Z'
+        t |= "Z"
     except Exception as es:
         print(str(es))
-    print(f'SET t - {s}')
-    print(f'SAME - {s==t}')
-    t = FrozenOrderedSet('abrac')
-    print(f'SAME - {s==t}')
-    print(f'SAME - {t==s}')
+    print(f"SET t - {s}")
+    print(f"SAME - {s == t}")
+    t = FrozenOrderedSet("abrac")
+    print(f"SAME - {s == t}")
+    print(f"SAME - {t == s}")

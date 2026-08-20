@@ -1,9 +1,9 @@
-import os, re
+import os
+import re
+from subprocess import Popen
 
 from pdbe.adatah.Constants import archivesDataDir, bmrbUrl
 from pdbe.adatah.Io import getDataFromHttp, getReferenceTextFileFromHttp
-
-from subprocess import Popen
 
 #####################################
 #                                   #
@@ -25,8 +25,8 @@ nmrGridInfoUrl = "%s/mr_mysql_backup/%s" % (bmrbInfoUrl,nmrGridInfoFile)
 # Location of servlet to get specific nmrGrid info
 nmrGridServletUrl = "%s/servlets/MRGridServlet" % bmrbUrl
 
-mrArchiveLinkPatt = re.compile("\&request_type\=archive\&")
-mrLinkPatt = re.compile("MRGridServlet\?([^\>]+)\"\>")
+mrArchiveLinkPatt = re.compile(r"\&request_type\=archive\&")
+mrLinkPatt = re.compile("MRGridServlet\\?([^\\>]+)\"\\>")
 
 # Joined coordinate info at the BMRB (formerly at CMBI)
 #cmbiInfoUrl = "http://nmr.cmbi.ru.nl/~jd/viavia"
@@ -40,9 +40,9 @@ def getBmrbNmrGridDict(dataFilePath=None, skipCodes = None):
   """
 
   bmrbNmrGridDict = {}
-  
+
   #1047	1017	classified	1a51	2004-12-02
-  #26561	1064	parsed	1ajw	2004-12-03 
+  #26561	1064	parsed	1ajw	2004-12-03
   #39888	1263	filtered	1c54	2004-12-03
   #39889	1266	converted	1c7v	2004-12-03
   # Where classified means there is a constraint file, but it's not been parsed
@@ -52,28 +52,28 @@ def getBmrbNmrGridDict(dataFilePath=None, skipCodes = None):
     dataFilePath = os.path.join(nmrGridReferenceDir,nmrGridInfoFile)
 
   dataLines = getReferenceTextFileFromHttp(nmrGridInfoUrl,dataFilePath,refText = "NMR GRID information")
- 
+
   for dataLine in dataLines:
     if dataLine:
       (gridId,bmrbId,statusCode,pdbCode,date) = dataLine.split()
-      
+
       if skipCodes and pdbCode in skipCodes:
         continue
-      
+
       if statusCode in statusConvert:
-        if not bmrbNmrGridDict.has_key(pdbCode):
+        if pdbCode not in bmrbNmrGridDict:
           bmrbNmrGridDict[pdbCode] = {}
-          
+
         status = statusConvert[statusCode]
 
-        if not bmrbNmrGridDict[pdbCode].has_key(status):
+        if status not in bmrbNmrGridDict[pdbCode]:
           webLink = '%s?pdb_id=%s&min_items=0&block_text_type=%s' % (nmrGridServletUrl,pdbCode,statusCode)
-          bmrbNmrGridDict[pdbCode][status] = webLink        
+          bmrbNmrGridDict[pdbCode][status] = webLink
 
   return bmrbNmrGridDict
 
 def getBmrbNmrGridFile(pdbCode,forceGet = False, statusCode = '2-parsed'):
-  
+
   """
   Get NMR restraints grid NMR-STAR file
   """
@@ -82,11 +82,11 @@ def getBmrbNmrGridFile(pdbCode,forceGet = False, statusCode = '2-parsed'):
 
   if not os.path.exists(pdbDir):
     os.mkdir(pdbDir)
-    
+
   nmrStarFile = "%s.str" % (statusConvert[statusCode])
-  
+
   if not os.path.exists(os.path.join(pdbDir,nmrStarFile)) or forceGet:
-  
+
     origDir = os.getcwd()
 
     # Location zipped file
@@ -109,11 +109,11 @@ def getBmrbNmrGridJointCoordinateFile(pdbCode, forceGet = False):
 
   if not os.path.exists(pdbDir):
     os.mkdir(pdbDir)
-    
+
   nmrStarFile = "joinedCoord.str.gz"
-  
+
   if not os.path.exists(os.path.join(pdbDir,nmrStarFile)) or forceGet:
-  
+
     origDir = os.getcwd()
 
     # Location zipped file
@@ -125,9 +125,9 @@ def getBmrbNmrGridJointCoordinateFile(pdbCode, forceGet = False):
     localOut = open(localFile,'w')
     localOut.write(data)
     localOut.close()
-    
+
     Popen(['gunzip','-f',localFile])
-    
+
     os.chdir(origDir)
 
   return True
@@ -138,22 +138,22 @@ def restrFileHasIntensities(restrPdbCode):
   #
   # Load the dictionary (if exists)
   #
-  
+
   from pdbe.analysis.Util import getPickledDict, saveReferencePickledDict
-  
-  pickledDictFilePath = os.path.join(nmrGridReferenceDir,'restrFileOrigIntensities.pp')  
+
+  pickledDictFilePath = os.path.join(nmrGridReferenceDir,'restrFileOrigIntensities.pp')
   restrFileOrigIntensities = getPickledDict(pickledDictFilePath)
 
-  if not restrFileOrigIntensities.has_key(restrPdbCode):
-    
+  if restrPdbCode not in restrFileOrigIntensities:
+
     #
     # Get the relevant NMR-STAR info
     #
 
     from ccp.format.nmrStar.distanceConstraintsIO import NmrStarFile
-    
+
     nmrStarFilePath = os.path.join(nmrGridDataDir,restrPdbCode,'parsed.str')
-    
+
     if not os.path.exists(nmrStarFilePath):
       print("NMR Restraints Grid file for %s not available!" % restrPdbCode)
       return False
@@ -168,14 +168,14 @@ def restrFileHasIntensities(restrPdbCode):
           if hasattr(node,'intensity'):
             if node.intensity != None:
               restrFileOrigIntensities[restrPdbCode] = True
-    
+
     saveReferencePickledDict(pickledDictFilePath,restrFileOrigIntensities)
-    
+
   if restrFileOrigIntensities[restrPdbCode]:
     hasOrigIntensities = True
   else:
     hasOrigIntensities = False
-  
+
   return hasOrigIntensities
 
 def getBmrbNmrGridCompletenessInfo(pdbCode, forceWrite = False):
@@ -186,12 +186,12 @@ def getBmrbNmrGridCompletenessInfo(pdbCode, forceWrite = False):
 
   fileName = 'completeness.str'
   pdbDir = os.path.join(nmrGridDataDir,pdbCode)
-  
+
   finalFileName = os.path.join(pdbDir,fileName)
-  
+
   if forceWrite or not os.path.exists(finalFileName):
     finalFileName = None
-  
+
   if not finalFileName:
     urlLocation = '%s?db_username=wattos1&format=distance&pdb_id=%s&request_type=block_set&subtype=completeness&type=check' % (nmrGridServletUrl,pdbCode)
 
@@ -208,32 +208,32 @@ def getBmrbNmrGridCompletenessInfo(pdbCode, forceWrite = False):
             os.mkdir(pdbDir)
 
           processBmrbNmrGridArchiveLink(archiveLink,pdbDir,nmrGridDataDir,fileName)
-          
+
           finalFileName = os.path.join(pdbDir,fileName)
-          
+
           break
 
         else:
           print("  Error: no link for completeness data for %s!" % pdbCode)
-          
+
   return finalFileName
-    
+
 def processBmrbNmrGridArchiveLink(urlLocation,saveDir,homeDir,finalFileName):
 
     data = getDataFromHttp(urlLocation)
-    
+
     zipFileName = 'file.zip'
     zipFile = os.path.join(saveDir,zipFileName)
     zipOut = open(zipFile,'w')
     zipOut.write(data)
     zipOut.close()
-    
+
     os.chdir(saveDir)
     os.spawnlp(os.P_WAIT, 'nice', 'nice', '-19', 'unzip', zipFileName)
     os.chdir(homeDir)
 
     os.remove(zipFile)
-    
+
     removeFiles = ['readme.html','main.css','index.csv']
     for removeFile in removeFiles:
       removeFilePath = os.path.join(saveDir,removeFile)
@@ -244,7 +244,7 @@ def processBmrbNmrGridArchiveLink(urlLocation,saveDir,homeDir,finalFileName):
 
     for fileName in files:
       if fileName[:5] == 'block' and fileName[-4:] == '.str':
-        os.rename(os.path.join(saveDir,fileName),os.path.join(saveDir,finalFileName))        
+        os.rename(os.path.join(saveDir,fileName),os.path.join(saveDir,finalFileName))
 
 
 
@@ -291,7 +291,7 @@ def getBmrbPdbNmrMatches(nmrOnly = False):
       if overallScore == '9':
         continue
         
-      if not bmrbPdbDict.has_key(bmrbId):
+      if bmrbId not in bmrbPdbDict:
         bmrbPdbDict[bmrbId] = []
       
       bmrbPdbDict[bmrbId].append(pdbCode)

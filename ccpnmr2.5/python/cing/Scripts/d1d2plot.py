@@ -4,29 +4,25 @@ python -u $CINGROOT/python/cing/Scripts/d1d2plot.py
 
 Please make sure the projects to run are already in the tmpdir.
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import hPlot
-from cing.Libs.html import makeDihedralPlot
-from cing.Libs.test.test_NTplot2 import plotTestHistoDihedral
-from cing.PluginCode.matplib import * #@UnresolvedImport @UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.Scripts.d1d2plotConstants import BBCCHK_CUTOFF
-from cing.Scripts.d1d2plotConstants import CV_CUTOFF
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.database import NTdb
-from cing.core.molecule import Dihedral
-from cing.core.molecule import common20AAList
-from cing.core.molecule import getTripletHistogramList
-from matplotlib.pylab import * #@UnusedWildImport for most imports
-from numpy.ma.core import masked_where
-import numpy
 import profile
 import pstats
 
+import numpy
+from matplotlib.pylab import *  #@UnusedWildImport for most imports
+from numpy.ma.core import masked_where
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.database import NTdb
+from cing.core.molecule import Dihedral, common20AAList, getTripletHistogramList
+from cing.Libs.html import hPlot, makeDihedralPlot
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.test.test_NTplot2 import plotTestHistoDihedral
+from cing.PluginCode.matplib import *  #@UnresolvedImport @UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
+from cing.Scripts.d1d2plotConstants import BBCCHK_CUTOFF, CV_CUTOFF
 
 dihedralName1 = 'Cb4N'
 dihedralName2 = 'Cb4C'
@@ -98,15 +94,15 @@ def plotForEntry(entryId):
                 continue
             angles = NTlist() # store phi, psi, chi1, chi2
             for angle in ['PHI', 'PSI', 'CHI1', 'CHI2']:
-                if res.has_key(angle):
+                if angle in res:
                     angles.append(res[angle][i])
                 else:
                     angles.append(0.0)
             if bb < BBCCHK_CUTOFF:
-                fprintf(fpBad, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', 
+                fprintf(fpBad, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n',
                         res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), res, res.dssp.consensus)
             else:
-                fprintf(fpGood, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', 
+                fprintf(fpGood, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n',
                         res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), res, res.dssp.consensus)
             #end if
         #end for models
@@ -445,12 +441,12 @@ def plotDihedralD1_2d(doOnlyOverall=True):
                 sumh2 = sum(hist2)
                 titleStr += ' %d-%d' % (sumh1, sumh2)
 #                if doOnlyOverall:
-                histList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall = doOnlyOverall, 
+                histList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall = doOnlyOverall,
                                                    ssTypeRequested = None, doNormalize = False, normalizeSeparatelyToZ = False)
 
 #                else:
 #                    titleStr += '\n'
-#                    histList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall = doOnlyOverall, 
+#                    histList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall = doOnlyOverall,
 #ssTypeRequested = None, doNormalize = True, normalizeSeparatelyToZ = True)
 #                    scaleBy = SCALE_BY_ONE
 
@@ -608,13 +604,13 @@ def plotHisBySsTypeResTypes():
                         if resTypeNext != 'VAL':
                             continue
                         resTypeListBySequenceOrder = (resTypePrev, resType , resTypeNext)
-                        myHistList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall=doOnlyOverall, 
+                        myHistList = getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall=doOnlyOverall,
                                                              ssTypeRequested=ssType, doNormalize = True)
                         if myHistList == None:
                             nTwarning("Encountered an error getting the D1D2 hist for %s; skipping" % str(resTypeListBySequenceOrder))
                             continue
                         if len(myHistList) != 1:
-                            nTdebug("Expected exactly one but Found %s histogram for %s; skipping" % (len(myHistList), 
+                            nTdebug("Expected exactly one but Found %s histogram for %s; skipping" % (len(myHistList),
                                                                                                       str(resTypeListBySequenceOrder)))
                             continue
                         myHist = deepcopy(myHistList[0])
@@ -629,10 +625,10 @@ def plotHisBySsTypeResTypes():
                         suml2 = avl * n * n
                         if math.fabs(suml2 - suml) > 1:
                             # Perhaps because sum is misinterpreted?
-                            msg = "Math is off for suml != suml2: %s != %s" % (suml, suml2) 
+                            msg = "Math is off for suml != suml2: %s != %s" % (suml, suml2)
                             nTerror(msg)
                         if maxl > suml:
-                            msg = "Math is off for maxl > suml  : %s != %s" % (maxl, suml)    
+                            msg = "Math is off for maxl > suml  : %s != %s" % (maxl, suml)
                             nTerror(msg)
 
                         vL = []
@@ -657,7 +653,7 @@ def plotHisBySsTypeResTypes():
                               yLabel=dihedralName2)
                             ps.addPlot(myplot)
 
-                            myplot.dihedralComboPlot([myHist], minPercentage=MIN_Z_D1D2, maxPercentage=MAX_Z_D1D2, scaleBy=SCALE_BY_Z, 
+                            myplot.dihedralComboPlot([myHist], minPercentage=MIN_Z_D1D2, maxPercentage=MAX_Z_D1D2, scaleBy=SCALE_BY_Z,
                                                      ssType = ssType)
 
                             fn = 'd1d2_%s_%s-%s-%s' % (ssType, resTypePrev, resType, resTypeNext)
@@ -790,16 +786,16 @@ def plotDihedralD1D2():
                             continue
                         angles = NTlist() # store phi, psi, chi1, chi2
                         for angle in ['PHI', 'PSI', 'CHI1', 'CHI2']:
-                            if res.has_key(angle):
+                            if angle in res:
                                 angles.append(res[angle][i])
                             else:
                                 angles.append(0.0)
                         #end for
                         if bb < 20.0: # Arbitrary 20 bb occurences as cuttoff for now
-                            fprintf(fpBad,  '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', 
+                            fprintf(fpBad,  '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n',
                                     res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), res, res.dssp.consensus)
                         else:
-                            fprintf(fpGood, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', 
+                            fprintf(fpGood, '%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n',
                                     res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), res, res.dssp.consensus)
                 #end if
             #end if

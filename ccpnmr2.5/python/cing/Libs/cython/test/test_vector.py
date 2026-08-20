@@ -1,12 +1,14 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.cython.superpose  import NTcVector #@UnresolvedImport
-from cing.core.molecule import Coordinate #@UnusedImport
-from cing.core.molecule import CoordinateOld #@UnusedImport
-from cing.core.molecule import nTdihedralOpt
-from unittest import TestCase
 import profile
 import pstats
-import unittest #@UnusedImport
+from unittest import TestCase
+
+from cing.core.molecule import (
+    Coordinate,  #@UnusedImport
+    nTdihedralOpt,
+)
+from cing.Libs.cython.superpose import NTcVector  #@UnresolvedImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 
@@ -29,7 +31,7 @@ class AllChecks(TestCase):
 
     def testSuperposeChains(self):
         pass
-    
+
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug
     profile.run('unittest.main()', 'fooprof')

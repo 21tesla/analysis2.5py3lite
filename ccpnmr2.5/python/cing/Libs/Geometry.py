@@ -1,4 +1,5 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 TWO_PI = 2. * math.pi
 
 

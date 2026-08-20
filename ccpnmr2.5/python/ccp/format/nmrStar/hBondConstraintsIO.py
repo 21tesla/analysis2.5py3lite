@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -59,13 +59,15 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 #
 import os
 
-from memops.universal.Io import getTopDirectory
+from distanceConstraintsIO import (
+    NmrStarDistanceConstraint,
+    NmrStarDistanceConstraintFile,
+    NmrStarDistanceConstraintItem,
+    NmrStarDistanceConstraintMember,
+    NmrStarFile,
+)
 
-from distanceConstraintsIO import NmrStarDistanceConstraintFile
-from distanceConstraintsIO import NmrStarFile
-from distanceConstraintsIO import NmrStarDistanceConstraint
-from distanceConstraintsIO import NmrStarDistanceConstraintItem
-from distanceConstraintsIO import NmrStarDistanceConstraintMember
+from memops.universal.Io import getTopDirectory
 
 #####################
 # Class definitions #
@@ -79,23 +81,21 @@ NmrStarHBondConstraintMember = NmrStarDistanceConstraintMember
 ###################
 # Main of program #
 ###################
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    files = ["../reference/ccpNmr/jurgenBmrb/1d8b/1d8b.str", "3.0"]
 
-  files = ['../reference/ccpNmr/jurgenBmrb/1d8b/1d8b.str','3.0'] 
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    nmrStarFile = NmrStarFile(file)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    nmrStarFile.read(verbose = 1)
+        nmrStarFile = NmrStarFile(file)
 
-    for constraintFile in nmrStarFile.constraintFiles:
-      for constraint in constraintFile.constraints:
-        for node in constraint.nodes:
-          print(constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound)
-          mlist = []
-          for member in node.members:
-            mlist.append(member.Id)
-          print("   " + str(mlist))
+        nmrStarFile.read(verbose=1)
+
+        for constraintFile in nmrStarFile.constraintFiles:
+            for constraint in constraintFile.constraints:
+                for node in constraint.nodes:
+                    print(constraint.Id, node.Id, node.target, node.lowerBound, node.upperBound)
+                    mlist = []
+                    for member in node.members:
+                        mlist.append(member.Id)
+                    print("   " + str(mlist))

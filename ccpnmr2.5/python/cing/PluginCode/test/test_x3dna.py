@@ -4,21 +4,21 @@ python $CINGROOT/python/cing/PluginCode/test/test_x3dna.py
 
 Open the ???.r3d files in pymol or so; they're nice.
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing import osType
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqX3dna import X3DNA_STR
-from cing.core.classes import Project
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import shutil
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp, osType
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
+from cing.PluginCode.required.reqX3dna import X3DNA_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)

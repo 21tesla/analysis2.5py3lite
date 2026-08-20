@@ -58,25 +58,20 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
-import ccp.api.general.Method
-import ccp.api.general.Template
-import ccp.api.nmr.NmrCalc
 import memops.api.AccessControl
 import memops.api.Implementation
 import molsim.api.AnnealProtocol
@@ -92,9 +87,9 @@ class EnumValue(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'label', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'value', 'access', 'activeAccess', 'interfaceParameter', 'parent', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.EnumValue
@@ -137,7 +132,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -205,7 +200,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -231,7 +226,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.EnumValue:   deletes
@@ -242,11 +237,11 @@ class EnumValue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     interfaceParameter = dataDict.get('interfaceParameter')
-    if (not (interfaceParameter in objsToBeDeleted)):
+    if (interfaceParameter not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -258,14 +253,14 @@ class EnumValue(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.EnumValue
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsProtocol.EnumValue
@@ -286,7 +281,7 @@ class EnumValue(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('interfaceParameter')
         dd = value.__dict__.get('enumValues')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'interfaceParameter' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -409,7 +404,7 @@ class EnumValue(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -417,7 +412,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -435,7 +430,7 @@ class EnumValue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -471,7 +466,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.EnumValue
@@ -484,7 +479,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.EnumValue
@@ -541,7 +536,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.EnumValue
@@ -565,7 +560,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInterfaceParameter(self):
     """
     Get for cambridge.WmsProtocol.EnumValue.interfaceParameter
@@ -575,7 +570,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLabel(self):
     """
     Get for cambridge.WmsProtocol.EnumValue.label
@@ -583,7 +578,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('label')
     return result
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.EnumValue
@@ -597,7 +592,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.EnumValue.parent
@@ -609,7 +604,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.EnumValue.serial
@@ -619,7 +614,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getValue(self):
     """
     Get for cambridge.WmsProtocol.EnumValue.value
@@ -629,7 +624,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.EnumValue
@@ -640,7 +635,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setLabel(self, value):
     """
     Set for cambridge.WmsProtocol.EnumValue.label
@@ -709,13 +704,13 @@ class EnumValue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLabel')
       if ll:
         for notify in ll:
@@ -779,7 +774,7 @@ class EnumValue(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setValue(self, value):
     """
     Set for cambridge.WmsProtocol.EnumValue.value
@@ -829,13 +824,13 @@ class EnumValue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setValue')
       if ll:
         for notify in ll:
@@ -853,7 +848,7 @@ class EnumValue(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   label = property(getLabel, setLabel, None,
   r"""Display label for value.
   """)
@@ -865,14 +860,14 @@ class EnumValue(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   value = property(getValue, setValue, None,
   r"""Value of enumeration (string representation)
   """)
@@ -880,11 +875,11 @@ class EnumValue(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   interfaceParameter = property(getInterfaceParameter,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for interfaceParameter
   """)
@@ -926,7 +921,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCol(self):
     """
     Get for cambridge.WmsProtocol.InterfaceObject.col
@@ -934,7 +929,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('col')
     return result
-  
+
   def getColspan(self):
     """
     Get for cambridge.WmsProtocol.InterfaceObject.colspan
@@ -948,7 +943,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInterfaceGroup(self):
     """
     Get for cambridge.WmsProtocol.InterfaceObject.interfaceGroup
@@ -968,7 +963,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRow(self):
     """
     Get for cambridge.WmsProtocol.InterfaceObject.row
@@ -976,7 +971,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('row')
     return result
-  
+
   def getRowspan(self):
     """
     Get for cambridge.WmsProtocol.InterfaceObject.rowspan
@@ -992,7 +987,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCol(self, value):
     """
     Set for cambridge.WmsProtocol.InterfaceObject.col
@@ -1055,13 +1050,13 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCol')
       if ll:
         for notify in ll:
@@ -1130,13 +1125,13 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setColspan')
       if ll:
         for notify in ll:
@@ -1211,13 +1206,13 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInterfaceGroup')
       if ll:
         for notify in ll:
@@ -1286,13 +1281,13 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRow')
       if ll:
         for notify in ll:
@@ -1361,13 +1356,13 @@ class InterfaceObject(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRowspan')
       if ll:
         for notify in ll:
@@ -1379,11 +1374,11 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   col = property(getCol, setCol, None,
   r"""Column where object is gridded
   """)
-  
+
   colspan = property(getColspan, setColspan, None,
   r"""Column span of interface object
   """)
@@ -1391,7 +1386,7 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   interfaceGroup = property(getInterfaceGroup, setInterfaceGroup, None,
   r"""Interface grouping string of interface object. All object with the same 
   interfaceGroup will be displayed together, typically in a separate tab 
@@ -1408,11 +1403,11 @@ class InterfaceObject(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   row = property(getRow, setRow, None,
   r"""Row where object is gridded
   """)
-  
+
   rowspan = property(getRowspan, setRowspan, None,
   r"""Row span of interface object
   """)
@@ -1434,9 +1429,9 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'localUserName', 'metaclass', 'packageName', 'packageShortName', 'password', 'qualifiedName', 'serial', 'userName', 'access', 'activeAccess', 'localUser', 'parent', 'protocolService', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.ProtocolAccess
@@ -1480,7 +1475,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1548,7 +1543,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1574,7 +1569,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.ProtocolAccess:   deletes
@@ -1585,11 +1580,11 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     protocolService = dataDict.get('protocolService')
-    if (not (protocolService in objsToBeDeleted)):
+    if (protocolService not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -1601,14 +1596,14 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.ProtocolAccess
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsProtocol.ProtocolAccess
@@ -1629,7 +1624,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('protocolService')
         dd = value.__dict__.get('protocolAccesss')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'protocolService' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1798,7 +1793,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1806,7 +1801,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1824,7 +1819,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1842,7 +1837,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: localUser:
            Link localUser between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1891,7 +1886,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.ProtocolAccess
@@ -1904,7 +1899,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.ProtocolAccess
@@ -1957,7 +1952,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.ProtocolAccess
@@ -1981,7 +1976,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.ProtocolAccess
@@ -1989,7 +1984,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getLocalUser(self):
     """
     getter for derived link localUser
@@ -1999,7 +1994,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     if result is not None:
       result = result.findFirstUser(name=self.localUserName)
     return result
-  
+
   def getLocalUserName(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.localUserName
@@ -2013,7 +2008,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.parent
@@ -2021,7 +2016,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('protocolService')
     return result
-  
+
   def getPassword(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.password
@@ -2029,7 +2024,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('password')
     return result
-  
+
   def getProtocolService(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.protocolService
@@ -2041,7 +2036,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.serial
@@ -2051,7 +2046,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getUserName(self):
     """
     Get for cambridge.WmsProtocol.ProtocolAccess.userName
@@ -2061,7 +2056,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.ProtocolAccess
@@ -2072,7 +2067,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setLocalUserName(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolAccess.localUserName
@@ -2146,13 +2141,13 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLocalUserName')
       if ll:
         for notify in ll:
@@ -2227,13 +2222,13 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPassword')
       if ll:
         for notify in ll:
@@ -2297,7 +2292,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setUserName(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolAccess.userName
@@ -2371,13 +2366,13 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUserName')
       if ll:
         for notify in ll:
@@ -2395,7 +2390,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   localUserName = property(getLocalUserName, setLocalUserName, None,
   r"""User name on liocal system - key for derived ilnk to User object
   """)
@@ -2405,20 +2400,20 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   password = property(getPassword, setPassword, None,
   r"""Password name for protocol access
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   userName = property(getUserName, setUserName, None,
   r"""User name for accessing protocol
   """)
@@ -2426,15 +2421,15 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   localUser = property(getLocalUser, None, None,
   r"""Local user that holds the access
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for protocolService
   """)
-  
+
   protocolService = property(getProtocolService,  None, None,
   r"""parent link
   """)
@@ -2452,9 +2447,9 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'details', 'fieldNames', 'inConstructor', 'info', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'title', 'access', 'activeAccess', 'interfaceLabels', 'interfaceParameters', 'parent', 'root', 'topObject', 'wmsProtocol',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.ProtocolInterface
@@ -2502,7 +2497,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -2564,7 +2559,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -2590,19 +2585,19 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
     interfaceLabels = dataDict.get('interfaceLabels').values()
     for interfaceLabel in interfaceLabels:
-      if (not (interfaceLabel in objsToBeDeleted)):
+      if (interfaceLabel not in objsToBeDeleted):
         objsToBeDeleted.add(interfaceLabel)
         objsToBeChecked.append(interfaceLabel)
 
     interfaceParameters = dataDict.get('interfaceParameters').values()
     for interfaceParameter in interfaceParameters:
-      if (not (interfaceParameter in objsToBeDeleted)):
+      if (interfaceParameter not in objsToBeDeleted):
         objsToBeDeleted.add(interfaceParameter)
         objsToBeChecked.append(interfaceParameter)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.ProtocolInterface:   deletes
@@ -2613,11 +2608,11 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsProtocol = dataDict.get('wmsProtocol')
-    if (not (wmsProtocol in objsToBeDeleted)):
+    if (wmsProtocol not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -2629,7 +2624,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.ProtocolInterface
@@ -2664,7 +2659,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('wmsProtocol')
         dd = value.__dict__.get('protocolInterfaces')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsProtocol' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2820,7 +2815,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2828,7 +2823,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2846,7 +2841,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2862,7 +2857,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('protocolInterface')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: interfaceLabels:
            non-reciprocal link interfaceLabels from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2877,7 +2872,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('protocolInterface')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: interfaceParameters:
            non-reciprocal link interfaceParameters from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2926,7 +2921,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllInterfaceLabels(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.ProtocolInterface.interfaceLabels
@@ -2940,7 +2935,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('interfaceLabels').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2951,28 +2946,28 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2981,7 +2976,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
             result.add(v)
 
     return result
-  
+
   def findAllInterfaceParameters(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.ProtocolInterface.interfaceParameters
@@ -2995,7 +2990,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('interfaceParameters').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3006,28 +3001,28 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3038,7 +3033,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstInterfaceLabel(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.ProtocolInterface.interfaceLabels
@@ -3071,7 +3066,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('interfaceLabels').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3082,28 +3077,28 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3112,7 +3107,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def findFirstInterfaceParameter(self, **conditions):
     """
     FindFirst for
@@ -3146,7 +3141,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('interfaceParameters').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3157,28 +3152,28 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3187,7 +3182,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.ProtocolInterface
@@ -3200,7 +3195,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.ProtocolInterface
@@ -3245,7 +3240,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDetails(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.details
@@ -3257,7 +3252,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.ProtocolInterface
@@ -3277,7 +3272,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInfo(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.info
@@ -3285,7 +3280,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('info')
     return result
-  
+
   def getInterfaceLabels(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.interfaceLabels
@@ -3294,7 +3289,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('interfaceLabels').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getInterfaceParameters(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.interfaceParameters
@@ -3305,7 +3300,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.ProtocolInterface
@@ -3315,7 +3310,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.name
@@ -3327,7 +3322,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.parent
@@ -3339,7 +3334,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getTitle(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.title
@@ -3349,7 +3344,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsProtocol(self):
     """
     Get for cambridge.WmsProtocol.ProtocolInterface.wmsProtocol
@@ -3357,13 +3352,13 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('wmsProtocol')
     return result
-  
+
   def newInterfaceLabel(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.InterfaceLabel
     """
     return InterfaceLabel(self, **attrlinks)
-  
+
   def newInterfaceParameter(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.InterfaceParameter
@@ -3371,7 +3366,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     return InterfaceParameter(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.ProtocolInterface
@@ -3382,7 +3377,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setDetails(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolInterface.details
@@ -3445,13 +3440,13 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -3507,13 +3502,13 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInfo')
       if ll:
         for notify in ll:
@@ -3586,7 +3581,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def setTitle(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolInterface.title
@@ -3660,13 +3655,13 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setTitle')
       if ll:
         for notify in ll:
@@ -3679,19 +3674,19 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('interfaceLabels')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedInterfaceParameters(self):
     """
     Sorted for cambridge.WmsProtocol.ProtocolInterface.interfaceParameters
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('interfaceParameters')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -3702,7 +3697,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -3710,7 +3705,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   info = property(getInfo, setInfo, None,
   r"""Display information
   """)
@@ -3718,7 +3713,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""
   """)
@@ -3728,7 +3723,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   title = property(getTitle, setTitle, None,
   r"""Display title.
   """)
@@ -3736,15 +3731,15 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   interfaceLabels = property(getInterfaceLabels,  None, None,
   r"""child link to class InterfaceLabel
   """)
-  
+
   interfaceParameters = property(getInterfaceParameters,  None, None,
   r"""child link to class InterfaceParameter
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsProtocol
   """)
@@ -3752,7 +3747,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   wmsProtocol = property(getWmsProtocol,  None, None,
   r"""parent link
   """)
@@ -3768,9 +3763,9 @@ run, and set it in NmrCalc.
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'code', 'defaultStrings', 'fieldNames', 'hicard', 'inConstructor', 'ioRole', 'isDeleted', 'locard', 'metaclass', 'name', 'packageName', 'packageShortName', 'paramType', 'qualifiedName', 'serial', 'access', 'activeAccess', 'container', 'content', 'interfaceParameters', 'parent', 'root', 'topObject', 'wmsProtocol',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.ProtocolParameter
@@ -3823,7 +3818,7 @@ run, and set it in NmrCalc.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3891,7 +3886,7 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3917,13 +3912,13 @@ run, and set it in NmrCalc.
 
     interfaceParameters = dataDict.get('interfaceParameters')
     for interfaceParameter in interfaceParameters:
-      if (not (interfaceParameter in objsToBeDeleted)):
+      if (interfaceParameter not in objsToBeDeleted):
         objsToBeDeleted.add(interfaceParameter)
         objsToBeChecked.append(interfaceParameter)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.ProtocolParameter:   deletes
@@ -3934,20 +3929,20 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     container = dataDict.get('container')
-    if (container is not None and not (container in objsToBeDeleted)):
+    if (container is not None and container not in objsToBeDeleted):
       content = container.__dict__.get('content')
       content.remove(self)
 
     for content in dataDict.get('content'):
-      if (not (content in objsToBeDeleted)):
+      if (content not in objsToBeDeleted):
         content.__dict__['container'] = None
 
     wmsProtocol = dataDict.get('wmsProtocol')
-    if (not (wmsProtocol in objsToBeDeleted)):
+    if (wmsProtocol not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3959,7 +3954,7 @@ run, and set it in NmrCalc.
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addContent(self, value):
     """
     Add for cambridge.WmsProtocol.ProtocolParameter.content
@@ -4007,7 +4002,7 @@ run, and set it in NmrCalc.
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.addContent:
            Link content between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -4062,13 +4057,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addContent')
       if ll:
         for notify in ll:
@@ -4120,13 +4115,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addDefaultString')
       if ll:
         for notify in ll:
@@ -4139,7 +4134,7 @@ run, and set it in NmrCalc.
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsProtocol.ProtocolParameter
@@ -4160,7 +4155,7 @@ run, and set it in NmrCalc.
       else:
         value = dataDict.get('wmsProtocol')
         dd = value.__dict__.get('protocolParameters')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsProtocol' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4230,7 +4225,7 @@ run, and set it in NmrCalc.
         )
 
       value = dataDict.get('ioRole')
-      if (not (value in ['input', 'output'])):
+      if (value not in ['input', 'output']):
         raise ApiError("""%s.checkValid: ioRole:
          ccp.nmr.NmrCalc.IoRole input is not in enumeration ['input', 'output']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -4381,7 +4376,7 @@ run, and set it in NmrCalc.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4389,7 +4384,7 @@ run, and set it in NmrCalc.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4407,7 +4402,7 @@ run, and set it in NmrCalc.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4423,7 +4418,7 @@ run, and set it in NmrCalc.
           )
 
         oldSelves = value.__dict__.get('content')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: container:
            non-reciprocal link container from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4438,7 +4433,7 @@ run, and set it in NmrCalc.
           )
 
         oldSelf = value.__dict__.get('container')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: content:
            non-reciprocal link content from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4446,7 +4441,7 @@ run, and set it in NmrCalc.
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: content:
            Link content between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -4462,7 +4457,7 @@ run, and set it in NmrCalc.
           )
 
         oldSelf = value.__dict__.get('protocolParameter')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: interfaceParameters:
            non-reciprocal link interfaceParameters from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4470,7 +4465,7 @@ run, and set it in NmrCalc.
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: interfaceParameters:
            Link interfaceParameters between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -4611,7 +4606,7 @@ run, and set it in NmrCalc.
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllContent(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.ProtocolParameter.content
@@ -4625,7 +4620,7 @@ run, and set it in NmrCalc.
     else:
       currentValues = dataDict.get('content')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4636,28 +4631,28 @@ run, and set it in NmrCalc.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4666,7 +4661,7 @@ run, and set it in NmrCalc.
             result.add(v)
 
     return result
-  
+
   def findAllInterfaceParameters(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.ProtocolParameter.interfaceParameters
@@ -4680,7 +4675,7 @@ run, and set it in NmrCalc.
     else:
       currentValues = dataDict.get('interfaceParameters')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4691,28 +4686,28 @@ run, and set it in NmrCalc.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4723,7 +4718,7 @@ run, and set it in NmrCalc.
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstContent(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.ProtocolParameter.content
@@ -4740,7 +4735,7 @@ run, and set it in NmrCalc.
     else:
       currentValues = dataDict.get('content')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4751,28 +4746,28 @@ run, and set it in NmrCalc.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4781,7 +4776,7 @@ run, and set it in NmrCalc.
             result = v; break
 
     return result
-  
+
   def findFirstInterfaceParameter(self, **conditions):
     """
     FindFirst for
@@ -4799,7 +4794,7 @@ run, and set it in NmrCalc.
     else:
       currentValues = dataDict.get('interfaceParameters')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4810,28 +4805,28 @@ run, and set it in NmrCalc.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4840,7 +4835,7 @@ run, and set it in NmrCalc.
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.ProtocolParameter
@@ -4853,7 +4848,7 @@ run, and set it in NmrCalc.
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.ProtocolParameter
@@ -4898,7 +4893,7 @@ run, and set it in NmrCalc.
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.code
@@ -4906,7 +4901,7 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getContainer(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.container
@@ -4914,7 +4909,7 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     result = dataDict.get('container')
     return result
-  
+
   def getContent(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.content
@@ -4923,7 +4918,7 @@ run, and set it in NmrCalc.
     tempVar = dataDict.get('content')
     result = frozenset(tempVar)
     return result
-  
+
   def getDefaultStrings(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.defaultStrings
@@ -4936,7 +4931,7 @@ run, and set it in NmrCalc.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.ProtocolParameter
@@ -4954,7 +4949,7 @@ run, and set it in NmrCalc.
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getHicard(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.hicard
@@ -4964,7 +4959,7 @@ run, and set it in NmrCalc.
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInterfaceParameters(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.interfaceParameters
@@ -4973,7 +4968,7 @@ run, and set it in NmrCalc.
     tempVar = dataDict.get('interfaceParameters')
     result = frozenset(tempVar)
     return result
-  
+
   def getIoRole(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.ioRole
@@ -4983,7 +4978,7 @@ run, and set it in NmrCalc.
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.ProtocolParameter
@@ -4991,7 +4986,7 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getLocard(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.locard
@@ -5001,7 +4996,7 @@ run, and set it in NmrCalc.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.name
@@ -5013,7 +5008,7 @@ run, and set it in NmrCalc.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParamType(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.paramType
@@ -5021,7 +5016,7 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     result = dataDict.get('paramType')
     return result
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.parent
@@ -5033,7 +5028,7 @@ run, and set it in NmrCalc.
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.serial
@@ -5043,7 +5038,7 @@ run, and set it in NmrCalc.
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsProtocol(self):
     """
     Get for cambridge.WmsProtocol.ProtocolParameter.wmsProtocol
@@ -5053,7 +5048,7 @@ run, and set it in NmrCalc.
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeContent(self, value):
     """
     Remove for cambridge.WmsProtocol.ProtocolParameter.content
@@ -5091,7 +5086,7 @@ run, and set it in NmrCalc.
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeContent:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -5109,13 +5104,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeContent')
       if ll:
         for notify in ll:
@@ -5156,7 +5151,7 @@ run, and set it in NmrCalc.
        called on deleted object""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeDefaultString:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -5173,13 +5168,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeDefaultString')
       if ll:
         for notify in ll:
@@ -5196,7 +5191,7 @@ run, and set it in NmrCalc.
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolParameter.code
@@ -5265,13 +5260,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCode')
       if ll:
         for notify in ll:
@@ -5324,7 +5319,7 @@ run, and set it in NmrCalc.
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setContainer:
            Link container between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5384,13 +5379,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setContainer')
       if ll:
         for notify in ll:
@@ -5451,7 +5446,7 @@ run, and set it in NmrCalc.
       xx1 = dataDict.get('topObject')
       for value in values:
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setContent:
            Link content between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5493,11 +5488,11 @@ run, and set it in NmrCalc.
           (value, self) = (self, value)
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['container'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('container')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('content')
@@ -5513,13 +5508,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setContent')
       if ll:
         for notify in ll:
@@ -5576,13 +5571,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDefaultStrings')
       if ll:
         for notify in ll:
@@ -5645,13 +5640,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHicard')
       if ll:
         for notify in ll:
@@ -5710,7 +5705,7 @@ run, and set it in NmrCalc.
 
     if (notOverride):
       for cv in currentValues:
-        if (not (cv in values)):
+        if (cv not in values):
           raise ApiError("""%s.setInterfaceParameters:
            locard protocolParameter: cannot set because some of current values not in values""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5719,7 +5714,7 @@ run, and set it in NmrCalc.
       xx1 = dataDict.get('topObject')
       for value in values:
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setInterfaceParameters:
            Link interfaceParameters between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5727,11 +5722,11 @@ run, and set it in NmrCalc.
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['protocolParameter'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('protocolParameter')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('interfaceParameters')
@@ -5747,13 +5742,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInterfaceParameters')
       if ll:
         for notify in ll:
@@ -5765,7 +5760,7 @@ run, and set it in NmrCalc.
     Set for cambridge.WmsProtocol.ProtocolParameter.ioRole
     """
     dataDict = self.__dict__
-    if (not (value in ['input', 'output'])):
+    if (value not in ['input', 'output']):
       raise ApiError("""%s.setIoRole:
        ccp.nmr.NmrCalc.IoRole input is not in enumeration ['input', 'output']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -5818,13 +5813,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setIoRole')
       if ll:
         for notify in ll:
@@ -5893,13 +5888,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLocard')
       if ll:
         for notify in ll:
@@ -5974,13 +5969,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -6060,13 +6055,13 @@ run, and set it in NmrCalc.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setParamType')
       if ll:
         for notify in ll:
@@ -6130,7 +6125,7 @@ run, and set it in NmrCalc.
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def sortedContent(self):
     """
     Sorted for cambridge.WmsProtocol.ProtocolParameter.content
@@ -6138,11 +6133,11 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     ll = dataDict.get('content')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedInterfaceParameters(self):
     """
     Sorted for cambridge.WmsProtocol.ProtocolParameter.interfaceParameters
@@ -6150,7 +6145,7 @@ run, and set it in NmrCalc.
     dataDict = self.__dict__
     ll = dataDict.get('interfaceParameters')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
@@ -6160,38 +6155,38 @@ run, and set it in NmrCalc.
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Unique identifier for the parameter within the context of the 
   application being run 
   """)
-  
+
   defaultStrings = property(getDefaultStrings, setDefaultStrings, None,
   r"""String representation of default values. Will be converted to correct 
   type depending on paramType.
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   hicard = property(getHicard, setHicard, None,
   r"""Maximum number of exemplars allowed for this parameter. Value -1 is used 
   for 'unlimited'
   """)
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   ioRole = property(getIoRole, setIoRole, None,
   r"""Role of data in calculation (input / output).
   """)
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   locard = property(getLocard, setLocard, None,
   r"""Minimum number of exemplars required for this parameter
   """)
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""Name used for NmrCalc identification
   """)
@@ -6199,14 +6194,14 @@ run, and set it in NmrCalc.
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   paramType = property(getParamType, setParamType, None,
   r"""Parameter type, corresponding to NmrCalc Data or RunParameter types. 
   Necessary only for parameters that are entered in NmrCalc.
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -6217,22 +6212,22 @@ run, and set it in NmrCalc.
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   container = property(getContainer, setContainer, None,
   r"""ProtocolParam that contains this Param. Generally used when this 
   parameter relates only to another parameter, e.g. a temperature for an 
   annealing cycle, or a weight for a constraint list.
   """)
-  
+
   content = property(getContent, setContent, None,
   r"""ProtocolParams contained within this parameter. NB, parameters with 
   content can not have values of simple type, as the content is the value.
   """)
-  
+
   interfaceParameters = property(getInterfaceParameters, setInterfaceParameters, None,
   r"""Interface ap0rameters corresponding to parameter
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsProtocol
   """)
@@ -6240,7 +6235,7 @@ run, and set it in NmrCalc.
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   wmsProtocol = property(getWmsProtocol,  None, None,
   r"""parent link
   """)
@@ -6254,9 +6249,9 @@ class ProtocolService(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'login', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'result', 'run', 'serial', 'status', 'url', 'access', 'activeAccess', 'parent', 'protocolAccesss', 'root', 'topObject', 'wmsProtocol',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.ProtocolService
@@ -6305,7 +6300,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -6377,7 +6372,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -6403,13 +6398,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
     protocolAccesss = dataDict.get('protocolAccesss').values()
     for protocolAccess in protocolAccesss:
-      if (not (protocolAccess in objsToBeDeleted)):
+      if (protocolAccess not in objsToBeDeleted):
         objsToBeDeleted.add(protocolAccess)
         objsToBeChecked.append(protocolAccess)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.ProtocolService:   deletes
@@ -6420,11 +6415,11 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsProtocol = dataDict.get('wmsProtocol')
-    if (not (wmsProtocol in objsToBeDeleted)):
+    if (wmsProtocol not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -6436,7 +6431,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.ProtocolService
@@ -6467,7 +6462,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('wmsProtocol')
         dd = value.__dict__.get('protocolServices')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsProtocol' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6657,7 +6652,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6665,7 +6660,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6683,7 +6678,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6699,7 +6694,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('protocolService')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: protocolAccesss:
            non-reciprocal link protocolAccesss from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6739,7 +6734,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProtocolAccesss(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.ProtocolService.protocolAccesss
@@ -6753,7 +6748,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('protocolAccesss').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6764,28 +6759,28 @@ class ProtocolService(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6796,7 +6791,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProtocolAccess(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.ProtocolService.protocolAccesss
@@ -6829,7 +6824,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('protocolAccesss').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6840,28 +6835,28 @@ class ProtocolService(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6870,7 +6865,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.ProtocolService
@@ -6883,7 +6878,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.ProtocolService
@@ -6932,7 +6927,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.ProtocolService
@@ -6954,7 +6949,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.ProtocolService
@@ -6962,7 +6957,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getLogin(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.login
@@ -6976,7 +6971,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.parent
@@ -6984,7 +6979,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('wmsProtocol')
     return result
-  
+
   def getProtocolAccesss(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.protocolAccesss
@@ -6995,7 +6990,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getResult(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.result
@@ -7005,7 +7000,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     return result
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRun(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.run
@@ -7013,7 +7008,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('run')
     return result
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.serial
@@ -7021,7 +7016,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getStatus(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.status
@@ -7031,7 +7026,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getUrl(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.url
@@ -7039,7 +7034,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('url')
     return result
-  
+
   def getWmsProtocol(self):
     """
     Get for cambridge.WmsProtocol.ProtocolService.wmsProtocol
@@ -7047,7 +7042,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('wmsProtocol')
     return result
-  
+
   def newProtocolAccess(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.ProtocolAccess
@@ -7055,7 +7050,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     return ProtocolAccess(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.ProtocolService
@@ -7066,7 +7061,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setLogin(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolService.login
@@ -7135,13 +7130,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLogin')
       if ll:
         for notify in ll:
@@ -7197,13 +7192,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setResult')
       if ll:
         for notify in ll:
@@ -7278,13 +7273,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRun')
       if ll:
         for notify in ll:
@@ -7348,7 +7343,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setStatus(self, value):
     """
     Set for cambridge.WmsProtocol.ProtocolService.status
@@ -7417,13 +7412,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setStatus')
       if ll:
         for notify in ll:
@@ -7478,13 +7473,13 @@ class ProtocolService(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUrl')
       if ll:
         for notify in ll:
@@ -7497,7 +7492,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('protocolAccesss')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -7514,7 +7509,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   login = property(getLogin, setLogin, None,
   r"""Login string for service
   """)
@@ -7526,26 +7521,26 @@ class ProtocolService(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   result = property(getResult, setResult, None,
   r"""Text describing the run result
   """)
-  
+
   run = property(getRun, setRun, None,
   r"""String describing the run
   """)
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   status = property(getStatus, setStatus, None,
   r"""String describing run status
   """)
-  
+
   url = property(getUrl, setUrl, None,
   r"""Url of calculation service
   """)
@@ -7553,11 +7548,11 @@ class ProtocolService(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsProtocol
   """)
-  
+
   protocolAccesss = property(getProtocolAccesss,  None, None,
   r"""child link to class ProtocolAccess
   """)
@@ -7565,7 +7560,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   wmsProtocol = property(getWmsProtocol,  None, None,
   r"""parent link
   """)
@@ -7579,9 +7574,9 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('annealProtocolCode', 'annealProtocolStoreName', 'applicationData', 'className', 'createdBy', 'details', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'softwareName', 'softwareVersion', 'access', 'activeAccess', 'activeRepositories', 'annealProtocol', 'memopsRoot', 'packageLocator', 'parent', 'protocolInterfaces', 'protocolParameters', 'protocolServices', 'root', 'software', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.WmsProtocol
@@ -7644,7 +7639,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -7726,7 +7721,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -7760,25 +7755,25 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     protocolInterfaces = dataDict.get('protocolInterfaces').values()
     for protocolInterface in protocolInterfaces:
-      if (not (protocolInterface in objsToBeDeleted)):
+      if (protocolInterface not in objsToBeDeleted):
         objsToBeDeleted.add(protocolInterface)
         objsToBeChecked.append(protocolInterface)
 
     protocolParameters = dataDict.get('protocolParameters').values()
     for protocolParameter in protocolParameters:
-      if (not (protocolParameter in objsToBeDeleted)):
+      if (protocolParameter not in objsToBeDeleted):
         objsToBeDeleted.add(protocolParameter)
         objsToBeChecked.append(protocolParameter)
 
     protocolServices = dataDict.get('protocolServices').values()
     for protocolService in protocolServices:
-      if (not (protocolService in objsToBeDeleted)):
+      if (protocolService not in objsToBeDeleted):
         objsToBeDeleted.add(protocolService)
         objsToBeChecked.append(protocolService)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.WmsProtocol:   deletes
@@ -7793,11 +7788,11 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsProtocol'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -7815,7 +7810,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.WmsProtocol
@@ -7857,7 +7852,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('wmsProtocols')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8036,7 +8031,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8205,7 +8200,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8213,7 +8208,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8231,7 +8226,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8249,7 +8244,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: annealProtocol:
            Link annealProtocol between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8280,7 +8275,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8296,7 +8291,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: protocolInterfaces:
            non-reciprocal link protocolInterfaces from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8311,7 +8306,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: protocolParameters:
            non-reciprocal link protocolParameters from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8326,7 +8321,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: protocolServices:
            non-reciprocal link protocolServices from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8343,7 +8338,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: software:
            Link software between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8409,7 +8404,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProtocolInterfaces(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.WmsProtocol.protocolInterfaces
@@ -8429,7 +8424,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolInterfaces').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8440,28 +8435,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8470,7 +8465,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllProtocolParameters(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.WmsProtocol.protocolParameters
@@ -8490,7 +8485,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolParameters').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8501,28 +8496,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8531,7 +8526,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllProtocolServices(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.WmsProtocol.protocolServices
@@ -8551,7 +8546,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolServices').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8562,28 +8557,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8596,7 +8591,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProtocolInterface(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.WmsProtocol.protocolInterfaces
@@ -8638,7 +8633,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('protocolInterfaces').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8649,28 +8644,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8679,7 +8674,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstProtocolParameter(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.WmsProtocol.protocolParameters
@@ -8721,7 +8716,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('protocolParameters').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8732,28 +8727,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8762,7 +8757,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstProtocolService(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.WmsProtocol.protocolServices
@@ -8804,7 +8799,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('protocolServices').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -8815,28 +8810,28 @@ class WmsProtocol(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -8845,7 +8840,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.WmsProtocol
@@ -8858,7 +8853,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
-  
+
   def getAnnealProtocol(self):
     """
     getter for derived link annealProtocol
@@ -8866,7 +8861,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = molsim.api.AnnealProtocol.AnnealProtocol.getByKey(self.root, (self.annealProtocolStoreName, self.softwareName, self.annealProtocolCode))
     return result
-  
+
   def getAnnealProtocolCode(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.annealProtocolCode
@@ -8874,7 +8869,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('annealProtocolCode')
     return result
-  
+
   def getAnnealProtocolStoreName(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.annealProtocolStoreName
@@ -8884,7 +8879,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.WmsProtocol
@@ -8913,7 +8908,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
 
   getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
-  
+
   def getDetails(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.details
@@ -8925,7 +8920,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.WmsProtocol
@@ -8955,7 +8950,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.WmsProtocol
@@ -8963,7 +8958,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.memopsRoot
@@ -8973,7 +8968,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.name
@@ -8987,7 +8982,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.parent
@@ -8995,7 +8990,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('memopsRoot')
     return result
-  
+
   def getProtocolInterfaces(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.protocolInterfaces
@@ -9007,7 +9002,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     tempVar = dataDict.get('protocolInterfaces').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getProtocolParameters(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.protocolParameters
@@ -9019,7 +9014,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     tempVar = dataDict.get('protocolParameters').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getProtocolServices(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.protocolServices
@@ -9035,7 +9030,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSoftware(self):
     """
     getter for derived link software.
@@ -9052,7 +9047,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
         if len(ll) == 1:
           result = ll[0]
     return result
-  
+
   def getSoftwareName(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.softwareName
@@ -9060,7 +9055,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('softwareName')
     return result
-  
+
   def getSoftwareVersion(self):
     """
     Get for cambridge.WmsProtocol.WmsProtocol.softwareVersion
@@ -9074,19 +9069,19 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newProtocolInterface(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.ProtocolInterface
     """
     return ProtocolInterface(self, **attrlinks)
-  
+
   def newProtocolParameter(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.ProtocolParameter
     """
     return ProtocolParameter(self, **attrlinks)
-  
+
   def newProtocolService(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.ProtocolService
@@ -9102,7 +9097,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.WmsProtocol
@@ -9111,7 +9106,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setAnnealProtocol(self, value):
     """
     setter for derived lnk annealProtocol
@@ -9167,7 +9162,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       self.annealProtocolStoreName = value.annealProtocolStore.name
       self.softwareName = value.application  # necessary in case softwareName was None
       self.annealProtocolCode = value.code
-    
+
     if (notIsReading):
       if (notInConstructor):
         topObject.__dict__['isModified'] = True
@@ -9243,13 +9238,13 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnnealProtocolCode')
       if ll:
         for notify in ll:
@@ -9327,13 +9322,13 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnnealProtocolStoreName')
       if ll:
         for notify in ll:
@@ -9343,7 +9338,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
 
   setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
-  
+
   def setDetails(self, value):
     """
     Set for cambridge.WmsProtocol.WmsProtocol.details
@@ -9409,13 +9404,13 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -9427,7 +9422,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setName(self, value):
     """
     Set for cambridge.WmsProtocol.WmsProtocol.name
@@ -9497,7 +9492,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def setSoftware(self, value):
     """
     setter for derived link software
@@ -9625,13 +9620,13 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSoftwareName')
       if ll:
         for notify in ll:
@@ -9709,13 +9704,13 @@ class WmsProtocol(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSoftwareVersion')
       if ll:
         for notify in ll:
@@ -9731,12 +9726,12 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('protocolInterfaces')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedProtocolParameters(self):
     """
     Sorted for cambridge.WmsProtocol.WmsProtocol.protocolParameters
@@ -9746,12 +9741,12 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('protocolParameters')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedProtocolServices(self):
     """
     Sorted for cambridge.WmsProtocol.WmsProtocol.protocolServices
@@ -9761,7 +9756,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('protocolServices')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -9770,11 +9765,11 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
   touch = memops.api.Implementation.TopObject.touch
-  
+
   annealProtocolCode = property(getAnnealProtocolCode, setAnnealProtocolCode, None,
   r"""AnnealProtocol.code - part of key for derived annealProtocol link
   """)
-  
+
   annealProtocolStoreName = property(getAnnealProtocolStoreName, setAnnealProtocolStoreName, None,
   r"""Name of annealProtocolStore - part of key for derived AnnealProtocol 
   link.
@@ -9785,7 +9780,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   createdBy = memops.api.Implementation.TopObject.createdBy
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -9809,7 +9804,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""name of protocol (unique key)
   """)
@@ -9819,12 +9814,12 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   softwareName = property(getSoftwareName, setSoftwareName, None,
   r"""Name of Software used - defines derived link to Software. Also part of 
   key for derived annealProtocol link.
   """)
-  
+
   softwareVersion = property(getSoftwareVersion, setSoftwareVersion, None,
   r"""Version of Software used - defines derived link to Software 
   """)
@@ -9834,35 +9829,35 @@ class WmsProtocol(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   annealProtocol = property(getAnnealProtocol, setAnnealProtocol, None,
   r"""
   """)
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
-  
+
   protocolInterfaces = property(getProtocolInterfaces,  None, None,
   r"""child link to class ProtocolInterface
   """)
-  
+
   protocolParameters = property(getProtocolParameters,  None, None,
   r"""child link to class ProtocolParameter
   """)
-  
+
   protocolServices = property(getProtocolServices,  None, None,
   r"""child link to class ProtocolService
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   software = property(getSoftware, setSoftware, None,
   r"""Software used for protocol. Found in memopsRoot.currentMethodStore. 
   Elects on matching softwareName and softwareVersion. If no match found 
@@ -9880,9 +9875,9 @@ class InterfaceParameter(InterfaceObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'col', 'colspan', 'defaultStrings', 'fieldNames', 'hicard', 'inConstructor', 'interfaceGroup', 'isDeleted', 'isEditable', 'isOrdered', 'locard', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'row', 'rowspan', 'serial', 'access', 'activeAccess', 'enumValues', 'parent', 'protocolInterface', 'protocolParameter', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.InterfaceParameter
@@ -9935,7 +9930,7 @@ class InterfaceParameter(InterfaceObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -10007,7 +10002,7 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -10033,13 +10028,13 @@ class InterfaceParameter(InterfaceObject):
 
     enumValues = dataDict.get('enumValues').values()
     for enumValue in enumValues:
-      if (not (enumValue in objsToBeDeleted)):
+      if (enumValue not in objsToBeDeleted):
         objsToBeDeleted.add(enumValue)
         objsToBeChecked.append(enumValue)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.InterfaceParameter:   deletes
@@ -10050,16 +10045,16 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     protocolParameter = dataDict.get('protocolParameter')
-    if (protocolParameter is not None and not (protocolParameter in objsToBeDeleted)):
+    if (protocolParameter is not None and protocolParameter not in objsToBeDeleted):
       interfaceParameters = protocolParameter.__dict__.get('interfaceParameters')
       interfaceParameters.remove(self)
 
     protocolInterface = dataDict.get('protocolInterface')
-    if (not (protocolInterface in objsToBeDeleted)):
+    if (protocolInterface not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -10071,7 +10066,7 @@ class InterfaceParameter(InterfaceObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addDefaultString(self, value):
     """
     Add for cambridge.WmsProtocol.InterfaceParameter.defaultStrings
@@ -10117,13 +10112,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addDefaultString')
       if ll:
         for notify in ll:
@@ -10160,7 +10155,7 @@ class InterfaceParameter(InterfaceObject):
       else:
         value = dataDict.get('protocolInterface')
         dd = value.__dict__.get('interfaceParameters')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'protocolInterface' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -10264,14 +10259,14 @@ class InterfaceParameter(InterfaceObject):
           )
 
       value = dataDict.get('isEditable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isEditable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('isOrdered')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isOrdered:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -10393,7 +10388,7 @@ class InterfaceParameter(InterfaceObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -10401,7 +10396,7 @@ class InterfaceParameter(InterfaceObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -10419,7 +10414,7 @@ class InterfaceParameter(InterfaceObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -10435,7 +10430,7 @@ class InterfaceParameter(InterfaceObject):
           )
 
         oldSelf = value.__dict__.get('interfaceParameter')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: enumValues:
            non-reciprocal link enumValues from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -10456,7 +10451,7 @@ class InterfaceParameter(InterfaceObject):
         )
 
       oldSelves = value.__dict__.get('interfaceParameters')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: protocolParameter:
          non-reciprocal link protocolParameter from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -10572,7 +10567,7 @@ class InterfaceParameter(InterfaceObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllEnumValues(self, **conditions):
     """
     FindAll for cambridge.WmsProtocol.InterfaceParameter.enumValues
@@ -10586,7 +10581,7 @@ class InterfaceParameter(InterfaceObject):
     else:
       currentValues = dataDict.get('enumValues').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -10597,28 +10592,28 @@ class InterfaceParameter(InterfaceObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -10629,7 +10624,7 @@ class InterfaceParameter(InterfaceObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstEnumValue(self, **conditions):
     """
     FindFirst for cambridge.WmsProtocol.InterfaceParameter.enumValues
@@ -10662,7 +10657,7 @@ class InterfaceParameter(InterfaceObject):
         currentValues = dataDict.get('enumValues').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -10673,28 +10668,28 @@ class InterfaceParameter(InterfaceObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -10703,7 +10698,7 @@ class InterfaceParameter(InterfaceObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.InterfaceParameter
@@ -10716,7 +10711,7 @@ class InterfaceParameter(InterfaceObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.InterfaceParameter
@@ -10769,7 +10764,7 @@ class InterfaceParameter(InterfaceObject):
   getCol = InterfaceObject.getCol
 
   getColspan = InterfaceObject.getColspan
-  
+
   def getDefaultStrings(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.defaultStrings
@@ -10778,7 +10773,7 @@ class InterfaceParameter(InterfaceObject):
     tempVar = dataDict.get('defaultStrings')
     result = tuple(tempVar)
     return result
-  
+
   def getEnumValues(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.enumValues
@@ -10791,7 +10786,7 @@ class InterfaceParameter(InterfaceObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.InterfaceParameter
@@ -10811,7 +10806,7 @@ class InterfaceParameter(InterfaceObject):
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getHicard(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.hicard
@@ -10825,7 +10820,7 @@ class InterfaceParameter(InterfaceObject):
   getInterfaceGroup = InterfaceObject.getInterfaceGroup
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getIsEditable(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.isEditable
@@ -10833,7 +10828,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('isEditable')
     return result
-  
+
   def getIsOrdered(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.isOrdered
@@ -10841,7 +10836,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('isOrdered')
     return result
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.InterfaceParameter
@@ -10849,7 +10844,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getLocard(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.locard
@@ -10863,7 +10858,7 @@ class InterfaceParameter(InterfaceObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.parent
@@ -10871,7 +10866,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('protocolInterface')
     return result
-  
+
   def getProtocolInterface(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.protocolInterface
@@ -10879,7 +10874,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('protocolInterface')
     return result
-  
+
   def getProtocolParameter(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.protocolParameter
@@ -10895,7 +10890,7 @@ class InterfaceParameter(InterfaceObject):
   getRow = InterfaceObject.getRow
 
   getRowspan = InterfaceObject.getRowspan
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.InterfaceParameter.serial
@@ -10905,7 +10900,7 @@ class InterfaceParameter(InterfaceObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newEnumValue(self, **attrlinks):
     """
     Factory function to create cambridge.WmsProtocol.EnumValue
@@ -10913,7 +10908,7 @@ class InterfaceParameter(InterfaceObject):
     return EnumValue(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeDefaultString(self, value):
     """
     Remove for cambridge.WmsProtocol.InterfaceParameter.defaultStrings
@@ -10948,7 +10943,7 @@ class InterfaceParameter(InterfaceObject):
        called on deleted object""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeDefaultString:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -10965,13 +10960,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeDefaultString')
       if ll:
         for notify in ll:
@@ -10992,7 +10987,7 @@ class InterfaceParameter(InterfaceObject):
   setCol = InterfaceObject.setCol
 
   setColspan = InterfaceObject.setColspan
-  
+
   def setDefaultStrings(self, values):
     """
     Set for cambridge.WmsProtocol.InterfaceParameter.defaultStrings
@@ -11043,13 +11038,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDefaultStrings')
       if ll:
         for notify in ll:
@@ -11120,13 +11115,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHicard')
       if ll:
         for notify in ll:
@@ -11134,13 +11129,13 @@ class InterfaceParameter(InterfaceObject):
             notify(self)
 
   setInterfaceGroup = InterfaceObject.setInterfaceGroup
-  
+
   def setIsEditable(self, value):
     """
     Set for cambridge.WmsProtocol.InterfaceParameter.isEditable
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setIsEditable:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11187,13 +11182,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setIsEditable')
       if ll:
         for notify in ll:
@@ -11205,7 +11200,7 @@ class InterfaceParameter(InterfaceObject):
     Set for cambridge.WmsProtocol.InterfaceParameter.isOrdered
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setIsOrdered:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11252,13 +11247,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setIsOrdered')
       if ll:
         for notify in ll:
@@ -11333,13 +11328,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLocard')
       if ll:
         for notify in ll:
@@ -11396,7 +11391,7 @@ class InterfaceParameter(InterfaceObject):
 
       xx1 = dataDict.get('topObject')
       yy1 = value.__dict__.get('topObject')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setProtocolParameter:
          Link protocolParameter between objects from separate partitions
          - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -11425,13 +11420,13 @@ class InterfaceParameter(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setProtocolParameter')
       if ll:
         for notify in ll:
@@ -11441,7 +11436,7 @@ class InterfaceParameter(InterfaceObject):
   setRow = InterfaceObject.setRow
 
   setRowspan = InterfaceObject.setRowspan
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsProtocol.InterfaceParameter.serial
@@ -11499,14 +11494,14 @@ class InterfaceParameter(InterfaceObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def sortedEnumValues(self):
     """
     Sorted for cambridge.WmsProtocol.InterfaceParameter.enumValues
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('enumValues')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -11521,14 +11516,14 @@ class InterfaceParameter(InterfaceObject):
   col = InterfaceObject.col
 
   colspan = InterfaceObject.colspan
-  
+
   defaultStrings = property(getDefaultStrings, setDefaultStrings, None,
   r"""String representation of default values. Will be converted to correct 
   type depending on paramType.
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   hicard = property(getHicard, setHicard, None,
   r"""Max number of instances. -1 is used for no limit. Limit applies to 
   number of instances within each container.
@@ -11539,15 +11534,15 @@ class InterfaceParameter(InterfaceObject):
   interfaceGroup = InterfaceObject.interfaceGroup
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   isEditable = property(getIsEditable, setIsEditable, None,
   r"""Is parameter editable (or display-only)?
   """)
-  
+
   isOrdered = property(getIsOrdered, setIsOrdered, None,
   r"""Are values ordered - relevant only for multiple values.
   """)
-  
+
   locard = property(getLocard, setLocard, None,
   r"""Minimum number of instances. Limit applies to number of instances within 
   each container.
@@ -11564,7 +11559,7 @@ class InterfaceParameter(InterfaceObject):
   row = InterfaceObject.row
 
   rowspan = InterfaceObject.rowspan
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -11575,19 +11570,19 @@ class InterfaceParameter(InterfaceObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   enumValues = property(getEnumValues,  None, None,
   r"""child link to class EnumValue
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for protocolInterface
   """)
-  
+
   protocolInterface = property(getProtocolInterface,  None, None,
   r"""parent link
   """)
-  
+
   protocolParameter = property(getProtocolParameter, setProtocolParameter, None,
   r"""Protocol paramter defining interface parameter
   """)
@@ -11605,9 +11600,9 @@ class InterfaceLabel(InterfaceObject):
   _packageName = 'cambridge.WmsProtocol'
   _packageShortName = 'WMSP'
   _fieldNames = ('applicationData', 'className', 'col', 'colspan', 'fieldNames', 'inConstructor', 'interfaceGroup', 'isDeleted', 'label', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'row', 'rowspan', 'serial', 'access', 'activeAccess', 'parent', 'protocolInterface', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.WmsProtocol.InterfaceLabel
@@ -11654,7 +11649,7 @@ class InterfaceLabel(InterfaceObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -11722,7 +11717,7 @@ class InterfaceLabel(InterfaceObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -11748,7 +11743,7 @@ class InterfaceLabel(InterfaceObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.WmsProtocol.InterfaceLabel:   deletes
@@ -11759,11 +11754,11 @@ class InterfaceLabel(InterfaceObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     protocolInterface = dataDict.get('protocolInterface')
-    if (not (protocolInterface in objsToBeDeleted)):
+    if (protocolInterface not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -11775,14 +11770,14 @@ class InterfaceLabel(InterfaceObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.WmsProtocol.InterfaceLabel
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.WmsProtocol.InterfaceLabel
@@ -11803,7 +11798,7 @@ class InterfaceLabel(InterfaceObject):
       else:
         value = dataDict.get('protocolInterface')
         dd = value.__dict__.get('interfaceLabels')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'protocolInterface' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -12012,7 +12007,7 @@ class InterfaceLabel(InterfaceObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -12020,7 +12015,7 @@ class InterfaceLabel(InterfaceObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -12038,7 +12033,7 @@ class InterfaceLabel(InterfaceObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -12108,7 +12103,7 @@ class InterfaceLabel(InterfaceObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.WmsProtocol.InterfaceLabel
@@ -12121,7 +12116,7 @@ class InterfaceLabel(InterfaceObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.WmsProtocol.InterfaceLabel
@@ -12178,7 +12173,7 @@ class InterfaceLabel(InterfaceObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.WmsProtocol.InterfaceLabel
@@ -12204,7 +12199,7 @@ class InterfaceLabel(InterfaceObject):
   getInterfaceGroup = InterfaceObject.getInterfaceGroup
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLabel(self):
     """
     Get for cambridge.WmsProtocol.InterfaceLabel.label
@@ -12212,7 +12207,7 @@ class InterfaceLabel(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('label')
     return result
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.WmsProtocol.InterfaceLabel
@@ -12226,7 +12221,7 @@ class InterfaceLabel(InterfaceObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.WmsProtocol.InterfaceLabel.parent
@@ -12234,7 +12229,7 @@ class InterfaceLabel(InterfaceObject):
     dataDict = self.__dict__
     result = dataDict.get('protocolInterface')
     return result
-  
+
   def getProtocolInterface(self):
     """
     Get for cambridge.WmsProtocol.InterfaceLabel.protocolInterface
@@ -12250,7 +12245,7 @@ class InterfaceLabel(InterfaceObject):
   getRow = InterfaceObject.getRow
 
   getRowspan = InterfaceObject.getRowspan
-  
+
   def getSerial(self):
     """
     Get for cambridge.WmsProtocol.InterfaceLabel.serial
@@ -12262,7 +12257,7 @@ class InterfaceLabel(InterfaceObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.WmsProtocol.InterfaceLabel
@@ -12279,7 +12274,7 @@ class InterfaceLabel(InterfaceObject):
   setColspan = InterfaceObject.setColspan
 
   setInterfaceGroup = InterfaceObject.setInterfaceGroup
-  
+
   def setLabel(self, value):
     """
     Set for cambridge.WmsProtocol.InterfaceLabel.label
@@ -12353,13 +12348,13 @@ class InterfaceLabel(InterfaceObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLabel')
       if ll:
         for notify in ll:
@@ -12369,7 +12364,7 @@ class InterfaceLabel(InterfaceObject):
   setRow = InterfaceObject.setRow
 
   setRowspan = InterfaceObject.setRowspan
-  
+
   def setSerial(self, value):
     """
     Set for cambridge.WmsProtocol.InterfaceLabel.serial
@@ -12445,7 +12440,7 @@ class InterfaceLabel(InterfaceObject):
   interfaceGroup = InterfaceObject.interfaceGroup
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   label = property(getLabel, setLabel, None,
   r"""Label to display
   """)
@@ -12461,7 +12456,7 @@ class InterfaceLabel(InterfaceObject):
   row = InterfaceObject.row
 
   rowspan = InterfaceObject.rowspan
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -12472,11 +12467,11 @@ class InterfaceLabel(InterfaceObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for protocolInterface
   """)
-  
+
   protocolInterface = property(getProtocolInterface,  None, None,
   r"""parent link
   """)

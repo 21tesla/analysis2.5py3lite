@@ -40,75 +40,66 @@
 #   - makeLinearLink(molecule, molResidue, position, linking) .
 #
 
+# makeLinearLink sub-routine to make the correct links between the molResidues.
+from ccp.examples.workshop.session2.makeMolSystem import makeLinearLink
 from memops.api.Implementation import MemopsRoot
 
-# makeLinearLink sub-routine to make the correct links between the molResidues.
+if __name__ == "__main__":
+    project = MemopsRoot(name="dnaTest")
 
-from ccp.examples.workshop.session2.makeMolSystem import makeLinearLink
+    # Make a new molecule top object.
 
-if __name__ == '__main__':
+    molecule = project.newMolecule(name="myDnaMoleculeName")
 
-  project = MemopsRoot(name = 'dnaTest')
+    # DNA sequence as a string of one-letter codes.
 
-  # Make a new molecule top object.
+    seq = "ATGGATCATTAG"
 
-  molecule =  project.newMolecule(name = 'myDnaMoleculeName')
+    # Iterate over this sequence.
 
-  # DNA sequence as a string of one-letter codes.
+    for pos in range(0, len(seq)):
+        # Get the residue code.
 
-  seq = 'ATGGATCATTAG'
+        ccpCode = seq[pos]
 
-  # Iterate over this sequence.
+        # Find the DNA ChemComp for this residue code.
 
-  for pos in range(0, len(seq) ):
+        keywds = {"molType": "DNA", "ccpCode": ccpCode}
+        chemComp = project.findFirstChemComp(**keywds)
 
-    # Get the residue code.
+        # Specify the correct linking information for this residue
+        # based on its position in the sequence.
 
-    ccpCode = seq[pos]
+        if pos == 0:
+            linking = "start"
+        elif pos == len(seq) - 1:
+            linking = "end"
+        else:
+            linking = "middle"
 
-    # Find the DNA ChemComp for this residue code.
+        # Find the ChemCompVar (ChemComp variant) based on the
+        # linking information.
 
-    keywds = {'molType': 'DNA',
-              'ccpCode': ccpCode}
-    chemComp = project.findFirstChemComp(**keywds)
+        keywds2 = {"linking": linking, "isDefaultVar": True}
+        chemCompVar = chemComp.findFirstChemCompVar(**keywds2)
 
-    # Specify the correct linking information for this residue
-    # based on its position in the sequence.
+        # Make the molResidue from the parent molecule object -
+        # and linked to the correct ChemComp.
 
-    if pos == 0:
-      linking = 'start'
-    elif pos == len(seq) - 1:
-      linking = 'end'
-    else:
-      linking = 'middle'
+        keywds3 = {"chemComp": chemComp, "seqCode": pos, "linking": linking, "descriptor": chemCompVar.descriptor}
+        molRes = molecule.newMolResidue(**keywds3)
 
-    # Find the ChemCompVar (ChemComp variant) based on the
-    # linking information.
+        # Create a link between two consecutive molResidues.
 
-    keywds2 = {'linking':      linking,
-               'isDefaultVar': True}
-    chemCompVar = chemComp.findFirstChemCompVar(**keywds2)
+        makeLinearLink(molecule, molRes, pos, linking)
 
-    # Make the molResidue from the parent molecule object -
-    # and linked to the correct ChemComp.
+    print("Linear: [%s]" % molecule.isStdLinear, "\n")
 
-    keywds3 = {'chemComp':   chemComp,
-               'seqCode':    pos,
-               'linking':    linking,
-               'descriptor': chemCompVar.descriptor}
-    molRes = molecule.newMolResidue(**keywds3)
+    print("Molecule: [%s]" % molecule.name, "\n")
 
-    # Create a link between two consecutive molResidues.
+    for molRes in molecule.sortedMolResidues():
+        print("MolResidue: [%s]" % molRes.ccpCode)
 
-    makeLinearLink(molecule, molRes, pos, linking)
+    print()
 
-  print('Linear: [%s]' % molecule.isStdLinear, '\n')
-
-  print('Molecule: [%s]' % molecule.name, '\n')
-
-  for molRes in molecule.sortedMolResidues():
-    print('MolResidue: [%s]' % molRes.ccpCode)
-
-  print()
-
-  project.saveModified()
+    project.saveModified()

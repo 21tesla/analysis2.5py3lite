@@ -20,17 +20,18 @@ Imports structure(s) into the CCPN project using a CCPN routine
 
 """
 
-import CyanaParser.CyanaParser as cp
-from ccpnmr.integrator.core import Util as intUtil
-from ccpnmr.analysis.core.PeakBasic import pickPeak, setManualPeakIntensity, copyPeakList
-from ccpnmr.analysis.core.AssignmentBasic import assignResToDim, assignAtomsToRes
-from ccpnmr.analysis.core.ConstraintBasic import makeStructureGeneration, getFixedResonance
-from ccp.lib.StructureIo import getStructureFromFile
-from ccpnmr.analysis.core.ExperimentBasic import cloneExperiment, setExperimentShiftList
-from ccpnmr.format.converters.DataFormat import getResonanceAtomMap
-import os
 import json
+import os
 
+import CyanaParser.CyanaParser as cp
+
+from ccp.lib.StructureIo import getStructureFromFile
+from ccpnmr.analysis.core.AssignmentBasic import assignAtomsToRes, assignResToDim
+from ccpnmr.analysis.core.ConstraintBasic import getFixedResonance, makeStructureGeneration
+from ccpnmr.analysis.core.ExperimentBasic import cloneExperiment, setExperimentShiftList
+from ccpnmr.analysis.core.PeakBasic import copyPeakList, pickPeak, setManualPeakIntensity
+from ccpnmr.format.converters.DataFormat import getResonanceAtomMap
+from ccpnmr.integrator.core import Util as intUtil
 
 
 def importFromCyana(nmrCalcRun, targetDir):

@@ -1,37 +1,29 @@
-import os
 
 # added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.LabelFrame import LabelFrame
-from memops.gui.Label import Label
 from memops.gui.Button import Button
-from memops.gui.ButtonList import ButtonList
-from memops.gui.Text import Text
 from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.Text import Text
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class RepositoryPropertiesPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='Repository Properties')
 
-                       
+
 
   def body(self, guiFrame):
 
@@ -42,12 +34,12 @@ class RepositoryPropertiesPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('400x400')
-    
+
     self.update_idletasks()
 
- 
+
 class RepositoryPropertiesFrame(Frame):
 
   def __init__(self, guiParent, basePopup):
@@ -63,7 +55,7 @@ class RepositoryPropertiesFrame(Frame):
 
 
     Frame.__init__(self, guiParent)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=1, minsize=10)
@@ -108,13 +100,13 @@ class RepositoryPropertiesFrame(Frame):
     self.pswd_value = Text(self, width=20, height=1, text="")
     self.pswd_value.grid(row=4, column=2,  padx=5, pady=5, sticky='w')
 
-    
+
     self.cancel_button = Button(self, width=10, height=1,
                                text="Cancel",
                                command=self.quit )
     self.cancel_button.grid(row=5, column=1,  padx=5, pady=5, sticky='e')
 
-    
+
     self.login_botton = Button(self, width=10, height=1,
                                text="Connect",
                                command=self.connectRepository )
@@ -143,10 +135,10 @@ class RepositoryPropertiesFrame(Frame):
       ff.draw()
 
 
-    
+
     self.basePopup.destroy()
 
-    
+
   def administerNotifiers(self, notifyFunc):
 
       for func in ('__init__','delete','setName'):
@@ -162,26 +154,25 @@ class RepositoryPropertiesFrame(Frame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = RepositoryPropertiesPopup(root)
 
-  
 
- 
+
+
   root.mainloop()

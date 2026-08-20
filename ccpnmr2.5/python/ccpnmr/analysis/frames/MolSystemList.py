@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,32 +45,33 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
 # do not need 'setCode' since code is MolSystem key
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class MolSystemList(PulldownMenu):
+    def __init__(self, parent, getMolSystems, *args, **kw):
 
-  def __init__(self, parent, getMolSystems, *args, **kw):
+        self.getMolSystems = getMolSystems
 
-    self.getMolSystems = getMolSystems
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.__init__(self, parent, *args, **kw)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setMolSystems, "ccp.molecule.MolSystem.MolSystem", func)
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setMolSystems, 'ccp.molecule.MolSystem.MolSystem', func)
+    def destroy(self):
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setMolSystems, "ccp.molecule.MolSystem.MolSystem", func)
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setMolSystems, 'ccp.molecule.MolSystem.MolSystem', func)
+        PulldownMenu.destroy(self)
 
-    PulldownMenu.destroy(self)
+    def setMolSystems(self, *molSystem):
 
-  def setMolSystems(self, *molSystem):
- 
-    molSystems = self.getMolSystems()
-    names = [ molSystem.code for molSystem in molSystems ]
-    self.replace(names, self.selected_index)
+        molSystems = self.getMolSystems()
+        names = [molSystem.code for molSystem in molSystems]
+        self.replace(names, self.selected_index)

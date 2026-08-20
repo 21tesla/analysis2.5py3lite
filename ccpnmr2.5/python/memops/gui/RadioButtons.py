@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,7 +50,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Frame import Frame
 from memops.gui.RadioButton import RadioButton
@@ -67,185 +65,204 @@ from memops.gui.RadioButton import RadioButton
 #   select_bg           None            # bg for button when selected
 #   unselect_bg         None            # bg for button when unselected
 
+
 class RadioButtons(Frame):
+    def __init__(
+        self,
+        parent,
+        entries=None,
+        select_callback=None,
+        direction=Tkinter.HORIZONTAL,
+        option_dict=None,
+        min_text_width=0,
+        selected_index=0,
+        docKeys=None,
+        tipTexts=None,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, entries = None, select_callback = None,
-               direction = Tkinter.HORIZONTAL, option_dict = None, min_text_width=0,
-               selected_index = 0, docKeys=None, tipTexts=None, *args, **kw):
+        if option_dict is None:
+            option_dict = {"selectcolor": "#D0B0A0"}
 
-    if option_dict is None:
-      option_dict = {'selectcolor':'#D0B0A0'}
+        if entries is None:
+            entries = []
 
-    if entries is None:
-      entries = []
+        if tipTexts and (len(tipTexts) == 1):
+            # for length 1 tooltips just put on frame, rather than individual checkButtons
+            tipText = tipTexts[0]
+            if docKeys:
+                docKey = docKeys[0]
+            else:
+                docKey = None
+            tipTexts = None
+            docKeys = None
+        else:
+            tipText = None
+            docKey = None
 
-    if tipTexts and (len(tipTexts) == 1):
-      # for length 1 tooltips just put on frame, rather than individual checkButtons
-      tipText=tipTexts[0]
-      if docKeys:
-        docKey=docKeys[0]
-      else:
-        docKey = None
-      tipTexts = None
-      docKeys = None
-    else:
-      tipText = None
-      docKey = None
+        Frame.__init__(self, parent, docKey=docKey, tipText=tipText, createToolTip=True, *args, **kw)
 
-    Frame.__init__(self, parent, docKey=docKey, tipText=tipText, createToolTip=True, *args, **kw)
+        self.font = kw.get("font")
+        self.var = Tkinter.IntVar()
+        self.var.set(selected_index)
+        self.direction = direction
+        self.select_callback = select_callback
+        self.min_text_width = min_text_width
 
-    self.font = kw.get('font')
-    self.var = Tkinter.IntVar()
-    self.var.set(selected_index)
-    self.direction = direction
-    self.select_callback = select_callback
-    self.min_text_width = min_text_width
+        self.borderwidth = option_dict.get("borderwidth", 1)
+        self.padding = option_dict.get("padding", 1)
+        self.selectcolor = option_dict.get("selectcolor")
+        self.select_relief = option_dict.get("select_relief", Tkinter.FLAT)
+        self.unselect_relief = option_dict.get("unselect_relief", Tkinter.FLAT)
 
-    self.borderwidth = option_dict.get('borderwidth', 1)
-    self.padding = option_dict.get('padding', 1)
-    self.selectcolor = option_dict.get('selectcolor')
-    self.select_relief = option_dict.get('select_relief', Tkinter.FLAT)
-    self.unselect_relief = option_dict.get('unselect_relief', Tkinter.FLAT)
+        self.select_dict = {}
+        self.unselect_dict = {}
+        for key in option_dict.keys():
+            if key[-7:] == "_relief":
+                continue
+            elif key[:7] == "select_":
+                self.select_dict[key[7:]] = option_dict[key]
+            elif key[:9] == "unselect_":
+                self.unselect_dict[key[9:]] = option_dict[key]
 
-    self.select_dict = {}
-    self.unselect_dict = {}
-    for key in option_dict.keys():
-      if (key[-7:] == '_relief'):
-        continue
-      elif (key[:7] == 'select_'):
-        self.select_dict[key[7:]] = option_dict[key]
-      elif (key[:9] == 'unselect_'):
-        self.unselect_dict[key[9:]] = option_dict[key]
-    
-    self.entries = None
-    self.setEntries(entries, docKeys, tipTexts)
+        self.entries = None
+        self.setEntries(entries, docKeys, tipTexts)
 
-  def setEntries(self, entries, docKeys=None, tipTexts=None):
+    def setEntries(self, entries, docKeys=None, tipTexts=None):
 
-    if entries == self.entries:
-      return
+        if entries == self.entries:
+            return
 
-    nentries = len(entries)
-    if not docKeys:
-      docKeys = [None] * nentries
+        nentries = len(entries)
+        if not docKeys:
+            docKeys = [None] * nentries
 
-    if not tipTexts:
-      tipTexts = [None] * nentries
+        if not tipTexts:
+            tipTexts = [None] * nentries
 
-    if self.entries:
-      for b in self.buttons:
-        b.destroy()
+        if self.entries:
+            for b in self.buttons:
+                b.destroy()
 
-    self.entries = entries
-    self.buttons = nentries * [None]
-    self.frames = nentries * [None]
+        self.entries = entries
+        self.buttons = nentries * [None]
+        self.frames = nentries * [None]
 
-    for n, entry in enumerate(entries):
+        for n, entry in enumerate(entries):
+            frame = Frame(self, borderwidth=self.borderwidth)
 
-      frame = Frame(self, borderwidth=self.borderwidth)
+            entryText = entry
+            m = self.min_text_width - len(entryText)
+            if m > 0:
+                entryText = entryText + m * " "
 
-      entryText = entry
-      m =  self.min_text_width - len(entryText)
-      if m > 0:
-        entryText = entryText + m * ' '
-      
-      bgColor = self.cget('bg')
-      callback = lambda entry=entry, callback=self.selectCallback: callback(entry)
-      button = RadioButton(frame, bg=bgColor, text=entryText, callback=callback,
-                                   highlightbackground=bgColor, highlightcolor=bgColor,
-                                   activebackground='#D0B0A0', activeforeground='white',
-                                   variable=self.var, font=self.font, value=n,
-                                   docKey=docKeys[n], tipText=tipTexts[n])
+            bgColor = self.cget("bg")
+            callback = lambda entry=entry, callback=self.selectCallback: callback(entry)
+            button = RadioButton(
+                frame,
+                bg=bgColor,
+                text=entryText,
+                callback=callback,
+                highlightbackground=bgColor,
+                highlightcolor=bgColor,
+                activebackground="#D0B0A0",
+                activeforeground="white",
+                variable=self.var,
+                font=self.font,
+                value=n,
+                docKey=docKeys[n],
+                tipText=tipTexts[n],
+            )
 
-      if self.selectcolor:
-        button.config(selectcolor=self.selectcolor)
+            if self.selectcolor:
+                button.config(selectcolor=self.selectcolor)
 
-      if self.direction == Tkinter.HORIZONTAL:
-        frame.grid(row = 0, pady=0, column = n, sticky=Tkinter.NSEW, padx=self.padding)
-        self.grid_columnconfigure(n, weight=1)
-      else:
-        frame.grid(row = n, padx=0, sticky=Tkinter.NSEW, pady=self.padding)
-        self.grid_rowconfigure(n, weight=1)
- 
-      frame.grid_rowconfigure(0, weight=1)
-      frame.grid_columnconfigure(0, weight=1)
-      button.grid(sticky='nw')
+            if self.direction == Tkinter.HORIZONTAL:
+                frame.grid(row=0, pady=0, column=n, sticky=Tkinter.NSEW, padx=self.padding)
+                self.grid_columnconfigure(n, weight=1)
+            else:
+                frame.grid(row=n, padx=0, sticky=Tkinter.NSEW, pady=self.padding)
+                self.grid_rowconfigure(n, weight=1)
 
-      self.buttons[n] = button
-      self.frames[n] = frame
+            frame.grid_rowconfigure(0, weight=1)
+            frame.grid_columnconfigure(0, weight=1)
+            button.grid(sticky="nw")
 
-    self.setOptions()
+            self.buttons[n] = button
+            self.frames[n] = frame
 
-  def selectCallback(self, entry):
+        self.setOptions()
 
-    self.setOptions()
+    def selectCallback(self, entry):
 
-    if self.select_callback:
-      self.select_callback(entry)
+        self.setOptions()
 
-  def get(self):
+        if self.select_callback:
+            self.select_callback(entry)
 
-    n = self.getIndex()
+    def get(self):
 
-    return self.entries[n]
+        n = self.getIndex()
 
-  def getIndex(self):
+        return self.entries[n]
 
-    return self.var.get()
+    def getIndex(self):
 
-  def set(self, entry):
+        return self.var.get()
 
-    n = self.entries.index(entry)
-    self.setIndex(n)
+    def set(self, entry):
 
-  def setIndex(self, n):
+        n = self.entries.index(entry)
+        self.setIndex(n)
 
-    if n != self.getIndex():
-      self.var.set(n)
-      self.selectCallback(self.entries[n])
+    def setIndex(self, n):
 
-  def setOptions(self):
+        if n != self.getIndex():
+            self.var.set(n)
+            self.selectCallback(self.entries[n])
 
-    n = self.getIndex()
-    for m in range(len(self.frames)):
-      if (m == n):
-        relief = self.select_relief
-        dict = self.select_dict
-      else:
-        relief = self.unselect_relief
-        dict = self.unselect_dict
-      self.frames[m].config(relief=relief)
-      fg = dict.get('fg')
-      if (fg):
-        self.buttons[m].config(fg=fg)
-      bg = dict.get('bg')
-      if (bg):
-        self.buttons[m].config(bg=bg)
+    def setOptions(self):
 
-if __name__ == '__main__':
+        n = self.getIndex()
+        for m in range(len(self.frames)):
+            if m == n:
+                relief = self.select_relief
+                dict = self.select_dict
+            else:
+                relief = self.unselect_relief
+                dict = self.unselect_dict
+            self.frames[m].config(relief=relief)
+            fg = dict.get("fg")
+            if fg:
+                self.buttons[m].config(fg=fg)
+            bg = dict.get("bg")
+            if bg:
+                self.buttons[m].config(bg=bg)
 
-  from memops.gui.Button import Button
 
-  def get_me():
-    print('get_me:', r.get(), r.getIndex())
+if __name__ == "__main__":
+    from memops.gui.Button import Button
 
-  def set_me():
-    c = r.getIndex()
-    c = (c + 1) % 3
-    print('set_me:', c)
-    r.setIndex(c)
+    def get_me():
+        print("get_me:", r.get(), r.getIndex())
 
-  def my_callback(text):
-    print('my_callback:', text)
+    def set_me():
+        c = r.getIndex()
+        c = (c + 1) % 3
+        print("set_me:", c)
+        r.setIndex(c)
 
-  root = Tkinter.Tk()
+    def my_callback(text):
+        print("my_callback:", text)
 
-  r = RadioButtons(root, ['one', 'two', 'three'], select_callback=my_callback,
-                   tipTexts=['Tip A','Tip B','Tip C'])
-  r.grid()
-  b = Button(root, text='get me', command=get_me)
-  b.grid()
-  b = Button(root, text='set me', command=set_me)
-  b.grid()
+    root = Tkinter.Tk()
 
-  root.mainloop()
+    r = RadioButtons(root, ["one", "two", "three"], select_callback=my_callback, tipTexts=["Tip A", "Tip B", "Tip C"])
+    r.grid()
+    b = Button(root, text="get me", command=get_me)
+    b.grid()
+    b = Button(root, text="set me", command=set_me)
+    b.grid()
+
+    root.mainloop()

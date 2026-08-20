@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,390 +39,416 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-from memops.gui.ButtonList      import ButtonList, UtilityButtonList
-from memops.gui.Frame           import Frame
-from memops.gui.Label           import Label
-from memops.gui.LabelDivider    import LabelDivider
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-from memops.gui.WebBrowser      import WebBrowser
-
 from ccp.general.Io import getDataSourceFileName
-
+from ccpnmr.analysis.core.AssignmentBasic import getAtomSetShifts, isPeakAssigned
 from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import ButtonList, UtilityButtonList
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelDivider import LabelDivider
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.WebBrowser import WebBrowser
 
-from ccpnmr.analysis.core.AssignmentBasic import isPeakAssigned, getAtomSetShifts
+TABLE_BASE_URL = "http://www2.ccpn.ac.uk/table"
 
-TABLE_BASE_URL = 'http://www2.ccpn.ac.uk/table'
 
 class Table:
+    def __init__(self, colHeadings):
 
-  def __init__(self, colHeadings):
+        self.colHeadings = colHeadings
+        self.rowObjects = None
+        self.rowTexts = []
 
-    self.colHeadings = colHeadings
-    self.rowObjects = None
-    self.rowTexts = []
+    def update(self, rowTexts, rowObjects=None):
 
-  def update(self, rowTexts, rowObjects=None):
+        self.rowTexts = rowTexts
+        self.rowObjects = rowObjects
 
-    self.rowTexts = rowTexts
-    self.rowObjects = rowObjects
 
 class ScrolledTable(Table, ScrolledMatrix):
+    def __init__(self, guiParent, colHeadings, **kw):
 
-  def __init__(self, guiParent, colHeadings, **kw):
+        Table.__init__(self, colHeadings)
+        kw["headingList"] = colHeadings
+        ScrolledMatrix.__init__(self, guiParent, **kw)
 
-    Table.__init__(self, colHeadings)
-    kw['headingList'] = colHeadings
-    ScrolledMatrix.__init__(self, guiParent, **kw)
-    
-  def update(self, rowTexts, rowObjects):
+    def update(self, rowTexts, rowObjects):
 
-    Table.update(self, rowTexts, rowObjects)
-    ScrolledMatrix.update(self, textMatrix=rowTexts, objectList=rowObjects)
+        Table.update(self, rowTexts, rowObjects)
+        ScrolledMatrix.update(self, textMatrix=rowTexts, objectList=rowObjects)
+
 
 class ProjectSummaryPopup(BasePopup):
-  """
-  **An Executive Summary of the Project**
-  
-  This popup window provides a executive summary of the project.
-  It gives informaton about the project name, the project (non-spectra)
-  directories, the spectra, the peak lists, the chains, the restraint
-  lists and the structure ensembles.
+    """
+    **An Executive Summary of the Project**
 
-  The "Update" button will update the information, when the project has
-  changed.
+    This popup window provides a executive summary of the project.
+    It gives informaton about the project name, the project (non-spectra)
+    directories, the spectra, the peak lists, the chains, the restraint
+    lists and the structure ensembles.
 
-  The "Show in Browser" button will open up a browswer window with the
-  information in HTML, which can then be printed (which on many computers
-  also allows the output to be saved to a file).
-  """
+    The "Update" button will update the information, when the project has
+    changed.
 
-  def __init__(self, parent, *args, **kw):
+    The "Show in Browser" button will open up a browswer window with the
+    information in HTML, which can then be printed (which on many computers
+    also allows the output to be saved to a file).
+    """
 
-    self.guiParent = parent
-    title = "Project : Summary"
+    def __init__(self, parent, *args, **kw):
 
-    BasePopup.__init__(self, parent=parent, title=title, **kw)
-   
-  def open(self):
-  
-    self.updateAfter()
-    BasePopup.open(self)
-    
-  def body(self, guiFrame):
-    
-    self.geometry("+250+250")
+        self.guiParent = parent
+        title = "Project : Summary"
 
-    guiFrame.grid_columnconfigure(0, weight=1)
-    
-    row = 0
+        BasePopup.__init__(self, parent=parent, title=title, **kw)
 
-    frame = Frame(guiFrame, grid=(row,0))
-    frame.expandGrid(0,0)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
+    def open(self):
 
-    self.projectNameLabel = Label(frame, text='Project name:', grid=(0,0), sticky='w')
-    utilButtons = UtilityButtonList(frame, helpUrl=self.help_url, grid=(0,1), sticky='e')
+        self.updateAfter()
+        BasePopup.open(self)
 
-    div = LabelDivider(guiFrame, text='Project directories', grid=(row,0))
-    row += 1
+    def body(self, guiFrame):
 
-    tipTexts = ['The record number',
-                'The repository name',
-                'The full path of the repository',
-               ]
-    colHeadings = ['#','Name','Path']
-                   
-    self.projectTable = ScrolledTable(guiFrame, colHeadings, initialRows=3,
-                                      grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    div = LabelDivider(guiFrame, text='Spectra', grid=(row,0))
-    row += 1
+        self.geometry("+250+250")
 
-    tipTexts = ['The record number',
-                'The spectrum name',
-                'The number of dimensions for the spectrum',
-                'The shift list for the spectrum',
-                'The full path to the spectrum data file',
-               ]
-    colHeadings = ['#','Name','Num. Dim','Shift List','Path']
-                   
-    self.spectrumTable = ScrolledTable(guiFrame, colHeadings, initialRows=5,
-                                         grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    div = LabelDivider(guiFrame, text='PeakLists', grid=(row,0))
-    row += 1
+        guiFrame.grid_columnconfigure(0, weight=1)
 
-    tipTexts = ['The record number',
-                'The peak list name',
-                'The number of peaks for the peak list',
-                'The number assigned in at least one dimension',
-                'The percentage assigned in at least one dimension',
-                'The number assigned in all dimensions',
-                'The percentage assigned in all dimensions',
-               ]
-    colHeadings = ['#','Name','Peaks','Part Assigned','Part Percent', 'All Assigned', 'All Percent']
-                   
-    self.peakListTable = ScrolledTable(guiFrame, colHeadings, initialRows=5,
-                                       grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    div = LabelDivider(guiFrame, text='Chains', grid=(row,0))
-    row += 1
+        row = 0
 
-    tipTexts = ['The chain number',
-                'The chain name',
-                'The number of residues in the chain',
-                'The number of assignable atoms in the chain',
-                'The shift list being considered for assignment',
-                'The number of assigned atoms in the chain for given shift list',
-                'The percentage of atoms assigned in the chain for given shift list',
-               ]
-    colHeadings = ['#','Name','Residues','Assignable\nAtoms','Shift List', 'Assigned\nAtoms', 'Percent\nAssigned']
-                   
-    self.chainTable = ScrolledTable(guiFrame, colHeadings, initialRows=3,
-                                    grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    div = LabelDivider(guiFrame, text='Restraint Lists', grid=(row,0))
-    row += 1
+        frame = Frame(guiFrame, grid=(row, 0))
+        frame.expandGrid(0, 0)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-    tipTexts = ['The restraint list number',
-                'The restraint list name',
-                'The type of restraints in the restraint list',
-                'The number of restraints in the restraint list',
-                'The experiments related to the restraint list',
-               ]
-    colHeadings = ['#','Name','Type','Restraints','Experiments']
-                   
-    self.restraintListTable = ScrolledTable(guiFrame, colHeadings, initialRows=5,
-                                            grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    div = LabelDivider(guiFrame, text='Structure Ensembles', grid=(row,0))
-    row += 1
+        self.projectNameLabel = Label(frame, text="Project name:", grid=(0, 0), sticky="w")
+        utilButtons = UtilityButtonList(frame, helpUrl=self.help_url, grid=(0, 1), sticky="e")
 
-    tipTexts = ['The structure ensemble number',
-                'The structure ensemble name',
-                'The number of models in the structure ensemble',
-                'The chains in the structure ensemble',
-                'The total number of residues in the structure ensemble',
-               ]
-    colHeadings = ['#','Name','Models','Chains','Residues']
-                   
-    self.structureTable = ScrolledTable(guiFrame, colHeadings, initialRows=4,
-                                        grid=(row,0), tipTexts=tipTexts)
-    guiFrame.grid_rowconfigure(row, weight=1)
-    row += 1
-    
-    #tipTexts = ['Print the information to a file']
-    #texts    = ['Print to File']
-    #commands = [self.printInfo]
-    tipTexts = ['Update the information', 'Show the information in a browser (e.g. for printing)']
-    texts    = ['Update', 'Show in Browser']
-    commands = [self.updateAfter, self.showBrowser]
-    self.bottomButtons = ButtonList(guiFrame, texts=texts, commands=commands,
-                                    grid=(row,0), tipTexts=tipTexts)
+        div = LabelDivider(guiFrame, text="Project directories", grid=(row, 0))
+        row += 1
 
-    self.curateNotifiers(self.registerNotify)
-    
-    self.refresh = False 
-    self.updateAfter()
-  
-  def curateNotifiers(self, notifyFunc):
-  
-    pass  # have an Update button so probably don't need these
- 
-  def destroy(self):
-  
-    self.curateNotifiers(self.unregisterNotify)
+        tipTexts = [
+            "The record number",
+            "The repository name",
+            "The full path of the repository",
+        ]
+        colHeadings = ["#", "Name", "Path"]
 
-    BasePopup.destroy(self) 
-  
-  def updateAfter(self, obj=None):
-    
-    if self.refresh:
-      return
+        self.projectTable = ScrolledTable(guiFrame, colHeadings, initialRows=3, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-    self.refresh = True
-    self.after_idle(self.update)
-    
-  def update(self):
+        div = LabelDivider(guiFrame, text="Spectra", grid=(row, 0))
+        row += 1
 
-    self.updateProject()
-    self.updateSpectra()
-    self.updatePeakLists()
-    self.updateChains()
-    self.updateRestraintLists()
-    self.updateStructures()
+        tipTexts = [
+            "The record number",
+            "The spectrum name",
+            "The number of dimensions for the spectrum",
+            "The shift list for the spectrum",
+            "The full path to the spectrum data file",
+        ]
+        colHeadings = ["#", "Name", "Num. Dim", "Shift List", "Path"]
 
-  def updateProject(self):
+        self.spectrumTable = ScrolledTable(guiFrame, colHeadings, initialRows=5, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-    project = self.project
+        div = LabelDivider(guiFrame, text="PeakLists", grid=(row, 0))
+        row += 1
 
-    self.projectNameLabel.set('Project name = %s' % project.name)
+        tipTexts = [
+            "The record number",
+            "The peak list name",
+            "The number of peaks for the peak list",
+            "The number assigned in at least one dimension",
+            "The percentage assigned in at least one dimension",
+            "The number assigned in all dimensions",
+            "The percentage assigned in all dimensions",
+        ]
+        colHeadings = ["#", "Name", "Peaks", "Part Assigned", "Part Percent", "All Assigned", "All Percent"]
 
-    textMatrix = []
-    objectList = []
+        self.peakListTable = ScrolledTable(guiFrame, colHeadings, initialRows=5, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-    number = 0
-    for repository in project.sortedRepositories():
-      number += 1
-      name = repository.name
-      path = repository.url.path
+        div = LabelDivider(guiFrame, text="Chains", grid=(row, 0))
+        row += 1
 
-      datum = [number, name, path]
-      objectList.append(repository)
-      textMatrix.append(datum)
+        tipTexts = [
+            "The chain number",
+            "The chain name",
+            "The number of residues in the chain",
+            "The number of assignable atoms in the chain",
+            "The shift list being considered for assignment",
+            "The number of assigned atoms in the chain for given shift list",
+            "The percentage of atoms assigned in the chain for given shift list",
+        ]
+        colHeadings = [
+            "#",
+            "Name",
+            "Residues",
+            "Assignable\nAtoms",
+            "Shift List",
+            "Assigned\nAtoms",
+            "Percent\nAssigned",
+        ]
 
-    self.projectTable.update(textMatrix, objectList)
+        self.chainTable = ScrolledTable(guiFrame, colHeadings, initialRows=3, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
+        div = LabelDivider(guiFrame, text="Restraint Lists", grid=(row, 0))
+        row += 1
 
-  def updateSpectra(self):
+        tipTexts = [
+            "The restraint list number",
+            "The restraint list name",
+            "The type of restraints in the restraint list",
+            "The number of restraints in the restraint list",
+            "The experiments related to the restraint list",
+        ]
+        colHeadings = ["#", "Name", "Type", "Restraints", "Experiments"]
 
-    textMatrix = []
-    objectList = []
+        self.restraintListTable = ScrolledTable(guiFrame, colHeadings, initialRows=5, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-    nmrProject = self.nmrProject
-    number = 0
-    for experiment in nmrProject.sortedExperiments():
-      for spectrum in experiment.sortedDataSources():
-        number += 1
-        name = '%s:%s' % (experiment.name, spectrum.name)
-        numDim = spectrum.numDim
-        shiftList = experiment.shiftList
-        if shiftList:
-          shiftListText = '%s [%d]' % (shiftList.name or '<No name>', shiftList.serial)
-        else:
-          shiftListText = ''
-        path = getDataSourceFileName(spectrum)
+        div = LabelDivider(guiFrame, text="Structure Ensembles", grid=(row, 0))
+        row += 1
 
-        datum = [number, name, numDim, shiftListText, path]
-        objectList.append(spectrum)
-        textMatrix.append(datum)
+        tipTexts = [
+            "The structure ensemble number",
+            "The structure ensemble name",
+            "The number of models in the structure ensemble",
+            "The chains in the structure ensemble",
+            "The total number of residues in the structure ensemble",
+        ]
+        colHeadings = ["#", "Name", "Models", "Chains", "Residues"]
 
-    self.spectrumTable.update(textMatrix, objectList)
+        self.structureTable = ScrolledTable(guiFrame, colHeadings, initialRows=4, grid=(row, 0), tipTexts=tipTexts)
+        guiFrame.grid_rowconfigure(row, weight=1)
+        row += 1
 
-  def updatePeakLists(self):
+        # tipTexts = ['Print the information to a file']
+        # texts    = ['Print to File']
+        # commands = [self.printInfo]
+        tipTexts = ["Update the information", "Show the information in a browser (e.g. for printing)"]
+        texts = ["Update", "Show in Browser"]
+        commands = [self.updateAfter, self.showBrowser]
+        self.bottomButtons = ButtonList(guiFrame, texts=texts, commands=commands, grid=(row, 0), tipTexts=tipTexts)
 
-    textMatrix = []
-    objectList = []
+        self.curateNotifiers(self.registerNotify)
 
-    nmrProject = self.nmrProject
-    number = 0
-    for experiment in nmrProject.sortedExperiments():
-      for spectrum in experiment.sortedDataSources():
-        for peakList in spectrum.sortedPeakLists():
-          number += 1
-          name = '%s:%s:%s' % (experiment.name, spectrum.name, peakList.serial)
-          peaks = peakList.peaks
-          numPeaks = len(peaks)
-          numPartAssigned = len([peak for peak in peaks if isPeakAssigned(peak, fully=False)])
-          percentPartAssigned = int(round((100.0 * numPartAssigned) / max(numPeaks, 1)))
-          numAllAssigned = len([peak for peak in peaks if isPeakAssigned(peak, fully=True)])
-          percentAllAssigned = int(round((100.0 * numAllAssigned) / max(numPeaks, 1)))
+        self.refresh = False
+        self.updateAfter()
 
-          datum = [number, name, numPeaks, numPartAssigned, percentPartAssigned, numAllAssigned, percentAllAssigned]
-          objectList.append(peakList)
-          textMatrix.append(datum)
+    def curateNotifiers(self, notifyFunc):
 
-    self.peakListTable.update(textMatrix, objectList)
+        pass  # have an Update button so probably don't need these
 
-  def updateChains(self):
+    def destroy(self):
 
-    textMatrix = []
-    objectList = []
+        self.curateNotifiers(self.unregisterNotify)
 
-    project = self.project
-    nmrProject = self.nmrProject
-    number = 0
-    for molSystem in project.sortedMolSystems():
-      for chain in molSystem.sortedChains():
-        number += 1
-        name = '%s:%s' % (molSystem.code, chain.code)
-        residues = chain.residues
-        numResidues = len(residues)
-        numAssignableAtoms = 0
-        for residue in residues:
-          numAssignableAtoms += len([atom for atom in residue.atoms if not atom.chemAtom.waterExchangeable])
-        for shiftList in nmrProject.sortedMeasurementLists():
-          if shiftList.className != 'ShiftList':
-            continue
-          shiftListText = '%s [%d]' % (shiftList.name or '<No name>', shiftList.serial)
-          numAssignedAtoms = 0
-          for residue in residues:
-            numAssignedAtoms += len([atom for atom in residue.atoms if atom.atomSet and getAtomSetShifts(atom.atomSet, shiftList)])
-          percentAssignedAtoms = int(round((100.0*numAssignedAtoms)/max(numAssignableAtoms, 1)))
+        BasePopup.destroy(self)
 
-          datum = [number, name, numResidues, numAssignableAtoms, shiftListText, numAssignedAtoms, percentAssignedAtoms]
-          objectList.append(chain)
-          textMatrix.append(datum)
+    def updateAfter(self, obj=None):
 
-    self.chainTable.update(textMatrix, objectList)
+        if self.refresh:
+            return
 
-  def updateRestraintLists(self):
+        self.refresh = True
+        self.after_idle(self.update)
 
-    textMatrix = []
-    objectList = []
+    def update(self):
 
-    colHeadings = ['#','Name','Type','Restraints','Experiments']
+        self.updateProject()
+        self.updateSpectra()
+        self.updatePeakLists()
+        self.updateChains()
+        self.updateRestraintLists()
+        self.updateStructures()
 
-    project = self.project
-    number = 0
-    for nmrConstraintStore in project.sortedNmrConstraintStores():
-      for constraintList in nmrConstraintStore.sortedConstraintLists():
-        number += 1
-        name = '%s:%s' % (nmrConstraintStore.serial, constraintList.name or '')
-        typ = constraintList.className[:-14]
-        numRestraints = len(constraintList.constraints)
-        experiments = ', '.join([e.name for e in constraintList.experiments])
-        datum = [number, name, typ, numRestraints, experiments]
-        objectList.append(constraintList)
-        textMatrix.append(datum)
+    def updateProject(self):
 
-    self.restraintListTable.update(textMatrix, objectList)
-        
-  def updateStructures(self):
+        project = self.project
 
-    textMatrix = []
-    objectList = []
+        self.projectNameLabel.set("Project name = %s" % project.name)
 
-    project = self.project
-    number = 0
-    for structureEnsemble in project.sortedStructureEnsembles():
-      number += 1
-      name = structureEnsemble.ensembleId
-      numModels = len(structureEnsemble.models)
-      chainCodes = []
-      numResidues = 0
-      for chain in structureEnsemble.sortedCoordChains():
-        chainCodes.append(chain.code)
-        numResidues += len(chain.residues)
+        textMatrix = []
+        objectList = []
 
-      chainCodes = ','.join(['%s' % chainCode for chainCode in chainCodes])
-      chainCodes = '%s:%s' % (structureEnsemble.molSystem.code, chainCodes)
-      datum = [number, name, numModels, chainCodes, numResidues]
-      objectList.append(structureEnsemble)
-      textMatrix.append(datum)
+        number = 0
+        for repository in project.sortedRepositories():
+            number += 1
+            name = repository.name
+            path = repository.url.path
 
-    self.structureTable.update(textMatrix, objectList)
+            datum = [number, name, path]
+            objectList.append(repository)
+            textMatrix.append(datum)
 
-  def showBrowser(self):
+        self.projectTable.update(textMatrix, objectList)
 
-    project = self.project
-    projectName = project.name
-    url = TABLE_BASE_URL
-    webBrowser = WebBrowser(self)
+    def updateSpectra(self):
 
-    headerString = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        textMatrix = []
+        objectList = []
+
+        nmrProject = self.nmrProject
+        number = 0
+        for experiment in nmrProject.sortedExperiments():
+            for spectrum in experiment.sortedDataSources():
+                number += 1
+                name = "%s:%s" % (experiment.name, spectrum.name)
+                numDim = spectrum.numDim
+                shiftList = experiment.shiftList
+                if shiftList:
+                    shiftListText = "%s [%d]" % (shiftList.name or "<No name>", shiftList.serial)
+                else:
+                    shiftListText = ""
+                path = getDataSourceFileName(spectrum)
+
+                datum = [number, name, numDim, shiftListText, path]
+                objectList.append(spectrum)
+                textMatrix.append(datum)
+
+        self.spectrumTable.update(textMatrix, objectList)
+
+    def updatePeakLists(self):
+
+        textMatrix = []
+        objectList = []
+
+        nmrProject = self.nmrProject
+        number = 0
+        for experiment in nmrProject.sortedExperiments():
+            for spectrum in experiment.sortedDataSources():
+                for peakList in spectrum.sortedPeakLists():
+                    number += 1
+                    name = "%s:%s:%s" % (experiment.name, spectrum.name, peakList.serial)
+                    peaks = peakList.peaks
+                    numPeaks = len(peaks)
+                    numPartAssigned = len([peak for peak in peaks if isPeakAssigned(peak, fully=False)])
+                    percentPartAssigned = int(round((100.0 * numPartAssigned) / max(numPeaks, 1)))
+                    numAllAssigned = len([peak for peak in peaks if isPeakAssigned(peak, fully=True)])
+                    percentAllAssigned = int(round((100.0 * numAllAssigned) / max(numPeaks, 1)))
+
+                    datum = [
+                        number,
+                        name,
+                        numPeaks,
+                        numPartAssigned,
+                        percentPartAssigned,
+                        numAllAssigned,
+                        percentAllAssigned,
+                    ]
+                    objectList.append(peakList)
+                    textMatrix.append(datum)
+
+        self.peakListTable.update(textMatrix, objectList)
+
+    def updateChains(self):
+
+        textMatrix = []
+        objectList = []
+
+        project = self.project
+        nmrProject = self.nmrProject
+        number = 0
+        for molSystem in project.sortedMolSystems():
+            for chain in molSystem.sortedChains():
+                number += 1
+                name = "%s:%s" % (molSystem.code, chain.code)
+                residues = chain.residues
+                numResidues = len(residues)
+                numAssignableAtoms = 0
+                for residue in residues:
+                    numAssignableAtoms += len([atom for atom in residue.atoms if not atom.chemAtom.waterExchangeable])
+                for shiftList in nmrProject.sortedMeasurementLists():
+                    if shiftList.className != "ShiftList":
+                        continue
+                    shiftListText = "%s [%d]" % (shiftList.name or "<No name>", shiftList.serial)
+                    numAssignedAtoms = 0
+                    for residue in residues:
+                        numAssignedAtoms += len(
+                            [
+                                atom
+                                for atom in residue.atoms
+                                if atom.atomSet and getAtomSetShifts(atom.atomSet, shiftList)
+                            ]
+                        )
+                    percentAssignedAtoms = int(round((100.0 * numAssignedAtoms) / max(numAssignableAtoms, 1)))
+
+                    datum = [
+                        number,
+                        name,
+                        numResidues,
+                        numAssignableAtoms,
+                        shiftListText,
+                        numAssignedAtoms,
+                        percentAssignedAtoms,
+                    ]
+                    objectList.append(chain)
+                    textMatrix.append(datum)
+
+        self.chainTable.update(textMatrix, objectList)
+
+    def updateRestraintLists(self):
+
+        textMatrix = []
+        objectList = []
+
+        colHeadings = ["#", "Name", "Type", "Restraints", "Experiments"]
+
+        project = self.project
+        number = 0
+        for nmrConstraintStore in project.sortedNmrConstraintStores():
+            for constraintList in nmrConstraintStore.sortedConstraintLists():
+                number += 1
+                name = "%s:%s" % (nmrConstraintStore.serial, constraintList.name or "")
+                typ = constraintList.className[:-14]
+                numRestraints = len(constraintList.constraints)
+                experiments = ", ".join([e.name for e in constraintList.experiments])
+                datum = [number, name, typ, numRestraints, experiments]
+                objectList.append(constraintList)
+                textMatrix.append(datum)
+
+        self.restraintListTable.update(textMatrix, objectList)
+
+    def updateStructures(self):
+
+        textMatrix = []
+        objectList = []
+
+        project = self.project
+        number = 0
+        for structureEnsemble in project.sortedStructureEnsembles():
+            number += 1
+            name = structureEnsemble.ensembleId
+            numModels = len(structureEnsemble.models)
+            chainCodes = []
+            numResidues = 0
+            for chain in structureEnsemble.sortedCoordChains():
+                chainCodes.append(chain.code)
+                numResidues += len(chain.residues)
+
+            chainCodes = ",".join(["%s" % chainCode for chainCode in chainCodes])
+            chainCodes = "%s:%s" % (structureEnsemble.molSystem.code, chainCodes)
+            datum = [number, name, numModels, chainCodes, numResidues]
+            objectList.append(structureEnsemble)
+            textMatrix.append(datum)
+
+        self.structureTable.update(textMatrix, objectList)
+
+    def showBrowser(self):
+
+        project = self.project
+        projectName = project.name
+        url = TABLE_BASE_URL
+        webBrowser = WebBrowser(self)
+
+        headerString = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>%s</title>
@@ -447,42 +472,41 @@ table.tablesorter tr:nth-child(even) td {
 }); </script>
 </head>
 <body>
-''' % (projectName, url, url, url)
+""" % (projectName, url, url, url)
 
-    htmlStrings = [headerString]
-    htmlStrings.append('<h1>Project name = %s</h1>' % projectName)
+        htmlStrings = [headerString]
+        htmlStrings.append("<h1>Project name = %s</h1>" % projectName)
 
-    for name, table in ( \
-        ('Project directories', self.projectTable),
-        ('Spectra', self.spectrumTable),
-        ('Peak Lists', self.peakListTable),
-        ('Chains', self.chainTable),
-        ('Restraint Lists', self.restraintListTable),
-        ('Structure Ensembles', self.structureTable),
-    ):
-      htmlStrings.append('<h1>%s</h1>\n' % name)
-      htmlStrings.append('<table class=tablesorter>\n')
-      htmlStrings.append('<thead>\n')
-      htmlStrings.append('<tr>\n')
-      for colHeading in table.colHeadings:
-        colHeading = colHeading.replace('\n', ' ')
-        htmlStrings.append('<th>%s</th>' % colHeading)
-      htmlStrings.append('\n</tr>\n')
-      htmlStrings.append('</thead>\n')
+        for name, table in (
+            ("Project directories", self.projectTable),
+            ("Spectra", self.spectrumTable),
+            ("Peak Lists", self.peakListTable),
+            ("Chains", self.chainTable),
+            ("Restraint Lists", self.restraintListTable),
+            ("Structure Ensembles", self.structureTable),
+        ):
+            htmlStrings.append("<h1>%s</h1>\n" % name)
+            htmlStrings.append("<table class=tablesorter>\n")
+            htmlStrings.append("<thead>\n")
+            htmlStrings.append("<tr>\n")
+            for colHeading in table.colHeadings:
+                colHeading = colHeading.replace("\n", " ")
+                htmlStrings.append("<th>%s</th>" % colHeading)
+            htmlStrings.append("\n</tr>\n")
+            htmlStrings.append("</thead>\n")
 
-      htmlStrings.append('<tbody>\n')
-      for datum in table.rowTexts:
-        htmlStrings.append('<tr>\n')
-        for data in datum:
-          htmlStrings.append('<td>%s</td>' % data)
-        htmlStrings.append('\n</tr>\n')
-      htmlStrings.append('</tbody>\n')
+            htmlStrings.append("<tbody>\n")
+            for datum in table.rowTexts:
+                htmlStrings.append("<tr>\n")
+                for data in datum:
+                    htmlStrings.append("<td>%s</td>" % data)
+                htmlStrings.append("\n</tr>\n")
+            htmlStrings.append("</tbody>\n")
 
-      htmlStrings.append('</table>\n')
-    htmlStrings.append('</body>\n')
-    htmlStrings.append('</html>\n')
+            htmlStrings.append("</table>\n")
+        htmlStrings.append("</body>\n")
+        htmlStrings.append("</html>\n")
 
-    htmlString = ''.join(htmlStrings)
+        htmlString = "".join(htmlStrings)
 
-    webBrowser.openHtml(htmlString)
-
+        webBrowser.openHtml(htmlString)

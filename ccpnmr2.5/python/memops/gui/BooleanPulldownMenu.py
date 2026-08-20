@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,73 +55,73 @@ from memops.gui.PulldownMenu import PulldownMenu
 
 
 class BooleanPulldownMenu(PulldownMenu):
+    booleanToIndex = {True: 0, False: 1}
+    indexToBoolean = {0: True, 1: False}
 
-  booleanToIndex = { True: 0, False: 1 }
-  indexToBoolean = { 0: True, 1: False }
+    def __init__(self, parent, callback=None, entries=None, selected=True, *args, **kw):
 
-  def __init__(self, parent, callback = None, entries = None,
-               selected = True, *args, **kw):
+        self.booleanCallback = callback
 
-    self.booleanCallback = callback
+        if entries:
+            assert len(entries) == 2
+            kw["entries"] = entries
+        else:
+            kw["entries"] = ["True", "False"]
 
-    if (entries):
-      assert len(entries) == 2
-      kw['entries'] = entries
-    else:
-      kw['entries'] = ['True', 'False']
+        kw["selected_index"] = self.booleanToIndex[selected]
+        kw["callback"] = self.doCallback
 
-    kw['selected_index'] = self.booleanToIndex[selected]
-    kw['callback'] = self.doCallback
+        apply(PulldownMenu.__init__, (self, parent) + args, kw)
 
-    apply(PulldownMenu.__init__, (self, parent) + args, kw)
+    def doCallback(self, selected_index, selected):
 
-  def doCallback(self, selected_index, selected):
+        if self.booleanCallback:
+            if selected == None:
+                self.booleanCallback(None)
+            else:
+                self.booleanCallback(self.indexToBoolean[selected_index])
 
-    if (self.booleanCallback):
-      if (selected == None):
-        self.booleanCallback(None)
-      else:
-        self.booleanCallback(self.indexToBoolean[selected_index])
+    def setSelected(self, value):
 
-  def setSelected(self, value):
+        PulldownMenu.setSelectedIndex(self, self.booleanToIndex[value])
 
-    PulldownMenu.setSelectedIndex(self, self.booleanToIndex[value])
+    def getSelected(self):
 
-  def getSelected(self):
+        selected_index = PulldownMenu.getSelectedIndex(self)
 
-    selected_index = PulldownMenu.getSelectedIndex(self)
+        return self.indexToBoolean[selected_index]
 
-    return self.indexToBoolean[selected_index]
 
-if __name__ == '__main__':
- 
-  import sys
-  import Tkinter
-  from memops.gui.Button import Button
+if __name__ == "__main__":
+    import sys
 
-  popup_select = None
+    import Tkinter
 
-  def callback(text):
-    global popup_select
-    if (popup_select):
-      print('callback: selected =', popup_select.getSelected())
+    from memops.gui.Button import Button
 
-  def toggle():
-    global popup_select
-    if (popup_select.getSelected()):
-      popup_select.setSelected(False)
-    else:
-      popup_select.setSelected(True)
+    popup_select = None
 
-  root = Tkinter.Tk()
+    def callback(text):
+        global popup_select
+        if popup_select:
+            print("callback: selected =", popup_select.getSelected())
 
-  popup_select = BooleanPulldownMenu(root, callback=callback, selected=False)
-  popup_select.grid(row=0, column=0, columnspan=2)
+    def toggle():
+        global popup_select
+        if popup_select.getSelected():
+            popup_select.setSelected(False)
+        else:
+            popup_select.setSelected(True)
 
-  button = Button(root, text='toggle extra state', command=toggle)
-  button.grid(row=1, column=0)
+    root = Tkinter.Tk()
 
-  button = Button(root, text='quit', command=sys.exit)
-  button.grid(row=1, column=1)
+    popup_select = BooleanPulldownMenu(root, callback=callback, selected=False)
+    popup_select.grid(row=0, column=0, columnspan=2)
 
-  root.mainloop()
+    button = Button(root, text="toggle extra state", command=toggle)
+    button.grid(row=1, column=0)
+
+    button = Button(root, text="quit", command=sys.exit)
+    button.grid(row=1, column=1)
+
+    root.mainloop()

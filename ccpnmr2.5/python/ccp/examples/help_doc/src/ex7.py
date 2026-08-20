@@ -1,14 +1,11 @@
 import os
-import tkinter
-
-from memops.api.Implementation import MemopsRoot
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat
+from memops.api.Implementation import MemopsRoot
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     # CCPN project.
-    project = MemopsRoot(name = 'readCns')
+    project = MemopsRoot(name="readCns")
 
     guiRoot = Tkinter.Tk()
 
@@ -23,31 +20,29 @@ if __name__ == '__main__':
     # ccpnmr.format.converters.DataFormat class.
 
     # Set the location of the CNS files.
-    cnsDir = '../data/cns'
+    cnsDir = "../data/cns"
 
     # Read in a sequence to set molecule and molSystem objects.
-    cnsCoord     = 'cns_1.pdb'
+    cnsCoord = "cns_1.pdb"
     cnsCoordFile = os.path.join(cnsDir, cnsCoord)
 
     # readSequence() returns a list of chains.
-    chains = cnsObj.readSequence(cnsCoordFile,
-                                 minimalPrompts = 1)
+    chains = cnsObj.readSequence(cnsCoordFile, minimalPrompts=1)
 
     # Read in a distance constraint list.
-    distConst     = 'n15noesy.tbl'
+    distConst = "n15noesy.tbl"
     distConstFile = os.path.join(cnsDir, distConst)
 
-    constList = cnsObj.readDistanceConstraints(distConstFile,
-                                               minimalPrompts = 1)
+    constList = cnsObj.readDistanceConstraints(distConstFile, minimalPrompts=1)
 
     # Do some preliminary data model navigation to get input parameters for
     # linkResonances.
 
     # An nmrConstraintStore links a group of constraint files.
-    # A structureGeneration links an nmrConstraintStore with a set 
+    # A structureGeneration links an nmrConstraintStore with a set
     # of structures.
     nmrConstStore = constList.nmrConstraintStore
-    strucGen      = nmrConstStore.findFirstStructureGeneration()
+    strucGen = nmrConstStore.findFirstStructureGeneration()
 
     # Run linkResonances (this will generate a lot of output to the shell).
 
@@ -57,21 +52,20 @@ if __name__ == '__main__':
 
     # Set forceDefaultChainMapping to 0 if you want to interactively link the
     # chains in the CCPN data model to the information from the constraint file.
-    cnsObj.linkResonances(forceDefaultChainMapping = 1,
-                          globalStereoAssign = 1,
-                          setSingleProchiral = 1,
-                          setSinglePossEquiv = 1,
-                          strucGen = strucGen,
-                          minimalPrompts = 0)
+    cnsObj.linkResonances(
+        forceDefaultChainMapping=1,
+        globalStereoAssign=1,
+        setSingleProchiral=1,
+        setSinglePossEquiv=1,
+        strucGen=strucGen,
+        minimalPrompts=0,
+    )
 
     # Navigate the data model to get a list of atoms per constraint item.
     for distConst in constList.sortedConstraints():
-
-        print('Constraint [%d]: [%.1f] - [%.1f]' % (
-            distConst.serial, distConst.lowerLimit, distConst.upperLimit))
+        print("Constraint [%d]: [%.1f] - [%.1f]" % (distConst.serial, distConst.lowerLimit, distConst.upperLimit))
 
         for constItem in distConst.sortedItems():
-
             # Now list the atoms linked to each of the two resonances
             # associated with this item.
             atomList = []
@@ -84,7 +78,7 @@ if __name__ == '__main__':
                 resonanceList = constItem.sortedResonances()
 
             # Here, resonanceList should always have 2 resonances.
-            assert(len(resonanceList) == 2)
+            assert len(resonanceList) == 2
 
             for resonance in resonanceList:
                 resAtomList = []
@@ -94,14 +88,13 @@ if __name__ == '__main__':
 
                     for atomSet in resonanceSet.sortedAtomSets():
                         for atom in atomSet.sortedAtoms():
-                            resAtomList.append('%d.%s' % (
-                                atom.residue.seqCode, atom.name) )
+                            resAtomList.append("%d.%s" % (atom.residue.seqCode, atom.name))
 
                 resAtomList.sort()
-                resAtomString = ','.join(resAtomList)
+                resAtomString = ",".join(resAtomList)
 
                 atomList.append(resAtomString)
 
-            print('  [%s] - [%s]' % (atomList[0], atomList[1]))
+            print("  [%s] - [%s]" % (atomList[0], atomList[1]))
 
         print()

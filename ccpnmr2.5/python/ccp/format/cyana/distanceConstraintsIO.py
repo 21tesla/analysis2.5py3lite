@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,68 +51,75 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
+
+from ccp.format.cyana.generalIO import getFormat
+from ccp.format.dyana.distanceConstraintsIO import DyanaDistanceConstraint, DyanaDistanceConstraintFile
 from memops.universal.Io import getTopDirectory
 
-from ccp.format.dyana.distanceConstraintsIO import DyanaDistanceConstraintFile
-from ccp.format.dyana.distanceConstraintsIO import DyanaDistanceConstraint
-from ccp.format.cyana.generalIO import getFormat
 
 class CyanaDistanceConstraintFile(DyanaDistanceConstraintFile):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = getFormat()
 
-    self.format = getFormat()
+    def write(self, verbose=0, noAmbiguous=0):
 
-  def write(self,verbose = 0, noAmbiguous = 0):
+        if verbose == 1:
+            fileText = self.name
 
-    if verbose == 1:
-    
-      fileText = self.name
-      
-      if self.lowerDistanceFile:
-        fileText += ' and %s.' % self.lowerDistanceFile
+            if self.lowerDistanceFile:
+                fileText += " and %s." % self.lowerDistanceFile
 
-      print("Writing %s distance constraint list %s" % (self.format,fileText))
-    
-    #
-    # CYANA can handle ambiguous...
-    #
-    
-    self.writeGeneric(noAmbiguous = noAmbiguous)
+            print("Writing %s distance constraint list %s" % (self.format, fileText))
+
+        #
+        # CYANA can handle ambiguous...
+        #
+
+        self.writeGeneric(noAmbiguous=noAmbiguous)
+
 
 class CyanaDistanceConstraint(DyanaDistanceConstraint):
+    pass
 
-  pass
 
 if __name__ == "__main__":
+    files = ["../../reference/diana/1bc6.restr", "../../reference/diana/u1c.upl", "../../reference/cyana2.1/cycle3.upl"]
 
-  files = ['../../reference/diana/1bc6.restr',
-           '../../reference/diana/u1c.upl',
-           '../../reference/cyana2.1/cycle3.upl']
-  
-  for file in files[-1:]:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = CyanaDistanceConstraintFile(file)
+    for file in files[-1:]:
+        file = os.path.join(getTopDirectory(), file)
 
-    constraintFile.read(verbose = 1)
-  
-    for constraint in constraintFile.constraints:
-      print(constraint.Id,)
-      
-      print(constraint.upperDist,)
-      print(constraint.peakNum, constraint.qualityFactor)
-      for item in constraint.items:
-        print(item.support,)
-        for member in item.members:
-          print(member.seqCode, member.atomName,)
-        print("|",)
-      
-      print()
+        constraintFile = CyanaDistanceConstraintFile(file)
 
-    #constraintFile.name = 'local/dist.testout.upl'
-    #constraintFile.lowerDistanceFile = 'local/dist.testout.lol'
+        constraintFile.read(verbose=1)
 
-    #constraintFile.write(verbose = 1)
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+            )
+
+            print(
+                constraint.upperDist,
+            )
+            print(constraint.peakNum, constraint.qualityFactor)
+            for item in constraint.items:
+                print(
+                    item.support,
+                )
+                for member in item.members:
+                    print(
+                        member.seqCode,
+                        member.atomName,
+                    )
+                print(
+                    "|",
+                )
+
+            print()
+
+        # constraintFile.name = 'local/dist.testout.upl'
+        # constraintFile.lowerDistanceFile = 'local/dist.testout.lol'
+
+        # constraintFile.write(verbose = 1)

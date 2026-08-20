@@ -4,7 +4,7 @@
 #NRG-DOCR     http://nmr.cmbi.ru.nl/NRG-CING/entry_list_nrg_docr.csv;
 #NRG-CING     http://nmr.cmbi.ru.nl/NRG-CING/entry_list_done.csv;
 
-#The WHY_NOT comments need to be presented in a .txt file at cmbi8:/usr/scratch/whynot/comments. 
+#The WHY_NOT comments need to be presented in a .txt file at cmbi8:/usr/scratch/whynot/comments.
 #The fixed format looks like:
 
 #
@@ -33,7 +33,7 @@
 #Comment      : No R-free set in experimental data
 #//
 from cing import issueListUrl
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 booleanStrTrue = 'true'
 booleanStrFalse = 'false'

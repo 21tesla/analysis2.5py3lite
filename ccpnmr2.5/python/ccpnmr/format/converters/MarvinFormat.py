@@ -54,20 +54,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import sys
-
-import string, copy, textwrap
+import copy
+import textwrap
 
 from ccp.general.Util import findChemAtomSysName
-
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 from ccpnmr.format.general.Util import getNameInfo
-
-from ccpnmr.format.general.Constants import peakNum_kw
-from ccpnmr.format.general.Constants import volume_kw, height_kw
-from ccpnmr.format.general.Constants import tagSep
-
-from ccpnmr.format.general.Util import getResName, getResNameText
 
 #
 # Additional IOkeywords definitions
@@ -76,539 +68,538 @@ from ccpnmr.format.general.Util import getResName, getResNameText
 IOkeywords = copy.deepcopy(IOkeywords)
 # note bug Wim had default and mandatory wrong way round? in probability cutoff
 
-IOkeywords['readPeaks']['probabilityCutoff']          = (0.0,  False, 'Can set the probability cutoff to import peaks/assignments.')
-IOkeywords['readPeaks']['preservePeaks']              = (True, False, 'Preserve peaks in the original list that don\'t appear in the imported list.')
-IOkeywords['readPeaks']['preserveAssignments']        = (True, False, 'Preserve assignments already in the peak list.')
-IOkeywords['readPeaks']['removeDuplicateAssignments'] = (True, False, 'Remove duplicate assignments present in peaks (unimplemented)')
-IOkeywords['readPeaks']['defaultChainCode']           = (None, False, 'Default CCPN chain code')
-IOkeywords['readPeaks']['defaultMolSystem']           = (None, False, 'Default CCPN  molecular system name')
-IOkeywords['readPeaks']['createNew']                  = (False,False, 'Create a new peak if a matching peak can\'t be found')
-IOkeywords['readPeaks']['axisMapping']                = ('',   False, 'Change the axis marvin axes are mapped to, 132 would map axes marvin-> analysis as 1->1,3->2,2->3 for a peak list with 3 axes, default no mapping')
-IOkeywords['readPeaks']['useAppData']                 = (False,False, 'Use applicationData keyword (peakNum) on the analysis peak list to match marvin peak ids')
-IOkeywords['readPeaks']['appDataKey']                 = (',',  False, 'Application,keyword pair used to define which appdata to lookup to find marvin peak ids; keyword is typically peakNum')
+IOkeywords["readPeaks"]["probabilityCutoff"] = (
+    0.0,
+    False,
+    "Can set the probability cutoff to import peaks/assignments.",
+)
+IOkeywords["readPeaks"]["preservePeaks"] = (
+    True,
+    False,
+    "Preserve peaks in the original list that don't appear in the imported list.",
+)
+IOkeywords["readPeaks"]["preserveAssignments"] = (True, False, "Preserve assignments already in the peak list.")
+IOkeywords["readPeaks"]["removeDuplicateAssignments"] = (
+    True,
+    False,
+    "Remove duplicate assignments present in peaks (unimplemented)",
+)
+IOkeywords["readPeaks"]["defaultChainCode"] = (None, False, "Default CCPN chain code")
+IOkeywords["readPeaks"]["defaultMolSystem"] = (None, False, "Default CCPN  molecular system name")
+IOkeywords["readPeaks"]["createNew"] = (False, False, "Create a new peak if a matching peak can't be found")
+IOkeywords["readPeaks"]["axisMapping"] = (
+    "",
+    False,
+    "Change the axis marvin axes are mapped to, 132 would map axes marvin-> analysis as 1->1,3->2,2->3 for a peak list with 3 axes, default no mapping",
+)
+IOkeywords["readPeaks"]["useAppData"] = (
+    False,
+    False,
+    "Use applicationData keyword (peakNum) on the analysis peak list to match marvin peak ids",
+)
+IOkeywords["readPeaks"]["appDataKey"] = (
+    ",",
+    False,
+    "Application,keyword pair used to define which appdata to lookup to find marvin peak ids; keyword is typically peakNum",
+)
+
 
 class MarvinFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = "marvin"
+        self.IOkeywords = IOkeywords
 
-    self.format = 'marvin'
-    self.IOkeywords = IOkeywords
+    def setGenericImports(self):
 
-  def setGenericImports(self):
-
-    self.getPeaks = self.getPeaksGeneric
-
-  #
-  # Deviations from generic import stuff
-  #
-
-
-  #
-  # Functions different to default functions in DataFormat
-  #
-
-  def thisPeakValid(self):
-
-    #print 'assignList', self.rawPeak.assignList
-    #print 'probabilities', self.rawPeak.probabilities
-    #print 'labels', self.rawPeak.label
-
-    # filter out invalid data with the current assignment probability cutoff
-    validList = [prob >= self.probabilityCutoff for prob in self.rawPeak.probabilities]
-    #print 'validList', validList
-
-    print('thisPeakValid, rawPeak.num', self.rawPeak.num)
-    #print 'thisPeakValid, rawPeak.assignList', self.rawPeak.assignList
-    self.rawPeak.assignList  = self.filterByValid(self.rawPeak.assignList, validList)
-    self.rawPeak.label  = self.filterByValid(self.rawPeak.label, validList)
-    self.rawPeak.probabilities  = self.filterByValid(self.rawPeak.probabilities, validList)
-    #print 'thisPeakValid, rawPeak.assignList after', self.rawPeak.assignList
-    #print 'assignList', self.rawPeak.assignList
-    #print 'probabilities', self.rawPeak.probabilities
-    #print 'labels', self.rawPeak.label
-
-    isValid = False
-
-    for probability in self.rawPeak.probabilities:
-      if probability > self.probabilityCutoff:
-        isValid = True
-
-    return isValid
-
-  def setPeakIntensity(self):
-
-    # No info?
-
-    pass
-
-  def filterByValid(self,elementArray,truthArray):
-      if len(truthArray) != len(elementArray):
-          print(elementArray)
-          print(truthArray)
-          raise self.FormatConverterError('internal error the length of the truth array and element array dont agree!')
-
-      result  = []
-      for elem,truth in zip (elementArray,truthArray):
-          if truth:
-              result.append(elem)
-      return result
-
-  def setPeakExtras(self):
+        self.getPeaks = self.getPeaksGeneric
 
     #
-    # Make peakContribs for this one...
+    # Deviations from generic import stuff
     #
 
-    if self.peak==None:
-        return
+    #
+    # Functions different to default functions in DataFormat
+    #
 
+    def thisPeakValid(self):
 
-    numContribs = len(self.rawPeak.assignList)
+        # print 'assignList', self.rawPeak.assignList
+        # print 'probabilities', self.rawPeak.probabilities
+        # print 'labels', self.rawPeak.label
 
-    for i in range(numContribs):
-      self.peakContribs.append(self.peak.newPeakContrib(weight = self.rawPeak.probabilities[i]))
+        # filter out invalid data with the current assignment probability cutoff
+        validList = [prob >= self.probabilityCutoff for prob in self.rawPeak.probabilities]
+        # print 'validList', validList
 
-  def findFirstChemAtomWildCard(self,chemComp,atomName):
-      result = None
-      #print atomName
-      atomNameLength = len(atomName)
-      while atomName[-1] == '*':
-          #print 'pre',atomName
-          atomName = atomName[:-1]
-          #print 'post',atomName
-      #print atomName
+        print("thisPeakValid, rawPeak.num", self.rawPeak.num)
+        # print 'thisPeakValid, rawPeak.assignList', self.rawPeak.assignList
+        self.rawPeak.assignList = self.filterByValid(self.rawPeak.assignList, validList)
+        self.rawPeak.label = self.filterByValid(self.rawPeak.label, validList)
+        self.rawPeak.probabilities = self.filterByValid(self.rawPeak.probabilities, validList)
+        # print 'thisPeakValid, rawPeak.assignList after', self.rawPeak.assignList
+        # print 'assignList', self.rawPeak.assignList
+        # print 'probabilities', self.rawPeak.probabilities
+        # print 'labels', self.rawPeak.label
 
-      for chemAtom in chemComp.chemAtoms:
-          if chemAtom.name.startswith(atomName) and len(chemAtom.name) == atomNameLength:
-              result=chemAtom
-              break
+        isValid = False
 
-      return result
+        for probability in self.rawPeak.probabilities:
+            if probability > self.probabilityCutoff:
+                isValid = True
 
-  def convertLightToHeavy(self,assign):
-      (chain,seqId,codedAtomName)=assign.split('.')
-      (typeCode,resType,atomName)=codedAtomName.split(':')
-      #print ''
-      #print 'assign:',assign
-      targetChemComp =  self.project.findFirstChemComp(ccpCode = resType)
+        return isValid
 
-      #print 'target chemc comp:', targetChemComp
-      #for chemAtom in targetChemComp.chemAtoms:
-      #    print chemAtom
+    def setPeakIntensity(self):
 
-      resultAtoms=None
-      resultAssign=None
-      if targetChemComp != None:
-          targetAtom = None
-          if typeCode == 'HEAVY':
-              #print 'looking for heavy for %s %s %s %s' % (chain,resType,seqId,atomName)
+        # No info?
 
-              targetAtom = self.findFirstChemAtomWildCard(targetChemComp, atomName)
-              #targetChemComp.findFirstChemAtom(name=atomName)
-              #print '\tfound target atom: ', targetAtom
-              #print 'targetAtom:', targetAtom,targetAtom.chemBonds,targetAtom.chemBonds[0].chemAtoms
+        pass
 
-              targetBondAtoms = None
-              if targetAtom != None:
-                  targetBondAtoms = list(targetAtom.findFirstChemBond().chemAtoms)
-                  #print 'bond atoms:', targetBondAtoms,targetAtom
-                  if targetAtom in targetBondAtoms:
-                      targetBondAtoms.remove(targetAtom)
-              #print 'heavy bonds atom:', targetBondAtoms,targetBondAtoms.__class__.__name__
-                  resultAssign = '.'.join((chain,seqId,targetBondAtoms[0].name),)
-                  #print '\tNote: converted %s to %s'  % (assign,resultAssign)
+    def filterByValid(self, elementArray, truthArray):
+        if len(truthArray) != len(elementArray):
+            print(elementArray)
+            print(truthArray)
+            raise self.FormatConverterError(
+                "internal error the length of the truth array and element array dont agree!"
+            )
 
-          else:
-              resultAssign =  '.'.join((chain,seqId,atomName),)
+        result = []
+        for elem, truth in zip(elementArray, truthArray):
+            if truth:
+                result.append(elem)
+        return result
 
-      #print assign, resultAssign
-      return resultAssign
-      #print targetChemComp
-
-  def convertAtomNameByType(self,assign):
-      (chain,seqId,codedAtomName)=assign.split('.')
-      (typeCode,resType,atomName)=codedAtomName.split(':')
-      
-      newAssign = None
-      
-      # Warning: this is slightly dangerous because molType not defined - could in principle find wrong chemComp (Wim 080207)
-      targetChemComp =  self.project.findFirstChemComp(ccpCode = resType)
-      
-      if targetChemComp:
-
-        namingSystem = targetChemComp.findFirstNamingSystem(name = self.namingSystemName)
-        
-        if namingSystem:
-
-          searchDict = {'sysName': atomName}
-          chemAtomSysName = findChemAtomSysName(namingSystem,searchDict)
-
-
-          newAtomName=chemAtomSysName.atomName
-          #print chemAtomSysName,atomName,newAtomName
-
-          newCodedAtomName=':'.join((typeCode,resType,newAtomName),)
-          newAssign =  '.'.join((chain,seqId,newCodedAtomName),)
-
-      #if assign != newAssign:
-          #print '\tNote: changed %s %s %s %s to %s' % (chain,resType,seqId,atomName,newAtomName)
-      return newAssign
-
-  def getPeakResNames(self):
-
-    self.resNames = []
-
-    #print
-    #print self.rawPeak.assignList
-    for assign in self.rawPeak.assignList:
-
-      # note is there a way to abort here and keep going...
-      renamedAssign = self.convertAtomNameByType(assign[self.rawPeakDimIndex])
-      if renamedAssign ==  None:
-          msg = "Error: couldn't convert assignment %s (%s) to iupac nomenclature!\n stopping..."
-          msg = msg % (str(self.rawPeakDimIndex),str(assign[self.rawPeakDimIndex]))
-          raise self.FormatConverterError(msg)
-
-      #print 'renamed assign: ', renamedAssign
-      heavySwappedAssign = self.convertLightToHeavy(renamedAssign)
-      if heavySwappedAssign == None:
-          msg = "Error: couldn't convert assignment %s (%s) to it's  heavy parent!\n stopping..."
-          msg = msg % (str(self.rawPeakDimIndex),str(assign[self.rawPeakDimIndex]))
-          raise self.FormatConverterError(msg)
-
-      self.resNames.append(heavySwappedAssign)
-
-
-
-  def setPeakDim(self):
-
-    if self.peak == None:
-        return
-
-    dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
-
-    self.peakDim = self.peak.findFirstPeakDim(dim = dataDimRef.dataDim.dim)
-
-    self.peakDim.dataDimRef = dataDimRef
-
-    self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
-
-  def setFitMethodSerial(self):
-
-    pass
-
-  def getPresetChainMapping(self,chainList):
-
-    return self.getSingleChainFormatPresetChainMapping(chainList)
-
-
-  def setPeak(self):
-
-    """
-
-    Creates a peak object inside the data model or uses it to copy information
-    onto. Also creates/checks application data with original peak number.
-
-    """
-    #print
-    #print self.rawPeak.num
-    newPeak = 1
-
-    #print self.existingPeaks
-
-    if self.overwrite:
-      #print
-      #print self.rawPeak.num
-      target_peak = None
-      if self.useAppData:
-
-
-          if self.origPeakNumberDict.has_key(self.rawPeak.num):
-              target_peak = self.origPeakNumberDict[self.rawPeak.num]
-
-
-      else:
-          target_peak = self.peakList.findFirstPeak(serial=self.rawPeak.num)
-
-      if target_peak!=None:
-
-
-
-
-        self.peak = target_peak
-        #print self.existingPeaks.index(target_peak), target_peak.serial
-        #print self.existingPeaks.pop(self.existingPeaks.index(target_peak)).serial
-        ###print len(self.existingPeaks)
-        self.existingPeaks.pop(self.existingPeaks.index(target_peak))
-        ###print len(self.existingPeaks)
+    def setPeakExtras(self):
 
         #
-        # Get rid of intensities and peakcontribs
-        # TODO: note that peakDims are kept... could in principle create problems with dataDimRefs
+        # Make peakContribs for this one...
         #
 
-        #for peakIntensity in target_peak.peakIntensities:
-        #  peakIntensity.delete()
-        if not self.preserveAssignments:
-            if len(target_peak.sortedPeakContribs()) > 0:
-                #peakName = "%s:%d[%d]" % (target_peak.peakList.dataSource.name,target_peak.peakList.serial, target_peak.serial)
+        if self.peak == None:
+            return
 
-                print('Warning: replacing assignments for peak %s' % peakName)
-                for peakContrib in target_peak.sortedPeakContribs():
-                    peakContrib.delete()
-        ###print self.rawPeak
+        numContribs = len(self.rawPeak.assignList)
 
-        newPeak = 0
+        for i in range(numContribs):
+            self.peakContribs.append(self.peak.newPeakContrib(weight=self.rawPeak.probabilities[i]))
 
-    if newPeak:
+    def findFirstChemAtomWildCard(self, chemComp, atomName):
+        result = None
+        # print atomName
+        atomNameLength = len(atomName)
+        while atomName[-1] == "*":
+            # print 'pre',atomName
+            atomName = atomName[:-1]
+            # print 'post',atomName
+        # print atomName
 
-      print('Warning: ignored  marvin peak assignmnet %s no corresponding analysis peak found' % self.rawPeak.num)
+        for chemAtom in chemComp.chemAtoms:
+            if chemAtom.name.startswith(atomName) and len(chemAtom.name) == atomNameLength:
+                result = chemAtom
+                break
 
-      #note I have guarded all the other peak reading routines so they ignore peaks of type None
-      # it think this shlould work but I may need some more work elsewhere
-      self.peak = None
+        return result
 
-###      #self.peakList.newPeak( details = "Original number %d" % self.rawPeak.num)
-###
-###      #
-###      # Also set original number in applicationdata so can be reused for writing
-###      #
-###
-###      self.peak.addApplicationData(Implementation.AppDataInt(application = self.format, keyword = peakNum_kw, value = self.rawPeak.num))
-  ### can be removed when removeDuplicateAssignments is implimented
-  def setPeaks(self):
-    if self.removeDuplicateAssignments:
-      print('Warning: removal of duplicate assignments is selected but is not implimented!')
+    def convertLightToHeavy(self, assign):
+        (chain, seqId, codedAtomName) = assign.split(".")
+        (typeCode, resType, atomName) = codedAtomName.split(":")
+        # print ''
+        # print 'assign:',assign
+        targetChemComp = self.project.findFirstChemComp(ccpCode=resType)
 
-    DataFormat.setPeaks(self)
+        # print 'target chemc comp:', targetChemComp
+        # for chemAtom in targetChemComp.chemAtoms:
+        #    print chemAtom
 
-  def deleteRemainingPeaks(self):
+        resultAtoms = None
+        resultAssign = None
+        if targetChemComp != None:
+            targetAtom = None
+            if typeCode == "HEAVY":
+                # print 'looking for heavy for %s %s %s %s' % (chain,resType,seqId,atomName)
 
-    """
+                targetAtom = self.findFirstChemAtomWildCard(targetChemComp, atomName)
+                # targetChemComp.findFirstChemAtom(name=atomName)
+                # print '\tfound target atom: ', targetAtom
+                # print 'targetAtom:', targetAtom,targetAtom.chemBonds,targetAtom.chemBonds[0].chemAtoms
 
-    If overwrite mode is on, delete remaining existing peaks that were
-    not in new list.
+                targetBondAtoms = None
+                if targetAtom != None:
+                    targetBondAtoms = list(targetAtom.findFirstChemBond().chemAtoms)
+                    # print 'bond atoms:', targetBondAtoms,targetAtom
+                    if targetAtom in targetBondAtoms:
+                        targetBondAtoms.remove(targetAtom)
+                    # print 'heavy bonds atom:', targetBondAtoms,targetBondAtoms.__class__.__name__
+                    resultAssign = ".".join(
+                        (chain, seqId, targetBondAtoms[0].name),
+                    )
+                    # print '\tNote: converted %s to %s'  % (assign,resultAssign)
 
-    """
+            else:
+                resultAssign = ".".join(
+                    (chain, seqId, atomName),
+                )
 
-    #print self.preservePeaks
-    if not self.preservePeaks:
-        DataFormat.deleteRemainingPeaks(self)
+        # print assign, resultAssign
+        return resultAssign
+        # print targetChemComp
 
-  def findResonances(self,resName):
-      (chainCode,seqCode,spinSystemId,seqInsertCode,atomName) = getNameInfo(resName)
+    def convertAtomNameByType(self, assign):
+        (chain, seqId, codedAtomName) = assign.split(".")
+        (typeCode, resType, atomName) = codedAtomName.split(":")
 
-      #print '\tsearch for resonance', (chainCode,seqCode,spinSystemId,seqInsertCode,atomName)
-      resonance = None
+        newAssign = None
 
-      targetMolSystem =  None
-      if len(self.project.molSystems) == 1 and self.defaultMolSystem == None:
-          targetMolSystem = self.project.molSystems[0]
-      elif self.defaultMolSystem != None:
-          targetMolSystem = self.project.findFirstMolSystem(name = self.defaultMolSystem)
+        # Warning: this is slightly dangerous because molType not defined - could in principle find wrong chemComp (Wim 080207)
+        targetChemComp = self.project.findFirstChemComp(ccpCode=resType)
 
+        if targetChemComp:
+            namingSystem = targetChemComp.findFirstNamingSystem(name=self.namingSystemName)
 
-      targetChain =  None
-      if targetMolSystem != None:
-          if len(targetMolSystem.chains) == 1 and self.defaultChainCode == None:
-              targetChain = targetMolSystem.chains[0]
-          elif self.defaultChainCode != None:
-              targetChain = targetMolSystem.findFirstChain(code = self.defaultChainCode)
+            if namingSystem:
+                searchDict = {"sysName": atomName}
+                chemAtomSysName = findChemAtomSysName(namingSystem, searchDict)
 
+                newAtomName = chemAtomSysName.atomName
+                # print chemAtomSysName,atomName,newAtomName
 
-      targetResidue =  None
-      if seqCode != None and targetChain != None:
-          targetResidue = targetChain.findFirstResidue(seqCode = seqCode)
+                newCodedAtomName = ":".join(
+                    (typeCode, resType, newAtomName),
+                )
+                newAssign = ".".join(
+                    (chain, seqId, newCodedAtomName),
+                )
 
-      targetAtoms = []
-      targetAtomSets = []
+        # if assign != newAssign:
+        # print '\tNote: changed %s %s %s %s to %s' % (chain,resType,seqId,atomName,newAtomName)
+        return newAssign
 
-      #print atomName
-      atomNameLength = len(atomName)
-      while atomName[-1] == '*':
-          #print 'pre',atomName
-          atomName = atomName[:-1]
-          #print 'post',atomName
-      #print atomName
+    def getPeakResNames(self):
 
-      if targetResidue != None:
-          for atom in targetResidue.atoms:
-              if atom.name.startswith(atomName) and len(atom.name) == atomNameLength:
-                  targetAtoms.append(atom)
-                  targetAtomSets.append(atom.atomSet)
+        self.resNames = []
 
+        # print
+        # print self.rawPeak.assignList
+        for assign in self.rawPeak.assignList:
+            # note is there a way to abort here and keep going...
+            renamedAssign = self.convertAtomNameByType(assign[self.rawPeakDimIndex])
+            if renamedAssign == None:
+                msg = "Error: couldn't convert assignment %s (%s) to iupac nomenclature!\n stopping..."
+                msg = msg % (str(self.rawPeakDimIndex), str(assign[self.rawPeakDimIndex]))
+                raise self.FormatConverterError(msg)
 
-      targetResonances = set()
+            # print 'renamed assign: ', renamedAssign
+            heavySwappedAssign = self.convertLightToHeavy(renamedAssign)
+            if heavySwappedAssign == None:
+                msg = "Error: couldn't convert assignment %s (%s) to it's  heavy parent!\n stopping..."
+                msg = msg % (str(self.rawPeakDimIndex), str(assign[self.rawPeakDimIndex]))
+                raise self.FormatConverterError(msg)
 
-      for atom in targetAtoms:
-          for resonanceSet in atom.atomSet.resonanceSets:
-              #for resonance in resonanceSet.resonances:
-              targetResonances.update(resonanceSet.resonances)
-      #print ''
+            self.resNames.append(heavySwappedAssign)
 
-      if len(targetResonances) > 1:
-          selectName = '.'.join((chainCode,str(seqCode),atomName),)
-          resonanceIds = [str(resonance.serial) for resonance in targetResonances]
-          print('Warning: found more than one resonance for peak (%s) %s' % (selectName,self.rawPeak.num))
-          print('         resonances are: ', ','.join(resonanceIds))
+    def setPeakDim(self):
 
+        if self.peak == None:
+            return
 
-      #if targetResonances == None:
-      #    print '**** Oh bugger!!'
-      #    sys.exit()
-      return list(targetResonances)
+        dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
 
+        self.peakDim = self.peak.findFirstPeakDim(dim=dataDimRef.dataDim.dim)
 
+        self.peakDim.dataDimRef = dataDimRef
 
+        self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
 
+    def setFitMethodSerial(self):
 
+        pass
 
-  def setPeakDimResonance(self):
+    def getPresetChainMapping(self, chainList):
 
-    """
+        return self.getSingleChainFormatPresetChainMapping(chainList)
 
-    Set the connection to (existing) resonances.
+    def setPeak(self):
+        """
 
-    Not assuming that the peak list is for one chain only... but if no chainCode
-    is given by the external reader then assuming that it is all 'one chain'.
-    Ambiguity then has to be handled by linkResonances, not by this script.
+        Creates a peak object inside the data model or uses it to copy information
+        onto. Also creates/checks application data with original peak number.
 
-    Note that for XEasy this whole thing is different - have to use atomSerial or
-    nothing at all
+        """
+        # print
+        # print self.rawPeak.num
+        newPeak = 1
 
-    """
+        # print self.existingPeaks
 
-    # this indicates that the raw peak was not found in the peak list or vice versa
-    # could be tackled ata higher level
-    if self.peak == None:
-        return
-    if not hasattr(self,'peakDim'):
-        return
+        if self.overwrite:
+            # print
+            # print self.rawPeak.num
+            target_peak = None
+            if self.useAppData:
+                if self.rawPeak.num in self.origPeakNumberDict:
+                    target_peak = self.origPeakNumberDict[self.rawPeak.num]
 
-    self.getPeakResNames()
+            else:
+                target_peak = self.peakList.findFirstPeak(serial=self.rawPeak.num)
 
-    for resNameIndex in range(len(self.resNames)):
+            if target_peak != None:
+                self.peak = target_peak
+                # print self.existingPeaks.index(target_peak), target_peak.serial
+                # print self.existingPeaks.pop(self.existingPeaks.index(target_peak)).serial
+                ###print len(self.existingPeaks)
+                self.existingPeaks.pop(self.existingPeaks.index(target_peak))
+                ###print len(self.existingPeaks)
 
+                #
+                # Get rid of intensities and peakcontribs
+                # TODO: note that peakDims are kept... could in principle create problems with dataDimRefs
+                #
 
-      self.resName = self.resNames[resNameIndex]
+                # for peakIntensity in target_peak.peakIntensities:
+                #  peakIntensity.delete()
+                if not self.preserveAssignments:
+                    if len(target_peak.sortedPeakContribs()) > 0:
+                        # peakName = "%s:%d[%d]" % (target_peak.peakList.dataSource.name,target_peak.peakList.serial, target_peak.serial)
 
-      #
-      # Ignore if None
-      #
+                        print("Warning: replacing assignments for peak %s" % peakName)
+                        for peakContrib in target_peak.sortedPeakContribs():
+                            peakContrib.delete()
+                ###print self.rawPeak
 
-      if self.resName == None:
+                newPeak = 0
 
-        continue
+        if newPeak:
+            print("Warning: ignored  marvin peak assignmnet %s no corresponding analysis peak found" % self.rawPeak.num)
 
-      #
-      # Link peakDim to resonance
-      #
+            # note I have guarded all the other peak reading routines so they ignore peaks of type None
+            # it think this shlould work but I may need some more work elsewhere
+            self.peak = None
 
-      if not self.resonanceNames.has_key(self.resName):
-        resonances=None
-        #
-        # find the resonance if we have enough information
-        #
-        resonances =  self.findResonances(self.resName)
-        #
-        # Create resonance if doesn't exist.
-        #
-        if resonances == None:
-            resonance = self.createResonance(self.resName)
-            resonances = [resonance]
+    ###      #self.peakList.newPeak( details = "Original number %d" % self.rawPeak.num)
+    ###
+    ###      #
+    ###      # Also set original number in applicationdata so can be reused for writing
+    ###      #
+    ###
+    ###      self.peak.addApplicationData(Implementation.AppDataInt(application = self.format, keyword = peakNum_kw, value = self.rawPeak.num))
+    ### can be removed when removeDuplicateAssignments is implimented
+    def setPeaks(self):
+        if self.removeDuplicateAssignments:
+            print("Warning: removal of duplicate assignments is selected but is not implimented!")
 
-        #
-        # Keep track of it...
-        #
+        DataFormat.setPeaks(self)
 
+    def deleteRemainingPeaks(self):
+        """
 
-        self.resonanceNames[self.resName] = resonances
+        If overwrite mode is on, delete remaining existing peaks that were
+        not in new list.
 
-      else:
+        """
 
-        #
-        # Resonance(s) exists, get info from self.resonanceNames
-        #
-        resonances = self.resonanceNames[self.resName]
+        # print self.preservePeaks
+        if not self.preservePeaks:
+            DataFormat.deleteRemainingPeaks(self)
 
+    def findResonances(self, resName):
+        (chainCode, seqCode, spinSystemId, seqInsertCode, atomName) = getNameInfo(resName)
 
-      #
-      # Link resonance(s) to peakDim via peakDimContrib
-      # Note that will be linked to peakContrib automatically in this case:
-      # no distinction is made between the contributions (by default)
-      #
+        # print '\tsearch for resonance', (chainCode,seqCode,spinSystemId,seqInsertCode,atomName)
+        resonance = None
 
-      keywds = {}
-      #print self.peakContribs
-      #print self.rawPeak.num
-      if self.peakContribs:
-        keywds['peakContribs'] = [self.peakContribs[resNameIndex]]
-      #print resonances
-      for resonance in resonances:
-        peakDimContrib = self.peakDim.findFirstPeakDimContrib(resonance = resonance)
+        targetMolSystem = None
+        if len(self.project.molSystems) == 1 and self.defaultMolSystem == None:
+            targetMolSystem = self.project.molSystems[0]
+        elif self.defaultMolSystem != None:
+            targetMolSystem = self.project.findFirstMolSystem(name=self.defaultMolSystem)
 
-        if not peakDimContrib:
-          self.peakDim.newPeakDimContrib(resonance = resonance, **keywds)
-        elif keywds:
-          peakContribs = peakDimContrib.peakContribs
-          for peakContrib in keywds['peakContribs']:
-            if not peakContrib in peakContribs:
-              peakDimContrib.addPeakContrib(peakContrib)
+        targetChain = None
+        if targetMolSystem != None:
+            if len(targetMolSystem.chains) == 1 and self.defaultChainCode == None:
+                targetChain = targetMolSystem.chains[0]
+            elif self.defaultChainCode != None:
+                targetChain = targetMolSystem.findFirstChain(code=self.defaultChainCode)
 
-  APPDATA_APPLICATION =  0
-  APPDATA_KEYWORD =  1
-  def getAppDataKey(self):
+        targetResidue = None
+        if seqCode != None and targetChain != None:
+            targetResidue = targetChain.findFirstResidue(seqCode=seqCode)
 
-      result = None
-      if self.appDataKey != ',':
-          appDataApplicationKeyPair = self.appDataKey.split(',')
-          if len(appDataApplicationKeyPair) > 2 or len(appDataApplicationKeyPair) ==0:
-              msg = """Error: the applicationData application,keyword pair provided in appDataKey\n
+        targetAtoms = []
+        targetAtomSets = []
+
+        # print atomName
+        atomNameLength = len(atomName)
+        while atomName[-1] == "*":
+            # print 'pre',atomName
+            atomName = atomName[:-1]
+            # print 'post',atomName
+        # print atomName
+
+        if targetResidue != None:
+            for atom in targetResidue.atoms:
+                if atom.name.startswith(atomName) and len(atom.name) == atomNameLength:
+                    targetAtoms.append(atom)
+                    targetAtomSets.append(atom.atomSet)
+
+        targetResonances = set()
+
+        for atom in targetAtoms:
+            for resonanceSet in atom.atomSet.resonanceSets:
+                # for resonance in resonanceSet.resonances:
+                targetResonances.update(resonanceSet.resonances)
+        # print ''
+
+        if len(targetResonances) > 1:
+            selectName = ".".join(
+                (chainCode, str(seqCode), atomName),
+            )
+            resonanceIds = [str(resonance.serial) for resonance in targetResonances]
+            print("Warning: found more than one resonance for peak (%s) %s" % (selectName, self.rawPeak.num))
+            print("         resonances are: ", ",".join(resonanceIds))
+
+        # if targetResonances == None:
+        #    print '**** Oh bugger!!'
+        #    sys.exit()
+        return list(targetResonances)
+
+    def setPeakDimResonance(self):
+        """
+
+        Set the connection to (existing) resonances.
+
+        Not assuming that the peak list is for one chain only... but if no chainCode
+        is given by the external reader then assuming that it is all 'one chain'.
+        Ambiguity then has to be handled by linkResonances, not by this script.
+
+        Note that for XEasy this whole thing is different - have to use atomSerial or
+        nothing at all
+
+        """
+
+        # this indicates that the raw peak was not found in the peak list or vice versa
+        # could be tackled ata higher level
+        if self.peak == None:
+            return
+        if not hasattr(self, "peakDim"):
+            return
+
+        self.getPeakResNames()
+
+        for resNameIndex in range(len(self.resNames)):
+            self.resName = self.resNames[resNameIndex]
+
+            #
+            # Ignore if None
+            #
+
+            if self.resName == None:
+                continue
+
+            #
+            # Link peakDim to resonance
+            #
+
+            if self.resName not in self.resonanceNames:
+                resonances = None
+                #
+                # find the resonance if we have enough information
+                #
+                resonances = self.findResonances(self.resName)
+                #
+                # Create resonance if doesn't exist.
+                #
+                if resonances == None:
+                    resonance = self.createResonance(self.resName)
+                    resonances = [resonance]
+
+                #
+                # Keep track of it...
+                #
+
+                self.resonanceNames[self.resName] = resonances
+
+            else:
+                #
+                # Resonance(s) exists, get info from self.resonanceNames
+                #
+                resonances = self.resonanceNames[self.resName]
+
+            #
+            # Link resonance(s) to peakDim via peakDimContrib
+            # Note that will be linked to peakContrib automatically in this case:
+            # no distinction is made between the contributions (by default)
+            #
+
+            keywds = {}
+            # print self.peakContribs
+            # print self.rawPeak.num
+            if self.peakContribs:
+                keywds["peakContribs"] = [self.peakContribs[resNameIndex]]
+            # print resonances
+            for resonance in resonances:
+                peakDimContrib = self.peakDim.findFirstPeakDimContrib(resonance=resonance)
+
+                if not peakDimContrib:
+                    self.peakDim.newPeakDimContrib(resonance=resonance, **keywds)
+                elif keywds:
+                    peakContribs = peakDimContrib.peakContribs
+                    for peakContrib in keywds["peakContribs"]:
+                        if peakContrib not in peakContribs:
+                            peakDimContrib.addPeakContrib(peakContrib)
+
+    APPDATA_APPLICATION = 0
+    APPDATA_KEYWORD = 1
+
+    def getAppDataKey(self):
+
+        result = None
+        if self.appDataKey != ",":
+            appDataApplicationKeyPair = self.appDataKey.split(",")
+            if len(appDataApplicationKeyPair) > 2 or len(appDataApplicationKeyPair) == 0:
+                msg = """Error: the applicationData application,keyword pair provided in appDataKey\n
                        must be a pair of values: of the form  'application,keyword\n
                        got: '%s'"""
-              msg = textwrap.dedent(msg)
-              raise self.FormatConverterError(msg % str(self.appDataKey))
-          if len(appDataApplicationKeyPair) == 1:
-              result=(appDataApplicationKeyPair,'peakNum')
-          else:
-              result=appDataApplicationKeyPair
+                msg = textwrap.dedent(msg)
+                raise self.FormatConverterError(msg % str(self.appDataKey))
+            if len(appDataApplicationKeyPair) == 1:
+                result = (appDataApplicationKeyPair, "peakNum")
+            else:
+                result = appDataApplicationKeyPair
 
-      return result
+        return result
 
+    def setPeaks(self):
 
-  def setPeaks(self):
-  
-      #
-      # Get naming system name (Wim 080207)
-      #
-      
-      self.namingSystemName = self.getFormatNamingSystemName()
-      
-      # 
-   
-      if self.useAppData == True:
+        #
+        # Get naming system name (Wim 080207)
+        #
 
-          appDataKeyPair = self.getAppDataKey()
-          if  appDataKeyPair != None:
-              #print 'using app data %s' % appDataKeyPair
-              self.origPeakNumberDict = {}
-              for peak in self.peakList.sortedPeaks():
-                  application = appDataKeyPair[self.APPDATA_APPLICATION]
-                  keyword = appDataKeyPair[self.APPDATA_KEYWORD]
-                  applData = peak.findFirstApplicationData(application = application, keyword = keyword)
-                  #if applData != None:
-                  #    print peak.serial,applData.value
-                  #else:
-                  #    print peak.serial,applData
-                  if applData:
-                      self.origPeakNumberDict[applData.value] = peak
-                  else:
+        self.namingSystemName = self.getFormatNamingSystemName()
 
-                      peakSerial= peak.serial
-                      peakPeakList = peak.peakList.serial
-                      peakDataSource=peak.peakList.dataSource.name
-                      peakExperiment=peak.peakList.dataSource.experiment.name
-                      peakId = '%s:%s[%s].%d' % (peakExperiment,peakDataSource,peakPeakList,peakSerial)
-                      msg  = 'Warning: using application data %s but peak %s doesn\'t have integer appdata'
-                      print(msg % (self.appDataKey,peakId))
-      DataFormat.setPeaks(self)
+        #
+
+        if self.useAppData == True:
+            appDataKeyPair = self.getAppDataKey()
+            if appDataKeyPair != None:
+                # print 'using app data %s' % appDataKeyPair
+                self.origPeakNumberDict = {}
+                for peak in self.peakList.sortedPeaks():
+                    application = appDataKeyPair[self.APPDATA_APPLICATION]
+                    keyword = appDataKeyPair[self.APPDATA_KEYWORD]
+                    applData = peak.findFirstApplicationData(application=application, keyword=keyword)
+                    # if applData != None:
+                    #    print peak.serial,applData.value
+                    # else:
+                    #    print peak.serial,applData
+                    if applData:
+                        self.origPeakNumberDict[applData.value] = peak
+                    else:
+                        peakSerial = peak.serial
+                        peakPeakList = peak.peakList.serial
+                        peakDataSource = peak.peakList.dataSource.name
+                        peakExperiment = peak.peakList.dataSource.experiment.name
+                        peakId = "%s:%s[%s].%d" % (peakExperiment, peakDataSource, peakPeakList, peakSerial)
+                        msg = "Warning: using application data %s but peak %s doesn't have integer appdata"
+                        print(msg % (self.appDataKey, peakId))
+        DataFormat.setPeaks(self)

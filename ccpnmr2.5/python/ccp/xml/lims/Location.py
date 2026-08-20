@@ -19,14 +19,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -61,290 +61,295 @@ and contains original contributions embedded in the framework
 
 ===========================REFERENCE END===============================
 """
-from memops.general.Constants import baseDataTypeModule as basicDataTypes
-# 
+
+#
 #  Current package api
 import ccp.api.lims.Location
 
+
 def makeMapping(globalMap):
-  """
-  generates XML I/O mapping for package LOCA, adding it to globalMap
-  """
-  
-  from memops.xml.Implementation import bool2str, str2bool
+    """
+    generates XML I/O mapping for package LOCA, adding it to globalMap
+    """
 
-  # Set up top level dictionaries
-  loadMaps = globalMap.get('loadMaps')
-  mapsByGuid = globalMap.get('mapsByGuid')
+    # Set up top level dictionaries
+    loadMaps = globalMap.get("loadMaps")
+    mapsByGuid = globalMap.get("mapsByGuid")
 
-  abstractTypes = globalMap.get('LOCA').get('abstractTypes')
-  exolinks = globalMap.get('LOCA').get('exolinks')
+    abstractTypes = globalMap.get("LOCA").get("abstractTypes")
+    exolinks = globalMap.get("LOCA").get("exolinks")
 
-  # Class Location
-  currentMap = {}
-  abstractTypes['Location'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064'] = currentMap
-  loadMaps['LOCA.Location'] = currentMap
-  currentMap['tag'] = 'LOCA.Location'
-  currentMap['type'] = 'class'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064'
-  currentMap['eType'] = 'cplx'
-  currentMap['fromParent'] = 'locations'
-  currentMap['objkey'] = 'serial'
-  currentMap['class'] = ccp.api.lims.Location.Location
-  contentMap = {}
-  currentMap['content'] = contentMap
+    # Class Location
+    currentMap = {}
+    abstractTypes["Location"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064"] = currentMap
+    loadMaps["LOCA.Location"] = currentMap
+    currentMap["tag"] = "LOCA.Location"
+    currentMap["type"] = "class"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064"
+    currentMap["eType"] = "cplx"
+    currentMap["fromParent"] = "locations"
+    currentMap["objkey"] = "serial"
+    currentMap["class"] = ccp.api.lims.Location.Location
+    contentMap = {}
+    currentMap["content"] = contentMap
 
-  # Attribute Location.applicationData
-  contentMap['applicationData'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-09-14-18:48:27_00007')
+    # Attribute Location.applicationData
+    contentMap["applicationData"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-09-14-18:48:27_00007")
 
-  # Attribute Location.locationType
-  currentMap = {}
-  contentMap['locationType'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00037'] = currentMap
-  loadMaps['LOCA.Location.locationType'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.locationType'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00037'
-  currentMap['name'] = 'locationType'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['eType'] = 'cplx'
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033')
+    # Attribute Location.locationType
+    currentMap = {}
+    contentMap["locationType"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00037"] = currentMap
+    loadMaps["LOCA.Location.locationType"] = currentMap
+    currentMap["tag"] = "LOCA.Location.locationType"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00037"
+    currentMap["name"] = "locationType"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["eType"] = "cplx"
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033")
 
-  # Attribute Location.name
-  currentMap = {}
-  contentMap['name'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00036'] = currentMap
-  loadMaps['LOCA.Location.name'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.name'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00036'
-  currentMap['name'] = 'name'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 1
-  currentMap['eType'] = 'cplx'
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033')
+    # Attribute Location.name
+    currentMap = {}
+    contentMap["name"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00036"] = currentMap
+    loadMaps["LOCA.Location.name"] = currentMap
+    currentMap["tag"] = "LOCA.Location.name"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00036"
+    currentMap["name"] = "name"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 1
+    currentMap["eType"] = "cplx"
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033")
 
-  # Attribute Location.pressure
-  currentMap = {}
-  contentMap['pressure'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00040'] = currentMap
-  loadMaps['LOCA.Location.pressure'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.pressure'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00040'
-  currentMap['name'] = 'pressure'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00031')
+    # Attribute Location.pressure
+    currentMap = {}
+    contentMap["pressure"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00040"] = currentMap
+    loadMaps["LOCA.Location.pressure"] = currentMap
+    currentMap["tag"] = "LOCA.Location.pressure"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00040"
+    currentMap["name"] = "pressure"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00031")
 
-  # Attribute Location.pressureDisplayUnit
-  currentMap = {}
-  contentMap['pressureDisplayUnit'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00041'] = currentMap
-  loadMaps['LOCA.Location.pressureDisplayUnit'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.pressureDisplayUnit'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00041'
-  currentMap['name'] = 'pressureDisplayUnit'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00037')
+    # Attribute Location.pressureDisplayUnit
+    currentMap = {}
+    contentMap["pressureDisplayUnit"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00041"] = currentMap
+    loadMaps["LOCA.Location.pressureDisplayUnit"] = currentMap
+    currentMap["tag"] = "LOCA.Location.pressureDisplayUnit"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00041"
+    currentMap["name"] = "pressureDisplayUnit"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00037")
 
-  # Attribute Location.serial
-  currentMap = {}
-  contentMap['serial'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00035'] = currentMap
-  loadMaps['LOCA.Location.serial'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.serial'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00035'
-  currentMap['name'] = 'serial'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 1
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00032')
+    # Attribute Location.serial
+    currentMap = {}
+    contentMap["serial"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00035"] = currentMap
+    loadMaps["LOCA.Location.serial"] = currentMap
+    currentMap["tag"] = "LOCA.Location.serial"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00035"
+    currentMap["name"] = "serial"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 1
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00032")
 
-  # Attribute Location.tempDisplayUnit
-  currentMap = {}
-  contentMap['tempDisplayUnit'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00039'] = currentMap
-  loadMaps['LOCA.Location.tempDisplayUnit'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.tempDisplayUnit'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00039'
-  currentMap['name'] = 'tempDisplayUnit'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00037')
+    # Attribute Location.tempDisplayUnit
+    currentMap = {}
+    contentMap["tempDisplayUnit"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00039"] = currentMap
+    loadMaps["LOCA.Location.tempDisplayUnit"] = currentMap
+    currentMap["tag"] = "LOCA.Location.tempDisplayUnit"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00039"
+    currentMap["name"] = "tempDisplayUnit"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00037")
 
-  # Attribute Location.temperature
-  currentMap = {}
-  contentMap['temperature'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00038'] = currentMap
-  loadMaps['LOCA.Location.temperature'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.temperature'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00038'
-  currentMap['name'] = 'temperature'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00031')
+    # Attribute Location.temperature
+    currentMap = {}
+    contentMap["temperature"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00038"] = currentMap
+    loadMaps["LOCA.Location.temperature"] = currentMap
+    currentMap["tag"] = "LOCA.Location.temperature"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00038"
+    currentMap["name"] = "temperature"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00031")
 
-  # Role Location.access
-  contentMap['access'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-12-31-09:03:01_00014')
+    # Role Location.access
+    contentMap["access"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-12-31-09:03:01_00014")
 
-  # Role Location.contents
-  currentMap = {}
-  contentMap['contents'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00034'] = currentMap
-  loadMaps['LOCA.Location.contents'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.contents'
-  currentMap['type'] = 'link'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00034'
-  currentMap['name'] = 'contents'
-  currentMap['hicard'] = -1
-  currentMap['locard'] = 0
-  currentMap['copyOverride'] = False
+    # Role Location.contents
+    currentMap = {}
+    contentMap["contents"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00034"] = currentMap
+    loadMaps["LOCA.Location.contents"] = currentMap
+    currentMap["tag"] = "LOCA.Location.contents"
+    currentMap["type"] = "link"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00034"
+    currentMap["name"] = "contents"
+    currentMap["hicard"] = -1
+    currentMap["locard"] = 0
+    currentMap["copyOverride"] = False
 
-  # Role Location.location
-  currentMap = {}
-  contentMap['location'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00033'] = currentMap
-  loadMaps['LOCA.Location.location'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.location'
-  currentMap['type'] = 'link'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00033'
-  currentMap['name'] = 'location'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['copyOverride'] = True
+    # Role Location.location
+    currentMap = {}
+    contentMap["location"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00033"] = currentMap
+    loadMaps["LOCA.Location.location"] = currentMap
+    currentMap["tag"] = "LOCA.Location.location"
+    currentMap["type"] = "link"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00033"
+    currentMap["name"] = "location"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["copyOverride"] = True
 
-  # Role Location.organisation
-  currentMap = {}
-  contentMap['organisation'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00032'] = currentMap
-  loadMaps['LOCA.Location.organisation'] = currentMap
-  currentMap['tag'] = 'LOCA.Location.organisation'
-  currentMap['type'] = 'exolink'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00032'
-  currentMap['name'] = 'organisation'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 0
-  currentMap['eType'] = 'cplx'
-  currentMap['copyOverride'] = True
-  currentMap['content'] = globalMap.get('AFFI').get('exolinks')
-  # End of Location
+    # Role Location.organisation
+    currentMap = {}
+    contentMap["organisation"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00032"] = currentMap
+    loadMaps["LOCA.Location.organisation"] = currentMap
+    currentMap["tag"] = "LOCA.Location.organisation"
+    currentMap["type"] = "exolink"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-18:23:36_00032"
+    currentMap["name"] = "organisation"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 0
+    currentMap["eType"] = "cplx"
+    currentMap["copyOverride"] = True
+    currentMap["content"] = globalMap.get("AFFI").get("exolinks")
+    # End of Location
 
-  currentMap = abstractTypes.get('Location')
-  aList = ['pressure', 'pressureDisplayUnit', 'serial', 'tempDisplayUnit', 'temperature']
-  currentMap['headerAttrs'] = aList
-  aList = ['locationType', 'name', 'contents']
-  currentMap['simpleAttrs'] = aList
-  aList = ['location']
-  currentMap['optLinks'] = aList
-  aList = ['organisation', 'access', 'applicationData']
-  currentMap['cplxAttrs'] = aList
+    currentMap = abstractTypes.get("Location")
+    aList = ["pressure", "pressureDisplayUnit", "serial", "tempDisplayUnit", "temperature"]
+    currentMap["headerAttrs"] = aList
+    aList = ["locationType", "name", "contents"]
+    currentMap["simpleAttrs"] = aList
+    aList = ["location"]
+    currentMap["optLinks"] = aList
+    aList = ["organisation", "access", "applicationData"]
+    currentMap["cplxAttrs"] = aList
 
-  # Class LocationStore
-  currentMap = {}
-  abstractTypes['LocationStore'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005'] = currentMap
-  loadMaps['LOCA.LocationStore'] = currentMap
-  currentMap['tag'] = 'LOCA.LocationStore'
-  currentMap['type'] = 'class'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005'
-  currentMap['eType'] = 'cplx'
-  currentMap['fromParent'] = 'locationStores'
-  currentMap['isTop'] = True
-  currentMap['objkey'] = 'name'
-  currentMap['class'] = ccp.api.lims.Location.LocationStore
-  contentMap = {}
-  currentMap['content'] = contentMap
+    # Class LocationStore
+    currentMap = {}
+    abstractTypes["LocationStore"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005"] = currentMap
+    loadMaps["LOCA.LocationStore"] = currentMap
+    currentMap["tag"] = "LOCA.LocationStore"
+    currentMap["type"] = "class"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005"
+    currentMap["eType"] = "cplx"
+    currentMap["fromParent"] = "locationStores"
+    currentMap["isTop"] = True
+    currentMap["objkey"] = "name"
+    currentMap["class"] = ccp.api.lims.Location.LocationStore
+    contentMap = {}
+    currentMap["content"] = contentMap
 
-  # Attribute LocationStore.applicationData
-  contentMap['applicationData'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-09-14-18:48:27_00007')
+    # Attribute LocationStore.applicationData
+    contentMap["applicationData"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-09-14-18:48:27_00007")
 
-  # Attribute LocationStore.createdBy
-  contentMap['createdBy'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-12-31-09:00:59_00002__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002')
+    # Attribute LocationStore.createdBy
+    contentMap["createdBy"] = mapsByGuid.get(
+        "www.ccpn.ac.uk_Fogh_2006-12-31-09:00:59_00002__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002"
+    )
 
-  # Attribute LocationStore.guid
-  contentMap['guid'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-09-14-18:48:26_00002')
+    # Attribute LocationStore.guid
+    contentMap["guid"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-09-14-18:48:26_00002")
 
-  # Attribute LocationStore.isModifiable
-  contentMap['isModifiable'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-17-14:16:26_00010__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002')
+    # Attribute LocationStore.isModifiable
+    contentMap["isModifiable"] = mapsByGuid.get(
+        "www.ccpn.ac.uk_Fogh_2006-08-17-14:16:26_00010__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002"
+    )
 
-  # Attribute LocationStore.lastUnlockedBy
-  contentMap['lastUnlockedBy'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-12-31-09:00:59_00003__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002')
+    # Attribute LocationStore.lastUnlockedBy
+    contentMap["lastUnlockedBy"] = mapsByGuid.get(
+        "www.ccpn.ac.uk_Fogh_2006-12-31-09:00:59_00003__www.ccpn.ac.uk_Fogh_2007-10-03-14:53:27_00001__www.ccpn.ac.uk_Fogh_2006-09-14-16:28:57_00002"
+    )
 
-  # Attribute LocationStore.name
-  currentMap = {}
-  contentMap['name'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00013'] = currentMap
-  loadMaps['LOCA.LocationStore.name'] = currentMap
-  currentMap['tag'] = 'LOCA.LocationStore.name'
-  currentMap['type'] = 'attr'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00013'
-  currentMap['name'] = 'name'
-  currentMap['hicard'] = 1
-  currentMap['locard'] = 1
-  currentMap['eType'] = 'cplx'
-  currentMap['data'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033')
+    # Attribute LocationStore.name
+    currentMap = {}
+    contentMap["name"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00013"] = currentMap
+    loadMaps["LOCA.LocationStore.name"] = currentMap
+    currentMap["tag"] = "LOCA.LocationStore.name"
+    currentMap["type"] = "attr"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00013"
+    currentMap["name"] = "name"
+    currentMap["hicard"] = 1
+    currentMap["locard"] = 1
+    currentMap["eType"] = "cplx"
+    currentMap["data"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00033")
 
-  # Role LocationStore.access
-  contentMap['access'] = mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-12-31-09:03:01_00014')
+    # Role LocationStore.access
+    contentMap["access"] = mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-12-31-09:03:01_00014")
 
-  # Role LocationStore.locations
-  currentMap = {}
-  contentMap['locations'] = currentMap
-  mapsByGuid['www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00012'] = currentMap
-  loadMaps['LOCA.LocationStore.locations'] = currentMap
-  currentMap['tag'] = 'LOCA.LocationStore.locations'
-  currentMap['type'] = 'child'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00012'
-  currentMap['name'] = 'locations'
-  currentMap['hicard'] = -1
-  currentMap['locard'] = 0
-  currentMap['eType'] = 'cplx'
-  currentMap['implSkip'] = True
-  currentMap['content'] = globalMap.get('LOCA').get('abstractTypes')
-  # End of LocationStore
+    # Role LocationStore.locations
+    currentMap = {}
+    contentMap["locations"] = currentMap
+    mapsByGuid["www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00012"] = currentMap
+    loadMaps["LOCA.LocationStore.locations"] = currentMap
+    currentMap["tag"] = "LOCA.LocationStore.locations"
+    currentMap["type"] = "child"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-09-05-12:37:27_00012"
+    currentMap["name"] = "locations"
+    currentMap["hicard"] = -1
+    currentMap["locard"] = 0
+    currentMap["eType"] = "cplx"
+    currentMap["implSkip"] = True
+    currentMap["content"] = globalMap.get("LOCA").get("abstractTypes")
+    # End of LocationStore
 
-  currentMap = abstractTypes.get('LocationStore')
-  aList = ['createdBy', 'guid', 'isModifiable', 'lastUnlockedBy']
-  currentMap['headerAttrs'] = aList
-  aList = ['name']
-  currentMap['simpleAttrs'] = aList
-  aList = ['locations', 'access', 'applicationData']
-  currentMap['cplxAttrs'] = aList
-  aList = ['locations']
-  currentMap['children'] = aList
+    currentMap = abstractTypes.get("LocationStore")
+    aList = ["createdBy", "guid", "isModifiable", "lastUnlockedBy"]
+    currentMap["headerAttrs"] = aList
+    aList = ["name"]
+    currentMap["simpleAttrs"] = aList
+    aList = ["locations", "access", "applicationData"]
+    currentMap["cplxAttrs"] = aList
+    aList = ["locations"]
+    currentMap["children"] = aList
 
-  # Out-of-package link to Location
-  currentMap = {}
-  exolinks['Location'] = currentMap
-  loadMaps['LOCA.exo-Location'] = currentMap
-  currentMap['tag'] = 'LOCA.exo-Location'
-  currentMap['type'] = 'exo'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064'
-  currentMap['name'] = 'Location'
-  currentMap['eType'] = 'cplx'
-  currentMap['class'] = ccp.api.lims.Location.Location
-  aList = list()
-  currentMap['keyMaps'] = aList
-  aList.append(mapsByGuid.get('www.ccpn.ac.uk_Fogh_2008-06-30-16:30:50_00001'))
-  aList.append(mapsByGuid.get('www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00032'))
+    # Out-of-package link to Location
+    currentMap = {}
+    exolinks["Location"] = currentMap
+    loadMaps["LOCA.exo-Location"] = currentMap
+    currentMap["tag"] = "LOCA.exo-Location"
+    currentMap["type"] = "exo"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-08-16-14:22:54_00064"
+    currentMap["name"] = "Location"
+    currentMap["eType"] = "cplx"
+    currentMap["class"] = ccp.api.lims.Location.Location
+    aList = list()
+    currentMap["keyMaps"] = aList
+    aList.append(mapsByGuid.get("www.ccpn.ac.uk_Fogh_2008-06-30-16:30:50_00001"))
+    aList.append(mapsByGuid.get("www.ccpn.ac.uk_Fogh_2006-08-16-14:22:53_00032"))
 
-  # Out-of-package link to LocationStore
-  currentMap = {}
-  exolinks['LocationStore'] = currentMap
-  loadMaps['LOCA.exo-LocationStore'] = currentMap
-  currentMap['tag'] = 'LOCA.exo-LocationStore'
-  currentMap['type'] = 'exo'
-  currentMap['guid'] = 'www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005'
-  currentMap['name'] = 'LocationStore'
-  currentMap['eType'] = 'cplx'
-  currentMap['class'] = ccp.api.lims.Location.LocationStore
-  aList = list()
-  currentMap['keyMaps'] = aList
-  aList.append(mapsByGuid.get('www.ccpn.ac.uk_Fogh_2008-06-30-16:30:50_00001'))
+    # Out-of-package link to LocationStore
+    currentMap = {}
+    exolinks["LocationStore"] = currentMap
+    loadMaps["LOCA.exo-LocationStore"] = currentMap
+    currentMap["tag"] = "LOCA.exo-LocationStore"
+    currentMap["type"] = "exo"
+    currentMap["guid"] = "www.ccpn.ac.uk_Fogh_2006-09-05-12:37:24_00005"
+    currentMap["name"] = "LocationStore"
+    currentMap["eType"] = "cplx"
+    currentMap["class"] = ccp.api.lims.Location.LocationStore
+    aList = list()
+    currentMap["keyMaps"] = aList
+    aList.append(mapsByGuid.get("www.ccpn.ac.uk_Fogh_2008-06-30-16:30:50_00001"))

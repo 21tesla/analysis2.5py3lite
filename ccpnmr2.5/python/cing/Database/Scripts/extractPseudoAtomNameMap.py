@@ -5,14 +5,14 @@ $CINGROOT/python/cing/Database/Scripts/extractPseudoAtomNameMap.py
 '''
 
 from cing import NTdb
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 
 print('mapCcpn2IupacPseudo = {\n')
 for resd in NTdb:
     for atomd in resd.allAtomDefs():
         if atomd.type == 'PSEUD':
 #            print resd, atomd
-            if not atomd.nameDict.has_key('CCPN'):
+            if 'CCPN' not in atomd.nameDict:
 #                print "skipping ", atomd
                 continue
             print('"%s,%s": "%s",' % (resd.name, atomd.nameDict['CCPN'], atomd.name))

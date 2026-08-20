@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,87 +45,93 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import array
 
-from memops.universal.Util import isBigEndian
-
-from memops.general.Implementation import ApiError
-
 from ccp.format.spectra.params.ExternalParams import ExternalParams
+from memops.general.Implementation import ApiError
+from memops.universal.Util import isBigEndian
 
 ucsf_file_header = 180
 ucsf_dim_header = 128
 
+
 class UcsfParams(ExternalParams):
+    format = "UCSF"
 
-  format = 'UCSF'
+    def __init__(self, file, **kw):
 
-  def __init__(self, file, **kw):
+        self.dataFile = file
+        ExternalParams.__init__(self, **kw)
 
-    self.dataFile = file
-    ExternalParams.__init__(self, **kw)
+    # ExternalParams requires this to be defined
+    def parseFile(self):
 
-  # ExternalParams requires this to be defined
-  def parseFile(self):
+        try:
+            fp = open(self.dataFile, "rb")
+        except OSError as e:
+            raise ApiError(str(e))
 
-    try:
-      fp = open(self.dataFile, 'rb')
-    except OSError as e:
-      raise ApiError(str(e))
+        s = fp.read(ucsf_file_header)
+        if len(s) < ucsf_file_header:
+            raise ApiError(
+                "file shorter than expected length (%d bytes) of first part of header (never mind data)"
+                % ucsf_file_header
+            )
 
-    s = fp.read(ucsf_file_header)
-    if (len(s) < ucsf_file_header):
-      raise ApiError('file shorter than expected length (%d bytes) of first part of header (never mind data)' % ucsf_file_header)
+        if s[:8] != "UCSF NMR":
+            raise ApiError('first eight bytes of header = "%s", should be "UCSF NMR"' % s[:8])
 
-    if (s[:8] != 'UCSF NMR'):
-      raise ApiError('first eight bytes of header = "%s", should be "UCSF NMR"' % s[:8])
+        ndim = self.ndim = ord(s[10])
 
-    ndim = self.ndim = ord(s[10])
+        self.head = ucsf_file_header + ndim * ucsf_dim_header
+        self.big_endian = True  # UCSF files always big endian
+        self.swap = not isBigEndian()
 
-    self.head = ucsf_file_header + ndim*ucsf_dim_header
-    self.big_endian = True # UCSF files always big endian
-    self.swap = not isBigEndian()
+        s = fp.read(ndim * ucsf_dim_header)
+        if len(s) < ndim * ucsf_dim_header:
+            raise ApiError(
+                "file shorter than expected length (%d bytes) of header (never mind data)"
+                % (ucsf_file_header + ndim * ucsf_dim_header)
+            )
 
-    s = fp.read(ndim*ucsf_dim_header)
-    if (len(s) < ndim*ucsf_dim_header):
-      raise ApiError('file shorter than expected length (%d bytes) of header (never mind data)' % (ucsf_file_header+ndim*ucsf_dim_header))
+        fp.close()
 
-    fp.close()
+        x = array.array("i")
+        y = array.array("f")
 
-    x = array.array('i')
-    y = array.array('f')
+        x.fromstring(s)
+        y.fromstring(s)
 
-    x.fromstring(s)
-    y.fromstring(s)
+        if self.swap:
+            x.byteswap()
+            y.byteswap()
 
-    if (self.swap):
-      x.byteswap()
-      y.byteswap()
+        self.initDims()
 
-    self.initDims()
+        for i in range(ndim):
+            j = ndim - i - 1  # UCSF does dims backwards
+            base = (j * ucsf_dim_header) / 4
+            self.npts[i] = x[base + 2]
+            self.block[i] = x[base + 4]
+            self.sf[i] = y[base + 5]
+            self.sw[i] = y[base + 6]
+            self.refppm[i] = y[base + 7]
+            # 27 Oct 2006: added 1.0, which seems to be the correct thing to do
+            self.refpt[i] = 1.0 + 0.5 * float(self.npts[i])
+            nuc = s[4 * base : 4 * base + 6]
+            n = nuc.find(chr(0))
+            if n >= 0:
+                nuc = nuc[:n]
+            self.nuc[i] = self.standardNucleusName(nuc)
 
-    for i in range(ndim):
-      j = ndim - i - 1 # UCSF does dims backwards
-      base = (j * ucsf_dim_header) / 4
-      self.npts[i] = x[base+2]
-      self.block[i] = x[base+4]
-      self.sf[i] = y[base+5]
-      self.sw[i] = y[base+6]
-      self.refppm[i] = y[base+7]
-      # 27 Oct 2006: added 1.0, which seems to be the correct thing to do
-      self.refpt[i] = 1.0 + 0.5 * float(self.npts[i])
-      nuc = s[4*base:4*base+6]
-      n = nuc.find(chr(0))
-      if (n >= 0):
-        nuc = nuc[:n]
-      self.nuc[i] = self.standardNucleusName(nuc)
 
-if (__name__ == '__main__'):
+if __name__ == "__main__":
+    import sys
 
-  import sys
-  if (len(sys.argv) != 2):
-    print('Error: correct syntax: <script> <UCSF_file>')
-    sys.exit(1)
+    if len(sys.argv) != 2:
+        print("Error: correct syntax: <script> <UCSF_file>")
+        sys.exit(1)
 
-  ucsf_file = sys.argv[1]
-  params = UcsfParams(ucsf_file)
+    ucsf_file = sys.argv[1]
+    params = UcsfParams(ucsf_file)

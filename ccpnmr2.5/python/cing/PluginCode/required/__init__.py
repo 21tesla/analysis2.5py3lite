@@ -3,4 +3,3 @@ The files in this python module contain code that is always functional in CING e
 The idea is to have as little as possible here and remove it over time.
 """
 
- 

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,102 +38,101 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
-
-from memops.general import Implementation
-
-from memops.gui.ButtonList import UtilityButtonList
-from memops.gui.Label import Label
-from memops.gui.Entry import Entry
-from memops.gui.MessageReporter import showError
-from memops.gui.PulldownList import PulldownList
-from memops.gui.Separator import Separator
 
 from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import UtilityButtonList
+from memops.gui.Entry import Entry
+from memops.gui.Label import Label
+from memops.gui.MessageReporter import showError
+from memops.gui.PulldownList import PulldownList
 
-from ccpnmr.api import Analysis
 
 class CreatePanelTypePopup(BasePopup):
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        self.axisType = None
 
-    self.axisType = None
+        BasePopup.__init__(self, parent=parent, title="Create panel type", modal=True, **kw)
 
-    BasePopup.__init__(self, parent=parent,
-                       title='Create panel type', modal=True, **kw)
+    def body(self, master):
 
-  def body(self, master):
+        master.grid_columnconfigure(1, weight=1)
 
-    master.grid_columnconfigure(1, weight=1)
+        row = 0
+        label = Label(master, text="Panel name: ", grid=(row, 0))
+        tipText = 'Short text name for the new axis panel, e.g. "N2"'
+        self.name_entry = Entry(master, width=15, grid=(row, 1), tipText=tipText)
 
-    row = 0
-    label = Label(master, text='Panel name: ', grid=(row,0))
-    tipText = 'Short text name for the new axis panel, e.g. "N2"'
-    self.name_entry = Entry(master, width=15, grid=(row,1), tipText=tipText)
+        row += 1
+        label = Label(master, text="Axis type:", grid=(row, 0))
+        tipText = "The type of axis (isotope, time, sampled etc.) represented by panel type"
+        self.types_list = PulldownList(master, grid=(row, 1), tipText=tipText)
 
-    row += 1 
-    label = Label(master, text='Axis type:', grid=(row,0))
-    tipText = 'The type of axis (isotope, time, sampled etc.) represented by panel type'
-    self.types_list = PulldownList(master, grid=(row,1), tipText=tipText)
+        row += 1
+        tipTexts = ["Create a new panel type object with the selected options & close the popup"]
+        texts = ["Create"]
+        commands = [self.ok]
+        buttons = UtilityButtonList(
+            master,
+            texts=texts,
+            commands=commands,
+            doClone=False,
+            closeText="Cancel",
+            helpUrl=self.help_url,
+            grid=(row, 0),
+            gridSpan=(1, 2),
+            tipTexts=tipTexts,
+        )
 
-    row += 1
-    tipTexts = ['Create a new panel type object with the selected options & close the popup']
-    texts = [ 'Create' ]
-    commands = [ self.ok ]
-    buttons = UtilityButtonList(master, texts=texts, commands=commands, doClone=False,
-                                closeText='Cancel', helpUrl=self.help_url, grid=(row,0),
-                                gridSpan=(1,2), tipTexts=tipTexts)
+        master.grid_rowconfigure(row, weight=1)
 
-    master.grid_rowconfigure(row, weight=1)
+        self.administerNotifiers(self.registerNotify)
+        self.update()
 
-    self.administerNotifiers(self.registerNotify)
-    self.update()
+    def administerNotifiers(self, notifyFunc):
 
-  def administerNotifiers(self, notifyFunc):
+        for func in ("__init__", "delete", "setName"):
+            notifyFunc(self.update, "ccpnmr.Analysis.AxisType", func)
 
-    for func in ('__init__', 'delete', 'setName'):
-      notifyFunc(self.update, 'ccpnmr.Analysis.AxisType', func)
+    def destroy(self):
 
-  def destroy(self):
+        self.administerNotifiers(self.unregisterNotify)
 
-    self.administerNotifiers(self.unregisterNotify)
+        BasePopup.destroy(self)
 
-    BasePopup.destroy(self)
+    def update(self, *extra):
 
-  def update(self, *extra):
+        axisType = self.axisType
+        axisTypes = self.parent.getAxisTypes()
+        names = [x.name for x in axisTypes]
+        if axisTypes:
+            if axisType not in axisTypes:
+                self.axisType = axisType = axisTypes[0]
+            index = axisTypes.index(axisType)
+        else:
+            index = 0
+            self.axisType = None
 
-    axisType = self.axisType
-    axisTypes = self.parent.getAxisTypes()
-    names = [x.name for x in axisTypes]
-    if axisTypes:
-      if axisType not in axisTypes:
-        self.axisType = axisType = axisTypes[0]
-      index = axisTypes.index(axisType)
-    else:
-      index = 0
-      self.axisType = None
+        self.types_list.setup(names, axisTypes, index)
 
-    self.types_list.setup(names, axisTypes, index)
+    def apply(self):
 
-  def apply(self):
+        name = self.name_entry.get()
+        if not name:
+            showError("No name", "Need to enter name", parent=self)
+            return False
 
-    name = self.name_entry.get()
-    if not name:
-      showError('No name', 'Need to enter name', parent=self)
-      return False
+        names = [panelType.name for panelType in self.analysisProject.panelTypes]
+        if name in names:
+            showError("Repeated name", "Name already used", parent=self)
+            return False
 
-    names = [ panelType.name for panelType in self.analysisProject.panelTypes ]
-    if name in names:
-      showError('Repeated name', 'Name already used', parent=self)
-      return False
+        axisType = self.types_list.getObject()
 
-    axisType = self.types_list.getObject()
+        if not axisType:
+            showError("No axis type", "Need to create axis type", parent=self)
+            return False
 
-    if not axisType:
-      showError('No axis type', 'Need to create axis type', parent=self)
-      return False
-    
-    self.analysisProject.newPanelType(name=name, axisType=axisType)
+        self.analysisProject.newPanelType(name=name, axisType=axisType)
 
-    return True
-
+        return True

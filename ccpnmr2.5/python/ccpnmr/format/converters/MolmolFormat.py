@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,92 +54,88 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
 from ccp.format.general.Constants import defaultSeqInsertCode
+from ccpnmr.format.converters.DataFormat import DataFormat
+
 
 class MolmolFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'molmol'
+        self.format = "molmol"
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    
-    self.getCoordinates = self.getCoordinatesGeneric
-    self.createCoordinateFile = self.createCoordinateFileGeneric 
+    def setGenericImports(self):
 
-  #
-  # Deviations from generic import stuff
-  #
+        self.getSequence = self.getSequenceGeneric
 
-  #
-  # Functions different to default functions in DataFormat
-  #
+        self.getCoordinates = self.getCoordinatesGeneric
+        self.createCoordinateFile = self.createCoordinateFileGeneric
 
-  def setRawCoordinate(self):
-  
-    if not self.coordinateFile.modelCoordinates.has_key(self.modelId):
-
-      self.coordinateFile.modelCoordinates[self.modelId] = []
-    
-    chemCompVar = self.residue.chemCompVar
-    chemComp = chemCompVar.chemComp
-    cifCode = self.findChemCompVarSysName('CIF',chemCompVar)
-    
-    if self.useOriginalData and self.origResLabel != None:
-      resName = self.origResLabel
-    elif cifCode:
-      resName = cifCode
-    elif chemComp.code3Letter:
-      resName = chemComp.code3Letter
-    else:
-      resName = chemComp.ccpCode
-      
-    
-    if self.useOriginalData and self.origChainCode != None:
-      chainCode = self.origChainCode
-    else:
-      chainCode = self.exportChainCode
-  
-    if self.useOriginalData and self.origSeqCode != None:
-      seqCode = self.origSeqCode
-    else:
-      seqCode = self.seqCode
- 
-    if self.useOriginalData and self.origSeqInsertCode != None:
-      seqInsertCode = self.origSeqInsertCode
-    else:
-      seqInsertCode = defaultSeqInsertCode
- 
-    if self.useOriginalData and self.origAtomName != None:
-      atomName = self.origAtomName
-    else:
-      atomName = self.atomName
- 
     #
-    # TODO: setting chainId but is really segId... does molmol use the chainID position?
+    # Deviations from generic import stuff
     #
 
-    modelCoordinate = self.coordinatesIO.MolmolCoordinate(
-                    
-                    self.coordinateFile,
-                    self.coordinateSerial,
-                    atomName,
-                    resName,
-                    chainCode,
-                    seqCode,
-                    self.x,
-                    self.y,
-                    self.z,
-                    '',
-                    insertionCode = seqInsertCode)
-      
-    self.coordinateFile.modelCoordinates[self.modelId].append(modelCoordinate)
+    #
+    # Functions different to default functions in DataFormat
+    #
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getMultiChainFormatPresetChainMapping(chainList)
-    
+    def setRawCoordinate(self):
+
+        if self.modelId not in self.coordinateFile.modelCoordinates:
+            self.coordinateFile.modelCoordinates[self.modelId] = []
+
+        chemCompVar = self.residue.chemCompVar
+        chemComp = chemCompVar.chemComp
+        cifCode = self.findChemCompVarSysName("CIF", chemCompVar)
+
+        if self.useOriginalData and self.origResLabel != None:
+            resName = self.origResLabel
+        elif cifCode:
+            resName = cifCode
+        elif chemComp.code3Letter:
+            resName = chemComp.code3Letter
+        else:
+            resName = chemComp.ccpCode
+
+        if self.useOriginalData and self.origChainCode != None:
+            chainCode = self.origChainCode
+        else:
+            chainCode = self.exportChainCode
+
+        if self.useOriginalData and self.origSeqCode != None:
+            seqCode = self.origSeqCode
+        else:
+            seqCode = self.seqCode
+
+        if self.useOriginalData and self.origSeqInsertCode != None:
+            seqInsertCode = self.origSeqInsertCode
+        else:
+            seqInsertCode = defaultSeqInsertCode
+
+        if self.useOriginalData and self.origAtomName != None:
+            atomName = self.origAtomName
+        else:
+            atomName = self.atomName
+
+        #
+        # TODO: setting chainId but is really segId... does molmol use the chainID position?
+        #
+
+        modelCoordinate = self.coordinatesIO.MolmolCoordinate(
+            self.coordinateFile,
+            self.coordinateSerial,
+            atomName,
+            resName,
+            chainCode,
+            seqCode,
+            self.x,
+            self.y,
+            self.z,
+            "",
+            insertionCode=seqInsertCode,
+        )
+
+        self.coordinateFile.modelCoordinates[self.modelId].append(modelCoordinate)
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getMultiChainFormatPresetChainMapping(chainList)

@@ -1,20 +1,18 @@
 import os
 
+from ccpnmr.format.converters.FastaFormat import FastaFormat
+
 # This contains the application data class.
 from memops.api import Implementation
 from memops.api.Implementation import MemopsRoot
-
-from ccpnmr.format.converters.FastaFormat import FastaFormat
-
 from pdbe.nmrStar.IO.NmrStarExport import NmrStarExport
 
-if __name__ == '__main__':
-
-    project = MemopsRoot(name = 'alignTest')
+if __name__ == "__main__":
+    project = MemopsRoot(name="alignTest")
 
     # Create a BMRB Entry for export to the NMR-STAR file.
-    entryStore = project.newNmrEntryStore(name = project.name)
-    nmrEntry   = entryStore.newEntry(name = project.name)
+    entryStore = project.newNmrEntryStore(name=project.name)
+    nmrEntry = entryStore.newEntry(name=project.name)
 
     # Application data objects allow you to store and associate extra data
     # in the CCPN project that does not fit into the rest of the data model.
@@ -25,12 +23,10 @@ if __name__ == '__main__':
     # of the data.
 
     # For this example, we are reading a Fasta file.
-    seqDir  = '../data/seq'
-    seqFile = os.path.join(seqDir, 'fasta.seq')
-    
-    keywds = {'application': 'Fasta format',
-              'keyword':     'sequence file',
-              'value':       seqFile}
+    seqDir = "../data/seq"
+    seqFile = os.path.join(seqDir, "fasta.seq")
+
+    keywds = {"application": "Fasta format", "keyword": "sequence file", "value": seqFile}
 
     # Make and add this application data to the BMRB Entry.
     appData = Implementation.AppDataString(**keywds)
@@ -39,11 +35,10 @@ if __name__ == '__main__':
     # Print it.
     entryAppData = nmrEntry.findFirstApplicationData()
 
-    print('Application data: [%s]' % entryAppData)
+    print("Application data: [%s]" % entryAppData)
 
     # Find it based on the application and keyword values.
-    keywds2 = {'application': 'Fasta format',
-               'keyword':     'sequence file'}
+    keywds2 = {"application": "Fasta format", "keyword": "sequence file"}
 
     seqFileFromAppData = nmrEntry.findFirstApplicationData(**keywds2).value
 
@@ -52,38 +47,35 @@ if __name__ == '__main__':
     # routines.
     fastaObj = FastaFormat(project, None)
 
-    fastaObj.readSequence(seqFileFromAppData, minimalPrompts = 1)
+    fastaObj.readSequence(seqFileFromAppData, minimalPrompts=1)
 
     # Connect the molSystem to the BMRB Entry.
     nmrEntry.setMolSystem(project.sortedMolSystems()[0])
 
     # Also create a new study object.
-    keywordList = ['NMR', 'Structure determination']
-    study = entryStore.newStudy(name = project.name,
-                                keywords = keywordList)
+    keywordList = ["NMR", "Structure determination"]
+    study = entryStore.newStudy(name=project.name, keywords=keywordList)
 
     # And connect to the Entry object.
     nmrEntry.setStudy(study)
 
-    affStore = project.newAffiliationStore(name = project.name)
+    affStore = project.newAffiliationStore(name=project.name)
 
-    orgn  = affStore.newOrganisation(name = 'myDepartment')
-    group = orgn.newGroup(name = 'myGroup')
+    orgn = affStore.newOrganisation(name="myDepartment")
+    group = orgn.newGroup(name="myGroup")
 
-    keywds = {'familyName': 'Smith',
-              'givenName':  'John'}
+    keywds = {"familyName": "Smith", "givenName": "John"}
     person = affStore.newPerson(**keywds)
 
-    personInGroup = person.newPersonInGroup(group = group)
+    personInGroup = person.newPersonInGroup(group=group)
 
     nmrEntry.addContactPerson(person)
     nmrEntry.addAuthor(person)
     nmrEntry.addLaboratory(group)
 
-    citStore = project.newCitationStore(name = project.name)
+    citStore = project.newCitationStore(name=project.name)
 
-    keywds2 = {'title':               'myPaper',
-               'journalAbbreviation': 'JMB'}
+    keywds2 = {"title": "myPaper", "journalAbbreviation": "JMB"}
     citation = citStore.newJournalCitation(**keywds2)
 
     citation.addAuthor(person)
@@ -91,51 +83,48 @@ if __name__ == '__main__':
 
     # Create a new database entry - the top hit in UniProt from a
     # Blast search of the previously read in sequence.
-    dbStore = project.newDatabase(name='UniProt')
-    dbEntry = dbStore.newEntry(code = 'P27927')
+    dbStore = project.newDatabase(name="UniProt")
+    dbEntry = dbStore.newEntry(code="P27927")
 
     # Find the molecule object in the molSystem.
     molecule = nmrEntry.molSystem.sortedChains()[0].molecule
 
     # Some of the results of the Blast search for a sequence alignment object.
-    keywds3 = {'alignLength':      360,
-               'alignmentProgram': 'NCBI BlastP 2.2.17',
-               'alignmentScore':   1507,
-               'dbRefAlignBegin':  231,
-               'dbRefAlignEnd':    586,
-               'homologyRatio':    0.79,  # 79% sequence identity.
-               'nIdentical':       287,
-               'nPositive':        304}
+    keywds3 = {
+        "alignLength": 360,
+        "alignmentProgram": "NCBI BlastP 2.2.17",
+        "alignmentScore": 1507,
+        "dbRefAlignBegin": 231,
+        "dbRefAlignEnd": 586,
+        "homologyRatio": 0.79,  # 79% sequence identity.
+        "nIdentical": 287,
+        "nPositive": 304,
+    }
 
     # Add a new alignment object to this molecule.
-    molecule.newAlignment(dbRef = dbEntry, **keywds3)
+    molecule.newAlignment(dbRef=dbEntry, **keywds3)
 
     # Reference store for making molecule components.
-    refSampCompStore = project.newRefSampleComponentStore(name = project.name)
+    refSampCompStore = project.newRefSampleComponentStore(name=project.name)
 
     # New molecule component object for a molecule of type protein.
-    keywds4 = {'name':    'testComp',
-               'molType': 'protein'}
+    keywds4 = {"name": "testComp", "molType": "protein"}
     molComp = refSampCompStore.newMolComponent(**keywds4)
 
     # More of the Blast results to link to the molecule component object.
-    keywds5 = {'alignBegin':      1,
-               'alignEnd':        338,
-               'dbRefAlignBegin': 231,
-               'dbRefAlignEnd':   586}
+    keywds5 = {"alignBegin": 1, "alignEnd": 338, "dbRefAlignBegin": 231, "dbRefAlignEnd": 586}
 
     # Link the molecule component to this UniProt cross reference.
-    compDbRef = molComp.newComponentDbRef(dbRef = dbEntry, **keywds5)
+    compDbRef = molComp.newComponentDbRef(dbRef=dbEntry, **keywds5)
 
     # Get the molResidues that begin and end the alignment.
-    startResidue = molecule.findFirstMolResidue(seqCode = compDbRef.alignBegin)
-    endResidue   = molecule.findFirstMolResidue(seqCode = compDbRef.alignEnd)
+    startResidue = molecule.findFirstMolResidue(seqCode=compDbRef.alignBegin)
+    endResidue = molecule.findFirstMolResidue(seqCode=compDbRef.alignEnd)
 
     # Create the molSeqFragment object for this alignment.
     limitResidues = [startResidue, endResidue]
 
-    keywds6 = {'alignments':    molecule.sortedAlignments(),
-               'limitResidues': limitResidues}
+    keywds6 = {"alignments": molecule.sortedAlignments(), "limitResidues": limitResidues}
     molSeqFrag = molecule.newMolSeqFragment(**keywds6)
 
     # The molecule must be finalised to add molecule components.
@@ -145,11 +134,10 @@ if __name__ == '__main__':
     molecule.addMolComponent(molComp)
 
     # Taxonomy storage class.
-    tax = project.newTaxonomy(name = project.name)
+    tax = project.newTaxonomy(name=project.name)
 
     # Create a natural source from this taxonomy object.
-    keywds7 = {'organismName':   'Maize',
-               'scientificName': 'Zea mays'}
+    keywds7 = {"organismName": "Maize", "scientificName": "Zea mays"}
     natSource = tax.newNaturalSource(**keywds7)
 
     # Set some links to the natural source.
@@ -163,8 +151,7 @@ if __name__ == '__main__':
 
     molecule.setNaturalSource(natSource)
 
-    keywds8 = {'molecule':         molecule,
-               'productionMethod': 'recombinant technology'}
+    keywds8 = {"molecule": molecule, "productionMethod": "recombinant technology"}
 
     entryMol = nmrEntry.newEntryMolecule(**keywds8)
 
@@ -173,20 +160,19 @@ if __name__ == '__main__':
 
     # Also create an experimental source and link to the
     #   entryMolecule object.
-    keywds9 = {'organismName':   'E. coli',
-               'scientificName': 'Escherichia coli'}
+    keywds9 = {"organismName": "E. coli", "scientificName": "Escherichia coli"}
     expSource = tax.newNaturalSource(**keywds9)
 
     entryMol.setExperimentalSource(expSource)
 
-    curDir     = os.path.abspath('../data')
-    nmrStarDir = os.path.join(curDir, 'nmrStar')
+    curDir = os.path.abspath("../data")
+    nmrStarDir = os.path.join(curDir, "nmrStar")
 
     if not os.path.exists(nmrStarDir):
         os.mkdir(nmrStarDir)
 
-    outNmrStarFile = os.path.join(nmrStarDir, 'nmrStar2.str')
+    outNmrStarFile = os.path.join(nmrStarDir, "nmrStar2.str")
 
-    nmrStarExport = NmrStarExport(nmrEntry, nmrStarVersion = '3.1')
+    nmrStarExport = NmrStarExport(nmrEntry, nmrStarVersion="3.1")
     nmrStarExport.createFile(outNmrStarFile)
     nmrStarExport.writeFile()

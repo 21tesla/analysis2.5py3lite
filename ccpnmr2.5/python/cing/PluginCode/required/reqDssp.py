@@ -1,6 +1,6 @@
 'required items for this plugin for CING setup'
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqProcheck import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqProcheck import *  #@UnusedWildImport
 
 DSSP_STR = "dssp" # key to the entities (atoms, residues, etc under which the results will be stored
 DSSP_ID_STR = 'dssp_id'

@@ -3,12 +3,13 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_network.py
 """
 
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.network import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.Libs.network import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 
@@ -31,7 +32,7 @@ class AllChecks(TestCase):
 #        targetUrl = '/Users/jd'
         self.assertFalse( getFileBySsh( sourceUrl, '.', ntriesMax = 2 ))
     # end def
-    
+
     def _test_get_local_ip_address(self):
         ip = get_local_ip_address()
         print('IP is: %s' % ip)

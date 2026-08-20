@@ -599,7 +599,7 @@ def tail(file, lines=10):
     Return the last lines of the file.
 
     >>> import StringIO
-    >>> f = StringIO.StringIO()
+    >>> f = StringIO()
     >>> for i in range(11):
     ...     f.write('Line %d\\n' % (i + 1))
     >>> tail(f, 3)
@@ -612,7 +612,7 @@ def head(file, lines=10):
     Return the top lines of the file.
 
     >>> import StringIO
-    >>> f = StringIO.StringIO()
+    >>> f = StringIO()
     >>> for i in range(11):
     ...     f.write('Line %d\\n' % (i + 1))
     >>> head(f, 3)
@@ -654,7 +654,7 @@ def _main(filepath, options):
             if options.lines > 0:
                 if options.head:
                     if options.follow:
-                        print(>>sys.stderr, 'Cannot follow from top of file.')
+                        print('Cannot follow from top of file.', file=sys.stderr)
                         sys.exit(1)
                     lines = tailer.head(options.lines)
                 else:
@@ -723,7 +723,7 @@ def mkdirs(dst):
     mkdirs(head)
 
     try:
-        os.mkdir(dst, 0777)
+        os.mkdir(dst, 0o777)
     except OSError as e:
         # be happy if someone already created the path
         if e.errno != EEXIST:

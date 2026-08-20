@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,71 +56,72 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
+
 def getMethodStore(project):
-  """Descrn: Get project.currentMethodStore, creating or setting it if need be.
-     Inputs: memops.api.Implementation.MemopsRoot
-     Output: ccp.api.general.Method.MethodStore
-  """
+    """Descrn: Get project.currentMethodStore, creating or setting it if need be.
+    Inputs: memops.api.Implementation.MemopsRoot
+    Output: ccp.api.general.Method.MethodStore
+    """
 
-  if not project.currentMethodStore:
-    methodStores = project.sortedMethodStores()
-    if methodStores:
-      project.currentMethodStore = methodStores[0]
-    else:
-      # this automatically sets project.currentMethodStore
-      project.newMethodStore(name=project.name)
+    if not project.currentMethodStore:
+        methodStores = project.sortedMethodStores()
+        if methodStores:
+            project.currentMethodStore = methodStores[0]
+        else:
+            # this automatically sets project.currentMethodStore
+            project.newMethodStore(name=project.name)
 
-  return project.currentMethodStore
+    return project.currentMethodStore
 
-def getSoftware(project, name, version, vendorName='', vendorAddress='', vendorWebAddress='', details=''):
-  """Descrn: Get software if it exists, otherwise create a new software.
-             Two softwares the same if name and version are the same.
-     Inputs: memops.api.Implementation.MemopsRoot, String, String [, String, String, String]
-     Output: ccp.api.general.Method.Software
-  """
 
-  methodStore = getMethodStore(project)
-  software = methodStore.findFirstSoftware(name=name, version=version)
-  if not software:
-    software = methodStore.newSoftware(name=name, version=version)
+def getSoftware(project, name, version, vendorName="", vendorAddress="", vendorWebAddress="", details=""):
+    """Descrn: Get software if it exists, otherwise create a new software.
+            Two softwares the same if name and version are the same.
+    Inputs: memops.api.Implementation.MemopsRoot, String, String [, String, String, String]
+    Output: ccp.api.general.Method.Software
+    """
 
-  if vendorName:
-    software.vendorName = vendorName
-  
-  if vendorAddress:
-    software.vendorAddress = vendorAddress
-  
-  if vendorWebAddress:
-    software.vendorWebAddress = vendorWebAddress
+    methodStore = getMethodStore(project)
+    software = methodStore.findFirstSoftware(name=name, version=version)
+    if not software:
+        software = methodStore.newSoftware(name=name, version=version)
 
-  if details:
-    software.details = details
+    if vendorName:
+        software.vendorName = vendorName
 
-  return software
+    if vendorAddress:
+        software.vendorAddress = vendorAddress
+
+    if vendorWebAddress:
+        software.vendorWebAddress = vendorWebAddress
+
+    if details:
+        software.details = details
+
+    return software
+
 
 def getMethod(software, task, procedure=None, parameters=None, details=None):
-  """Descrn: Get method if it exists, otherwise create a new method.
-             Two methods the same if software, procedure and parameters are the same.
-     Inputs: ccp.api.general.Method.Software, String [, String, List((String, Object)), String]
-     Output: ccp.api.general.Method.Method
-  """
+    """Descrn: Get method if it exists, otherwise create a new method.
+            Two methods the same if software, procedure and parameters are the same.
+    Inputs: ccp.api.general.Method.Software, String [, String, List((String, Object)), String]
+    Output: ccp.api.general.Method.Method
+    """
 
-  if parameters is None:
-    parameters = []
-  else:
-    parameters = list(parameters)
+    if parameters is None:
+        parameters = []
+    else:
+        parameters = list(parameters)
 
-  methodStore = getMethodStore(software.root)
-  methods = methodStore.findAllMethods(software=software, procedure=procedure)
-  for method in methods:
-    params = [(p.name,p.value) for p in method.parameters]
-    if params == parameters:
-      return method
+    methodStore = getMethodStore(software.root)
+    methods = methodStore.findAllMethods(software=software, procedure=procedure)
+    for method in methods:
+        params = [(p.name, p.value) for p in method.parameters]
+        if params == parameters:
+            return method
 
-  method = methodStore.newMethod(software=software, procedure=procedure,
-                         details=details)
-  for (name, value) in parameters:
-    method.newParameter(name=name, value=value)
+    method = methodStore.newMethod(software=software, procedure=procedure, details=details)
+    for name, value in parameters:
+        method.newParameter(name=name, value=value)
 
-  return method
-
+    return method

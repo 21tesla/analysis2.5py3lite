@@ -17,17 +17,18 @@ handle multimers.
 the restraints in you project. It is not possible to restore them!!
 '''
 
-from cing.Scripts.munkres import Munkres
-from cing.core.classes import * #@UnusedWildImport
-from cing.core.molecule import * #@UnusedWildImport
 from collections import defaultdict
 from itertools import combinations
+
+from cing.core.classes import *  #@UnusedWildImport
+from cing.core.molecule import *  #@UnusedWildImport
+from cing.Scripts.munkres import Munkres
 
 CHI1_LOW_DEFAULT  = 120.
 CHI2_LOW_DEFAULT  = 0.
 CHI2_UPP_DEFAULT  = 240.
 
-# The four (or twelve) chi dihedral angle values 
+# The four (or twelve) chi dihedral angle values
 CHI1_LIST = [300, 180] # g-/t, t/g+
 CHI2_LIST = [180,  60]
 #CHI1_LIST=[-60,-49,-41,-48,-53,-63,-75,-79,-78,-70,180,-169,-163,-162,-170,180,171,168,166,173]
@@ -119,7 +120,7 @@ def checkRestraintsExistance(restraintlist, proj):
 #                nTdebug('%s,id=%s' % (str(ap), str(dr.id)))
             #end if
         #end for
-    #end for                
+    #end for
     if count == 0:
         nTerror('No restraints found')
     #end if
@@ -135,9 +136,9 @@ def deassignHB(proj, leu):
     nTmessage('In %s looking at restraints with SSA HBs of %s with %s DRs in %s' % (
         getCallerName(), leu, len(leu.distanceRestraints), proj))
     deassHBaplist = []
-    for dr in leu.distanceRestraints: 
+    for dr in leu.distanceRestraints:
 #        nTdebug("Looking at: %s" % dr)
-        ap = dr.atomPairs[0] # TODO: adapt for ambiguous restraints by adding a loop here. 
+        ap = dr.atomPairs[0] # TODO: adapt for ambiguous restraints by adding a loop here.
         atom1 = ap[0]
         atom2 = ap[1]
         for ai in [0, 1]:
@@ -241,7 +242,7 @@ def classifyRestraints(prl, leu, threshold):
                 break
             #end if
             ap = dr.atomPairs[0]
-            for ai in atomIndexes: 
+            for ai in atomIndexes:
                 #specifies first or second atom in atompair of restraint
                 #TODO: enable testing ambi restraints.
                 atom = ap[ai]
@@ -260,7 +261,7 @@ def classifyRestraints(prl, leu, threshold):
                 #end if
 #                nTdebug('Looking at violations for: %s' % atom)
                 # TRANS
-                violCountTr = 0 
+                violCountTr = 0
                 violTr = 0
                 violTreshTr = dr.violations[0] # first t model
                 #violMinTr=min(dr.violations[:halfModelCount])
@@ -292,20 +293,20 @@ def classifyRestraints(prl, leu, threshold):
                 violCountBoth = violCountGp + violCountTr
                 nTdebug('violCountGp, violCountTr, violTr, violGp: %8.3f %8.3f %8.3f %8.3f' % (violCountGp, violCountTr, violTr, violGp))
                 if violCountBoth == 0:
-                    nTdebug('Classified to u')                    
+                    nTdebug('Classified to u')
                     u.append(ap)
-                elif (violCountTr > (violCountGp + thresholdModelCount) and violTr > violGp): 
-                    nTdebug('Classified to t')                    
+                elif (violCountTr > (violCountGp + thresholdModelCount) and violTr > violGp):
+                    nTdebug('Classified to t')
                     trdict[ap] = (dr.upper, violTreshTr)
                 elif violCountGp > (violCountTr + thresholdModelCount) and violGp > violTr:
-                    nTdebug('Classified to g+')                    
+                    nTdebug('Classified to g+')
                     gpdict[ap] = (dr.upper, violTreshGp)
                 elif violCountGp < thresholdModelCount and violCountTr < thresholdModelCount:
                     #less than 10 violations is not enough to classify restraint.
-                    nTdebug('Classified to u because failed the threshold model and restraint counts')                    
+                    nTdebug('Classified to u because failed the threshold model and restraint counts')
                     u.append(ap)
                 else:
-                    nTdebug('Classified to n.')                    
+                    nTdebug('Classified to n.')
                     n.append(ap)
                 #end if
                 found = 1
@@ -365,7 +366,7 @@ def tablePrint(table, ln):
     'Just a handy script to print tables while debugging. Length is the number of characters per element in table'
     if not table:
         return 'Empty table'
-    # end if    
+    # end if
     result = ''
     fmt = '%-' + str(ln) + '.2f' #to be able to print the table aligned, this value has to depend on the len of an element in the table
     for r in table:
@@ -448,7 +449,7 @@ def checkAllowedTable(allowedTable, table, maxi, n, lenDrlColumns, lenDrlRows, d
         if min(allowedTable[r]) == maxi:
             delListrows.append(r)
         #end if
-    #end for            
+    #end for
     for c in range(lenDrlColumns):
         column = []
         for r in range(lenDrlRows):
@@ -513,7 +514,7 @@ def transposeTable(table):
     nTmessage("Starting %s" % getCallerName())
     if not table:
         return []
-    #end if    
+    #end if
     return map(lambda *row: list(row), *table)
 # end def
 
@@ -578,7 +579,7 @@ def fac(n):
     if type(n) != int:
         nTmessage('%s is not an integer, %s! will be calculated instead' % (n, int(n)))
         n = int(n)
-    #end if        
+    #end if
     if n == 1 or n == 0:
         return 1
     else:
@@ -820,7 +821,7 @@ def deleteRestraints(delList, proj):
     '''
     delList = list(set(delList)) #sort delList and remove double elements
     nTmessage('Now in: %s' % getCallerName())
-    firstDrList = proj.distances[0] 
+    firstDrList = proj.distances[0]
     for i in delList:
         for j in firstDrList:
             if j == i:
@@ -915,17 +916,17 @@ def massageRestraintsForLeu(prl, proj, prlleu, projleu, threshold, deasHB):
     '''
     if prlleu.resNum != projleu.resNum:
         nTerror('Residuenumbers %s and %s are not the same.' % (prlleu.resNum, projleu.resNum))
-    #end if        
+    #end if
     if deasHB == True: #if HB's needs to be deassigned
         _deassHBaplistproj = deassignHB(proj, projleu)
         _deassHBaplistprl  = deassignHB(prl, prlleu)#just to be able to compare the two projects later on
     #end if
-    
+
     resultClassification = classifyRestraints(prl, prlleu, threshold)
     if not resultClassification:
         nTerror("Failed classifyRestraints")
         return True
-    # end if 
+    # end if
     n, _u, trdict, gpdict = resultClassification
     drlColumnsdict, drlColumns, lenDrlColumns, drlRowsdict, drlRows, lenDrlRows = renameDicts(trdict, gpdict)
     invdrlColumnsdict = reverseDict(drlColumnsdict)
@@ -997,7 +998,7 @@ def alterRestraintsForLeus(leuList, proj, prl, threshold, deasHB, dihrCHI2):
         addDihRestr(proj, leuList=leuList)
     #end if
     return proj
-# end def        
+# end def
 
 def runScript():
     '''
@@ -1007,8 +1008,8 @@ def runScript():
 #    proj_path='/Users/jd/workspace/'
     proj_path = '/home/i/tmp/karenVCdir'
     proj_name = 'H2_2Ca_64_100'
-    prl_name = proj_name + '_' + ROTL_STR 
-    
+    prl_name = proj_name + '_' + ROTL_STR
+
     proj = Project.open('%s/%s' % (proj_path, proj_name), status='old')
     prl = Project.open('%s/%s' % (proj_path, prl_name), status='old')
     leuNumberList = [0] #please define leunumbers.
@@ -1022,7 +1023,7 @@ def runScript():
     if True:
         proj.save()
     #end if
-# end def        
+# end def
 
 if __name__ == '__main__':
     runScript()

@@ -1,5 +1,5 @@
 from cing import __author__
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqCcpn import CCPN_LOWERCASE_STR
 
 __author__ += 'Wim Vranken '

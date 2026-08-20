@@ -1,8 +1,7 @@
 import os
-from memops.universal.Io import getTopDirectory, joinPath
 
 from ccp.general.Io import getDataPath
-
+from memops.universal.Io import getTopDirectory, joinPath
 from pdbe.general.Io import pdbeDataDir
 
 #

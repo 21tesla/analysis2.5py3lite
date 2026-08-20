@@ -65,25 +65,26 @@ ID  PDB  REMARK
 Only ~30 segments with bad estimates remain but will not be fixed.
 """
 
-from cing.Libs.DBMS import getRelationFromCsvFile
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.core.molecule import Molecule
+from cing.Libs.DBMS import getRelationFromCsvFile
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def run():
     relationName =  'nrgcing_ranges'
     fn = os.path.join( '/Users/jd/CMBI/Papers/CING/Data', relationName + '.csv')
-    
+
     nentries = 0
     nchains = 0
-    nsegments = 0 
+    nsegments = 0
     nresidues = 0
     nresiduesMin = 999
     nresiduesMinEntry = None
     r = getRelationFromCsvFile(fn)
-    
+
     columnIdxId = 0
     columnIdxRange = 1
-    
+
     for rowIdx in range(r.sizeRows()):
         if rowIdx >= 200000:
             print("Stopping early.")
@@ -107,15 +108,15 @@ def run():
             # end for
             if residueCount < 5:
                 nTdebug( 'residueCount for %s with range %s and segment %s is %s' % ( pdb_id, rangeStr, str(startStopList), residueCount))
-            # end for            
+            # end for
             segmentChainId = startStopList[0]
             if segmentChainId != chain_id:
                 chain_id = segmentChainId
                 nchains += 1
             # end if
         # end for
-    # end for    
-    
+    # end for
+
     print("nentries:                %s" % nentries)
     print("nchains:                 %s" % nchains)
     print("nsegments:               %s" % nsegments)
@@ -131,6 +132,5 @@ def run():
 # end def
 
 if __name__ == '__main__':
-    cing.verbosity = cing.verbosityDebug    
+    cing.verbosity = cing.verbosityDebug
     run()
-    

@@ -4,11 +4,13 @@ Created on Mar 30, 2010
 @author: jd
 '''
 
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
 from glob import glob
-from yasaramodule import * #@UnusedWildImport
-import yasara #@UnusedImport @UnresolvedImport
+
+import yasara  #@UnusedImport @UnresolvedImport
+from yasaramodule import *  #@UnusedWildImport
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 #filename = '/Users/jd/CASD-NMR-CING/data/eR/NeR103ACheshire/Author/mod.pdb'
 #LoadPDB(filename, center=None, correct=None, model=None, download=None)

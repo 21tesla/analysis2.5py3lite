@@ -38,147 +38,152 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.universal.Util import returnInt, returnFloat
+
+from memops.universal.Util import returnFloat
+
 
 def readPdbCloud(pdbFileName):
 
-  fileHandle = open(pdbFileName)
+    fileHandle = open(pdbFileName)
 
-  # assumes order of atoms
+    # assumes order of atoms
 
-  coordList = []
+    coordList = []
 
-  for line in fileHandle.readlines():
-    key = line[0:6].strip()
-    if key == 'ATOM':
-      #serial  = returnInt(line[6:11])
-      #seqCode = returnInt(line[22:26])
-      x = returnFloat(line[30:38])
-      y = returnFloat(line[38:46])
-      z = returnFloat(line[46:54])
-      coordList.append([x,y,z])
+    for line in fileHandle.readlines():
+        key = line[0:6].strip()
+        if key == "ATOM":
+            # serial  = returnInt(line[6:11])
+            # seqCode = returnInt(line[22:26])
+            x = returnFloat(line[30:38])
+            y = returnFloat(line[38:46])
+            z = returnFloat(line[46:54])
+            coordList.append([x, y, z])
 
-  return coordList
+    return coordList
+
 
 def readTypedPdbCloud(pdbFileName):
 
-  fileHandle = open(pdbFileName)
+    fileHandle = open(pdbFileName)
 
-  # assumes order of atoms
+    # assumes order of atoms
 
-  coordList = []
-  atomList = []
+    coordList = []
+    atomList = []
 
-  for line in fileHandle.readlines():
-    key = line[0:6].strip()
-    if key == 'ATOM':
-      #serial  = returnInt(line[6:11])
-      #seqCode = returnInt(line[22:26])
-      a = line[13:15].strip()
-      x = returnFloat(line[30:38])
-      y = returnFloat(line[38:46])
-      z = returnFloat(line[46:54])
-      coordList.append([x,y,z])
-      atomList.append(a)
+    for line in fileHandle.readlines():
+        key = line[0:6].strip()
+        if key == "ATOM":
+            # serial  = returnInt(line[6:11])
+            # seqCode = returnInt(line[22:26])
+            a = line[13:15].strip()
+            x = returnFloat(line[30:38])
+            y = returnFloat(line[38:46])
+            z = returnFloat(line[46:54])
+            coordList.append([x, y, z])
+            atomList.append(a)
 
-  return (coordList, atomList)
+    return (coordList, atomList)
+
 
 def writePdbCloud(atomCoordList, pdbFileName):
 
-  fp = open(pdbFileName, 'w')
-  N  = len(atomCoordList)
-  if hasattr(atomCoordList[0],'x'):
-    for n in range(N):
-      a = atomCoordList[n]
-      fp.write('ATOM  %5d  H   HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.2f\n' \
-               % (n+1, n+1, a.x, a.y, a.z, 1.0, 1.0))
-  else:
-    for n in range(N):
-      [x,y,z] = atomCoordList[n]
-      fp.write('ATOM  %5d  H   HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.2f\n' \
-               % (n+1, n+1, x, y, z, 1.0, 1.0))
-    
-  fp.close()
+    fp = open(pdbFileName, "w")
+    N = len(atomCoordList)
+    if hasattr(atomCoordList[0], "x"):
+        for n in range(N):
+            a = atomCoordList[n]
+            fp.write("ATOM  %5d  H   HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.2f\n" % (n + 1, n + 1, a.x, a.y, a.z, 1.0, 1.0))
+    else:
+        for n in range(N):
+            [x, y, z] = atomCoordList[n]
+            fp.write("ATOM  %5d  H   HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.2f\n" % (n + 1, n + 1, x, y, z, 1.0, 1.0))
+
+    fp.close()
+
 
 def writeStructureCloud(structure, pdbFileName, coordIndex=0):
 
-  atomSetDict = {}
-  resonances = []
-  atomCoordList = []
-  for chain in structure.coordChains:
-    for residue in chain.residues:
-      for atom in residue.atoms:
-        atomSet = atom.atom.atomSet
-        if atomSet:
-          coord = atom.coords[coordIndex]
-          if atomSetDict.get(atomSet) is None:
-            atomSetDict[atomSet] = []
-          
-          ll = [coord.x, coord.y, coord.z]
-          atomSetDict[atomSet].append( ll ) 
-  
-  for atomSet in atomSetDict.keys():
-    if atomSet.resonanceSets:
+    atomSetDict = {}
+    resonances = []
+    atomCoordList = []
+    for chain in structure.coordChains:
+        for residue in chain.residues:
+            for atom in residue.atoms:
+                atomSet = atom.atom.atomSet
+                if atomSet:
+                    coord = atom.coords[coordIndex]
+                    if atomSetDict.get(atomSet) is None:
+                        atomSetDict[atomSet] = []
 
-      x = 0.0
-      y = 0.0
-      z = 0.0
-      n = 0.0
-      for coord in atomSetDict[atomSet]:
-        x += coord[0]
-        y += coord[1]
-        z += coord[2]
-        n += 1.0
- 
-      x /= n
-      y /= n
-      z /= n
-      atomCoordList.append((x,y,z))
-    
-      resonance = None
-      for resonanceSet in atomSet.resonanceSets:
-        if len(resonanceSet.resonances) == 1:
-          resonance = resonanceSet.findFirstResonance()
-          break
-      
-      if not resonance:
-        resonanceSet = atomSet.findFirstResonanceSet()
-        index = list(resonanceSet.atomSets).index(atomSet)
-        if index >= len(resonanceSet.resonances):
-          resonance = resonanceSet.resonances[-1]
-        else:
-          resonance = resonanceSet.resonances[index]
-  
-      resonances.append(resonance)
+                    ll = [coord.x, coord.y, coord.z]
+                    atomSetDict[atomSet].append(ll)
 
-  writeTypedPdbCloud(atomCoordList, pdbFileName, resonances)  
+    for atomSet in atomSetDict.keys():
+        if atomSet.resonanceSets:
+            x = 0.0
+            y = 0.0
+            z = 0.0
+            n = 0.0
+            for coord in atomSetDict[atomSet]:
+                x += coord[0]
+                y += coord[1]
+                z += coord[2]
+                n += 1.0
+
+            x /= n
+            y /= n
+            z /= n
+            atomCoordList.append((x, y, z))
+
+            resonance = None
+            for resonanceSet in atomSet.resonanceSets:
+                if len(resonanceSet.resonances) == 1:
+                    resonance = resonanceSet.findFirstResonance()
+                    break
+
+            if not resonance:
+                resonanceSet = atomSet.findFirstResonanceSet()
+                index = list(resonanceSet.atomSets).index(atomSet)
+                if index >= len(resonanceSet.resonances):
+                    resonance = resonanceSet.resonances[-1]
+                else:
+                    resonance = resonanceSet.resonances[index]
+
+            resonances.append(resonance)
+
+    writeTypedPdbCloud(atomCoordList, pdbFileName, resonances)
+
 
 def writeTypedPdbCloud(atomCoordList, pdbFileName, resonances):
 
-  fp = open(pdbFileName, 'w')
-  N  = len(atomCoordList)
-  if hasattr(atomCoordList[0],'x'):
-    for n in range(N):
-      a = atomCoordList[n]
-      name = resonances[n].name
-      if resonances[n].shifts:
-        shift = resonances[n].findFirstShift().value
-      else:
-        shift = 0.0
-      
-      fp.write('ATOM  %5d  %-3.3s HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.4f\n' \
-               % (n+1, name, n+1, a.x, a.y, a.z, 1.0, shift))
-  else:
-    for n in range(N):
-      [x,y,z] = atomCoordList[n]
-      name = resonances[n].name
-      if resonances[n].shifts:
-        shift = resonances[n].finsFirstShift().value
-      else:
-        shift = 0.0
-      
-      fp.write('ATOM  %5d  %-3.3s HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.4f\n' \
-               % (n+1, name, n+1, x, y, z, 1.0, shift))
-    
-  fp.close()
-  
+    fp = open(pdbFileName, "w")
+    N = len(atomCoordList)
+    if hasattr(atomCoordList[0], "x"):
+        for n in range(N):
+            a = atomCoordList[n]
+            name = resonances[n].name
+            if resonances[n].shifts:
+                shift = resonances[n].findFirstShift().value
+            else:
+                shift = 0.0
+
+            fp.write(
+                "ATOM  %5d  %-3.3s HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.4f\n"
+                % (n + 1, name, n + 1, a.x, a.y, a.z, 1.0, shift)
+            )
+    else:
+        for n in range(N):
+            [x, y, z] = atomCoordList[n]
+            name = resonances[n].name
+            if resonances[n].shifts:
+                shift = resonances[n].finsFirstShift().value
+            else:
+                shift = 0.0
+
+            fp.write(
+                "ATOM  %5d  %-3.3s HY1 %5d    %8.3f%8.3f%8.3f%6.2f%6.4f\n" % (n + 1, name, n + 1, x, y, z, 1.0, shift)
+            )
+
+    fp.close()

@@ -7,7 +7,7 @@ Please make sure that numpy objects are never passed to code in other files,
 unless the other file also imports numpy.
 """
 
-import sys, os, struct
+import struct
 
 try:
   from gothenburg.prodecomp import prodecomp
@@ -15,12 +15,13 @@ except ImportError:
   class prodecomp:
     publicDocumentation = '*WARNING* PRODECOMP is not installed'
 
-from memops.general.Implementation import ApiError
 from ccp.general.Io import getDataSourceFileName
+from memops.general.Implementation import ApiError
+
 
 def runProdecomp(dataSources, pythonDefsMatrix, intl, cmps, rglf, itrs):
 
-  from numpy import zeros, array
+  from numpy import array, zeros
 
   # get DataMatrix
   dataMatrix = getDataMatrix(dataSources)

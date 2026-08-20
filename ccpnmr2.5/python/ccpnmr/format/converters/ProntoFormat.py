@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,73 +54,66 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
-from ccpnmr.format.general.Util import getResName
-
+import ccp.api.nmr.Nmr as Nmr
+from ccpnmr.format.converters.DataFormat import DataFormat
 from ccpnmr.format.general.Constants import height_kw
 
-import ccp.api.nmr.Nmr as Nmr
 
 class ProntoFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'pronto'
+        self.format = "pronto"
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
+    def setGenericImports(self):
 
-    self.getPeaks = self.getPeaksGeneric
-    
-    self.getMeasurements = self.getMeasurementsGeneric
+        self.getSequence = self.getSequenceGeneric
 
-  #
-  # Deviations from generic import stuff
-  #
-    
-  #
-  # Functions different to default functions in DataFormat
-  #
+        self.getPeaks = self.getPeaksGeneric
 
+        self.getMeasurements = self.getMeasurementsGeneric
 
-  def setPeakIntensity(self):
+    #
+    # Deviations from generic import stuff
+    #
 
-    # PeakIntensity attributes
-    if self.rawPeak.intensity != 0:
-      peakInt = Nmr.PeakIntensity(self.peak,value = self.rawPeak.intensity, method = self.methods[self.format]['Intensity'])
-    
-      # Assuming always intensity for pronto
-      peakInt.intensityType = height_kw
-      
-    
-    # TODO: peak status!!!
+    #
+    # Functions different to default functions in DataFormat
+    #
 
-  def setPeakDim(self):
+    def setPeakIntensity(self):
 
-    dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
+        # PeakIntensity attributes
+        if self.rawPeak.intensity != 0:
+            peakInt = Nmr.PeakIntensity(
+                self.peak, value=self.rawPeak.intensity, method=self.methods[self.format]["Intensity"]
+            )
 
-    self.peakDim = self.peak.findFirstPeakDim(dim = dataDimRef.dataDim.dim)
+            # Assuming always intensity for pronto
+            peakInt.intensityType = height_kw
 
-    self.peakDim.dataDimRef = dataDimRef
+        # TODO: peak status!!!
 
-    self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
+    def setPeakDim(self):
 
+        dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
 
-  def getPeakResNames(self):
-  
-    # Have to do some interpretation of the assigns...
-    assign = self.rawPeak.assign[self.rawPeakDimIndex]
+        self.peakDim = self.peak.findFirstPeakDim(dim=dataDimRef.dataDim.dim)
 
-    if assign:
+        self.peakDim.dataDimRef = dataDimRef
 
-      self.resNames = [assign]
+        self.peakDim.value = self.rawPeak.ppm[self.rawPeakDimIndex]
 
-    else:
-      
-      self.resNames = []
+    def getPeakResNames(self):
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)
+        # Have to do some interpretation of the assigns...
+        assign = self.rawPeak.assign[self.rawPeakDimIndex]
+
+        if assign:
+            self.resNames = [assign]
+
+        else:
+            self.resNames = []
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

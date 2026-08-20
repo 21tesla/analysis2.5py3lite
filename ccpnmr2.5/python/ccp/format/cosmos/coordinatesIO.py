@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,104 +53,101 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 # Import general functions
-from memops.universal.Util import returnInt, returnFloat
 from ccp.format.cosmos.generalIO import CosmosGenericFile
-
 from ccp.format.general.Constants import defaultMolCode, defaultSeqInsertCode
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class CosmosCoordinateFile(CosmosGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.modelCoordinates = {}
-    
-    self.chains = []
+        self.modelCoordinates = {}
 
-  #def read(self,maxNum = 999):
+        self.chains = []
 
-  #  pass
+    # def read(self,maxNum = 999):
 
-  def write(self,version = '003',verbose = False, use_fout = None):
+    #  pass
 
-    if verbose == 1:
-      print("Writing %s coordinate file %s" % (self.format,self.name))
-     
-    if use_fout:
-      fout = use_fout
-    else:
-      fout = open(self.name,'w')
-    
-    atomLineFormat = "%s %d %7.5f %7.5f %7.5f"
-    
-    if not use_fout:
-      fout.write("$COO%s" % version)
-      fout.write(self.newline)
+    def write(self, version="003", verbose=False, use_fout=None):
 
-    fout.write("CELL  1.0000  1.0000  1.0000  90.000  90.000  90.000  0.0000  0.0000  0.0000")
-    fout.write(self.newline)
-    
-    fout.write("SPGROUP P1")
-    fout.write(self.newline)
+        if verbose == 1:
+            print("Writing %s coordinate file %s" % (self.format, self.name))
 
-    # TODO can handle multiple models?
-    # TODO can handle multiple chains?
-    modelNums = self.modelCoordinates.keys()
-    modelNums.sort()
-    
-    if len(modelNums) > 1:
-      print("  Warning: only writing out first model!")
-    
-    for modelNum in modelNums[:1]:
-        
-      #oldChainId = self.modelCoordinates[modelNum][0].chainId
-      
-      fout.write("ATOMS %d" % len(self.modelCoordinates[modelNum]))
-      fout.write(self.newline)
-      
-      for coord in self.modelCoordinates[modelNum]:
-      
-        #if oldChainId != coord.chainId:
-        #  oldChainId = coord.chainId
-        #  fout.write("TER" + self.newline)
-      
-        atomId = "%s_%s" % (coord.atomName,coord.resName)
-        if coord.chainCode:
-          atomId += '_%s' % coord.chainCode
-        atomId += '_%s' % coord.seqCode
-      
-        fout.write(atomLineFormat % (atomId,coord.atomNumber,coord.x,coord.y,coord.z))
-        
+        if use_fout:
+            fout = use_fout
+        else:
+            fout = open(self.name, "w")
+
+        atomLineFormat = "%s %d %7.5f %7.5f %7.5f"
+
+        if not use_fout:
+            fout.write("$COO%s" % version)
+            fout.write(self.newline)
+
+        fout.write("CELL  1.0000  1.0000  1.0000  90.000  90.000  90.000  0.0000  0.0000  0.0000")
         fout.write(self.newline)
-                
-    if not use_fout:
-      fout.close()    
+
+        fout.write("SPGROUP P1")
+        fout.write(self.newline)
+
+        # TODO can handle multiple models?
+        # TODO can handle multiple chains?
+        modelNums = self.modelCoordinates.keys()
+        modelNums.sort()
+
+        if len(modelNums) > 1:
+            print("  Warning: only writing out first model!")
+
+        for modelNum in modelNums[:1]:
+            # oldChainId = self.modelCoordinates[modelNum][0].chainId
+
+            fout.write("ATOMS %d" % len(self.modelCoordinates[modelNum]))
+            fout.write(self.newline)
+
+            for coord in self.modelCoordinates[modelNum]:
+                # if oldChainId != coord.chainId:
+                #  oldChainId = coord.chainId
+                #  fout.write("TER" + self.newline)
+
+                atomId = "%s_%s" % (coord.atomName, coord.resName)
+                if coord.chainCode:
+                    atomId += "_%s" % coord.chainCode
+                atomId += "_%s" % coord.seqCode
+
+                fout.write(atomLineFormat % (atomId, coord.atomNumber, coord.x, coord.y, coord.z))
+
+                fout.write(self.newline)
+
+        if not use_fout:
+            fout.close()
+
 
 class CosmosChain:
+    def __init__(self):
 
-  def __init__(self):
-    
-    # Not supported
-    self.chainId = defaultMolCode
+        # Not supported
+        self.chainId = defaultMolCode
+
 
 class CosmosCoordinate:
+    def __init__(self, serial, chainCode, seqCode, atomName, atomNumber, resName, x, y, z):
 
-  def __init__(self,serial,chainCode,seqCode,atomName,atomNumber,resName,x,y,z):
-  
-    self.serial = returnInt(serial)
-    self.atomName = atomName.strip()
-    self.atomNumber = returnInt(atomNumber)
-    self.resName = resName.strip().upper()
-    self.seqCode = seqCode
-    self.chainCode = chainCode.strip()
+        self.serial = returnInt(serial)
+        self.atomName = atomName.strip()
+        self.atomNumber = returnInt(atomNumber)
+        self.resName = resName.strip().upper()
+        self.seqCode = seqCode
+        self.chainCode = chainCode.strip()
 
-    self.x = returnFloat(x)
-    self.y = returnFloat(y)
-    self.z = returnFloat(z)
-    
-    # Not supported
-    self.insertionCode = defaultSeqInsertCode
-    self.chainId = defaultMolCode
+        self.x = returnFloat(x)
+        self.y = returnFloat(y)
+        self.z = returnFloat(z)
+
+        # Not supported
+        self.insertionCode = defaultSeqInsertCode
+        self.chainId = defaultMolCode

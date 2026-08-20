@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,49 +38,53 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
 
+
 class Command:
- 
-  def __init__(self, argumentServer, command_name, module_name, func_name):
- 
-    self.name = command_name
-    self.module_name = module_name
-    self.func_name = func_name
-    self.argumentServer = argumentServer
+    def __init__(self, argumentServer, command_name, module_name, func_name):
 
-    try:
-      self.module = __import__(module_name)
-    except:
-      raise Implementation.ApiError('could not import module "' + self.module_name + '"')
- 
-    try:
-      self.func = getattr(self.module, self.func_name)
-    except:
-      raise Implementation.ApiError('could not find function "' + self.func_name + '" in module "' + self.module_name + '"')
+        self.name = command_name
+        self.module_name = module_name
+        self.func_name = func_name
+        self.argumentServer = argumentServer
 
-  def run(self):
- 
-    self.func(argServer=self.argumentServer)
-    #try:
-    #  self.func(argServer=self.argumentServer)
-    #except Implementation.ApiError:
-    #  raise
-    #except TypeError, e:
-    #  raise Implementation.ApiError(str(e))
-    #except:
-    #  raise Implementation.ApiError('could not run function "' + self.func_name + '" in module "' + self.module_name + '"')
- 
-  def reload(self):
- 
-    try:
-      reload(self.module)
-    except:
-      raise Implementation.ApiError('could not reload module "' + self.module_name + '"')
-      return
- 
-    try:
-      self.func = getattr(self.module, self.func_name)
-    except:
-      raise Implementation.ApiError('could not find function "' + self.func_name + '" in module "' + self.module_name + '"')
+        try:
+            self.module = __import__(module_name)
+        except:
+            raise Implementation.ApiError('could not import module "' + self.module_name + '"')
 
+        try:
+            self.func = getattr(self.module, self.func_name)
+        except:
+            raise Implementation.ApiError(
+                'could not find function "' + self.func_name + '" in module "' + self.module_name + '"'
+            )
+
+    def run(self):
+
+        self.func(argServer=self.argumentServer)
+        # try:
+        #  self.func(argServer=self.argumentServer)
+        # except Implementation.ApiError:
+        #  raise
+        # except TypeError, e:
+        #  raise Implementation.ApiError(str(e))
+        # except:
+        #  raise Implementation.ApiError('could not run function "' + self.func_name + '" in module "' + self.module_name + '"')
+
+    def reload(self):
+
+        try:
+            reload(self.module)
+        except:
+            raise Implementation.ApiError('could not reload module "' + self.module_name + '"')
+            return
+
+        try:
+            self.func = getattr(self.module, self.func_name)
+        except:
+            raise Implementation.ApiError(
+                'could not find function "' + self.func_name + '" in module "' + self.module_name + '"'
+            )

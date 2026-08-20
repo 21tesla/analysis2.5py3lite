@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,85 +52,84 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from ccp.format.general.formatIO import FormatFile
 from ccp.format.general.Constants import defaultMolCode
+from ccp.format.general.formatIO import FormatFile
+from ccp.format.mmCif.sans.CifParser import parser
 
 # Sans parser code
 from ccp.format.mmCif.sans.lexer import STARLexer
-from ccp.format.mmCif.sans.CifParser import parser
 
 # Custom data dictionary for reading mmCIF
 from ccp.format.mmCif.Util import DataDictionary_mmCIF
 
-# TODO USE THIS -> look at PDB 
+# TODO USE THIS -> look at PDB
 from ccp.format.pdb.cifCodeRedirect import redirectDict
 
 #####################
 # Class definitions #
 #####################
 
-class MMCIFGenericFile(FormatFile):
 
-  def setGeneric(self):
-    
-    self.format = 'mmCif'
-    self.defaultMolCode = defaultMolCode
-    
-    self.version = None
+class MMCIFGenericFile(FormatFile):
+    def setGeneric(self):
+
+        self.format = "mmCif"
+        self.defaultMolCode = defaultMolCode
+
+        self.version = None
+
 
 class MMCIFFile(MMCIFGenericFile):
+    """
 
-  """
-  
-  mmCIF file handling. Uses code from Dimitri Maziuk (BMRB) for parsing files, the information is then
-  extracted here to be forwarded to MMCIFFormat.py code (in ccpnmr/format/converters/)
-  
-  """
-  
-  def readGeneric(self, verbose=False):
-  
-    if verbose:
-      print("  Reading %s file %s..." % (self.format,self.name))
+    mmCIF file handling. Uses code from Dimitri Maziuk (BMRB) for parsing files, the information is then
+    extracted here to be forwarded to MMCIFFormat.py code (in ccpnmr/format/converters/)
 
-    fin = open(self.name)
-    lexer = STARLexer( fin)
-    self.mmCif = DataDictionary_mmCIF()
-    mmCifParser = parser( lexer, self.mmCif, self.mmCif)
-    mmCifParser.parse()
-    fin.close()
-    
-    #
-    # Set some general information
-    #
-    
-    self.code = self.mmCif.getPdbCode()
+    """
 
-    #mmCif.getSequenceInfo()
-    #mmCif.getBondInfo()
-    #mmCif.getCoordinateInfo()
-  
-  def convertResName(self,resName):
-  
-    resName = resName.strip()
-    
-    if redirectDict.has_key(resName):
-      resName = redirectDict[resName]
-      
-    return resName
+    def readGeneric(self, verbose=False):
 
-if __name__ == "__main__" :
-  
-  for pdbCode in ('1ieh','146d'):
-  
-    fin = open( "/Users/wim/reference/mmCif/%s.cif" % pdbCode)
-    lexer = STARLexer( fin)
-    mmCif = DataDictionary_mmCIF()
-    mmCifParser = parser( lexer, mmCif, mmCif)
-    mmCifParser.parse()
+        if verbose:
+            print("  Reading %s file %s..." % (self.format, self.name))
 
-    fin.close()
+        fin = open(self.name)
+        lexer = STARLexer(fin)
+        self.mmCif = DataDictionary_mmCIF()
+        mmCifParser = parser(lexer, self.mmCif, self.mmCif)
+        mmCifParser.parse()
+        fin.close()
 
-    mmCif.getSequenceInfo()
-    mmCif.getPdbCode()
-    mmCif.getBondInfo()
-    mmCif.getCoordinateInfo()
+        #
+        # Set some general information
+        #
+
+        self.code = self.mmCif.getPdbCode()
+
+        # mmCif.getSequenceInfo()
+        # mmCif.getBondInfo()
+        # mmCif.getCoordinateInfo()
+
+    def convertResName(self, resName):
+
+        resName = resName.strip()
+
+        if resName in redirectDict:
+            resName = redirectDict[resName]
+
+        return resName
+
+
+if __name__ == "__main__":
+    for pdbCode in ("1ieh", "146d"):
+        fin = open("/Users/wim/reference/mmCif/%s.cif" % pdbCode)
+        lexer = STARLexer(fin)
+        mmCif = DataDictionary_mmCIF()
+        mmCifParser = parser(lexer, mmCif, mmCif)
+        mmCifParser.parse()
+
+        fin.close()
+
+        mmCif.getSequenceInfo()
+        mmCif.getPdbCode()
+        mmCif.getBondInfo()
+        mmCif.getCoordinateInfo()

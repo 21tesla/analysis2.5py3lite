@@ -1,12 +1,12 @@
 # python -u $CINGROOT/python/cing/NRG/validateForCASP_NMR.py
+import os
+
+import cing
 from cing import cingPythonDir
 from cing.NRG import CASP_NMR_BASE_NAME
 from cing.NRG.PDBEntryLists import writeEntryListToFile
 from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23_BY_ENTRY
-from cing.Scripts.validateEntry import PROJECT_TYPE_CCPN
-import cing
-import os
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23_BY_ENTRY, PROJECT_TYPE_CCPN
 
 cing.verbosity = cing.verbosityDebug
 #cing.verbosity = cing.verbosityDefault

@@ -2,19 +2,20 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_Procheck.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqProcheck import PROCHECK_STR
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqProcheck import PROCHECK_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.procheck import Procheck #@UnusedImport Keep to indicate dep and proper handeling.
+    pass  #@UnusedImport Keep to indicate dep and proper handeling.
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( PROCHECK_STR, getCallerFileName() ))
     raise SkipTest(PROCHECK_STR)
@@ -71,7 +72,7 @@ class AllChecks(TestCase):
         cyanaFile = os.path.join(cingDirTestsData, "cyana", entryId + ".cyana.tgz")
         self.assertTrue(project.initCyana(cyanaFolder = cyanaFile))
         project.molecule.setRanges(ranges)
-        
+
         project.save()
         self.assertFalse(project.runProcheck(createPlots=True, runAqua=runAqua) is None)
 

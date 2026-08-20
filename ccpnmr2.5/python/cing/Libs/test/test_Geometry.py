@@ -1,7 +1,9 @@
-from cing.Libs.Geometry import violationAngle
-from cing.Libs.NTutils import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing.Libs.Geometry import violationAngle
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

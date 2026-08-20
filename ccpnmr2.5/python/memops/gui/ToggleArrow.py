@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,81 +50,80 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Frame import Frame
 
+
 class ToggleArrow(Frame):
+    def __init__(
+        self, parent, arrowSize=11, outline="#5050b0", fill="#a0a0ff", isArrowClosed=True, callback=None, *args, **kw
+    ):
 
-  def __init__(self, parent, arrowSize = 11, outline='#5050b0', fill='#a0a0ff',
-               isArrowClosed = True, callback = None, *args, **kw):
- 
-    self.arrowSize = arrowSize
-    self.isArrowClosed = isArrowClosed
-    self.callback = callback
+        self.arrowSize = arrowSize
+        self.isArrowClosed = isArrowClosed
+        self.callback = callback
 
-    apply(Frame.__init__, (self, parent) + args, kw)
+        apply(Frame.__init__, (self, parent) + args, kw)
 
-    bg = kw.get('bg')
-    if (not bg):
-      bg = kw.get('background')
-    if (not bg):
-      bg = parent.cget('bg')
-    # below does not work for some reason, instead explicitly create rectangle below
-    #self.canvas = Canvas(self, width=arrowSize, height=arrowSize, bg=bg)
-    self.canvas = Canvas(self, width=arrowSize+3, height=arrowSize+1)
-    self.canvas.grid(row=0, column=0)
+        bg = kw.get("bg")
+        if not bg:
+            bg = kw.get("background")
+        if not bg:
+            bg = parent.cget("bg")
+        # below does not work for some reason, instead explicitly create rectangle below
+        # self.canvas = Canvas(self, width=arrowSize, height=arrowSize, bg=bg)
+        self.canvas = Canvas(self, width=arrowSize + 3, height=arrowSize + 1)
+        self.canvas.grid(row=0, column=0)
 
-    # need +/-1 otherwise get line along borders
-    self.canvas.create_rectangle(-1, -1, arrowSize+3, arrowSize+1, fill=bg)
+        # need +/-1 otherwise get line along borders
+        self.canvas.create_rectangle(-1, -1, arrowSize + 3, arrowSize + 1, fill=bg)
 
-    # arbitrary coords
-    self.arrow = self.canvas.create_polygon(0, 0, 1, 0, 1, 1, fill=fill, outline=outline)
-    self.drawArrow()
+        # arbitrary coords
+        self.arrow = self.canvas.create_polygon(0, 0, 1, 0, 1, 1, fill=fill, outline=outline)
+        self.drawArrow()
 
-    self.canvas.bind('<Button-1>', self.flipState)
+        self.canvas.bind("<Button-1>", self.flipState)
 
-  def drawArrow(self):
+    def drawArrow(self):
 
-    s = self.arrowSize
-    if (self.isArrowClosed):
-      self.canvas.coords(self.arrow, 2, 0, s+2, s/2, 2, s)
-    else:
-      self.canvas.coords(self.arrow, 2, 0, s+2, 0, (s/2)+2, s)
+        s = self.arrowSize
+        if self.isArrowClosed:
+            self.canvas.coords(self.arrow, 2, 0, s + 2, s / 2, 2, s)
+        else:
+            self.canvas.coords(self.arrow, 2, 0, s + 2, 0, (s / 2) + 2, s)
 
-  def flipState(self, *event):
+    def flipState(self, *event):
 
-    self.isArrowClosed = not self.isArrowClosed
-    if (self.callback):
-      self.callback(self.isArrowClosed)
+        self.isArrowClosed = not self.isArrowClosed
+        if self.callback:
+            self.callback(self.isArrowClosed)
 
-    self.drawArrow()
+        self.drawArrow()
 
-if (__name__ == '__main__'):
 
-  from Label import Label
+if __name__ == "__main__":
+    from Label import Label
 
-  frame = None
+    frame = None
 
-  def callback(isClosed):
+    def callback(isClosed):
 
-    if (isClosed):
-      frame.grid_forget()
-    else:
-      frame.grid(row=1, column=0, columnspan=2, sticky=Tkinter.NSEW)
+        if isClosed:
+            frame.grid_forget()
+        else:
+            frame.grid(row=1, column=0, columnspan=2, sticky=Tkinter.NSEW)
 
-  root = Tkinter.Tk()
- 
-  root.grid_rowconfigure(1, weight=1)
-  root.grid_columnconfigure(1, weight=1)
+    root = Tkinter.Tk()
 
-  arrow = ToggleArrow(root, callback=callback, arrowSize=20)
-  arrow.grid(row=0, column=0, sticky=Tkinter.W)
-  label = Label(root, text='Test frame:')
-  label.grid(row=0, column=1, sticky=Tkinter.W)
+    root.grid_rowconfigure(1, weight=1)
+    root.grid_columnconfigure(1, weight=1)
 
-  frame = Frame(root, bg='green', width=300, height=300)
+    arrow = ToggleArrow(root, callback=callback, arrowSize=20)
+    arrow.grid(row=0, column=0, sticky=Tkinter.W)
+    label = Label(root, text="Test frame:")
+    label.grid(row=0, column=1, sticky=Tkinter.W)
 
-  root.mainloop()
+    frame = Frame(root, bg="green", width=300, height=300)
+
+    root.mainloop()

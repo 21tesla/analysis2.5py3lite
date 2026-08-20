@@ -63,26 +63,20 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
-import ccp.api.molecule.MolSystem
-import ccp.api.molecule.Molecule
-import ccp.api.nmr.Nmr
-import ccp.api.nmr.NmrConstraint
 import memops.api.AccessControl
 import memops.api.Implementation
 
@@ -97,9 +91,9 @@ class DangleChain(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.Dangle'
   _packageShortName = 'DANG'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'chain', 'dangleResidues', 'dangleStore', 'nmrConstraintStore', 'parent', 'root', 'shiftList', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Dangle.DangleChain
@@ -145,7 +139,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -202,7 +196,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -233,7 +227,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
     dangleResidues = dataDict.get('dangleResidues').values()
     for dangleResidue in dangleResidues:
-      if (not (dangleResidue in objsToBeDeleted)):
+      if (dangleResidue not in objsToBeDeleted):
         objsToBeDeleted.add(dangleResidue)
         objsToBeChecked.append(dangleResidue)
 
@@ -249,7 +243,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Dangle.DangleChain:   deletes
@@ -260,26 +254,26 @@ class DangleChain(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     chain = dataDict.get('chain')
-    if (chain is not None and not (chain in objsToBeDeleted)):
+    if (chain is not None and chain not in objsToBeDeleted):
       dangleChains = chain.__dict__.get('dangleChains')
       dangleChains.remove(self)
 
     nmrConstraintStore = dataDict.get('nmrConstraintStore')
-    if (nmrConstraintStore is not None and not (nmrConstraintStore in objsToBeDeleted)):
+    if (nmrConstraintStore is not None and nmrConstraintStore not in objsToBeDeleted):
       dangleChains = nmrConstraintStore.__dict__.get('dangleChains')
       dangleChains.remove(self)
 
     shiftList = dataDict.get('shiftList')
-    if (shiftList is not None and not (shiftList in objsToBeDeleted)):
+    if (shiftList is not None and shiftList not in objsToBeDeleted):
       dangleChains = shiftList.__dict__.get('dangleChains')
       dangleChains.remove(self)
 
     dangleStore = dataDict.get('dangleStore')
-    if (not (dangleStore in objsToBeDeleted)):
+    if (dangleStore not in objsToBeDeleted):
       objKey = dataDict.get('chain')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -291,7 +285,7 @@ class DangleChain(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Dangle.DangleChain
@@ -322,7 +316,7 @@ class DangleChain(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('dangleStore')
         dd = value.__dict__.get('dangleChains')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'dangleStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -389,7 +383,7 @@ class DangleChain(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -397,7 +391,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -415,7 +409,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -431,7 +425,7 @@ class DangleChain(memops.api.Implementation.DataObject):
         )
 
       oldSelves = value.__dict__.get('dangleChains')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: chain:
          non-reciprocal link chain from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -446,7 +440,7 @@ class DangleChain(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dangleChain')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: dangleResidues:
            non-reciprocal link dangleResidues from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -469,7 +463,7 @@ class DangleChain(memops.api.Implementation.DataObject):
           )
 
         oldSelves = value.__dict__.get('dangleChains')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: nmrConstraintStore:
            non-reciprocal link nmrConstraintStore from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -485,7 +479,7 @@ class DangleChain(memops.api.Implementation.DataObject):
           )
 
         oldSelves = value.__dict__.get('dangleChains')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: shiftList:
            non-reciprocal link shiftList from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -520,7 +514,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllDangleResidues(self, **conditions):
     """
     FindAll for cambridge.Dangle.DangleChain.dangleResidues
@@ -534,7 +528,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('dangleResidues').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -545,28 +539,28 @@ class DangleChain(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -577,7 +571,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstDangleResidue(self, **conditions):
     """
     FindFirst for cambridge.Dangle.DangleChain.dangleResidues
@@ -610,7 +604,7 @@ class DangleChain(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('dangleResidues').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -621,28 +615,28 @@ class DangleChain(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -651,7 +645,7 @@ class DangleChain(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Dangle.DangleChain
@@ -664,7 +658,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Dangle.DangleChain
@@ -707,7 +701,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getChain(self):
     """
     Get for cambridge.Dangle.DangleChain.chain
@@ -717,7 +711,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     return result
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDangleResidues(self):
     """
     Get for cambridge.Dangle.DangleChain.dangleResidues
@@ -726,7 +720,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('dangleResidues').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getDangleStore(self):
     """
     Get for cambridge.Dangle.DangleChain.dangleStore
@@ -738,7 +732,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Dangle.DangleChain
@@ -760,7 +754,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Dangle.DangleChain
@@ -770,7 +764,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getNmrConstraintStore(self):
     """
     Get for cambridge.Dangle.DangleChain.nmrConstraintStore
@@ -782,7 +776,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Dangle.DangleChain.parent
@@ -794,7 +788,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getShiftList(self):
     """
     Get for cambridge.Dangle.DangleChain.shiftList
@@ -804,7 +798,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newDangleResidue(self, **attrlinks):
     """
     Factory function to create cambridge.Dangle.DangleResidue
@@ -812,7 +806,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     return DangleResidue(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Dangle.DangleChain
@@ -823,7 +817,7 @@ class DangleChain(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setChain(self, value):
     """
     Set for cambridge.Dangle.DangleChain.chain
@@ -873,7 +867,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setChain:
          Link chain between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -897,7 +891,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     dataDict['chain'] = value
 
     # doNotifies
-  
+
   def setNmrConstraintStore(self, value):
     """
     Set for cambridge.Dangle.DangleChain.nmrConstraintStore
@@ -959,7 +953,7 @@ class DangleChain(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setNmrConstraintStore:
            Link nmrConstraintStore between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -991,13 +985,13 @@ class DangleChain(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNmrConstraintStore')
       if ll:
         for notify in ll:
@@ -1065,7 +1059,7 @@ class DangleChain(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setShiftList:
            Link shiftList between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1094,13 +1088,13 @@ class DangleChain(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setShiftList')
       if ll:
         for notify in ll:
@@ -1113,7 +1107,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('dangleResidues')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -1142,29 +1136,29 @@ class DangleChain(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   chain = property(getChain, setChain, None,
   r"""MolSystem chain for which prediction is made
   """)
-  
+
   dangleResidues = property(getDangleResidues,  None, None,
   r"""child link to class DangleResidue
   """)
-  
+
   dangleStore = property(getDangleStore,  None, None,
   r"""parent link
   """)
-  
+
   nmrConstraintStore = property(getNmrConstraintStore, setNmrConstraintStore, None,
   r"""Nmr ConstraintStore where derived angles should be stored as constraints
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for dangleStore
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   shiftList = property(getShiftList, setShiftList, None,
   r"""Nmr ShiftList used as input in prediction
   """)
@@ -1180,9 +1174,9 @@ class DangleResidue(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.Dangle'
   _packageShortName = 'DANG'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'numIslands', 'omegaLower', 'omegaUpper', 'omegaValue', 'packageName', 'packageShortName', 'phiLower', 'phiPsiLikelihoodMatrix', 'phiUpper', 'phiValue', 'psiLower', 'psiUpper', 'psiValue', 'qualifiedName', 'secStrucCode', 'access', 'activeAccess', 'dangleChain', 'parent', 'residue', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Dangle.DangleResidue
@@ -1235,7 +1229,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1292,7 +1286,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1323,7 +1317,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Dangle.DangleResidue:   deletes
@@ -1334,16 +1328,16 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     residue = dataDict.get('residue')
-    if (residue is not None and not (residue in objsToBeDeleted)):
+    if (residue is not None and residue not in objsToBeDeleted):
       dangleResidues = residue.__dict__.get('dangleResidues')
       dangleResidues.remove(self)
 
     dangleChain = dataDict.get('dangleChain')
-    if (not (dangleChain in objsToBeDeleted)):
+    if (dangleChain not in objsToBeDeleted):
       objKey = dataDict.get('residue')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -1355,14 +1349,14 @@ class DangleResidue(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Dangle.DangleResidue
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.Dangle.DangleResidue
@@ -1383,7 +1377,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('dangleChain')
         dd = value.__dict__.get('dangleResidues')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'dangleChain' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1794,7 +1788,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1802,7 +1796,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1820,7 +1814,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1843,7 +1837,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
         )
 
       oldSelves = value.__dict__.get('dangleResidues')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: residue:
          non-reciprocal link residue from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -1894,7 +1888,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Dangle.DangleResidue
@@ -1907,7 +1901,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Dangle.DangleResidue
@@ -1956,7 +1950,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDangleChain(self):
     """
     Get for cambridge.Dangle.DangleResidue.dangleChain
@@ -1968,7 +1962,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Dangle.DangleResidue
@@ -1992,7 +1986,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Dangle.DangleResidue
@@ -2002,7 +1996,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getNumIslands(self):
     """
     Get for cambridge.Dangle.DangleResidue.numIslands
@@ -2010,7 +2004,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numIslands')
     return result
-  
+
   def getOmegaLower(self):
     """
     Get for cambridge.Dangle.DangleResidue.omegaLower
@@ -2018,7 +2012,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('omegaLower')
     return result
-  
+
   def getOmegaUpper(self):
     """
     Get for cambridge.Dangle.DangleResidue.omegaUpper
@@ -2026,7 +2020,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('omegaUpper')
     return result
-  
+
   def getOmegaValue(self):
     """
     Get for cambridge.Dangle.DangleResidue.omegaValue
@@ -2038,7 +2032,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Dangle.DangleResidue.parent
@@ -2046,7 +2040,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('dangleChain')
     return result
-  
+
   def getPhiLower(self):
     """
     Get for cambridge.Dangle.DangleResidue.phiLower
@@ -2054,7 +2048,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('phiLower')
     return result
-  
+
   def getPhiPsiLikelihoodMatrix(self):
     """
     Get for cambridge.Dangle.DangleResidue.phiPsiLikelihoodMatrix
@@ -2063,7 +2057,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('phiPsiLikelihoodMatrix')
     result = tuple(tempVar)
     return result
-  
+
   def getPhiUpper(self):
     """
     Get for cambridge.Dangle.DangleResidue.phiUpper
@@ -2071,7 +2065,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('phiUpper')
     return result
-  
+
   def getPhiValue(self):
     """
     Get for cambridge.Dangle.DangleResidue.phiValue
@@ -2079,7 +2073,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('phiValue')
     return result
-  
+
   def getPsiLower(self):
     """
     Get for cambridge.Dangle.DangleResidue.psiLower
@@ -2087,7 +2081,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('psiLower')
     return result
-  
+
   def getPsiUpper(self):
     """
     Get for cambridge.Dangle.DangleResidue.psiUpper
@@ -2095,7 +2089,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('psiUpper')
     return result
-  
+
   def getPsiValue(self):
     """
     Get for cambridge.Dangle.DangleResidue.psiValue
@@ -2105,7 +2099,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getResidue(self):
     """
     Get for cambridge.Dangle.DangleResidue.residue
@@ -2115,7 +2109,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     return result
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSecStrucCode(self):
     """
     Get for cambridge.Dangle.DangleResidue.secStrucCode
@@ -2127,7 +2121,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Dangle.DangleResidue
@@ -2138,7 +2132,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setNumIslands(self, value):
     """
     Set for cambridge.Dangle.DangleResidue.numIslands
@@ -2196,13 +2190,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumIslands')
       if ll:
         for notify in ll:
@@ -2278,13 +2272,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setOmegaLower')
       if ll:
         for notify in ll:
@@ -2360,13 +2354,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setOmegaUpper')
       if ll:
         for notify in ll:
@@ -2442,13 +2436,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setOmegaValue')
       if ll:
         for notify in ll:
@@ -2524,13 +2518,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPhiLower')
       if ll:
         for notify in ll:
@@ -2604,13 +2598,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPhiPsiLikelihoodMatrix')
       if ll:
         for notify in ll:
@@ -2686,13 +2680,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPhiUpper')
       if ll:
         for notify in ll:
@@ -2768,13 +2762,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPhiValue')
       if ll:
         for notify in ll:
@@ -2850,13 +2844,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPsiLower')
       if ll:
         for notify in ll:
@@ -2932,13 +2926,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPsiUpper')
       if ll:
         for notify in ll:
@@ -3014,13 +3008,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPsiValue')
       if ll:
         for notify in ll:
@@ -3077,7 +3071,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('dangleChain')
       xx2 = xx1.__dict__.get('chain')
       yy1 = value.__dict__.get('chain')
-      if (not (xx2 is yy1)):
+      if (xx2 is not yy1):
         raise ApiError("""%s.setResidue:
          Link residue between objects from separate partitions
          - cambridge.Dangle.DangleChain.chain not set correctly""" % self.qualifiedName
@@ -3101,7 +3095,7 @@ class DangleResidue(memops.api.Implementation.DataObject):
     dataDict['residue'] = value
 
     # doNotifies
-  
+
   def setSecStrucCode(self, value):
     """
     Set for cambridge.Dangle.DangleResidue.secStrucCode
@@ -3176,13 +3170,13 @@ class DangleResidue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSecStrucCode')
       if ll:
         for notify in ll:
@@ -3202,19 +3196,19 @@ class DangleResidue(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   numIslands = property(getNumIslands, setNumIslands, None,
   r"""Number of predicted 'islands'
   """)
-  
+
   omegaLower = property(getOmegaLower, setOmegaLower, None,
   r"""lower omega value
   """)
-  
+
   omegaUpper = property(getOmegaUpper, setOmegaUpper, None,
   r"""upper Omega value
   """)
-  
+
   omegaValue = property(getOmegaValue, setOmegaValue, None,
   r"""predicted omega value
   """)
@@ -3222,37 +3216,37 @@ class DangleResidue(memops.api.Implementation.DataObject):
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   phiLower = property(getPhiLower, setPhiLower, None,
   r"""lower phi value
   """)
-  
+
   phiPsiLikelihoodMatrix = property(getPhiPsiLikelihoodMatrix, setPhiPsiLikelihoodMatrix, None,
   r"""Phi/psi likelihood matrix. 36*36 float matrix, packed as list.
   """)
-  
+
   phiUpper = property(getPhiUpper, setPhiUpper, None,
   r"""upper phi value
   """)
-  
+
   phiValue = property(getPhiValue, setPhiValue, None,
   r"""Predicted phi value
   """)
-  
+
   psiLower = property(getPsiLower, setPsiLower, None,
   r"""lower psi value
   """)
-  
+
   psiUpper = property(getPsiUpper, setPsiUpper, None,
   r"""upper psi value
   """)
-  
+
   psiValue = property(getPsiValue, setPsiValue, None,
   r"""predicted psi value
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   secStrucCode = property(getSecStrucCode, setSecStrucCode, None,
   r"""Secondary structure code.
   """)
@@ -3260,15 +3254,15 @@ class DangleResidue(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   dangleChain = property(getDangleChain,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for dangleChain
   """)
-  
+
   residue = property(getResidue, setResidue, None,
   r"""Residue for which angles are predicted
   """)
@@ -3287,9 +3281,9 @@ class serves as TopObject.
   _packageName = 'cambridge.Dangle'
   _packageShortName = 'DANG'
   _fieldNames = ('applicationData', 'className', 'colorScheme', 'createdBy', 'dbLocation', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'activeRepositories', 'dangleChains', 'memopsRoot', 'packageLocator', 'parent', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Dangle.DangleStore
@@ -3347,7 +3341,7 @@ class serves as TopObject.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3424,7 +3418,7 @@ class serves as TopObject.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3453,7 +3447,7 @@ class serves as TopObject.
 
     dangleChains = dataDict.get('dangleChains').values()
     for dangleChain in dangleChains:
-      if (not (dangleChain in objsToBeDeleted)):
+      if (dangleChain not in objsToBeDeleted):
         objsToBeDeleted.add(dangleChain)
         objsToBeChecked.append(dangleChain)
 
@@ -3464,7 +3458,7 @@ class serves as TopObject.
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Dangle.DangleStore:   deletes
@@ -3479,11 +3473,11 @@ class serves as TopObject.
       memopsRoot.__dict__['currentDangleStore'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3499,7 +3493,7 @@ class serves as TopObject.
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Dangle.DangleStore
@@ -3533,7 +3527,7 @@ class serves as TopObject.
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('dangleStores')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3556,7 +3550,7 @@ class serves as TopObject.
           )
 
       value = dataDict.get('colorScheme')
-      if (not (value in ['black', 'white', 'rainbow'])):
+      if (value not in ['black', 'white', 'rainbow']):
         raise ApiError("""%s.checkValid: colorScheme:
          cambridge.Dangle.ColorScheme input is not in enumeration ['black', 'white', 'rainbow']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3653,7 +3647,7 @@ class serves as TopObject.
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3764,7 +3758,7 @@ class serves as TopObject.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3772,7 +3766,7 @@ class serves as TopObject.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3790,7 +3784,7 @@ class serves as TopObject.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3806,7 +3800,7 @@ class serves as TopObject.
           )
 
         oldSelf = value.__dict__.get('dangleStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: dangleChains:
            non-reciprocal link dangleChains from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3836,7 +3830,7 @@ class serves as TopObject.
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3906,7 +3900,7 @@ class serves as TopObject.
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllDangleChains(self, **conditions):
     """
     FindAll for cambridge.Dangle.DangleStore.dangleChains
@@ -3926,7 +3920,7 @@ class serves as TopObject.
 
       currentValues = dataDict.get('dangleChains').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3937,28 +3931,28 @@ class serves as TopObject.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3971,7 +3965,7 @@ class serves as TopObject.
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstDangleChain(self, **conditions):
     """
     FindFirst for cambridge.Dangle.DangleStore.dangleChains
@@ -4013,7 +4007,7 @@ class serves as TopObject.
         currentValues = dataDict.get('dangleChains').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4024,28 +4018,28 @@ class serves as TopObject.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4054,7 +4048,7 @@ class serves as TopObject.
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Dangle.DangleStore
@@ -4069,7 +4063,7 @@ class serves as TopObject.
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Dangle.DangleStore
@@ -4096,7 +4090,7 @@ class serves as TopObject.
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getColorScheme(self):
     """
     Get for cambridge.Dangle.DangleStore.colorScheme
@@ -4106,7 +4100,7 @@ class serves as TopObject.
     return result
 
   getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
-  
+
   def getDangleChains(self):
     """
     Get for cambridge.Dangle.DangleStore.dangleChains
@@ -4118,7 +4112,7 @@ class serves as TopObject.
     tempVar = dataDict.get('dangleChains').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getDbLocation(self):
     """
     Get for cambridge.Dangle.DangleStore.dbLocation
@@ -4130,7 +4124,7 @@ class serves as TopObject.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Dangle.DangleStore
@@ -4160,7 +4154,7 @@ class serves as TopObject.
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Dangle.DangleStore
@@ -4168,7 +4162,7 @@ class serves as TopObject.
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for cambridge.Dangle.DangleStore.memopsRoot
@@ -4178,7 +4172,7 @@ class serves as TopObject.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.Dangle.DangleStore.name
@@ -4192,7 +4186,7 @@ class serves as TopObject.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Dangle.DangleStore.parent
@@ -4210,7 +4204,7 @@ class serves as TopObject.
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newDangleChain(self, **attrlinks):
     """
     Factory function to create cambridge.Dangle.DangleChain
@@ -4226,7 +4220,7 @@ class serves as TopObject.
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Dangle.DangleStore
@@ -4237,13 +4231,13 @@ class serves as TopObject.
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setColorScheme(self, value):
     """
     Set for cambridge.Dangle.DangleStore.colorScheme
     """
     dataDict = self.__dict__
-    if (not (value in ['black', 'white', 'rainbow'])):
+    if (value not in ['black', 'white', 'rainbow']):
       raise ApiError("""%s.setColorScheme:
        cambridge.Dangle.ColorScheme input is not in enumeration ['black', 'white', 'rainbow']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -4299,13 +4293,13 @@ class serves as TopObject.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setColorScheme')
       if ll:
         for notify in ll:
@@ -4313,7 +4307,7 @@ class serves as TopObject.
             notify(self)
 
   setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
-  
+
   def setDbLocation(self, value):
     """
     Set for cambridge.Dangle.DangleStore.dbLocation
@@ -4365,13 +4359,13 @@ class serves as TopObject.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDbLocation')
       if ll:
         for notify in ll:
@@ -4383,7 +4377,7 @@ class serves as TopObject.
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setName(self, value):
     """
     Set for cambridge.Dangle.DangleStore.name
@@ -4453,7 +4447,7 @@ class serves as TopObject.
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def sortedDangleChains(self):
     """
     Sorted for cambridge.Dangle.DangleStore.dangleChains
@@ -4463,7 +4457,7 @@ class serves as TopObject.
       self.load()
 
     sortdd = dataDict.get('dangleChains')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -4476,13 +4470,13 @@ class serves as TopObject.
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   colorScheme = property(getColorScheme, setColorScheme, None,
   r"""Color scheme used in Dangle
   """)
 
   createdBy = memops.api.Implementation.TopObject.createdBy
-  
+
   dbLocation = property(getDbLocation, setDbLocation, None,
   r"""Location (directory) of Dangle database files
   """)
@@ -4506,7 +4500,7 @@ class serves as TopObject.
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""Name of DangleStore. Serves as key
   """)
@@ -4522,17 +4516,17 @@ class serves as TopObject.
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   dangleChains = property(getDangleChains,  None, None,
   r"""child link to class DangleChain
   """)
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)

@@ -7,18 +7,18 @@
 #
 
 def readListCoordinateFiles(coordFilePath,fileEnd = '.pdb'):
-    
+
   fileList = []
   fileEndLen = len(fileEnd)
 
   files = os.listdir(coordFilePath)
-  
+
   for fileName in files:
     if fileName[-fileEndLen:] == fileEnd:
       fileList.append(os.path.join(coordFilePath,fileName))
-      
+
   fileList.sort()
-  
+
   return fileList
 
 #
@@ -29,14 +29,15 @@ import os
 
 from ccpnmr.format.general.Constants import ccpNmr_kw, originalFormat_kw
 
+
 class CoordinateHandler:
-  
+
   """
   For use with dataHandler classes, can also be used as standalone if self. info set correctly
   """
-  
+
   # WAS FORMERLY: readCnsCoordinates, readPseudoPdbCoordinates
-  
+
   def readCoordinateFiles(self,formatName,coordFileDir, fileEnd = '.pdb', forceNamingSystemName = None):
 
     #
@@ -51,19 +52,19 @@ class CoordinateHandler:
 
     keywds = {}
 
-    if self.presets.has_key('readCoordinates'):
+    if 'readCoordinates' in self.presets:
 
       scriptPresets = self.presets['readCoordinates']
 
-      if scriptPresets.has_key('keywds'):
+      if 'keywds' in scriptPresets:
 
         keywds = scriptPresets['keywds']
-        
+
     if forceNamingSystemName:
       keywds['forceNamingSystemName'] = forceNamingSystemName
 
     self.formatObjectDict[formatName].readCoordinates(fileList, molSystem = self.molSystem, strucGen = self.strucGen, linkAtoms = False, minimalPrompts = 1, **keywds)
-  
+
     print("  Read %d files from %s in %s format..." % (len(fileList),coordFileDir,formatName))
 
   def checkCoordinateAtomConsistency(self):
@@ -151,29 +152,29 @@ class CoordinateHandler:
       warnings.append(message)
 
     return warnings
-    
+
   def getCoordinateMappingErrors(self):
-  
+
     """
     Finds information about chains/residues/atoms that could not be mapped when importing with the FormatConverter
     """
-    
+
     appData = self.structureEnsemble.findFirstApplicationData(application=ccpNmr_kw,keyword='mappingErrors')
 
     if appData:
       mappingErrors = eval(appData.value)
-      
+
       # Extra check
       hasMappingErrors = False
       for mapKey in mappingErrors.keys():
         if mappingErrors[mapKey]:
           hasMappingErrors = True
           break
-      
+
       if not hasMappingErrors:
         mappingErrors = {}
-      
+
     else:
       mappingErrors = {}
-      
+
     return mappingErrors

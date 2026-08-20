@@ -13,7 +13,7 @@ class Test1:
         self._projectDir = projectDir
 
     def process(self):
-        
+
         rootProject = loadProject(self._projectDir)
 
         rootProject.saveModified()
@@ -26,6 +26,6 @@ if __name__ == '__main__':
 
     test.process()
 
-      
+
 
 

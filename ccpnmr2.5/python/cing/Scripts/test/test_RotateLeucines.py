@@ -2,18 +2,19 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_RotateLeucines.py
 """
-from cing import cingDirTestsData #@UnusedImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqYasara import YASARA_STR
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData  #@UnusedImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqYasara import YASARA_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.yasaraPlugin import yasaraShell #@UnusedImport needed to throw a ImportWarning so that test is handled properly.
     # A bit redundant with above line.
-    from cing.Scripts.rotateLeucines import * #@UnusedWildImport Relies on Yasara as well.
+    from cing.Scripts.rotateLeucines import *  #@UnusedWildImport Relies on Yasara as well.
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( YASARA_STR, getCallerFileName() ))
     raise SkipTest(YASARA_STR)
@@ -36,7 +37,7 @@ class AllChecks(TestCase):
         self.assertFalse( runRotateLeucines(cingDirTmpTest, inputArchiveDir, entryId, useAll = True))
     # end def
 # end class
-        
+
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug
     unittest.main()

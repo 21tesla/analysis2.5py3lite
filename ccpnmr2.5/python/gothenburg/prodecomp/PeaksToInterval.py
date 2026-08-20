@@ -13,27 +13,27 @@ def ccpnPeaksToInterval(peakList, iHalfRange=2.5, shiftScale=10, peakShapeModel=
   intensThreshold: - Float - Intensity ratio to consider a peak as influencing a shape
   intensityType: - String - 'height' or 'volume'
   """
-  
+
   from gothenburg.prodecomp.generateInterval import peak2compProcess
 
   # Check peak list is OK
-    
-  
+
+
   spectrum = peakList.dataSource
-  
+
   if spectrum.numDim != 2:
     print('ccpnPeaksToInterval failed')
     print('Input peak list was not from a 2-D experiment')
     return []
-  
+
   dataDims = spectrum.sortedDataDims()
   expDimRefs = [dd.expDim.findFirstExpDimRef() for dd in dataDims]
-  
+
   if None in expDimRefs:
     print('ccpnPeaksToInterval failed')
     print("Input peak list's experiment is missing dimension references")
     return []
-    
+
 
   if '1H' in expDimRefs[0].isotopeCodes:
     hDim = 0
@@ -51,44 +51,44 @@ def ccpnPeaksToInterval(peakList, iHalfRange=2.5, shiftScale=10, peakShapeModel=
   # nDim = 1
 
   # Get peak data
-    
+
   peakNums = []
   hDimPoints = []
   intensityVals = []
   hPpms = []
   nPpms = []
-  
+
   for peak in peakList.sortedPeaks():
     intensity = peak.findFirstPeakIntensity(intensityType=intensityType)
-  
+
     if not intensity:
       continue
-  
+
     peakDims = peak.sortedPeakDims()
     peakDimH = peakDims[hDim]
     peakDimN = peakDims[nDim]
-    
+
     peakNums.append(peak.serial)
     hDimPoints.append(peakDimH.position)
     intensityVals.append(intensity.value)
     hPpms.append(peakDimH.value)
     nPpms.append(peakDimN.value)
-  
-  
+
+
   peakData = peakNums, hDimPoints, intensityVals, hPpms, nPpms
-  
-    
+
+
   intervals0 = peak2compProcess(peakData, iHalfRange,
                                shiftScale, peakShapeModel,
                                halfWidthHalfHeight, intensThreshold)
-  
-  
+
+
   pNlst, stI, endI, comp, ppmH, ppmN = intervals0
-  
+
   intervals = []
   for i in range(len(peakNums)):
     intervals.append([i, stI[i], endI[i], comp[i], ppmH[i], ppmN[i]])
 
-  return intervals               
-  
+  return intervals
+
 

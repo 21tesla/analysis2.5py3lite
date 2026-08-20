@@ -5,9 +5,8 @@
 #   and license headers are inserted.
 # - Once a file is matched it is excluded from further checking
 # - Files that are left after all licenseInfo has been processed, are
-#   skipped, or cause a warning, depending on the parameters of the calling 
+#   skipped, or cause a warning, depending on the parameters of the calling
 #   function.
-
 
 
 # includeDirs is a list of directory names (must match exactly)
@@ -21,7 +20,7 @@ includeDirs = []
 excludeDirs = []
 
 # excludeFiles is 'all',or a list of file names (must match exactly)
-excludeFiles = ['Credits.py']
+excludeFiles = ["Credits.py"]
 
 # excludeFileMatches is a list of regular expressions matching file names
 excludeFileMatches = []
@@ -32,11 +31,11 @@ excludeFileMatches = []
 # - includeFiles is 'all', or a list of file names (must match exactly)
 # - includeFileMatches is a list of regular expressions matching file names
 # - format describes the format to be used when entering the license
-#   (i.e. how comments are delimited). It is from an enumerated list. 
+#   (i.e. how comments are delimited). It is from an enumerated list.
 #   if format is None the format is derived from the file extension
 # - author, organization, and useLicense must have a value, the rest are optional
-# - author, organization, programFunction, programType, extraContact, and 
-#   credits are strings that are entered directly in the license header 
+# - author, organization, programFunction, programType, extraContact, and
+#   credits are strings that are entered directly in the license header
 # - useLicense, stdContact, and the members of the references tuple refer to
 #   information defined elsewhere. The options are (were?):
 #     useLicense : ('GPL','LGPL','ccpn','restricted')
@@ -47,18 +46,18 @@ excludeFileMatches = []
 # - credits serve instead of or in addition to references. Both can be omitted.
 
 licenseInfo = (
- {'includeFiles':'all',
-  'includeFileMatches':[],
-  'format':None,
-  'author':'Rasmus Fogh',
-  'organization':'CCPN Project',
-  'useLicense':'LGPL',
-  'programFunction':"MetaModel implementation for CCPN data model and code generation framework",
-  'programType':None,
-  'stdContact':'ccpn',
-  'extraContact':None,
-  'references':('CCPN2002','MEMOPS2004'),
-  'credits':None
- },
+    {
+        "includeFiles": "all",
+        "includeFileMatches": [],
+        "format": None,
+        "author": "Rasmus Fogh",
+        "organization": "CCPN Project",
+        "useLicense": "LGPL",
+        "programFunction": "MetaModel implementation for CCPN data model and code generation framework",
+        "programType": None,
+        "stdContact": "ccpn",
+        "extraContact": None,
+        "references": ("CCPN2002", "MEMOPS2004"),
+        "credits": None,
+    },
 )
-

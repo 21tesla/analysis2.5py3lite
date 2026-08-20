@@ -19,14 +19,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -58,6716 +58,7776 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
-#import sets
-import traceback
-import types
-import operator
+# import sets
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
-containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
+containsWhitespace = re.compile(r"\s").search
+containsNonAlphanumeric = re.compile("[^a-zA-Z0-9_]").search
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
 import memops.api.Implementation
 
-metaPackage = memops.api.Implementation.topPackage.metaObjFromQualName('memops.AccessControl')
+metaPackage = memops.api.Implementation.topPackage.metaObjFromQualName("memops.AccessControl")
+
 
 ###############################################################################
 class AccessControlStore(memops.api.Implementation.TopObject):
-  r"""TopObject for AccessControl
-  """
-  #   from data model element memops.AccessControl.AccessControlStore revision ?
-  _metaclass = metaPackage.getElement('AccessControlStore')
-  _packageName = 'memops.AccessControl'
-  _packageShortName = 'ACCO'
-  _fieldNames = ('applicationData', 'className', 'createdBy', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'accessObjects', 'activeAccess', 'activeRepositories', 'memopsRoot', 'packageLocator', 'parent', 'root', 'topObject', 'userGroups', 'users',)
-  
-  _notifies = {'':[]}
-  
-  def __init__(self, parent, **attrlinks):
-    """
-    Constructor for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    dataDict['memopsRoot'] = parent
-    from memops.api.Implementation import MemopsRoot as importedType
-    if (not isinstance(parent, importedType)):
-      raise ApiError("""%s.__init__:
-       value is not of class memops.Implementation.MemopsRoot""" % self.qualifiedName
-       + ": %s" % (parent,)
-      )
+    r"""TopObject for AccessControl"""
 
-    if (parent.__dict__.get('isDeleted')):
-      raise ApiError("""%s.__init__:
-       called with deleted parent""" % self.qualifiedName
-      )
+    #   from data model element memops.AccessControl.AccessControlStore revision ?
+    _metaclass = metaPackage.getElement("AccessControlStore")
+    _packageName = "memops.AccessControl"
+    _packageShortName = "ACCO"
+    _fieldNames = (
+        "applicationData",
+        "className",
+        "createdBy",
+        "fieldNames",
+        "guid",
+        "inConstructor",
+        "isDeleted",
+        "isLoaded",
+        "isModifiable",
+        "isModified",
+        "isReading",
+        "lastUnlockedBy",
+        "metaclass",
+        "name",
+        "packageName",
+        "packageShortName",
+        "qualifiedName",
+        "access",
+        "accessObjects",
+        "activeAccess",
+        "activeRepositories",
+        "memopsRoot",
+        "packageLocator",
+        "parent",
+        "root",
+        "topObject",
+        "userGroups",
+        "users",
+    )
 
-    topObject = self
-    dataDict['topObject'] = topObject
-    if (attrlinks.get('isReading', False)):
-      del attrlinks['isReading']
-      dataDict['isLoaded'] = False
-      dataDict['isModified'] = False
-      dataDict['isReading'] = True
-    elif (parent.__dict__.get('isReading')):
-      dataDict['isLoaded'] = False
-      dataDict['isModified'] = False
-      dataDict['isReading'] = True
-    else:
-      dataDict['isLoaded'] = True
-      dataDict['isModified'] = True
-      dataDict['isReading'] = False
+    _notifies = {"": []}
 
-    root = dataDict.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
+    def __init__(self, parent, **attrlinks):
+        """
+        Constructor for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        dataDict["memopsRoot"] = parent
+        from memops.api.Implementation import MemopsRoot as importedType
 
-    try:
-      if (not (dataDict.get('isReading'))):
-        parent.refreshTopObjects('memops.AccessControl')
-
-      dataDict['applicationData'] = list()
-      dataDict['createdBy'] = None
-      dataDict['guid'] = None
-      dataDict['isModifiable'] = True
-      dataDict['lastUnlockedBy'] = None
-      dataDict['name'] = None
-      dataDict['access'] = None
-      dataDict['accessObjects'] = {}
-      dataDict['userGroups'] = {}
-      dataDict['users'] = {}
-      dataDict['activeRepositories'] = list()
-
-      dataDict['inConstructor'] = True
-      try:
-        
-        for key, value in attrlinks.iteritems():
-          try:
-            func = getattr(self.__class__, key).fset
-          except:
-            raise ApiError("%s: error setting %s - not a modeled attribute"
-                           % (self, key))
-          if func is None:
-            raise ApiError("%s: error setting %s - not a settable attribute"
-                           % (self, key))
-          else:
-            func(self, value)
-        del dataDict['inConstructor']
-      except:
-        print("ERROR in memops.AccessControl.AccessControlStore.__init__")
-        del dataDict['inConstructor']
-        raise
-
-      if (notIsReading):
-        childrenDict = parent.__dict__.get('accessControlStores')
-        objKey = dataDict.get('name')
-        if (objKey is None):
-          raise ApiError("""%s.__init__:
-           Key attribute or link not set (from ['name'])""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-        else:
-          if (childrenDict.get(objKey) is None):
-            childrenDict[objKey] = self
-          else:
-            raise ApiError("""%s.__init__:
-             Could not create, pre-existing object had same key""" % self.qualifiedName
-             + ": %s" % (self,)
+        if not isinstance(parent, importedType):
+            raise ApiError(
+                """%s.__init__:
+       value is not of class memops.Implementation.MemopsRoot"""
+                % self.qualifiedName
+                + ": %s" % (parent,)
             )
 
-      if (notIsReading):
-        guid = dataDict.get('guid')
-        if (guid is None):
-          guid = root.newGuid()
-          dataDict['guid'] = guid
+        if parent.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.__init__:
+       called with deleted parent"""
+                % self.qualifiedName
+            )
 
-        dd = root.__dict__.get('topObjects')
-        if (dd.get(guid) is None):
-          dd[guid] = self
+        topObject = self
+        dataDict["topObject"] = topObject
+        if attrlinks.get("isReading", False):
+            del attrlinks["isReading"]
+            dataDict["isLoaded"] = False
+            dataDict["isModified"] = False
+            dataDict["isReading"] = True
+        elif parent.__dict__.get("isReading"):
+            dataDict["isLoaded"] = False
+            dataDict["isModified"] = False
+            dataDict["isReading"] = True
         else:
-          raise ApiError("""%s.__init__:
-           Creating TopObject with preexisting guid""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            dataDict["isLoaded"] = True
+            dataDict["isModified"] = True
+            dataDict["isReading"] = False
 
-        dataDict['createdBy'] = root.__dict__.get('currentUserId')
+        root = dataDict.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
 
-      if (notOverride):
-        self.checkValid()
+        try:
+            if not (dataDict.get("isReading")):
+                parent.refreshTopObjects("memops.AccessControl")
 
-      if (notIsReading or root.__dict__.get('currentAccessControlStore') is None):
-        root.__dict__['currentAccessControlStore'] = self
+            dataDict["applicationData"] = list()
+            dataDict["createdBy"] = None
+            dataDict["guid"] = None
+            dataDict["isModifiable"] = True
+            dataDict["lastUnlockedBy"] = None
+            dataDict["name"] = None
+            dataDict["access"] = None
+            dataDict["accessObjects"] = {}
+            dataDict["userGroups"] = {}
+            dataDict["users"] = {}
+            dataDict["activeRepositories"] = list()
 
-      if (notIsReading):
-        topObject.__dict__['isModified'] = True
+            dataDict["inConstructor"] = True
+            try:
+                for key, value in attrlinks.iteritems():
+                    try:
+                        func = getattr(self.__class__, key).fset
+                    except:
+                        raise ApiError("%s: error setting %s - not a modeled attribute" % (self, key))
+                    if func is None:
+                        raise ApiError("%s: error setting %s - not a settable attribute" % (self, key))
+                    else:
+                        func(self, value)
+                del dataDict["inConstructor"]
+            except:
+                print("ERROR in memops.AccessControl.AccessControlStore.__init__")
+                del dataDict["inConstructor"]
+                raise
 
-    except:
-      import sys
-      exc_info = sys.exc_info()
-      try:
-        dataDict['inConstructor'] = True
-        self.delete()
-        del dataDict['inConstructor']
-      except:
-        print('''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state''')
-        del dataDict['inConstructor']
-      raise exc_info[1]
+            if notIsReading:
+                childrenDict = parent.__dict__.get("accessControlStores")
+                objKey = dataDict.get("name")
+                if objKey is None:
+                    raise ApiError(
+                        """%s.__init__:
+           Key attribute or link not set (from ['name'])"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+                else:
+                    if childrenDict.get(objKey) is None:
+                        childrenDict[objKey] = self
+                    else:
+                        raise ApiError(
+                            """%s.__init__:
+             Could not create, pre-existing object had same key"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
 
-    # doNotifies
+            if notIsReading:
+                guid = dataDict.get("guid")
+                if guid is None:
+                    guid = root.newGuid()
+                    dataDict["guid"] = guid
 
-    if (notOverride):
-      
-      ll = self.__class__._notifies.get('__init__')
-      if ll:
-        for notify in ll:
-          notify(self)
+                dd = root.__dict__.get("topObjects")
+                if dd.get(guid) is None:
+                    dd[guid] = self
+                else:
+                    raise ApiError(
+                        """%s.__init__:
+           Creating TopObject with preexisting guid"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-  def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
-    """
-    checkDelete for memops.AccessControl.AccessControlStore:
-       determines 
-    cascading deletes to follow from delete of object.
-       *Implementation 
-    function* - should be called only by API delete function.
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
+                dataDict["createdBy"] = root.__dict__.get("currentUserId")
 
-    objsToBeDeleted.add(self)
-    accessObjects = dataDict.get('accessObjects').values()
-    for accessObject in accessObjects:
-      if (not (accessObject in objsToBeDeleted)):
-        objsToBeDeleted.add(accessObject)
-        objsToBeChecked.append(accessObject)
+            if notOverride:
+                self.checkValid()
 
-    memopsRoot = dataDict.get('memopsRoot')
-    if (memopsRoot is not None):
-      topObject = memopsRoot.__dict__.get('topObject')
-      topObjectsToCheck.add(topObject)
+            if notIsReading or root.__dict__.get("currentAccessControlStore") is None:
+                root.__dict__["currentAccessControlStore"] = self
 
-    userGroups = dataDict.get('userGroups').values()
-    for userGroup in userGroups:
-      if (not (userGroup in objsToBeDeleted)):
-        objsToBeDeleted.add(userGroup)
-        objsToBeChecked.append(userGroup)
+            if notIsReading:
+                topObject.__dict__["isModified"] = True
 
-    users = dataDict.get('users').values()
-    for user in users:
-      if (not (user in objsToBeDeleted)):
-        objsToBeDeleted.add(user)
-        objsToBeChecked.append(user)
+        except:
+            import sys
 
-    topObject = dataDict.get('topObject')
-    topObjectsToCheck.add(topObject)
-  
-  def _singleDelete(self, objsToBeDeleted):
-    """
-    singleDelete for memops.AccessControl.AccessControlStore:   deletes
-    objects
-    *Implementation function* - will CORRUPT DATA if called outside 
-    the API delete function.
-    """
-    dataDict = self.__dict__
-    dataDict['isDeleted'] = True
-    memopsRoot = dataDict.get('memopsRoot')
-    if (self is memopsRoot.__dict__.get('currentAccessControlStore')):
-      memopsRoot.__dict__['currentAccessControlStore'] = None
+            exc_info = sys.exc_info()
+            try:
+                dataDict["inConstructor"] = True
+                self.delete()
+                del dataDict["inConstructor"]
+            except:
+                print("""WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state""")
+                del dataDict["inConstructor"]
+            raise exc_info[1]
 
-    access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
-      access.__dict__['dataObject'] = None
+        # doNotifies
 
-    memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s._singleDelete:
-         Key could not be calculated for object to be deleted""" % self.qualifiedName
-        )
-      else:
-        dd = memopsRoot.__dict__.get('accessControlStores')
-        if (self is dd.get(objKey)):
-          del dd[objKey]
+        if notOverride:
+            ll = self.__class__._notifies.get("__init__")
+            if ll:
+                for notify in ll:
+                    notify(self)
 
-    dataDict['accessObjects'] = {}
-    dataDict['userGroups'] = {}
-    dataDict['users'] = {}
+    def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
+        """
+        checkDelete for memops.AccessControl.AccessControlStore:
+           determines
+        cascading deletes to follow from delete of object.
+           *Implementation
+        function* - should be called only by API delete function.
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
 
-  addApplicationData = memops.api.Implementation.DataObject.addApplicationData
+        objsToBeDeleted.add(self)
+        accessObjects = dataDict.get("accessObjects").values()
+        for accessObject in accessObjects:
+            if accessObject not in objsToBeDeleted:
+                objsToBeDeleted.add(accessObject)
+                objsToBeChecked.append(accessObject)
 
-  backup = memops.api.Implementation.TopObject.backup
-  
-  def checkAllValid(self, complete=False):
-    """
-    CheckAllValid for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
+        memopsRoot = dataDict.get("memopsRoot")
+        if memopsRoot is not None:
+            topObject = memopsRoot.__dict__.get("topObject")
+            topObjectsToCheck.add(topObject)
 
-    self.checkValid(complete)
-    values = dataDict.get('accessObjects').values()
-    for value in values:
-      value.checkAllValid(complete)
+        userGroups = dataDict.get("userGroups").values()
+        for userGroup in userGroups:
+            if userGroup not in objsToBeDeleted:
+                objsToBeDeleted.add(userGroup)
+                objsToBeChecked.append(userGroup)
 
-    values = dataDict.get('userGroups').values()
-    for value in values:
-      value.checkAllValid(complete)
+        users = dataDict.get("users").values()
+        for user in users:
+            if user not in objsToBeDeleted:
+                objsToBeDeleted.add(user)
+                objsToBeChecked.append(user)
 
-    values = dataDict.get('users').values()
-    for value in values:
-      value.checkAllValid(complete)
+        topObject = dataDict.get("topObject")
+        topObjectsToCheck.add(topObject)
 
-  def checkValid(self, complete=False):
-    """
-    CheckValid for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.checkValid:
-       called on deleted object""" % self.qualifiedName
-      )
+    def _singleDelete(self, objsToBeDeleted):
+        """
+        singleDelete for memops.AccessControl.AccessControlStore:   deletes
+        objects
+        *Implementation function* - will CORRUPT DATA if called outside
+        the API delete function.
+        """
+        dataDict = self.__dict__
+        dataDict["isDeleted"] = True
+        memopsRoot = dataDict.get("memopsRoot")
+        if self is memopsRoot.__dict__.get("currentAccessControlStore"):
+            memopsRoot.__dict__["currentAccessControlStore"] = None
 
-    if (complete):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s.checkValid:
-         Key could not be calculated for object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-      else:
-        value = dataDict.get('memopsRoot')
-        dd = value.__dict__.get('accessControlStores')
-        if (not (self is dd.get(objKey))):
-          raise ApiError("""%s.checkValid:
-           non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+        access = dataDict.get("access")
+        if access is not None and access not in objsToBeDeleted:
+            access.__dict__["dataObject"] = None
 
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
+        memopsRoot = dataDict.get("memopsRoot")
+        if memopsRoot not in objsToBeDeleted:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s._singleDelete:
+         Key could not be calculated for object to be deleted"""
+                    % self.qualifiedName
+                )
+            else:
+                dd = memopsRoot.__dict__.get("accessControlStores")
+                if self is dd.get(objKey):
+                    del dd[objKey]
 
-      # check attributes
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+        dataDict["accessObjects"] = {}
+        dataDict["userGroups"] = {}
+        dataDict["users"] = {}
 
-      values = dataDict.get('applicationData')
-      for value in values:
-        from memops.api.Implementation import ApplicationData as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: applicationData:
-           value is not of class memops.Implementation.ApplicationData""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+    addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
-      value = dataDict.get('createdBy')
-      if (value is None):
-        raise ApiError("""%s.checkValid: createdBy:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+    backup = memops.api.Implementation.TopObject.backup
 
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: createdBy:
-         memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+    def checkAllValid(self, complete=False):
+        """
+        CheckAllValid for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
 
-      _lenValue = len(value)
-      if (_lenValue > 32):
-        raise ApiError("""%s.checkValid: createdBy:
-         memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        self.checkValid(complete)
+        values = dataDict.get("accessObjects").values()
+        for value in values:
+            value.checkAllValid(complete)
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: createdBy:
-         memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        values = dataDict.get("userGroups").values()
+        for value in values:
+            value.checkAllValid(complete)
 
-      if (not (len(value.split()) == 1)):
-        raise ApiError("""%s.checkValid: createdBy:
-         Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        values = dataDict.get("users").values()
+        for value in values:
+            value.checkAllValid(complete)
 
-      value = dataDict.get('guid')
-      if (value is None):
-        raise ApiError("""%s.checkValid: guid:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+    def checkValid(self, complete=False):
+        """
+        CheckValid for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.checkValid:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: guid:
-         memops.Implementation.GuidString input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        if complete:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s.checkValid:
+         Key could not be calculated for object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+            else:
+                value = dataDict.get("memopsRoot")
+                dd = value.__dict__.get("accessControlStores")
+                if self is not dd.get(objKey):
+                    raise ApiError(
+                        """%s.checkValid:
+           non-reciprocal parent link 'memopsRoot' from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: guid:
-         memops.Implementation.GuidString maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: guid:
-         memops.Implementation.GuidString: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            # check attributes
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: guid:
-         GuidString constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            values = dataDict.get("applicationData")
+            for value in values:
+                from memops.api.Implementation import ApplicationData as importedType
 
-      isValid = frozenset('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-').issuperset(value)
-      if (not (isValid)):
-        raise ApiError("""%s.checkValid: guid:
-         GuidString constraint value_is_url_safe violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: applicationData:
+           value is not of class memops.Implementation.ApplicationData"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
-        raise ApiError("""%s.checkValid: isModifiable:
-         memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("createdBy")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: createdBy:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      value = dataDict.get('lastUnlockedBy')
-      if (value is not None):
-        if (isinstance(value, memops.api.Implementation.String.PythonType)):
-          pass
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: createdBy:
+         memops.Implementation.Word input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 32:
+                raise ApiError(
+                    """%s.checkValid: createdBy:
+         memops.Implementation.Word maximum length is 32 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: createdBy:
+         memops.Implementation.Word: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.split()) == 1):
+                raise ApiError(
+                    """%s.checkValid: createdBy:
+         Word constraint contains_no_white_space violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = dataDict.get("guid")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: guid:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: guid:
+         memops.Implementation.GuidString input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: guid:
+         memops.Implementation.GuidString maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: guid:
+         memops.Implementation.GuidString: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: guid:
+         GuidString constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            isValid = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-").issuperset(value)
+            if not (isValid):
+                raise ApiError(
+                    """%s.checkValid: guid:
+         GuidString constraint value_is_url_safe violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = dataDict.get("isModifiable")
+            if value not in [True, False]:
+                raise ApiError(
+                    """%s.checkValid: isModifiable:
+         memops.Implementation.Boolean input is not in enumeration [True, False]"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = dataDict.get("lastUnlockedBy")
+            if value is not None:
+                if isinstance(value, memops.api.Implementation.String.PythonType):
+                    pass
+                else:
+                    raise ApiError(
+                        """%s.checkValid: lastUnlockedBy:
+           memops.Implementation.Word input is not of a valid type"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                _lenValue = len(value)
+                if _lenValue > 32:
+                    raise ApiError(
+                        """%s.checkValid: lastUnlockedBy:
+           memops.Implementation.Word maximum length is 32 violated by value"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                if _lenValue < 1:
+                    raise ApiError(
+                        """%s.checkValid: lastUnlockedBy:
+           memops.Implementation.Word: Empty string not allowed"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                if not (len(value.split()) == 1):
+                    raise ApiError(
+                        """%s.checkValid: lastUnlockedBy:
+           Word constraint contains_no_white_space violated by value"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+            value = dataDict.get("name")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: name:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = self.getQualifiedName()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            # check roles
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
+
+            value = dataDict.get("access")
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: access:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("dataObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           non-reciprocal link access from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           Link access between objects from separate partitions
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
+
+            values = dataDict.get("accessObjects").values()
+            for value in values:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: accessObjects:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("accessControlStore")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: accessObjects:
+           non-reciprocal link accessObjects from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+            value = self.getActiveAccess()
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           Link activeAccess between objects from separate partitions
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
+
+            value = dataDict.get("memopsRoot")
+            from memops.api.Implementation import MemopsRoot as importedType
+
+            if not isinstance(value, importedType):
+                raise ApiError(
+                    """%s.checkValid: memopsRoot:
+         value is not of class memops.Implementation.MemopsRoot"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = self.getPackageLocator()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: packageLocator:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            from memops.api.Implementation import PackageLocator as importedType
+
+            if not isinstance(value, importedType):
+                raise ApiError(
+                    """%s.checkValid: packageLocator:
+         value is not of class memops.Implementation.PackageLocator"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+            yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+            if xx1 is not yy1:
+                raise ApiError(
+                    """%s.checkValid: packageLocator:
+         Link packageLocator between objects from separate partitions
+         - memops.Implementation.MemopsRoot does not match"""
+                    % self.qualifiedName
+                    + ": %s:%s" % (self, value)
+                )
+
+            values = dataDict.get("userGroups").values()
+            for value in values:
+                if not isinstance(value, UserGroup):
+                    raise ApiError(
+                        """%s.checkValid: userGroups:
+           value is not of class memops.AccessControl.UserGroup"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("accessControlStore")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: userGroups:
+           non-reciprocal link userGroups from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+            values = dataDict.get("users").values()
+            for value in values:
+                if not isinstance(value, User):
+                    raise ApiError(
+                        """%s.checkValid: users:
+           value is not of class memops.AccessControl.User"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("accessControlStore")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: users:
+           non-reciprocal link users from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+        if dataDict.get("isLoaded"):
+            # check explicit class constraints
+            # check attributes
+            values = dataDict.get("applicationData")
+            for value in values:
+                value.checkAllValid(complete)
+
+            value = dataDict.get("isModifiable")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: isModifiable:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            value = dataDict.get("name")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: name:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            # check roles
+            value = dataDict.get("access")
+            values = dataDict.get("accessObjects").values()
+            value = dataDict.get("memopsRoot")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: memopsRoot:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            values = dataDict.get("userGroups").values()
+            values = dataDict.get("users").values()
         else:
-          raise ApiError("""%s.checkValid: lastUnlockedBy:
-           memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            # check unloaded TopObject
+            value = dataDict.get("guid")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: guid:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            value = dataDict.get("name")
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: name:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+    delete = memops.api.Implementation.DataObject.delete
+
+    def findAllAccessObjects(self, **conditions):
+        """
+        FindAll for memops.AccessControl.AccessControlStore.accessObjects
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("accessObjects").values()
+            result = set(currentValues)
+
+        else:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("accessObjects").values()
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "description",
+                        "name",
+                        "access",
+                        "accessControlStore",
+                        "dataObject",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
+
+    findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
+
+    def findAllUserGroups(self, **conditions):
+        """
+        FindAll for memops.AccessControl.AccessControlStore.userGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("userGroups").values()
+            result = set(currentValues)
+
+        else:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("userGroups").values()
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    def findAllUsers(self, **conditions):
+        """
+        FindAll for memops.AccessControl.AccessControlStore.users
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("users").values()
+            result = set(currentValues)
+
+        else:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("users").values()
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    def findFirstAccessObject(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.AccessControlStore.accessObjects
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("accessObjects").values()
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            objKey = conditions.get("name")
+            if objKey is not None:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                result = dataDict.get("accessObjects").get(objKey)
+
+                if nConditions <= 1:
+                    return result
+
+                elif result is None:
+                    return result
+
+                else:
+                    currentValues = set()
+                    currentValues.add(result)
+
+            else:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                currentValues = dataDict.get("accessObjects").values()
+
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "description",
+                        "name",
+                        "access",
+                        "accessControlStore",
+                        "dataObject",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
+
+    findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
+
+    def findFirstUser(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.AccessControlStore.users
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("users").values()
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            objKey = conditions.get("name")
+            if objKey is not None:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                result = dataDict.get("users").get(objKey)
+
+                if nConditions <= 1:
+                    return result
+
+                elif result is None:
+                    return result
+
+                else:
+                    currentValues = set()
+                    currentValues.add(result)
+
+            else:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                currentValues = dataDict.get("users").values()
+
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def findFirstUserGroup(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.AccessControlStore.userGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                self.load()
+
+            currentValues = dataDict.get("userGroups").values()
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            objKey = conditions.get("name")
+            if objKey is not None:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                result = dataDict.get("userGroups").get(objKey)
+
+                if nConditions <= 1:
+                    return result
+
+                elif result is None:
+                    return result
+
+                else:
+                    currentValues = set()
+                    currentValues.add(result)
+
+            else:
+                if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+                    self.load()
+
+                currentValues = dataDict.get("userGroups").values()
+
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def get(self, name):
+        """
+        GetAttr for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        return getattr(self, name)
+
+    getAccess = memops.api.Implementation.DataObject.getAccess
+
+    def getAccessObjects(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.accessObjects
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        tempVar = dataDict.get("accessObjects").values()
+        result = frozenset(tempVar)
+        return result
+
+    getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+
+    getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
+
+    getApplicationData = memops.api.Implementation.DataObject.getApplicationData
+
+    def getByKey(startObj, fullKey):
+        """
+        GetByKey for memops.AccessControl.AccessControlStore
+        """
+
+        result = None
+        if 1 != len(fullKey):
+            raise ApiError(
+                """'memops.AccessControl.AccessControlStore'.getByKey:
+       getByKey called with fullKey of wrong length. Parameters:"""
+                + ": %s:%s" % (startObj, fullKey)
+            )
+
+        objKey = fullKey[0]
+        obj1 = startObj.__dict__.get("accessControlStores").get(objKey)
+        if obj1 is None:
+            startObj.refreshTopObjects("memops.AccessControl")
+            obj1 = startObj.__dict__.get("accessControlStores").get(objKey)
+
+        result = obj1
+        return result
+
+    getByKey = staticmethod(getByKey)
+
+    getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+
+    getClassName = memops.api.Implementation.ComplexDataType.getClassName
+
+    getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
+
+    getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+
+    getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
+
+    def getFullKey(self, useGuid=False):
+        """
+        GetFullKey for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        result = list()
+
+        if useGuid:
+            result.append(dataDict.get("guid"))
+        else:
+            result.append(dataDict.get("name"))
+
+        return result
+
+    getGuid = memops.api.Implementation.TopObject.getGuid
+
+    getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
+
+    getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
+
+    getIsLoaded = memops.api.Implementation.TopObject.getIsLoaded
+
+    getIsModifiable = memops.api.Implementation.TopObject.getIsModifiable
+
+    getIsModified = memops.api.Implementation.TopObject.getIsModified
+
+    getIsReading = memops.api.Implementation.TopObject.getIsReading
+
+    getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
+
+    def getLocalKey(self):
+        """
+        GetLocalKey for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
+
+    def getMemopsRoot(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.memopsRoot
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("memopsRoot")
+        return result
+
+    getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
+
+    def getName(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.name
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
+
+    getPackageLocator = memops.api.Implementation.TopObject.getPackageLocator
+
+    getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
+
+    getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
+
+    def getParent(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.parent
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("memopsRoot")
+        return result
+
+    getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
+
+    getRoot = memops.api.Implementation.MemopsObject.getRoot
+
+    getTopObject = memops.api.Implementation.DataObject.getTopObject
+
+    def getUserGroups(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.userGroups
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        tempVar = dataDict.get("userGroups").values()
+        result = frozenset(tempVar)
+        return result
+
+    def getUsers(self):
+        """
+        Get for memops.AccessControl.AccessControlStore.users
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        tempVar = dataDict.get("users").values()
+        result = frozenset(tempVar)
+        return result
+
+    load = memops.api.Implementation.TopObject.load
+
+    loadFrom = memops.api.Implementation.TopObject.loadFrom
+
+    def newAccessObject(self, **attrlinks):
+        """
+        Factory function to create memops.AccessControl.AccessObject
+        """
+        return AccessObject(self, **attrlinks)
+
+    def newUser(self, **attrlinks):
+        """
+        Factory function to create memops.AccessControl.User
+        """
+        return User(self, **attrlinks)
+
+    def newUserGroup(self, **attrlinks):
+        """
+        Factory function to create memops.AccessControl.UserGroup
+        """
+        return UserGroup(self, **attrlinks)
+
+    removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
+
+    removeFrom = memops.api.Implementation.TopObject.removeFrom
+
+    restore = memops.api.Implementation.TopObject.restore
+
+    save = memops.api.Implementation.TopObject.save
+
+    saveTo = memops.api.Implementation.TopObject.saveTo
+
+    def set(self, name, value):
+        """
+        SetAttr for memops.AccessControl.AccessControlStore
+        """
+        dataDict = self.__dict__
+        setattr(self, name, value)
+
+    setAccess = memops.api.Implementation.DataObject.setAccess
+
+    setApplicationData = memops.api.Implementation.DataObject.setApplicationData
+
+    setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
+
+    setGuid = memops.api.Implementation.TopObject.setGuid
+
+    setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
+
+    setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
+
+    def setName(self, value):
+        """
+        Set for memops.AccessControl.AccessControlStore.name
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
         _lenValue = len(value)
-        if (_lenValue > 32):
-          raise ApiError("""%s.checkValid: lastUnlockedBy:
-           memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        if (_lenValue < 1):
-          raise ApiError("""%s.checkValid: lastUnlockedBy:
-           memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        if (not (len(value.split()) == 1)):
-          raise ApiError("""%s.checkValid: lastUnlockedBy:
-           Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-      value = dataDict.get('name')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: name:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      value = self.getQualifiedName()
-      if (value is None):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      # check roles
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
-
-      value = dataDict.get('access')
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: access:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: access:
-           non-reciprocal link access from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: access:
-           Link access between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
-
-      values = dataDict.get('accessObjects').values()
-      for value in values:
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: accessObjects:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('accessControlStore')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: accessObjects:
-           non-reciprocal link accessObjects from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-      value = self.getActiveAccess()
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           Link activeAccess between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
-
-      value = dataDict.get('memopsRoot')
-      from memops.api.Implementation import MemopsRoot as importedType
-      if (not isinstance(value, importedType)):
-        raise ApiError("""%s.checkValid: memopsRoot:
-         value is not of class memops.Implementation.MemopsRoot""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      value = self.getPackageLocator()
-      if (value is None):
-        raise ApiError("""%s.checkValid: packageLocator:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      from memops.api.Implementation import PackageLocator as importedType
-      if (not isinstance(value, importedType)):
-        raise ApiError("""%s.checkValid: packageLocator:
-         value is not of class memops.Implementation.PackageLocator""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-      yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
-        raise ApiError("""%s.checkValid: packageLocator:
-         Link packageLocator between objects from separate partitions
-         - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-         + ": %s:%s" % (self, value)
-        )
-
-      values = dataDict.get('userGroups').values()
-      for value in values:
-        if (not isinstance(value, UserGroup)):
-          raise ApiError("""%s.checkValid: userGroups:
-           value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('accessControlStore')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: userGroups:
-           non-reciprocal link userGroups from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-      values = dataDict.get('users').values()
-      for value in values:
-        if (not isinstance(value, User)):
-          raise ApiError("""%s.checkValid: users:
-           value is not of class memops.AccessControl.User""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('accessControlStore')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: users:
-           non-reciprocal link users from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-    if (dataDict.get('isLoaded')):
-      # check explicit class constraints
-      # check attributes
-      values = dataDict.get('applicationData')
-      for value in values:
-        value.checkAllValid(complete)
-
-      value = dataDict.get('isModifiable')
-      if (value is None):
-        raise ApiError("""%s.checkValid: isModifiable:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      value = dataDict.get('name')
-      if (value is None):
-        raise ApiError("""%s.checkValid: name:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      # check roles
-      value = dataDict.get('access')
-      values = dataDict.get('accessObjects').values()
-      value = dataDict.get('memopsRoot')
-      if (value is None):
-        raise ApiError("""%s.checkValid: memopsRoot:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      values = dataDict.get('userGroups').values()
-      values = dataDict.get('users').values()
-    else:
-      # check unloaded TopObject
-      value = dataDict.get('guid')
-      if (value is None):
-        raise ApiError("""%s.checkValid: guid:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      value = dataDict.get('name')
-      if (value is None):
-        raise ApiError("""%s.checkValid: name:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-  delete = memops.api.Implementation.DataObject.delete
-  
-  def findAllAccessObjects(self, **conditions):
-    """
-    FindAll for memops.AccessControl.AccessControlStore.accessObjects
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('accessObjects').values()
-      result = set(currentValues)
-
-    else:
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('accessObjects').values()
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('description', 'name', 'access', 'accessControlStore', 'dataObject',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
-
-    return result
-
-  findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
-
-  findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
-  def findAllUserGroups(self, **conditions):
-    """
-    FindAll for memops.AccessControl.AccessControlStore.userGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('userGroups').values()
-      result = set(currentValues)
-
-    else:
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('userGroups').values()
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
-
-    return result
-  
-  def findAllUsers(self, **conditions):
-    """
-    FindAll for memops.AccessControl.AccessControlStore.users
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('users').values()
-      result = set(currentValues)
-
-    else:
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('users').values()
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
-
-    return result
-  
-  def findFirstAccessObject(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.AccessControlStore.accessObjects
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('accessObjects').values()
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      objKey = conditions.get('name')
-      if (objKey is not None):
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        result = dataDict.get('accessObjects').get(objKey)
-
-        if (nConditions <= 1):
-          return result
-
-        elif (result is None):
-          return result
-
-        else:
-          currentValues = set()
-          currentValues.add(result)
-
-      else:
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        currentValues = dataDict.get('accessObjects').values()
-
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('description', 'name', 'access', 'accessControlStore', 'dataObject',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-
-  findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
-
-  findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
-  def findFirstUser(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.AccessControlStore.users
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('users').values()
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      objKey = conditions.get('name')
-      if (objKey is not None):
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        result = dataDict.get('users').get(objKey)
-
-        if (nConditions <= 1):
-          return result
-
-        elif (result is None):
-          return result
-
-        else:
-          currentValues = set()
-          currentValues.add(result)
-
-      else:
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        currentValues = dataDict.get('users').values()
-
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def findFirstUserGroup(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.AccessControlStore.userGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-        self.load()
-
-      currentValues = dataDict.get('userGroups').values()
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      objKey = conditions.get('name')
-      if (objKey is not None):
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        result = dataDict.get('userGroups').get(objKey)
-
-        if (nConditions <= 1):
-          return result
-
-        elif (result is None):
-          return result
-
-        else:
-          currentValues = set()
-          currentValues.add(result)
-
-      else:
-        if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-          self.load()
-
-        currentValues = dataDict.get('userGroups').values()
-
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def get(self, name):
-    """
-    GetAttr for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    return getattr(self, name)
-
-  getAccess = memops.api.Implementation.DataObject.getAccess
-  
-  def getAccessObjects(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.accessObjects
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    tempVar = dataDict.get('accessObjects').values()
-    result = frozenset(tempVar)
-    return result
-
-  getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-
-  getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
-
-  getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
-  def getByKey(startObj, fullKey):
-    """
-    GetByKey for memops.AccessControl.AccessControlStore
-    """
-
-    result = None
-    if (1 != len(fullKey)):
-      raise ApiError("""'memops.AccessControl.AccessControlStore'.getByKey:
-       getByKey called with fullKey of wrong length. Parameters:"""
-       + ": %s:%s" % (startObj, fullKey)
-      )
-
-    objKey = fullKey[0]
-    obj1 = startObj.__dict__.get('accessControlStores').get(objKey)
-    if (obj1 is None):
-      startObj.refreshTopObjects('memops.AccessControl')
-      obj1 = startObj.__dict__.get('accessControlStores').get(objKey)
-
-    result = obj1
-    return result
-
-  getByKey = staticmethod(getByKey)
-
-  getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-
-  getClassName = memops.api.Implementation.ComplexDataType.getClassName
-
-  getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
-
-  getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
-
-  getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
-  def getFullKey(self, useGuid=False):
-    """
-    GetFullKey for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    result = list()
-
-    if (useGuid):
-      result.append(dataDict.get('guid'))
-    else:
-      result.append(dataDict.get('name'))
-
-    return result
-
-  getGuid = memops.api.Implementation.TopObject.getGuid
-
-  getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-
-  getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-
-  getIsLoaded = memops.api.Implementation.TopObject.getIsLoaded
-
-  getIsModifiable = memops.api.Implementation.TopObject.getIsModifiable
-
-  getIsModified = memops.api.Implementation.TopObject.getIsModified
-
-  getIsReading = memops.api.Implementation.TopObject.getIsReading
-
-  getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
-  def getLocalKey(self):
-    """
-    GetLocalKey for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
-  
-  def getMemopsRoot(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.memopsRoot
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('memopsRoot')
-    return result
-
-  getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
-  def getName(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.name
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
-
-  getPackageLocator = memops.api.Implementation.TopObject.getPackageLocator
-
-  getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
-
-  getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
-  def getParent(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.parent
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('memopsRoot')
-    return result
-
-  getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-
-  getRoot = memops.api.Implementation.MemopsObject.getRoot
-
-  getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
-  def getUserGroups(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.userGroups
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    tempVar = dataDict.get('userGroups').values()
-    result = frozenset(tempVar)
-    return result
-  
-  def getUsers(self):
-    """
-    Get for memops.AccessControl.AccessControlStore.users
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    tempVar = dataDict.get('users').values()
-    result = frozenset(tempVar)
-    return result
-
-  load = memops.api.Implementation.TopObject.load
-
-  loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
-  def newAccessObject(self, **attrlinks):
-    """
-    Factory function to create memops.AccessControl.AccessObject
-    """
-    return AccessObject(self, **attrlinks)
-  
-  def newUser(self, **attrlinks):
-    """
-    Factory function to create memops.AccessControl.User
-    """
-    return User(self, **attrlinks)
-  
-  def newUserGroup(self, **attrlinks):
-    """
-    Factory function to create memops.AccessControl.UserGroup
-    """
-    return UserGroup(self, **attrlinks)
-
-  removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-
-  removeFrom = memops.api.Implementation.TopObject.removeFrom
-
-  restore = memops.api.Implementation.TopObject.restore
-
-  save = memops.api.Implementation.TopObject.save
-
-  saveTo = memops.api.Implementation.TopObject.saveTo
-  
-  def set(self, name, value):
-    """
-    SetAttr for memops.AccessControl.AccessControlStore
-    """
-    dataDict = self.__dict__
-    setattr(self, name, value)
-
-  setAccess = memops.api.Implementation.DataObject.setAccess
-
-  setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-
-  setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
-
-  setGuid = memops.api.Implementation.TopObject.setGuid
-
-  setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
-
-  setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
-  def setName(self, value):
-    """
-    Set for memops.AccessControl.AccessControlStore.name
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
-
-    _lenValue = len(value)
-    if (_lenValue > 80):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
-
-    if (_lenValue < 1):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
-
-    if (not (len(value.splitlines()) <= 1)):
-      raise ApiError("""%s.setName:
-       Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
-
-    topObject = dataDict.get('topObject')
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    currentValue = dataDict.get('name')
-    notInConstructor = not (dataDict.get('inConstructor'))
-
-    root = dataDict.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setName:
-       called on deleted object""" % self.qualifiedName
-      )
-
-    if (value == currentValue):
-      return
-
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setName:
-         cannot set name, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      if (value is None):
-        raise ApiError("""%s.setName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      pass
-
-    dataDict['name'] = value
-
-    # doNotifies
-  
-  def sortedAccessObjects(self):
-    """
-    Sorted for memops.AccessControl.AccessControlStore.accessObjects
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    sortdd = dataDict.get('accessObjects')
-    
-    ll = sortdd.keys()
-    ll.sort()
-    result = [sortdd[x] for x in ll]
-    return result
-  
-  def sortedUserGroups(self):
-    """
-    Sorted for memops.AccessControl.AccessControlStore.userGroups
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    sortdd = dataDict.get('userGroups')
-    
-    ll = sortdd.keys()
-    ll.sort()
-    result = [sortdd[x] for x in ll]
-    return result
-  
-  def sortedUsers(self):
-    """
-    Sorted for memops.AccessControl.AccessControlStore.users
-    """
-    dataDict = self.__dict__
-    if (not (dataDict.get('isLoaded') or dataDict.get('isReading'))):
-      self.load()
-
-    sortdd = dataDict.get('users')
-    
-    ll = sortdd.keys()
-    ll.sort()
-    result = [sortdd[x] for x in ll]
-    return result
-
-  toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
-
-  touch = memops.api.Implementation.TopObject.touch
-
-  applicationData = memops.api.Implementation.DataObject.applicationData
-
-  className = memops.api.Implementation.ComplexDataType.className
-
-  createdBy = memops.api.Implementation.TopObject.createdBy
-
-  fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-
-  guid = memops.api.Implementation.TopObject.guid
-
-  inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-
-  isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-
-  isLoaded = memops.api.Implementation.TopObject.isLoaded
-
-  isModifiable = memops.api.Implementation.TopObject.isModifiable
-
-  isModified = memops.api.Implementation.TopObject.isModified
-
-  isReading = memops.api.Implementation.TopObject.isReading
-
-  lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
-
-  metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
-  name = property(getName, setName, None,
-  r"""name os AccessControlStore - serves  as key
-  """)
-
-  packageName = memops.api.Implementation.ComplexDataType.packageName
-
-  packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-
-  qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-
-  access = memops.api.Implementation.DataObject.access
-  
-  accessObjects = property(getAccessObjects,  None, None,
-  r"""child link to class AccessObject
-  """)
-
-  activeAccess = memops.api.Implementation.DataObject.activeAccess
-
-  activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
-  memopsRoot = property(getMemopsRoot,  None, None,
-  r"""parent link
-  """)
-
-  packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
-  parent = property(getParent, None, None,
-  r"""link to parent object - synonym for memopsRoot
-  """)
-
-  root = memops.api.Implementation.MemopsObject.root
-
-  topObject = memops.api.Implementation.DataObject.topObject
-  
-  userGroups = property(getUserGroups,  None, None,
-  r"""child link to class UserGroup
-  """)
-  
-  users = property(getUsers,  None, None,
-  r"""child link to class User
-  """)
+        if _lenValue > 80:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line maximum length is 80 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        if not (len(value.splitlines()) <= 1):
+            raise ApiError(
+                """%s.setName:
+       Line constraint contains_no_linebreak violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        topObject = dataDict.get("topObject")
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        currentValue = dataDict.get("name")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = dataDict.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setName:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value == currentValue:
+            return
+
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setName:
+         cannot set name, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if value is None:
+                raise ApiError(
+                    """%s.setName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            pass
+
+        dataDict["name"] = value
+
+        # doNotifies
+
+    def sortedAccessObjects(self):
+        """
+        Sorted for memops.AccessControl.AccessControlStore.accessObjects
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        sortdd = dataDict.get("accessObjects")
+
+        ll = sortdd.keys()
+        ll.sort()
+        result = [sortdd[x] for x in ll]
+        return result
+
+    def sortedUserGroups(self):
+        """
+        Sorted for memops.AccessControl.AccessControlStore.userGroups
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        sortdd = dataDict.get("userGroups")
+
+        ll = sortdd.keys()
+        ll.sort()
+        result = [sortdd[x] for x in ll]
+        return result
+
+    def sortedUsers(self):
+        """
+        Sorted for memops.AccessControl.AccessControlStore.users
+        """
+        dataDict = self.__dict__
+        if not (dataDict.get("isLoaded") or dataDict.get("isReading")):
+            self.load()
+
+        sortdd = dataDict.get("users")
+
+        ll = sortdd.keys()
+        ll.sort()
+        result = [sortdd[x] for x in ll]
+        return result
+
+    toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
+
+    touch = memops.api.Implementation.TopObject.touch
+
+    applicationData = memops.api.Implementation.DataObject.applicationData
+
+    className = memops.api.Implementation.ComplexDataType.className
+
+    createdBy = memops.api.Implementation.TopObject.createdBy
+
+    fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+
+    guid = memops.api.Implementation.TopObject.guid
+
+    inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+
+    isDeleted = memops.api.Implementation.MemopsObject.isDeleted
+
+    isLoaded = memops.api.Implementation.TopObject.isLoaded
+
+    isModifiable = memops.api.Implementation.TopObject.isModifiable
+
+    isModified = memops.api.Implementation.TopObject.isModified
+
+    isReading = memops.api.Implementation.TopObject.isReading
+
+    lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
+
+    metaclass = memops.api.Implementation.ComplexDataType.metaclass
+
+    name = property(
+        getName,
+        setName,
+        None,
+        r"""name os AccessControlStore - serves  as key
+  """,
+    )
+
+    packageName = memops.api.Implementation.ComplexDataType.packageName
+
+    packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
+
+    qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+
+    access = memops.api.Implementation.DataObject.access
+
+    accessObjects = property(
+        getAccessObjects,
+        None,
+        None,
+        r"""child link to class AccessObject
+  """,
+    )
+
+    activeAccess = memops.api.Implementation.DataObject.activeAccess
+
+    activeRepositories = memops.api.Implementation.TopObject.activeRepositories
+
+    memopsRoot = property(
+        getMemopsRoot,
+        None,
+        None,
+        r"""parent link
+  """,
+    )
+
+    packageLocator = memops.api.Implementation.TopObject.packageLocator
+
+    parent = property(
+        getParent,
+        None,
+        None,
+        r"""link to parent object - synonym for memopsRoot
+  """,
+    )
+
+    root = memops.api.Implementation.MemopsObject.root
+
+    topObject = memops.api.Implementation.DataObject.topObject
+
+    userGroups = property(
+        getUserGroups,
+        None,
+        None,
+        r"""child link to class UserGroup
+  """,
+    )
+
+    users = property(
+        getUsers,
+        None,
+        None,
+        r"""child link to class User
+  """,
+    )
+
 
 ###############################################################################
 class AccessObject(memops.api.Implementation.DataObject):
-  r"""
-  """
-  #   from data model element memops.AccessControl.AccessObject revision ?
-  _metaclass = metaPackage.getElement('AccessObject')
-  _packageName = 'memops.AccessControl'
-  _packageShortName = 'ACCO'
-  _fieldNames = ('applicationData', 'className', 'description', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'accessControlStore', 'activeAccess', 'dataObject', 'parent', 'permissions', 'root', 'topObject',)
-  
-  _notifies = {'':[]}
-  
-  def __init__(self, parent, **attrlinks):
-    """
-    Constructor for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    dataDict['accessControlStore'] = parent
-    if (not isinstance(parent, AccessControlStore)):
-      raise ApiError("""%s.__init__:
-       value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-       + ": %s" % (parent,)
-      )
+    r""" """
 
-    if (parent.__dict__.get('isDeleted')):
-      raise ApiError("""%s.__init__:
-       called with deleted parent""" % self.qualifiedName
-      )
+    #   from data model element memops.AccessControl.AccessObject revision ?
+    _metaclass = metaPackage.getElement("AccessObject")
+    _packageName = "memops.AccessControl"
+    _packageShortName = "ACCO"
+    _fieldNames = (
+        "applicationData",
+        "className",
+        "description",
+        "fieldNames",
+        "inConstructor",
+        "isDeleted",
+        "metaclass",
+        "name",
+        "packageName",
+        "packageShortName",
+        "qualifiedName",
+        "access",
+        "accessControlStore",
+        "activeAccess",
+        "dataObject",
+        "parent",
+        "permissions",
+        "root",
+        "topObject",
+    )
 
-    topObject = parent.__dict__.get('topObject')
-    dataDict['topObject'] = topObject
+    _notifies = {"": []}
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-
-    if (notIsReading):
-      if (not (topObject.__dict__.get('isModifiable'))):
-        raise ApiError("""%s.__init__:
-         Storage not modifiable""" % self.qualifiedName
-         + ": %s" % (topObject,)
-        )
-
-    try:
-      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
-        parent.load()
-
-      dataDict['applicationData'] = list()
-      dataDict['description'] = None
-      dataDict['name'] = None
-      dataDict['access'] = None
-      dataDict['dataObject'] = None
-      dataDict['permissions'] = {}
-
-      dataDict['inConstructor'] = True
-      try:
-        
-        for key, value in attrlinks.iteritems():
-          try:
-            func = getattr(self.__class__, key).fset
-          except:
-            raise ApiError("%s: error setting %s - not a modeled attribute"
-                           % (self, key))
-          if func is None:
-            raise ApiError("%s: error setting %s - not a settable attribute"
-                           % (self, key))
-          else:
-            func(self, value)
-        del dataDict['inConstructor']
-      except:
-        print("ERROR in memops.AccessControl.AccessObject.__init__")
-        del dataDict['inConstructor']
-        raise
-
-      if (notIsReading):
-        childrenDict = parent.__dict__.get('accessObjects')
-        objKey = dataDict.get('name')
-        if (objKey is None):
-          raise ApiError("""%s.__init__:
-           Key attribute or link not set (from ['name'])""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-        else:
-          if (childrenDict.get(objKey) is None):
-            childrenDict[objKey] = self
-          else:
-            raise ApiError("""%s.__init__:
-             Could not create, pre-existing object had same key""" % self.qualifiedName
-             + ": %s" % (self,)
+    def __init__(self, parent, **attrlinks):
+        """
+        Constructor for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        dataDict["accessControlStore"] = parent
+        if not isinstance(parent, AccessControlStore):
+            raise ApiError(
+                """%s.__init__:
+       value is not of class memops.AccessControl.AccessControlStore"""
+                % self.qualifiedName
+                + ": %s" % (parent,)
             )
 
-      if (notOverride):
-        self.checkValid()
-
-      if (notIsReading):
-        topObject.__dict__['isModified'] = True
-
-    except:
-      import sys
-      exc_info = sys.exc_info()
-      try:
-        dataDict['inConstructor'] = True
-        self.delete()
-        del dataDict['inConstructor']
-      except:
-        print('''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state''')
-        del dataDict['inConstructor']
-      raise exc_info[1]
-
-    # doNotifies
-
-    if (notOverride):
-      
-      ll = self.__class__._notifies.get('__init__')
-      if ll:
-        for notify in ll:
-          notify(self)
-
-  def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
-    """
-    checkDelete for memops.AccessControl.AccessObject:
-       determines 
-    cascading deletes to follow from delete of object.
-       *Implementation 
-    function* - should be called only by API delete function.
-    """
-    dataDict = self.__dict__
-    objsToBeDeleted.add(self)
-    dataObject = dataDict.get('dataObject')
-    if (dataObject is not None):
-      topObject = dataObject.__dict__.get('topObject')
-      topObjectsToCheck.add(topObject)
-
-    permissions = dataDict.get('permissions').values()
-    for permission in permissions:
-      if (not (permission in objsToBeDeleted)):
-        objsToBeDeleted.add(permission)
-        objsToBeChecked.append(permission)
-
-    topObject = dataDict.get('topObject')
-    topObjectsToCheck.add(topObject)
-  
-  def _singleDelete(self, objsToBeDeleted):
-    """
-    singleDelete for memops.AccessControl.AccessObject:   deletes
-    objects
-    *Implementation function* - will CORRUPT DATA if called outside 
-    the API delete function.
-    """
-    dataDict = self.__dict__
-    dataDict['isDeleted'] = True
-    access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
-      access.__dict__['dataObject'] = None
-
-    dataObject = dataDict.get('dataObject')
-    if (dataObject is not None and not (dataObject in objsToBeDeleted)):
-      dataObject.__dict__['access'] = None
-
-    accessControlStore = dataDict.get('accessControlStore')
-    if (not (accessControlStore in objsToBeDeleted)):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s._singleDelete:
-         Key could not be calculated for object to be deleted""" % self.qualifiedName
-        )
-      else:
-        dd = accessControlStore.__dict__.get('accessObjects')
-        if (self is dd.get(objKey)):
-          del dd[objKey]
-
-  addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
-  def checkAllValid(self, complete=False):
-    """
-    CheckAllValid for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    self.checkValid(complete)
-    values = dataDict.get('permissions').values()
-    for value in values:
-      value.checkAllValid(complete)
-
-  def checkValid(self, complete=False):
-    """
-    CheckValid for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.checkValid:
-       called on deleted object""" % self.qualifiedName
-      )
-
-    if (complete):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s.checkValid:
-         Key could not be calculated for object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-      else:
-        value = dataDict.get('accessControlStore')
-        dd = value.__dict__.get('accessObjects')
-        if (not (self is dd.get(objKey))):
-          raise ApiError("""%s.checkValid:
-           non-reciprocal parent link 'accessControlStore' from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-      # check attributes
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
-
-      values = dataDict.get('applicationData')
-      for value in values:
-        from memops.api.Implementation import ApplicationData as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: applicationData:
-           value is not of class memops.Implementation.ApplicationData""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-      value = dataDict.get('description')
-      if (value is not None):
-        if (isinstance(value, memops.api.Implementation.String.PythonType)):
-          pass
-        else:
-          raise ApiError("""%s.checkValid: description:
-           memops.Implementation.String input is not of a valid type""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-      value = dataDict.get('name')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: name:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      value = self.getQualifiedName()
-      if (value is None):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      # check roles
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
-
-      value = dataDict.get('access')
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: access:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: access:
-           non-reciprocal link access from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: access:
-           Link access between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
-
-      value = dataDict.get('accessControlStore')
-      if (not isinstance(value, AccessControlStore)):
-        raise ApiError("""%s.checkValid: accessControlStore:
-         value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-      value = self.getActiveAccess()
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           Link activeAccess between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
-
-      value = dataDict.get('dataObject')
-      if (value is not None):
-        from memops.api.Implementation import DataObject as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: dataObject:
-           value is not of class memops.Implementation.DataObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('access')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: dataObject:
-           non-reciprocal link dataObject from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-      values = dataDict.get('permissions').values()
-      for value in values:
-        if (not isinstance(value, Permission)):
-          raise ApiError("""%s.checkValid: permissions:
-           value is not of class memops.AccessControl.Permission""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
-
-        oldSelf = value.__dict__.get('accessObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: permissions:
-           non-reciprocal link permissions from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-
-    # check explicit class constraints
-    # check attributes
-    values = dataDict.get('applicationData')
-    for value in values:
-      value.checkAllValid(complete)
-
-    value = dataDict.get('description')
-    value = dataDict.get('name')
-    if (value is None):
-      raise ApiError("""%s.checkValid: name:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
-
-    # check roles
-    value = dataDict.get('access')
-    value = dataDict.get('accessControlStore')
-    if (value is None):
-      raise ApiError("""%s.checkValid: accessControlStore:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
-
-    value = dataDict.get('dataObject')
-    values = dataDict.get('permissions').values()
-
-  delete = memops.api.Implementation.DataObject.delete
-
-  findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
-  def findAllPermissions(self, **conditions):
-    """
-    FindAll for memops.AccessControl.AccessObject.permissions
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('permissions').values()
-      result = set(currentValues)
-
-    else:
-      currentValues = dataDict.get('permissions').values()
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
-
-    return result
-
-  findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
-  def findFirstPermission(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.AccessObject.permissions
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('permissions').values()
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      ll = list()
-      objKey = conditions.get('userGroup')
-      ll.append(objKey)
-      if (objKey is not None):
-        objKey = conditions.get('permissionClass')
-        ll.append(objKey)
-        if (objKey is not None):
-          objKey = conditions.get('opType')
-          ll.append(objKey)
-          if (objKey is not None):
-            objKey = conditions.get('roleName')
-            ll.append(objKey)
-            if (objKey is not None):
-              objKey = tuple(ll)
-
-      if (objKey is not None):
-        result = dataDict.get('permissions').get(objKey)
-
-        if (nConditions <= 4):
-          return result
-
-        elif (result is None):
-          return result
-
-        else:
-          currentValues = set()
-          currentValues.add(result)
-
-      else:
-        currentValues = dataDict.get('permissions').values()
-
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def get(self, name):
-    """
-    GetAttr for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    return getattr(self, name)
-
-  getAccess = memops.api.Implementation.DataObject.getAccess
-  
-  def getAccessControlStore(self):
-    """
-    Get for memops.AccessControl.AccessObject.accessControlStore
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
-
-  getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-
-  getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
-  def getByKey(startObj, fullKey):
-    """
-    GetByKey for memops.AccessControl.AccessObject
-    """
-
-    result = None
-    if (startObj.__class__.__name__ == 'MemopsRoot'):
-      if (2 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.AccessObject'.getByKey:
-         getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
-
-      obj0 = startObj
-      objKey = fullKey[0]
-      obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
-      if (obj1 is None):
-        obj0.refreshTopObjects('memops.AccessControl')
-        obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
-
-    else:
-      if (1 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.AccessObject'.getByKey:
-         getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
-
-      obj1 = startObj
-
-    if (obj1 is not None):
-      if (not (obj1.__dict__.get('isLoaded'))):
-        obj1.load()
-
-      objKey = fullKey[-1]
-      obj2 = obj1.__dict__.get('accessObjects').get(objKey)
-      result = obj2
-
-    return result
-
-  getByKey = staticmethod(getByKey)
-
-  getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-
-  getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
-  def getDataObject(self):
-    """
-    Get for memops.AccessControl.AccessObject.dataObject
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('dataObject')
-    return result
-  
-  def getDescription(self):
-    """
-    Get for memops.AccessControl.AccessObject.description
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('description')
-    return result
-
-  getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
-
-  getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
-  def getFullKey(self, useGuid=False):
-    """
-    GetFullKey for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    result = list()
-
-    obj1 = dataDict.get('accessControlStore')
-
-    if (useGuid):
-      result.append(obj1.__dict__.get('guid'))
-    else:
-      result.append(obj1.__dict__.get('name'))
-
-    result.append(dataDict.get('name'))
-
-    return result
-
-  getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-
-  getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
-  def getLocalKey(self):
-    """
-    GetLocalKey for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
-
-  getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
-  def getName(self):
-    """
-    Get for memops.AccessControl.AccessObject.name
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
-
-  getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
-
-  getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
-  def getParent(self):
-    """
-    Get for memops.AccessControl.AccessObject.parent
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
-  
-  def getPermissions(self):
-    """
-    Get for memops.AccessControl.AccessObject.permissions
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('permissions').values()
-    result = frozenset(tempVar)
-    return result
-
-  getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-
-  getRoot = memops.api.Implementation.MemopsObject.getRoot
-
-  getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
-  def newPermission(self, **attrlinks):
-    """
-    Factory function to create memops.AccessControl.Permission
-    """
-    return Permission(self, **attrlinks)
-
-  removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
-  def set(self, name, value):
-    """
-    SetAttr for memops.AccessControl.AccessObject
-    """
-    dataDict = self.__dict__
-    setattr(self, name, value)
-
-  setAccess = memops.api.Implementation.DataObject.setAccess
-
-  setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
-  def setDataObject(self, value):
-    """
-    Set for memops.AccessControl.AccessObject.dataObject
-    """
-    dataDict = self.__dict__
-    if (value is not None):
-      from memops.api.Implementation import DataObject as importedType
-      if (not isinstance(value, importedType)):
-        raise ApiError("""%s.setDataObject:
-         value is not of class memops.Implementation.DataObject""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
-
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('dataObject')
-    notInConstructor = not (dataDict.get('inConstructor'))
-
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      root = dataDict.get('topObject').__dict__.get('memopsRoot')
-      root.refreshTopObjects('memops.AccessControl')
-      tobjList = set(root.__dict__.get('accessControlStores').values())
-      for tobj in tobjList:
-        if (not (tobj.__dict__.get('isLoaded'))):
-          tobj.load()
-
-    topObjectsToCheck = None
-    if (notIsReading):
-      topObjectsToCheck = set()
-      if (notInConstructor):
-        topObject = dataDict.get('topObject')
-        topObjectsToCheck.add(topObject)
-
-      if (value is not None):
-        topObject = value.__dict__.get('topObject')
-        topObjectsToCheck.add(topObject)
-        oldSelf = value.__dict__.get('access')
-        if (oldSelf is not None):
-          if (notIsReading):
-            topObject = oldSelf.__dict__.get('topObject')
+        if parent.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.__init__:
+       called with deleted parent"""
+                % self.qualifiedName
+            )
+
+        topObject = parent.__dict__.get("topObject")
+        dataDict["topObject"] = topObject
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+
+        if notIsReading:
+            if not (topObject.__dict__.get("isModifiable")):
+                raise ApiError(
+                    """%s.__init__:
+         Storage not modifiable"""
+                    % self.qualifiedName
+                    + ": %s" % (topObject,)
+                )
+
+        try:
+            if not (parent.__dict__.get("isLoaded") or parent.__dict__.get("isReading")):
+                parent.load()
+
+            dataDict["applicationData"] = list()
+            dataDict["description"] = None
+            dataDict["name"] = None
+            dataDict["access"] = None
+            dataDict["dataObject"] = None
+            dataDict["permissions"] = {}
+
+            dataDict["inConstructor"] = True
+            try:
+                for key, value in attrlinks.iteritems():
+                    try:
+                        func = getattr(self.__class__, key).fset
+                    except:
+                        raise ApiError("%s: error setting %s - not a modeled attribute" % (self, key))
+                    if func is None:
+                        raise ApiError("%s: error setting %s - not a settable attribute" % (self, key))
+                    else:
+                        func(self, value)
+                del dataDict["inConstructor"]
+            except:
+                print("ERROR in memops.AccessControl.AccessObject.__init__")
+                del dataDict["inConstructor"]
+                raise
+
+            if notIsReading:
+                childrenDict = parent.__dict__.get("accessObjects")
+                objKey = dataDict.get("name")
+                if objKey is None:
+                    raise ApiError(
+                        """%s.__init__:
+           Key attribute or link not set (from ['name'])"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+                else:
+                    if childrenDict.get(objKey) is None:
+                        childrenDict[objKey] = self
+                    else:
+                        raise ApiError(
+                            """%s.__init__:
+             Could not create, pre-existing object had same key"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
+
+            if notOverride:
+                self.checkValid()
+
+            if notIsReading:
+                topObject.__dict__["isModified"] = True
+
+        except:
+            import sys
+
+            exc_info = sys.exc_info()
+            try:
+                dataDict["inConstructor"] = True
+                self.delete()
+                del dataDict["inConstructor"]
+            except:
+                print("""WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state""")
+                del dataDict["inConstructor"]
+            raise exc_info[1]
+
+        # doNotifies
+
+        if notOverride:
+            ll = self.__class__._notifies.get("__init__")
+            if ll:
+                for notify in ll:
+                    notify(self)
+
+    def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
+        """
+        checkDelete for memops.AccessControl.AccessObject:
+           determines
+        cascading deletes to follow from delete of object.
+           *Implementation
+        function* - should be called only by API delete function.
+        """
+        dataDict = self.__dict__
+        objsToBeDeleted.add(self)
+        dataObject = dataDict.get("dataObject")
+        if dataObject is not None:
+            topObject = dataObject.__dict__.get("topObject")
             topObjectsToCheck.add(topObject)
-          else:
-            raise ApiError("""%s.setDataObject:
-             Read link incompatible with pre-existing link""" % self.qualifiedName
-             + ": %s" % (self,)
-            )
 
-      if (currentValue is not None):
-        topObject = currentValue.__dict__.get('topObject')
+        permissions = dataDict.get("permissions").values()
+        for permission in permissions:
+            if permission not in objsToBeDeleted:
+                objsToBeDeleted.add(permission)
+                objsToBeChecked.append(permission)
+
+        topObject = dataDict.get("topObject")
         topObjectsToCheck.add(topObject)
 
-      for topObjectToCheck in topObjectsToCheck:
-        if (not (topObjectToCheck.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setDataObject:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObjectToCheck,)
-          )
+    def _singleDelete(self, objsToBeDeleted):
+        """
+        singleDelete for memops.AccessControl.AccessObject:   deletes
+        objects
+        *Implementation function* - will CORRUPT DATA if called outside
+        the API delete function.
+        """
+        dataDict = self.__dict__
+        dataDict["isDeleted"] = True
+        access = dataDict.get("access")
+        if access is not None and access not in objsToBeDeleted:
+            access.__dict__["dataObject"] = None
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setDataObject:
-       called on deleted object""" % self.qualifiedName
-      )
+        dataObject = dataDict.get("dataObject")
+        if dataObject is not None and dataObject not in objsToBeDeleted:
+            dataObject.__dict__["access"] = None
 
-    if (value is not None):
-      if (value.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setDataObject:
-         called with deleted value""" % self.qualifiedName
-        )
+        accessControlStore = dataDict.get("accessControlStore")
+        if accessControlStore not in objsToBeDeleted:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s._singleDelete:
+         Key could not be calculated for object to be deleted"""
+                    % self.qualifiedName
+                )
+            else:
+                dd = accessControlStore.__dict__.get("accessObjects")
+                if self is dd.get(objKey):
+                    del dd[objKey]
 
-    if (value == currentValue):
-      return
+    addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
-    if (notOverride):
-      if (value is not None):
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setDataObject:
+    def checkAllValid(self, complete=False):
+        """
+        CheckAllValid for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        self.checkValid(complete)
+        values = dataDict.get("permissions").values()
+        for value in values:
+            value.checkAllValid(complete)
+
+    def checkValid(self, complete=False):
+        """
+        CheckValid for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.checkValid:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if complete:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s.checkValid:
+         Key could not be calculated for object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+            else:
+                value = dataDict.get("accessControlStore")
+                dd = value.__dict__.get("accessObjects")
+                if self is not dd.get(objKey):
+                    raise ApiError(
+                        """%s.checkValid:
+           non-reciprocal parent link 'accessControlStore' from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+            # check attributes
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
+
+            values = dataDict.get("applicationData")
+            for value in values:
+                from memops.api.Implementation import ApplicationData as importedType
+
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: applicationData:
+           value is not of class memops.Implementation.ApplicationData"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+            value = dataDict.get("description")
+            if value is not None:
+                if isinstance(value, memops.api.Implementation.String.PythonType):
+                    pass
+                else:
+                    raise ApiError(
+                        """%s.checkValid: description:
+           memops.Implementation.String input is not of a valid type"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+            value = dataDict.get("name")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: name:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = self.getQualifiedName()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            # check roles
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
+
+            value = dataDict.get("access")
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: access:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("dataObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           non-reciprocal link access from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           Link access between objects from separate partitions
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
+
+            value = dataDict.get("accessControlStore")
+            if not isinstance(value, AccessControlStore):
+                raise ApiError(
+                    """%s.checkValid: accessControlStore:
+         value is not of class memops.AccessControl.AccessControlStore"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            value = self.getActiveAccess()
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           Link activeAccess between objects from separate partitions
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
+
+            value = dataDict.get("dataObject")
+            if value is not None:
+                from memops.api.Implementation import DataObject as importedType
+
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: dataObject:
+           value is not of class memops.Implementation.DataObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("access")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: dataObject:
+           non-reciprocal link dataObject from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+            values = dataDict.get("permissions").values()
+            for value in values:
+                if not isinstance(value, Permission):
+                    raise ApiError(
+                        """%s.checkValid: permissions:
+           value is not of class memops.AccessControl.Permission"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("accessObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: permissions:
+           non-reciprocal link permissions from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+        # check explicit class constraints
+        # check attributes
+        values = dataDict.get("applicationData")
+        for value in values:
+            value.checkAllValid(complete)
+
+        value = dataDict.get("description")
+        value = dataDict.get("name")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: name:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
+
+        # check roles
+        value = dataDict.get("access")
+        value = dataDict.get("accessControlStore")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: accessControlStore:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
+
+        value = dataDict.get("dataObject")
+        values = dataDict.get("permissions").values()
+
+    delete = memops.api.Implementation.DataObject.delete
+
+    findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
+
+    def findAllPermissions(self, **conditions):
+        """
+        FindAll for memops.AccessControl.AccessObject.permissions
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("permissions").values()
+            result = set(currentValues)
+
+        else:
+            currentValues = dataDict.get("permissions").values()
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "opType",
+                        "permission",
+                        "permissionClass",
+                        "roleName",
+                        "access",
+                        "accessObject",
+                        "userGroup",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
+
+    def findFirstPermission(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.AccessObject.permissions
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("permissions").values()
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            ll = list()
+            objKey = conditions.get("userGroup")
+            ll.append(objKey)
+            if objKey is not None:
+                objKey = conditions.get("permissionClass")
+                ll.append(objKey)
+                if objKey is not None:
+                    objKey = conditions.get("opType")
+                    ll.append(objKey)
+                    if objKey is not None:
+                        objKey = conditions.get("roleName")
+                        ll.append(objKey)
+                        if objKey is not None:
+                            objKey = tuple(ll)
+
+            if objKey is not None:
+                result = dataDict.get("permissions").get(objKey)
+
+                if nConditions <= 4:
+                    return result
+
+                elif result is None:
+                    return result
+
+                else:
+                    currentValues = set()
+                    currentValues.add(result)
+
+            else:
+                currentValues = dataDict.get("permissions").values()
+
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "opType",
+                        "permission",
+                        "permissionClass",
+                        "roleName",
+                        "access",
+                        "accessObject",
+                        "userGroup",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def get(self, name):
+        """
+        GetAttr for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        return getattr(self, name)
+
+    getAccess = memops.api.Implementation.DataObject.getAccess
+
+    def getAccessControlStore(self):
+        """
+        Get for memops.AccessControl.AccessObject.accessControlStore
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
+
+    getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+
+    getApplicationData = memops.api.Implementation.DataObject.getApplicationData
+
+    def getByKey(startObj, fullKey):
+        """
+        GetByKey for memops.AccessControl.AccessObject
+        """
+
+        result = None
+        if startObj.__class__.__name__ == "MemopsRoot":
+            if 2 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.AccessObject'.getByKey:
+         getByKey called with fullKey of wrong length. Parameters:"""
+                    + ": %s:%s" % (startObj, fullKey)
+                )
+
+            obj0 = startObj
+            objKey = fullKey[0]
+            obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
+            if obj1 is None:
+                obj0.refreshTopObjects("memops.AccessControl")
+                obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
+
+        else:
+            if 1 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.AccessObject'.getByKey:
+         getByKey called with fullKey of wrong length. Parameters:"""
+                    + ": %s:%s" % (startObj, fullKey)
+                )
+
+            obj1 = startObj
+
+        if obj1 is not None:
+            if not (obj1.__dict__.get("isLoaded")):
+                obj1.load()
+
+            objKey = fullKey[-1]
+            obj2 = obj1.__dict__.get("accessObjects").get(objKey)
+            result = obj2
+
+        return result
+
+    getByKey = staticmethod(getByKey)
+
+    getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+
+    getClassName = memops.api.Implementation.ComplexDataType.getClassName
+
+    def getDataObject(self):
+        """
+        Get for memops.AccessControl.AccessObject.dataObject
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("dataObject")
+        return result
+
+    def getDescription(self):
+        """
+        Get for memops.AccessControl.AccessObject.description
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("description")
+        return result
+
+    getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+
+    getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
+
+    def getFullKey(self, useGuid=False):
+        """
+        GetFullKey for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        result = list()
+
+        obj1 = dataDict.get("accessControlStore")
+
+        if useGuid:
+            result.append(obj1.__dict__.get("guid"))
+        else:
+            result.append(obj1.__dict__.get("name"))
+
+        result.append(dataDict.get("name"))
+
+        return result
+
+    getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
+
+    getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
+
+    def getLocalKey(self):
+        """
+        GetLocalKey for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
+
+    getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
+
+    def getName(self):
+        """
+        Get for memops.AccessControl.AccessObject.name
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
+
+    getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
+
+    getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
+
+    def getParent(self):
+        """
+        Get for memops.AccessControl.AccessObject.parent
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
+
+    def getPermissions(self):
+        """
+        Get for memops.AccessControl.AccessObject.permissions
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("permissions").values()
+        result = frozenset(tempVar)
+        return result
+
+    getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
+
+    getRoot = memops.api.Implementation.MemopsObject.getRoot
+
+    getTopObject = memops.api.Implementation.DataObject.getTopObject
+
+    def newPermission(self, **attrlinks):
+        """
+        Factory function to create memops.AccessControl.Permission
+        """
+        return Permission(self, **attrlinks)
+
+    removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
+
+    def set(self, name, value):
+        """
+        SetAttr for memops.AccessControl.AccessObject
+        """
+        dataDict = self.__dict__
+        setattr(self, name, value)
+
+    setAccess = memops.api.Implementation.DataObject.setAccess
+
+    setApplicationData = memops.api.Implementation.DataObject.setApplicationData
+
+    def setDataObject(self, value):
+        """
+        Set for memops.AccessControl.AccessObject.dataObject
+        """
+        dataDict = self.__dict__
+        if value is not None:
+            from memops.api.Implementation import DataObject as importedType
+
+            if not isinstance(value, importedType):
+                raise ApiError(
+                    """%s.setDataObject:
+         value is not of class memops.Implementation.DataObject"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("dataObject")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            root = dataDict.get("topObject").__dict__.get("memopsRoot")
+            root.refreshTopObjects("memops.AccessControl")
+            tobjList = set(root.__dict__.get("accessControlStores").values())
+            for tobj in tobjList:
+                if not (tobj.__dict__.get("isLoaded")):
+                    tobj.load()
+
+        topObjectsToCheck = None
+        if notIsReading:
+            topObjectsToCheck = set()
+            if notInConstructor:
+                topObject = dataDict.get("topObject")
+                topObjectsToCheck.add(topObject)
+
+            if value is not None:
+                topObject = value.__dict__.get("topObject")
+                topObjectsToCheck.add(topObject)
+                oldSelf = value.__dict__.get("access")
+                if oldSelf is not None:
+                    if notIsReading:
+                        topObject = oldSelf.__dict__.get("topObject")
+                        topObjectsToCheck.add(topObject)
+                    else:
+                        raise ApiError(
+                            """%s.setDataObject:
+             Read link incompatible with pre-existing link"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
+
+            if currentValue is not None:
+                topObject = currentValue.__dict__.get("topObject")
+                topObjectsToCheck.add(topObject)
+
+            for topObjectToCheck in topObjectsToCheck:
+                if not (topObjectToCheck.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setDataObject:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObjectToCheck,)
+                    )
+
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setDataObject:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value is not None:
+            if value.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setDataObject:
+         called with deleted value"""
+                    % self.qualifiedName
+                )
+
+        if value == currentValue:
+            return
+
+        if notOverride:
+            if value is not None:
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setDataObject:
            Link dataObject between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    if (currentValue is not None):
-      currentValue.__dict__['access'] = None
+        if currentValue is not None:
+            currentValue.__dict__["access"] = None
 
-    if (value is not None):
-      oldSelf = value.__dict__.get('access')
-      if (oldSelf is not None):
-        oldSelf.__dict__['dataObject'] = None
+        if value is not None:
+            oldSelf = value.__dict__.get("access")
+            if oldSelf is not None:
+                oldSelf.__dict__["dataObject"] = None
 
-      value.__dict__['access'] = self
+            value.__dict__["access"] = self
 
-    dataDict['dataObject'] = value
-    if (notIsReading):
-      for topObjectModify in topObjectsToCheck:
-        topObjectModify.__dict__['isModified'] = True
+        dataDict["dataObject"] = value
+        if notIsReading:
+            for topObjectModify in topObjectsToCheck:
+                topObjectModify.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setDataObject')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def setDescription(self, value):
-    """
-    Set for memops.AccessControl.AccessObject.description
-    """
-    dataDict = self.__dict__
-    if (value is not None):
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.setDescription:
-         memops.Implementation.String input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('description')
-    notInConstructor = not (dataDict.get('inConstructor'))
+            ll = _notifies.get("setDataObject")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setDescription:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+    def setDescription(self, value):
+        """
+        Set for memops.AccessControl.AccessObject.description
+        """
+        dataDict = self.__dict__
+        if value is not None:
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.setDescription:
+         memops.Implementation.String input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setDescription:
-       called on deleted object""" % self.qualifiedName
-      )
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("description")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (value == currentValue):
-      return
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setDescription:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    if (notOverride):
-      pass
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setDescription:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    dataDict['description'] = value
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        if value == currentValue:
+            return
 
-    # doNotifies
+        if notOverride:
+            pass
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setDescription')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        dataDict["description"] = value
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-  def setName(self, value):
-    """
-    Set for memops.AccessControl.AccessObject.name
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        # doNotifies
 
-    _lenValue = len(value)
-    if (_lenValue > 80):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    if (not (len(value.splitlines()) <= 1)):
-      raise ApiError("""%s.setName:
-       Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll = _notifies.get("setDescription")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('name')
-    notInConstructor = not (dataDict.get('inConstructor'))
+    def setName(self, value):
+        """
+        Set for memops.AccessControl.AccessObject.name
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setName:
-       called on deleted object""" % self.qualifiedName
-      )
+        _lenValue = len(value)
+        if _lenValue > 80:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line maximum length is 80 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (value == currentValue):
-      return
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setName:
-         cannot set name, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if not (len(value.splitlines()) <= 1):
+            raise ApiError(
+                """%s.setName:
+       Line constraint contains_no_linebreak violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-      if (value is None):
-        raise ApiError("""%s.setName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("name")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-      pass
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setName:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    dataDict['name'] = value
+        if value == currentValue:
+            return
 
-    # doNotifies
-  
-  def sortedPermissions(self):
-    """
-    Sorted for memops.AccessControl.AccessObject.permissions
-    """
-    dataDict = self.__dict__
-    sortdd = dataDict.get('permissions')
-    
-    ll = sortdd.keys()
-    ll.sort()
-    result = [sortdd[x] for x in ll]
-    return result
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setName:
+         cannot set name, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-  toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
+            if value is None:
+                raise ApiError(
+                    """%s.setName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-  applicationData = memops.api.Implementation.DataObject.applicationData
+            pass
 
-  className = memops.api.Implementation.ComplexDataType.className
-  
-  description = property(getDescription, setDescription, None,
-  r"""
-  """)
+        dataDict["name"] = value
 
-  fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+        # doNotifies
 
-  inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+    def sortedPermissions(self):
+        """
+        Sorted for memops.AccessControl.AccessObject.permissions
+        """
+        dataDict = self.__dict__
+        sortdd = dataDict.get("permissions")
 
-  isDeleted = memops.api.Implementation.MemopsObject.isDeleted
+        ll = sortdd.keys()
+        ll.sort()
+        result = [sortdd[x] for x in ll]
+        return result
 
-  metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
-  name = property(getName, setName, None,
-  r"""
-  """)
+    toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
-  packageName = memops.api.Implementation.ComplexDataType.packageName
+    applicationData = memops.api.Implementation.DataObject.applicationData
 
-  packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
+    className = memops.api.Implementation.ComplexDataType.className
 
-  qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+    description = property(
+        getDescription,
+        setDescription,
+        None,
+        r"""
+  """,
+    )
 
-  access = memops.api.Implementation.DataObject.access
-  
-  accessControlStore = property(getAccessControlStore,  None, None,
-  r"""parent link
-  """)
+    fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
-  activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
-  dataObject = property(getDataObject, setDataObject, None,
-  r"""DataObject that is controlled by AccessObject
-  """)
-  
-  parent = property(getParent, None, None,
-  r"""link to parent object - synonym for accessControlStore
-  """)
-  
-  permissions = property(getPermissions,  None, None,
-  r"""child link to class Permission
-  """)
+    inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
-  root = memops.api.Implementation.MemopsObject.root
+    isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
-  topObject = memops.api.Implementation.DataObject.topObject
+    metaclass = memops.api.Implementation.ComplexDataType.metaclass
+
+    name = property(
+        getName,
+        setName,
+        None,
+        r"""
+  """,
+    )
+
+    packageName = memops.api.Implementation.ComplexDataType.packageName
+
+    packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
+
+    qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+
+    access = memops.api.Implementation.DataObject.access
+
+    accessControlStore = property(
+        getAccessControlStore,
+        None,
+        None,
+        r"""parent link
+  """,
+    )
+
+    activeAccess = memops.api.Implementation.DataObject.activeAccess
+
+    dataObject = property(
+        getDataObject,
+        setDataObject,
+        None,
+        r"""DataObject that is controlled by AccessObject
+  """,
+    )
+
+    parent = property(
+        getParent,
+        None,
+        None,
+        r"""link to parent object - synonym for accessControlStore
+  """,
+    )
+
+    permissions = property(
+        getPermissions,
+        None,
+        None,
+        r"""child link to class Permission
+  """,
+    )
+
+    root = memops.api.Implementation.MemopsObject.root
+
+    topObject = memops.api.Implementation.DataObject.topObject
+
 
 ###############################################################################
 class Permission(memops.api.Implementation.DataObject):
-  r"""
-  """
-  #   from data model element memops.AccessControl.Permission revision ?
-  _metaclass = metaPackage.getElement('Permission')
-  _packageName = 'memops.AccessControl'
-  _packageShortName = 'ACCO'
-  _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'opType', 'packageName', 'packageShortName', 'permission', 'permissionClass', 'qualifiedName', 'roleName', 'access', 'accessObject', 'activeAccess', 'parent', 'root', 'topObject', 'userGroup',)
-  
-  _notifies = {'':[]}
-  
-  def __init__(self, parent, **attrlinks):
-    """
-    Constructor for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    dataDict['accessObject'] = parent
-    if (not isinstance(parent, AccessObject)):
-      raise ApiError("""%s.__init__:
-       value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-       + ": %s" % (parent,)
-      )
+    r""" """
 
-    if (parent.__dict__.get('isDeleted')):
-      raise ApiError("""%s.__init__:
-       called with deleted parent""" % self.qualifiedName
-      )
+    #   from data model element memops.AccessControl.Permission revision ?
+    _metaclass = metaPackage.getElement("Permission")
+    _packageName = "memops.AccessControl"
+    _packageShortName = "ACCO"
+    _fieldNames = (
+        "applicationData",
+        "className",
+        "fieldNames",
+        "inConstructor",
+        "isDeleted",
+        "metaclass",
+        "opType",
+        "packageName",
+        "packageShortName",
+        "permission",
+        "permissionClass",
+        "qualifiedName",
+        "roleName",
+        "access",
+        "accessObject",
+        "activeAccess",
+        "parent",
+        "root",
+        "topObject",
+        "userGroup",
+    )
 
-    topObject = parent.__dict__.get('topObject')
-    dataDict['topObject'] = topObject
+    _notifies = {"": []}
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-
-    if (notIsReading):
-      if (not (topObject.__dict__.get('isModifiable'))):
-        raise ApiError("""%s.__init__:
-         Storage not modifiable""" % self.qualifiedName
-         + ": %s" % (topObject,)
-        )
-
-    try:
-
-      dataDict['applicationData'] = list()
-      dataDict['opType'] = 'any'
-      dataDict['permission'] = True
-      dataDict['permissionClass'] = 'any'
-      dataDict['roleName'] = 'any'
-      dataDict['access'] = None
-      dataDict['userGroup'] = None
-
-      dataDict['inConstructor'] = True
-      try:
-        
-        for key, value in attrlinks.iteritems():
-          try:
-            func = getattr(self.__class__, key).fset
-          except:
-            raise ApiError("%s: error setting %s - not a modeled attribute"
-                           % (self, key))
-          if func is None:
-            raise ApiError("%s: error setting %s - not a settable attribute"
-                           % (self, key))
-          else:
-            func(self, value)
-        del dataDict['inConstructor']
-      except:
-        print("ERROR in memops.AccessControl.Permission.__init__")
-        del dataDict['inConstructor']
-        raise
-
-      if (notIsReading):
-        childrenDict = parent.__dict__.get('permissions')
-        ll = list()
-        objKey = dataDict.get('userGroup')
-        ll.append(objKey)
-        if (objKey is not None):
-          objKey = dataDict.get('permissionClass')
-          ll.append(objKey)
-          if (objKey is not None):
-            objKey = dataDict.get('opType')
-            ll.append(objKey)
-            if (objKey is not None):
-              objKey = dataDict.get('roleName')
-              ll.append(objKey)
-              if (objKey is not None):
-                objKey = tuple(ll)
-
-        if (objKey is None):
-          raise ApiError("""%s.__init__:
-           Key attribute or link not set (from ['userGroup', 'permissionClass', 'opType', 'roleName'])""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-        else:
-          if (childrenDict.get(objKey) is None):
-            childrenDict[objKey] = self
-          else:
-            raise ApiError("""%s.__init__:
-             Could not create, pre-existing object had same key""" % self.qualifiedName
-             + ": %s" % (self,)
+    def __init__(self, parent, **attrlinks):
+        """
+        Constructor for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        dataDict["accessObject"] = parent
+        if not isinstance(parent, AccessObject):
+            raise ApiError(
+                """%s.__init__:
+       value is not of class memops.AccessControl.AccessObject"""
+                % self.qualifiedName
+                + ": %s" % (parent,)
             )
 
-      if (notOverride):
-        self.checkValid()
+        if parent.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.__init__:
+       called with deleted parent"""
+                % self.qualifiedName
+            )
 
-      if (notIsReading):
-        topObject.__dict__['isModified'] = True
+        topObject = parent.__dict__.get("topObject")
+        dataDict["topObject"] = topObject
 
-    except:
-      import sys
-      exc_info = sys.exc_info()
-      try:
-        dataDict['inConstructor'] = True
-        self.delete()
-        del dataDict['inConstructor']
-      except:
-        print('''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state''')
-        del dataDict['inConstructor']
-      raise exc_info[1]
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
 
-    # doNotifies
+        if notIsReading:
+            if not (topObject.__dict__.get("isModifiable")):
+                raise ApiError(
+                    """%s.__init__:
+         Storage not modifiable"""
+                    % self.qualifiedName
+                    + ": %s" % (topObject,)
+                )
 
-    if (notOverride):
-      
-      ll = self.__class__._notifies.get('__init__')
-      if ll:
-        for notify in ll:
-          notify(self)
+        try:
+            dataDict["applicationData"] = list()
+            dataDict["opType"] = "any"
+            dataDict["permission"] = True
+            dataDict["permissionClass"] = "any"
+            dataDict["roleName"] = "any"
+            dataDict["access"] = None
+            dataDict["userGroup"] = None
 
-  def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
-    """
-    checkDelete for memops.AccessControl.Permission:
-       determines cascading 
-    deletes to follow from delete of object.
-       *Implementation function* - 
-    should be called only by API delete function.
-    """
-    dataDict = self.__dict__
-    objsToBeDeleted.add(self)
-    topObject = dataDict.get('topObject')
-    topObjectsToCheck.add(topObject)
-  
-  def _singleDelete(self, objsToBeDeleted):
-    """
-    singleDelete for memops.AccessControl.Permission:   deletes
-    objects
-    *Implementation function* - will CORRUPT DATA if called outside 
-    the API delete function.
-    """
-    dataDict = self.__dict__
-    dataDict['isDeleted'] = True
-    access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
-      access.__dict__['dataObject'] = None
+            dataDict["inConstructor"] = True
+            try:
+                for key, value in attrlinks.iteritems():
+                    try:
+                        func = getattr(self.__class__, key).fset
+                    except:
+                        raise ApiError("%s: error setting %s - not a modeled attribute" % (self, key))
+                    if func is None:
+                        raise ApiError("%s: error setting %s - not a settable attribute" % (self, key))
+                    else:
+                        func(self, value)
+                del dataDict["inConstructor"]
+            except:
+                print("ERROR in memops.AccessControl.Permission.__init__")
+                del dataDict["inConstructor"]
+                raise
 
-    userGroup = dataDict.get('userGroup')
-    if (userGroup is not None and not (userGroup in objsToBeDeleted)):
-      permissions = userGroup.__dict__.get('permissions')
-      permissions.remove(self)
+            if notIsReading:
+                childrenDict = parent.__dict__.get("permissions")
+                ll = list()
+                objKey = dataDict.get("userGroup")
+                ll.append(objKey)
+                if objKey is not None:
+                    objKey = dataDict.get("permissionClass")
+                    ll.append(objKey)
+                    if objKey is not None:
+                        objKey = dataDict.get("opType")
+                        ll.append(objKey)
+                        if objKey is not None:
+                            objKey = dataDict.get("roleName")
+                            ll.append(objKey)
+                            if objKey is not None:
+                                objKey = tuple(ll)
 
-    accessObject = dataDict.get('accessObject')
-    if (not (accessObject in objsToBeDeleted)):
-      ll = list()
-      objKey = dataDict.get('userGroup')
-      ll.append(objKey)
-      if (objKey is not None):
-        objKey = dataDict.get('permissionClass')
-        ll.append(objKey)
-        if (objKey is not None):
-          objKey = dataDict.get('opType')
-          ll.append(objKey)
-          if (objKey is not None):
-            objKey = dataDict.get('roleName')
+                if objKey is None:
+                    raise ApiError(
+                        """%s.__init__:
+           Key attribute or link not set (from ['userGroup', 'permissionClass', 'opType', 'roleName'])"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+                else:
+                    if childrenDict.get(objKey) is None:
+                        childrenDict[objKey] = self
+                    else:
+                        raise ApiError(
+                            """%s.__init__:
+             Could not create, pre-existing object had same key"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
+
+            if notOverride:
+                self.checkValid()
+
+            if notIsReading:
+                topObject.__dict__["isModified"] = True
+
+        except:
+            import sys
+
+            exc_info = sys.exc_info()
+            try:
+                dataDict["inConstructor"] = True
+                self.delete()
+                del dataDict["inConstructor"]
+            except:
+                print("""WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state""")
+                del dataDict["inConstructor"]
+            raise exc_info[1]
+
+        # doNotifies
+
+        if notOverride:
+            ll = self.__class__._notifies.get("__init__")
+            if ll:
+                for notify in ll:
+                    notify(self)
+
+    def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
+        """
+        checkDelete for memops.AccessControl.Permission:
+           determines cascading
+        deletes to follow from delete of object.
+           *Implementation function* -
+        should be called only by API delete function.
+        """
+        dataDict = self.__dict__
+        objsToBeDeleted.add(self)
+        topObject = dataDict.get("topObject")
+        topObjectsToCheck.add(topObject)
+
+    def _singleDelete(self, objsToBeDeleted):
+        """
+        singleDelete for memops.AccessControl.Permission:   deletes
+        objects
+        *Implementation function* - will CORRUPT DATA if called outside
+        the API delete function.
+        """
+        dataDict = self.__dict__
+        dataDict["isDeleted"] = True
+        access = dataDict.get("access")
+        if access is not None and access not in objsToBeDeleted:
+            access.__dict__["dataObject"] = None
+
+        userGroup = dataDict.get("userGroup")
+        if userGroup is not None and userGroup not in objsToBeDeleted:
+            permissions = userGroup.__dict__.get("permissions")
+            permissions.remove(self)
+
+        accessObject = dataDict.get("accessObject")
+        if accessObject not in objsToBeDeleted:
+            ll = list()
+            objKey = dataDict.get("userGroup")
             ll.append(objKey)
-            if (objKey is not None):
-              objKey = tuple(ll)
+            if objKey is not None:
+                objKey = dataDict.get("permissionClass")
+                ll.append(objKey)
+                if objKey is not None:
+                    objKey = dataDict.get("opType")
+                    ll.append(objKey)
+                    if objKey is not None:
+                        objKey = dataDict.get("roleName")
+                        ll.append(objKey)
+                        if objKey is not None:
+                            objKey = tuple(ll)
 
-      if (objKey is None):
-        raise ApiError("""%s._singleDelete:
-         Key could not be calculated for object to be deleted""" % self.qualifiedName
-        )
-      else:
-        dd = accessObject.__dict__.get('permissions')
-        if (self is dd.get(objKey)):
-          del dd[objKey]
+            if objKey is None:
+                raise ApiError(
+                    """%s._singleDelete:
+         Key could not be calculated for object to be deleted"""
+                    % self.qualifiedName
+                )
+            else:
+                dd = accessObject.__dict__.get("permissions")
+                if self is dd.get(objKey):
+                    del dd[objKey]
 
-  addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
-  def checkAllValid(self, complete=False):
-    """
-    CheckAllValid for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    self.checkValid(complete)
-  
-  def checkValid(self, complete=False):
-    """
-    CheckValid for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.checkValid:
-       called on deleted object""" % self.qualifiedName
-      )
+    addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
-    if (complete):
-      ll = list()
-      objKey = dataDict.get('userGroup')
-      ll.append(objKey)
-      if (objKey is not None):
-        objKey = dataDict.get('permissionClass')
-        ll.append(objKey)
-        if (objKey is not None):
-          objKey = dataDict.get('opType')
-          ll.append(objKey)
-          if (objKey is not None):
-            objKey = dataDict.get('roleName')
+    def checkAllValid(self, complete=False):
+        """
+        CheckAllValid for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        self.checkValid(complete)
+
+    def checkValid(self, complete=False):
+        """
+        CheckValid for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.checkValid:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if complete:
+            ll = list()
+            objKey = dataDict.get("userGroup")
             ll.append(objKey)
-            if (objKey is not None):
-              objKey = tuple(ll)
+            if objKey is not None:
+                objKey = dataDict.get("permissionClass")
+                ll.append(objKey)
+                if objKey is not None:
+                    objKey = dataDict.get("opType")
+                    ll.append(objKey)
+                    if objKey is not None:
+                        objKey = dataDict.get("roleName")
+                        ll.append(objKey)
+                        if objKey is not None:
+                            objKey = tuple(ll)
 
-      if (objKey is None):
-        raise ApiError("""%s.checkValid:
-         Key could not be calculated for object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-      else:
-        value = dataDict.get('accessObject')
-        dd = value.__dict__.get('permissions')
-        if (not (self is dd.get(objKey))):
-          raise ApiError("""%s.checkValid:
-           non-reciprocal parent link 'accessObject' from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            if objKey is None:
+                raise ApiError(
+                    """%s.checkValid:
+         Key could not be calculated for object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+            else:
+                value = dataDict.get("accessObject")
+                dd = value.__dict__.get("permissions")
+                if self is not dd.get(objKey):
+                    raise ApiError(
+                        """%s.checkValid:
+           non-reciprocal parent link 'accessObject' from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-      # check attributes
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+            # check attributes
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
 
-      values = dataDict.get('applicationData')
-      for value in values:
-        from memops.api.Implementation import ApplicationData as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: applicationData:
-           value is not of class memops.Implementation.ApplicationData""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            values = dataDict.get("applicationData")
+            for value in values:
+                from memops.api.Implementation import ApplicationData as importedType
 
-      value = dataDict.get('opType')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: opType:
-         memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: applicationData:
+           value is not of class memops.Implementation.ApplicationData"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      _lenValue = len(value)
-      if (_lenValue > 32):
-        raise ApiError("""%s.checkValid: opType:
-         memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("opType")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: opType:
+         memops.Implementation.Word input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: opType:
-         memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 32:
+                raise ApiError(
+                    """%s.checkValid: opType:
+         memops.Implementation.Word maximum length is 32 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (not (len(value.split()) == 1)):
-        raise ApiError("""%s.checkValid: opType:
-         Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: opType:
+         memops.Implementation.Word: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('permission')
-      if (not (value in [True, False])):
-        raise ApiError("""%s.checkValid: permission:
-         memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if not (len(value.split()) == 1):
+                raise ApiError(
+                    """%s.checkValid: opType:
+         Word constraint contains_no_white_space violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('permissionClass')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: permissionClass:
-         memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("permission")
+            if value not in [True, False]:
+                raise ApiError(
+                    """%s.checkValid: permission:
+         memops.Implementation.Boolean input is not in enumeration [True, False]"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      _lenValue = len(value)
-      if (_lenValue > 32):
-        raise ApiError("""%s.checkValid: permissionClass:
-         memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("permissionClass")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: permissionClass:
+         memops.Implementation.Word input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: permissionClass:
-         memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 32:
+                raise ApiError(
+                    """%s.checkValid: permissionClass:
+         memops.Implementation.Word maximum length is 32 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (not (len(value.split()) == 1)):
-        raise ApiError("""%s.checkValid: permissionClass:
-         Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: permissionClass:
+         memops.Implementation.Word: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = self.getQualifiedName()
-      if (value is None):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            if not (len(value.split()) == 1):
+                raise ApiError(
+                    """%s.checkValid: permissionClass:
+         Word constraint contains_no_white_space violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = self.getQualifiedName()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('roleName')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: roleName:
-         memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      _lenValue = len(value)
-      if (_lenValue > 32):
-        raise ApiError("""%s.checkValid: roleName:
-         memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("roleName")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: roleName:
+         memops.Implementation.Word input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: roleName:
-         memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 32:
+                raise ApiError(
+                    """%s.checkValid: roleName:
+         memops.Implementation.Word maximum length is 32 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (not (len(value.split()) == 1)):
-        raise ApiError("""%s.checkValid: roleName:
-         Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: roleName:
+         memops.Implementation.Word: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      # check roles
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+            if not (len(value.split()) == 1):
+                raise ApiError(
+                    """%s.checkValid: roleName:
+         Word constraint contains_no_white_space violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('access')
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: access:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            # check roles
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
 
-        oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: access:
-           non-reciprocal link access from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            value = dataDict.get("access")
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: access:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: access:
+                oldSelf = value.__dict__.get("dataObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           non-reciprocal link access from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: access:
            Link access between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      value = dataDict.get('accessObject')
-      if (not isinstance(value, AccessObject)):
-        raise ApiError("""%s.checkValid: accessObject:
-         value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("accessObject")
+            if not isinstance(value, AccessObject):
+                raise ApiError(
+                    """%s.checkValid: accessObject:
+         value is not of class memops.AccessControl.AccessObject"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = self.getActiveAccess()
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            value = self.getActiveAccess()
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: activeAccess:
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      value = dataDict.get('userGroup')
-      if (not isinstance(value, UserGroup)):
-        raise ApiError("""%s.checkValid: userGroup:
-         value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("userGroup")
+            if not isinstance(value, UserGroup):
+                raise ApiError(
+                    """%s.checkValid: userGroup:
+         value is not of class memops.AccessControl.UserGroup"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      oldSelves = value.__dict__.get('permissions')
-      if (not (self in oldSelves)):
-        raise ApiError("""%s.checkValid: userGroup:
-         non-reciprocal link userGroup from object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            oldSelves = value.__dict__.get("permissions")
+            if self not in oldSelves:
+                raise ApiError(
+                    """%s.checkValid: userGroup:
+         non-reciprocal link userGroup from object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    # check explicit class constraints
-    # check attributes
-    values = dataDict.get('applicationData')
-    for value in values:
-      value.checkAllValid(complete)
+        # check explicit class constraints
+        # check attributes
+        values = dataDict.get("applicationData")
+        for value in values:
+            value.checkAllValid(complete)
 
-    value = dataDict.get('opType')
-    if (value is None):
-      raise ApiError("""%s.checkValid: opType:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("opType")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: opType:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    value = dataDict.get('permission')
-    if (value is None):
-      raise ApiError("""%s.checkValid: permission:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("permission")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: permission:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    value = dataDict.get('permissionClass')
-    if (value is None):
-      raise ApiError("""%s.checkValid: permissionClass:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("permissionClass")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: permissionClass:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    value = dataDict.get('roleName')
-    if (value is None):
-      raise ApiError("""%s.checkValid: roleName:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("roleName")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: roleName:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    # check roles
-    value = dataDict.get('access')
-    value = dataDict.get('accessObject')
-    if (value is None):
-      raise ApiError("""%s.checkValid: accessObject:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        # check roles
+        value = dataDict.get("access")
+        value = dataDict.get("accessObject")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: accessObject:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    value = dataDict.get('userGroup')
-    if (value is None):
-      raise ApiError("""%s.checkValid: userGroup:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("userGroup")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: userGroup:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-  delete = memops.api.Implementation.DataObject.delete
+    delete = memops.api.Implementation.DataObject.delete
 
-  findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
+    findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
-  findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
-  def get(self, name):
-    """
-    GetAttr for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    return getattr(self, name)
+    findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
 
-  getAccess = memops.api.Implementation.DataObject.getAccess
-  
-  def getAccessObject(self):
-    """
-    Get for memops.AccessControl.Permission.accessObject
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessObject')
-    return result
+    def get(self, name):
+        """
+        GetAttr for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        return getattr(self, name)
 
-  getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+    getAccess = memops.api.Implementation.DataObject.getAccess
 
-  getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
-  def getByKey(startObj, fullKey):
-    """
-    GetByKey for memops.AccessControl.Permission
-    """
+    def getAccessObject(self):
+        """
+        Get for memops.AccessControl.Permission.accessObject
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessObject")
+        return result
 
-    result = None
-    if (startObj.__class__.__name__ == 'MemopsRoot'):
-      if (6 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.Permission'.getByKey:
+    getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+
+    getApplicationData = memops.api.Implementation.DataObject.getApplicationData
+
+    def getByKey(startObj, fullKey):
+        """
+        GetByKey for memops.AccessControl.Permission
+        """
+
+        result = None
+        if startObj.__class__.__name__ == "MemopsRoot":
+            if 6 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.Permission'.getByKey:
          getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-      obj0 = startObj
-      objKey = fullKey[0]
-      obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
-      if (obj1 is None):
-        obj0.refreshTopObjects('memops.AccessControl')
-        obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
+            obj0 = startObj
+            objKey = fullKey[0]
+            obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
+            if obj1 is None:
+                obj0.refreshTopObjects("memops.AccessControl")
+                obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
 
-    else:
-      if (5 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.Permission'.getByKey:
+        else:
+            if 5 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.Permission'.getByKey:
          getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-      obj1 = startObj
+            obj1 = startObj
 
-    if (obj1 is not None):
-      if (not (obj1.__dict__.get('isLoaded'))):
-        obj1.load()
+        if obj1 is not None:
+            if not (obj1.__dict__.get("isLoaded")):
+                obj1.load()
 
-      objKey = fullKey[-5]
-      obj2 = obj1.__dict__.get('accessObjects').get(objKey)
+            objKey = fullKey[-5]
+            obj2 = obj1.__dict__.get("accessObjects").get(objKey)
 
-      if (obj2 is not None):
+            if obj2 is not None:
+                ll = list()
+                objKey = fullKey[-4]
+                ll.append(objKey)
+                if objKey is not None:
+                    objKey = fullKey[-3]
+                    ll.append(objKey)
+                    if objKey is not None:
+                        objKey = fullKey[-2]
+                        ll.append(objKey)
+                        if objKey is not None:
+                            objKey = fullKey[-1]
+                            ll.append(objKey)
+                            if objKey is not None:
+                                objKey = tuple(ll)
+
+                obj3 = obj2.__dict__.get("permissions").get(objKey)
+                result = obj3
+
+        return result
+
+    getByKey = staticmethod(getByKey)
+
+    getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+
+    getClassName = memops.api.Implementation.ComplexDataType.getClassName
+
+    getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+
+    getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
+
+    def getFullKey(self, useGuid=False):
+        """
+        GetFullKey for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        result = list()
+
+        obj2 = dataDict.get("accessObject")
+        obj1 = obj2.__dict__.get("accessControlStore")
+
+        if useGuid:
+            result.append(obj1.__dict__.get("guid"))
+        else:
+            result.append(obj1.__dict__.get("name"))
+
+        result.append(obj2.__dict__.get("name"))
+        result.append(dataDict.get("userGroup"))
+        result.append(dataDict.get("permissionClass"))
+        result.append(dataDict.get("opType"))
+        result.append(dataDict.get("roleName"))
+
+        return result
+
+    getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
+
+    getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
+
+    def getLocalKey(self):
+        """
+        GetLocalKey for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
         ll = list()
-        objKey = fullKey[-4]
-        ll.append(objKey)
-        if (objKey is not None):
-          objKey = fullKey[-3]
-          ll.append(objKey)
-          if (objKey is not None):
-            objKey = fullKey[-2]
-            ll.append(objKey)
-            if (objKey is not None):
-              objKey = fullKey[-1]
-              ll.append(objKey)
-              if (objKey is not None):
-                objKey = tuple(ll)
-
-        obj3 = obj2.__dict__.get('permissions').get(objKey)
-        result = obj3
-
-    return result
-
-  getByKey = staticmethod(getByKey)
-
-  getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-
-  getClassName = memops.api.Implementation.ComplexDataType.getClassName
-
-  getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
-
-  getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
-  def getFullKey(self, useGuid=False):
-    """
-    GetFullKey for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    result = list()
-
-    obj2 = dataDict.get('accessObject')
-    obj1 = obj2.__dict__.get('accessControlStore')
-
-    if (useGuid):
-      result.append(obj1.__dict__.get('guid'))
-    else:
-      result.append(obj1.__dict__.get('name'))
-
-    result.append(obj2.__dict__.get('name'))
-    result.append(dataDict.get('userGroup'))
-    result.append(dataDict.get('permissionClass'))
-    result.append(dataDict.get('opType'))
-    result.append(dataDict.get('roleName'))
-
-    return result
-
-  getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-
-  getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
-  def getLocalKey(self):
-    """
-    GetLocalKey for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    ll = list()
-    result = dataDict.get('userGroup')
-    ll.append(result)
-    if (result is not None):
-      result = dataDict.get('permissionClass')
-      ll.append(result)
-      if (result is not None):
-        result = dataDict.get('opType')
+        result = dataDict.get("userGroup")
         ll.append(result)
-        if (result is not None):
-          result = dataDict.get('roleName')
-          ll.append(result)
-          if (result is not None):
-            result = tuple(ll)
+        if result is not None:
+            result = dataDict.get("permissionClass")
+            ll.append(result)
+            if result is not None:
+                result = dataDict.get("opType")
+                ll.append(result)
+                if result is not None:
+                    result = dataDict.get("roleName")
+                    ll.append(result)
+                    if result is not None:
+                        result = tuple(ll)
 
-    return result
+        return result
 
-  getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
-  def getOpType(self):
-    """
-    Get for memops.AccessControl.Permission.opType
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('opType')
-    return result
+    getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
 
-  getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
+    def getOpType(self):
+        """
+        Get for memops.AccessControl.Permission.opType
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("opType")
+        return result
 
-  getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
-  def getParent(self):
-    """
-    Get for memops.AccessControl.Permission.parent
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessObject')
-    return result
-  
-  def getPermission(self):
-    """
-    Get for memops.AccessControl.Permission.permission
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('permission')
-    return result
-  
-  def getPermissionClass(self):
-    """
-    Get for memops.AccessControl.Permission.permissionClass
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('permissionClass')
-    return result
+    getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
-  getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
-  def getRoleName(self):
-    """
-    Get for memops.AccessControl.Permission.roleName
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('roleName')
-    return result
+    getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
 
-  getRoot = memops.api.Implementation.MemopsObject.getRoot
+    def getParent(self):
+        """
+        Get for memops.AccessControl.Permission.parent
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessObject")
+        return result
 
-  getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
-  def getUserGroup(self):
-    """
-    Get for memops.AccessControl.Permission.userGroup
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('userGroup')
-    return result
+    def getPermission(self):
+        """
+        Get for memops.AccessControl.Permission.permission
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("permission")
+        return result
 
-  removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
-  def set(self, name, value):
-    """
-    SetAttr for memops.AccessControl.Permission
-    """
-    dataDict = self.__dict__
-    setattr(self, name, value)
+    def getPermissionClass(self):
+        """
+        Get for memops.AccessControl.Permission.permissionClass
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("permissionClass")
+        return result
 
-  setAccess = memops.api.Implementation.DataObject.setAccess
+    getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
-  setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
-  def setOpType(self, value):
-    """
-    Set for memops.AccessControl.Permission.opType
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setOpType:
-       memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def getRoleName(self):
+        """
+        Get for memops.AccessControl.Permission.roleName
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("roleName")
+        return result
 
-    _lenValue = len(value)
-    if (_lenValue > 32):
-      raise ApiError("""%s.setOpType:
-       memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    getRoot = memops.api.Implementation.MemopsObject.getRoot
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setOpType:
-       memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    getTopObject = memops.api.Implementation.DataObject.getTopObject
 
-    if (not (len(value.split()) == 1)):
-      raise ApiError("""%s.setOpType:
-       Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def getUserGroup(self):
+        """
+        Get for memops.AccessControl.Permission.userGroup
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("userGroup")
+        return result
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('opType')
-    notInConstructor = not (dataDict.get('inConstructor'))
+    removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setOpType:
-       called on deleted object""" % self.qualifiedName
-      )
+    def set(self, name, value):
+        """
+        SetAttr for memops.AccessControl.Permission
+        """
+        dataDict = self.__dict__
+        setattr(self, name, value)
 
-    if (value == currentValue):
-      return
+    setAccess = memops.api.Implementation.DataObject.setAccess
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setOpType:
-         cannot set opType, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+    setApplicationData = memops.api.Implementation.DataObject.setApplicationData
 
-      if (value is None):
-        raise ApiError("""%s.setOpType:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+    def setOpType(self, value):
+        """
+        Set for memops.AccessControl.Permission.opType
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setOpType:
+       memops.Implementation.Word input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-      pass
+        _lenValue = len(value)
+        if _lenValue > 32:
+            raise ApiError(
+                """%s.setOpType:
+       memops.Implementation.Word maximum length is 32 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    dataDict['opType'] = value
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setOpType:
+       memops.Implementation.Word: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    # doNotifies
-  
-  def setPermission(self, value):
-    """
-    Set for memops.AccessControl.Permission.permission
-    """
-    dataDict = self.__dict__
-    if (not (value in [True, False])):
-      raise ApiError("""%s.setPermission:
-       memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        if not (len(value.split()) == 1):
+            raise ApiError(
+                """%s.setOpType:
+       Word constraint contains_no_white_space violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('permission')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("opType")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setPermission:
-       called on deleted object""" % self.qualifiedName
-      )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setOpType:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    if (value == currentValue):
-      return
+        if value == currentValue:
+            return
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setPermission:
-         cannot set permission, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setOpType:
+         cannot set opType, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      if (value is None):
-        raise ApiError("""%s.setPermission:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            if value is None:
+                raise ApiError(
+                    """%s.setOpType:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      pass
+            pass
 
-    dataDict['permission'] = value
+        dataDict["opType"] = value
 
-    # doNotifies
-  
-  def setPermissionClass(self, value):
-    """
-    Set for memops.AccessControl.Permission.permissionClass
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setPermissionClass:
-       memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        # doNotifies
 
-    _lenValue = len(value)
-    if (_lenValue > 32):
-      raise ApiError("""%s.setPermissionClass:
-       memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def setPermission(self, value):
+        """
+        Set for memops.AccessControl.Permission.permission
+        """
+        dataDict = self.__dict__
+        if value not in [True, False]:
+            raise ApiError(
+                """%s.setPermission:
+       memops.Implementation.Boolean input is not in enumeration [True, False]"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setPermissionClass:
-       memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("permission")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (not (len(value.split()) == 1)):
-      raise ApiError("""%s.setPermissionClass:
-       Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setPermission:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('permissionClass')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if value == currentValue:
+            return
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setPermissionClass:
-       called on deleted object""" % self.qualifiedName
-      )
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setPermission:
+         cannot set permission, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    if (value == currentValue):
-      return
+            if value is None:
+                raise ApiError(
+                    """%s.setPermission:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setPermissionClass:
-         cannot set permissionClass, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            pass
 
-      if (value is None):
-        raise ApiError("""%s.setPermissionClass:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        dataDict["permission"] = value
 
-      pass
+        # doNotifies
 
-    dataDict['permissionClass'] = value
+    def setPermissionClass(self, value):
+        """
+        Set for memops.AccessControl.Permission.permissionClass
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setPermissionClass:
+       memops.Implementation.Word input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    # doNotifies
-  
-  def setRoleName(self, value):
-    """
-    Set for memops.AccessControl.Permission.roleName
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setRoleName:
-       memops.Implementation.Word input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        _lenValue = len(value)
+        if _lenValue > 32:
+            raise ApiError(
+                """%s.setPermissionClass:
+       memops.Implementation.Word maximum length is 32 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    _lenValue = len(value)
-    if (_lenValue > 32):
-      raise ApiError("""%s.setRoleName:
-       memops.Implementation.Word maximum length is 32 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setPermissionClass:
+       memops.Implementation.Word: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setRoleName:
-       memops.Implementation.Word: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        if not (len(value.split()) == 1):
+            raise ApiError(
+                """%s.setPermissionClass:
+       Word constraint contains_no_white_space violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (not (len(value.split()) == 1)):
-      raise ApiError("""%s.setRoleName:
-       Word constraint contains_no_white_space violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("permissionClass")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('roleName')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setPermissionClass:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setRoleName:
-       called on deleted object""" % self.qualifiedName
-      )
+        if value == currentValue:
+            return
 
-    if (value == currentValue):
-      return
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setPermissionClass:
+         cannot set permissionClass, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setRoleName:
-         cannot set roleName, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            if value is None:
+                raise ApiError(
+                    """%s.setPermissionClass:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      if (value is None):
-        raise ApiError("""%s.setRoleName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            pass
 
-      pass
+        dataDict["permissionClass"] = value
 
-    dataDict['roleName'] = value
+        # doNotifies
 
-    # doNotifies
-  
-  def setUserGroup(self, value):
-    """
-    Set for memops.AccessControl.Permission.userGroup
-    """
-    dataDict = self.__dict__
-    if (not isinstance(value, UserGroup)):
-      raise ApiError("""%s.setUserGroup:
-       value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def setRoleName(self, value):
+        """
+        Set for memops.AccessControl.Permission.roleName
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setRoleName:
+       memops.Implementation.Word input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('userGroup')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        _lenValue = len(value)
+        if _lenValue > 32:
+            raise ApiError(
+                """%s.setRoleName:
+       memops.Implementation.Word maximum length is 32 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setUserGroup:
-       called on deleted object""" % self.qualifiedName
-      )
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setRoleName:
+       memops.Implementation.Word: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (value is not None):
-      if (value.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setUserGroup:
-         called with deleted value""" % self.qualifiedName
-        )
+        if not (len(value.split()) == 1):
+            raise ApiError(
+                """%s.setRoleName:
+       Word constraint contains_no_white_space violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (value == currentValue):
-      return
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("roleName")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setUserGroup:
-         cannot set userGroup, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setRoleName:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      if (value is None):
-        raise ApiError("""%s.setUserGroup:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if value == currentValue:
+            return
 
-      xx1 = dataDict.get('topObject')
-      yy1 = value.__dict__.get('topObject')
-      if (not (xx1 is yy1)):
-        raise ApiError("""%s.setUserGroup:
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setRoleName:
+         cannot set roleName, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if value is None:
+                raise ApiError(
+                    """%s.setRoleName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            pass
+
+        dataDict["roleName"] = value
+
+        # doNotifies
+
+    def setUserGroup(self, value):
+        """
+        Set for memops.AccessControl.Permission.userGroup
+        """
+        dataDict = self.__dict__
+        if not isinstance(value, UserGroup):
+            raise ApiError(
+                """%s.setUserGroup:
+       value is not of class memops.AccessControl.UserGroup"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("userGroup")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setUserGroup:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value is not None:
+            if value.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setUserGroup:
+         called with deleted value"""
+                    % self.qualifiedName
+                )
+
+        if value == currentValue:
+            return
+
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setUserGroup:
+         cannot set userGroup, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            if value is None:
+                raise ApiError(
+                    """%s.setUserGroup:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            xx1 = dataDict.get("topObject")
+            yy1 = value.__dict__.get("topObject")
+            if xx1 is not yy1:
+                raise ApiError(
+                    """%s.setUserGroup:
          Link userGroup between objects from separate partitions
-         - memops.Implementation.TopObject does not match""" % self.qualifiedName
-         + ": %s:%s" % (self, value)
-        )
+         - memops.Implementation.TopObject does not match"""
+                    % self.qualifiedName
+                    + ": %s:%s" % (self, value)
+                )
 
-    if (currentValue is not None):
-      if (notIsReading):
-        oldSelves = currentValue.__dict__.get('permissions')
-        oldSelves.remove(self)
-      else:
-        raise ApiError("""%s.setUserGroup:
-         Read link 'userGroup' incompatible with pre-existing link""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if currentValue is not None:
+            if notIsReading:
+                oldSelves = currentValue.__dict__.get("permissions")
+                oldSelves.remove(self)
+            else:
+                raise ApiError(
+                    """%s.setUserGroup:
+         Read link 'userGroup' incompatible with pre-existing link"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    if (value is not None):
-      newSelves = value.__dict__.get('permissions')
-      newSelves.add(self)
+        if value is not None:
+            newSelves = value.__dict__.get("permissions")
+            newSelves.add(self)
 
-    dataDict['userGroup'] = value
+        dataDict["userGroup"] = value
 
-    # doNotifies
+        # doNotifies
 
-  toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
+    toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
-  applicationData = memops.api.Implementation.DataObject.applicationData
+    applicationData = memops.api.Implementation.DataObject.applicationData
 
-  className = memops.api.Implementation.ComplexDataType.className
+    className = memops.api.Implementation.ComplexDataType.className
 
-  fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+    fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
-  inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+    inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
-  isDeleted = memops.api.Implementation.MemopsObject.isDeleted
+    isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
-  metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
-  opType = property(getOpType, setOpType, None,
-  r"""
-  """)
+    metaclass = memops.api.Implementation.ComplexDataType.metaclass
 
-  packageName = memops.api.Implementation.ComplexDataType.packageName
+    opType = property(
+        getOpType,
+        setOpType,
+        None,
+        r"""
+  """,
+    )
 
-  packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
-  permission = property(getPermission, setPermission, None,
-  r"""
-  """)
-  
-  permissionClass = property(getPermissionClass, setPermissionClass, None,
-  r"""
-  """)
+    packageName = memops.api.Implementation.ComplexDataType.packageName
 
-  qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
-  roleName = property(getRoleName, setRoleName, None,
-  r"""
-  """)
+    packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
-  access = memops.api.Implementation.DataObject.access
-  
-  accessObject = property(getAccessObject,  None, None,
-  r"""parent link
-  """)
+    permission = property(
+        getPermission,
+        setPermission,
+        None,
+        r"""
+  """,
+    )
 
-  activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
-  parent = property(getParent, None, None,
-  r"""link to parent object - synonym for accessObject
-  """)
+    permissionClass = property(
+        getPermissionClass,
+        setPermissionClass,
+        None,
+        r"""
+  """,
+    )
 
-  root = memops.api.Implementation.MemopsObject.root
+    qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
 
-  topObject = memops.api.Implementation.DataObject.topObject
-  
-  userGroup = property(getUserGroup, setUserGroup, None,
-  r"""
-  """)
+    roleName = property(
+        getRoleName,
+        setRoleName,
+        None,
+        r"""
+  """,
+    )
+
+    access = memops.api.Implementation.DataObject.access
+
+    accessObject = property(
+        getAccessObject,
+        None,
+        None,
+        r"""parent link
+  """,
+    )
+
+    activeAccess = memops.api.Implementation.DataObject.activeAccess
+
+    parent = property(
+        getParent,
+        None,
+        None,
+        r"""link to parent object - synonym for accessObject
+  """,
+    )
+
+    root = memops.api.Implementation.MemopsObject.root
+
+    topObject = memops.api.Implementation.DataObject.topObject
+
+    userGroup = property(
+        getUserGroup,
+        setUserGroup,
+        None,
+        r"""
+  """,
+    )
+
 
 ###############################################################################
 class User(memops.api.Implementation.DataObject):
-  r"""
-  """
-  #   from data model element memops.AccessControl.User revision ?
-  _metaclass = metaPackage.getElement('User')
-  _packageName = 'memops.AccessControl'
-  _packageShortName = 'ACCO'
-  _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'isSuperuser', 'metaclass', 'name', 'packageName', 'packageShortName', 'passwordHashed', 'qualifiedName', 'access', 'accessControlStore', 'activeAccess', 'ledGroups', 'parent', 'person', 'root', 'topObject', 'userGroups',)
-  
-  _notifies = {'':[]}
-  
-  def __init__(self, parent, **attrlinks):
-    """
-    Constructor for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    dataDict['accessControlStore'] = parent
-    if (not isinstance(parent, AccessControlStore)):
-      raise ApiError("""%s.__init__:
-       value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-       + ": %s" % (parent,)
-      )
+    r""" """
 
-    if (parent.__dict__.get('isDeleted')):
-      raise ApiError("""%s.__init__:
-       called with deleted parent""" % self.qualifiedName
-      )
+    #   from data model element memops.AccessControl.User revision ?
+    _metaclass = metaPackage.getElement("User")
+    _packageName = "memops.AccessControl"
+    _packageShortName = "ACCO"
+    _fieldNames = (
+        "applicationData",
+        "className",
+        "fieldNames",
+        "inConstructor",
+        "isDeleted",
+        "isSuperuser",
+        "metaclass",
+        "name",
+        "packageName",
+        "packageShortName",
+        "passwordHashed",
+        "qualifiedName",
+        "access",
+        "accessControlStore",
+        "activeAccess",
+        "ledGroups",
+        "parent",
+        "person",
+        "root",
+        "topObject",
+        "userGroups",
+    )
 
-    topObject = parent.__dict__.get('topObject')
-    dataDict['topObject'] = topObject
+    _notifies = {"": []}
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-
-    if (notIsReading):
-      if (not (topObject.__dict__.get('isModifiable'))):
-        raise ApiError("""%s.__init__:
-         Storage not modifiable""" % self.qualifiedName
-         + ": %s" % (topObject,)
-        )
-
-    try:
-      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
-        parent.load()
-
-      dataDict['applicationData'] = list()
-      dataDict['isSuperuser'] = False
-      dataDict['name'] = None
-      dataDict['passwordHashed'] = None
-      dataDict['access'] = None
-      dataDict['ledGroups'] = set()
-      dataDict['person'] = None
-      dataDict['userGroups'] = set()
-
-      dataDict['inConstructor'] = True
-      try:
-        
-        for key, value in attrlinks.iteritems():
-          try:
-            func = getattr(self.__class__, key).fset
-          except:
-            raise ApiError("%s: error setting %s - not a modeled attribute"
-                           % (self, key))
-          if func is None:
-            raise ApiError("%s: error setting %s - not a settable attribute"
-                           % (self, key))
-          else:
-            func(self, value)
-        del dataDict['inConstructor']
-      except:
-        print("ERROR in memops.AccessControl.User.__init__")
-        del dataDict['inConstructor']
-        raise
-
-      if (notIsReading):
-        childrenDict = parent.__dict__.get('users')
-        objKey = dataDict.get('name')
-        if (objKey is None):
-          raise ApiError("""%s.__init__:
-           Key attribute or link not set (from ['name'])""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-        else:
-          if (childrenDict.get(objKey) is None):
-            childrenDict[objKey] = self
-          else:
-            raise ApiError("""%s.__init__:
-             Could not create, pre-existing object had same key""" % self.qualifiedName
-             + ": %s" % (self,)
+    def __init__(self, parent, **attrlinks):
+        """
+        Constructor for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        dataDict["accessControlStore"] = parent
+        if not isinstance(parent, AccessControlStore):
+            raise ApiError(
+                """%s.__init__:
+       value is not of class memops.AccessControl.AccessControlStore"""
+                % self.qualifiedName
+                + ": %s" % (parent,)
             )
 
-      if (notOverride):
-        self.checkValid()
+        if parent.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.__init__:
+       called with deleted parent"""
+                % self.qualifiedName
+            )
 
-      if (notIsReading):
-        topObject.__dict__['isModified'] = True
+        topObject = parent.__dict__.get("topObject")
+        dataDict["topObject"] = topObject
 
-    except:
-      import sys
-      exc_info = sys.exc_info()
-      try:
-        dataDict['inConstructor'] = True
-        self.delete()
-        del dataDict['inConstructor']
-      except:
-        print('''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state''')
-        del dataDict['inConstructor']
-      raise exc_info[1]
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
 
-    # doNotifies
+        if notIsReading:
+            if not (topObject.__dict__.get("isModifiable")):
+                raise ApiError(
+                    """%s.__init__:
+         Storage not modifiable"""
+                    % self.qualifiedName
+                    + ": %s" % (topObject,)
+                )
 
-    if (notOverride):
-      
-      ll = self.__class__._notifies.get('__init__')
-      if ll:
-        for notify in ll:
-          notify(self)
+        try:
+            if not (parent.__dict__.get("isLoaded") or parent.__dict__.get("isReading")):
+                parent.load()
 
-  def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
-    """
-    checkDelete for memops.AccessControl.User:
-       determines cascading 
-    deletes to follow from delete of object.
-       *Implementation function* - 
-    should be called only by API delete function.
-    """
-    dataDict = self.__dict__
-    objsToBeDeleted.add(self)
-    if (dataDict.get('person') is None):
-      root = dataDict.get('topObject').__dict__.get('memopsRoot')
-      root.refreshTopObjects('ccp.general.Affiliation')
-      tobjList = root.__dict__.get('affiliationStores').values()
-      for tobj in tobjList:
-        if (not (tobj.__dict__.get('isLoaded'))):
-          tobj.load()
+            dataDict["applicationData"] = list()
+            dataDict["isSuperuser"] = False
+            dataDict["name"] = None
+            dataDict["passwordHashed"] = None
+            dataDict["access"] = None
+            dataDict["ledGroups"] = set()
+            dataDict["person"] = None
+            dataDict["userGroups"] = set()
 
-    person = dataDict.get('person')
-    if (person is not None):
-      topObject = person.__dict__.get('topObject')
-      topObjectsToCheck.add(topObject)
+            dataDict["inConstructor"] = True
+            try:
+                for key, value in attrlinks.iteritems():
+                    try:
+                        func = getattr(self.__class__, key).fset
+                    except:
+                        raise ApiError("%s: error setting %s - not a modeled attribute" % (self, key))
+                    if func is None:
+                        raise ApiError("%s: error setting %s - not a settable attribute" % (self, key))
+                    else:
+                        func(self, value)
+                del dataDict["inConstructor"]
+            except:
+                print("ERROR in memops.AccessControl.User.__init__")
+                del dataDict["inConstructor"]
+                raise
 
-    topObject = dataDict.get('topObject')
-    topObjectsToCheck.add(topObject)
-  
-  def _singleDelete(self, objsToBeDeleted):
-    """
-    singleDelete for memops.AccessControl.User:   deletes
-    objects
-    *Implementation function* - will CORRUPT DATA if called outside 
-    the API delete function.
-    """
-    dataDict = self.__dict__
-    dataDict['isDeleted'] = True
-    access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
-      access.__dict__['dataObject'] = None
+            if notIsReading:
+                childrenDict = parent.__dict__.get("users")
+                objKey = dataDict.get("name")
+                if objKey is None:
+                    raise ApiError(
+                        """%s.__init__:
+           Key attribute or link not set (from ['name'])"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+                else:
+                    if childrenDict.get(objKey) is None:
+                        childrenDict[objKey] = self
+                    else:
+                        raise ApiError(
+                            """%s.__init__:
+             Could not create, pre-existing object had same key"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
 
-    for ledGroup in dataDict.get('ledGroups'):
-      if (not (ledGroup in objsToBeDeleted)):
-        leaders = ledGroup.__dict__.get('leaders')
-        leaders.remove(self)
+            if notOverride:
+                self.checkValid()
 
-    person = dataDict.get('person')
-    if (person is not None and not (person in objsToBeDeleted)):
-      users = person.__dict__.get('users')
-      users.remove(self)
+            if notIsReading:
+                topObject.__dict__["isModified"] = True
 
-    for userGroup in dataDict.get('userGroups'):
-      if (not (userGroup in objsToBeDeleted)):
-        members = userGroup.__dict__.get('members')
-        members.remove(self)
+        except:
+            import sys
 
-    accessControlStore = dataDict.get('accessControlStore')
-    if (not (accessControlStore in objsToBeDeleted)):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s._singleDelete:
-         Key could not be calculated for object to be deleted""" % self.qualifiedName
-        )
-      else:
-        dd = accessControlStore.__dict__.get('users')
-        if (self is dd.get(objKey)):
-          del dd[objKey]
+            exc_info = sys.exc_info()
+            try:
+                dataDict["inConstructor"] = True
+                self.delete()
+                del dataDict["inConstructor"]
+            except:
+                print("""WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state""")
+                del dataDict["inConstructor"]
+            raise exc_info[1]
 
-  addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
-  def addLedGroup(self, value):
-    """
-    Add for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    if (not isinstance(value, UserGroup)):
-      raise ApiError("""%s.addLedGroup:
-       value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        # doNotifies
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('ledGroups')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if notOverride:
+            ll = self.__class__._notifies.get("__init__")
+            if ll:
+                for notify in ll:
+                    notify(self)
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.addLedGroup:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+    def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
+        """
+        checkDelete for memops.AccessControl.User:
+           determines cascading
+        deletes to follow from delete of object.
+           *Implementation function* -
+        should be called only by API delete function.
+        """
+        dataDict = self.__dict__
+        objsToBeDeleted.add(self)
+        if dataDict.get("person") is None:
+            root = dataDict.get("topObject").__dict__.get("memopsRoot")
+            root.refreshTopObjects("ccp.general.Affiliation")
+            tobjList = root.__dict__.get("affiliationStores").values()
+            for tobj in tobjList:
+                if not (tobj.__dict__.get("isLoaded")):
+                    tobj.load()
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.addLedGroup:
-       called on deleted object""" % self.qualifiedName
-      )
+        person = dataDict.get("person")
+        if person is not None:
+            topObject = person.__dict__.get("topObject")
+            topObjectsToCheck.add(topObject)
 
-    if (value.__dict__.get('isDeleted')):
-      raise ApiError("""%s.addLedGroup:
-       called with deleted value""" % self.qualifiedName
-      )
+        topObject = dataDict.get("topObject")
+        topObjectsToCheck.add(topObject)
 
-    if (value in currentValues):
-      raise ApiError("""%s.addLedGroup:
-       value is in list already""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+    def _singleDelete(self, objsToBeDeleted):
+        """
+        singleDelete for memops.AccessControl.User:   deletes
+        objects
+        *Implementation function* - will CORRUPT DATA if called outside
+        the API delete function.
+        """
+        dataDict = self.__dict__
+        dataDict["isDeleted"] = True
+        access = dataDict.get("access")
+        if access is not None and access not in objsToBeDeleted:
+            access.__dict__["dataObject"] = None
 
-    if (notOverride):
-      if (value is not None):
-        xx1 = dataDict.get('topObject')
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.addLedGroup:
+        for ledGroup in dataDict.get("ledGroups"):
+            if ledGroup not in objsToBeDeleted:
+                leaders = ledGroup.__dict__.get("leaders")
+                leaders.remove(self)
+
+        person = dataDict.get("person")
+        if person is not None and person not in objsToBeDeleted:
+            users = person.__dict__.get("users")
+            users.remove(self)
+
+        for userGroup in dataDict.get("userGroups"):
+            if userGroup not in objsToBeDeleted:
+                members = userGroup.__dict__.get("members")
+                members.remove(self)
+
+        accessControlStore = dataDict.get("accessControlStore")
+        if accessControlStore not in objsToBeDeleted:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s._singleDelete:
+         Key could not be calculated for object to be deleted"""
+                    % self.qualifiedName
+                )
+            else:
+                dd = accessControlStore.__dict__.get("users")
+                if self is dd.get(objKey):
+                    del dd[objKey]
+
+    addApplicationData = memops.api.Implementation.DataObject.addApplicationData
+
+    def addLedGroup(self, value):
+        """
+        Add for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        if not isinstance(value, UserGroup):
+            raise ApiError(
+                """%s.addLedGroup:
+       value is not of class memops.AccessControl.UserGroup"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("ledGroups")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.addLedGroup:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
+
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.addLedGroup:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.addLedGroup:
+       called with deleted value"""
+                % self.qualifiedName
+            )
+
+        if value in currentValues:
+            raise ApiError(
+                """%s.addLedGroup:
+       value is in list already"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
+
+        if notOverride:
+            if value is not None:
+                xx1 = dataDict.get("topObject")
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.addLedGroup:
            Link ledGroups between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    oldSelves = value.__dict__.get('leaders')
-    oldSelves.add(self)
-    currentValues.add(value)
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        oldSelves = value.__dict__.get("leaders")
+        oldSelves.add(self)
+        currentValues.add(value)
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('addLedGroup')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def checkAllValid(self, complete=False):
-    """
-    CheckAllValid for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    self.checkValid(complete)
-  
-  def checkValid(self, complete=False):
-    """
-    CheckValid for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.checkValid:
-       called on deleted object""" % self.qualifiedName
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    if (complete):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s.checkValid:
-         Key could not be calculated for object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-      else:
-        value = dataDict.get('accessControlStore')
-        dd = value.__dict__.get('users')
-        if (not (self is dd.get(objKey))):
-          raise ApiError("""%s.checkValid:
-           non-reciprocal parent link 'accessControlStore' from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            ll = _notifies.get("addLedGroup")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-      # check attributes
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+    def checkAllValid(self, complete=False):
+        """
+        CheckAllValid for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        self.checkValid(complete)
 
-      values = dataDict.get('applicationData')
-      for value in values:
-        from memops.api.Implementation import ApplicationData as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: applicationData:
-           value is not of class memops.Implementation.ApplicationData""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+    def checkValid(self, complete=False):
+        """
+        CheckValid for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.checkValid:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      value = dataDict.get('isSuperuser')
-      if (not (value in [True, False])):
-        raise ApiError("""%s.checkValid: isSuperuser:
-         memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        if complete:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s.checkValid:
+         Key could not be calculated for object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+            else:
+                value = dataDict.get("accessControlStore")
+                dd = value.__dict__.get("users")
+                if self is not dd.get(objKey):
+                    raise ApiError(
+                        """%s.checkValid:
+           non-reciprocal parent link 'accessControlStore' from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-      value = dataDict.get('name')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            # check attributes
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            values = dataDict.get("applicationData")
+            for value in values:
+                from memops.api.Implementation import ApplicationData as importedType
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: applicationData:
+           value is not of class memops.Implementation.ApplicationData"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: name:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("isSuperuser")
+            if value not in [True, False]:
+                raise ApiError(
+                    """%s.checkValid: isSuperuser:
+         memops.Implementation.Boolean input is not in enumeration [True, False]"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('passwordHashed')
-      if (value is not None):
-        if (isinstance(value, memops.api.Implementation.String.PythonType)):
-          pass
-        else:
-          raise ApiError("""%s.checkValid: passwordHashed:
-           memops.Implementation.String input is not of a valid type""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            value = dataDict.get("name")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = self.getQualifiedName()
-      if (value is None):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: name:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("passwordHashed")
+            if value is not None:
+                if isinstance(value, memops.api.Implementation.String.PythonType):
+                    pass
+                else:
+                    raise ApiError(
+                        """%s.checkValid: passwordHashed:
+           memops.Implementation.String input is not of a valid type"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = self.getQualifiedName()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      # check roles
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('access')
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: access:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-        oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: access:
-           non-reciprocal link access from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: access:
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            # check roles
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
+
+            value = dataDict.get("access")
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: access:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("dataObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           non-reciprocal link access from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: access:
            Link access between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      value = dataDict.get('accessControlStore')
-      if (not isinstance(value, AccessControlStore)):
-        raise ApiError("""%s.checkValid: accessControlStore:
-         value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("accessControlStore")
+            if not isinstance(value, AccessControlStore):
+                raise ApiError(
+                    """%s.checkValid: accessControlStore:
+         value is not of class memops.AccessControl.AccessControlStore"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = self.getActiveAccess()
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            value = self.getActiveAccess()
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: activeAccess:
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      values = dataDict.get('ledGroups')
-      for value in values:
-        if (not isinstance(value, UserGroup)):
-          raise ApiError("""%s.checkValid: ledGroups:
-           value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            values = dataDict.get("ledGroups")
+            for value in values:
+                if not isinstance(value, UserGroup):
+                    raise ApiError(
+                        """%s.checkValid: ledGroups:
+           value is not of class memops.AccessControl.UserGroup"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        oldSelves = value.__dict__.get('leaders')
-        if (not (self in oldSelves)):
-          raise ApiError("""%s.checkValid: ledGroups:
-           non-reciprocal link ledGroups from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+                oldSelves = value.__dict__.get("leaders")
+                if self not in oldSelves:
+                    raise ApiError(
+                        """%s.checkValid: ledGroups:
+           non-reciprocal link ledGroups from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-      if (dataDict.get('person') is None):
-        root = dataDict.get('topObject').__dict__.get('memopsRoot')
-        root.refreshTopObjects('ccp.general.Affiliation')
-        tobjList = root.__dict__.get('affiliationStores').values()
-        for tobj in tobjList:
-          if (not (tobj.__dict__.get('isLoaded'))):
-            tobj.load()
+            if dataDict.get("person") is None:
+                root = dataDict.get("topObject").__dict__.get("memopsRoot")
+                root.refreshTopObjects("ccp.general.Affiliation")
+                tobjList = root.__dict__.get("affiliationStores").values()
+                for tobj in tobjList:
+                    if not (tobj.__dict__.get("isLoaded")):
+                        tobj.load()
 
-      value = dataDict.get('person')
-      if (value is not None):
-        from ccp.api.general.Affiliation import Person as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: person:
-           value is not of class ccp.general.Affiliation.Person""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            value = dataDict.get("person")
+            if value is not None:
+                from ccp.api.general.Affiliation import Person as importedType
 
-        oldSelves = value.__dict__.get('users')
-        if (not (self in oldSelves)):
-          raise ApiError("""%s.checkValid: person:
-           non-reciprocal link person from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: person:
+           value is not of class ccp.general.Affiliation.Person"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      values = dataDict.get('userGroups')
-      for value in values:
-        if (not isinstance(value, UserGroup)):
-          raise ApiError("""%s.checkValid: userGroups:
-           value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+                oldSelves = value.__dict__.get("users")
+                if self not in oldSelves:
+                    raise ApiError(
+                        """%s.checkValid: person:
+           non-reciprocal link person from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-        oldSelves = value.__dict__.get('members')
-        if (not (self in oldSelves)):
-          raise ApiError("""%s.checkValid: userGroups:
-           non-reciprocal link userGroups from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            values = dataDict.get("userGroups")
+            for value in values:
+                if not isinstance(value, UserGroup):
+                    raise ApiError(
+                        """%s.checkValid: userGroups:
+           value is not of class memops.AccessControl.UserGroup"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-    # check explicit class constraints
-    # check attributes
-    values = dataDict.get('applicationData')
-    for value in values:
-      value.checkAllValid(complete)
+                oldSelves = value.__dict__.get("members")
+                if self not in oldSelves:
+                    raise ApiError(
+                        """%s.checkValid: userGroups:
+           non-reciprocal link userGroups from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-    value = dataDict.get('isSuperuser')
-    if (value is None):
-      raise ApiError("""%s.checkValid: isSuperuser:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        # check explicit class constraints
+        # check attributes
+        values = dataDict.get("applicationData")
+        for value in values:
+            value.checkAllValid(complete)
 
-    value = dataDict.get('name')
-    if (value is None):
-      raise ApiError("""%s.checkValid: name:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("isSuperuser")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: isSuperuser:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    value = dataDict.get('passwordHashed')
-    # check roles
-    value = dataDict.get('access')
-    value = dataDict.get('accessControlStore')
-    if (value is None):
-      raise ApiError("""%s.checkValid: accessControlStore:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("name")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: name:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    values = dataDict.get('ledGroups')
-    value = dataDict.get('person')
-    values = dataDict.get('userGroups')
+        value = dataDict.get("passwordHashed")
+        # check roles
+        value = dataDict.get("access")
+        value = dataDict.get("accessControlStore")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: accessControlStore:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-  delete = memops.api.Implementation.DataObject.delete
+        values = dataDict.get("ledGroups")
+        value = dataDict.get("person")
+        values = dataDict.get("userGroups")
 
-  findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
-  def findAllLedGroups(self, **conditions):
-    """
-    FindAll for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('ledGroups')
-      result = set(currentValues)
+    delete = memops.api.Implementation.DataObject.delete
 
-    else:
-      currentValues = dataDict.get('ledGroups')
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
+    findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
-
-    return result
-  
-  def findAllUserGroups(self, **conditions):
-    """
-    FindAll for memops.AccessControl.User.userGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('userGroups')
-      result = set(currentValues)
-
-    else:
-      currentValues = dataDict.get('userGroups')
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
+    def findAllLedGroups(self, **conditions):
+        """
+        FindAll for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("ledGroups")
+            result = set(currentValues)
 
         else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
+            currentValues = dataDict.get("ledGroups")
+            result = set()
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
 
-    return result
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
 
-  findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
-  def findFirstLedGroup(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('ledGroups')
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    def findAllUserGroups(self, **conditions):
+        """
+        FindAll for memops.AccessControl.User.userGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("userGroups")
+            result = set(currentValues)
+
+        else:
+            currentValues = dataDict.get("userGroups")
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
+
+    def findFirstLedGroup(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("ledGroups")
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            currentValues = dataDict.get("ledGroups")
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def findFirstUserGroup(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.User.userGroups
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("userGroups")
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            currentValues = dataDict.get("userGroups")
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "name",
+                        "access",
+                        "accessControlStore",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def get(self, name):
+        """
+        GetAttr for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        return getattr(self, name)
+
+    getAccess = memops.api.Implementation.DataObject.getAccess
+
+    def getAccessControlStore(self):
+        """
+        Get for memops.AccessControl.User.accessControlStore
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
+
+    getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+
+    getApplicationData = memops.api.Implementation.DataObject.getApplicationData
+
+    def getByKey(startObj, fullKey):
+        """
+        GetByKey for memops.AccessControl.User
+        """
+
         result = None
+        if startObj.__class__.__name__ == "MemopsRoot":
+            if 2 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.User'.getByKey:
+         getByKey called with fullKey of wrong length. Parameters:"""
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-    else:
-      currentValues = dataDict.get('ledGroups')
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
+            obj0 = startObj
+            objKey = fullKey[0]
+            obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
+            if obj1 is None:
+                obj0.refreshTopObjects("memops.AccessControl")
+                obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
 
         else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
+            if 1 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.User'.getByKey:
+         getByKey called with fullKey of wrong length. Parameters:"""
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
+            obj1 = startObj
 
-    return result
-  
-  def findFirstUserGroup(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.User.userGroups
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('userGroups')
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
+        if obj1 is not None:
+            if not (obj1.__dict__.get("isLoaded")):
+                obj1.load()
 
-    else:
-      currentValues = dataDict.get('userGroups')
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('name', 'access', 'accessControlStore',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
+            objKey = fullKey[-1]
+            obj2 = obj1.__dict__.get("users").get(objKey)
+            result = obj2
 
+        return result
+
+    getByKey = staticmethod(getByKey)
+
+    getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+
+    getClassName = memops.api.Implementation.ComplexDataType.getClassName
+
+    getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+
+    getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
+
+    def getFullKey(self, useGuid=False):
+        """
+        GetFullKey for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        result = list()
+
+        obj1 = dataDict.get("accessControlStore")
+
+        if useGuid:
+            result.append(obj1.__dict__.get("guid"))
         else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
+            result.append(obj1.__dict__.get("name"))
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
+        result.append(dataDict.get("name"))
 
-    return result
-  
-  def get(self, name):
-    """
-    GetAttr for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    return getattr(self, name)
+        return result
 
-  getAccess = memops.api.Implementation.DataObject.getAccess
-  
-  def getAccessControlStore(self):
-    """
-    Get for memops.AccessControl.User.accessControlStore
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
+    getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
-  getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+    getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
 
-  getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
-  def getByKey(startObj, fullKey):
-    """
-    GetByKey for memops.AccessControl.User
-    """
+    def getIsSuperuser(self):
+        """
+        Get for memops.AccessControl.User.isSuperuser
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("isSuperuser")
+        return result
 
-    result = None
-    if (startObj.__class__.__name__ == 'MemopsRoot'):
-      if (2 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.User'.getByKey:
-         getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+    def getLedGroups(self):
+        """
+        Get for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("ledGroups")
+        result = frozenset(tempVar)
+        return result
 
-      obj0 = startObj
-      objKey = fullKey[0]
-      obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
-      if (obj1 is None):
-        obj0.refreshTopObjects('memops.AccessControl')
-        obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
+    def getLocalKey(self):
+        """
+        GetLocalKey for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
 
-    else:
-      if (1 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.User'.getByKey:
-         getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+    getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
 
-      obj1 = startObj
+    def getName(self):
+        """
+        Get for memops.AccessControl.User.name
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
 
-    if (obj1 is not None):
-      if (not (obj1.__dict__.get('isLoaded'))):
-        obj1.load()
+    getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
-      objKey = fullKey[-1]
-      obj2 = obj1.__dict__.get('users').get(objKey)
-      result = obj2
+    getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
 
-    return result
+    def getParent(self):
+        """
+        Get for memops.AccessControl.User.parent
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
 
-  getByKey = staticmethod(getByKey)
+    def getPasswordHashed(self):
+        """
+        Get for memops.AccessControl.User.passwordHashed
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("passwordHashed")
+        return result
 
-  getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+    def getPerson(self):
+        """
+        Get for memops.AccessControl.User.person
+        """
+        dataDict = self.__dict__
+        if dataDict.get("person") is None:
+            root = dataDict.get("topObject").__dict__.get("memopsRoot")
+            root.refreshTopObjects("ccp.general.Affiliation")
+            tobjList = root.__dict__.get("affiliationStores").values()
+            for tobj in tobjList:
+                if not (tobj.__dict__.get("isLoaded")):
+                    tobj.load()
 
-  getClassName = memops.api.Implementation.ComplexDataType.getClassName
+        result = dataDict.get("person")
+        return result
 
-  getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+    getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
-  getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
-  def getFullKey(self, useGuid=False):
-    """
-    GetFullKey for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    result = list()
+    getRoot = memops.api.Implementation.MemopsObject.getRoot
 
-    obj1 = dataDict.get('accessControlStore')
+    getTopObject = memops.api.Implementation.DataObject.getTopObject
 
-    if (useGuid):
-      result.append(obj1.__dict__.get('guid'))
-    else:
-      result.append(obj1.__dict__.get('name'))
+    def getUserGroups(self):
+        """
+        Get for memops.AccessControl.User.userGroups
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("userGroups")
+        result = frozenset(tempVar)
+        return result
 
-    result.append(dataDict.get('name'))
+    removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
 
-    return result
+    def removeLedGroup(self, value):
+        """
+        Remove for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        if not isinstance(value, UserGroup):
+            raise ApiError(
+                """%s.removeLedGroup:
+       value is not of class memops.AccessControl.UserGroup"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-  getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("ledGroups")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-  getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
-  def getIsSuperuser(self):
-    """
-    Get for memops.AccessControl.User.isSuperuser
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('isSuperuser')
-    return result
-  
-  def getLedGroups(self):
-    """
-    Get for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('ledGroups')
-    result = frozenset(tempVar)
-    return result
-  
-  def getLocalKey(self):
-    """
-    GetLocalKey for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.removeLedGroup:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-  getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
-  def getName(self):
-    """
-    Get for memops.AccessControl.User.name
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.removeLedGroup:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-  getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
+        if value.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.removeLedGroup:
+       called with deleted value"""
+                % self.qualifiedName
+            )
 
-  getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
-  def getParent(self):
-    """
-    Get for memops.AccessControl.User.parent
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
-  
-  def getPasswordHashed(self):
-    """
-    Get for memops.AccessControl.User.passwordHashed
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('passwordHashed')
-    return result
-  
-  def getPerson(self):
-    """
-    Get for memops.AccessControl.User.person
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('person') is None):
-      root = dataDict.get('topObject').__dict__.get('memopsRoot')
-      root.refreshTopObjects('ccp.general.Affiliation')
-      tobjList = root.__dict__.get('affiliationStores').values()
-      for tobj in tobjList:
-        if (not (tobj.__dict__.get('isLoaded'))):
-          tobj.load()
+        if value not in currentValues:
+            raise ApiError(
+                """%s.removeLedGroup:
+       value not in list"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    result = dataDict.get('person')
-    return result
+        if notOverride:
+            pass
 
-  getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
+        oldSelves = value.__dict__.get("leaders")
+        oldSelves.remove(self)
+        currentValues.remove(value)
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-  getRoot = memops.api.Implementation.MemopsObject.getRoot
+        # doNotifies
 
-  getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
-  def getUserGroups(self):
-    """
-    Get for memops.AccessControl.User.userGroups
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('userGroups')
-    result = frozenset(tempVar)
-    return result
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
-  def removeLedGroup(self, value):
-    """
-    Remove for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    if (not isinstance(value, UserGroup)):
-      raise ApiError("""%s.removeLedGroup:
-       value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('ledGroups')
-    notInConstructor = not (dataDict.get('inConstructor'))
+            ll = _notifies.get("removeLedGroup")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.removeLedGroup:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+    def set(self, name, value):
+        """
+        SetAttr for memops.AccessControl.User
+        """
+        dataDict = self.__dict__
+        setattr(self, name, value)
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.removeLedGroup:
-       called on deleted object""" % self.qualifiedName
-      )
+    setAccess = memops.api.Implementation.DataObject.setAccess
 
-    if (value.__dict__.get('isDeleted')):
-      raise ApiError("""%s.removeLedGroup:
-       called with deleted value""" % self.qualifiedName
-      )
+    setApplicationData = memops.api.Implementation.DataObject.setApplicationData
 
-    if (not (value in currentValues)):
-      raise ApiError("""%s.removeLedGroup:
-       value not in list""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+    def setIsSuperuser(self, value):
+        """
+        Set for memops.AccessControl.User.isSuperuser
+        """
+        dataDict = self.__dict__
+        if value not in [True, False]:
+            raise ApiError(
+                """%s.setIsSuperuser:
+       memops.Implementation.Boolean input is not in enumeration [True, False]"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (notOverride):
-      pass
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("isSuperuser")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    oldSelves = value.__dict__.get('leaders')
-    oldSelves.remove(self)
-    currentValues.remove(value)
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setIsSuperuser:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    # doNotifies
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setIsSuperuser:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('removeLedGroup')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if value == currentValue:
+            return
 
-  def set(self, name, value):
-    """
-    SetAttr for memops.AccessControl.User
-    """
-    dataDict = self.__dict__
-    setattr(self, name, value)
+        if notOverride:
+            if value is None:
+                raise ApiError(
+                    """%s.setIsSuperuser:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-  setAccess = memops.api.Implementation.DataObject.setAccess
+            pass
 
-  setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
-  def setIsSuperuser(self, value):
-    """
-    Set for memops.AccessControl.User.isSuperuser
-    """
-    dataDict = self.__dict__
-    if (not (value in [True, False])):
-      raise ApiError("""%s.setIsSuperuser:
-       memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        dataDict["isSuperuser"] = value
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('isSuperuser')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        # doNotifies
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setIsSuperuser:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setIsSuperuser:
-       called on deleted object""" % self.qualifiedName
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    if (value == currentValue):
-      return
+            ll = _notifies.get("setIsSuperuser")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    if (notOverride):
-      if (value is None):
-        raise ApiError("""%s.setIsSuperuser:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+    def setLedGroups(self, values):
+        """
+        Set for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        xx = values
+        values = set(values)
+        if len(values) != len(xx):
+            raise ApiError(
+                """%s.setLedGroups:
+       values may not contain duplicates"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-      pass
+        for value in values:
+            if not isinstance(value, UserGroup):
+                raise ApiError(
+                    """%s.setLedGroups:
+         value is not of class memops.AccessControl.UserGroup"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    dataDict['isSuperuser'] = value
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("ledGroups")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    # doNotifies
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setLedGroups:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setIsSuperuser')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setLedGroups:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-  def setLedGroups(self, values):
-    """
-    Set for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    xx = values
-    values = set(values)
-    if (len(values) != len(xx)):
-      raise ApiError("""%s.setLedGroups:
-       values may not contain duplicates""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        for obj in values:
+            if obj.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setLedGroups:
+         an object in values is deleted"""
+                    % self.qualifiedName
+                )
 
-    for value in values:
-      if (not isinstance(value, UserGroup)):
-        raise ApiError("""%s.setLedGroups:
-         value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        if values == currentValues:
+            return
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('ledGroups')
-    notInConstructor = not (dataDict.get('inConstructor'))
-
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setLedGroups:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
-
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setLedGroups:
-       called on deleted object""" % self.qualifiedName
-      )
-
-    for obj in values:
-      if (obj.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setLedGroups:
-         an object in values is deleted""" % self.qualifiedName
-        )
-
-    if (values == currentValues):
-      return
-
-    if (notOverride):
-      xx1 = dataDict.get('topObject')
-      for value in values:
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setLedGroups:
+        if notOverride:
+            xx1 = dataDict.get("topObject")
+            for value in values:
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setLedGroups:
            Link ledGroups between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    for cv in currentValues:
-      if (not (cv in values)):
-        oldSelves = cv.__dict__.get('leaders')
-        oldSelves.remove(self)
+        for cv in currentValues:
+            if cv not in values:
+                oldSelves = cv.__dict__.get("leaders")
+                oldSelves.remove(self)
 
-    for cv in values:
-      if (not (cv in currentValues)):
-        oldSelves = cv.__dict__.get('leaders')
-        oldSelves.add(self)
+        for cv in values:
+            if cv not in currentValues:
+                oldSelves = cv.__dict__.get("leaders")
+                oldSelves.add(self)
 
-    dataDict['ledGroups'] = values
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        dataDict["ledGroups"] = values
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setLedGroups')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def setName(self, value):
-    """
-    Set for memops.AccessControl.User.name
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    _lenValue = len(value)
-    if (_lenValue > 80):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll = _notifies.get("setLedGroups")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def setName(self, value):
+        """
+        Set for memops.AccessControl.User.name
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (not (len(value.splitlines()) <= 1)):
-      raise ApiError("""%s.setName:
-       Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        _lenValue = len(value)
+        if _lenValue > 80:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line maximum length is 80 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('name')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setName:
-       called on deleted object""" % self.qualifiedName
-      )
+        if not (len(value.splitlines()) <= 1):
+            raise ApiError(
+                """%s.setName:
+       Line constraint contains_no_linebreak violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (value == currentValue):
-      return
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("name")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setName:
-         cannot set name, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setName:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      if (value is None):
-        raise ApiError("""%s.setName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if value == currentValue:
+            return
 
-      pass
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setName:
+         cannot set name, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    dataDict['name'] = value
+            if value is None:
+                raise ApiError(
+                    """%s.setName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    # doNotifies
-  
-  def setPasswordHashed(self, value):
-    """
-    Set for memops.AccessControl.User.passwordHashed
-    """
-    dataDict = self.__dict__
-    if (value is not None):
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.setPasswordHashed:
-         memops.Implementation.String input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            pass
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('passwordHashed')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        dataDict["name"] = value
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setPasswordHashed:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+        # doNotifies
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setPasswordHashed:
-       called on deleted object""" % self.qualifiedName
-      )
+    def setPasswordHashed(self, value):
+        """
+        Set for memops.AccessControl.User.passwordHashed
+        """
+        dataDict = self.__dict__
+        if value is not None:
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.setPasswordHashed:
+         memops.Implementation.String input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    if (value == currentValue):
-      return
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("passwordHashed")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (notOverride):
-      pass
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setPasswordHashed:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    dataDict['passwordHashed'] = value
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setPasswordHashed:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    # doNotifies
+        if value == currentValue:
+            return
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setPasswordHashed')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notOverride:
+            pass
 
-  def setPerson(self, value):
-    """
-    Set for memops.AccessControl.User.person
-    """
-    dataDict = self.__dict__
-    if (value is not None):
-      from ccp.api.general.Affiliation import Person as importedType
-      if (not isinstance(value, importedType)):
-        raise ApiError("""%s.setPerson:
-         value is not of class ccp.general.Affiliation.Person""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        dataDict["passwordHashed"] = value
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    topObject = dataDict.get('topObject')
-    if (dataDict.get('person') is None):
-      root = dataDict.get('topObject').__dict__.get('memopsRoot')
-      root.refreshTopObjects('ccp.general.Affiliation')
-      tobjList = root.__dict__.get('affiliationStores').values()
-      for tobj in tobjList:
-        if (not (tobj.__dict__.get('isLoaded'))):
-          tobj.load()
+        # doNotifies
 
-    currentValue = dataDict.get('person')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    topObjectsToCheck = None
-    if (notIsReading):
-      topObjectsToCheck = set()
-      if (notInConstructor):
-        topObject = dataDict.get('topObject')
-        topObjectsToCheck.add(topObject)
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-      if (value is not None):
-        topObject = value.__dict__.get('topObject')
-        topObjectsToCheck.add(topObject)
+            ll = _notifies.get("setPasswordHashed")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-      if (currentValue is not None):
-        topObject = currentValue.__dict__.get('topObject')
-        topObjectsToCheck.add(topObject)
+    def setPerson(self, value):
+        """
+        Set for memops.AccessControl.User.person
+        """
+        dataDict = self.__dict__
+        if value is not None:
+            from ccp.api.general.Affiliation import Person as importedType
 
-      for topObjectToCheck in topObjectsToCheck:
-        if (not (topObjectToCheck.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setPerson:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObjectToCheck,)
-          )
+            if not isinstance(value, importedType):
+                raise ApiError(
+                    """%s.setPerson:
+         value is not of class ccp.general.Affiliation.Person"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setPerson:
-       called on deleted object""" % self.qualifiedName
-      )
+        topObject = dataDict.get("topObject")
+        if dataDict.get("person") is None:
+            root = dataDict.get("topObject").__dict__.get("memopsRoot")
+            root.refreshTopObjects("ccp.general.Affiliation")
+            tobjList = root.__dict__.get("affiliationStores").values()
+            for tobj in tobjList:
+                if not (tobj.__dict__.get("isLoaded")):
+                    tobj.load()
 
-    if (value is not None):
-      if (value.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setPerson:
-         called with deleted value""" % self.qualifiedName
-        )
+        currentValue = dataDict.get("person")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (value == currentValue):
-      return
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        topObjectsToCheck = None
+        if notIsReading:
+            topObjectsToCheck = set()
+            if notInConstructor:
+                topObject = dataDict.get("topObject")
+                topObjectsToCheck.add(topObject)
 
-    if (notOverride):
-      if (value is not None):
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setPerson:
+            if value is not None:
+                topObject = value.__dict__.get("topObject")
+                topObjectsToCheck.add(topObject)
+
+            if currentValue is not None:
+                topObject = currentValue.__dict__.get("topObject")
+                topObjectsToCheck.add(topObject)
+
+            for topObjectToCheck in topObjectsToCheck:
+                if not (topObjectToCheck.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setPerson:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObjectToCheck,)
+                    )
+
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setPerson:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value is not None:
+            if value.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setPerson:
+         called with deleted value"""
+                    % self.qualifiedName
+                )
+
+        if value == currentValue:
+            return
+
+        if notOverride:
+            if value is not None:
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setPerson:
            Link person between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    if (currentValue is not None):
-      if (notIsReading):
-        oldSelves = currentValue.__dict__.get('users')
-        oldSelves.remove(self)
-      else:
-        raise ApiError("""%s.setPerson:
-         Read link 'person' incompatible with pre-existing link""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if currentValue is not None:
+            if notIsReading:
+                oldSelves = currentValue.__dict__.get("users")
+                oldSelves.remove(self)
+            else:
+                raise ApiError(
+                    """%s.setPerson:
+         Read link 'person' incompatible with pre-existing link"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    if (value is not None):
-      newSelves = value.__dict__.get('users')
-      newSelves.add(self)
+        if value is not None:
+            newSelves = value.__dict__.get("users")
+            newSelves.add(self)
 
-    dataDict['person'] = value
-    if (notIsReading):
-      for topObjectModify in topObjectsToCheck:
-        topObjectModify.__dict__['isModified'] = True
+        dataDict["person"] = value
+        if notIsReading:
+            for topObjectModify in topObjectsToCheck:
+                topObjectModify.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setPerson')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def setUserGroups(self, values):
-    """
-    Set for memops.AccessControl.User.userGroups
-    """
-    dataDict = self.__dict__
-    xx = values
-    values = set(values)
-    if (len(values) != len(xx)):
-      raise ApiError("""%s.setUserGroups:
-       values may not contain duplicates""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    for value in values:
-      if (not isinstance(value, UserGroup)):
-        raise ApiError("""%s.setUserGroups:
-         value is not of class memops.AccessControl.UserGroup""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            ll = _notifies.get("setPerson")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('userGroups')
-    notInConstructor = not (dataDict.get('inConstructor'))
+    def setUserGroups(self, values):
+        """
+        Set for memops.AccessControl.User.userGroups
+        """
+        dataDict = self.__dict__
+        xx = values
+        values = set(values)
+        if len(values) != len(xx):
+            raise ApiError(
+                """%s.setUserGroups:
+       values may not contain duplicates"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setUserGroups:
-       called on deleted object""" % self.qualifiedName
-      )
+        for value in values:
+            if not isinstance(value, UserGroup):
+                raise ApiError(
+                    """%s.setUserGroups:
+         value is not of class memops.AccessControl.UserGroup"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    for obj in values:
-      if (obj.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setUserGroups:
-         an object in values is deleted""" % self.qualifiedName
-        )
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("userGroups")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (values == currentValues):
-      return
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setUserGroups:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setUserGroups:
-         cannot set userGroups, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        for obj in values:
+            if obj.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setUserGroups:
+         an object in values is deleted"""
+                    % self.qualifiedName
+                )
 
-      xx1 = dataDict.get('topObject')
-      for value in values:
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setUserGroups:
+        if values == currentValues:
+            return
+
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setUserGroups:
+         cannot set userGroups, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+
+            xx1 = dataDict.get("topObject")
+            for value in values:
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setUserGroups:
            Link userGroups between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    for cv in currentValues:
-      if (not (cv in values)):
-        oldSelves = cv.__dict__.get('members')
-        oldSelves.remove(self)
+        for cv in currentValues:
+            if cv not in values:
+                oldSelves = cv.__dict__.get("members")
+                oldSelves.remove(self)
 
-    for cv in values:
-      if (not (cv in currentValues)):
-        oldSelves = cv.__dict__.get('members')
-        oldSelves.add(self)
+        for cv in values:
+            if cv not in currentValues:
+                oldSelves = cv.__dict__.get("members")
+                oldSelves.add(self)
 
-    dataDict['userGroups'] = values
+        dataDict["userGroups"] = values
 
-    # doNotifies
-  
-  def sortedLedGroups(self):
-    """
-    Sorted for memops.AccessControl.User.ledGroups
-    """
-    dataDict = self.__dict__
-    ll = dataDict.get('ledGroups')
-    ll = [(x.getFullKey(),x) for x in ll]
-    
-    ll.sort()
-    result = [x[1] for x in ll]
-    return result
-  
-  def sortedUserGroups(self):
-    """
-    Sorted for memops.AccessControl.User.userGroups
-    """
-    dataDict = self.__dict__
-    ll = dataDict.get('userGroups')
-    ll = [(x.getFullKey(),x) for x in ll]
-    
-    ll.sort()
-    result = [x[1] for x in ll]
-    return result
+        # doNotifies
 
-  toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
+    def sortedLedGroups(self):
+        """
+        Sorted for memops.AccessControl.User.ledGroups
+        """
+        dataDict = self.__dict__
+        ll = dataDict.get("ledGroups")
+        ll = [(x.getFullKey(), x) for x in ll]
 
-  applicationData = memops.api.Implementation.DataObject.applicationData
+        ll.sort()
+        result = [x[1] for x in ll]
+        return result
 
-  className = memops.api.Implementation.ComplexDataType.className
+    def sortedUserGroups(self):
+        """
+        Sorted for memops.AccessControl.User.userGroups
+        """
+        dataDict = self.__dict__
+        ll = dataDict.get("userGroups")
+        ll = [(x.getFullKey(), x) for x in ll]
 
-  fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+        ll.sort()
+        result = [x[1] for x in ll]
+        return result
 
-  inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+    toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
-  isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
-  isSuperuser = property(getIsSuperuser, setIsSuperuser, None,
-  r"""Is this user a superuser? Superusers have permission to do anything they 
+    applicationData = memops.api.Implementation.DataObject.applicationData
+
+    className = memops.api.Implementation.ComplexDataType.className
+
+    fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+
+    inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+
+    isDeleted = memops.api.Implementation.MemopsObject.isDeleted
+
+    isSuperuser = property(
+        getIsSuperuser,
+        setIsSuperuser,
+        None,
+        r"""Is this user a superuser? Superusers have permission to do anything they 
   want. This may be removed later for more sophisticated access control 
   models. 
-  """)
+  """,
+    )
 
-  metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
-  name = property(getName, setName, None,
-  r"""
-  """)
+    metaclass = memops.api.Implementation.ComplexDataType.metaclass
 
-  packageName = memops.api.Implementation.ComplexDataType.packageName
+    name = property(
+        getName,
+        setName,
+        None,
+        r"""
+  """,
+    )
 
-  packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
-  passwordHashed = property(getPasswordHashed, setPasswordHashed, None,
-  r"""Hashed password for user
-  """)
+    packageName = memops.api.Implementation.ComplexDataType.packageName
 
-  qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+    packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
-  access = memops.api.Implementation.DataObject.access
-  
-  accessControlStore = property(getAccessControlStore,  None, None,
-  r"""parent link
-  """)
+    passwordHashed = property(
+        getPasswordHashed,
+        setPasswordHashed,
+        None,
+        r"""Hashed password for user
+  """,
+    )
 
-  activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
-  ledGroups = property(getLedGroups, setLedGroups, None,
-  r"""
-  """)
-  
-  parent = property(getParent, None, None,
-  r"""link to parent object - synonym for accessControlStore
-  """)
-  
-  person = property(getPerson, setPerson, None,
-  r"""Actual person corresponding to user
-  """)
+    qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
 
-  root = memops.api.Implementation.MemopsObject.root
+    access = memops.api.Implementation.DataObject.access
 
-  topObject = memops.api.Implementation.DataObject.topObject
-  
-  userGroups = property(getUserGroups, setUserGroups, None,
-  r"""
-  """)
+    accessControlStore = property(
+        getAccessControlStore,
+        None,
+        None,
+        r"""parent link
+  """,
+    )
+
+    activeAccess = memops.api.Implementation.DataObject.activeAccess
+
+    ledGroups = property(
+        getLedGroups,
+        setLedGroups,
+        None,
+        r"""
+  """,
+    )
+
+    parent = property(
+        getParent,
+        None,
+        None,
+        r"""link to parent object - synonym for accessControlStore
+  """,
+    )
+
+    person = property(
+        getPerson,
+        setPerson,
+        None,
+        r"""Actual person corresponding to user
+  """,
+    )
+
+    root = memops.api.Implementation.MemopsObject.root
+
+    topObject = memops.api.Implementation.DataObject.topObject
+
+    userGroups = property(
+        getUserGroups,
+        setUserGroups,
+        None,
+        r"""
+  """,
+    )
+
 
 ###############################################################################
 class UserGroup(memops.api.Implementation.DataObject):
-  r"""
-  """
-  #   from data model element memops.AccessControl.UserGroup revision ?
-  _metaclass = metaPackage.getElement('UserGroup')
-  _packageName = 'memops.AccessControl'
-  _packageShortName = 'ACCO'
-  _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'accessControlStore', 'activeAccess', 'leaders', 'members', 'parent', 'permissions', 'root', 'topObject',)
-  
-  _notifies = {'':[]}
-  
-  def __init__(self, parent, **attrlinks):
-    """
-    Constructor for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    dataDict['accessControlStore'] = parent
-    if (not isinstance(parent, AccessControlStore)):
-      raise ApiError("""%s.__init__:
-       value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-       + ": %s" % (parent,)
-      )
+    r""" """
 
-    if (parent.__dict__.get('isDeleted')):
-      raise ApiError("""%s.__init__:
-       called with deleted parent""" % self.qualifiedName
-      )
+    #   from data model element memops.AccessControl.UserGroup revision ?
+    _metaclass = metaPackage.getElement("UserGroup")
+    _packageName = "memops.AccessControl"
+    _packageShortName = "ACCO"
+    _fieldNames = (
+        "applicationData",
+        "className",
+        "fieldNames",
+        "inConstructor",
+        "isDeleted",
+        "metaclass",
+        "name",
+        "packageName",
+        "packageShortName",
+        "qualifiedName",
+        "access",
+        "accessControlStore",
+        "activeAccess",
+        "leaders",
+        "members",
+        "parent",
+        "permissions",
+        "root",
+        "topObject",
+    )
 
-    topObject = parent.__dict__.get('topObject')
-    dataDict['topObject'] = topObject
+    _notifies = {"": []}
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-
-    if (notIsReading):
-      if (not (topObject.__dict__.get('isModifiable'))):
-        raise ApiError("""%s.__init__:
-         Storage not modifiable""" % self.qualifiedName
-         + ": %s" % (topObject,)
-        )
-
-    try:
-      if (not (parent.__dict__.get('isLoaded') or parent.__dict__.get('isReading'))):
-        parent.load()
-
-      dataDict['applicationData'] = list()
-      dataDict['name'] = None
-      dataDict['access'] = None
-      dataDict['leaders'] = set()
-      dataDict['members'] = set()
-      dataDict['permissions'] = set()
-
-      dataDict['inConstructor'] = True
-      try:
-        
-        for key, value in attrlinks.iteritems():
-          try:
-            func = getattr(self.__class__, key).fset
-          except:
-            raise ApiError("%s: error setting %s - not a modeled attribute"
-                           % (self, key))
-          if func is None:
-            raise ApiError("%s: error setting %s - not a settable attribute"
-                           % (self, key))
-          else:
-            func(self, value)
-        del dataDict['inConstructor']
-      except:
-        print("ERROR in memops.AccessControl.UserGroup.__init__")
-        del dataDict['inConstructor']
-        raise
-
-      if (notIsReading):
-        childrenDict = parent.__dict__.get('userGroups')
-        objKey = dataDict.get('name')
-        if (objKey is None):
-          raise ApiError("""%s.__init__:
-           Key attribute or link not set (from ['name'])""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
-        else:
-          if (childrenDict.get(objKey) is None):
-            childrenDict[objKey] = self
-          else:
-            raise ApiError("""%s.__init__:
-             Could not create, pre-existing object had same key""" % self.qualifiedName
-             + ": %s" % (self,)
+    def __init__(self, parent, **attrlinks):
+        """
+        Constructor for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        dataDict["accessControlStore"] = parent
+        if not isinstance(parent, AccessControlStore):
+            raise ApiError(
+                """%s.__init__:
+       value is not of class memops.AccessControl.AccessControlStore"""
+                % self.qualifiedName
+                + ": %s" % (parent,)
             )
 
-      if (notOverride):
-        self.checkValid()
+        if parent.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.__init__:
+       called with deleted parent"""
+                % self.qualifiedName
+            )
 
-      if (notIsReading):
-        topObject.__dict__['isModified'] = True
+        topObject = parent.__dict__.get("topObject")
+        dataDict["topObject"] = topObject
 
-    except:
-      import sys
-      exc_info = sys.exc_info()
-      try:
-        dataDict['inConstructor'] = True
-        self.delete()
-        del dataDict['inConstructor']
-      except:
-        print('''WARNING Error in clean-up of incorrectly created object. 
-        Data may be left in an illegal state''')
-        del dataDict['inConstructor']
-      raise exc_info[1]
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
 
-    # doNotifies
+        if notIsReading:
+            if not (topObject.__dict__.get("isModifiable")):
+                raise ApiError(
+                    """%s.__init__:
+         Storage not modifiable"""
+                    % self.qualifiedName
+                    + ": %s" % (topObject,)
+                )
 
-    if (notOverride):
-      
-      ll = self.__class__._notifies.get('__init__')
-      if ll:
-        for notify in ll:
-          notify(self)
+        try:
+            if not (parent.__dict__.get("isLoaded") or parent.__dict__.get("isReading")):
+                parent.load()
 
-  def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
-    """
-    checkDelete for memops.AccessControl.UserGroup:
-       determines cascading 
-    deletes to follow from delete of object.
-       *Implementation function* - 
-    should be called only by API delete function.
-    """
-    dataDict = self.__dict__
-    objsToBeDeleted.add(self)
-    permissions = dataDict.get('permissions')
-    for permission in permissions:
-      if (not (permission in objsToBeDeleted)):
-        objsToBeDeleted.add(permission)
-        objsToBeChecked.append(permission)
+            dataDict["applicationData"] = list()
+            dataDict["name"] = None
+            dataDict["access"] = None
+            dataDict["leaders"] = set()
+            dataDict["members"] = set()
+            dataDict["permissions"] = set()
 
-    topObject = dataDict.get('topObject')
-    topObjectsToCheck.add(topObject)
-  
-  def _singleDelete(self, objsToBeDeleted):
-    """
-    singleDelete for memops.AccessControl.UserGroup:   deletes
-    objects
-    *Implementation function* - will CORRUPT DATA if called outside 
-    the API delete function.
-    """
-    dataDict = self.__dict__
-    dataDict['isDeleted'] = True
-    access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
-      access.__dict__['dataObject'] = None
+            dataDict["inConstructor"] = True
+            try:
+                for key, value in attrlinks.iteritems():
+                    try:
+                        func = getattr(self.__class__, key).fset
+                    except:
+                        raise ApiError("%s: error setting %s - not a modeled attribute" % (self, key))
+                    if func is None:
+                        raise ApiError("%s: error setting %s - not a settable attribute" % (self, key))
+                    else:
+                        func(self, value)
+                del dataDict["inConstructor"]
+            except:
+                print("ERROR in memops.AccessControl.UserGroup.__init__")
+                del dataDict["inConstructor"]
+                raise
 
-    for leader in dataDict.get('leaders'):
-      if (not (leader in objsToBeDeleted)):
-        ledGroups = leader.__dict__.get('ledGroups')
-        ledGroups.remove(self)
+            if notIsReading:
+                childrenDict = parent.__dict__.get("userGroups")
+                objKey = dataDict.get("name")
+                if objKey is None:
+                    raise ApiError(
+                        """%s.__init__:
+           Key attribute or link not set (from ['name'])"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+                else:
+                    if childrenDict.get(objKey) is None:
+                        childrenDict[objKey] = self
+                    else:
+                        raise ApiError(
+                            """%s.__init__:
+             Could not create, pre-existing object had same key"""
+                            % self.qualifiedName
+                            + ": %s" % (self,)
+                        )
 
-    accessControlStore = dataDict.get('accessControlStore')
-    if (not (accessControlStore in objsToBeDeleted)):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s._singleDelete:
-         Key could not be calculated for object to be deleted""" % self.qualifiedName
-        )
-      else:
-        dd = accessControlStore.__dict__.get('userGroups')
-        if (self is dd.get(objKey)):
-          del dd[objKey]
+            if notOverride:
+                self.checkValid()
 
-  addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
-  def addLeader(self, value):
-    """
-    Add for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    if (not isinstance(value, User)):
-      raise ApiError("""%s.addLeader:
-       value is not of class memops.AccessControl.User""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            if notIsReading:
+                topObject.__dict__["isModified"] = True
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('leaders')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        except:
+            import sys
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.addLeader:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+            exc_info = sys.exc_info()
+            try:
+                dataDict["inConstructor"] = True
+                self.delete()
+                del dataDict["inConstructor"]
+            except:
+                print("""WARNING Error in clean-up of incorrectly created object. 
+        Data may be left in an illegal state""")
+                del dataDict["inConstructor"]
+            raise exc_info[1]
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.addLeader:
-       called on deleted object""" % self.qualifiedName
-      )
+        # doNotifies
 
-    if (value.__dict__.get('isDeleted')):
-      raise ApiError("""%s.addLeader:
-       called with deleted value""" % self.qualifiedName
-      )
+        if notOverride:
+            ll = self.__class__._notifies.get("__init__")
+            if ll:
+                for notify in ll:
+                    notify(self)
 
-    if (value in currentValues):
-      raise ApiError("""%s.addLeader:
-       value is in list already""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+    def _checkDelete(self, objsToBeDeleted, objsToBeChecked, linkCounter, topObjectsToCheck):
+        """
+        checkDelete for memops.AccessControl.UserGroup:
+           determines cascading
+        deletes to follow from delete of object.
+           *Implementation function* -
+        should be called only by API delete function.
+        """
+        dataDict = self.__dict__
+        objsToBeDeleted.add(self)
+        permissions = dataDict.get("permissions")
+        for permission in permissions:
+            if permission not in objsToBeDeleted:
+                objsToBeDeleted.add(permission)
+                objsToBeChecked.append(permission)
 
-    if (notOverride):
-      if (value is not None):
-        xx1 = dataDict.get('topObject')
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.addLeader:
+        topObject = dataDict.get("topObject")
+        topObjectsToCheck.add(topObject)
+
+    def _singleDelete(self, objsToBeDeleted):
+        """
+        singleDelete for memops.AccessControl.UserGroup:   deletes
+        objects
+        *Implementation function* - will CORRUPT DATA if called outside
+        the API delete function.
+        """
+        dataDict = self.__dict__
+        dataDict["isDeleted"] = True
+        access = dataDict.get("access")
+        if access is not None and access not in objsToBeDeleted:
+            access.__dict__["dataObject"] = None
+
+        for leader in dataDict.get("leaders"):
+            if leader not in objsToBeDeleted:
+                ledGroups = leader.__dict__.get("ledGroups")
+                ledGroups.remove(self)
+
+        accessControlStore = dataDict.get("accessControlStore")
+        if accessControlStore not in objsToBeDeleted:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s._singleDelete:
+         Key could not be calculated for object to be deleted"""
+                    % self.qualifiedName
+                )
+            else:
+                dd = accessControlStore.__dict__.get("userGroups")
+                if self is dd.get(objKey):
+                    del dd[objKey]
+
+    addApplicationData = memops.api.Implementation.DataObject.addApplicationData
+
+    def addLeader(self, value):
+        """
+        Add for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        if not isinstance(value, User):
+            raise ApiError(
+                """%s.addLeader:
+       value is not of class memops.AccessControl.User"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
+
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("leaders")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.addLeader:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
+
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.addLeader:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        if value.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.addLeader:
+       called with deleted value"""
+                % self.qualifiedName
+            )
+
+        if value in currentValues:
+            raise ApiError(
+                """%s.addLeader:
+       value is in list already"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
+
+        if notOverride:
+            if value is not None:
+                xx1 = dataDict.get("topObject")
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.addLeader:
            Link leaders between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    oldSelves = value.__dict__.get('ledGroups')
-    oldSelves.add(self)
-    currentValues.add(value)
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        oldSelves = value.__dict__.get("ledGroups")
+        oldSelves.add(self)
+        currentValues.add(value)
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('addLeader')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def checkAllValid(self, complete=False):
-    """
-    CheckAllValid for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    self.checkValid(complete)
-  
-  def checkValid(self, complete=False):
-    """
-    CheckValid for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.checkValid:
-       called on deleted object""" % self.qualifiedName
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    if (complete):
-      objKey = dataDict.get('name')
-      if (objKey is None):
-        raise ApiError("""%s.checkValid:
-         Key could not be calculated for object""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
-      else:
-        value = dataDict.get('accessControlStore')
-        dd = value.__dict__.get('userGroups')
-        if (not (self is dd.get(objKey))):
-          raise ApiError("""%s.checkValid:
-           non-reciprocal parent link 'accessControlStore' from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            ll = _notifies.get("addLeader")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-      # check attributes
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+    def checkAllValid(self, complete=False):
+        """
+        CheckAllValid for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        self.checkValid(complete)
 
-      values = dataDict.get('applicationData')
-      for value in values:
-        from memops.api.Implementation import ApplicationData as importedType
-        if (not isinstance(value, importedType)):
-          raise ApiError("""%s.checkValid: applicationData:
-           value is not of class memops.Implementation.ApplicationData""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+    def checkValid(self, complete=False):
+        """
+        CheckValid for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.checkValid:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      value = dataDict.get('name')
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        if complete:
+            objKey = dataDict.get("name")
+            if objKey is None:
+                raise ApiError(
+                    """%s.checkValid:
+         Key could not be calculated for object"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
+            else:
+                value = dataDict.get("accessControlStore")
+                dd = value.__dict__.get("userGroups")
+                if self is not dd.get(objKey):
+                    raise ApiError(
+                        """%s.checkValid:
+           non-reciprocal parent link 'accessControlStore' from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            # check attributes
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: name:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            values = dataDict.get("applicationData")
+            for value in values:
+                from memops.api.Implementation import ApplicationData as importedType
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: name:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+                if not isinstance(value, importedType):
+                    raise ApiError(
+                        """%s.checkValid: applicationData:
+           value is not of class memops.Implementation.ApplicationData"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-      value = self.getQualifiedName()
-      if (value is None):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+            value = dataDict.get("name")
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (isinstance(value, memops.api.Implementation.String.PythonType)):
-        pass
-      else:
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      _lenValue = len(value)
-      if (_lenValue > 80):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: name:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (_lenValue < 1):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: name:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      if (not (len(value.splitlines()) <= 1)):
-        raise ApiError("""%s.checkValid: qualifiedName:
-         Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = self.getQualifiedName()
+            if value is None:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-      # check roles
-      if (not (dataDict.get('topObject').__dict__.get('isLoaded') or dataDict.get('topObject').__dict__.get('isReading'))):
-        dataDict.get('topObject').load()
+            if isinstance(value, memops.api.Implementation.String.PythonType):
+                pass
+            else:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line input is not of a valid type"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = dataDict.get('access')
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: access:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            _lenValue = len(value)
+            if _lenValue > 80:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line maximum length is 80 violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-        oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: access:
-           non-reciprocal link access from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+            if _lenValue < 1:
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         memops.Implementation.Line: Empty string not allowed"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: access:
+            if not (len(value.splitlines()) <= 1):
+                raise ApiError(
+                    """%s.checkValid: qualifiedName:
+         Line constraint contains_no_linebreak violated by value"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+            # check roles
+            if not (
+                dataDict.get("topObject").__dict__.get("isLoaded")
+                or dataDict.get("topObject").__dict__.get("isReading")
+            ):
+                dataDict.get("topObject").load()
+
+            value = dataDict.get("access")
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: access:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
+
+                oldSelf = value.__dict__.get("dataObject")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: access:
+           non-reciprocal link access from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: access:
            Link access between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      value = dataDict.get('accessControlStore')
-      if (not isinstance(value, AccessControlStore)):
-        raise ApiError("""%s.checkValid: accessControlStore:
-         value is not of class memops.AccessControl.AccessControlStore""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            value = dataDict.get("accessControlStore")
+            if not isinstance(value, AccessControlStore):
+                raise ApiError(
+                    """%s.checkValid: accessControlStore:
+         value is not of class memops.AccessControl.AccessControlStore"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-      value = self.getActiveAccess()
-      if (value is not None):
-        if (not isinstance(value, AccessObject)):
-          raise ApiError("""%s.checkValid: activeAccess:
-           value is not of class memops.AccessControl.AccessObject""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            value = self.getActiveAccess()
+            if value is not None:
+                if not isinstance(value, AccessObject):
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
+           value is not of class memops.AccessControl.AccessObject"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
-        yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: activeAccess:
+                xx1 = dataDict.get("topObject").__dict__.get("memopsRoot")
+                yy1 = value.__dict__.get("topObject").__dict__.get("memopsRoot")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
-           - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.MemopsRoot does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      values = dataDict.get('leaders')
-      for value in values:
-        if (not isinstance(value, User)):
-          raise ApiError("""%s.checkValid: leaders:
-           value is not of class memops.AccessControl.User""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            values = dataDict.get("leaders")
+            for value in values:
+                if not isinstance(value, User):
+                    raise ApiError(
+                        """%s.checkValid: leaders:
+           value is not of class memops.AccessControl.User"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        oldSelves = value.__dict__.get('ledGroups')
-        if (not (self in oldSelves)):
-          raise ApiError("""%s.checkValid: leaders:
-           non-reciprocal link leaders from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+                oldSelves = value.__dict__.get("ledGroups")
+                if self not in oldSelves:
+                    raise ApiError(
+                        """%s.checkValid: leaders:
+           non-reciprocal link leaders from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-        xx1 = dataDict.get('topObject')
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: leaders:
+                xx1 = dataDict.get("topObject")
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: leaders:
            Link leaders between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      values = dataDict.get('members')
-      for value in values:
-        if (not isinstance(value, User)):
-          raise ApiError("""%s.checkValid: members:
-           value is not of class memops.AccessControl.User""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            values = dataDict.get("members")
+            for value in values:
+                if not isinstance(value, User):
+                    raise ApiError(
+                        """%s.checkValid: members:
+           value is not of class memops.AccessControl.User"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        oldSelves = value.__dict__.get('userGroups')
-        if (not (self in oldSelves)):
-          raise ApiError("""%s.checkValid: members:
-           non-reciprocal link members from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+                oldSelves = value.__dict__.get("userGroups")
+                if self not in oldSelves:
+                    raise ApiError(
+                        """%s.checkValid: members:
+           non-reciprocal link members from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-        xx1 = dataDict.get('topObject')
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: members:
+                xx1 = dataDict.get("topObject")
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: members:
            Link members between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-      values = dataDict.get('permissions')
-      for value in values:
-        if (not isinstance(value, Permission)):
-          raise ApiError("""%s.checkValid: permissions:
-           value is not of class memops.AccessControl.Permission""" % self.qualifiedName
-           + ": %s" % (value,)
-          )
+            values = dataDict.get("permissions")
+            for value in values:
+                if not isinstance(value, Permission):
+                    raise ApiError(
+                        """%s.checkValid: permissions:
+           value is not of class memops.AccessControl.Permission"""
+                        % self.qualifiedName
+                        + ": %s" % (value,)
+                    )
 
-        oldSelf = value.__dict__.get('userGroup')
-        if (not (oldSelf is self)):
-          raise ApiError("""%s.checkValid: permissions:
-           non-reciprocal link permissions from object""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+                oldSelf = value.__dict__.get("userGroup")
+                if oldSelf is not self:
+                    raise ApiError(
+                        """%s.checkValid: permissions:
+           non-reciprocal link permissions from object"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
 
-        xx1 = dataDict.get('topObject')
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.checkValid: permissions:
+                xx1 = dataDict.get("topObject")
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.checkValid: permissions:
            Link permissions between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    # check explicit class constraints
-    # check attributes
-    values = dataDict.get('applicationData')
-    for value in values:
-      value.checkAllValid(complete)
+        # check explicit class constraints
+        # check attributes
+        values = dataDict.get("applicationData")
+        for value in values:
+            value.checkAllValid(complete)
 
-    value = dataDict.get('name')
-    if (value is None):
-      raise ApiError("""%s.checkValid: name:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        value = dataDict.get("name")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: name:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    # check roles
-    value = dataDict.get('access')
-    value = dataDict.get('accessControlStore')
-    if (value is None):
-      raise ApiError("""%s.checkValid: accessControlStore:
-       value cannot be None""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        # check roles
+        value = dataDict.get("access")
+        value = dataDict.get("accessControlStore")
+        if value is None:
+            raise ApiError(
+                """%s.checkValid: accessControlStore:
+       value cannot be None"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    values = dataDict.get('leaders')
-    values = dataDict.get('members')
-    values = dataDict.get('permissions')
+        values = dataDict.get("leaders")
+        values = dataDict.get("members")
+        values = dataDict.get("permissions")
 
-  delete = memops.api.Implementation.DataObject.delete
+    delete = memops.api.Implementation.DataObject.delete
 
-  findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
-  def findAllLeaders(self, **conditions):
-    """
-    FindAll for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('leaders')
-      result = set(currentValues)
+    findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
-    else:
-      currentValues = dataDict.get('leaders')
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
+    def findAllLeaders(self, **conditions):
+        """
+        FindAll for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("leaders")
+            result = set(currentValues)
 
         else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
+            currentValues = dataDict.get("leaders")
+            result = set()
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
 
-    return result
-  
-  def findAllMembers(self, **conditions):
-    """
-    FindAll for memops.AccessControl.UserGroup.members
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('members')
-      result = set(currentValues)
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
 
-    else:
-      currentValues = dataDict.get('members')
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
 
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
 
-    return result
-  
-  def findAllPermissions(self, **conditions):
-    """
-    FindAll for memops.AccessControl.UserGroup.permissions
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('permissions')
-      result = set(currentValues)
+        return result
 
-    else:
-      currentValues = dataDict.get('permissions')
-      result = set()
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result.add(v)
+    def findAllMembers(self, **conditions):
+        """
+        FindAll for memops.AccessControl.UserGroup.members
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("members")
+            result = set(currentValues)
 
         else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result.add(v)
+            currentValues = dataDict.get("members")
+            result = set()
 
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result.add(v)
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
 
-    return result
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
 
-  findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
-  def findFirstLeader(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('leaders')
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    def findAllPermissions(self, **conditions):
+        """
+        FindAll for memops.AccessControl.UserGroup.permissions
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("permissions")
+            result = set(currentValues)
+
+        else:
+            currentValues = dataDict.get("permissions")
+            result = set()
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "opType",
+                        "permission",
+                        "permissionClass",
+                        "roleName",
+                        "access",
+                        "accessObject",
+                        "userGroup",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result.add(v)
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result.add(v)
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result.add(v)
+
+        return result
+
+    findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
+
+    def findFirstLeader(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("leaders")
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            currentValues = dataDict.get("leaders")
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def findFirstMember(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.UserGroup.members
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("members")
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            currentValues = dataDict.get("members")
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "isSuperuser",
+                        "name",
+                        "passwordHashed",
+                        "access",
+                        "accessControlStore",
+                        "person",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def findFirstPermission(self, **conditions):
+        """
+        FindFirst for memops.AccessControl.UserGroup.permissions
+        """
+        dataDict = self.__dict__
+        nConditions = len(conditions)
+        if nConditions == 0:
+            currentValues = dataDict.get("permissions")
+            if currentValues:
+                result = iter(currentValues).next()
+            else:
+                result = None
+
+        else:
+            currentValues = dataDict.get("permissions")
+            result = None
+
+            items = conditions.items()
+            if nConditions == 1:
+                (key, condition) = items[0]
+                directAttrs = frozenset(
+                    (
+                        "opType",
+                        "permission",
+                        "permissionClass",
+                        "roleName",
+                        "access",
+                        "accessObject",
+                        "userGroup",
+                    )
+                )
+                if key in directAttrs:
+                    for v in currentValues:
+                        if condition == v.__dict__.get(key):
+                            result = v
+                            break
+
+                else:
+                    if isinstance(condition, list):
+                        condition = tuple(condition)
+                    elif isinstance(condition, set):
+                        condition = frozenset(condition)
+
+                    for v in currentValues:
+                        if getattr(v, key, ApiError) == condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            result = v
+                            break
+
+            else:
+                for ii in range(nConditions):
+                    (key, condition) = items[ii]
+                    if isinstance(condition, list):
+                        items[ii] = (key, tuple(condition))
+                    elif isinstance(condition, set):
+                        items[ii] = (key, frozenset(condition))
+
+                for v in currentValues:
+                    for key, condition in items:
+                        if getattr(v, key, ApiError) != condition:
+                            # NB ApiError is a dummy object, never equal to condition
+                            break
+                    else:
+                        result = v
+                        break
+
+        return result
+
+    def get(self, name):
+        """
+        GetAttr for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        return getattr(self, name)
+
+    getAccess = memops.api.Implementation.DataObject.getAccess
+
+    def getAccessControlStore(self):
+        """
+        Get for memops.AccessControl.UserGroup.accessControlStore
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
+
+    getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
+
+    getApplicationData = memops.api.Implementation.DataObject.getApplicationData
+
+    def getByKey(startObj, fullKey):
+        """
+        GetByKey for memops.AccessControl.UserGroup
+        """
+
         result = None
-
-    else:
-      currentValues = dataDict.get('leaders')
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def findFirstMember(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.UserGroup.members
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('members')
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      currentValues = dataDict.get('members')
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def findFirstPermission(self, **conditions):
-    """
-    FindFirst for memops.AccessControl.UserGroup.permissions
-    """
-    dataDict = self.__dict__
-    nConditions = len(conditions)
-    if (nConditions == 0):
-      currentValues = dataDict.get('permissions')
-      if (currentValues):
-        result = iter(currentValues).next()
-      else:
-        result = None
-
-    else:
-      currentValues = dataDict.get('permissions')
-      result = None
-      
-      items = conditions.items()
-      if (nConditions == 1):
-        (key, condition) = items[0]
-        directAttrs = frozenset(('opType', 'permission', 'permissionClass', 'roleName', 'access', 'accessObject', 'userGroup',))
-        if (key in directAttrs):
-          for v in currentValues:
-            if (condition == v.__dict__.get(key)):
-              result = v; break
-
-        else:
-          
-          if isinstance(condition, list):
-            condition = tuple(condition)
-          elif isinstance(condition, set):
-            condition = frozenset(condition)
-          
-          for v in currentValues:
-            if getattr(v, key, ApiError) == condition:
-              # NB ApiError is a dummy object, never equal to condition
-              result = v; break
-
-      else:
-        
-        for ii in range(nConditions):
-          (key, condition) = items[ii]
-          if isinstance(condition, list):
-            items[ii] = (key, tuple(condition))
-          elif isinstance(condition, set):
-            items[ii] = (key, frozenset(condition))
-        
-        for v in currentValues:
-        
-          for (key, condition) in items:
-            if getattr(v, key, ApiError) != condition:
-              # NB ApiError is a dummy object, never equal to condition
-              break
-          else:
-            result = v; break
-
-    return result
-  
-  def get(self, name):
-    """
-    GetAttr for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    return getattr(self, name)
-
-  getAccess = memops.api.Implementation.DataObject.getAccess
-  
-  def getAccessControlStore(self):
-    """
-    Get for memops.AccessControl.UserGroup.accessControlStore
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
-
-  getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-
-  getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
-  def getByKey(startObj, fullKey):
-    """
-    GetByKey for memops.AccessControl.UserGroup
-    """
-
-    result = None
-    if (startObj.__class__.__name__ == 'MemopsRoot'):
-      if (2 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.UserGroup'.getByKey:
+        if startObj.__class__.__name__ == "MemopsRoot":
+            if 2 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.UserGroup'.getByKey:
          getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-      obj0 = startObj
-      objKey = fullKey[0]
-      obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
-      if (obj1 is None):
-        obj0.refreshTopObjects('memops.AccessControl')
-        obj1 = obj0.__dict__.get('accessControlStores').get(objKey)
+            obj0 = startObj
+            objKey = fullKey[0]
+            obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
+            if obj1 is None:
+                obj0.refreshTopObjects("memops.AccessControl")
+                obj1 = obj0.__dict__.get("accessControlStores").get(objKey)
 
-    else:
-      if (1 != len(fullKey)):
-        raise ApiError("""'memops.AccessControl.UserGroup'.getByKey:
+        else:
+            if 1 != len(fullKey):
+                raise ApiError(
+                    """'memops.AccessControl.UserGroup'.getByKey:
          getByKey called with fullKey of wrong length. Parameters:"""
-         + ": %s:%s" % (startObj, fullKey)
-        )
+                    + ": %s:%s" % (startObj, fullKey)
+                )
 
-      obj1 = startObj
+            obj1 = startObj
 
-    if (obj1 is not None):
-      if (not (obj1.__dict__.get('isLoaded'))):
-        obj1.load()
+        if obj1 is not None:
+            if not (obj1.__dict__.get("isLoaded")):
+                obj1.load()
 
-      objKey = fullKey[-1]
-      obj2 = obj1.__dict__.get('userGroups').get(objKey)
-      result = obj2
+            objKey = fullKey[-1]
+            obj2 = obj1.__dict__.get("userGroups").get(objKey)
+            result = obj2
 
-    return result
+        return result
 
-  getByKey = staticmethod(getByKey)
+    getByKey = staticmethod(getByKey)
 
-  getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
+    getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
-  getClassName = memops.api.Implementation.ComplexDataType.getClassName
+    getClassName = memops.api.Implementation.ComplexDataType.getClassName
 
-  getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
+    getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
-  getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
-  def getFullKey(self, useGuid=False):
-    """
-    GetFullKey for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    result = list()
+    getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
 
-    obj1 = dataDict.get('accessControlStore')
+    def getFullKey(self, useGuid=False):
+        """
+        GetFullKey for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        result = list()
 
-    if (useGuid):
-      result.append(obj1.__dict__.get('guid'))
-    else:
-      result.append(obj1.__dict__.get('name'))
+        obj1 = dataDict.get("accessControlStore")
 
-    result.append(dataDict.get('name'))
+        if useGuid:
+            result.append(obj1.__dict__.get("guid"))
+        else:
+            result.append(obj1.__dict__.get("name"))
 
-    return result
+        result.append(dataDict.get("name"))
 
-  getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
+        return result
 
-  getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
-  def getLeaders(self):
-    """
-    Get for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('leaders')
-    result = frozenset(tempVar)
-    return result
-  
-  def getLocalKey(self):
-    """
-    GetLocalKey for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
-  
-  def getMembers(self):
-    """
-    Get for memops.AccessControl.UserGroup.members
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('members')
-    result = frozenset(tempVar)
-    return result
+    getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
-  getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
-  def getName(self):
-    """
-    Get for memops.AccessControl.UserGroup.name
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('name')
-    return result
+    getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
 
-  getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
+    def getLeaders(self):
+        """
+        Get for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("leaders")
+        result = frozenset(tempVar)
+        return result
 
-  getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
-  def getParent(self):
-    """
-    Get for memops.AccessControl.UserGroup.parent
-    """
-    dataDict = self.__dict__
-    result = dataDict.get('accessControlStore')
-    return result
-  
-  def getPermissions(self):
-    """
-    Get for memops.AccessControl.UserGroup.permissions
-    """
-    dataDict = self.__dict__
-    tempVar = dataDict.get('permissions')
-    result = frozenset(tempVar)
-    return result
+    def getLocalKey(self):
+        """
+        GetLocalKey for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
 
-  getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
+    def getMembers(self):
+        """
+        Get for memops.AccessControl.UserGroup.members
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("members")
+        result = frozenset(tempVar)
+        return result
 
-  getRoot = memops.api.Implementation.MemopsObject.getRoot
+    getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
 
-  getTopObject = memops.api.Implementation.DataObject.getTopObject
+    def getName(self):
+        """
+        Get for memops.AccessControl.UserGroup.name
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("name")
+        return result
 
-  removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
-  def removeLeader(self, value):
-    """
-    Remove for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    if (not isinstance(value, User)):
-      raise ApiError("""%s.removeLeader:
-       value is not of class memops.AccessControl.User""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('leaders')
-    notInConstructor = not (dataDict.get('inConstructor'))
+    getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.removeLeader:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+    def getParent(self):
+        """
+        Get for memops.AccessControl.UserGroup.parent
+        """
+        dataDict = self.__dict__
+        result = dataDict.get("accessControlStore")
+        return result
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.removeLeader:
-       called on deleted object""" % self.qualifiedName
-      )
+    def getPermissions(self):
+        """
+        Get for memops.AccessControl.UserGroup.permissions
+        """
+        dataDict = self.__dict__
+        tempVar = dataDict.get("permissions")
+        result = frozenset(tempVar)
+        return result
 
-    if (value.__dict__.get('isDeleted')):
-      raise ApiError("""%s.removeLeader:
-       called with deleted value""" % self.qualifiedName
-      )
+    getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
-    if (not (value in currentValues)):
-      raise ApiError("""%s.removeLeader:
-       value not in list""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+    getRoot = memops.api.Implementation.MemopsObject.getRoot
 
-    if (notOverride):
-      pass
+    getTopObject = memops.api.Implementation.DataObject.getTopObject
 
-    oldSelves = value.__dict__.get('ledGroups')
-    oldSelves.remove(self)
-    currentValues.remove(value)
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+    removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
 
-    # doNotifies
+    def removeLeader(self, value):
+        """
+        Remove for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        if not isinstance(value, User):
+            raise ApiError(
+                """%s.removeLeader:
+       value is not of class memops.AccessControl.User"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('removeLeader')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("leaders")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-  def set(self, name, value):
-    """
-    SetAttr for memops.AccessControl.UserGroup
-    """
-    dataDict = self.__dict__
-    setattr(self, name, value)
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.removeLeader:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-  setAccess = memops.api.Implementation.DataObject.setAccess
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.removeLeader:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-  setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
-  def setLeaders(self, values):
-    """
-    Set for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    xx = values
-    values = set(values)
-    if (len(values) != len(xx)):
-      raise ApiError("""%s.setLeaders:
-       values may not contain duplicates""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+        if value.__dict__.get("isDeleted"):
+            raise ApiError(
+                """%s.removeLeader:
+       called with deleted value"""
+                % self.qualifiedName
+            )
 
-    for value in values:
-      if (not isinstance(value, User)):
-        raise ApiError("""%s.setLeaders:
-         value is not of class memops.AccessControl.User""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        if value not in currentValues:
+            raise ApiError(
+                """%s.removeLeader:
+       value not in list"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('leaders')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if notOverride:
+            pass
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setLeaders:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+        oldSelves = value.__dict__.get("ledGroups")
+        oldSelves.remove(self)
+        currentValues.remove(value)
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setLeaders:
-       called on deleted object""" % self.qualifiedName
-      )
+        # doNotifies
 
-    for obj in values:
-      if (obj.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setLeaders:
-         an object in values is deleted""" % self.qualifiedName
-        )
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-    if (values == currentValues):
-      return
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    if (notOverride):
-      xx1 = dataDict.get('topObject')
-      for value in values:
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setLeaders:
+            ll = _notifies.get("removeLeader")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
+
+    def set(self, name, value):
+        """
+        SetAttr for memops.AccessControl.UserGroup
+        """
+        dataDict = self.__dict__
+        setattr(self, name, value)
+
+    setAccess = memops.api.Implementation.DataObject.setAccess
+
+    setApplicationData = memops.api.Implementation.DataObject.setApplicationData
+
+    def setLeaders(self, values):
+        """
+        Set for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        xx = values
+        values = set(values)
+        if len(values) != len(xx):
+            raise ApiError(
+                """%s.setLeaders:
+       values may not contain duplicates"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
+
+        for value in values:
+            if not isinstance(value, User):
+                raise ApiError(
+                    """%s.setLeaders:
+         value is not of class memops.AccessControl.User"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
+
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("leaders")
+        notInConstructor = not (dataDict.get("inConstructor"))
+
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setLeaders:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
+
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setLeaders:
+       called on deleted object"""
+                % self.qualifiedName
+            )
+
+        for obj in values:
+            if obj.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setLeaders:
+         an object in values is deleted"""
+                    % self.qualifiedName
+                )
+
+        if values == currentValues:
+            return
+
+        if notOverride:
+            xx1 = dataDict.get("topObject")
+            for value in values:
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setLeaders:
            Link leaders between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    for cv in currentValues:
-      if (not (cv in values)):
-        oldSelves = cv.__dict__.get('ledGroups')
-        oldSelves.remove(self)
+        for cv in currentValues:
+            if cv not in values:
+                oldSelves = cv.__dict__.get("ledGroups")
+                oldSelves.remove(self)
 
-    for cv in values:
-      if (not (cv in currentValues)):
-        oldSelves = cv.__dict__.get('ledGroups')
-        oldSelves.add(self)
+        for cv in values:
+            if cv not in currentValues:
+                oldSelves = cv.__dict__.get("ledGroups")
+                oldSelves.add(self)
 
-    dataDict['leaders'] = values
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        dataDict["leaders"] = values
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setLeaders')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def setMembers(self, values):
-    """
-    Set for memops.AccessControl.UserGroup.members
-    """
-    dataDict = self.__dict__
-    xx = values
-    values = set(values)
-    if (len(values) != len(xx)):
-      raise ApiError("""%s.setMembers:
-       values may not contain duplicates""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    for value in values:
-      if (not isinstance(value, User)):
-        raise ApiError("""%s.setMembers:
-         value is not of class memops.AccessControl.User""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+            ll = _notifies.get("setLeaders")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('members')
-    notInConstructor = not (dataDict.get('inConstructor'))
+    def setMembers(self, values):
+        """
+        Set for memops.AccessControl.UserGroup.members
+        """
+        dataDict = self.__dict__
+        xx = values
+        values = set(values)
+        if len(values) != len(xx):
+            raise ApiError(
+                """%s.setMembers:
+       values may not contain duplicates"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setMembers:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+        for value in values:
+            if not isinstance(value, User):
+                raise ApiError(
+                    """%s.setMembers:
+         value is not of class memops.AccessControl.User"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setMembers:
-       called on deleted object""" % self.qualifiedName
-      )
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("members")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    for obj in values:
-      if (obj.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setMembers:
-         an object in values is deleted""" % self.qualifiedName
-        )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setMembers:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    if (values == currentValues):
-      return
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setMembers:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-    if (notOverride):
-      xx1 = dataDict.get('topObject')
-      for value in values:
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setMembers:
+        for obj in values:
+            if obj.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setMembers:
+         an object in values is deleted"""
+                    % self.qualifiedName
+                )
+
+        if values == currentValues:
+            return
+
+        if notOverride:
+            xx1 = dataDict.get("topObject")
+            for value in values:
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setMembers:
            Link members between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    for cv in currentValues:
-      if (not (cv in values)):
-        oldSelves = cv.__dict__.get('userGroups')
-        oldSelves.remove(self)
+        for cv in currentValues:
+            if cv not in values:
+                oldSelves = cv.__dict__.get("userGroups")
+                oldSelves.remove(self)
 
-    for cv in values:
-      if (not (cv in currentValues)):
-        oldSelves = cv.__dict__.get('userGroups')
-        oldSelves.add(self)
+        for cv in values:
+            if cv not in currentValues:
+                oldSelves = cv.__dict__.get("userGroups")
+                oldSelves.add(self)
 
-    dataDict['members'] = values
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        dataDict["members"] = values
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setMembers')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def setName(self, value):
-    """
-    Set for memops.AccessControl.UserGroup.name
-    """
-    dataDict = self.__dict__
-    if (isinstance(value, memops.api.Implementation.String.PythonType)):
-      pass
-    else:
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line input is not of a valid type""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-    _lenValue = len(value)
-    if (_lenValue > 80):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line maximum length is 80 violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+            ll = _notifies.get("setMembers")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-    if (_lenValue < 1):
-      raise ApiError("""%s.setName:
-       memops.Implementation.Line: Empty string not allowed""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+    def setName(self, value):
+        """
+        Set for memops.AccessControl.UserGroup.name
+        """
+        dataDict = self.__dict__
+        if isinstance(value, memops.api.Implementation.String.PythonType):
+            pass
+        else:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line input is not of a valid type"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (not (len(value.splitlines()) <= 1)):
-      raise ApiError("""%s.setName:
-       Line constraint contains_no_linebreak violated by value""" % self.qualifiedName
-       + ": %s" % (value,)
-      )
+        _lenValue = len(value)
+        if _lenValue > 80:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line maximum length is 80 violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    topObject = dataDict.get('topObject')
-    currentValue = dataDict.get('name')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        if _lenValue < 1:
+            raise ApiError(
+                """%s.setName:
+       memops.Implementation.Line: Empty string not allowed"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setName:
-       called on deleted object""" % self.qualifiedName
-      )
+        if not (len(value.splitlines()) <= 1):
+            raise ApiError(
+                """%s.setName:
+       Line constraint contains_no_linebreak violated by value"""
+                % self.qualifiedName
+                + ": %s" % (value,)
+            )
 
-    if (value == currentValue):
-      return
+        topObject = dataDict.get("topObject")
+        currentValue = dataDict.get("name")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (notOverride):
-      if (notInConstructor):
-        raise ApiError("""%s.setName:
-         cannot set name, frozen""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setName:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      if (value is None):
-        raise ApiError("""%s.setName:
-         value cannot be None""" % self.qualifiedName
-         + ": %s" % (self,)
-        )
+        if value == currentValue:
+            return
 
-      pass
+        if notOverride:
+            if notInConstructor:
+                raise ApiError(
+                    """%s.setName:
+         cannot set name, frozen"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    dataDict['name'] = value
+            if value is None:
+                raise ApiError(
+                    """%s.setName:
+         value cannot be None"""
+                    % self.qualifiedName
+                    + ": %s" % (self,)
+                )
 
-    # doNotifies
-  
-  def setPermissions(self, values):
-    """
-    Set for memops.AccessControl.UserGroup.permissions
-    """
-    dataDict = self.__dict__
-    xx = values
-    values = set(values)
-    if (len(values) != len(xx)):
-      raise ApiError("""%s.setPermissions:
-       values may not contain duplicates""" % self.qualifiedName
-       + ": %s" % (self,)
-      )
+            pass
 
-    for value in values:
-      if (not isinstance(value, Permission)):
-        raise ApiError("""%s.setPermissions:
-         value is not of class memops.AccessControl.Permission""" % self.qualifiedName
-         + ": %s" % (value,)
-        )
+        dataDict["name"] = value
 
-    topObject = dataDict.get('topObject')
-    currentValues = dataDict.get('permissions')
-    notInConstructor = not (dataDict.get('inConstructor'))
+        # doNotifies
 
-    root = topObject.__dict__.get('memopsRoot')
-    notOverride = not (root.__dict__.get('override'))
-    notIsReading = not (topObject.__dict__.get('isReading'))
-    notOverride = (notOverride and notIsReading)
-    if (notIsReading):
-      if (notInConstructor):
-        if (not (topObject.__dict__.get('isModifiable'))):
-          raise ApiError("""%s.setPermissions:
-           Storage not modifiable""" % self.qualifiedName
-           + ": %s" % (topObject,)
-          )
+    def setPermissions(self, values):
+        """
+        Set for memops.AccessControl.UserGroup.permissions
+        """
+        dataDict = self.__dict__
+        xx = values
+        values = set(values)
+        if len(values) != len(xx):
+            raise ApiError(
+                """%s.setPermissions:
+       values may not contain duplicates"""
+                % self.qualifiedName
+                + ": %s" % (self,)
+            )
 
-    if (dataDict.get('isDeleted')):
-      raise ApiError("""%s.setPermissions:
-       called on deleted object""" % self.qualifiedName
-      )
+        for value in values:
+            if not isinstance(value, Permission):
+                raise ApiError(
+                    """%s.setPermissions:
+         value is not of class memops.AccessControl.Permission"""
+                    % self.qualifiedName
+                    + ": %s" % (value,)
+                )
 
-    for obj in values:
-      if (obj.__dict__.get('isDeleted')):
-        raise ApiError("""%s.setPermissions:
-         an object in values is deleted""" % self.qualifiedName
-        )
+        topObject = dataDict.get("topObject")
+        currentValues = dataDict.get("permissions")
+        notInConstructor = not (dataDict.get("inConstructor"))
 
-    if (values == currentValues):
-      return
+        root = topObject.__dict__.get("memopsRoot")
+        notOverride = not (root.__dict__.get("override"))
+        notIsReading = not (topObject.__dict__.get("isReading"))
+        notOverride = notOverride and notIsReading
+        if notIsReading:
+            if notInConstructor:
+                if not (topObject.__dict__.get("isModifiable")):
+                    raise ApiError(
+                        """%s.setPermissions:
+           Storage not modifiable"""
+                        % self.qualifiedName
+                        + ": %s" % (topObject,)
+                    )
 
-    if (notOverride):
-      for cv in currentValues:
-        if (not (cv in values)):
-          raise ApiError("""%s.setPermissions:
-           locard userGroup: cannot set because some of current values not in values""" % self.qualifiedName
-           + ": %s" % (self,)
-          )
+        if dataDict.get("isDeleted"):
+            raise ApiError(
+                """%s.setPermissions:
+       called on deleted object"""
+                % self.qualifiedName
+            )
 
-      xx1 = dataDict.get('topObject')
-      for value in values:
-        yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
-          raise ApiError("""%s.setPermissions:
+        for obj in values:
+            if obj.__dict__.get("isDeleted"):
+                raise ApiError(
+                    """%s.setPermissions:
+         an object in values is deleted"""
+                    % self.qualifiedName
+                )
+
+        if values == currentValues:
+            return
+
+        if notOverride:
+            for cv in currentValues:
+                if cv not in values:
+                    raise ApiError(
+                        """%s.setPermissions:
+           locard userGroup: cannot set because some of current values not in values"""
+                        % self.qualifiedName
+                        + ": %s" % (self,)
+                    )
+
+            xx1 = dataDict.get("topObject")
+            for value in values:
+                yy1 = value.__dict__.get("topObject")
+                if xx1 is not yy1:
+                    raise ApiError(
+                        """%s.setPermissions:
            Link permissions between objects from separate partitions
-           - memops.Implementation.TopObject does not match""" % self.qualifiedName
-           + ": %s:%s" % (self, value)
-          )
+           - memops.Implementation.TopObject does not match"""
+                        % self.qualifiedName
+                        + ": %s:%s" % (self, value)
+                    )
 
-    for cv in values:
-      cv.__dict__['userGroup'] = self
+        for cv in values:
+            cv.__dict__["userGroup"] = self
 
-    dataDict['permissions'] = values
-    if (notIsReading):
-      if (notInConstructor):
-        topObject.__dict__['isModified'] = True
+        dataDict["permissions"] = values
+        if notIsReading:
+            if notInConstructor:
+                topObject.__dict__["isModified"] = True
 
-    # doNotifies
+        # doNotifies
 
-    if (notInConstructor and notOverride):
-      
-      _notifies = self.__class__._notifies
-      
-      ll1 = _notifies['']
-      for notify in ll1:
-        notify(self)
-      
-      ll = _notifies.get('setPermissions')
-      if ll:
-        for notify in ll:
-          if notify not in ll1:
-            notify(self)
+        if notInConstructor and notOverride:
+            _notifies = self.__class__._notifies
 
-  def sortedLeaders(self):
-    """
-    Sorted for memops.AccessControl.UserGroup.leaders
-    """
-    dataDict = self.__dict__
-    ll = dataDict.get('leaders')
-    ll = [(x.getFullKey(),x) for x in ll]
-    
-    ll.sort()
-    result = [x[1] for x in ll]
-    return result
-  
-  def sortedMembers(self):
-    """
-    Sorted for memops.AccessControl.UserGroup.members
-    """
-    dataDict = self.__dict__
-    ll = dataDict.get('members')
-    ll = [(x.getFullKey(),x) for x in ll]
-    
-    ll.sort()
-    result = [x[1] for x in ll]
-    return result
-  
-  def sortedPermissions(self):
-    """
-    Sorted for memops.AccessControl.UserGroup.permissions
-    """
-    dataDict = self.__dict__
-    ll = dataDict.get('permissions')
-    ll = [(x.getFullKey(),x) for x in ll]
-    
-    ll.sort()
-    result = [x[1] for x in ll]
-    return result
+            ll1 = _notifies[""]
+            for notify in ll1:
+                notify(self)
 
-  toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
+            ll = _notifies.get("setPermissions")
+            if ll:
+                for notify in ll:
+                    if notify not in ll1:
+                        notify(self)
 
-  applicationData = memops.api.Implementation.DataObject.applicationData
+    def sortedLeaders(self):
+        """
+        Sorted for memops.AccessControl.UserGroup.leaders
+        """
+        dataDict = self.__dict__
+        ll = dataDict.get("leaders")
+        ll = [(x.getFullKey(), x) for x in ll]
 
-  className = memops.api.Implementation.ComplexDataType.className
+        ll.sort()
+        result = [x[1] for x in ll]
+        return result
 
-  fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
+    def sortedMembers(self):
+        """
+        Sorted for memops.AccessControl.UserGroup.members
+        """
+        dataDict = self.__dict__
+        ll = dataDict.get("members")
+        ll = [(x.getFullKey(), x) for x in ll]
 
-  inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
+        ll.sort()
+        result = [x[1] for x in ll]
+        return result
 
-  isDeleted = memops.api.Implementation.MemopsObject.isDeleted
+    def sortedPermissions(self):
+        """
+        Sorted for memops.AccessControl.UserGroup.permissions
+        """
+        dataDict = self.__dict__
+        ll = dataDict.get("permissions")
+        ll = [(x.getFullKey(), x) for x in ll]
 
-  metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
-  name = property(getName, setName, None,
-  r"""
-  """)
+        ll.sort()
+        result = [x[1] for x in ll]
+        return result
 
-  packageName = memops.api.Implementation.ComplexDataType.packageName
+    toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
-  packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
+    applicationData = memops.api.Implementation.DataObject.applicationData
 
-  qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+    className = memops.api.Implementation.ComplexDataType.className
 
-  access = memops.api.Implementation.DataObject.access
-  
-  accessControlStore = property(getAccessControlStore,  None, None,
-  r"""parent link
-  """)
+    fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
-  activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
-  leaders = property(getLeaders, setLeaders, None,
-  r"""
-  """)
-  
-  members = property(getMembers, setMembers, None,
-  r"""
-  """)
-  
-  parent = property(getParent, None, None,
-  r"""link to parent object - synonym for accessControlStore
-  """)
-  
-  permissions = property(getPermissions, setPermissions, None,
-  r"""
-  """)
+    inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
-  root = memops.api.Implementation.MemopsObject.root
+    isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
-  topObject = memops.api.Implementation.DataObject.topObject
+    metaclass = memops.api.Implementation.ComplexDataType.metaclass
+
+    name = property(
+        getName,
+        setName,
+        None,
+        r"""
+  """,
+    )
+
+    packageName = memops.api.Implementation.ComplexDataType.packageName
+
+    packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
+
+    qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
+
+    access = memops.api.Implementation.DataObject.access
+
+    accessControlStore = property(
+        getAccessControlStore,
+        None,
+        None,
+        r"""parent link
+  """,
+    )
+
+    activeAccess = memops.api.Implementation.DataObject.activeAccess
+
+    leaders = property(
+        getLeaders,
+        setLeaders,
+        None,
+        r"""
+  """,
+    )
+
+    members = property(
+        getMembers,
+        setMembers,
+        None,
+        r"""
+  """,
+    )
+
+    parent = property(
+        getParent,
+        None,
+        None,
+        r"""link to parent object - synonym for accessControlStore
+  """,
+    )
+
+    permissions = property(
+        getPermissions,
+        setPermissions,
+        None,
+        r"""
+  """,
+    )
+
+    root = memops.api.Implementation.MemopsObject.root
+
+    topObject = memops.api.Implementation.DataObject.topObject

@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,53 +54,50 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-def setupDataEntry(guiParent = None):
 
-  #
-  # If a guiParent is passed in, will use GUI interaction
-  # If not, will use text-based system
-  #
+def setupDataEntry(guiParent=None):
 
-  if guiParent:
-  
-    from memops.gui.DataEntry import dataEntry
-  
-  else:
-  
-    from memops.universal.DataEntry import dataEntry
-  
-  return dataEntry
-  
-def setupMessageReporter(guiParent = None):
+    #
+    # If a guiParent is passed in, will use GUI interaction
+    # If not, will use text-based system
+    #
 
-  #
-  # If a guiParent is passed in, will use GUI interaction
-  # If not, will use text-based system
-  #
+    if guiParent:
+        from memops.gui.DataEntry import dataEntry
 
-  if guiParent:
-  
-    from memops.gui.MessageReporter import messageReporter
-  
-  else:
-  
-    from memops.universal.MessageReporter import messageReporter
-  
-  return messageReporter
+    else:
+        from memops.universal.DataEntry import dataEntry
 
-def setupMultiDialog(guiParent = None):
+    return dataEntry
 
-  #
-  # If a guiParent is passed in, will use GUI interaction
-  # If not, will use text-based system
-  #
 
-  if guiParent:
-  
-    from ccpnmr.format.gui.MultiDialog import multiDialog
-  
-  else:
-  
-    from ccpnmr.format.general.MultiDialog import multiDialog
-  
-  return multiDialog
+def setupMessageReporter(guiParent=None):
+
+    #
+    # If a guiParent is passed in, will use GUI interaction
+    # If not, will use text-based system
+    #
+
+    if guiParent:
+        from memops.gui.MessageReporter import messageReporter
+
+    else:
+        from memops.universal.MessageReporter import messageReporter
+
+    return messageReporter
+
+
+def setupMultiDialog(guiParent=None):
+
+    #
+    # If a guiParent is passed in, will use GUI interaction
+    # If not, will use text-based system
+    #
+
+    if guiParent:
+        from ccpnmr.format.gui.MultiDialog import multiDialog
+
+    else:
+        from ccpnmr.format.general.MultiDialog import multiDialog
+
+    return multiDialog

@@ -3,12 +3,13 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils6.py
 """
 
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.classes2 import ResonanceList
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes2 import ResonanceList
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTutils6' )
@@ -76,7 +77,7 @@ class AllChecks(TestCase):
         for i, obj in enumerate(inputList):
             self.assertEqual( nTflatten(obj), expectedList[i] )
         pair = (('A', 6), ('A', 9))
-#        valueList =  nTflatten(pair)        
+#        valueList =  nTflatten(pair)
 #        nTmessage("valueList: %s" % valueList)
         _x = "patch DISU  reference=1  =( segi %s and resid %s )  reference=2=( segi %s and resid %s )        end\n" % nTflatten(pair)
 #        nTmessage("x: %s" % x)
@@ -84,11 +85,11 @@ class AllChecks(TestCase):
     def test_sort(self):
 #        inputList = [ 3, 1, 2]
 #        inputList = NTlist(*inputList)
-#        inputList.mmm = 3        
+#        inputList.mmm = 3
 #        expectedOutputList = [1, 2, 3]
 #        expectedOutputList = NTlist(*expectedOutputList)
 #        self.assertEqual( expectedOutputList, inputList.sort())
-        
+
         # Complexer object
         inputList = NTlist()
         inputList.append({'a': 2, 'b': 1})
@@ -104,24 +105,24 @@ class AllChecks(TestCase):
 #        inputList.reverse()
         self.assertEqual( expectedOutputList, inputList)
     # end def
-        
+
     def test_is_pdb_code(self):
         inputList = """
             .            
             1brv
             1234
         """.split()
-        expectedList = [ 
+        expectedList = [
             False,
             True,
-            False            
-        ] 
+            False
+        ]
         for i, inputStr in enumerate(inputList):
             result = is_pdb_code(inputStr)
             self.assertEqual( result, expectedList[i])
         # end for
     # end def
-        
+
     def test_is_bmrb_code(self):
         inputList = """
             1brv
@@ -129,11 +130,11 @@ class AllChecks(TestCase):
             1
             999999999
         """.split()
-        expectedList = [ 
+        expectedList = [
             False,
             True,
-            False,            
-            False            
+            False,
+            False
         ]
         for i, inputStr in enumerate(inputList):
             try:
@@ -147,7 +148,7 @@ class AllChecks(TestCase):
             self.assertEqual( result, expectedList[i])
         # end for
     # end def
-        
+
 
     def test_capitalizeFirst(self):
         inputList = '. a 1brv hello'.split()
@@ -166,11 +167,11 @@ class AllChecks(TestCase):
     # end def
 
     def test_Flatten(self):
-        inputLoL = [ 
+        inputLoL = [
 #                     [1],
 #                     [1,2],
                      [[1],[2,3]],
-                    
+
         ]
         expectedLoL = [
 #                        [1],
@@ -182,10 +183,10 @@ class AllChecks(TestCase):
 #            nTdebug("Found on iteration %s with input: %s the result %s and expected %s" % ( i, inputStr, result, expectedList[i]))
             self.assertEqual( result, expectedLoL[i])
         # end for
-    # end def                
+    # end def
 # end class
-           
-            
+
+
 def additionalTestRoutineByItself():
     return getCallerName()
 # end def

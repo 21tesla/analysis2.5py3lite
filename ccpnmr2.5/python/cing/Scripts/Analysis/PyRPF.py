@@ -16,24 +16,36 @@
 # Run like:
 # python -u $CINGROOT/python/cing/Scripts/Analysis/PyRPF.py
 
-from ccp.util.Software import getMethodStore
-from ccpnmr.analysis.core.AssignmentBasic import clearPeakDim, assignResToDim
-from ccpnmr.analysis.core.AssignmentBasic import findMatchingPeakDimShifts, getBoundResonances
-from ccpnmr.analysis.core.ConstraintBasic import getPeakDimTolerance
-from ccpnmr.analysis.core.ExperimentBasic import getOnebondDataDims, getDataDimIsotopes, findSpectrumDimsByIsotope
-from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists, getDataDimRefFullRange, getPrimaryDataDimRef
-from ccpnmr.analysis.core.MarkBasic import createNonPeakMark
-from ccpnmr.analysis.core.MoleculeBasic import getNumConnectingBonds, areResonancesBound, getBoundAtoms
-from ccpnmr.analysis.core.PeakBasic import pickPeak, setupPeak
-from ccpnmr.analysis.core.StructureBasic import getAtomSetCoords
-from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
-from ccpnmr.analysis.core.Util import getAnalysisDataDim
-from ccpnmr.analysis.core.Util import getAnalysisPeakList
-from ccpnmr.analysis.core.WindowBasic import getDataDimAxisMapping
-from ccpnmr.analysis.frames.PeakTableFrame import PeakTableFrame # This is the table for missing peaks with built-in functionalities
+import time
 from math import sqrt
+
+from ccp.util.Software import getMethodStore
+from ccpnmr.analysis.core.AssignmentBasic import (
+  assignResToDim,
+  clearPeakDim,
+  findMatchingPeakDimShifts,
+  getBoundResonances,
+)
+from ccpnmr.analysis.core.ConstraintBasic import getPeakDimTolerance
+from ccpnmr.analysis.core.ExperimentBasic import (
+  findSpectrumDimsByIsotope,
+  getDataDimIsotopes,
+  getDataDimRefFullRange,
+  getOnebondDataDims,
+  getPrimaryDataDimRef,
+  getThroughSpacePeakLists,
+)
+from ccpnmr.analysis.core.MarkBasic import createNonPeakMark
+from ccpnmr.analysis.core.MoleculeBasic import areResonancesBound, getBoundAtoms, getNumConnectingBonds
+from ccpnmr.analysis.core.PeakBasic import pickPeak, setupPeak
+from ccpnmr.analysis.core.StructureBasic import getAtomSetCoords, getAtomSetsDistance
+from ccpnmr.analysis.core.Util import getAnalysisDataDim, getAnalysisPeakList
+from ccpnmr.analysis.core.WindowBasic import getDataDimAxisMapping
+from ccpnmr.analysis.frames.PeakTableFrame import (
+  PeakTableFrame,  # This is the table for missing peaks with built-in functionalities
+)
 from memops.editor.BasePopup import BasePopup
-from memops.gui.ButtonList import UtilityButtonList, ButtonList
+from memops.gui.ButtonList import ButtonList, UtilityButtonList
 from memops.gui.CheckButton import CheckButton
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Frame import Frame
@@ -45,7 +57,7 @@ from memops.gui.PulldownList import PulldownList
 from memops.gui.ScrolledGraph import ScrolledGraph
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.gui.TabbedFrame import TabbedFrame
-import time
+
 #from ccpnmr.analysis.core.WindowBasic import getWindowPaneName #@UnusedImport
 #from memops.gui.Button import Button #@UnusedImport
 #from ccpnmr.analysis.core.AssignmentBasic import makeResonanceGuiName #@UnusedImport
@@ -1629,7 +1641,7 @@ def calcRPF(ensembles, peakLists, tolerances,
 
             # Check to see whether we've seen this peak before
             # e.g. from another pair of resonances
-            if not explainedPeaks.has_key(peak):
+            if peak not in explainedPeaks:
 
               # Check no other resonance pairs are close for this peak
               for resonance3, resonance4, atom3, atom4 in peakPoss[peak]:
@@ -1711,7 +1723,7 @@ def calcRPF(ensembles, peakLists, tolerances,
 
             # Check to see whether we've seen this peak before
             # e.g. from another pair of resonances
-            if not explainedPeaksFree.has_key(peak):
+            if peak not in explainedPeaksFree:
 
               # Check no other resonance pairs are close for this peak
               for resonance3, resonance4, atom3, atom4 in peakPoss[peak]:
@@ -2793,9 +2805,8 @@ def pyRpfApp(ensembles, peakLists, tolerances, distThreshold=5.0,
 
 if __name__ == '__main__':
 
-  from memops.general.Io import loadProject
-
   from ccpnmr.analysis.Analysis import Analysis
+  from memops.general.Io import loadProject
 
   #projectDirectory = '/home/tjs23/nmr/montelione/rpf/1brv_cs_pk_2mdl/'
 #  projectDirectory = '/home/tjs23/nmr/montelione/rpf/AtT13Org/'

@@ -2,9 +2,11 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Scripts/cingProfile.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
 import profile
 import pstats
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def run():
     print("hello")

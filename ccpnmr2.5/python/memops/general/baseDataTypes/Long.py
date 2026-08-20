@@ -1,6 +1,6 @@
 """Basic data type Long
 
-Correct procedure is that values of type in compatibleTypes must be 
+Correct procedure is that values of type in compatibleTypes must be
 accepted as input, and coerced to PythonType. isValid should be applied only
 after coercion. Note that the coercion may well cause an error
 (e.g. out-of-range)
@@ -18,14 +18,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,20 +54,21 @@ software development. Bioinformatics 21, 1678-1684.
 """
 
 import types
+
 # corresponding python type
-PythonType = types.LongType
+PythonType = int
 
 # Python types acceptable as input instead of main type
-compatibleTypes = (types.IntType,)
+compatibleTypes = (int,)
 
 # Special isValid function
 # None
 
 # conversion to String
-toString  = str
+toString = str
 
 # conversion from string
-fromString = long
+fromString = int
 
-# casting/creation function.    
-create = long
+# casting/creation function.
+create = int

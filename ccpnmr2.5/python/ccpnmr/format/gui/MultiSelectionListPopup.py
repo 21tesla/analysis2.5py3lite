@@ -1,4 +1,3 @@
-  
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,25 +51,21 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-
-from memops.universal.Io import joinPath
-
-from memops.gui.MultiSelectionList import MultiSelectionListSkeleton
 
 from ccpnmr.format.general.Io import getHelpUrlDir
-
 from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
+from memops.gui.MultiSelectionList import MultiSelectionListSkeleton
+from memops.universal.Io import joinPath
 
-class MultiSelectionListPopup(MultiSelectionListSkeleton,TemporaryBasePopup):
- 
-  def startBasePopup(self,parent,title,modal,True):
-  
-    TemporaryBasePopup.__init__(self,parent = parent, title = title, modal = modal, transient=True)
- 
-  def setUrlFile(self,urlFile):
-      
-    if urlFile:
-      self.help_url = joinPath(getHelpUrlDir(),urlFile + '.html')
-    else:
-      self.help_url = None
+
+class MultiSelectionListPopup(MultiSelectionListSkeleton, TemporaryBasePopup):
+    def startBasePopup(self, parent, title, modal, alwaysOnTop):
+
+        TemporaryBasePopup.__init__(self, parent=parent, title=title, modal=modal, transient=True)
+
+    def setUrlFile(self, urlFile):
+
+        if urlFile:
+            self.help_url = joinPath(getHelpUrlDir(), urlFile + ".html")
+        else:
+            self.help_url = None

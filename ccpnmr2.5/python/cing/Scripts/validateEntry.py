@@ -33,26 +33,21 @@ For topos replace the first command by validateEntryNrg:
 validateEntryNrg 1brv http://nmr.cmbi.umcn.nl/NRG-CING/input \
     jd@nmr.cmbi.umcn.nl:/Library/WebServer/Documents/NRG-CING . . BY_CH23_BY_ENTRY CCPN
 """
-from cing import cingDirTmp
-from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import copy
-from cing.Libs.disk import rmdir
-from cing.Libs.network import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
-from cing.NRG.Utils import getArchiveIdFromDirectoryName
-from cing.NRG.settings import * #@UnusedWildImport
-from cing.NRG.storeCING2db import doStoreCING2db
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from shutil import rmtree
-import shutil
 import string
 import urllib
+from shutil import rmtree
 
-
+from cing import cingDirTmp, header
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.disk import copy, rmdir
+from cing.Libs.network import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
+from cing.NRG import *  #@UnusedWildImport
+from cing.NRG.settings import *  #@UnusedWildImport
+from cing.NRG.storeCING2db import doStoreCING2db
+from cing.NRG.Utils import getArchiveIdFromDirectoryName
 
 ARCHIVE_TYPE_FLAT = 'FLAT'
 ARCHIVE_TYPE_BY_ENTRY = 'BY_ENTRY'
@@ -105,7 +100,7 @@ def main(entryId, *extraArgList):
         doWattos = False
         doQueeny = False
         doTalos = False
-        
+
     forceRedo = True
     forceRetrieveInput = True
 
@@ -170,7 +165,7 @@ def main(entryId, *extraArgList):
     # end if
 #    vc = vCing('.') # argument is a fake master_ssh_url not needed here.
     archive_id = getArchiveIdFromDirectoryName( inputDir )
-    
+
     nTdebug("Using program arguments:")
     nTdebug("inputDir:             %s" % inputDir)
     nTdebug("outputDir:            %s" % outputDir)
@@ -182,18 +177,18 @@ def main(entryId, *extraArgList):
     nTdebug("ranges:               %s" % ranges)
     nTdebug("filterTopViolations:  %s" % filterTopViolations)
     nTdebug("filterVasco:          %s" % filterVasco)
-    nTdebug("singleCoreOperation:  %s" % singleCoreOperation)    
+    nTdebug("singleCoreOperation:  %s" % singleCoreOperation)
     nTdebug("")
     nTdebug("Using derived settings:")
     nTdebug("modelCount:           %s" % modelCount)
     nTdebug("isRemoteOutputDir:    %s" % isRemoteOutputDir)
     nTdebug("archive_id:            %s" % archive_id)
-    
-    
+
+
     # For NMR_REDO required as most efficient.
-    if singleCoreOperation: 
+    if singleCoreOperation:
         setToSingleCoreOperation()
-    
+
     # presume the directory still needs to be created.
     cingEntryDir = entryId + ".cing"
 
@@ -285,7 +280,7 @@ def main(entryId, *extraArgList):
     # end if
     project.molecule.superpose(ranges=ranges)
     if filterTopViolations and not project.filterHighRestraintViol():
-        nTerror("Failed to filterHighRestraintViol")    
+        nTerror("Failed to filterHighRestraintViol")
 ####> MAIN UTILITY HERE
     if 0: # DEFAULT 0
         project.save()
@@ -294,11 +289,11 @@ def main(entryId, *extraArgList):
         nTerror("Failed to validate project read")
         return True
     # end if filterVasco
-    
-    # Write a single PDB file containing all models 
-    # according to IUPAC conventions 
+
+    # Write a single PDB file containing all models
+    # according to IUPAC conventions
     project.export2PDB()
-    
+
     project.save()
 
     if storeCING2db and archive_id:

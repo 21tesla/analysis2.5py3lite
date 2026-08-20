@@ -122,9 +122,9 @@ cingDirTmp             = os.path.join("/tmp" , "cing")
 # The TMPDIR environment variable will override the default above but not the one that
 # might be defined in localConstants.py.
 try:
-    from cing.localConstants import cingDirTmp #@UnresolvedImport # pylint: disable=E0611
+    from cing.localConstants import cingDirTmp  #@UnresolvedImport # pylint: disable=E0611
 except:
-    if os.environ.has_key("TMPDIR"):
+    if "TMPDIR" in os.environ:
         cingDirTmp = os.path.join(os.environ["TMPDIR"] , "cing")
 # end if
 
@@ -143,16 +143,20 @@ starttime = time.time()
 # track imports well if not correct.
 #---------------------------------------------------------------------------------------------
 
-from cing.Libs.NTutils      import *
-from cing.Libs.AwkLike      import AwkLike
-
-from cing.core.constants    import *
-
 # from cing.core.classes      import Project
-from cing.core.classes      import Peak,              PeakList
-from cing.core.classes      import DistanceRestraint, DistanceRestraintList
-from cing.core.classes      import DihedralRestraint, DihedralRestraintList
-from cing.core.classes      import RDCRestraint,      RDCRestraintList
+from cing.core.classes import (
+    DihedralRestraint,
+    DihedralRestraintList,
+    DistanceRestraint,
+    DistanceRestraintList,
+    Peak,
+    PeakList,
+    RDCRestraint,
+    RDCRestraintList,
+)
+from cing.core.constants import *
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.NTutils import *
 
 #---------------------------------------------------------------------------------------------
 # functional imports: Order matters!
@@ -161,7 +165,7 @@ from cing.core.classes      import RDCRestraint,      RDCRestraintList
 # Try a Yasara import
 # GV: We could change this by defining yasaradir in the CING setup
 try:
-    from yasara import yasaradir #@UnresolvedImport # JFD: why not add the functionality from the plugin ?
+    from yasara import yasaradir  #@UnresolvedImport # JFD: why not add the functionality from the plugin ?
     if os.path.exists(yasaradir):
         sys.path.append(os.path.join(yasaradir,'pym'))
         sys.path.append(os.path.join(yasaradir,'plg'))
@@ -172,11 +176,12 @@ except:
     yasaradir = None
 #end try
 
-from cing.core.molecule     import *
-from cing.core.importPlugin import importPlugin # This imports all plugins
-from cing.core.sml          import obj2SML      # This also initializes the SMLhandler methods
-from cing.core.sml          import sML2obj      # This also initializes the SMLhandler methods
+from cing.core.database import NTdb  #@Reimport
+from cing.core.importPlugin import importPlugin  # This imports all plugins
+from cing.core.molecule import *
+from cing.core.sml import (
+    obj2SML,  # This also initializes the SMLhandler methods
+    sML2obj,  # This also initializes the SMLhandler methods
+)
 
-
-from cing.core.database     import NTdb #@Reimport
 NTdb._restoreFromSML()                          # This initializes the database

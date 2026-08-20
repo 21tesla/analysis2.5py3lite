@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -55,118 +55,110 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # Import general functions
 from ccp.format.cosmos.generalIO import CosmosGenericFile
 
-from ccp.format.cosmos.chemShiftsIO import CosmosChemShiftFile
-from ccp.format.cosmos.coordinatesIO import CosmosCoordinateFile
-
 #####################
 # Class definitions #
 #####################
 
+
 class CosmosProjectFile(CosmosGenericFile):
+    # Information on file level
 
-  # Information on file level
+    def initialize(self):
 
-  def initialize(self):
+        # For coo file
+        self.chemShiftFile = None
+        self.sequenceFile = None
+        self.constraintFile = None
 
-    # For coo file
-    self.chemShiftFile = None
-    self.sequenceFile = None
-    self.constraintFile = None
+        # For cod file
+        self.rcOptMolecule = "ALL"
+        self.rcOptCutoff = -1.0
+        self.namesOptFitTo = "EXACT"
+        self.groupMembers = [("^C.*", 1), ("^H.*", 2), ("^[CN][A_].*", 3)]
 
-    # For cod file
-    self.rcOptMolecule = 'ALL'
-    self.rcOptCutoff = -1.0
-    self.namesOptFitTo = 'EXACT'
-    self.groupMembers = [('^C.*',1),('^H.*',2),('^[CN][A_].*',3)]
-    
-  def write(self, version='003', verbose=False, fileType='COO'):
+    def write(self, version="003", verbose=False, fileType="COO"):
 
-    if verbose == 1:
-      print("Writing %s .%s project file %s" % (self.format,fileType,self.name))
+        if verbose == 1:
+            print("Writing %s .%s project file %s" % (self.format, fileType, self.name))
 
-    fout = open(self.name,'w')
+        fout = open(self.name, "w")
 
-    if fileType == 'COO':
-    
-      #
-      # Write out header
-      #
+        if fileType == "COO":
+            #
+            # Write out header
+            #
 
-      fout.write("$COO%s" % version)
-      fout.write(self.newline)
+            fout.write("$COO%s" % version)
+            fout.write(self.newline)
 
-      fout.write("REM File written by CcpNmrFormat converter.")
-      fout.write(self.newline)
+            fout.write("REM File written by CcpNmrFormat converter.")
+            fout.write(self.newline)
 
-      #
-      # Write the coordinates from the project file
-      #
+            #
+            # Write the coordinates from the project file
+            #
 
-      self.coordinateFile.write(use_fout = fout)
+            self.coordinateFile.write(use_fout=fout)
 
-      #
-      # Write the chemical shifts from the project file if available
-      #
-      
-      if self.chemShiftFile:
+            #
+            # Write the chemical shifts from the project file if available
+            #
 
-        self.chemShiftFile.write(use_fout = fout)
-    
-    elif fileType == 'COD':
-    
-      #
-      # Write out header and data options
-      #
+            if self.chemShiftFile:
+                self.chemShiftFile.write(use_fout=fout)
 
-      fout.write("$COD%s" % version)
-      fout.write(self.newline)
+        elif fileType == "COD":
+            #
+            # Write out header and data options
+            #
 
-      fout.write("REMARK File written by CcpNmrFormat converter.")
-      fout.write(self.newline)
-      
-      # Only constraints within a molecule: IN_MOL, or all constraints: ALL (default)
-      fout.write("RC_OPT_MOLECULE %s" % self.rcOptMolecule)
-      fout.write(self.newline)
-      
-      # Cutoff to skip constraints that do not fit structure, set to -1.0 to ignore cutoff
-      fout.write("RC_OPT_CUTOFF %.1f" % self.rcOptCutoff)
-      fout.write(self.newline)
-      
-      # Regular expression setting; leave to EXACT
-      fout.write("NAMES_OPT_FIT_TO %s" % self.namesOptFitTo)
-      fout.write(self.newline)
+            fout.write("$COD%s" % version)
+            fout.write(self.newline)
 
-      # End of data options
-      fout.write("DATA_OPT_END")
-      fout.write(self.newline)
-      
-      #
-      # Write the group members info, not relevant for now
-      #
+            fout.write("REMARK File written by CcpNmrFormat converter.")
+            fout.write(self.newline)
 
-      fout.write("GROUP_MEMBERS %d" % len(self.groupMembers))
-      fout.write(self.newline)
-      
-      for (groupRegExp,groupNumber) in self.groupMembers:
-        fout.write("%s %d%s" % (groupRegExp,groupNumber,self.newline))
-        
-      
-      #
-      # Write the constraints
-      #
-      
-      if self.constraintFile:
-        self.constraintFile.write(use_fout = fout,rcOptCutoff=self.rcOptCutoff)
- 
-      #
-      # Write the chemical shifts
-      #
+            # Only constraints within a molecule: IN_MOL, or all constraints: ALL (default)
+            fout.write("RC_OPT_MOLECULE %s" % self.rcOptMolecule)
+            fout.write(self.newline)
 
-      if self.chemShiftFile:
-        self.chemShiftFile.write(use_fout = fout,useSerial=False)
-    
-    
-    fout.write("END")
-    fout.write(self.newline)
-    
-    fout.close()
+            # Cutoff to skip constraints that do not fit structure, set to -1.0 to ignore cutoff
+            fout.write("RC_OPT_CUTOFF %.1f" % self.rcOptCutoff)
+            fout.write(self.newline)
+
+            # Regular expression setting; leave to EXACT
+            fout.write("NAMES_OPT_FIT_TO %s" % self.namesOptFitTo)
+            fout.write(self.newline)
+
+            # End of data options
+            fout.write("DATA_OPT_END")
+            fout.write(self.newline)
+
+            #
+            # Write the group members info, not relevant for now
+            #
+
+            fout.write("GROUP_MEMBERS %d" % len(self.groupMembers))
+            fout.write(self.newline)
+
+            for groupRegExp, groupNumber in self.groupMembers:
+                fout.write("%s %d%s" % (groupRegExp, groupNumber, self.newline))
+
+            #
+            # Write the constraints
+            #
+
+            if self.constraintFile:
+                self.constraintFile.write(use_fout=fout, rcOptCutoff=self.rcOptCutoff)
+
+            #
+            # Write the chemical shifts
+            #
+
+            if self.chemShiftFile:
+                self.chemShiftFile.write(use_fout=fout, useSerial=False)
+
+        fout.write("END")
+        fout.write(self.newline)
+
+        fout.close()

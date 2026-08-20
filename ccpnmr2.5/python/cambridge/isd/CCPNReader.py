@@ -635,8 +635,8 @@ class CCPNReader:
             restraints.append(r_isd)
 
             if self.debug:
-              print('Torsion angle %d: name=%s, residue number=%s, atoms=%s, value=%s' % \)
-                    (constraint.serial, r_isd.name, str(r_isd.residue_number), str(contribs), str(r_isd.value))
+              print('Torsion angle %d: name=%s, residue number=%s, atoms=%s, value=%s' %
+                    (constraint.serial, r_isd.name, str(r_isd.residue_number), str(contribs), str(r_isd.value)))
 
         r_list = data.TorsionAngleList()
         r_list.restraints = restraints
@@ -1003,8 +1003,8 @@ class CCPNReader:
             key = getObjectKeyString(x)
             _type = restraint_types.get(x.className, 'Unknown')
 
-            print(' - Type: %s (%.4d), ISD key: %s (CCPN name: %s)' % \)
-                  (_type, len(x.constraints), repr(key), x.name)
+            print(' - Type: %s (%.4d), ISD key: %s (CCPN name: %s)' %
+                  (_type, len(x.constraints), repr(key), x.name))
 
         if not constraint_lists:
           print('   None.')
@@ -1065,8 +1065,8 @@ class CCPNReader:
 
     def export_project_settings(self, settings, nmr_project_name, key):
 
-      print('Exporting ISD project to CCPN NmrProject %s using key "%s" ...' % \)
-            (nmr_project_name, key)
+      print('Exporting ISD project to CCPN NmrProject %s using key "%s" ...' %
+            (nmr_project_name, key))
 
       nmr_project = self.get_nmr_project(nmr_project_name, True)
 
@@ -1092,8 +1092,8 @@ class CCPNReader:
       nmr_project = list(self.project.findAllNmrProjects(name=nmr_project_name))
 
       if len(nmr_project) > 1:
-          raise KeyError('Key %s for CCPN NmrProject is not unique.' % \)
-                nmr_project_name
+          raise KeyError('Key %s for CCPN NmrProject is not unique.' %
+                nmr_project_name)
 
       elif not nmr_project:
 
@@ -1105,8 +1105,8 @@ class CCPNReader:
           nmr_project = NmrProject(self.project, name=nmr_project_name)
           
         else:
-          raise KeyError('CCPN NmrProject with key %s not found.' % \)
-                nmr_project_name
+          raise KeyError('CCPN NmrProject with key %s not found.' %
+                nmr_project_name)
 
       else:
         nmr_project = nmr_project[0]
@@ -1117,8 +1117,8 @@ class CCPNReader:
 
       from pickle import loads
 
-      print('Reading ISD project settings from CCPN NmrProject %s using key %s  ...' % \)
-            (nmr_project_name, key)
+      print('Reading ISD project settings from CCPN NmrProject %s using key %s  ...' %
+            (nmr_project_name, key))
 
       nmr_project = self.get_nmr_project(nmr_project_name)
 
@@ -1126,14 +1126,14 @@ class CCPNReader:
                                                     keyword=key_project_settings)
 
       if not app_data:
-        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \)
-              (nmr_project_name, key)
-      
+        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' %
+              (nmr_project_name, key))
+
       ad = self.find_app_data(app_data, key)
 
       if ad is None:
-        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' % \)
-              (nmr_project_name, key)
+        raise KeyError('CCPN NmrProject %s contains no ISD simulation settings with key %s.' %
+              (nmr_project_name, key))
 
       return self.get_app_data_object(ad)
 
@@ -1147,16 +1147,16 @@ class CCPNReader:
 
         if not mol_systems:
 
-            print('CCPN MolSystem %s not found. Creating new one.' % \)
-                  mol_system_name
+            print('CCPN MolSystem %s not found. Creating new one.' %
+                  mol_system_name)
 
             from ccp.api.molecule.MolSystem import MolSystem
 
             mol_system = MolSystem(self.project, code=mol_system_name)
 
         elif len(mol_systems) != 1:
-            raise KeyError('More than one CCPN MolSystem with name %s found.' % \)
-                  mol_system_name
+            raise KeyError('More than one CCPN MolSystem with name %s found.' %
+                  mol_system_name)
 
         else:
             mol_system = mol_systems[0]

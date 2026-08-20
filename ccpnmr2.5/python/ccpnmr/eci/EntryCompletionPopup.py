@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -47,51 +46,48 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-from memops.gui.ButtonList import UtilityButtonList
-from memops.editor.BasePopup import BasePopup
-
 from ccpnmr.eci.EntryCompletionFrame import EntryCompletionFrame
+from memops.editor.BasePopup import BasePopup
+from memops.gui.ButtonList import UtilityButtonList
+
 
 def testEditNmrEntryPopup(argServer):
 
-  popup = EntryCompletionPopup(argServer.parent, argServer.getProject())
-  popup.open()
+    popup = EntryCompletionPopup(argServer.parent, argServer.getProject())
+    popup.open()
 
 
 class EntryCompletionPopup(BasePopup):
+    """
+    **Setup Deposition of Coordinate and NMR Data to PDB and BMRB**
 
-  """
-  **Setup Deposition of Coordinate and NMR Data to PDB and BMRB**
-  
-  The popup version of CcpNmr Entry Completion Interface (ECI), available from
-  Analysis in the Structure menu.  With it, you can complete all the necessary
-  information required for PDB and BMRB data depositions by adding an "Entry"
-  object to your CCPN project. An "Entry" object contains all the information that
-  you wish to deposit with your submission. You can also select chemical shift
-  lists, peak lists, structural restraints, ensembles, etc. and all at the click
-  of a button. In addition, you can add all the meta data that is required for
-  submissions to the PDB and BMRB. This can be done securely on your desktop
-  computer over the duration of your NMR project.
+    The popup version of CcpNmr Entry Completion Interface (ECI), available from
+    Analysis in the Structure menu.  With it, you can complete all the necessary
+    information required for PDB and BMRB data depositions by adding an "Entry"
+    object to your CCPN project. An "Entry" object contains all the information that
+    you wish to deposit with your submission. You can also select chemical shift
+    lists, peak lists, structural restraints, ensembles, etc. and all at the click
+    of a button. In addition, you can add all the meta data that is required for
+    submissions to the PDB and BMRB. This can be done securely on your desktop
+    computer over the duration of your NMR project.
 
-  For more documentation see the str(ECI section of the PDBe pages at the EBI web
-  site <http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html>)_.
-  """
+    For more documentation see the str(ECI section of the PDBe pages at the EBI web
+    site <http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html>)_.
+    """
 
-  def __init__(self, parent, project, *args, **kw):
-  
-    self.project = project             
-    BasePopup.__init__(self, parent, title='Deposition Entry Completion Interface', **kw)
-    
-    
-  def body(self, guiFrame):
+    def __init__(self, parent, project, *args, **kw):
 
-    self.geometry('950x700')
-    
-    guiFrame.expandGrid(0,0)
+        self.project = project
+        BasePopup.__init__(self, parent, title="Deposition Entry Completion Interface", **kw)
 
-    frame = EntryCompletionFrame(guiFrame, basePopup=self, grid=(0,0))
-    frame.updateAll()
+    def body(self, guiFrame):
 
-    utilButtons = UtilityButtonList(frame.tabbedFrame.sideFrame)
-    utilButtons.grid(row=0, column=0, sticky='e')
+        self.geometry("950x700")
 
+        guiFrame.expandGrid(0, 0)
+
+        frame = EntryCompletionFrame(guiFrame, basePopup=self, grid=(0, 0))
+        frame.updateAll()
+
+        utilButtons = UtilityButtonList(frame.tabbedFrame.sideFrame)
+        utilButtons.grid(row=0, column=0, sticky="e")

@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 from ccp.format.azara.generalIO import AzaraGenericFile
 from ccp.format.general.Constants import indent
 
@@ -58,122 +59,131 @@ from ccp.format.general.Constants import indent
 # Class definitions #
 #####################
 
+
 class AzaraProcessingScriptFile(AzaraGenericFile):
+    def initialize(self, inputFile, outputFile, parFile, numDim):
 
-  def initialize(self,inputFile,outputFile,parFile,numDim):
+        self.inputFile = inputFile
+        self.outputFile = outputFile
+        self.parFile = parFile
+        self.numDim = numDim
 
-    self.inputFile = inputFile
-    self.outputFile = outputFile
-    self.parFile = parFile
-    self.numDim = numDim
-    
-    self.scriptName = 'processingParsIO.py'
+        self.scriptName = "processingParsIO.py"
 
+        self.dataValues = []
 
-    self.dataValues = []
-    
-    for i in range(0,numDim):
-      self.dataValues.append([])
-        
-    self.addBeginCommands = []
-    self.addEndCommands = []
-        
-    self.dimRefs = ['1','2','3','4']
-    self.dataRefs = ['NegateAlternate','DataType','Conjugate','Varian','Rescale','BrukerAvance','WindowFunction','Zerofill','FourierTransform','BrukerAvancePhase','Phase','Reduce']
-    
-  def getDataValue(self,dim,index):    
-  
-    try:
-      return self.dataValues[dim][index].value
+        for i in range(0, numDim):
+            self.dataValues.append([])
 
-    except:
-      print("  Error: azara data reference index %d, dim %d not found." % (index,dim))
+        self.addBeginCommands = []
+        self.addEndCommands = []
 
-  def setDataValue(self,expDimIndex,dataRef,value):
-    dataRefIndex = self.dataRefs.index(dataRef)
-    self.dataValues[expDimIndex][dataRefIndex].setValue(value)             
+        self.dimRefs = ["1", "2", "3", "4"]
+        self.dataRefs = [
+            "NegateAlternate",
+            "DataType",
+            "Conjugate",
+            "Varian",
+            "Rescale",
+            "BrukerAvance",
+            "WindowFunction",
+            "Zerofill",
+            "FourierTransform",
+            "BrukerAvancePhase",
+            "Phase",
+            "Reduce",
+        ]
 
-  def write(self,verbose = 0):
+    def getDataValue(self, dim, index):
 
-    if verbose == 1:
-      print("Writing azara processing script file %s" % self.name)
+        try:
+            return self.dataValues[dim][index].value
 
-    fout = open(self.name,'w')
+        except:
+            print("  Error: azara data reference index %d, dim %d not found." % (index, dim))
 
-    #
-    # Write first lines...
-    #
+    def setDataValue(self, expDimIndex, dataRef, value):
+        dataRefIndex = self.dataRefs.index(dataRef)
+        self.dataValues[expDimIndex][dataRefIndex].setValue(value)
 
-    fout.write("input %s" % self.inputFile + self.newline * 2)
-    fout.write("output %s" % self.outputFile + self.newline * 2)
-    fout.write("par %s" % self.parFile + self.newline * 2)
+    def write(self, verbose=0):
 
-    #  
-    # Get data for addBeginCommand(s) - are added as extra lines
-    #
+        if verbose == 1:
+            print("Writing azara processing script file %s" % self.name)
 
-    for addCommand in self.addBeginCommands:
-      fout.write("%s%s" % (addCommand,self.newline*2))
+        fout = open(self.name, "w")
 
-    #
-    # Write variable bits in middle
-    # 
+        #
+        # Write first lines...
+        #
 
-    numFuncs = len(self.dataRefs)
+        fout.write("input %s" % self.inputFile + self.newline * 2)
+        fout.write("output %s" % self.outputFile + self.newline * 2)
+        fout.write("par %s" % self.parFile + self.newline * 2)
 
-    for dim in range(0,self.numDim):
+        #
+        # Get data for addBeginCommand(s) - are added as extra lines
+        #
 
-      dimRef = self.dimRefs[dim]
+        for addCommand in self.addBeginCommands:
+            fout.write("%s%s" % (addCommand, self.newline * 2))
 
-      fout.write("script_com %s" % dimRef + self.newline)
+        #
+        # Write variable bits in middle
+        #
 
-      for i in range(0,numFuncs):
+        numFuncs = len(self.dataRefs)
 
-        value = self.getDataValue(dim,i)
-        dataRef = self.dataRefs[i]
+        for dim in range(0, self.numDim):
+            dimRef = self.dimRefs[dim]
 
-        if value != '':
-          fout.write("%s%-25s! %s%s" % (indent,value,dataRef,self.newline))
+            fout.write("script_com %s" % dimRef + self.newline)
 
-      # End current script
-      fout.write("end_script" + (self.newline * 2))
+            for i in range(0, numFuncs):
+                value = self.getDataValue(dim, i)
+                dataRef = self.dataRefs[i]
 
-    fout.write(self.newline)
+                if value != "":
+                    fout.write("%s%-25s! %s%s" % (indent, value, dataRef, self.newline))
 
-    #
-    # Get data for addEndCommand(s) - are added as extra lines
-    #
+            # End current script
+            fout.write("end_script" + (self.newline * 2))
 
-    for addCommand in self.addEndCommands:
-      fout.write("%s%s" % (addCommand,self.newline*2))
+        fout.write(self.newline)
 
-    fout.close()
+        #
+        # Get data for addEndCommand(s) - are added as extra lines
+        #
 
-    if verbose == 1:
-      print(self.scriptName + " finished...")
+        for addCommand in self.addEndCommands:
+            fout.write("%s%s" % (addCommand, self.newline * 2))
+
+        fout.close()
+
+        if verbose == 1:
+            print(self.scriptName + " finished...")
+
 
 class AzaraProcessingScript:
+    def __init__(self, parent, index, value):
 
-  def __init__(self,parent,index,value):
-  
-    self.index = index
-    self.parent = parent
-    self.setValue(value)
-    # TODO: could add more info here (which dim, ...)
+        self.index = index
+        self.parent = parent
+        self.setValue(value)
+        # TODO: could add more info here (which dim, ...)
 
-  def setValue(self,value):
-  
-    if value == None:
-      print("Warning: no value for Azara dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index]))
-      value = 0
+    def setValue(self, value):
 
-    self.value = value
+        if value == None:
+            print("Warning: no value for Azara dataRef index %s. Set to zero." % (self.parent.dataRefs[self.index]))
+            value = 0
+
+        self.value = value
+
 
 ###################
 # Main of program #
 ###################
-    
-if __name__ == "__main__":
 
-  print("No test available")
-  
+if __name__ == "__main__":
+    print("No test available")

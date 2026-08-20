@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,54 +53,54 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 # Import general functions
-from memops.universal.Util import returnFloat, returnFloats
-from memops.universal.Util import returnInt
-from ccp.format.talos.generalIO import TalosGenericFile, TalosGenericDataItem
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.talos.generalIO import TalosGenericDataItem, TalosGenericFile
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
-    
+
+
 class TalosChemShiftFile(TalosGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.chemShifts = []
+    """
+    Information on file level
+    """
 
-    #
-    # Reference data setup
-    #
-    
-    self.refData = [['RESID', '%4d','seqCode',returnInt,True],
-                   	['RESNAME','%1s','resLabel',str,True], 
-                   	['ATOMNAME','%4s','atomName',str,True],
-                   	['SHIFT','%8.3f','value',returnFloat,True]
-                   ]
-    
+    def initialize(self):
 
-  def printInfo(self,action):
-    
-    print("%s %s chemical shift list %s" % (action,self.format,self.name))
+        self.chemShifts = []
 
-  def setVarsLine(self,varsDict):
-    
-    self.chemShifts.append(TalosChemShift(self))
-    self.chemShifts[-1].setVarsDict(varsDict)
+        #
+        # Reference data setup
+        #
 
-  def getVarItems(self):
-  
-    self.varItems = self.chemShifts
+        self.refData = [
+            ["RESID", "%4d", "seqCode", returnInt, True],
+            ["RESNAME", "%1s", "resLabel", str, True],
+            ["ATOMNAME", "%4s", "atomName", str, True],
+            ["SHIFT", "%8.3f", "value", returnFloat, True],
+        ]
+
+    def printInfo(self, action):
+
+        print("%s %s chemical shift list %s" % (action, self.format, self.name))
+
+    def setVarsLine(self, varsDict):
+
+        self.chemShifts.append(TalosChemShift(self))
+        self.chemShifts[-1].setVarsDict(varsDict)
+
+    def getVarItems(self):
+
+        self.varItems = self.chemShifts
+
 
 class TalosChemShift(TalosGenericDataItem):
+    def initItemSpecificData(self):
 
-  def initItemSpecificData(self):
-  
-    self.molCode = self.parent.defaultMolCode
- 
-  def setItemSpecificVars(self):
-  
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+        self.molCode = self.parent.defaultMolCode
+
+    def setItemSpecificVars(self):
+
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)

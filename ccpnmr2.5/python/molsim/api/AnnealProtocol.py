@@ -58,19 +58,17 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
@@ -90,9 +88,9 @@ general terms.
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('application', 'applicationData', 'applicationVersion', 'className', 'code', 'details', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'methodStoreName', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'annealProtocolStore', 'annealStages', 'energyTerms', 'haddockRuns', 'nmrCalcRuns', 'parent', 'root', 'software', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.AnnealProtocol
@@ -143,7 +141,7 @@ general terms.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -213,7 +211,7 @@ general terms.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -239,13 +237,13 @@ general terms.
 
     annealStages = dataDict.get('annealStages').values()
     for annealStage in annealStages:
-      if (not (annealStage in objsToBeDeleted)):
+      if (annealStage not in objsToBeDeleted):
         objsToBeDeleted.add(annealStage)
         objsToBeChecked.append(annealStage)
 
     energyTerms = dataDict.get('energyTerms').values()
     for energyTerm in energyTerms:
-      if (not (energyTerm in objsToBeDeleted)):
+      if (energyTerm not in objsToBeDeleted):
         objsToBeDeleted.add(energyTerm)
         objsToBeChecked.append(energyTerm)
 
@@ -264,7 +262,7 @@ general terms.
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.AnnealProtocol:   deletes
@@ -275,15 +273,15 @@ general terms.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     for haddockRun in dataDict.get('haddockRuns'):
-      if (not (haddockRun in objsToBeDeleted)):
+      if (haddockRun not in objsToBeDeleted):
         haddockRun.__dict__['annealProtocol'] = None
 
     annealProtocolStore = dataDict.get('annealProtocolStore')
-    if (not (annealProtocolStore in objsToBeDeleted)):
+    if (annealProtocolStore not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('application')
       ll.append(objKey)
@@ -303,7 +301,7 @@ general terms.
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addHaddockRun(self, value):
     """
     Add for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -372,7 +370,7 @@ general terms.
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.addHaddockRun:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -400,13 +398,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addHaddockRun')
       if ll:
         for notify in ll:
@@ -455,7 +453,7 @@ general terms.
       else:
         value = dataDict.get('annealProtocolStore')
         dd = value.__dict__.get('annealProtocols')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'annealProtocolStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -687,7 +685,7 @@ general terms.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -695,7 +693,7 @@ general terms.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -713,7 +711,7 @@ general terms.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -736,7 +734,7 @@ general terms.
           )
 
         oldSelf = value.__dict__.get('annealProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: annealStages:
            non-reciprocal link annealStages from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -751,7 +749,7 @@ general terms.
           )
 
         oldSelf = value.__dict__.get('annealProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: energyTerms:
            non-reciprocal link energyTerms from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -774,7 +772,7 @@ general terms.
           )
 
         oldSelf = value.__dict__.get('annealProtocol')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: haddockRuns:
            non-reciprocal link haddockRuns from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -782,7 +780,7 @@ general terms.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: haddockRuns:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -799,7 +797,7 @@ general terms.
           )
 
         oldSelf = value.getAnnealProtocol()
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: nmrCalcRuns:
            non-reciprocal link nmrCalcRuns from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -807,7 +805,7 @@ general terms.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: nmrCalcRuns:
            Link nmrCalcRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -825,7 +823,7 @@ general terms.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: software:
            Link software between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -876,7 +874,7 @@ general terms.
     values = dataDict.get('haddockRuns')
 
   delete = memops.api.Implementation.DataObject.delete
-  
+
   def findAllAnnealStages(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocol.annealStages
@@ -890,7 +888,7 @@ general terms.
     else:
       currentValues = dataDict.get('annealStages').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -901,28 +899,28 @@ general terms.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -933,7 +931,7 @@ general terms.
     return result
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllEnergyTerms(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocol.energyTerms
@@ -947,7 +945,7 @@ general terms.
     else:
       currentValues = dataDict.get('energyTerms').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -958,28 +956,28 @@ general terms.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -988,7 +986,7 @@ general terms.
             result.add(v)
 
     return result
-  
+
   def findAllHaddockRuns(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -1016,7 +1014,7 @@ general terms.
 
       currentValues = dataDict.get('haddockRuns')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1027,28 +1025,28 @@ general terms.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1057,7 +1055,7 @@ general terms.
             result.add(v)
 
     return result
-  
+
   def findAllNmrCalcRuns(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocol.nmrCalcRuns
@@ -1071,7 +1069,7 @@ general terms.
     else:
       currentValues = self.getNmrCalcRuns()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1082,28 +1080,28 @@ general terms.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1112,7 +1110,7 @@ general terms.
             result.add(v)
 
     return result
-  
+
   def findFirstAnnealStage(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealProtocol.annealStages
@@ -1145,7 +1143,7 @@ general terms.
         currentValues = dataDict.get('annealStages').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1156,28 +1154,28 @@ general terms.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1188,7 +1186,7 @@ general terms.
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstEnergyTerm(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealProtocol.energyTerms
@@ -1221,7 +1219,7 @@ general terms.
         currentValues = dataDict.get('energyTerms').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1232,28 +1230,28 @@ general terms.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1262,7 +1260,7 @@ general terms.
             result = v; break
 
     return result
-  
+
   def findFirstHaddockRun(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -1293,7 +1291,7 @@ general terms.
 
       currentValues = dataDict.get('haddockRuns')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1304,28 +1302,28 @@ general terms.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1334,7 +1332,7 @@ general terms.
             result = v; break
 
     return result
-  
+
   def findFirstNmrCalcRun(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealProtocol.nmrCalcRuns
@@ -1351,7 +1349,7 @@ general terms.
     else:
       currentValues = self.getNmrCalcRuns()
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1362,28 +1360,28 @@ general terms.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -1392,7 +1390,7 @@ general terms.
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.AnnealProtocol
@@ -1403,7 +1401,7 @@ general terms.
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnnealProtocolStore(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.annealProtocolStore
@@ -1411,7 +1409,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('annealProtocolStore')
     return result
-  
+
   def getAnnealStages(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.annealStages
@@ -1420,7 +1418,7 @@ general terms.
     tempVar = dataDict.get('annealStages').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getApplication(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.application
@@ -1430,7 +1428,7 @@ general terms.
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getApplicationVersion(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.applicationVersion
@@ -1438,7 +1436,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('applicationVersion')
     return result
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.AnnealProtocol
@@ -1491,7 +1489,7 @@ general terms.
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.code
@@ -1499,7 +1497,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getDetails(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.details
@@ -1507,7 +1505,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('details')
     return result
-  
+
   def getEnergyTerms(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.energyTerms
@@ -1520,7 +1518,7 @@ general terms.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.AnnealProtocol
@@ -1539,7 +1537,7 @@ general terms.
     result.append(dataDict.get('code'))
 
     return result
-  
+
   def getHaddockRuns(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -1559,7 +1557,7 @@ general terms.
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.AnnealProtocol
@@ -1577,7 +1575,7 @@ general terms.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getMethodStoreName(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.methodStoreName
@@ -1585,7 +1583,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('methodStoreName')
     return result
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.name
@@ -1593,7 +1591,7 @@ general terms.
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getNmrCalcRuns(self):
     """
     getter for derived link nmrCalcRums
@@ -1608,7 +1606,7 @@ general terms.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocol.parent
@@ -1620,7 +1618,7 @@ general terms.
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSoftware(self):
     """
     getter for derived link 'software'
@@ -1630,13 +1628,13 @@ general terms.
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newAnnealStage(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.AnnealStage
     """
     return AnnealStage(self, **attrlinks)
-  
+
   def newEnergyTerm(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.EnergyTerm
@@ -1644,7 +1642,7 @@ general terms.
     return EnergyTerm(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeHaddockRun(self, value):
     """
     Remove for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -1698,7 +1696,7 @@ general terms.
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeHaddockRun:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -1716,13 +1714,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeHaddockRun')
       if ll:
         for notify in ll:
@@ -1737,7 +1735,7 @@ general terms.
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setApplication(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealProtocol.application
@@ -1806,7 +1804,7 @@ general terms.
     # doNotifies
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setApplicationVersion(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealProtocol.applicationVersion
@@ -1875,13 +1873,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setApplicationVersion')
       if ll:
         for notify in ll:
@@ -1954,7 +1952,7 @@ general terms.
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setDetails(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealProtocol.details
@@ -2017,13 +2015,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -2074,12 +2072,12 @@ general terms.
         topObjectsToCheck.add(topObject)
 
       for pv in currentValues:
-        if (not (pv in values)):
+        if (pv not in values):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
       for pv in values:
-        if (not (pv in currentValues)):
+        if (pv not in currentValues):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
           oldSelf = pv.__dict__.get('annealProtocol')
@@ -2118,7 +2116,7 @@ general terms.
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       for value in values:
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setHaddockRuns:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2126,11 +2124,11 @@ general terms.
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['annealProtocol'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('annealProtocol')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('haddockRuns')
@@ -2146,13 +2144,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHaddockRuns')
       if ll:
         for notify in ll:
@@ -2227,13 +2225,13 @@ general terms.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setMethodStoreName')
       if ll:
         for notify in ll:
@@ -2306,7 +2304,7 @@ general terms.
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def setSoftware(self, value):
     """
     setter for derived link 'software'
@@ -2368,24 +2366,24 @@ general terms.
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('annealStages')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedEnergyTerms(self):
     """
     Sorted for molsim.AnnealProtocol.AnnealProtocol.energyTerms
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('energyTerms')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedHaddockRuns(self):
     """
     Sorted for molsim.AnnealProtocol.AnnealProtocol.haddockRuns
@@ -2400,11 +2398,11 @@ general terms.
 
     ll = dataDict.get('haddockRuns')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedNmrCalcRuns(self):
     """
     Sorted for molsim.AnnealProtocol.AnnealProtocol.nmrCalcRuns
@@ -2412,30 +2410,30 @@ general terms.
     dataDict = self.__dict__
     ll = self.getNmrCalcRuns()
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
 
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
-  
+
   application = property(getApplication, setApplication, None,
   r"""Name of application that uses the protocol. Part of Object key. Part of 
   key for derived link 'software'
   """)
 
   applicationData = memops.api.Implementation.DataObject.applicationData
-  
+
   applicationVersion = property(getApplicationVersion, setApplicationVersion, None,
   r"""Version of application used. part of key for derived link software
   """)
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Application-specific name for the protocol. Part of class key.
   """)
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -2447,12 +2445,12 @@ general terms.
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   methodStoreName = property(getMethodStoreName, setMethodStoreName, None,
   r"""Name of MethodStore used to store Software. Part of key for derived link 
   software
   """)
-  
+
   name = property(getName, setName, None,
   r"""name of AnnealProtocol. in human-readable form
   """)
@@ -2466,33 +2464,33 @@ general terms.
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealProtocolStore = property(getAnnealProtocolStore,  None, None,
   r"""parent link
   """)
-  
+
   annealStages = property(getAnnealStages,  None, None,
   r"""child link to class AnnealStage
   """)
-  
+
   energyTerms = property(getEnergyTerms,  None, None,
   r"""child link to class EnergyTerm
   """)
-  
+
   haddockRuns = property(getHaddockRuns, setHaddockRuns, None,
   r"""Haddock runs using annealing protocol
   """)
-  
+
   nmrCalcRuns = property(getNmrCalcRuns, None, None,
   r"""NmrCalc.Runs carried out with AnnealProtocol
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for annealProtocolStore
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   software = property(getSoftware, setSoftware, None,
   r"""Software used in annealing protocol
   """)
@@ -2508,9 +2506,9 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('applicationData', 'className', 'createdBy', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'activeRepositories', 'annealProtocols', 'memopsRoot', 'packageLocator', 'parent', 'refPotentialTerms', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.AnnealProtocolStore
@@ -2567,7 +2565,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -2644,7 +2642,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -2673,7 +2671,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
     annealProtocols = dataDict.get('annealProtocols').values()
     for annealProtocol in annealProtocols:
-      if (not (annealProtocol in objsToBeDeleted)):
+      if (annealProtocol not in objsToBeDeleted):
         objsToBeDeleted.add(annealProtocol)
         objsToBeChecked.append(annealProtocol)
 
@@ -2684,13 +2682,13 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
     refPotentialTerms = dataDict.get('refPotentialTerms').values()
     for refPotentialTerm in refPotentialTerms:
-      if (not (refPotentialTerm in objsToBeDeleted)):
+      if (refPotentialTerm not in objsToBeDeleted):
         objsToBeDeleted.add(refPotentialTerm)
         objsToBeChecked.append(refPotentialTerm)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.AnnealProtocolStore:   deletes
@@ -2705,11 +2703,11 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentAnnealProtocolStore'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -2726,7 +2724,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for molsim.AnnealProtocol.AnnealProtocolStore
@@ -2764,7 +2762,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('annealProtocolStores')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2862,7 +2860,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -2973,7 +2971,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2981,7 +2979,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2999,7 +2997,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3015,7 +3013,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('annealProtocolStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: annealProtocols:
            non-reciprocal link annealProtocols from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3045,7 +3043,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3061,7 +3059,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('annealProtocolStore')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: refPotentialTerms:
            non-reciprocal link refPotentialTerms from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3118,7 +3116,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
-  
+
   def findAllAnnealProtocols(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
@@ -3138,7 +3136,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('annealProtocols').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3149,28 +3147,28 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3181,7 +3179,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllRefPotentialTerms(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealProtocolStore.refPotentialTerms
@@ -3201,7 +3199,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('refPotentialTerms').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3212,28 +3210,28 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3244,7 +3242,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
-  
+
   def findFirstAnnealProtocol(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
@@ -3294,7 +3292,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('annealProtocols').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3305,28 +3303,28 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3337,7 +3335,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstRefPotentialTerm(self, **conditions):
     """
     FindFirst for
@@ -3391,7 +3389,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('refPotentialTerms').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3402,28 +3400,28 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3432,7 +3430,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.AnnealProtocolStore
@@ -3445,7 +3443,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
-  
+
   def getAnnealProtocols(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
@@ -3459,7 +3457,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.AnnealProtocolStore
@@ -3492,7 +3490,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.AnnealProtocolStore
@@ -3522,7 +3520,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.AnnealProtocolStore
@@ -3530,7 +3528,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocolStore.memopsRoot
@@ -3540,7 +3538,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocolStore.name
@@ -3554,7 +3552,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocolStore.parent
@@ -3564,7 +3562,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getRefPotentialTerms(self):
     """
     Get for molsim.AnnealProtocol.AnnealProtocolStore.refPotentialTerms
@@ -3584,13 +3582,13 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newAnnealProtocol(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.AnnealProtocol
     """
     return AnnealProtocol(self, **attrlinks)
-  
+
   def newRefPotentialTerm(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.RefPotentialTerm
@@ -3606,7 +3604,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for molsim.AnnealProtocol.AnnealProtocolStore
@@ -3625,7 +3623,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setName(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealProtocolStore.name
@@ -3695,7 +3693,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def sortedAnnealProtocols(self):
     """
     Sorted for molsim.AnnealProtocol.AnnealProtocolStore.annealProtocols
@@ -3705,12 +3703,12 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('annealProtocols')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedRefPotentialTerms(self):
     """
     Sorted for molsim.AnnealProtocol.AnnealProtocolStore.refPotentialTerms
@@ -3720,7 +3718,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('refPotentialTerms')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -3755,7 +3753,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""AnnealProtocol name.
   """)
@@ -3771,21 +3769,21 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   annealProtocols = property(getAnnealProtocols,  None, None,
   r"""child link to class AnnealProtocol
   """)
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
-  
+
   refPotentialTerms = property(getRefPotentialTerms,  None, None,
   r"""child link to class RefPotentialTerm
   """)
@@ -3803,9 +3801,9 @@ class AnnealStage(memops.api.Implementation.DataObject):
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'finalTemp', 'function', 'functionParams', 'inConstructor', 'initialTemp', 'isDeleted', 'metaclass', 'name', 'numSteps', 'numSubSteps', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'timeStep', 'timeStepScaling', 'access', 'activeAccess', 'annealProtocol', 'parent', 'potentialScales', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.AnnealStage
@@ -3856,7 +3854,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3924,7 +3922,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3950,13 +3948,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     potentialScales = dataDict.get('potentialScales')
     for potentialScale in potentialScales:
-      if (not (potentialScale in objsToBeDeleted)):
+      if (potentialScale not in objsToBeDeleted):
         objsToBeDeleted.add(potentialScale)
         objsToBeChecked.append(potentialScale)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.AnnealStage:   deletes
@@ -3967,11 +3965,11 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     annealProtocol = dataDict.get('annealProtocol')
-    if (not (annealProtocol in objsToBeDeleted)):
+    if (annealProtocol not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3983,7 +3981,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addFunctionParam(self, value):
     """
     Add for molsim.AnnealProtocol.AnnealStage.functionParams
@@ -4037,13 +4035,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addFunctionParam')
       if ll:
         for notify in ll:
@@ -4056,7 +4054,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for molsim.AnnealProtocol.AnnealStage
@@ -4077,7 +4075,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('annealProtocol')
         dd = value.__dict__.get('annealStages')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'annealProtocol' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4370,7 +4368,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4378,7 +4376,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4396,7 +4394,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4419,7 +4417,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('annealStage')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: potentialScales:
            non-reciprocal link potentialScales from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4427,7 +4425,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: potentialScales:
            Link potentialScales between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -4475,7 +4473,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllPotentialScales(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.AnnealStage.potentialScales
@@ -4489,7 +4487,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('potentialScales')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4500,28 +4498,28 @@ class AnnealStage(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4532,7 +4530,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstPotentialScale(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.AnnealStage.potentialScales
@@ -4549,7 +4547,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('potentialScales')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -4560,28 +4558,28 @@ class AnnealStage(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -4590,7 +4588,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.AnnealStage
@@ -4601,7 +4599,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnnealProtocol(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.annealProtocol
@@ -4611,7 +4609,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.AnnealStage
@@ -4672,7 +4670,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFinalTemp(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.finalTemp
@@ -4680,7 +4678,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('finalTemp')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.AnnealStage
@@ -4701,7 +4699,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getFunction(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.function
@@ -4709,7 +4707,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('function')
     return result
-  
+
   def getFunctionParams(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.functionParams
@@ -4720,7 +4718,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInitialTemp(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.initialTemp
@@ -4730,7 +4728,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.AnnealStage
@@ -4740,7 +4738,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.name
@@ -4748,7 +4746,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getNumSteps(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.numSteps
@@ -4756,7 +4754,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numSteps')
     return result
-  
+
   def getNumSubSteps(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.numSubSteps
@@ -4768,7 +4766,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.parent
@@ -4776,7 +4774,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('annealProtocol')
     return result
-  
+
   def getPotentialScales(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.potentialScales
@@ -4789,7 +4787,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.serial
@@ -4797,7 +4795,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getTimeStep(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.timeStep
@@ -4805,7 +4803,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('timeStep')
     return result
-  
+
   def getTimeStepScaling(self):
     """
     Get for molsim.AnnealProtocol.AnnealStage.timeStepScaling
@@ -4817,7 +4815,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeFunctionParam(self, value):
     """
     Remove for molsim.AnnealProtocol.AnnealStage.functionParams
@@ -4860,7 +4858,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
        called on deleted object""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeFunctionParam:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -4877,13 +4875,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeFunctionParam')
       if ll:
         for notify in ll:
@@ -4900,7 +4898,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setFinalTemp(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealStage.finalTemp
@@ -4964,13 +4962,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFinalTemp')
       if ll:
         for notify in ll:
@@ -5050,13 +5048,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFunction')
       if ll:
         for notify in ll:
@@ -5124,13 +5122,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFunctionParams')
       if ll:
         for notify in ll:
@@ -5200,13 +5198,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInitialTemp')
       if ll:
         for notify in ll:
@@ -5281,13 +5279,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -5356,13 +5354,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumSteps')
       if ll:
         for notify in ll:
@@ -5426,13 +5424,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumSubSteps')
       if ll:
         for notify in ll:
@@ -5491,7 +5489,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
 
     if (notOverride):
       for cv in currentValues:
-        if (not (cv in values)):
+        if (cv not in values):
           raise ApiError("""%s.setPotentialScales:
            locard annealStage: cannot set because some of current values not in values""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5500,7 +5498,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('topObject')
       for value in values:
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setPotentialScales:
            Link potentialScales between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5518,13 +5516,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPotentialScales')
       if ll:
         for notify in ll:
@@ -5588,7 +5586,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setTimeStep(self, value):
     """
     Set for molsim.AnnealProtocol.AnnealStage.timeStep
@@ -5652,13 +5650,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setTimeStep')
       if ll:
         for notify in ll:
@@ -5728,13 +5726,13 @@ class AnnealStage(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setTimeStepScaling')
       if ll:
         for notify in ll:
@@ -5748,7 +5746,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     ll = dataDict.get('potentialScales')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
@@ -5760,23 +5758,23 @@ class AnnealStage(memops.api.Implementation.DataObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   finalTemp = property(getFinalTemp, setFinalTemp, None,
   r"""Final temperature in degrees K.
   """)
-  
+
   function = property(getFunction, setFunction, None,
   r"""Function used for varying temperature. See ScaleFunction data type for 
   details.
   """)
-  
+
   functionParams = property(getFunctionParams, setFunctionParams, None,
   r"""Parameters for the temperature varying function. Their number and 
   meaning depends on the value of 'function'.
   """)
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   initialTemp = property(getInitialTemp, setInitialTemp, None,
   r"""Initial temperature in degrees K.
   """)
@@ -5784,15 +5782,15 @@ class AnnealStage(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""name of stage
   """)
-  
+
   numSteps = property(getNumSteps, setNumSteps, None,
   r"""Number of annealing steps
   """)
-  
+
   numSubSteps = property(getNumSubSteps, setNumSubSteps, None,
   r"""Number of substeps (e.g. Molecular dynamics steps) for each main step
   """)
@@ -5802,16 +5800,16 @@ class AnnealStage(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of stage. Set autoamtically. Defines temporal order of 
   stages.
   """)
-  
+
   timeStep = property(getTimeStep, setTimeStep, None,
   r"""Time step in seconds
   """)
-  
+
   timeStepScaling = property(getTimeStepScaling, setTimeStepScaling, None,
   r"""Scling factor aplied to time step. Used in certain protocols such as CNS 
   torsion angle dynamics. The actual timestep is 
@@ -5821,15 +5819,15 @@ class AnnealStage(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealProtocol = property(getAnnealProtocol,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for annealProtocol
   """)
-  
+
   potentialScales = property(getPotentialScales, setPotentialScales, None,
   r"""PotentialScales in use at this AnnealStage
   """)
@@ -5848,9 +5846,9 @@ refPotentialTerms
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('applicationData', 'className', 'code', 'details', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'serial', 'access', 'activeAccess', 'annealProtocol', 'haddockEnergyTerms', 'nmrCalcEnergyTerms', 'parent', 'potentialScales', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.EnergyTerm
@@ -5896,7 +5894,7 @@ refPotentialTerms
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -5964,7 +5962,7 @@ refPotentialTerms
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -6003,13 +6001,13 @@ refPotentialTerms
 
     potentialScales = dataDict.get('potentialScales').values()
     for potentialScale in potentialScales:
-      if (not (potentialScale in objsToBeDeleted)):
+      if (potentialScale not in objsToBeDeleted):
         objsToBeDeleted.add(potentialScale)
         objsToBeChecked.append(potentialScale)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.EnergyTerm:   deletes
@@ -6020,15 +6018,15 @@ refPotentialTerms
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     for haddockEnergyTerm in dataDict.get('haddockEnergyTerms'):
-      if (not (haddockEnergyTerm in objsToBeDeleted)):
+      if (haddockEnergyTerm not in objsToBeDeleted):
         haddockEnergyTerm.__dict__['energyTerm'] = None
 
     annealProtocol = dataDict.get('annealProtocol')
-    if (not (annealProtocol in objsToBeDeleted)):
+    if (annealProtocol not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -6040,7 +6038,7 @@ refPotentialTerms
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addHaddockEnergyTerm(self, value):
     """
     Add for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -6110,7 +6108,7 @@ refPotentialTerms
         xx1 = dataDict.get('annealProtocol')
         yy1 = value.__dict__.get('run')
         yy2 = yy1.__dict__.get('annealProtocol')
-        if (not (xx1 is yy2)):
+        if (xx1 is not yy2):
           raise ApiError("""%s.addHaddockEnergyTerm:
            Link haddockEnergyTerms between objects from separate partitions
            - utrecht.Haddock.Run.annealProtocol not set correctly""" % self.qualifiedName
@@ -6138,13 +6136,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addHaddockEnergyTerm')
       if ll:
         for notify in ll:
@@ -6181,7 +6179,7 @@ refPotentialTerms
       else:
         value = dataDict.get('annealProtocol')
         dd = value.__dict__.get('energyTerms')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'annealProtocol' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6346,7 +6344,7 @@ refPotentialTerms
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6354,7 +6352,7 @@ refPotentialTerms
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6372,7 +6370,7 @@ refPotentialTerms
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6403,7 +6401,7 @@ refPotentialTerms
           )
 
         oldSelf = value.__dict__.get('energyTerm')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: haddockEnergyTerms:
            non-reciprocal link haddockEnergyTerms from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6412,7 +6410,7 @@ refPotentialTerms
         xx1 = dataDict.get('annealProtocol')
         yy1 = value.__dict__.get('run')
         yy2 = yy1.__dict__.get('annealProtocol')
-        if (not (xx1 is yy2)):
+        if (xx1 is not yy2):
           raise ApiError("""%s.checkValid: haddockEnergyTerms:
            Link haddockEnergyTerms between objects from separate partitions
            - utrecht.Haddock.Run.annealProtocol not set correctly""" % self.qualifiedName
@@ -6429,7 +6427,7 @@ refPotentialTerms
           )
 
         oldSelf = value.getAnnealEnergyTerm()
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: nmrCalcEnergyTerms:
            non-reciprocal link nmrCalcEnergyTerms from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6437,7 +6435,7 @@ refPotentialTerms
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: nmrCalcEnergyTerms:
            Link nmrCalcEnergyTerms between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6453,7 +6451,7 @@ refPotentialTerms
           )
 
         oldSelf = value.__dict__.get('energyTerm')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: potentialScales:
            non-reciprocal link potentialScales from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6483,7 +6481,7 @@ refPotentialTerms
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllHaddockEnergyTerms(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -6511,7 +6509,7 @@ refPotentialTerms
 
       currentValues = dataDict.get('haddockEnergyTerms')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6522,28 +6520,28 @@ refPotentialTerms
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6552,7 +6550,7 @@ refPotentialTerms
             result.add(v)
 
     return result
-  
+
   def findAllNmrCalcEnergyTerms(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.EnergyTerm.nmrCalcEnergyTerms
@@ -6566,7 +6564,7 @@ refPotentialTerms
     else:
       currentValues = self.getNmrCalcEnergyTerms()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6577,28 +6575,28 @@ refPotentialTerms
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6607,7 +6605,7 @@ refPotentialTerms
             result.add(v)
 
     return result
-  
+
   def findAllPotentialScales(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.EnergyTerm.potentialScales
@@ -6621,7 +6619,7 @@ refPotentialTerms
     else:
       currentValues = dataDict.get('potentialScales').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6632,28 +6630,28 @@ refPotentialTerms
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6664,7 +6662,7 @@ refPotentialTerms
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstHaddockEnergyTerm(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -6695,7 +6693,7 @@ refPotentialTerms
 
       currentValues = dataDict.get('haddockEnergyTerms')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6706,28 +6704,28 @@ refPotentialTerms
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6736,7 +6734,7 @@ refPotentialTerms
             result = v; break
 
     return result
-  
+
   def findFirstNmrCalcEnergyTerm(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.EnergyTerm.nmrCalcEnergyTerms
@@ -6753,7 +6751,7 @@ refPotentialTerms
     else:
       currentValues = self.getNmrCalcEnergyTerms()
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6764,28 +6762,28 @@ refPotentialTerms
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6794,7 +6792,7 @@ refPotentialTerms
             result = v; break
 
     return result
-  
+
   def findFirstPotentialScale(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.EnergyTerm.potentialScales
@@ -6835,7 +6833,7 @@ refPotentialTerms
         currentValues = dataDict.get('potentialScales').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6846,28 +6844,28 @@ refPotentialTerms
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6876,7 +6874,7 @@ refPotentialTerms
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.EnergyTerm
@@ -6887,7 +6885,7 @@ refPotentialTerms
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnnealProtocol(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.annealProtocol
@@ -6897,7 +6895,7 @@ refPotentialTerms
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.EnergyTerm
@@ -6954,7 +6952,7 @@ refPotentialTerms
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.code
@@ -6962,7 +6960,7 @@ refPotentialTerms
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getDetails(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.details
@@ -6974,7 +6972,7 @@ refPotentialTerms
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.EnergyTerm
@@ -6995,7 +6993,7 @@ refPotentialTerms
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getHaddockEnergyTerms(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -7015,7 +7013,7 @@ refPotentialTerms
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.EnergyTerm
@@ -7025,7 +7023,7 @@ refPotentialTerms
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.name
@@ -7033,7 +7031,7 @@ refPotentialTerms
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getNmrCalcEnergyTerms(self):
     """
     getter for derived link nmrCalcEnergyTerms
@@ -7046,7 +7044,7 @@ refPotentialTerms
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.parent
@@ -7054,7 +7052,7 @@ refPotentialTerms
     dataDict = self.__dict__
     result = dataDict.get('annealProtocol')
     return result
-  
+
   def getPotentialScales(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.potentialScales
@@ -7067,7 +7065,7 @@ refPotentialTerms
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for molsim.AnnealProtocol.EnergyTerm.serial
@@ -7077,7 +7075,7 @@ refPotentialTerms
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newPotentialScale(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.PotentialScale
@@ -7085,7 +7083,7 @@ refPotentialTerms
     return PotentialScale(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeHaddockEnergyTerm(self, value):
     """
     Remove for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -7139,7 +7137,7 @@ refPotentialTerms
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeHaddockEnergyTerm:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -7157,13 +7155,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeHaddockEnergyTerm')
       if ll:
         for notify in ll:
@@ -7180,7 +7178,7 @@ refPotentialTerms
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for molsim.AnnealProtocol.EnergyTerm.code
@@ -7249,13 +7247,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCode')
       if ll:
         for notify in ll:
@@ -7324,13 +7322,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -7381,12 +7379,12 @@ refPotentialTerms
         topObjectsToCheck.add(topObject)
 
       for pv in currentValues:
-        if (not (pv in values)):
+        if (pv not in values):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
       for pv in values:
-        if (not (pv in currentValues)):
+        if (pv not in currentValues):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
           oldSelf = pv.__dict__.get('energyTerm')
@@ -7426,7 +7424,7 @@ refPotentialTerms
       for value in values:
         yy1 = value.__dict__.get('run')
         yy2 = yy1.__dict__.get('annealProtocol')
-        if (not (xx1 is yy2)):
+        if (xx1 is not yy2):
           raise ApiError("""%s.setHaddockEnergyTerms:
            Link haddockEnergyTerms between objects from separate partitions
            - utrecht.Haddock.Run.annealProtocol not set correctly""" % self.qualifiedName
@@ -7434,11 +7432,11 @@ refPotentialTerms
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['energyTerm'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('energyTerm')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('haddockEnergyTerms')
@@ -7454,13 +7452,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHaddockEnergyTerms')
       if ll:
         for notify in ll:
@@ -7535,13 +7533,13 @@ refPotentialTerms
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -7605,7 +7603,7 @@ refPotentialTerms
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def sortedHaddockEnergyTerms(self):
     """
     Sorted for molsim.AnnealProtocol.EnergyTerm.haddockEnergyTerms
@@ -7620,11 +7618,11 @@ refPotentialTerms
 
     ll = dataDict.get('haddockEnergyTerms')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedNmrCalcEnergyTerms(self):
     """
     Sorted for molsim.AnnealProtocol.EnergyTerm.nmrCalcEnergyTerms
@@ -7632,18 +7630,18 @@ refPotentialTerms
     dataDict = self.__dict__
     ll = self.getNmrCalcEnergyTerms()
     ll = [(repr(x),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedPotentialScales(self):
     """
     Sorted for molsim.AnnealProtocol.EnergyTerm.potentialScales
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('potentialScales')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -7654,12 +7652,12 @@ refPotentialTerms
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Name identifying EnergyTerm in the context of the application using the 
   protocol
   """)
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -7671,7 +7669,7 @@ refPotentialTerms
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""User-intelligible name of EnergyTerm
   """)
@@ -7681,7 +7679,7 @@ refPotentialTerms
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -7692,23 +7690,23 @@ refPotentialTerms
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealProtocol = property(getAnnealProtocol,  None, None,
   r"""parent link
   """)
-  
+
   haddockEnergyTerms = property(getHaddockEnergyTerms, setHaddockEnergyTerms, None,
   r"""Haddock Run Energy Terms that refer to AnnealProtocol energy term
   """)
-  
+
   nmrCalcEnergyTerms = property(getNmrCalcEnergyTerms, None, None,
   r"""NmrCalc.EnergyTerms that correspond to EnergyTerm
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for annealProtocol
   """)
-  
+
   potentialScales = property(getPotentialScales,  None, None,
   r"""child link to class PotentialScale
   """)
@@ -7726,9 +7724,9 @@ class PotentialScale(memops.api.Implementation.DataObject):
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('applicationData', 'className', 'code', 'fieldNames', 'finalScale', 'function', 'functionParams', 'inConstructor', 'initialScale', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'annealStage', 'energyTerm', 'parent', 'refPotentialTerm', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.PotentialScale
@@ -7775,7 +7773,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -7840,7 +7838,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -7866,7 +7864,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.PotentialScale:   deletes
@@ -7877,21 +7875,21 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     annealStage = dataDict.get('annealStage')
-    if (annealStage is not None and not (annealStage in objsToBeDeleted)):
+    if (annealStage is not None and annealStage not in objsToBeDeleted):
       potentialScales = annealStage.__dict__.get('potentialScales')
       potentialScales.remove(self)
 
     refPotentialTerm = dataDict.get('refPotentialTerm')
-    if (refPotentialTerm is not None and not (refPotentialTerm in objsToBeDeleted)):
+    if (refPotentialTerm is not None and refPotentialTerm not in objsToBeDeleted):
       potentialScales = refPotentialTerm.__dict__.get('potentialScales')
       potentialScales.remove(self)
 
     energyTerm = dataDict.get('energyTerm')
-    if (not (energyTerm in objsToBeDeleted)):
+    if (energyTerm not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('annealStage')
       ll.append(objKey)
@@ -7911,7 +7909,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addFunctionParam(self, value):
     """
     Add for molsim.AnnealProtocol.PotentialScale.functionParams
@@ -7965,13 +7963,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addFunctionParam')
       if ll:
         for notify in ll:
@@ -7984,7 +7982,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for molsim.AnnealProtocol.PotentialScale
@@ -8013,7 +8011,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('energyTerm')
         dd = value.__dict__.get('potentialScales')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'energyTerm' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8203,7 +8201,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8211,7 +8209,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8229,7 +8227,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8244,7 +8242,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
         )
 
       oldSelves = value.__dict__.get('potentialScales')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: annealStage:
          non-reciprocal link annealStage from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -8265,7 +8263,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
         )
 
       oldSelves = value.__dict__.get('potentialScales')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: refPotentialTerm:
          non-reciprocal link refPotentialTerm from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -8334,7 +8332,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.PotentialScale
@@ -8345,7 +8343,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnnealStage(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.annealStage
@@ -8355,7 +8353,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.PotentialScale
@@ -8424,7 +8422,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.code
@@ -8432,7 +8430,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getEnergyTerm(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.energyTerm
@@ -8444,7 +8442,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFinalScale(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.finalScale
@@ -8452,7 +8450,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('finalScale')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.PotentialScale
@@ -8476,7 +8474,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     result.append(dataDict.get('code'))
 
     return result
-  
+
   def getFunction(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.function
@@ -8484,7 +8482,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('function')
     return result
-  
+
   def getFunctionParams(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.functionParams
@@ -8495,7 +8493,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInitialScale(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.initialScale
@@ -8505,7 +8503,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.PotentialScale
@@ -8527,7 +8525,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.parent
@@ -8537,7 +8535,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getRefPotentialTerm(self):
     """
     Get for molsim.AnnealProtocol.PotentialScale.refPotentialTerm
@@ -8551,7 +8549,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeFunctionParam(self, value):
     """
     Remove for molsim.AnnealProtocol.PotentialScale.functionParams
@@ -8594,7 +8592,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
        called on deleted object""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeFunctionParam:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -8611,13 +8609,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeFunctionParam')
       if ll:
         for notify in ll:
@@ -8632,7 +8630,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setAnnealStage(self, value):
     """
     Set for molsim.AnnealProtocol.PotentialScale.annealStage
@@ -8681,7 +8679,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject')
       yy1 = value.__dict__.get('topObject')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setAnnealStage:
          Link annealStage between objects from separate partitions
          - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -8707,7 +8705,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for molsim.AnnealProtocol.PotentialScale.code
@@ -8774,7 +8772,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setFinalScale(self, value):
     """
     Set for molsim.AnnealProtocol.PotentialScale.finalScale
@@ -8843,13 +8841,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFinalScale')
       if ll:
         for notify in ll:
@@ -8929,13 +8927,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFunction')
       if ll:
         for notify in ll:
@@ -9003,13 +9001,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFunctionParams')
       if ll:
         for notify in ll:
@@ -9084,13 +9082,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInitialScale')
       if ll:
         for notify in ll:
@@ -9147,7 +9145,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject')
       yy1 = value.__dict__.get('topObject')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setRefPotentialTerm:
          Link refPotentialTerm between objects from separate partitions
          - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -9176,13 +9174,13 @@ class PotentialScale(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRefPotentialTerm')
       if ll:
         for notify in ll:
@@ -9194,7 +9192,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Code identifying teh relevant potential scale in the context of the 
   application using the protocol. INtended for potential terms that have 
@@ -9205,22 +9203,22 @@ class PotentialScale(memops.api.Implementation.DataObject):
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   finalScale = property(getFinalScale, setFinalScale, None,
   r"""Scale at the end of the stage.
   """)
-  
+
   function = property(getFunction, setFunction, None,
   r"""Function used for scaling. See ScaleFunction data type for details
   """)
-  
+
   functionParams = property(getFunctionParams, setFunctionParams, None,
   r"""Parameters for the scaling function. Their number and meaning depends on 
   the value of 'function'.
   """)
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   initialScale = property(getInitialScale, setInitialScale, None,
   r"""Scale at the start of the stage
   """)
@@ -9238,19 +9236,19 @@ class PotentialScale(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealStage = property(getAnnealStage, setAnnealStage, None,
   r"""AnnealStage to which Potential scale refers
   """)
-  
+
   energyTerm = property(getEnergyTerm,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for energyTerm
   """)
-  
+
   refPotentialTerm = property(getRefPotentialTerm, setRefPotentialTerm, None,
   r"""Potential term applied 
   """)
@@ -9271,9 +9269,9 @@ interpretation generally requires reference to the application.
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('application', 'applicationData', 'className', 'code', 'details', 'fieldNames', 'inConstructor', 'index', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'annealProtocolStore', 'parent', 'potentialScales', 'refTermParameters', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.RefPotentialTerm
@@ -9322,7 +9320,7 @@ interpretation generally requires reference to the application.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -9390,7 +9388,7 @@ interpretation generally requires reference to the application.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -9416,19 +9414,19 @@ interpretation generally requires reference to the application.
 
     potentialScales = dataDict.get('potentialScales')
     for potentialScale in potentialScales:
-      if (not (potentialScale in objsToBeDeleted)):
+      if (potentialScale not in objsToBeDeleted):
         objsToBeDeleted.add(potentialScale)
         objsToBeChecked.append(potentialScale)
 
     refTermParameters = dataDict.get('refTermParameters').values()
     for refTermParameter in refTermParameters:
-      if (not (refTermParameter in objsToBeDeleted)):
+      if (refTermParameter not in objsToBeDeleted):
         objsToBeDeleted.add(refTermParameter)
         objsToBeChecked.append(refTermParameter)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.RefPotentialTerm:   deletes
@@ -9439,11 +9437,11 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     annealProtocolStore = dataDict.get('annealProtocolStore')
-    if (not (annealProtocolStore in objsToBeDeleted)):
+    if (annealProtocolStore not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('application')
       ll.append(objKey)
@@ -9466,7 +9464,7 @@ interpretation generally requires reference to the application.
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for molsim.AnnealProtocol.RefPotentialTerm
@@ -9508,7 +9506,7 @@ interpretation generally requires reference to the application.
       else:
         value = dataDict.get('annealProtocolStore')
         dd = value.__dict__.get('refPotentialTerms')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'annealProtocolStore' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -9700,7 +9698,7 @@ interpretation generally requires reference to the application.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -9708,7 +9706,7 @@ interpretation generally requires reference to the application.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -9726,7 +9724,7 @@ interpretation generally requires reference to the application.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -9749,7 +9747,7 @@ interpretation generally requires reference to the application.
           )
 
         oldSelf = value.__dict__.get('refPotentialTerm')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: potentialScales:
            non-reciprocal link potentialScales from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -9757,7 +9755,7 @@ interpretation generally requires reference to the application.
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: potentialScales:
            Link potentialScales between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -9773,7 +9771,7 @@ interpretation generally requires reference to the application.
           )
 
         oldSelf = value.__dict__.get('refPotentialTerm')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: refTermParameters:
            non-reciprocal link refTermParameters from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -9823,7 +9821,7 @@ interpretation generally requires reference to the application.
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllPotentialScales(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.RefPotentialTerm.potentialScales
@@ -9837,7 +9835,7 @@ interpretation generally requires reference to the application.
     else:
       currentValues = dataDict.get('potentialScales')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9848,28 +9846,28 @@ interpretation generally requires reference to the application.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9878,7 +9876,7 @@ interpretation generally requires reference to the application.
             result.add(v)
 
     return result
-  
+
   def findAllRefTermParameters(self, **conditions):
     """
     FindAll for molsim.AnnealProtocol.RefPotentialTerm.refTermParameters
@@ -9892,7 +9890,7 @@ interpretation generally requires reference to the application.
     else:
       currentValues = dataDict.get('refTermParameters').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9903,28 +9901,28 @@ interpretation generally requires reference to the application.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9935,7 +9933,7 @@ interpretation generally requires reference to the application.
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstPotentialScale(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.RefPotentialTerm.potentialScales
@@ -9952,7 +9950,7 @@ interpretation generally requires reference to the application.
     else:
       currentValues = dataDict.get('potentialScales')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9963,28 +9961,28 @@ interpretation generally requires reference to the application.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9993,7 +9991,7 @@ interpretation generally requires reference to the application.
             result = v; break
 
     return result
-  
+
   def findFirstRefTermParameter(self, **conditions):
     """
     FindFirst for molsim.AnnealProtocol.RefPotentialTerm.refTermParameters
@@ -10026,7 +10024,7 @@ interpretation generally requires reference to the application.
         currentValues = dataDict.get('refTermParameters').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -10037,28 +10035,28 @@ interpretation generally requires reference to the application.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -10067,7 +10065,7 @@ interpretation generally requires reference to the application.
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.RefPotentialTerm
@@ -10078,7 +10076,7 @@ interpretation generally requires reference to the application.
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnnealProtocolStore(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.annealProtocolStore
@@ -10086,7 +10084,7 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     result = dataDict.get('annealProtocolStore')
     return result
-  
+
   def getApplication(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.application
@@ -10096,7 +10094,7 @@ interpretation generally requires reference to the application.
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.RefPotentialTerm
@@ -10152,7 +10150,7 @@ interpretation generally requires reference to the application.
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.code
@@ -10160,7 +10158,7 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getDetails(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.details
@@ -10172,7 +10170,7 @@ interpretation generally requires reference to the application.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.RefPotentialTerm
@@ -10194,7 +10192,7 @@ interpretation generally requires reference to the application.
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getIndex(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.index
@@ -10204,7 +10202,7 @@ interpretation generally requires reference to the application.
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.RefPotentialTerm
@@ -10225,7 +10223,7 @@ interpretation generally requires reference to the application.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.name
@@ -10237,7 +10235,7 @@ interpretation generally requires reference to the application.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.parent
@@ -10245,7 +10243,7 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     result = dataDict.get('annealProtocolStore')
     return result
-  
+
   def getPotentialScales(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.potentialScales
@@ -10256,7 +10254,7 @@ interpretation generally requires reference to the application.
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getRefTermParameters(self):
     """
     Get for molsim.AnnealProtocol.RefPotentialTerm.refTermParameters
@@ -10269,7 +10267,7 @@ interpretation generally requires reference to the application.
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newRefTermParameter(self, **attrlinks):
     """
     Factory function to create molsim.AnnealProtocol.RefTermParameter
@@ -10277,7 +10275,7 @@ interpretation generally requires reference to the application.
     return RefTermParameter(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for molsim.AnnealProtocol.RefPotentialTerm
@@ -10286,7 +10284,7 @@ interpretation generally requires reference to the application.
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setApplication(self, value):
     """
     Set for molsim.AnnealProtocol.RefPotentialTerm.application
@@ -10355,7 +10353,7 @@ interpretation generally requires reference to the application.
     # doNotifies
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for molsim.AnnealProtocol.RefPotentialTerm.code
@@ -10422,7 +10420,7 @@ interpretation generally requires reference to the application.
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setDetails(self, value):
     """
     Set for molsim.AnnealProtocol.RefPotentialTerm.details
@@ -10485,13 +10483,13 @@ interpretation generally requires reference to the application.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -10553,7 +10551,7 @@ interpretation generally requires reference to the application.
     dataDict['index'] = value
 
     # doNotifies
-  
+
   def setName(self, value):
     """
     Set for molsim.AnnealProtocol.RefPotentialTerm.name
@@ -10622,13 +10620,13 @@ interpretation generally requires reference to the application.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -10687,7 +10685,7 @@ interpretation generally requires reference to the application.
 
     if (notOverride):
       for cv in currentValues:
-        if (not (cv in values)):
+        if (cv not in values):
           raise ApiError("""%s.setPotentialScales:
            locard refPotentialTerm: cannot set because some of current values not in values""" % self.qualifiedName
            + ": %s" % (self,)
@@ -10696,7 +10694,7 @@ interpretation generally requires reference to the application.
       xx1 = dataDict.get('topObject')
       for value in values:
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setPotentialScales:
            Link potentialScales between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -10704,11 +10702,11 @@ interpretation generally requires reference to the application.
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['refPotentialTerm'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('refPotentialTerm')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('potentialScales')
@@ -10724,13 +10722,13 @@ interpretation generally requires reference to the application.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPotentialScales')
       if ll:
         for notify in ll:
@@ -10744,25 +10742,25 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     ll = dataDict.get('potentialScales')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedRefTermParameters(self):
     """
     Sorted for molsim.AnnealProtocol.RefPotentialTerm.refTermParameters
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('refTermParameters')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
 
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
-  
+
   application = property(getApplication, setApplication, None,
   r"""Name of application that uses the RefPotentialTerm. Part of Object key. 
   RefPotentialTerm not limited to a single application should have 
@@ -10772,11 +10770,11 @@ interpretation generally requires reference to the application.
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Application-specific name for the RefPotentialTerm. Part of class key. 
   """)
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -10784,7 +10782,7 @@ interpretation generally requires reference to the application.
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   index = property(getIndex, setIndex, None,
   r"""Hand-entered serial number of RefPotentialTerm. Part of class key. To 
   distinguish versions with same application and code but e.g. different 
@@ -10794,7 +10792,7 @@ interpretation generally requires reference to the application.
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""name of RefPotentialTerm
   """)
@@ -10808,19 +10806,19 @@ interpretation generally requires reference to the application.
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealProtocolStore = property(getAnnealProtocolStore,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for annealProtocolStore
   """)
-  
+
   potentialScales = property(getPotentialScales, setPotentialScales, None,
   r"""PotentialScales using RefPotentialTerm
   """)
-  
+
   refTermParameters = property(getRefTermParameters,  None, None,
   r"""child link to class RefTermParameter
   """)
@@ -10838,9 +10836,9 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   _packageName = 'molsim.AnnealProtocol'
   _packageShortName = 'ANPR'
   _fieldNames = ('applicationData', 'className', 'code', 'details', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'value', 'access', 'activeAccess', 'parent', 'refPotentialTerm', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.AnnealProtocol.RefTermParameter
@@ -10884,7 +10882,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -10941,7 +10939,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -10967,7 +10965,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.AnnealProtocol.RefTermParameter:   deletes
@@ -10978,11 +10976,11 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     refPotentialTerm = dataDict.get('refPotentialTerm')
-    if (not (refPotentialTerm in objsToBeDeleted)):
+    if (refPotentialTerm not in objsToBeDeleted):
       objKey = dataDict.get('code')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -10994,14 +10992,14 @@ class RefTermParameter(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for molsim.AnnealProtocol.RefTermParameter
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for molsim.AnnealProtocol.RefTermParameter
@@ -11022,7 +11020,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('refPotentialTerm')
         dd = value.__dict__.get('refTermParameters')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'refPotentialTerm' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -11186,7 +11184,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -11194,7 +11192,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -11212,7 +11210,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -11262,7 +11260,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for molsim.AnnealProtocol.RefTermParameter
@@ -11275,7 +11273,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.AnnealProtocol.RefTermParameter
@@ -11335,7 +11333,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.code
@@ -11343,7 +11341,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getDetails(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.details
@@ -11355,7 +11353,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.AnnealProtocol.RefTermParameter
@@ -11381,7 +11379,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.AnnealProtocol.RefTermParameter
@@ -11391,7 +11389,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.name
@@ -11403,7 +11401,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.parent
@@ -11413,7 +11411,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getRefPotentialTerm(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.refPotentialTerm
@@ -11425,7 +11423,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getValue(self):
     """
     Get for molsim.AnnealProtocol.RefTermParameter.value
@@ -11435,7 +11433,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for molsim.AnnealProtocol.RefTermParameter
@@ -11446,7 +11444,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for molsim.AnnealProtocol.RefTermParameter.code
@@ -11513,7 +11511,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setDetails(self, value):
     """
     Set for molsim.AnnealProtocol.RefTermParameter.details
@@ -11576,13 +11574,13 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -11657,13 +11655,13 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -11732,13 +11730,13 @@ class RefTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setValue')
       if ll:
         for notify in ll:
@@ -11750,12 +11748,12 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""code identifying the parameter in the context of the parent 
   RefPotentialTerrm
   """)
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -11767,7 +11765,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""User-intelligible name for parameter
   """)
@@ -11777,7 +11775,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   value = property(getValue, setValue, None,
   r"""Value of RefTermParameter
   """)
@@ -11785,11 +11783,11 @@ class RefTermParameter(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for refPotentialTerm
   """)
-  
+
   refPotentialTerm = property(getRefPotentialTerm,  None, None,
   r"""parent link
   """)

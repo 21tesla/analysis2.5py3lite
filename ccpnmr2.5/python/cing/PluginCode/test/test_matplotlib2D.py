@@ -2,26 +2,23 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_matplotlib2D.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.numpyInterpolation import interp2_linear
-from cing.Libs.numpyInterpolation import interpn_linear
-from cing.Libs.numpyInterpolation import interpn_nearest
-from cing.PluginCode.matplib import NTplotSet
-from cing.PluginCode.matplib import gray_inv
-from cing.PluginCode.matplib import makeDihedralHistogramPlot
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.core.classes import Project
-from matplotlib.pylab import * #@UnusedWildImport
-from nose.plugins.skip import SkipTest
-from numpy import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from matplotlib.pylab import *  #@UnusedWildImport
+from nose.plugins.skip import SkipTest
+from numpy import *  #@UnusedWildImport
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.numpyInterpolation import interp2_linear, interpn_linear, interpn_nearest
+from cing.PluginCode.matplib import NTplotSet, gray_inv, makeDihedralHistogramPlot
+from cing.PluginCode.required.reqCcpn import CCPN_STR
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -85,10 +82,10 @@ class AllChecks(TestCase):
             self.assertEqual(palette(1.0)[0],0.0) # hi end is white with alpha 1
             self.assertEqual(palette(1.0)[3],1.0) #
             # under should be white with alpha 0 should actually be true, alpha needs to be zero for under.
-            self.assertEqual(      palette(-1.0  )[0],1.0)   
+            self.assertEqual(      palette(-1.0  )[0],1.0)
             self.assertEqual(      palette(-1.0  )[3],1.0)
             # over should be black with alpha 1 should actually be true, alpha needs to be zero for under.
-            self.assertEqual(      palette( 9.0  )[0],0.0)   
+            self.assertEqual(      palette( 9.0  )[0],0.0)
             self.assertEqual(      palette( 9.0  )[3],1.0)
 
     def testMatplotlibColorSegmented3(self):
@@ -102,18 +99,18 @@ class AllChecks(TestCase):
         #               alpha=0)
         ))
         nTdebug( paletteStr )
-        
+
     def test_makeDihedralHistogramPlot(self):
         '''
         See test_NTplot2 for simpler test
         '''
-        cing.verbosity = verbosityDebug        
+        cing.verbosity = verbosityDebug
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
         mkdirs( cingDirTmpTest )
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
-            "Failed to change to test directory for files: " + cingDirTmpTest)        
-#        entryId = "1brv_cs_pk_2mdl"        
-        entryId = "2kq3"        
+            "Failed to change to test directory for files: " + cingDirTmpTest)
+#        entryId = "1brv_cs_pk_2mdl"
+        entryId = "2kq3"
         project = Project.open(entryId, status = 'new')
         inputArchiveDir = os.path.join(cingDirTestsData, "ccpn")
         ccpnFile = os.path.join(inputArchiveDir, entryId + ".tgz")

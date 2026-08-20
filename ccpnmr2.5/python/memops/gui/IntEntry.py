@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,47 +50,48 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import re
 
 from memops.gui.Entry import Entry
 
+
 class IntEntry(Entry):
+    def __init__(self, parent, cleanInt=False, *args, **kw):
 
-  def __init__(self, parent, cleanInt=False, *args, **kw):
+        kw["valToStr"] = str
 
-    kw['valToStr'] = str
-    
-    if cleanInt:
-      kw['strToVal'] = self.cleanInt
-    else:
-      kw['strToVal'] = int
-    
-    apply(Entry.__init__, (self, parent) + args, kw)
+        if cleanInt:
+            kw["strToVal"] = self.cleanInt
+        else:
+            kw["strToVal"] = int
 
-  def cleanInt(self, val):
-  
-    return int( round( float(re.sub(r'[^-|0-9|\.|,]','',val) or 0) ) )
+        apply(Entry.__init__, (self, parent) + args, kw)
 
-if (__name__ == '__main__'):
+    def cleanInt(self, val):
 
-  import Tkinter
-  from memops.universal.Button import Button
+        return int(round(float(re.sub(r"[^-|0-9|\.|,]", "", val) or 0)))
 
-  def func():
 
-    v = entry1.get()
-    print(type(v), v)
-    v = entry2.get()
-    print(type(v), v)
+if __name__ == "__main__":
+    import Tkinter
 
-  root = Tkinter.Tk()
- 
-  entry1 = IntEntry(root)
-  entry1.grid()
-  entry2 = IntEntry(root, isArray=True)
-  entry2.grid()
-  button = Button(root, text='hit me', command=func)
-  button.grid()
+    from memops.universal.Button import Button
 
-  root.mainloop()
+    def func():
 
+        v = entry1.get()
+        print(type(v), v)
+        v = entry2.get()
+        print(type(v), v)
+
+    root = Tkinter.Tk()
+
+    entry1 = IntEntry(root)
+    entry1.grid()
+    entry2 = IntEntry(root, isArray=True)
+    entry2.grid()
+    button = Button(root, text="hit me", command=func)
+    button.grid()
+
+    root.mainloop()

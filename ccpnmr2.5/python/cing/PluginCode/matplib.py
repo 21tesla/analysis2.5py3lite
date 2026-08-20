@@ -2,14 +2,13 @@
 All functionality depending on matplotlib. Most came out of NTplot.py
 """
 
-from cing.Libs.Imagery import convert2Web
-from cing.Libs.Imagery import joinPdfPages
-from cing.Libs.Imagery import montage
-from cing.Libs.NTplot import * #@UnusedWildImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import _matchDihedrals
-from cing.core.parameters import plotParameters
 from colorsys import hsv_to_rgb
+
+from cing.core.parameters import plotParameters
+from cing.Libs.html import _matchDihedrals
+from cing.Libs.Imagery import convert2Web, joinPdfPages, montage
+from cing.Libs.NTplot import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 try:
     import Image
@@ -21,15 +20,16 @@ except ImportError:
 #end try
 
 try:
-    from matplotlib.pylab import * #@UnusedWildImport for such functions as amax, arange, multiply, mat, etc...
     from matplotlib import pyplot
-    from matplotlib.cm import LUTSIZE
-    from matplotlib.cm import datad
-    from matplotlib.cm import gray #pylint: disable=E0611
+    from matplotlib.cm import (
+        LUTSIZE,
+        datad,
+        gray,  #pylint: disable=E0611
+    )
     from matplotlib.colors import LinearSegmentedColormap
-    from matplotlib.patches import Ellipse
-    from matplotlib.patches import Patch
+    from matplotlib.patches import Ellipse, Patch
     from matplotlib.path import Path
+    from matplotlib.pylab import *  #@UnusedWildImport for such functions as amax, arange, multiply, mat, etc...
 except ImportError:
     raise ImportWarning('matplib')
 #end try
@@ -219,7 +219,7 @@ class NTplot( NTdict ):
     #end def
 
     # TODO: check if he knows of an import that overrides this.
-    # pylint: disable=E0202     
+    # pylint: disable=E0202
     def line( self, startPoint, endPoint, attributes=defaultAttributes):
         if not attributes:
             attributes=defaultAttributes
@@ -323,7 +323,7 @@ class NTplot( NTdict ):
 #        nTdebug("attributes: " + attributes.format())
         if 'pointType' in keys:
             if attributes.pointType:
-                if mappingPointType2MatLibPlot.has_key(attributes.pointType):
+                if attributes.pointType in mappingPointType2MatLibPlot:
 #                    print "doing pointType"
                     result['marker'] =  mappingPointType2MatLibPlot[attributes.pointType]
                 else:
@@ -346,7 +346,7 @@ class NTplot( NTdict ):
             result['color']           =  attributes.lineColor
         if 'lineType' in keys:
 #            print "doing lineType (linestyle)"
-            if not mappingLineType2MatLibPlot.has_key( attributes.lineType ):
+            if  attributes.lineType  not in mappingLineType2MatLibPlot:
                 nTcodeerror("Failed to set line style [%s] because it is absent in mappingLineType2MatLibPlot %s" %
                             (attributes.lineType, mappingLineType2MatLibPlot))
             else:
@@ -439,7 +439,7 @@ class NTplot( NTdict ):
 
         if not attributes:
             attributes=defaultAttributes
-        if attributes.has_key('pointType'):
+        if 'pointType' in attributes:
             if not attributes.pointType:
                 attributes.pointType= 'none' # Changed to have no point as this is more common for all.
         attributesMatLibPlot = self.mapAttributes2MatLibPlotLine2D(attributes)
@@ -1274,7 +1274,7 @@ y coordinate is in axis coordinates (from 0 to 1) when the renderer asks for the
             color = mapAccessibilityZscore2Color(accessibilityZscore) # get an rgb tuple
             startPoint = ( iconBoxXstart + i, iconBoxYstart)
 #            nTdebug("RangeIcon: startPoint %s %s" % startPoint)
-            p = RangeIcon( startPoint=startPoint,width=1,height=height, seq=1, 
+            p = RangeIcon( startPoint=startPoint,width=1,height=height, seq=1,
                            axis=self.axis,edgecolor=color, facecolor=color, clip_on=None )
             self.axis.add_patch(p)
             i += 1
@@ -1543,7 +1543,7 @@ class RangeIcon(Polygon):
 """
     def __init__(self, seq=1, axis=None, startPoint=None, width=1, height=None, **kwargs):
         # pylint: disable=W0231
-        Patch.__init__(self, **kwargs) # pylint: disable=W0233 
+        Patch.__init__(self, **kwargs) # pylint: disable=W0233
         self.seq = seq
         self.axis= axis
         self.startPoint = startPoint
@@ -1748,9 +1748,9 @@ def mapAccessibilityZscore2Color(zScore):
 def triangularList( xList, c=360. ):
     """Triangular function with periodicity.
     Returns a value between zero and one (inclusive)
-    1    /\    /\
-        /  \  /  \
-    0  /    \/    \
+    1    /\\    /\
+        /  \\  /  \
+    0  /    \\/    \
       |  c  |
     c is the cycle period.
 
@@ -1987,7 +1987,7 @@ class MoleculePlotSet:
                     itemDictKeyList = item.keys()
                     itemDictKeyList.sort()
                     for keyList in itemDictKeyList:
-                        if not (keyList in [ KEY_LIST_STR, KEY_LIST2_STR, KEY_LIST3_STR, KEY_LIST4_STR, KEY_LIST5_STR]):
+                        if keyList not in [ KEY_LIST_STR, KEY_LIST2_STR, KEY_LIST3_STR, KEY_LIST4_STR, KEY_LIST5_STR]:
                             continue
                         serie = []
                         points.append(serie)
@@ -2019,7 +2019,7 @@ class MoleculePlotSet:
                                 color = res.rogScore.colorLabel
                             k = 0
                             for keyList in itemDictKeyList:
-                                if not (keyList in [ KEY_LIST_STR, KEY_LIST2_STR, KEY_LIST3_STR, KEY_LIST4_STR, KEY_LIST5_STR]):
+                                if keyList not in [ KEY_LIST_STR, KEY_LIST2_STR, KEY_LIST3_STR, KEY_LIST4_STR, KEY_LIST5_STR]:
                                     continue
                                 serie = points[k]
                                 keys = item[keyList]
@@ -2391,7 +2391,7 @@ def makeDihedralHistogramPlot( project, residue, dihedralName, binsize = 5, html
 
 #    Note that the good and outliers come from:
 #    d.good, d.outliers = peirceTest( d )
-    if not angle.__dict__.has_key('good'):
+    if 'good' not in angle.__dict__:
         nTcodeerror("No angle.good plots added. Skipping makeDihedralHistogramPlot for %s %s." % (
                     residue, dihedralName))
         return None
@@ -2399,7 +2399,7 @@ def makeDihedralHistogramPlot( project, residue, dihedralName, binsize = 5, html
     plot.histogram( angle.good.zap(1),
                     plotparams.min, plotparams.max, bins,
                     attributes = boxAttributes( fillColor=plotparams.color ))
-    if not angle.__dict__.has_key('outliers'):
+    if 'outliers' not in angle.__dict__:
         nTcodeerror("No angle.outliers plots added. Skipping makeDihedralHistogramPlot for %s %s." % (
                     residue, dihedralName))
         return None
@@ -2449,11 +2449,11 @@ def makeDihedralHistogramPlot( project, residue, dihedralName, binsize = 5, html
     angle.good.cAverage(  plotparams.min, plotparams.max, byItem=1 )
 #    nTdebug("good:      %s" % str(angle.good))
 #    nTdebug("      cav: %s" % angle.good.cav)
-            
+
     if angle.good.cav == None:
         nTerror("Failed to derive circular average from good values; falling back to cav of all values.")
         aAv  = angle.cav
-    else:        
+    else:
         aAv  = angle.good.cav
     # end if
     # pylint: disable=E1102

@@ -8,7 +8,7 @@ ccpnProjectNames = ('HR6470A','HR6430A','HR5460A','OR36','OR135',
                     'StT322','HR2876B','YR313A','HR8254A','HR2876C')
 
 #skipEntries = (
-# 139, 197, 248, 280, 306, 292,  # Superseded 
+# 139, 197, 248, 280, 306, 292,  # Superseded
  #135, 136, 207, 277, 279,      # Duplicate LYS 1 HZ records, FIXED
  #281,                          # incorrect methyl names, FIXED
 #)

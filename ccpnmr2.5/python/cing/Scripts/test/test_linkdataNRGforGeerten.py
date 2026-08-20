@@ -2,11 +2,13 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_linkdataNRGforGeerten.py
 """
-from cing import cingDirTmp, cingDirTestsData #@UnusedImport
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.linkdataNRGforGeerten import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp  #@UnusedImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.linkdataNRGforGeerten import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

@@ -1,4 +1,5 @@
 import os
+
 from memops.universal.Io import getTopDirectory
 
 # TODO: make these local-settable as well?
@@ -25,7 +26,7 @@ try:
   from localConstants import customArchivesDataDir
 except:
   customArchivesDataDir = os.path.join(archivesDataDir,'custom')
-  
+
 # TODO THIS ONE MIGHT GO!
 try:
   from localConstants import archivesCcpnDataDir
@@ -58,13 +59,13 @@ bmrbRestUrl = "http://rest.bmrb.wisc.edu"
 try:
   from localConstants import pdbFtp
 except:
-  pdbFtp = "ftp.wwpdb.org" 
+  pdbFtp = "ftp.wwpdb.org"
 
 try:
   from localConstants import pdbFtpDir
 except:
   pdbFtpDir = "pub/pdb/data/structures/divided/pdb/"
-  
+
 try:
   from localConstants import ebiPdbFtp
 except:

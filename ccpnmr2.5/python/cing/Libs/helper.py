@@ -2,13 +2,13 @@
 Very simple functions only here that can be instantiated without the general CING setup.
 Called from cing's main __init__.py and setupCing.py.
 """
-from subprocess import PIPE
-from subprocess import Popen
 import os
 import platform
 import sys
 import time
 import urllib.request
+from subprocess import PIPE, Popen
+
 
 #-----------------------------------------------------------------------------------
 # Synchronize block with cing.Libs.helper.py
@@ -80,7 +80,7 @@ def getIpythonVersionTuple(reportAsIs = False):
         # end if
         iPythonVersionStr = IPython.__version__.split('.')
         iPythonVersion = [ int(x) for x in iPythonVersionStr]
-    except:        
+    except:
         _nTwarning("Failed to getIpythonVersion()" )
     # end try
     return iPythonVersion
@@ -102,7 +102,7 @@ def getIpythonVersionType():
         _nTerror("Failed to getIpythonVersionTuple")
         return None
     # end if
-    
+
     c = compareVersionTuple(iPythonVersionTuple, (0,11))
     if c == None:
         _nTerror("Failed to compareVersionTuple")
@@ -135,12 +135,12 @@ def compareVersionTuple( t1, t2):
     if t2 == None:
         _nTerror("Input 2 of compareIpythonVersionTuple is None" )
         return None
-    # end if    
+    # end if
     lt1 = len(t1)
     lt2 = len(t2)
     for i in range(max(lt1,lt2)):
         if lt1 <= i:
-            if lt2 <= i:                
+            if lt2 <= i:
                 return 0
             else:
                 return -1
@@ -152,16 +152,16 @@ def compareVersionTuple( t1, t2):
         v1 = t1[i]
         v2 = t2[i]
         if v1 == v2:
-            continue 
+            continue
         # end if
         if v1 > v2:
-            return 1 
+            return 1
         # end if
         return -1
     # end for
     return 0
 # end def
-    
+
 def isInternetConnected():
     """Retrieves about 6 kbytes from google; takes 0.2 seconds on fast network."""
     url = 'http://www.google.com'
@@ -186,7 +186,7 @@ def detectCPUs():
     """
     # Linux, Unix and MacOS:
     if hasattr(os, "sysconf"):
-        if os.sysconf_names.has_key("SC_NPROCESSORS_ONLN"):
+        if "SC_NPROCESSORS_ONLN" in os.sysconf_names:
             # Linux & Unix:
             ncpus = os.sysconf("SC_NPROCESSORS_ONLN")
             if isinstance(ncpus, int) and ncpus > 0:
@@ -194,7 +194,7 @@ def detectCPUs():
         else: # OSX:
             return int(os.popen2("sysctl -n hw.ncpu")[1].read())
     # Windows:
-    if os.environ.has_key("NUMBER_OF_PROCESSORS"):
+    if "NUMBER_OF_PROCESSORS" in os.environ:
         ncpus = int(os.environ["NUMBER_OF_PROCESSORS"])
         if ncpus > 0:
             return ncpus

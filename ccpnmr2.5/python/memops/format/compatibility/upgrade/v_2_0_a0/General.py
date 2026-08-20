@@ -4,21 +4,21 @@
 General.py: Data compatibility handling
 
 Copyright (C) 2007 Rasmus Fogh (CCPN project)
- 
+
 =======================================================================
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license.
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -39,10 +39,10 @@ quoting the following reference:
 ===========================REFERENCE START=============================
 Rasmus H. Fogh, Wayne Boucher, Wim F. Vranken, Anne
 Pajon, Tim J. Stevens, T.N. Bhat, John Westbrook, John M.C. Ionides and
-Ernest D. Laue (2005). A framework for scientific data modeling and 
+Ernest D. Laue (2005). A framework for scientific data modeling and
 automated software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
- 
+
 """
 
 from memops.format.compatibility.upgrade.v_2_0_a1 import General as General20a1
@@ -52,14 +52,16 @@ fullKeyConverters = {}
 fullKeyConverters.update(General20a1.fullKeyConverters)
 
 # guids of elements that should not be modified, removed, etc.
-elemsTreatedAsOld = set((
- 'www.ccpn.ac.uk_Fogh_2008-05-05-17:24:14_00002',
- 'www.ccpn.ac.uk_Fogh_2008-05-05-18:37:55_00020',
- 'www.ccpn.ac.uk_Fogh_2008-05-05-18:37:55_00022',
- 'www.ccpn.ac.uk_Fogh_2008-05-05-17:24:14_00008',
- 'www.ccpn.ac.uk_Fogh_2006-09-14-18:48:26_00002',
- 'www.ccpn.ac.uk_Fogh_2008-04-10-18:39:14_00002',
- 'www.ccpn.ac.uk_Fogh_2006-08-16-18:20:11_00004')
+elemsTreatedAsOld = set(
+    (
+        "www.ccpn.ac.uk_Fogh_2008-05-05-17:24:14_00002",
+        "www.ccpn.ac.uk_Fogh_2008-05-05-18:37:55_00020",
+        "www.ccpn.ac.uk_Fogh_2008-05-05-18:37:55_00022",
+        "www.ccpn.ac.uk_Fogh_2008-05-05-17:24:14_00008",
+        "www.ccpn.ac.uk_Fogh_2006-09-14-18:48:26_00002",
+        "www.ccpn.ac.uk_Fogh_2008-04-10-18:39:14_00002",
+        "www.ccpn.ac.uk_Fogh_2006-08-16-18:20:11_00004",
+    )
 ).union(General20a1.elemsTreatedAsOld)
 
 # pairs of element guids that should be treated as matching, e.g. whe n
@@ -68,9 +70,9 @@ elemsTreatedAsOld = set((
 # these are links from MemopsRoot to individual TopObjects that all have changed their guids in a model change.
 elementPairings = General20a1.elementPairings
 
+
 def extraMapChanges(globalMapping):
-  """ Extra map changes specific for a given step
-  """
-  
-  #
-  General20a1.extraMapChanges(globalMapping)
+    """Extra map changes specific for a given step"""
+
+    #
+    General20a1.extraMapChanges(globalMapping)

@@ -1,20 +1,15 @@
-from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import do_cmd
-from cing.NRG.CaspNmrMassageCcpnProject import baseDir
-from cing.Scripts.FC.utils import importPseudoPdb
-from cing.Scripts.FC.utils import swapCheck
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from memops.general.Io import loadProject
-from memops.general.Io import saveProject
-from shutil import copytree
-from shutil import rmtree
-import tkinter
 import tarfile
+from shutil import copytree, rmtree
 
+from cing import header
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
+from cing.NRG.CaspNmrMassageCcpnProject import baseDir
+from cing.Scripts.FC.utils import importPseudoPdb, swapCheck
+from memops.general.Io import loadProject, saveProject
 
 dataDir = os.path.join(baseDir,DATA_STR)
 
@@ -125,7 +120,7 @@ def annotateEntry(entryCodeNew, *extraArgList):
 #    print 'status: %s' % ccpnMolSystem.setCode(projectName) # impossible; reported to ccpn team.
 
     if replaceCoordinates or replaceRestraints:
-        importPseudoPdb(ccpnProject, inputAuthorDir, guiRoot, allowPopups=allowPopups, 
+        importPseudoPdb(ccpnProject, inputAuthorDir, guiRoot, allowPopups=allowPopups,
                         minimalPrompts=minimalPrompts, verbose=verbose, **presets)
 
     if doSwapCheck:

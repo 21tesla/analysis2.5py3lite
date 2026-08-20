@@ -4,19 +4,20 @@ python $CINGROOT/python/cing/PluginCode/test/test_cyana.py
 """
 
 
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqWattos import * #@UnusedWildImport
-from cing.core.classes import Project
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqCcpn import CCPN_STR
+from cing.PluginCode.required.reqWattos import *  #@UnusedWildImport
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -27,8 +28,8 @@ class AllChecks(TestCase):
     entryList = "1brv".split() # DEFAULT
 #    entryList = "1brv 1bus CopZ-in H2_2Ca_53 1ai0 1hkt_1model 2hgh_1model".split()
 #    entryList = "CopZ-in".split()
-#    entryList = "1y4o_1model".split() 
-    
+#    entryList = "1y4o_1model".split()
+
     def test_cyana(self):
 #        cing.verbosity = verbosityDebug
 #        if you have a local copy you can use it; make sure to adjust the path setting below.
@@ -38,13 +39,13 @@ class AllChecks(TestCase):
         redoFromCingProject = False    # DEFAULT: False
         htmlOnly = False               # DEFAULT: False # default is False but enable it for faster runs without some actual data.
         doWhatif = True                # DEFAULT: True # disables whatif actual run
-        doProcheck = True              # DEFAULT: True 
-        doWattos = True                # DEFAULT: True 
-        doQueeny = True                # DEFAULT: True 
-        doTalos = True                 # DEFAULT: True 
-        filterVasco = False             # DEFAULT: False 
-        filterTopViolations = False     # DEFAULT: False 
-        ranges = CV_STR                # DEFAULT: CV_STR 
+        doProcheck = True              # DEFAULT: True
+        doWattos = True                # DEFAULT: True
+        doQueeny = True                # DEFAULT: True
+        doTalos = True                 # DEFAULT: True
+        filterVasco = False             # DEFAULT: False
+        filterTopViolations = False     # DEFAULT: False
+        ranges = CV_STR                # DEFAULT: CV_STR
 #        ranges='173-177'
 #        ranges='6-13,29-45' # 1bus
 

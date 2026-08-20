@@ -2,15 +2,15 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/STAR/test/test_File.py
 """
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.STAR import Utils
-from cing.STAR.File import File
-from unittest import TestCase
 import unittest
 import urllib
 import zipfile
+from unittest import TestCase
 
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.STAR import Utils
+from cing.STAR.File import File
 
 
 class AllChecks(TestCase):

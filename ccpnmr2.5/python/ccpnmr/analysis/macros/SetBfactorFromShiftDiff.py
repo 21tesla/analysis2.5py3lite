@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,60 +38,65 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-ISOTOPE_SCALE = {'1H':100.0,'15N':20.0,'13C':10.0,}
+
+ISOTOPE_SCALE = {
+    "1H": 100.0,
+    "15N": 20.0,
+    "13C": 10.0,
+}
+
 
 def setBFactorFromShiftDiff(argServer):
 
-  sdList = argServer.getMeasurementList('ShiftDifferenceList')  
+    sdList = argServer.getMeasurementList("ShiftDifferenceList")
 
-  if sdList is None:
-    msg = 'No Shift Difference list, cannot continue.\n'
-    msg += 'Make shift difference lists by comparing peak lists'
-    msg += ' or shift lists at Menu::DataAnalysis::Shift Differences'
-    argServer.showWarning(msg)
-    return
+    if sdList is None:
+        msg = "No Shift Difference list, cannot continue.\n"
+        msg += "Make shift difference lists by comparing peak lists"
+        msg += " or shift lists at Menu::DataAnalysis::Shift Differences"
+        argServer.showWarning(msg)
+        return
 
-  structure = argServer.getStructure()
+    structure = argServer.getStructure()
 
-  if structure is None:
-    msg = 'No structure, cannot continue.\n'
-    msg += 'Load a PDB structure via Menu::Structure::Structures:[Import]'
-    argServer.showWarning(msg)
-    return
+    if structure is None:
+        msg = "No structure, cannot continue.\n"
+        msg += "Load a PDB structure via Menu::Structure::Structures:[Import]"
+        argServer.showWarning(msg)
+        return
 
-  question = 'Do you want to spread the B factor to all atoms in a residue?'
-  if argServer.askYesNo(question):
-    wholeResidue = True
-  else:
-    wholeResidue = False  
+    question = "Do you want to spread the B factor to all atoms in a residue?"
+    if argServer.askYesNo(question):
+        wholeResidue = True
+    else:
+        wholeResidue = False
 
-  atomsDict = {}
-  for measurement in sdList.measurements:
-    resonance = measurement.resonance
-    scale = ISOTOPE_SCALE.get(resonance.isotopeCode, 10.0)
-    resonanceSet = resonance.resonanceSet
-    
-    if resonanceSet:
-      for atom in resonanceSet.findFirstAtomSet().atoms:
-         atomsDict[atom] = measurement.value * scale
+    atomsDict = {}
+    for measurement in sdList.measurements:
+        resonance = measurement.resonance
+        scale = ISOTOPE_SCALE.get(resonance.isotopeCode, 10.0)
+        resonanceSet = resonance.resonanceSet
 
-  for chain in structure.coordChains:
-    for residue in chain.residues:
-      for atom in residue.atoms:
-        value = atomsDict.get(atom.atom)
-      
-        if value is not None:
- 
-          if wholeResidue:
-            for atom2 in residue.atoms:
-              for coord in atom2.coords:
-                coord.bFactor = value
- 
-          else:
-            for coord in atom.coords:
-              coord.bFactor = value
+        if resonanceSet:
+            for atom in resonanceSet.findFirstAtomSet().atoms:
+                atomsDict[atom] = measurement.value * scale
 
-  strucId = '%s:%d' % (structure.molSystem.code, structure.ensembleId)
-  msg = 'Shift differences from list %d stored as bFactors in structure %s.\n'
-  msg += 'B-factor values will be written out when you export the structure as a PDB file.'
-  argServer.showInfo(msg % (sdList.serial,strucId))
+    for chain in structure.coordChains:
+        for residue in chain.residues:
+            for atom in residue.atoms:
+                value = atomsDict.get(atom.atom)
+
+                if value is not None:
+                    if wholeResidue:
+                        for atom2 in residue.atoms:
+                            for coord in atom2.coords:
+                                coord.bFactor = value
+
+                    else:
+                        for coord in atom.coords:
+                            coord.bFactor = value
+
+    strucId = "%s:%d" % (structure.molSystem.code, structure.ensembleId)
+    msg = "Shift differences from list %d stored as bFactors in structure %s.\n"
+    msg += "B-factor values will be written out when you export the structure as a PDB file."
+    argServer.showInfo(msg % (sdList.serial, strucId))

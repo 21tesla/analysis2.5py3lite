@@ -1,8 +1,10 @@
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.STAR.Text import comments_strip
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.STAR.Text import comments_strip
+
 #from cing import verbosityDebug
 #import cing
 

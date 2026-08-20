@@ -2,6 +2,7 @@
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from grenoble.BlackledgeModule.BlackledgeModuleFrame import BlackledgeModuleFrame
 
+
 class BlackledgeModulePopup(BasePopup):
 
   def __init__(self, parent, *args, **kw):
@@ -17,7 +18,7 @@ class BlackledgeModulePopup(BasePopup):
 
     guiFrame.grid_columnconfigure(0, weight=1)
     guiFrame.grid_rowconfigure(0, weight=1)
-    
+
     self.frame = BlackledgeModuleFrame(self, self.project, grid=(0,0))
 
 def launchModulePopup():

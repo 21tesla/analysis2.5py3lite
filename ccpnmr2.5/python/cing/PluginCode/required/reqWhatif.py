@@ -1,6 +1,6 @@
 'required items for this plugin for CING setup'
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 # Too long lines. pylint: disable=C0301
 
@@ -167,7 +167,7 @@ def cingCheckId( checkId ):
     """
     Static method to return a cingId if exists. Returns checkId otherwise.
     """
-    if cingNameDict.has_key(checkId) and cingNameDict[checkId] != None:
+    if checkId in cingNameDict and cingNameDict[checkId] != None:
         return cingNameDict[checkId]
     return checkId
 #end def

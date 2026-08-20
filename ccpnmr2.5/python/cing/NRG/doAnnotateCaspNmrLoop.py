@@ -1,7 +1,7 @@
 # python -u $CINGROOT/python/cing/NRG/doAnnotateCaspNmrLoop.py
 
 from cing import cingPythonDir
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.CaspNmrMassageCcpnProject import baseDir
 from cing.NRG.PDBEntryLists import writeEntryListToFile
 from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList

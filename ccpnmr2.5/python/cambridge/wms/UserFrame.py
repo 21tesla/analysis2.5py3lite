@@ -1,38 +1,31 @@
 
-# Essentially the same as the ExtendNMR GUI for now. 
+# Essentially the same as the ExtendNMR GUI for now.
 
 
-import os
 
 # added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 
-
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class UserPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='PRODECOMP')
 
-                       
+
   def body(self, guiFrame):
 
     guiFrame.grid_rowconfigure(0, weight=1)
@@ -40,14 +33,14 @@ class UserPopup(BasePopup):
 
     frame = UserFrame(guiFrame, basePopup=self, ccpnProject=self.ccpnProject)
     frame.grid(row=0, column=0, sticky='nsew')
-    
+
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('650x600')
-    
+
     self.update_idletasks()
- 
+
 
 class UserFrame(Frame):
 
@@ -57,7 +50,7 @@ class UserFrame(Frame):
     # state
 
     print('setting up userFrame')
-    
+
     self.basePopup = basePopup
     self.guiParent = guiParent
 
@@ -65,7 +58,7 @@ class UserFrame(Frame):
     self.unregisterNotify=basePopup.unregisterNotify
 
     Frame.__init__(self, guiParent)
-  
+
     self.grid_columnconfigure(0, weight=0, minsize=10)
     self.grid_columnconfigure(1, weight=1)
     self.grid_columnconfigure(2, weight=1)
@@ -97,7 +90,7 @@ class UserFrame(Frame):
     #
     # really need to set up a dummy structure on login that we can build
     # from if the user does not wish to log in
-    
+
     user_label = Label(self, text="Currently Logged in as User: " + self.basePopup.repList.user.name)
     user_label.grid(row=1, column=1, columnspan=2, sticky='w')
 
@@ -126,18 +119,18 @@ class UserFrame(Frame):
         rep_type_text = 'not specified'
       else:
         rep_type_text = rep.type
-      
+
       rep_type = Label(self, text=rep_type_text )
       rep_type.grid(row=repRow, column=3,  sticky='w')
 
-      repRow += 1    
+      repRow += 1
 
     self.grid_rowconfigure(repRow, weight=1, minsize=10 )
 
-    
 
 
-    
+
+
   def administerNotifiers(self, notifyFunc):
 
       for func in ('__init__','delete','setName'):
@@ -162,24 +155,23 @@ class UserFrame(Frame):
 
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
 
   popup = UserPopup(root)
-  
+
   root.mainloop()

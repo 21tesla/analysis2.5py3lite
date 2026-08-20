@@ -1,14 +1,15 @@
 """
 Just a few utilities that can be of more general use.
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def equalIgnoringWhiteSpace( a, b):
     """
     Collapses all whitespace to a single regular space
     before comparing. Doesn't remove final eol space.
     """
-    pattern   = re.compile("\s+" )
+    pattern   = re.compile(r"\s+" )
     a = re.sub(pattern, ' ',a)
     b = re.sub(pattern, ' ',b)
 #    print "a["+a+"]"

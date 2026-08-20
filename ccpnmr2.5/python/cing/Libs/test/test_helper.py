@@ -1,9 +1,9 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.helper import compareVersionTuple
-from cing.Libs.helper import detectCPUs
-from cing.Libs.helper import getSvnRevision
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing.Libs.helper import compareVersionTuple, detectCPUs, getSvnRevision
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 
@@ -25,15 +25,15 @@ class AllChecks(TestCase):
     def test_compareVersionTuple(self):
         cing.verbosity = verbosityDebug
         nTdebug("\nTesting %s" % getCallerName())
-        inputLoL = [ 
-                     [(2,),(1,)],                    
-                     [(1,),(1,)],                    
-                     [(1,),(2,)],                    
-                     [(1,2),(1,2)],                    
-                     [(1,2),(1,)],                    
-                     [(1,2),(2,)],                
-                     [(2,),(1,1)],                
-                     [(2,),(2,1)],                
+        inputLoL = [
+                     [(2,),(1,)],
+                     [(1,),(1,)],
+                     [(1,),(2,)],
+                     [(1,2),(1,2)],
+                     [(1,2),(1,)],
+                     [(1,2),(2,)],
+                     [(2,),(1,1)],
+                     [(2,),(2,1)],
         ]
         expectedList = [ 1,0,-1,0,1,-1,1,-1]
         for i, inputList in enumerate( inputLoL ):
@@ -41,7 +41,7 @@ class AllChecks(TestCase):
             result = compareVersionTuple( inputList[0], inputList[1])
             self.assertEqual( result, expectedList[i])
         # end for
-    # end def                
+    # end def
 # end class
 
 if __name__ == "__main__":

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,10 +50,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import os
-
-import tkinter
-
 
 from memops.gui.BasePopup import BasePopup
 from memops.gui.Button import Button
@@ -67,173 +62,168 @@ from memops.gui.MessageReporter import showError
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.Util import createDismissHelpButtonList
 
-tabFormat = 'Tab-separated'
-commaFormat = 'Comma-separated'
+tabFormat = "Tab-separated"
+commaFormat = "Comma-separated"
 exportFormats = (tabFormat, commaFormat)
-exportJoin = { \
-  tabFormat: '\t',
-  commaFormat: ',',
-  }
+exportJoin = {
+    tabFormat: "\t",
+    commaFormat: ",",
+}
 
 
 class TableExportPopup(BasePopup):
+    def __init__(self, parent, headings, entries, title="", file="", *args, **kw):
 
-  def __init__(self, parent, headings, entries, title = '', file = '', *args, **kw):
- 
-    headings = [ heading.replace('\n', ' ') for heading in headings ]
+        headings = [heading.replace("\n", " ") for heading in headings]
 
-    if (headings[0].lower() == 'number'):
-      self.addNumber = False
-    else:
-      self.addNumber = True
-      headings.insert(0,  'Number')
+        if headings[0].lower() == "number":
+            self.addNumber = False
+        else:
+            self.addNumber = True
+            headings.insert(0, "Number")
 
-    if (not title):
-      title = 'Export data'
+        if not title:
+            title = "Export data"
 
-    self.exportSelection = parent.tableExportSelection
-    self.headings = headings
-    self.entries = entries
-    self.file = file
+        self.exportSelection = parent.tableExportSelection
+        self.headings = headings
+        self.entries = entries
+        self.file = file
 
-    kw['title'] = title
-    kw['transient'] = True
-    kw['modal'] = True
-    BasePopup.__init__(self, parent=parent, *args, **kw)
+        kw["title"] = title
+        kw["transient"] = True
+        kw["modal"] = True
+        BasePopup.__init__(self, parent=parent, *args, **kw)
 
-  def body(self, master):
+    def body(self, master):
 
-    master.grid_columnconfigure(2, weight=1)
+        master.grid_columnconfigure(2, weight=1)
 
-    row = 0
-    label = Label(master, text='Data to export:')
-    label.grid(row=row, column=0, columnspan=3, sticky=Tkinter.W)
+        row = 0
+        label = Label(master, text="Data to export:")
+        label.grid(row=row, column=0, columnspan=3, sticky=Tkinter.W)
 
-    self.check_buttons = {}
-    i = 0
-    for heading in self.headings:
-      row = row + 1
-      isSelected = self.exportSelection.get(i, True)
-      self.check_buttons[i] = c = CheckButton(master, selected=isSelected, callback=self.toggleCheckButton)
-      c.grid(row=row, column=1)
-      label = Label(master, text=heading)
-      label.grid(row=row, column=2, sticky=Tkinter.W)
-      i += 1
+        self.check_buttons = {}
+        i = 0
+        for heading in self.headings:
+            row = row + 1
+            isSelected = self.exportSelection.get(i, True)
+            self.check_buttons[i] = c = CheckButton(master, selected=isSelected, callback=self.toggleCheckButton)
+            c.grid(row=row, column=1)
+            label = Label(master, text=heading)
+            label.grid(row=row, column=2, sticky=Tkinter.W)
+            i += 1
 
-    row = row + 1
-    button = Button(master, text='File:', command=self.findFile)
-    button.grid(row=row, column=0, sticky=Tkinter.W)
-    self.file_entry = Entry(master, text=self.file, width=30)
-    self.file_entry.grid(row=row, column=1, columnspan=2, sticky=Tkinter.EW)
+        row = row + 1
+        button = Button(master, text="File:", command=self.findFile)
+        button.grid(row=row, column=0, sticky=Tkinter.W)
+        self.file_entry = Entry(master, text=self.file, width=30)
+        self.file_entry.grid(row=row, column=1, columnspan=2, sticky=Tkinter.EW)
 
-    row = row + 1
-    label = Label(master, text='Format:')
-    label.grid(row=row, column=0, sticky=Tkinter.W)
-    self.format_menu = PulldownMenu(master, entries=exportFormats)
-    self.format_menu.grid(row=row, column=1, columnspan=2, sticky=Tkinter.W)
+        row = row + 1
+        label = Label(master, text="Format:")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
+        self.format_menu = PulldownMenu(master, entries=exportFormats)
+        self.format_menu.grid(row=row, column=1, columnspan=2, sticky=Tkinter.W)
 
-    row = row + 1
-    master.grid_rowconfigure(row, weight=1)
-    texts = [ 'Save' ]
-    commands = [ self.ok ]
-    buttons = createDismissHelpButtonList(master, texts=texts, commands=commands,
-                                          dismiss_text='Cancel')
-    buttons.grid(row=row, column=0, columnspan=3, sticky=Tkinter.EW)
+        row = row + 1
+        master.grid_rowconfigure(row, weight=1)
+        texts = ["Save"]
+        commands = [self.ok]
+        buttons = createDismissHelpButtonList(master, texts=texts, commands=commands, dismiss_text="Cancel")
+        buttons.grid(row=row, column=0, columnspan=3, sticky=Tkinter.EW)
 
-  def toggleCheckButton(self, isSelected):
-  
-    for i in self.check_buttons.keys():
-      self.exportSelection[i] = self.check_buttons[i].get()
+    def toggleCheckButton(self, isSelected):
 
-  def apply(self):
+        for i in self.check_buttons.keys():
+            self.exportSelection[i] = self.check_buttons[i].get()
 
-    file   = self.file_entry.get()
-    format = self.format_menu.getSelected()
-    join   = exportJoin[format]
+    def apply(self):
 
-    n = 0
-    headings = []
-    for heading in self.headings:
-      if self.check_buttons[n].get():
-        headings.append(n)
-      n += 1
+        file = self.file_entry.get()
+        format = self.format_menu.getSelected()
+        join = exportJoin[format]
 
-    if (not headings):
-      showError('Nothing selected', 'No data selected to export.', parent=self)
-      return False
+        n = 0
+        headings = []
+        for heading in self.headings:
+            if self.check_buttons[n].get():
+                headings.append(n)
+            n += 1
 
-    try:
-      fp = open(file, 'w')
-    except (OSError, e):
-      showError('File error', str(e))
-      return False
+        if not headings:
+            showError("Nothing selected", "No data selected to export.", parent=self)
+            return False
 
-    for n in headings:
-      if (n != headings[0]):
-        fp.write(join)
-      fp.write(self.headings[n].encode('utf-8'))
-    fp.write('\n')
+        try:
+            fp = open(file, "w")
+        except (OSError, e):
+            showError("File error", str(e))
+            return False
 
-    m = 0
-    for data in self.entries:
-      if data:
         for n in headings:
-          if (n != headings[0]):
-            fp.write(join)
-          if (self.addNumber):
-            if (n == 0):
-              x = m+1
-            else:
-              x = data[n-1]
-          else:
-            x = data[n]
-          if (type(x) == type(float(1))):
-            if (x == 0):
-              t = '0'
-            elif ((abs(x) > 10000) or (abs(x) < 0.001)):
-              t = '%6.5e' % x
-            else:
-              t = '%6.5f' % x
-          else:
-            t = str(x)
-          fp.write(t)
-        fp.write('\n')
-        m = m + 1
+            if n != headings[0]:
+                fp.write(join)
+            fp.write(self.headings[n].encode("utf-8"))
+        fp.write("\n")
 
-    fp.close()
+        m = 0
+        for data in self.entries:
+            if data:
+                for n in headings:
+                    if n != headings[0]:
+                        fp.write(join)
+                    if self.addNumber:
+                        if n == 0:
+                            x = m + 1
+                        else:
+                            x = data[n - 1]
+                    else:
+                        x = data[n]
+                    if type(x) == type(float(1)):
+                        if x == 0:
+                            t = "0"
+                        elif (abs(x) > 10000) or (abs(x) < 0.001):
+                            t = "%6.5e" % x
+                        else:
+                            t = "%6.5f" % x
+                    else:
+                        t = str(x)
+                    fp.write(t)
+                fp.write("\n")
+                m = m + 1
 
-    return True
+        fp.close()
 
-  def findFile(self):
- 
-    format = self.format_menu.getSelected()
+        return True
 
-    if (format == tabFormat):
-      file_types = [ FileType('All', ['*']),
-                     FileType('Text', ['*.txt']) ]
-    else:
-      file_types = [ FileType('All', ['*']),
-                     FileType('CSV', ['*.csv']) ]
+    def findFile(self):
 
-    popup = FileSelectPopup(self, file_types=file_types)
-    
-    file = popup.getFile()
-    if (file):
-      self.file_entry.set(file)
+        format = self.format_menu.getSelected()
 
+        if format == tabFormat:
+            file_types = [FileType("All", ["*"]), FileType("Text", ["*.txt"])]
+        else:
+            file_types = [FileType("All", ["*"]), FileType("CSV", ["*.csv"])]
+
+        popup = FileSelectPopup(self, file_types=file_types)
+
+        file = popup.getFile()
+        if file:
+            self.file_entry.set(file)
+
+        popup.destroy()
+
+
+if __name__ == "__main__":
+    root = Tkinter.Tk()
+
+    headings = ("Name", "Rank", "Serial")
+    entries = (
+        ("Abc", 1, 34345),
+        ("Def", 33, 7984),
+        ("Ghijklm", -9998, 4456),
+    )
+
+    popup = TableExportPopup(root, headings=headings, entries=entries, title="Export Test Data", file="test/test1.txt")
     popup.destroy()
-
-if __name__ == '__main__':
-
-  root = Tkinter.Tk()
-
-  headings = ('Name', 'Rank', 'Serial')
-  entries = ( \
-    ('Abc', 1, 34345),
-    ('Def', 33, 7984),
-    ('Ghijklm', -9998, 4456),
-  )
-
-  popup = TableExportPopup(root, headings=headings, entries=entries,
-            title='Export Test Data', file='test/test1.txt')
-  popup.destroy()

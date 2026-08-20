@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,117 +45,112 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
-
-from memops.general import Implementation
-
-from memops.gui.Label import Label
-from memops.gui.Frame import Frame
 
 from ccpnmr.analysis.core.ExperimentBasic import getExperimentSpectra
 from ccpnmr.analysis.frames.ExperimentList import ExperimentList
 from ccpnmr.analysis.frames.SpectrumList import SpectrumList
+from memops.general import Implementation
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
 
-notify_funcs = ('__init__', 'delete', 'setName')
+notify_funcs = ("__init__", "delete", "setName")
+
 
 class ExptSpectrumRows(Frame):
+    def __init__(self, parent, analysis, orientation="horizontal", callback=None, *args, **kw):
 
-  def __init__(self, parent, analysis, orientation='horizontal', callback = None, *args, **kw):
+        self.analysis = analysis
+        self.callback = callback
 
-    self.analysis = analysis
-    self.callback = callback
+        apply(Frame.__init__, (self, parent) + args, kw)
 
-    apply(Frame.__init__, (self, parent) + args, kw)
+        label = Label(self, text="Experiment:")
+        label.grid(row=0, column=0, sticky="ne")
+        self.expt_list = ExperimentList(self, self.analysis.getExperiments, callback=self.setSpectra)
+        self.expt_list.grid(row=0, column=1, sticky="nw")
 
-    label = Label(self, text='Experiment:')
-    label.grid(row=0, column=0, sticky='ne')
-    self.expt_list = ExperimentList(self, self.analysis.getExperiments,
-                                    callback=self.setSpectra)
-    self.expt_list.grid(row=0, column=1, sticky='nw')
- 
-    if orientation in ['horizontal','h','H',Tkinter.HORIZONTAL]:
-      row = 0
-      col = 2
-    else:
-      row = 1
-      col = 0
-    
-    label = Label(self, text='Spectrum:')
-    label.grid(row=row, column=col, sticky='ne')
-    self.spectrum_list = SpectrumList(self, self.getSpectra,
-                                      callback=self.setSpectrumProperties)
-    self.spectrum_list.grid(row=row, column=col+1, sticky='nw')
+        if orientation in ["horizontal", "h", "H", Tkinter.HORIZONTAL]:
+            row = 0
+            col = 2
+        else:
+            row = 1
+            col = 0
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
-      Implementation.registerNotify(self.setSpectra, 'ccp.nmr.Nmr.DataSource', func)
+        label = Label(self, text="Spectrum:")
+        label.grid(row=row, column=col, sticky="ne")
+        self.spectrum_list = SpectrumList(self, self.getSpectra, callback=self.setSpectrumProperties)
+        self.spectrum_list.grid(row=row, column=col + 1, sticky="nw")
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
+            Implementation.registerNotify(self.setSpectra, "ccp.nmr.Nmr.DataSource", func)
 
-    self.spectrum_list.destroy()
-    self.expt_list.destroy()
+    def destroy(self):
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setExperiments, 'ccp.nmr.Nmr.Experiment', func)
-      Implementation.unregisterNotify(self.setSpectra, 'ccp.nmr.Nmr.DataSource', func)
+        self.spectrum_list.destroy()
+        self.expt_list.destroy()
 
-  def setSpectra(self, *extra):
- 
-    self.spectrum_list.setSpectra()
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setExperiments, "ccp.nmr.Nmr.Experiment", func)
+            Implementation.unregisterNotify(self.setSpectra, "ccp.nmr.Nmr.DataSource", func)
 
-  def setSpectrumProperties(self, *extra):
+    def setSpectra(self, *extra):
 
-    spectrum = self.getSpectrum()
+        self.spectrum_list.setSpectra()
 
-    if (self.callback):
-      self.callback(spectrum)
- 
-  def setExperiments(self, *extra):
+    def setSpectrumProperties(self, *extra):
 
-    self.expt_list.setExperiments()
+        spectrum = self.getSpectrum()
 
-  def getExperiment(self):
- 
-    ind = self.expt_list.getSelectedIndex()
-    if (ind >= 0):
-      project = self.analysis.getProject()
-      try:
-        experiment = project.currentNmrProject.sortedExperiments()[ind]
-      except IndexError: # if no experiments for some reason ind = 0 rather than -1
-        experiment = None
-    else:
-      experiment = None
- 
-    return experiment
- 
-  def getSpectra(self):
- 
-    experiment = self.getExperiment()
-    if (experiment):
-      return getExperimentSpectra(experiment)
-    else:
-      return []
- 
-  def getSpectrum(self):
+        if self.callback:
+            self.callback(spectrum)
 
-    spectra = self.getSpectra()
-    ind = self.spectrum_list.getSelectedIndex()
-    if (ind >= 0 and (ind < len(spectra))):
-      spectrum = spectra[ind]
-    else:
-      spectrum = None
- 
-    return spectrum
+    def setExperiments(self, *extra):
 
-  def setSpectrum(self, spectrum):
+        self.expt_list.setExperiments()
 
-    if (not spectrum):
-      return
+    def getExperiment(self):
 
-    experiments = list(self.analysis.getExperiments())
-    expt_index = experiments.index(spectrum.experiment)
-    spectra = getExperimentSpectra(spectrum.experiment)
-    spectrum_index = spectra.index(spectrum)
-    
-    self.expt_list.setSelectedIndex(expt_index)
-    self.spectrum_list.setSelectedIndex(spectrum_index)
+        ind = self.expt_list.getSelectedIndex()
+        if ind >= 0:
+            project = self.analysis.getProject()
+            try:
+                experiment = project.currentNmrProject.sortedExperiments()[ind]
+            except IndexError:  # if no experiments for some reason ind = 0 rather than -1
+                experiment = None
+        else:
+            experiment = None
+
+        return experiment
+
+    def getSpectra(self):
+
+        experiment = self.getExperiment()
+        if experiment:
+            return getExperimentSpectra(experiment)
+        else:
+            return []
+
+    def getSpectrum(self):
+
+        spectra = self.getSpectra()
+        ind = self.spectrum_list.getSelectedIndex()
+        if ind >= 0 and (ind < len(spectra)):
+            spectrum = spectra[ind]
+        else:
+            spectrum = None
+
+        return spectrum
+
+    def setSpectrum(self, spectrum):
+
+        if not spectrum:
+            return
+
+        experiments = list(self.analysis.getExperiments())
+        expt_index = experiments.index(spectrum.experiment)
+        spectra = getExperimentSpectra(spectrum.experiment)
+        spectrum_index = spectra.index(spectrum)
+
+        self.expt_list.setSelectedIndex(expt_index)
+        self.spectrum_list.setSelectedIndex(spectrum_index)

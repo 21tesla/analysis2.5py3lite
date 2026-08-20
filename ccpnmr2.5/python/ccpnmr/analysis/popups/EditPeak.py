@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,321 +38,316 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.general import Implementation
 
-from memops.gui.Button import Button
+from ccpnmr.analysis.core.ExperimentBasic import getPrimaryDataDimRef
+from ccpnmr.analysis.core.PeakBasic import movePeak, pickPeak, setManualPeakIntensity
+from ccpnmr.analysis.core.UnitConverter import unit_converter
+from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.Entry import Entry
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 from memops.gui.PulldownList import PulldownList
-from memops.gui.Text import Text
 
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-from ccpnmr.analysis.core.ExperimentBasic import getPrimaryDataDimRef
-from ccpnmr.analysis.core.PeakBasic import pickPeak, movePeak, setManualPeakIntensity
-from ccpnmr.analysis.core.UnitConverter import pnt2ppm, unit_converter
 
 class EditPeakPopup(BasePopup):
-  """
-  **Edit Position, Intensity & Details for a Peak**
-  
-  This popup window provides an means of editing peak information as an
-  alternative to editing values in the main peak tables. This popup is also used
-  to specify parameters for when a new peak is explicitly added to a peak list
-  using a tabular display.
+    """
+    **Edit Position, Intensity & Details for a Peak**
 
-  The user can specify the position of the peak's dimensions in ppm, Hz or data
-  point units. Also, the user can adjust the height and volume peak intensity
-  values and a textual "Details" field, ,which can carry the user's comments
-  about the peak.
+    This popup window provides an means of editing peak information as an
+    alternative to editing values in the main peak tables. This popup is also used
+    to specify parameters for when a new peak is explicitly added to a peak list
+    using a tabular display.
 
-  When editing an existing peak, no changes are made to the peak until the
-  [Update] button is pressed. Likewise for a new peak the [Add Peak] button
-  commits the changes. If the popup window is closed before the changes are 
-  committed then the entire editing or peak addition operation is cancelled.
+    The user can specify the position of the peak's dimensions in ppm, Hz or data
+    point units. Also, the user can adjust the height and volume peak intensity
+    values and a textual "Details" field, ,which can carry the user's comments
+    about the peak.
 
-  """
-  def __init__(self, parent, peak=None, peakList=None, *args, **kw):
+    When editing an existing peak, no changes are made to the peak until the
+    [Update] button is pressed. Likewise for a new peak the [Add Peak] button
+    commits the changes. If the popup window is closed before the changes are
+    committed then the entire editing or peak addition operation is cancelled.
 
-    self.titleColor = '#000080'
-    self.numDims    = 0
-    self.peak       = peak
-    
-    kw['borderwidth'] = 6
-    BasePopup.__init__(self, parent=parent, title='Edit Peak', **kw)
+    """
 
-    self.registerNotify(self.deletedPeak, 'ccp.nmr.Nmr.Peak', 'delete')
+    def __init__(self, parent, peak=None, peakList=None, *args, **kw):
 
-    for func in ('setAnnotation','setDetails','setFigOfMerit'):
-      self.registerNotify(self.updatePeak, 'ccp.nmr.Nmr.Peak', func)
-    for func in ('setAnnotation','setPosition','setNumAliasing'):
-      self.registerNotify(self.updatePeak, 'ccp.nmr.Nmr.PeakDim', func)
-    for func in ('__init__','delete','setValue'):
-      self.registerNotify(self.updatePeak, 'ccp.nmr.Nmr.PeakIntensity', func)
+        self.titleColor = "#000080"
+        self.numDims = 0
+        self.peak = peak
 
-    self.dimensionLabels =[]
-    self.dimensionEntries=[]
-    self.update(self.peak, peakList)
+        kw["borderwidth"] = 6
+        BasePopup.__init__(self, parent=parent, title="Edit Peak", **kw)
 
-  def body(self, guiParent):
+        self.registerNotify(self.deletedPeak, "ccp.nmr.Nmr.Peak", "delete")
 
-    self.geometry("+150+150")
-    
-    guiParent.grid_columnconfigure(0, weight=1)
-    self.master_frame = guiParent
-    
-    units = ('ppm','point','Hz')
-    
-    self.unit = 'ppm'
-    
-    self.specLabel = Label(guiParent, fg=self.titleColor, grid=(0,0), sticky='ew')
- 
-    self.peakLabel = Label(guiParent, grid=(0,1), sticky='ew')
- 
-    self.unit_frame = frame = Frame(guiParent, grid=(1,1), gridSpan=(1,2))
+        for func in ("setAnnotation", "setDetails", "setFigOfMerit"):
+            self.registerNotify(self.updatePeak, "ccp.nmr.Nmr.Peak", func)
+        for func in ("setAnnotation", "setPosition", "setNumAliasing"):
+            self.registerNotify(self.updatePeak, "ccp.nmr.Nmr.PeakDim", func)
+        for func in ("__init__", "delete", "setValue"):
+            self.registerNotify(self.updatePeak, "ccp.nmr.Nmr.PeakIntensity", func)
 
-    self.unitLabel  = Label(frame, text='Current units: ', grid=(0,0))
-    tipText = 'Selects which unit of measurement to display peak dimension positions with'
-    self.unitSelect = PulldownList(frame, callback=self.changeUnit,
-                                   texts=units, grid=(0,1), tipText=tipText)
- 
-    self.heightLabel = Label(guiParent, text='Height',
-                             borderwidth=2, relief='groove')
-    tipText = 'Sets the peak height; the value of the spectrum point intensity (albeit often interpolated)'
-    self.heightEntry = FloatEntry(guiParent, borderwidth=1, tipText=tipText)
-    self.volumeLabel = Label(guiParent, text='Volume',
-                             borderwidth=2, relief='groove')
-    tipText = 'Sets the peak volume integral; normally a summation of data point values'
-    self.volumeEntry = FloatEntry(guiParent, borderwidth=1, tipText=tipText)
-    self.detailLabel = Label(guiParent, text='Details',
-                             borderwidth=2, relief='groove')
-    tipText = 'A user-configurable textual comment for the peak, which appears an tables and occasionally on spectrum displays'
-    self.detailEntry = Entry(guiParent, borderwidth=1, tipText=tipText)
+        self.dimensionLabels = []
+        self.dimensionEntries = []
+        self.update(self.peak, peakList)
 
-    tipTexts = ['Commits the specified values to update the peak and closes the popup',]
-    texts = [ 'Update' ]
-    commands = [ self.commit ]
-    self.buttons = UtilityButtonList(guiParent, texts=texts, commands=commands, 
-                                     doClone=False, helpUrl=self.help_url,
-                                     tipTexts=tipTexts)
-  def open(self):
-  
-    self.updatePeak()
-    BasePopup.open(self)
-    
+    def body(self, guiParent):
 
-  def updatePeak(self, object=None):
-  
-    peak = None
-    if object:
-      if object.className == 'Peak':
-        peak = object
-      elif object.className == 'PeakDim':
-        peak = object.peak
-      elif object.className == 'PeakIntensity':
-        peak = object.peak
-    
-    if (peak is None) or (peak is self.peak):
-      self.update(peak=self.peak)
-    
-  def update(self, peak = None, peakList = None):
+        self.geometry("+150+150")
 
-    # first destroy old labels and entries (saves grid hassles)
+        guiParent.grid_columnconfigure(0, weight=1)
+        self.master_frame = guiParent
 
-    for label in self.dimensionLabels:
-      label.destroy()
-    for entry in self.dimensionEntries:
-      entry.destroy()
+        units = ("ppm", "point", "Hz")
 
-    # now setup required data
+        self.unit = "ppm"
 
-    if peak:
-      title = 'Edit Peak'
-      self.buttons.buttons[0].config(text='Update')
-    else:
-      title = 'Add Peak'
-      self.buttons.buttons[0].config(text='Add Peak')
+        self.specLabel = Label(guiParent, fg=self.titleColor, grid=(0, 0), sticky="ew")
 
-    self.setTitle(title)
+        self.peakLabel = Label(guiParent, grid=(0, 1), sticky="ew")
 
-    self.peak = peak
-    self.peakList = peakList
-    if not peakList:
-      if peak:
-        self.peakList = peak.peakList
-      else:
-        return
+        self.unit_frame = frame = Frame(guiParent, grid=(1, 1), gridSpan=(1, 2))
 
-    peakList  = self.peakList
-    spectrum = peakList.dataSource.name
-    self.numDims  = peakList.dataSource.numDim
-    self.posn     = self.numDims * [0]
-    self.dataDims = peakList.dataSource.sortedDataDims()
+        self.unitLabel = Label(frame, text="Current units: ", grid=(0, 0))
+        tipText = "Selects which unit of measurement to display peak dimension positions with"
+        self.unitSelect = PulldownList(frame, callback=self.changeUnit, texts=units, grid=(0, 1), tipText=tipText)
 
-    if self.peak:
-      
-      serial   = self.peak.serial
-      dims     = self.peak.sortedPeakDims()
-      details  = self.peak.details
-      if not details:
-        details = ''
-      if self.peak.annotation:
-        annotn = '%0.16s' % self.peak.annotation
-      else:
-        annotn = ''
- 
-      heightIntensity = self.peak.findFirstPeakIntensity(intensityType='height')
-      volumeIntensity = self.peak.findFirstPeakIntensity(intensityType='volume')
+        self.heightLabel = Label(guiParent, text="Height", borderwidth=2, relief="groove")
+        tipText = "Sets the peak height; the value of the spectrum point intensity (albeit often interpolated)"
+        self.heightEntry = FloatEntry(guiParent, borderwidth=1, tipText=tipText)
+        self.volumeLabel = Label(guiParent, text="Volume", borderwidth=2, relief="groove")
+        tipText = "Sets the peak volume integral; normally a summation of data point values"
+        self.volumeEntry = FloatEntry(guiParent, borderwidth=1, tipText=tipText)
+        self.detailLabel = Label(guiParent, text="Details", borderwidth=2, relief="groove")
+        tipText = "A user-configurable textual comment for the peak, which appears an tables and occasionally on spectrum displays"
+        self.detailEntry = Entry(guiParent, borderwidth=1, tipText=tipText)
 
-      if heightIntensity:
-        height = heightIntensity.value
-      else:
-        height = 0.0
-        
-      if volumeIntensity:
-        volume = volumeIntensity.value
-      else:
-        volume = 0.0
-    
-      for i in range(self.numDims):
-        peakDim = dims[i]
-        dataDimRef = peakDim.dataDimRef
-        if dataDimRef:
-          self.posn[i] = peakDim.position + (peakDim.numAliasing*dataDimRef.dataDim.numPointsOrig)
+        tipTexts = [
+            "Commits the specified values to update the peak and closes the popup",
+        ]
+        texts = ["Update"]
+        commands = [self.commit]
+        self.buttons = UtilityButtonList(
+            guiParent, texts=texts, commands=commands, doClone=False, helpUrl=self.help_url, tipTexts=tipTexts
+        )
+
+    def open(self):
+
+        self.updatePeak()
+        BasePopup.open(self)
+
+    def updatePeak(self, object=None):
+
+        peak = None
+        if object:
+            if object.className == "Peak":
+                peak = object
+            elif object.className == "PeakDim":
+                peak = object.peak
+            elif object.className == "PeakIntensity":
+                peak = object.peak
+
+        if (peak is None) or (peak is self.peak):
+            self.update(peak=self.peak)
+
+    def update(self, peak=None, peakList=None):
+
+        # first destroy old labels and entries (saves grid hassles)
+
+        for label in self.dimensionLabels:
+            label.destroy()
+        for entry in self.dimensionEntries:
+            entry.destroy()
+
+        # now setup required data
+
+        if peak:
+            title = "Edit Peak"
+            self.buttons.buttons[0].config(text="Update")
         else:
-          self.posn[i] = peakDim.position
+            title = "Add Peak"
+            self.buttons.buttons[0].config(text="Add Peak")
 
-      
-    else:
-          
-      dict = peakList.__dict__.get('serialDict')
-      if dict is None:
-        serial = 1
-      else:
-        serial = dict.get('peaks',0) + 1
-      
-      height  = 0.0 
-      volume  = 0.0
-      details = ''
-      annotn  = ''
+        self.setTitle(title)
 
-    self.specLabel.set(text='Experiment: %s Spectrum: %s PeakList: %d' % (peakList.dataSource.experiment.name,spectrum,peakList.serial))
-    self.peakLabel.set(text='Peak: %d' % serial)
- 
-    self.dimensionLabels =self.numDims*['']
-    self.dimensionEntries=self.numDims*['']
-    for i in range(self.numDims):
-      pos = self.posn[i]
-      if self.unit != 'point':
-        dataDim = self.dataDims[i]
-        if dataDim.className == 'FreqDataDim':
-          pos = unit_converter[('point', self.unit)]( pos, getPrimaryDataDimRef(dataDim) )
-      self.dimensionLabels[i] = Label(self.master_frame, text='F%d' % (i+1), borderwidth=2, relief='groove')
-      tipText = 'The peak position in dimension %d, in the specified units' % (i+1)
-      self.dimensionEntries[i] = FloatEntry(self.master_frame, borderwidth=1,
-                                            text='%8.4f' % pos, tipText=tipText)
+        self.peak = peak
+        self.peakList = peakList
+        if not peakList:
+            if peak:
+                self.peakList = peak.peakList
+            else:
+                return
 
-    self.heightEntry.set(text='%f' % height)
-    self.volumeEntry.set(text='%f' % volume)
-    self.detailEntry.set(text=details)
+        peakList = self.peakList
+        spectrum = peakList.dataSource.name
+        self.numDims = peakList.dataSource.numDim
+        self.posn = self.numDims * [0]
+        self.dataDims = peakList.dataSource.sortedDataDims()
 
-    row = 0
-    self.specLabel.grid(row = row, column = 0, columnspan=2, sticky='nsew')
- 
-    row = row + 1
-    self.peakLabel.grid(row = row, column = 0,  sticky='nsew')
-    self.unit_frame.grid(row = row, column = 1, columnspan=2, sticky='nsew')
+        if self.peak:
+            serial = self.peak.serial
+            dims = self.peak.sortedPeakDims()
+            details = self.peak.details
+            if not details:
+                details = ""
+            if self.peak.annotation:
+                annotn = "%0.16s" % self.peak.annotation
+            else:
+                annotn = ""
 
-    for i in range(self.numDims):
-      row = row + 1
-      self.dimensionLabels[i].grid(row = row, column = 0, sticky='nsew')
-      self.dimensionEntries[i].grid(row = row, column = 1, columnspan=3, sticky='e')
-      
-    row = row + 1
-    self.heightLabel.grid(row = row, column = 0, sticky='nsew')
-    self.heightEntry.grid(row = row, column = 1, columnspan=3, sticky='e')
+            heightIntensity = self.peak.findFirstPeakIntensity(intensityType="height")
+            volumeIntensity = self.peak.findFirstPeakIntensity(intensityType="volume")
 
-    row = row + 1
-    self.volumeLabel.grid(row = row, column = 0, sticky='nsew')
-    self.volumeEntry.grid(row = row, column = 1, columnspan=3, sticky='e')
+            if heightIntensity:
+                height = heightIntensity.value
+            else:
+                height = 0.0
 
-    row = row + 1
-    self.detailLabel.grid(row = row, column = 0, sticky='nsew')
-    self.detailEntry.grid(row = row, column = 1, columnspan=3, sticky='e')
-    
-    row = row + 1
-    self.buttons.grid(row = row, column = 0, columnspan = 4, sticky='nsew')
+            if volumeIntensity:
+                volume = volumeIntensity.value
+            else:
+                volume = 0.0
 
-  def changeUnit(self, unit):
-  
-    posDisp = self.numDims*[None]
-    for i in range(self.numDims):
-      posDisp[i] = float(self.dimensionEntries[i].get() )
-      if self.unit != 'point':
-        dataDim = self.dataDims[i]
-        if dataDim.className == 'FreqDataDim':
-          posDisp[i] = unit_converter[(self.unit,'point')](posDisp[i],getPrimaryDataDimRef(dataDim))
-        
-    self.unit = unit
-    if self.unit != 'point':
-      for i in range(self.numDims):
-        dataDim = self.dataDims[i]
-        if dataDim.className == 'FreqDataDim':
-          posDisp[i] = unit_converter[('point',self.unit)](posDisp[i], getPrimaryDataDimRef(dataDim) )
-     
-    for i in range(self.numDims):
-      value = posDisp[i]
-      if value is None:
-        self.dimensionEntries[i].set('None') 
-      else:
-        self.dimensionEntries[i].set('%8.4f' % posDisp[i])    
+            for i in range(self.numDims):
+                peakDim = dims[i]
+                dataDimRef = peakDim.dataDimRef
+                if dataDimRef:
+                    self.posn[i] = peakDim.position + (peakDim.numAliasing * dataDimRef.dataDim.numPointsOrig)
+                else:
+                    self.posn[i] = peakDim.position
 
-  def commit(self):
-      
-    posDisp = self.numDims * [0]
-     
-    for i in range(self.numDims):
-      posDisp[i] = float(self.dimensionEntries[i].get() )
-      if self.unit != 'point':
-        dataDim = self.dataDims[i]
-        if dataDim.className == 'FreqDataDim':
-          self.posn[i] = unit_converter[(self.unit,'point')]( posDisp[i], getPrimaryDataDimRef(dataDim) )
-          
-      else:
-        self.posn[i] = posDisp[i]
-    
-    if self.peak:
-      movePeak(self.peak,self.posn)
-    else:
-      self.peak = pickPeak(self.peakList, self.posn)
-   
-    height = self.heightEntry.get()
-    volume = self.volumeEntry.get()
-    setManualPeakIntensity(self.peak, height, intensityType='height')
-    setManualPeakIntensity(self.peak, volume, intensityType='volume')
- 
-    details    = self.detailEntry.get() or None
-    
-    self.peak.setDetails( details )
+        else:
+            dict = peakList.__dict__.get("serialDict")
+            if dict is None:
+                serial = 1
+            else:
+                serial = dict.get("peaks", 0) + 1
 
-    self.close()
-    
-  def deletedPeak(self, peak):
+            height = 0.0
+            volume = 0.0
+            details = ""
+            annotn = ""
 
-    if self.peak is peak:
-      self.close()
+        self.specLabel.set(
+            text="Experiment: %s Spectrum: %s PeakList: %d"
+            % (peakList.dataSource.experiment.name, spectrum, peakList.serial)
+        )
+        self.peakLabel.set(text="Peak: %d" % serial)
 
-  def destroy(self):
+        self.dimensionLabels = self.numDims * [""]
+        self.dimensionEntries = self.numDims * [""]
+        for i in range(self.numDims):
+            pos = self.posn[i]
+            if self.unit != "point":
+                dataDim = self.dataDims[i]
+                if dataDim.className == "FreqDataDim":
+                    pos = unit_converter[("point", self.unit)](pos, getPrimaryDataDimRef(dataDim))
+            self.dimensionLabels[i] = Label(self.master_frame, text="F%d" % (i + 1), borderwidth=2, relief="groove")
+            tipText = "The peak position in dimension %d, in the specified units" % (i + 1)
+            self.dimensionEntries[i] = FloatEntry(self.master_frame, borderwidth=1, text="%8.4f" % pos, tipText=tipText)
 
-    self.unregisterNotify(self.deletedPeak, 'ccp.nmr.Nmr.Peak', 'delete')
+        self.heightEntry.set(text="%f" % height)
+        self.volumeEntry.set(text="%f" % volume)
+        self.detailEntry.set(text=details)
 
-    for func in ('setAnnotation','setDetails','setFigOfMerit'):
-      self.unregisterNotify(self.updatePeak, 'ccp.nmr.Nmr.Peak', func)
-    for func in ('setAnnotation','setPosition','setNumAliasing'):
-      self.unregisterNotify(self.updatePeak, 'ccp.nmr.Nmr.PeakDim', func)
-    for func in ('__init__','delete','setValue'):
-      self.unregisterNotify(self.updatePeak, 'ccp.nmr.Nmr.PeakIntensity', func)
+        row = 0
+        self.specLabel.grid(row=row, column=0, columnspan=2, sticky="nsew")
 
-    BasePopup.destroy(self)
+        row = row + 1
+        self.peakLabel.grid(row=row, column=0, sticky="nsew")
+        self.unit_frame.grid(row=row, column=1, columnspan=2, sticky="nsew")
+
+        for i in range(self.numDims):
+            row = row + 1
+            self.dimensionLabels[i].grid(row=row, column=0, sticky="nsew")
+            self.dimensionEntries[i].grid(row=row, column=1, columnspan=3, sticky="e")
+
+        row = row + 1
+        self.heightLabel.grid(row=row, column=0, sticky="nsew")
+        self.heightEntry.grid(row=row, column=1, columnspan=3, sticky="e")
+
+        row = row + 1
+        self.volumeLabel.grid(row=row, column=0, sticky="nsew")
+        self.volumeEntry.grid(row=row, column=1, columnspan=3, sticky="e")
+
+        row = row + 1
+        self.detailLabel.grid(row=row, column=0, sticky="nsew")
+        self.detailEntry.grid(row=row, column=1, columnspan=3, sticky="e")
+
+        row = row + 1
+        self.buttons.grid(row=row, column=0, columnspan=4, sticky="nsew")
+
+    def changeUnit(self, unit):
+
+        posDisp = self.numDims * [None]
+        for i in range(self.numDims):
+            posDisp[i] = float(self.dimensionEntries[i].get())
+            if self.unit != "point":
+                dataDim = self.dataDims[i]
+                if dataDim.className == "FreqDataDim":
+                    posDisp[i] = unit_converter[(self.unit, "point")](posDisp[i], getPrimaryDataDimRef(dataDim))
+
+        self.unit = unit
+        if self.unit != "point":
+            for i in range(self.numDims):
+                dataDim = self.dataDims[i]
+                if dataDim.className == "FreqDataDim":
+                    posDisp[i] = unit_converter[("point", self.unit)](posDisp[i], getPrimaryDataDimRef(dataDim))
+
+        for i in range(self.numDims):
+            value = posDisp[i]
+            if value is None:
+                self.dimensionEntries[i].set("None")
+            else:
+                self.dimensionEntries[i].set("%8.4f" % posDisp[i])
+
+    def commit(self):
+
+        posDisp = self.numDims * [0]
+
+        for i in range(self.numDims):
+            posDisp[i] = float(self.dimensionEntries[i].get())
+            if self.unit != "point":
+                dataDim = self.dataDims[i]
+                if dataDim.className == "FreqDataDim":
+                    self.posn[i] = unit_converter[(self.unit, "point")](posDisp[i], getPrimaryDataDimRef(dataDim))
+
+            else:
+                self.posn[i] = posDisp[i]
+
+        if self.peak:
+            movePeak(self.peak, self.posn)
+        else:
+            self.peak = pickPeak(self.peakList, self.posn)
+
+        height = self.heightEntry.get()
+        volume = self.volumeEntry.get()
+        setManualPeakIntensity(self.peak, height, intensityType="height")
+        setManualPeakIntensity(self.peak, volume, intensityType="volume")
+
+        details = self.detailEntry.get() or None
+
+        self.peak.setDetails(details)
+
+        self.close()
+
+    def deletedPeak(self, peak):
+
+        if self.peak is peak:
+            self.close()
+
+    def destroy(self):
+
+        self.unregisterNotify(self.deletedPeak, "ccp.nmr.Nmr.Peak", "delete")
+
+        for func in ("setAnnotation", "setDetails", "setFigOfMerit"):
+            self.unregisterNotify(self.updatePeak, "ccp.nmr.Nmr.Peak", func)
+        for func in ("setAnnotation", "setPosition", "setNumAliasing"):
+            self.unregisterNotify(self.updatePeak, "ccp.nmr.Nmr.PeakDim", func)
+        for func in ("__init__", "delete", "setValue"):
+            self.unregisterNotify(self.updatePeak, "ccp.nmr.Nmr.PeakIntensity", func)
+
+        BasePopup.destroy(self)

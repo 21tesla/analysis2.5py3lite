@@ -28,15 +28,16 @@ Accepted from manual list 1 for a total of 3339 matches
 Accepted unique 3339 PDB and 2993 BMRB entries
 Will write 3339 nrows and 2 ncols to newMany2OneTable.csv
 """
-from cing import cingRoot
-from cing.Libs.DBMS import Relation
-from cing.Libs.DBMS import addColumnHeaderRowToCsvFile
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import rmdir
-from cing.NRG.PDBEntryLists import * #@UnusedWildImport
-from cing.NRG.settings import * #@UnusedWildImport
 from glob import glob
 from shutil import copytree
+
+from cing import cingRoot
+from cing.Libs.DBMS import Relation, addColumnHeaderRowToCsvFile
+from cing.Libs.disk import rmdir
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.PDBEntryLists import *  #@UnusedWildImport
+from cing.NRG.settings import *  #@UnusedWildImport
+
 
 class MatchBmrbPdb(Lister):
     def __init__(self):
@@ -163,10 +164,10 @@ class MatchBmrbPdb(Lister):
         bmrbIdListAbsent =[]
         for idx, pdb_id in enumerate(pdbIdOldMany2OneList):
             bmrb_id = bmrbIdOldMany2OneList[idx]
-            if not pdbIdPdbNmrHash.has_key(pdb_id):
+            if pdb_id not in pdbIdPdbNmrHash:
                 pdbIdListAbsent.append(pdb_id)
                 continue
-            if not bmrbIdHash.has_key(bmrb_id):
+            if bmrb_id not in bmrbIdHash:
                 bmrbIdListAbsent.append(bmrb_id)
                 continue
             bmrbIdNewMany2OneList.append(bmrb_id)
@@ -198,10 +199,10 @@ class MatchBmrbPdb(Lister):
                     if pdb_id not in pdbIdListDouble:
                         pdbIdListDouble.append(pdb_id)
                     continue
-                if not pdbIdPdbNmrHash.has_key(pdb_id):
+                if pdb_id not in pdbIdPdbNmrHash:
                     pdbIdListObsolete.append(pdb_id)
                     continue
-                if not bmrbIdHash.has_key(bmrb_id):
+                if bmrb_id not in bmrbIdHash:
                     bmrbIdListObsolete.append(bmrb_id)
                     continue
                 if pdb_id in pdbIdNewMany2OneList:
@@ -219,10 +220,10 @@ class MatchBmrbPdb(Lister):
 
         for idx, pdb_id in enumerate(pdbIdManualList):
             bmrb_id = bmrbIdManualList[idx]
-            if not pdbIdPdbNmrHash.has_key(pdb_id):
+            if pdb_id not in pdbIdPdbNmrHash:
                 nTerror("Failed to find %s in PDB; update the manual list." % pdb_id)
                 continue
-            if not bmrbIdHash.has_key(bmrb_id):
+            if bmrb_id not in bmrbIdHash:
                 nTerror("Failed to find %s in BMRB; update the manual list." % bmrb_id)
                 continue
             if pdb_id in pdbIdNewMany2OneList:
@@ -254,9 +255,9 @@ class MatchBmrbPdb(Lister):
         for aditIdx in range(nadit):
             pdbIdLoLObsolete[aditIdx].sort()
             bmrbIdLoLObsolete[aditIdx].sort()
-            nTmessage("Skipped: %s obsolete  PDB entries from adit%s %s" % (len( pdbIdLoLObsolete[aditIdx]), aditIdx,  
+            nTmessage("Skipped: %s obsolete  PDB entries from adit%s %s" % (len( pdbIdLoLObsolete[aditIdx]), aditIdx,
                                                                             str(pdbIdLoLObsolete[aditIdx])))
-            nTmessage("Skipped: %s obsolete BMRB entries from adit%s %s" % (len(bmrbIdLoLObsolete[aditIdx]), aditIdx, 
+            nTmessage("Skipped: %s obsolete BMRB entries from adit%s %s" % (len(bmrbIdLoLObsolete[aditIdx]), aditIdx,
                                                                             str(bmrbIdLoLObsolete[aditIdx])))
             nTmessage("Accepted from adit%s %s for a total of %s matches" %(aditIdx, l2[aditIdx], ltotal1[aditIdx]))
         nTmessage("Accepted from manual list %s for a total of %s matches" %( l3, ltotal2))

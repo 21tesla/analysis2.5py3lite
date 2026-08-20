@@ -7,8 +7,8 @@ Test syntax with:
 python -u $CINGROOT/python/cing/NRG/rdbPlotList.py 
 
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG.nrgCingRdb import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.nrgCingRdb import *  #@UnusedWildImport
 
 dictDivideByResidueCount = {DIVIDE_BY_RESIDUE_COUNT:1}
 dictDivideByResidueCount_OnlyProtein = {DIVIDE_BY_RESIDUE_COUNT:1, ONLY_PROTEIN:1}
@@ -85,33 +85,33 @@ plotList = [
             [ RES_LEVEL, CING_STR, CHK_RAMACH_STR,      uR({},   {MI:-3, MA: 3}) ],
             [ RES_LEVEL, CING_STR, CHK_JANIN_STR,       uR({},   {MI:-3, MA: 3}) ],
             [ RES_LEVEL, CING_STR, CHK_D1D2_STR,        uR({},   {MI:-3, MA: 3}) ],
-            [ RES_LEVEL, CING_STR, DIS_MAX_ALL_STR,     uR(d5,{MI: 0, MA: 10})  ],   
-            [ RES_LEVEL, CING_STR, DIS_RMS_ALL_STR,     uR(d5,{MI: 0, MA: 2})  ],   
-            [ RES_LEVEL, CING_STR, DIS_AV_ALL_STR ,     uR(d5,{MI:-2, MA: 2})  ],   
-            [ RES_LEVEL, CING_STR, DIS_AV_VIOL_STR,     uR(d5,{MI:-2, MA: 2})  ],   
-            [ RES_LEVEL, CING_STR, DIS_C1_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],   
-            [ RES_LEVEL, CING_STR, DIS_C3_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],   
-            [ RES_LEVEL, CING_STR, DIS_C5_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],   
+            [ RES_LEVEL, CING_STR, DIS_MAX_ALL_STR,     uR(d5,{MI: 0, MA: 10})  ],
+            [ RES_LEVEL, CING_STR, DIS_RMS_ALL_STR,     uR(d5,{MI: 0, MA: 2})  ],
+            [ RES_LEVEL, CING_STR, DIS_AV_ALL_STR ,     uR(d5,{MI:-2, MA: 2})  ],
+            [ RES_LEVEL, CING_STR, DIS_AV_VIOL_STR,     uR(d5,{MI:-2, MA: 2})  ],
+            [ RES_LEVEL, CING_STR, DIS_C1_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],
+            [ RES_LEVEL, CING_STR, DIS_C3_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],
+            [ RES_LEVEL, CING_STR, DIS_C5_VIOL_STR,     uR(d5,{MI: 0, MA: 1000})  ],
             [ RES_LEVEL, DSSP_STR, DSSP_ID_STR,         {} ],
             [ RES_LEVEL, PC_STR, pc_gf_STR       ,      {} ],
             [ RES_LEVEL, PC_STR, pc_gf_PHIPSI_STR,      {} ],
             [ RES_LEVEL, PC_STR, pc_gf_CHI12_STR ,      {MA: 5.0}  ],
             [ RES_LEVEL, PC_STR, pc_gf_CHI1_STR  ,      {} ],
-            [ RES_LEVEL, WHATIF_STR, ACCLST_STR,        uR({},   {MI:-3, MA: 3}) ],   
-            [ RES_LEVEL, WHATIF_STR, ANGCHK_STR,        uR({},   {MI: 0, MA:20}) ],   
+            [ RES_LEVEL, WHATIF_STR, ACCLST_STR,        uR({},   {MI:-3, MA: 3}) ],
+            [ RES_LEVEL, WHATIF_STR, ANGCHK_STR,        uR({},   {MI: 0, MA:20}) ],
             [ RES_LEVEL, WHATIF_STR, BBCCHK_STR,        {}],    # idx is 73
-            [ RES_LEVEL, WHATIF_STR, BMPCHK_STR,        uR({},   {MI: 0, MA: 4}) ],   
-            [ RES_LEVEL, WHATIF_STR, BNDCHK_STR,        uR({},   {MI: 0, MA:10}) ],   
-            [ RES_LEVEL, WHATIF_STR, C12CHK_STR,        {}],   
-            [ RES_LEVEL, WHATIF_STR, FLPCHK_STR,        uR({},   {MI: 0, MA: 4}) ],   
-            [ RES_LEVEL, WHATIF_STR, INOCHK_STR,        {}],     
+            [ RES_LEVEL, WHATIF_STR, BMPCHK_STR,        uR({},   {MI: 0, MA: 4}) ],
+            [ RES_LEVEL, WHATIF_STR, BNDCHK_STR,        uR({},   {MI: 0, MA:10}) ],
+            [ RES_LEVEL, WHATIF_STR, C12CHK_STR,        {}],
+            [ RES_LEVEL, WHATIF_STR, FLPCHK_STR,        uR({},   {MI: 0, MA: 4}) ],
+            [ RES_LEVEL, WHATIF_STR, INOCHK_STR,        {}],
 #            [ RES_LEVEL, WHATIF_STR, OMECHK_STR,        uR({},   {MI: 0, MA: 0.4}) ],    # ABSENT
 #            [ RES_LEVEL, WHATIF_STR, PL2CHK_STR,        uR({},   {MI: 0, MA: 3}) ],    # ABSENT
-            [ RES_LEVEL, WHATIF_STR, PL3CHK_STR,        uR({},   {MI: 0, MA: 0.4}) ],   
-            [ RES_LEVEL, WHATIF_STR, PLNCHK_STR,        uR({},   {MI: 0, MA: 10}) ],   
-            [ RES_LEVEL, WHATIF_STR, QUACHK_STR,        uR({},   {MI:-10, MA: 10}) ],   
-            [ RES_LEVEL, WHATIF_STR, RAMCHK_STR,        uR({},   {MI:-2, MA: 3}) ],   
-            [ RES_LEVEL, WHATIF_STR, ROTCHK_STR,        {}],   
+            [ RES_LEVEL, WHATIF_STR, PL3CHK_STR,        uR({},   {MI: 0, MA: 0.4}) ],
+            [ RES_LEVEL, WHATIF_STR, PLNCHK_STR,        uR({},   {MI: 0, MA: 10}) ],
+            [ RES_LEVEL, WHATIF_STR, QUACHK_STR,        uR({},   {MI:-10, MA: 10}) ],
+            [ RES_LEVEL, WHATIF_STR, RAMCHK_STR,        uR({},   {MI:-2, MA: 3}) ],
+            [ RES_LEVEL, WHATIF_STR, ROTCHK_STR,        {}],
 #            [ RES_LEVEL, QSHIFT_STR, QCS_ALL_STR,       {} ], # ABSENT
 #            [ RES_LEVEL, QSHIFT_STR, QCS_BB_STR,        {} ],
 #            [ RES_LEVEL, QSHIFT_STR, QCS_HVY_STR,       {} ],
@@ -123,8 +123,8 @@ plotList = [
             [ ATOM_LEVEL, WHATIF_STR, CHICHK_STR, {MI: -10.0, MA: 10.0} ], # 94
             [ ATOM_LEVEL, WHATIF_STR, HNDCHK_STR, {}  ], # ABSENT
             [ ATOM_LEVEL, WHATIF_STR, PL2CHK_STR, {MI:  0.0, MA:10.0}],
-            [ CSLPA_LEVEL, VASCO_STR,          csd_STR,   {IS_OTHER_VALUE_STR: (( atomclass_STR, H_None_STR),),MI:-0.5, MA:0.5 } ], 
-            [ CSLPA_LEVEL, VASCO_STR,          csd_STR,   {IS_OTHER_VALUE_STR: (( atomclass_STR, N_None_STR),),MI:-10,  MA: 10 } ],  
+            [ CSLPA_LEVEL, VASCO_STR,          csd_STR,   {IS_OTHER_VALUE_STR: (( atomclass_STR, H_None_STR),),MI:-0.5, MA:0.5 } ],
+            [ CSLPA_LEVEL, VASCO_STR,          csd_STR,   {IS_OTHER_VALUE_STR: (( atomclass_STR, N_None_STR),),MI:-10,  MA: 10 } ],
             [ CSLPA_LEVEL, VASCO_STR,          csd_STR,   {IS_OTHER_VALUE_STR: (( atomclass_STR, C_3_STR   ),),MI:-10,  MA: 10 } ],
-            
+
         ]

@@ -64,7 +64,7 @@ for chemComp in memopsRoot.chemComps:
       for chemAtomName in chemAtomNames:
         atomText = 'ATOM '
         for name in names:
-            sysName = atomDict[chemAtomName].get(name, '-') 
+            sysName = atomDict[chemAtomName].get(name, '-')
             atomText += ' %5s %-7s' % (name, sysName)
         atomText += '  CCPN %s' % chemAtomName
         atomTexts.append(atomText)

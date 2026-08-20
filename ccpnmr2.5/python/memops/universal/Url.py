@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -99,6 +99,7 @@ def fetchUrl(url, values=None, headers=None, timeout=None):
 # With inspiration from urllib.request_file.py by Fabien Seisen, http://fabien.seisen.org/python/ (without his twiddly bits)
 # It actually uses my upload script located at http://www.voidspace.xennos.com
 
+
 def uploadFiles(url, fileFields, fields=None, boundary=None):
     """Uploads regular fields and files to specified url
     url is the Url to send data to.
@@ -109,50 +110,51 @@ def uploadFiles(url, fileFields, fields=None, boundary=None):
     Returns response."""
 
     import mimetypes
-    import mimetools
     import os
     import urllib.request
+
+    import mimetools
 
     if not fields:
         fields = ()
 
     if not boundary:
-        boundary = '-----' + mimetools.choose_boundary() + '-----'
+        boundary = "-----" + mimetools.choose_boundary() + "-----"
 
-    CRLF = '\r\n'
+    CRLF = "\r\n"
     xx = []
     if isinstance(fields, dict):
         fields = fields.items()
-    for (key, value) in fields:
-        xx.append('--' + boundary)
+    for key, value in fields:
+        xx.append("--" + boundary)
         xx.append('Content-Disposition: form-data; name="%s"' % key)
-        xx.append('')
+        xx.append("")
         xx.append(str(value))
 
     if isinstance(fileFields, dict):
         fileFields = fileFields.items()
-    for (key, fileName) in fileFields:
-        fp = open(fileName, 'rb')
+    for key, fileName in fileFields:
+        fp = open(fileName, "rb")
         value = fp.read()
         fp.close()
 
         fileName = os.path.basename(fileName)
-        fileType = mimetypes.guess_type(fileName)[0] or 'application/octet-stream'
-        xx.append('--' + boundary)
+        fileType = mimetypes.guess_type(fileName)[0] or "application/octet-stream"
+        xx.append("--" + boundary)
         xx.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, fileName))
-        xx.append('Content-Type: %s' % fileType)
-        xx.append('')
+        xx.append("Content-Type: %s" % fileType)
+        xx.append("")
         xx.append(value)
 
-    xx.append('--' + boundary + '--')
-    xx.append('')
+    xx.append("--" + boundary + "--")
+    xx.append("")
     body = CRLF.join(xx)
 
-    contentType = 'multipart/form-data; boundary=%s' % boundary
+    contentType = "multipart/form-data; boundary=%s" % boundary
     headers = {
-        'Content-type'  : contentType,
-        'Content-length': str(len(body)),
-        }
+        "Content-type": contentType,
+        "Content-length": str(len(body)),
+    }
 
     request = urllib.request.Request(url, body, headers)
     handle = urllib.request.urlopen(request)
@@ -176,27 +178,26 @@ def uploadFile(url, fileKey, fileName, fields=None, boundary=None):
     return uploadFiles(url, ((fileKey, fileName),), fields, boundary)
 
 
-def fetchHttpResponse(url, method='GET', data=None, headers=None):
-    """Generate an http, and return the response
-    """
-    import ssl
+def fetchHttpResponse(url, method="GET", data=None, headers=None):
+    """Generate an http, and return the response"""
     import os
-    import certifi
+    import ssl
     import urllib
-    import urllib3.contrib.pyopenssl
     from urllib import urlencode
 
+    import urllib3.contrib.pyopenssl
+
     if not headers:
-        headers = {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                    'User-Agent': 'ccpn-v2.5.0'
-        }
-    body = urlencode(data).encode('utf-8') if data else None
+        headers = {"Content-type": "application/x-www-form-urlencoded;charset=UTF-8", "User-Agent": "ccpn-v2.5.0"}
+    body = urlencode(data).encode("utf-8") if data else None
 
     # urllib3.contrib.pyopenssl.inject_into_urllib3()
 
     from urllib3.util import ssl_
+
     if ssl_.IS_PYOPENSSL:
         import urllib3.contrib.pyopenssl
+
         urllib3.contrib.pyopenssl.extract_from_urllib3()
 
     context = ssl._create_unverified_context()
@@ -214,18 +215,17 @@ def fetchHttpResponse(url, method='GET', data=None, headers=None):
     # _http = urllib3.PoolManager(ssl_context=context)
 
     # create the options list for creating an http connection
-    options = {#'cert_reqs': 'NONE',
-               #'ca_certs' : certifi.where(),
-               'timeout'  : urllib3.Timeout(connect=3.0, read=3.0),
-               'retries'  : urllib3.Retry(1, redirect=False),
-               'ssl_context'  : context
-               }
+    options = {  #'cert_reqs': 'NONE',
+        #'ca_certs' : certifi.where(),
+        "timeout": urllib3.Timeout(connect=3.0, read=3.0),
+        "retries": urllib3.Retry(1, redirect=False),
+        "ssl_context": context,
+    }
 
     def _getProxyIn(proxyDict):
-        """Get the first occurrence of a proxy type in the supplied dict
-        """
+        """Get the first occurrence of a proxy type in the supplied dict"""
         # define a list of proxy identifiers
-        proxyCheckList = ['HTTPS_PROXY', 'https', 'HTTP_PROXY', 'http']
+        proxyCheckList = ["HTTPS_PROXY", "https", "HTTP_PROXY", "http"]
         for pCheck in proxyCheckList:
             proxyUrl = proxyDict.get(pCheck, None)
             if proxyUrl:
@@ -239,10 +239,7 @@ def fetchHttpResponse(url, method='GET', data=None, headers=None):
         http = urllib3.PoolManager(**options)
 
     # generate an http request
-    response = http.request(method, url,
-                            headers=headers,
-                            body=body,
-                            preload_content=False)
+    response = http.request(method, url, headers=headers, body=body, preload_content=False)
     response.release_conn()
 
     # return the http response
@@ -250,11 +247,10 @@ def fetchHttpResponse(url, method='GET', data=None, headers=None):
 
 
 def _fetchUrl(url, data=None, headers=None, timeout=2.0, proxySettings=None, decodeResponse=True):
-    """Fetch url request from the server
-    """
+    """Fetch url request from the server"""
     import logging
 
-    urllib3_logger = logging.getLogger('urllib3')
+    urllib3_logger = logging.getLogger("urllib3")
     urllib3_logger.setLevel(logging.CRITICAL)
 
     # if not proxySettings:
@@ -270,13 +266,13 @@ def _fetchUrl(url, data=None, headers=None, timeout=2.0, proxySettings=None, dec
     #         for name in proxyNames:
     #             proxySettings[name] = _userPreferences._getPreferencesParameter(name)
 
-    response = fetchHttpResponse(url, method='POST', data=data, headers=headers)
+    response = fetchHttpResponse(url, method="POST", data=data, headers=headers)
 
     # if response:
     #     ll = len(response.data)
     #     print('>>>>>>responseUrl', proxySettings, response.data[0:min(ll, 20)])
 
-    return response.data.decode('utf-8') if decodeResponse else response
+    return response.data.decode("utf-8") if decodeResponse else response
 
 
 def uploadFile(url, fileName, data=None):
@@ -285,11 +281,11 @@ def uploadFile(url, fileName, data=None):
     if not data:
         data = {}
 
-    with open(fileName, 'rb') as fp:
+    with open(fileName, "rb") as fp:
         fileData = fp.read()
 
-    data['fileName'] = os.path.basename(fileName)
-    data['fileData'] = fileData
+    data["fileName"] = os.path.basename(fileName)
+    data["fileData"] = fileData
 
     try:
         return fetchUrl(url, data)

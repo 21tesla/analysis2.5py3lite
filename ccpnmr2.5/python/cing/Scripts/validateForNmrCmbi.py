@@ -1,10 +1,8 @@
-from cing import cingDirScripts
-from cing import cingDirTestsData
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing import cingDirScripts, cingDirTestsData
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_ENTRY
-from cing.Scripts.validateEntry import PROJECT_TYPE_CYANA
-from cing.core.constants import * #@UnusedWildImport
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_ENTRY, PROJECT_TYPE_CYANA
 
 cing.verbosity = cing.verbosityDebug
 

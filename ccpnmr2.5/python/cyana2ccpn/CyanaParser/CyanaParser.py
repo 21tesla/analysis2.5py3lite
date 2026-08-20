@@ -76,29 +76,28 @@ Adapted from PluginCode xeasy.py and cyana.py files
 
 """
 
-import sys
 #sys.path.append('.')
 
 # from cing.core.constants import * #@UnusedWildImport
-import cing.Libs.NTutils as ntu
-from cing.Libs.AwkLike import AwkLike
-#from cing.Libs.disk import path
-from cing.core.classes import Peak
-from cing.core.classes import PeakList
-from cing.core.classes import DistanceRestraintList
-from cing.core.classes import DistanceRestraint
-from cing.core.classes import DihedralRestraintList
-from cing.core.classes import DihedralRestraint
-from cing.core.molecule import Resonance
-from cing.core.database import translateAtomName
-from cing.Libs import PyMMLib
-from cing.Libs.pdb import moveFirstDigitToEnd
-from cing.Libs.pdb import MatchGame
-from cyana2ccpn.classes4 import RDCRestraint
-from cyana2ccpn.classes4 import RDCRestraintList
-from cyana2ccpn.classes4 import ChemicalShiftRestraint
-from cyana2ccpn.classes4 import ChemicalShiftRestraintList
 import json
+
+import cing.Libs.NTutils as ntu
+
+#from cing.Libs.disk import path
+from cing.core.classes import (
+    DihedralRestraint,
+    DihedralRestraintList,
+    DistanceRestraint,
+    DistanceRestraintList,
+    Peak,
+    PeakList,
+)
+from cing.core.database import translateAtomName
+from cing.core.molecule import Resonance
+from cing.Libs import PyMMLib
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.pdb import MatchGame, moveFirstDigitToEnd
+from cyana2ccpn.classes4 import ChemicalShiftRestraint, RDCRestraint, RDCRestraintList
 
 CYANA_CHAIN_ID = 'A'
 CYANA_NON_RESIDUES = ['PL','LL2','link']
@@ -240,7 +239,7 @@ def findTupleInDict( myDict, *args):
     if len(args) == 0:
         return None
     t = tuple(args)
-    if myDict.has_key(t):
+    if t in myDict:
         return myDict[t]
     else:
         return None
@@ -457,7 +456,7 @@ class CyanaParser(dict):
         if object == None:
             return None
 
-        if self.has_key(object.toTuple()):
+        if object.toTuple() in self:
             ntu.nTerror('CyanaParser.appendObject: object %s already present', object)
             return None
         #end if
@@ -755,7 +754,7 @@ problem resides in the multiple assignments that alters format
             elif (not line.isComment('#') and line.NF > 0):
 
                 # try to determine dimension from header info
-                if header.has_key('label'):
+                if 'label' in header:
                     dimension = len( header['label'] )
                 #end if
 
@@ -894,7 +893,7 @@ problem resides in the multiple assignments that alters format
                                             if aIndex == 0:
                                                     resonances.append( None )
                                             else:
-                                                if not aIndex in self._protDict:
+                                                if aIndex not in self._protDict:
                                                             ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
                                                                                      aIndex, line.NR, line[0]
                                                                                  )
@@ -946,7 +945,7 @@ problem resides in the multiple assignments that alters format
                                             if aIndex == 0:
                                                     resonances.append( None )
                                             else:
-                                                    if not aIndex in self._protDict:
+                                                    if aIndex not in self._protDict:
                                                             ntu.nTerror('CyanaParser.parsePeakFile: invalid atom id %d on line %d (%s)',
                                                                                      aIndex, line.NR, line[0]
                                                                                  )
@@ -1416,7 +1415,7 @@ problem resides in the multiple assignments that alters format
                 atomId     = self._fixPdbName(record.name)
 
                 res = self.findTuple('ResidueRecord', chainId, sequenceId, residueId)
-                if res == None and not ( residueId in CYANA_NON_RESIDUES ):        # skip the bloody CYANA non-residue stuff:
+                if res == None and residueId not in CYANA_NON_RESIDUES:        # skip the bloody CYANA non-residue stuff:
                     if not silent:
                         ntu.nTmessage('CyanaParser.parsePdbFile: adding residue (%s, %s, %s)', chainId, sequenceId, residueId)
                     res = ResidueRecord(chainId, sequenceId, residueId)
@@ -1424,7 +1423,7 @@ problem resides in the multiple assignments that alters format
                 #end if
 
                 atm = self.findTuple('AtomRecord', chainId, sequenceId, residueId, atomId)
-                if atm == None and not ( residueId in CYANA_NON_RESIDUES ):        # skip the bloody CYANA non-residue stuff:
+                if atm == None and residueId not in CYANA_NON_RESIDUES:        # skip the bloody CYANA non-residue stuff:
                     if not silent:
                         ntu.nTmessage('CyanaParser.parsePdbFile: adding atom (%s, %s, %s, %s)', chainId, sequenceId, residueId, atomId)
                     atm = AtomRecord(chainId, sequenceId, residueId, atomId)

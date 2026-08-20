@@ -3,16 +3,16 @@
 Or execute: python -u $CINGROOT/python/cing/Scripts/pyMolWorks.py
 From http://pymolwiki.org/index.php/Launching_From_a_Script
 """
-import __main__
 import sys
 import time
 import urllib.request
 
+import __main__
 
 try:
     # Importing the PyMOL module will create the window.
-    import pymol #@UnresolvedImport
-    from pymol import cmd #@UnresolvedImport
+    import pymol  #@UnresolvedImport
+    from pymol import cmd  #@UnresolvedImport
 except:
     print("Failed to import pymol; python will stack dump next:")
 

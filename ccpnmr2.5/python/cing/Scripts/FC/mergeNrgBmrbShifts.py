@@ -6,17 +6,16 @@ python -u $CINGROOT/python/cing/Scripts/FC/mergeNrgBmrbShifts.py 1ieh -bmrbCodes
 """
 
 from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.classes import Project
 from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.doAnnotateNrgCing import bmrbDir
 from cing.NRG.settings import dir_S
 from cing.NRG.shiftPresetDict import presetDict
-from cing.core.classes import Project
 from memops.general.Io import saveProject
 from pdbe.adatah.Generic import DataHandler
-from pdbe.adatah.NmrRestrGrid import nmrGridDataDir #@UnusedImport
 from pdbe.adatah.NmrStar import NmrStarHandler
-from pdbe.adatah.Util import runConversionJobs #@UnusedImport
+
 #from recoord2.pdbe.Constants import projectDirectory as loadDir
 #from pdbe.adatah.Bmrb    import bmrbArchiveDataDir #@UnresolvedImport
 
@@ -112,7 +111,7 @@ class MergeNrgBmrbShifts(DataHandler, NmrStarHandler):
         nTmessage("Saved ccpn project to tgz: %s" % ccpnTgzFile)
 
     def initShiftPresets(self, bmrbCode):
-        if not self.presetDict.has_key(bmrbCode):
+        if bmrbCode not in self.presetDict:
             return
         sys.__stdout__.write("  Using shift preset values...\n")
         self.presets = self.presetDict[bmrbCode]
@@ -120,7 +119,7 @@ class MergeNrgBmrbShifts(DataHandler, NmrStarHandler):
         if 1:
             sys.__stdout__.write("    > %s\n" % self.presets)
         else: # Just comments
-            if self.presets.has_key('comment'):
+            if 'comment' in self.presets:
                 commentLines = self.presets['comment'].split("\n")
                 for commentLine in commentLines:
                     sys.__stdout__.write("    > %s\n" % commentLine)

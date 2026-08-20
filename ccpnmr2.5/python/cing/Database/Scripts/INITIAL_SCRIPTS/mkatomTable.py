@@ -54,12 +54,12 @@
 ##
 ##      ['F', 'PHE', 'Phe', 'phe']
 ## so that
-##      resNameTranslations['F'][0] equals 'F' 
-##      resNameTranslations['F'][1] equals 'PHE' 
+##      resNameTranslations['F'][0] equals 'F'
+##      resNameTranslations['F'][1] equals 'PHE'
 ##      resNameTranslations['F'][2] equals 'Phe' etc ..
 ##
-##      resNameTranslations['PHE'][0] equals 'F' 
-##      resNameTranslations['PHE'][1] equals 'PHE' 
+##      resNameTranslations['PHE'][0] equals 'F'
+##      resNameTranslations['PHE'][1] equals 'PHE'
 ##      resNameTranslations['PHE'][2] equals 'Phe' etc ..
 ## etc.
 ##
@@ -78,7 +78,7 @@
 #
 #cyanaLib = """
 ## RESIDUE resName Number_of_dihedral_defs number_of_atom_defs start_atom_of_residue stop_atom_of_residue
-## gv: connected pseudo's of Protein residues to carbon, but not carbon to pseudo as this is done indirectly 
+## gv: connected pseudo's of Protein residues to carbon, but not carbon to pseudo as this is done indirectly
 ## inserted one-letter code into residue field
 #RESIDUE   ALA  A    4   14    3   13
 #   1 OMEGA   -1    2   10.0000    2    1    3    4    0
@@ -1377,18 +1377,18 @@
 #"""
 #proteinTable = """
 ## Correlation of hydrogen atom naming systems, including diastereotopic
-## protons. The original version of this table was created by Charles 
+## protons. The original version of this table was created by Charles
 ## Hoogstraten.
 ##
 ## BMRB  = System in use at BioMagResBank (IUPAC/IUB Biochemistry 9, 3471-3479
 ##	  [1970]).
 ##
-## SC    = Stereochemical designations 
+## SC    = Stereochemical designations
 ##
 ## UCSF  = Mardigras-type software (peptide protonated with newhyd utility).
 ##
 ## XPLOR = Peptide protonated with XPLOR 3.1.  Atom nomenclature is derived
-##	  from the X-PLOR topology file topallhdg.pro.  
+##	  from the X-PLOR topology file topallhdg.pro.
 ##
 ## MSI   = Artificial peptide created with InsightII.  For the side chain
 ##	  protons attached to nitrogen in ASN, GLN, and ARG, the atom
@@ -1402,9 +1402,9 @@
 ## PDB   = PDB nomenclature (Taken from PDB entry 6I1B REVDAT 15-OCT-92.)
 ##
 ## SYBYL = The atom nomenclature was taken from the xxx.res files supplied with
-##	  the software package Sybyl version 6.2 from Tripos, Inc.  
+##	  the software package Sybyl version 6.2 from Tripos, Inc.
 ##
-## MIDAS = MidasPlus from the Computer Graphics Laboratory at UCSF.  The atom 
+## MIDAS = MidasPlus from the Computer Graphics Laboratory at UCSF.  The atom
 ##	  nomenclature has been taken from the XXX.ins files supplied with the
 ##	  software.  The prochiral atoms have not been correlated with the
 ##	  BMRB assignments at this time.  Hydrogens are not included in the
@@ -1417,7 +1417,7 @@
 ##	  determined for these software systems.
 ##
 ## Note-3: The Z and E nomenclature is defined in the paper by Blackwood, J.E.,
-##	  Gladys, C.L., Loening, K.L., Petrarca, A.E., and Rush, J.E., 
+##	  Gladys, C.L., Loening, K.L., Petrarca, A.E., and Rush, J.E.,
 ##	  "Unambiguous Specification of Stereoisomerism about a Double Bond,"
 ##	  J. Amer. Chem. Soc. 90, 509-510 (1968).
 ##
@@ -1477,7 +1477,7 @@
 #A		O	O	-	O	-	O	O	O	O	O
 #A 		MB 	HB 	- 	- 	MB 	- 	HB*,HB#,HB%,HB+ - -  	QB
 #
-## ARG removed the HH12 protons, HH1 in BMRB and CYANA, guessed other names 
+## ARG removed the HH12 protons, HH1 in BMRB and CYANA, guessed other names
 #ARG		H	H	-	H	HN	HN	HN	H	-	HN
 #ARG		HA	HA	-	HA	HA	HA	HA	HA	-	HA
 #ARG		HB2	HB2	pro-R	1HB	HB1	HB1	HB2	HB2	-	HB2
@@ -2085,7 +2085,7 @@
 #ATOM    125  H5    U     4      -2.910  -6.742   5.613  1.00  0.00
 #ATOM    126  H6    U     4      -1.930  -4.494   5.638  1.00  0.00
 #ATOM    127 HO3'   U     4       1.075  -0.002   6.724  1.00  0.00
-#""" 
+#"""
 #
 #dnaTable = """
 #ATOM      1  C3'   A     1     -20.010  -4.370   5.629  1.00  0.00
@@ -2257,7 +2257,7 @@
 #                                CYANA = '-',
 #                                INTERNAL = '-'
 #                               )
-#   
+#
 ##-----------------------------------------------------------------------
 ## parse the cyanaLib file for atom info and generate output table
 ##-----------------------------------------------------------------------
@@ -2290,18 +2290,18 @@
 #                idx = r.int(1)
 #                if (idx >= astart and idx <= astop):
 #                    fullName = resname + '.' + r.dollar[2]
-#                    nameDefs = names.setdefault( fullName, 
+#                    nameDefs = names.setdefault( fullName,
 #                                                 dict( BMRB  = '-',
 #                                                       IUPAC = '-',
 #                                                       PDB   = '-',
 #                                                       XPLOR = '-',
 #                                                       CYANA = r.dollar[2],
 #                                                       INTERNAL = r.dollar[2]
-#                                                     ) 
+#                                                     )
 #                                                )
 #                    nameDefs[CYANA] = r.dollar[2]
 #                    nameDefs[INTERNAL] = r.dollar[2]
-#                                       
+#
 #                    nTmessage( '\t%-8s          ', nameDefs['INTERNAL'] )
 #                    for n in [BMRB, IUPAC, PDB, CYANA, XPLOR]:
 #                        nTmessage( '%-8s ', nameDefs[n] )

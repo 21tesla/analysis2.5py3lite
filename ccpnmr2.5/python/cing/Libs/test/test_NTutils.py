@@ -3,11 +3,12 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils.py
 """
 
-from cing import cingDirTmp
-from cing import cingPythonDir
-from cing.Libs.NTutils import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp, cingPythonDir
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

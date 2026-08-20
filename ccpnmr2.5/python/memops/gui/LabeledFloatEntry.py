@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,65 +50,73 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-
 
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 
+
 class LabeledFloatEntry(Frame):
+    def __init__(
+        self,
+        parent,
+        label,
+        entry="",
+        separator=": ",
+        label_width=20,
+        entry_width=60,
+        label_anchor=Tkinter.E,
+        show="",
+        isArray=False,
+        returnCallback=None,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, label, entry = '', separator = ': ',
-               label_width = 20, entry_width = 60,
-               label_anchor=Tkinter.E, show = '', isArray = False,
-               returnCallback = None, *args, **kw):
+        apply(Frame.__init__, (self, parent) + args, kw)
 
-    apply(Frame.__init__, (self, parent) + args, kw)
+        self.grid_columnconfigure(1, weight=1)
 
-    self.grid_columnconfigure(1, weight=1)
+        self.separator = separator
 
-    self.separator = separator
+        text = label + separator
+        self.label = Label(self, text=text, width=label_width, anchor=label_anchor)
+        self.label.grid(row=0, column=0, sticky=Tkinter.EW)
 
-    text = label + separator
-    self.label = Label(self, text=text, width=label_width, anchor=label_anchor)
-    self.label.grid(row=0, column=0, sticky=Tkinter.EW)
+        self.entry = FloatEntry(self, show=show, width=entry_width, isArray=isArray, returnCallback=returnCallback)
+        self.entry.grid(row=0, column=1, sticky=Tkinter.EW)
+        self.setEntry(entry)
 
-    self.entry = FloatEntry(self, show=show, width=entry_width, isArray=isArray,
-                            returnCallback=returnCallback)
-    self.entry.grid(row=0, column=1, sticky=Tkinter.EW)
-    self.setEntry(entry)
+    def getLabel(self):
 
-  def getLabel(self):
+        text = self.label.get()
+        n = text.find(self.separator)
+        if n >= 0:
+            text = text[:n]
 
-    text = self.label.get()
-    n = text.find(self.separator)
-    if (n >= 0):
-      text = text[:n]
+        return text
 
-    return text
+    def setLabel(self, text=""):
 
-  def setLabel(self, text = ''):
+        text = text + self.separator
+        self.label.set(text)
 
-    text = text + self.separator
-    self.label.set(text)
+    def getEntry(self):
 
-  def getEntry(self):
+        return self.entry.get()
 
-    return self.entry.get()
+    def setEntry(self, value=""):
 
-  def setEntry(self, value = ''):
+        self.entry.set(value)
 
-    self.entry.set(value)
 
-if __name__ == '__main__':
-  
-  root = Tkinter.Tk()
+if __name__ == "__main__":
+    root = Tkinter.Tk()
 
-  entry1 = LabeledFloatEntry(root, 'x', '1.5')
-  entry1.grid()
+    entry1 = LabeledFloatEntry(root, "x", "1.5")
+    entry1.grid()
 
-  entry2 = LabeledFloatEntry(root, 'list', (3.5, 6.6), isArray=True)
-  entry2.grid()
+    entry2 = LabeledFloatEntry(root, "list", (3.5, 6.6), isArray=True)
+    entry2.grid()
 
-  root.mainloop()
+    root.mainloop()

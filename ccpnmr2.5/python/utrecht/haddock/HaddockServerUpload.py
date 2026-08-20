@@ -80,16 +80,16 @@ Citing:          If you are using this software for academic purposes, we
               Proteins: Struc. Funct. & Bioinformatic 69, 726-733.    
 =========================================================================
 """
-import http.client, urlparse, urllib, sys, os
+import http.client
 
-from memops.gui.Button          import Button
-from memops.gui.LabeledEntry    import LabeledEntry
-from memops.gui.LabelFrame      import LabelFrame
-from memops.editor.BasePopup    import BasePopup
-from memops.editor.Util         import createDismissHelpButtonList
+import urlparse
+from HaddockExportParam import exportParam
+
+from memops.editor.BasePopup import BasePopup
+from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.LabeledEntry import LabeledEntry
 from memops.gui.MessageReporter import showWarning
 
-from HaddockExportParam         import exportParam
 
 class HaddockServerUpload(BasePopup):
 
@@ -99,10 +99,10 @@ class HaddockServerUpload(BasePopup):
         self.hProject        = hProject
         self.latestRun         = latestRun
         self.ccpnProject     = ccpnProject
-        
+
         self.username        = None
         self.password        = None
-        
+
         BasePopup.__init__(self, parent=parent, title='HADDOCK server upload')
 
     def body(self, guiFrame):
@@ -115,25 +115,25 @@ class HaddockServerUpload(BasePopup):
 
         self.passwordEntry = LabeledEntry(guiFrame, 'password', show="*")
         self.passwordEntry.grid(row=1)
-        
+
         texts = ['Upload']
         commands = [self.serverUpload]
         buttonList = createDismissHelpButtonList(guiFrame, texts=texts, commands=commands, expands=True)
         buttonList.grid(row=2)
 
     def serverUpload(self):
-        
+
         """Process username and password. If both valid then start uploading otherwise issue warning.
            Export the project and run as a .web file to disk. Than upload this file
         """
         warning = ''
-        
+
         if self.usernameEntry.getEntry(): self.username = self.usernameEntry.getEntry()
-        else: warning += ' No username defined ' 
-        
+        else: warning += ' No username defined '
+
         if self.passwordEntry.getEntry(): self.password = self.passwordEntry.getEntry()
-        else: warning += ' No password defined '            
-        
+        else: warning += ' No password defined '
+
         if len(warning): showWarning('Warning', warning, parent=self)
         else:
             exportParams = exportParam(hProject=self.hProject,
@@ -145,14 +145,14 @@ class HaddockServerUpload(BasePopup):
                                                                      self.username,
                                                                      self.password)
             else: print("ERROR: Export project as parameter file failed")
-                
+
     def open(self):
 
-        BasePopup.open(self)    
+        BasePopup.open(self)
 
     def destroy(self):
 
-        BasePopup.destroy(self)    
+        BasePopup.destroy(self)
 
 class ServerUpload:
 
@@ -169,18 +169,18 @@ class ServerUpload:
 
     def __init__(self,filestring,project,runname,username,password,
                  server='http://haddock.chem.uu.nl/',cgi='cgi-bin/haddockserver4.cgi'):
-        
+
         self.files = [('params',project,filestring)]
         self.url = server+cgi
-        
+
         print("** Upload project file to HADDOCK server **")
         print("Project: %s\nRun: %s" % (project,runname))
-        
+
         self.__upload(runname,username,password)
-        
+
         print("** Upload complete **")
 
-    def __encode_multipart_formdata(self,fields,files):    
+    def __encode_multipart_formdata(self,fields,files):
 
         BOUNDARY = '----------1234567890abcdefghij_$'
         CRLF = '\r\n'
@@ -192,7 +192,7 @@ class ServerUpload:
             L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (filekey, filename))
             L.append('Content-Type: text/plain')
             L.append('')
-            for line in filevalue.split('\n'): L.append(line)    
+            for line in filevalue.split('\n'): L.append(line)
 
         for (key, value) in fields:
             if value == None: value = ""
@@ -208,20 +208,20 @@ class ServerUpload:
 
         return content_type, body
 
-    def __upload(self,runname,username,password):    
+    def __upload(self,runname,username,password):
 
         fields = [('runname', runname), ('username', username), ('password', password)]
 
         content_type, body = self.__encode_multipart_formdata(fields,self.files)
         urlparts = urlparse.urlsplit(self.url)
         host = urlparts[1]
-        selector = urlparts[2]    
+        selector = urlparts[2]
         http = http.client.HTTPConnection(host)
         headers = {'User-Agent':'anonymous', 'Content-Type':content_type}
         http.request('POST', selector, body, headers)
-        res = http.getresponse() 
+        res = http.getresponse()
         response = res.read()
-        
+
         print("HADDOCK server response:")
         print(response)
 

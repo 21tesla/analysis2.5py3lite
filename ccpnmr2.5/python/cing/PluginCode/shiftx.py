@@ -2,14 +2,13 @@
 Adds shiftx method to predict chemical shifts. The shiftx program is included as binaries for Mac OSX and 32 bit
 Linux in the bin directory.
 """
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.parameters import cingPaths
-from cing.core.parameters import validationSubDirectories
 from glob import glob
 from math import sqrt
 
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.parameters import cingPaths, validationSubDirectories
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 if True: # block
     useModule = True
@@ -67,7 +66,7 @@ format file:
                 atm = molecule.decodeNameTuple( (IUPAC, chainId, lineCol1, line.dollar[3]) )
             else:
                 atm =None
-                if atomDict.has_key( (lineCol1,line.dollar[3]) ):
+                if  (lineCol1,line.dollar[3] in atomDict ):
                     atm = atomDict[ (lineCol1,line.dollar[3]) ]
             #end if
 #            if not atm:
@@ -288,7 +287,7 @@ def averageShiftx( project, tmp=None ):
 
     for atm in project.molecule.allAtoms():
         # Set averages
-        if atm.has_key('shiftx'):
+        if 'shiftx' in atm:
             atm.shiftx.average()
             if atm.shiftx.av == None:
                 atm.shiftx.av = NaN
@@ -384,7 +383,7 @@ def _calcQshift( atmList ):
     sumDeltaSq    = 0.0
     sumMeasuredSq = 0.0
     for atm in atmList:
-        if atm.has_key('shiftx') and len(atm.shiftx)>0 and atm.isAssigned(resonanceListIdx=RESONANCE_LIST_IDX_ANY):
+        if 'shiftx' in atm and len(atm.shiftx)>0 and atm.isAssigned(resonanceListIdx=RESONANCE_LIST_IDX_ANY):
             atm.shiftx.average()
             measured = atm.shift()
             sumMeasuredSq += measured**2
@@ -407,7 +406,7 @@ def _calcQshift( atmList ):
     else:
         qshift=NaN
     # end if
-    
+
     return qshift
 #end def
 
@@ -437,11 +436,11 @@ protons:    %(protons)6.3f"""
                         )
 
         for a in atms:
-            if a.isBackbone(): 
+            if a.isBackbone():
                 bb.append(a)
-            if a.isProton(): 
+            if a.isProton():
                 protons.append(a)
-            else: 
+            else:
                 heavy.append(a)
         #end for
 

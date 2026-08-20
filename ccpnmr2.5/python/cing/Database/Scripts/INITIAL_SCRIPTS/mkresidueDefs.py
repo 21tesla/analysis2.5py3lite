@@ -1,7 +1,9 @@
 from cing.core.database import MolDef
-from cing.Libs.AwkLike import AwkLike #@UnusedImport
-from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.AwkLike import (
+    AwkLike,  #@UnusedImport
+    AwkLikeS,
+)
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 cyanaLib = """
 # RESIDUE resName Number_of_dihedral_defs number_of_atom_defs start_atom_of_residue stop_atom_of_residue

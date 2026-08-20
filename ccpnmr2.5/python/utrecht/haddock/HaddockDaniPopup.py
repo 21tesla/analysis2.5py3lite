@@ -81,15 +81,10 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-from memops.gui.IntEntry        import IntEntry
-from memops.gui.FloatEntry      import FloatEntry
-from memops.gui.LabelFrame      import LabelFrame
-from memops.gui.Label           import Label
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-from memops.gui.MessageReporter import showWarning
-
-from memops.editor.BasePopup    import BasePopup
-from memops.editor.Util         import createDismissHelpButtonList
+from memops.editor.BasePopup import BasePopup
+from memops.gui.FloatEntry import FloatEntry
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
 headingColor  = '#80C080'
 
@@ -106,7 +101,7 @@ class HaddockDaniPopup(BasePopup):
         BasePopup.__init__(self, parent=parent, title='Relaxation data')
 
     def body(self, guiFrame):
-        
+
         self.geometry('500x500')
         guiFrame.grid_columnconfigure(0, weight=1)
         guiFrame.grid_rowconfigure(1, weight=1)
@@ -115,18 +110,18 @@ class HaddockDaniPopup(BasePopup):
         frame.grid(row=1,column=0,sticky='nsew')
         frame.grid_columnconfigure(0, weight=1)
         frame.grid_rowconfigure(0, weight=1)
-        
+
         self.floatEntry  = FloatEntry(self, returnCallback=self.setValue)
-        
+
         headingList      = ['Parameter','Value','Description']
         justifyList      = ['center','center', 'left']
-        editWidgets      = [None, self.floatEntry, None]    
+        editWidgets      = [None, self.floatEntry, None]
         editGetCallbacks = [None, self.getValue, None]
         editSetCallbacks = [None, self.setValue, None]
         self.daniMatrix = ScrolledMatrix(frame, headingList=headingList,
                                         justifyList=justifyList,
                                         editSetCallbacks=editSetCallbacks,
-                                        editGetCallbacks=editGetCallbacks, 
+                                        editGetCallbacks=editGetCallbacks,
                                         editWidgets=editWidgets,
                                         multiSelect=False, initialRows=10,
                                         passSelfToCallback=True,
@@ -136,9 +131,9 @@ class HaddockDaniPopup(BasePopup):
         self.daniMatrix.refreshFunc = self.updateDaniSet
 
         self.updateDaniSet()
-        
+
     def getStoredDaniProtocols(self):
-        
+
         self.daniprotocols = [i for i in self.latestRun.sortedHaddockEnergyTerms() if i.code == 'daniProtocolStore' ]
 
     def selectDani(self, obj, row, col, table):
@@ -147,36 +142,36 @@ class HaddockDaniPopup(BasePopup):
         self.daniprotocol = obj
 
     def updateDaniSet(self):
-        
+
         textMatrix  = []; objectList  = []; colorMatrix = []
-        
+
         for protocol in self.daniprotocols:
             textMatrix.append(['DANI protocol %i' % protocol.termId, None, None])
             objectList.append(None)
-        
-            for term in protocol.sortedEnergyTermParameters():    
+
+            for term in protocol.sortedEnergyTermParameters():
                 textMatrix.append([term.code, term.value, 'Energy constant for term %s' % term.code])
                 objectList.append([term,'value', self.floatEntry, self.getFloat, self.setFloat])
-    
+
         n = len(textMatrix)
         colors = [None] * 3
         colorMatrix = [colors for i in range(n)]
         if len(colorMatrix) > 0:
             stages = range(0,n,12)
             for s in stages: colorMatrix[s]  = [headingColor] * 3
-        
+
         self.daniMatrix.update(colorMatrix=colorMatrix, objectList=objectList, textMatrix=textMatrix)
 
     def getValue(self, rowObj):
 
         obj, attrName, widget, getter, setter = rowObj
-        
+
         self.table.editWidget = widget
-        
+
         getter(widget, obj, attrName)
 
-    def setValue(self, event, null=None): 
-        
+    def setValue(self, event, null=None):
+
         obj, attrName, widget, getter, setter = self.daniprotocol
 
         if setter: setter(widget, obj, attrName)
@@ -185,13 +180,13 @@ class HaddockDaniPopup(BasePopup):
 
     def getFloat(self, widget, obj, attrName):
 
-        value = getattr(obj, attrName) 
+        value = getattr(obj, attrName)
         widget.set(value)
 
     def setFloat(self, widget, obj, attrName):
 
         value = widget.get() or 0.0
-        setattr(obj, attrName, value)    
+        setattr(obj, attrName, value)
 
     def destroy(self):
 

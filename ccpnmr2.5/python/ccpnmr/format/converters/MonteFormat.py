@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,96 +54,90 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, traceback, sys
+import os
 
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
+from ccpnmr.format.converters.DataFormat import DataFormat
 
-from ccpnmr.format.general.Util import getResName
-
-from ccpnmr.format.general.Constants import height_kw
-
-import ccp.api.nmr.Nmr as Nmr
 
 class MonteFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'monte'
+        self.format = "monte"
 
-  def setGenericImports(self):
-    
-    self.getSequence = self.getSequenceGeneric
-    self.createSequenceFile = self.createSequenceFileGeneric
-    
-    self.getMeasurements = self.getMeasurementsGeneric
+    def setGenericImports(self):
 
-  #
-  # Deviations from generic import stuff
-  #
+        self.getSequence = self.getSequenceGeneric
+        self.createSequenceFile = self.createSequenceFileGeneric
 
-  def getFullProject(self,fileName, verbose = 0):
-  
+        self.getMeasurements = self.getMeasurementsGeneric
+
     #
-    # TODO TODO REALLY should only read output _final file - although there should be an option
-    # to read the spin system information from the input file only.
+    # Deviations from generic import stuff
     #
-  
-    if self.verbose == 1:
-      print("Reading %s project from file %s" % (self.formatLabel,fileName))
-   
-    self.file = self.projectIO.MonteProjectFile(fileName)
-    self.file.read(verbose = verbose)
-    
-    (projectDir,projectFileName) = os.path.split(fileName)
-    
-    csFiles = {}
-    
-    # TODO: need to be able to pass in these file paths/names!!
-    for (fileType,fileFormat,isOutputFile) in (('input',"%s.cs",0),('output',"%s_final",1)):
-      for subDir in (self.file.subDirPath,''):
-        csFileName = os.path.join(projectDir,subDir,fileFormat % self.file.rootFileName)
-        if os.path.exists(csFileName):
-          csFile = self.chemShiftsIO.MonteChemShiftFile(csFileName)
-          csFile.read(headerCols = self.file.headerCols,isOutputFile = isOutputFile, verbose = verbose)
-          csFiles[fileType] = csFile
-          break
-    
+
+    def getFullProject(self, fileName, verbose=0):
+
+        #
+        # TODO TODO REALLY should only read output _final file - although there should be an option
+        # to read the spin system information from the input file only.
+        #
+
+        if self.verbose == 1:
+            print("Reading %s project from file %s" % (self.formatLabel, fileName))
+
+        self.file = self.projectIO.MonteProjectFile(fileName)
+        self.file.read(verbose=verbose)
+
+        (projectDir, projectFileName) = os.path.split(fileName)
+
+        csFiles = {}
+
+        # TODO: need to be able to pass in these file paths/names!!
+        for fileType, fileFormat, isOutputFile in (("input", "%s.cs", 0), ("output", "%s_final", 1)):
+            for subDir in (self.file.subDirPath, ""):
+                csFileName = os.path.join(projectDir, subDir, fileFormat % self.file.rootFileName)
+                if os.path.exists(csFileName):
+                    csFile = self.chemShiftsIO.MonteChemShiftFile(csFileName)
+                    csFile.read(headerCols=self.file.headerCols, isOutputFile=isOutputFile, verbose=verbose)
+                    csFiles[fileType] = csFile
+                    break
+
+        #
+        # Rearrange if necessary
+        #
+
+        if len(csFiles.keys()) == 1:
+            self.measurementFile = csFiles.values()[0]
+
+        elif len(csFiles.keys()) == 2:
+            assignedStripIds = []
+            for chemShift in csFiles["output"].chemShifts:
+                if chemShift.stripId not in assignedStripIds:
+                    assignedStripIds.append(chemShift.stripId)
+
+            for chemShift in csFiles["input"].chemShifts:
+                if chemShift.stripId not in assignedStripIds:
+                    csFiles["output"].chemShifts.append(chemShift)
+
+            self.measurementFile = csFiles["output"]
+
+        self.readShifts(minimalPrompts=self.minimalPrompts)
+
     #
-    # Rearrange if necessary
+    # Functions different to default functions in DataFormat
     #
-    
-    if len(csFiles.keys()) == 1:
-      self.measurementFile = csFiles.values()[0]
 
-    elif len(csFiles.keys()) == 2:
-      
-      assignedStripIds = []
-      for chemShift in csFiles['output'].chemShifts:
-        if chemShift.stripId not in assignedStripIds:
-          assignedStripIds.append(chemShift.stripId)
+    def createSequence(self):
 
-      for chemShift in csFiles['input'].chemShifts:
-        if chemShift.stripId not in assignedStripIds:
-          csFiles['output'].chemShifts.append(chemShift)
-          
-      self.measurementFile = csFiles['output']
-      
-    self.readShifts(minimalPrompts = self.minimalPrompts)
-    
-    
-  #
-  # Functions different to default functions in DataFormat
-  #
+        self.sequenceFile.sequences.append(self.sequenceIO.MonteSequence(molName=self.chain.molecule.name))
+        self.sequence = self.sequenceFile.sequences[-1]
 
-  def createSequence(self):
-  
-    self.sequenceFile.sequences.append(self.sequenceIO.MonteSequence(molName = self.chain.molecule.name))
-    self.sequence = self.sequenceFile.sequences[-1]
-    
-  def setSequenceFileElements(self):
-  
-    self.sequence.elements.append(self.sequenceIO.MonteSequenceElement(self.seqCode,self.residue.molResidue.chemComp.ccpCode))
+    def setSequenceFileElements(self):
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)
+        self.sequence.elements.append(
+            self.sequenceIO.MonteSequenceElement(self.seqCode, self.residue.molResidue.chemComp.ccpCode)
+        )
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

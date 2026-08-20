@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,61 +45,60 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.ScrolledListbox import ScrolledListbox
 
 # do not need 'setUnit' since unit is AxisUnit key
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
+
 
 class AxisUnitList(PulldownMenu):
- 
-  def __init__(self, parent, getAxisUnits, *args, **kw):
- 
-    self.getAxisUnits = getAxisUnits
- 
-    PulldownMenu.__init__(self, parent, *args, **kw)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setAxisUnits, 'ccpnmr.Analysis.AxisUnit', func)
+    def __init__(self, parent, getAxisUnits, *args, **kw):
 
-  def destroy(self):
+        self.getAxisUnits = getAxisUnits
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setAxisUnits, 'ccpnmr.Analysis.AxisUnit', func)
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.destroy(self)
- 
-  def setAxisUnits(self, *unit):
- 
-    axisUnits = self.getAxisUnits()
-    names = [ axisUnit.unit for axisUnit in axisUnits ]
-    self.replace(names, self.selected_index)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setAxisUnits, "ccpnmr.Analysis.AxisUnit", func)
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setAxisUnits, "ccpnmr.Analysis.AxisUnit", func)
+
+        PulldownMenu.destroy(self)
+
+    def setAxisUnits(self, *unit):
+
+        axisUnits = self.getAxisUnits()
+        names = [axisUnit.unit for axisUnit in axisUnits]
+        self.replace(names, self.selected_index)
+
 
 class AxisUnitScrolledList(ScrolledListbox):
- 
-  def __init__(self, parent, getAxisUnits):
- 
-    self.getAxisUnits = getAxisUnits
- 
-    ScrolledListbox.__init__(self, parent, xscroll=False, selectmode=Tkinter.MULTIPLE)
- 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setAxisUnits, 'ccpnmr.Analysis.AxisUnit', func)
+    def __init__(self, parent, getAxisUnits):
 
-  def destroy(self):
+        self.getAxisUnits = getAxisUnits
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setAxisUnits, 'ccpnmr.Analysis.AxisUnit', func)
+        ScrolledListbox.__init__(self, parent, xscroll=False, selectmode=Tkinter.MULTIPLE)
 
-    ScrolledListbox.destroy(self)
- 
-  def setAxisUnits(self, *unit):
- 
-    axisUnits = self.getAxisUnits()
-    names = [ axisUnit.unit for axisUnit in axisUnits ]
-    items = self.getSelectedItems()
-    self.setItems(names)
-    self.setSelectedItems(items)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setAxisUnits, "ccpnmr.Analysis.AxisUnit", func)
+
+    def destroy(self):
+
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setAxisUnits, "ccpnmr.Analysis.AxisUnit", func)
+
+        ScrolledListbox.destroy(self)
+
+    def setAxisUnits(self, *unit):
+
+        axisUnits = self.getAxisUnits()
+        names = [axisUnit.unit for axisUnit in axisUnits]
+        items = self.getSelectedItems()
+        self.setItems(names)
+        self.setSelectedItems(items)

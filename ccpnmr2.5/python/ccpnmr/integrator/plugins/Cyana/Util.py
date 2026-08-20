@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -53,144 +52,134 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 
 """
+
 import random
 
-from ccpnmr.integrator.core import Io as intIo
 from ccpnmr.integrator.core import Util as intUtil
 
-
 defaultConfiguration = {
-  "protocol": {
-    "protocolParameters": [
-      {"name":"fileNameSequence","paramType":"String","value":"protein.seq","code":"fileNameSequence"},
-      {"name":"fileFormatSequence","paramType":"String","value":"CYANA"},
-      {"name":"peakFormat","paramType":"String","value":"XEASY"},
-      {"name":"shiftFormat","paramType":"String","value":"CYANA"},
-      {"name":"restraintFormat","paramType":"String","value":"CYANA"},
-      {"name":"atomNamingSystem","paramType":"String","value":"CYANA2.1"},
-      {"name":"useXeasyDimCodes","paramType":"Boolean","value":True}
-    ]
-  }
-
+    "protocol": {
+        "protocolParameters": [
+            {"name": "fileNameSequence", "paramType": "String", "value": "protein.seq", "code": "fileNameSequence"},
+            {"name": "fileFormatSequence", "paramType": "String", "value": "CYANA"},
+            {"name": "peakFormat", "paramType": "String", "value": "XEASY"},
+            {"name": "shiftFormat", "paramType": "String", "value": "CYANA"},
+            {"name": "restraintFormat", "paramType": "String", "value": "CYANA"},
+            {"name": "atomNamingSystem", "paramType": "String", "value": "CYANA2.1"},
+            {"name": "useXeasyDimCodes", "paramType": "Boolean", "value": True},
+        ]
+    }
 }
 
+
 def adaptNmrCalcRun(nmrCalcRun, protocolName):
-  """ Modify nmrCalcRun from generic MultiStructure form to protocol-specific
+    """Modify nmrCalcRun from generic MultiStructure form to protocol-specific
     Input:
       nmrCalcRun: NmrCalc.Run
       String protocolName
-  """
+    """
 
-  if protocolName.startswith('CYANA'):
-    cyanaNmrCalcRun(nmrCalcRun)
+    if protocolName.startswith("CYANA"):
+        cyanaNmrCalcRun(nmrCalcRun)
 
-  else:
-    raise Exception("Protocol %s not recognized" % protocolName)
+    else:
+        raise Exception("Protocol %s not recognized" % protocolName)
+
 
 def cyanaNmrCalcRun(nmrCalcRun):
-  """ Modify nmrCalcRun from generic MultiStructure form to CANDID-specific
+    """Modify nmrCalcRun from generic MultiStructure form to CANDID-specific
     Input:
       nmrCalcRun: NmrCalc.Run
-  """
+    """
 
-  print ('### Cyana adaptNmrCalcRun')
+    print("### Cyana adaptNmrCalcRun")
 
-  ###Reset calcMode values
-  valueMap = {
-  'none':'default',
-  'assignedPeaks':'pks',
-  'unassignedPeaks':'upks',
-  }
-  runParam = nmrCalcRun.findFirstRunParameter(name='calcMode')
-  val = valueMap.get(runParam.textValue)
-  print(val)
-  if val is None:
-    raise ValueError("Cyana calculation mode %s must be one of %s"
-                     % (runParam.textValue, tuple(valueMap.keys())))
-  else:
-    runParam.textValue = val
+    ###Reset calcMode values
+    valueMap = {
+        "none": "default",
+        "assignedPeaks": "pks",
+        "unassignedPeaks": "upks",
+    }
+    runParam = nmrCalcRun.findFirstRunParameter(name="calcMode")
+    val = valueMap.get(runParam.textValue)
+    print(val)
+    if val is None:
+        raise ValueError("Cyana calculation mode %s must be one of %s" % (runParam.textValue, tuple(valueMap.keys())))
+    else:
+        runParam.textValue = val
 
+    # Sequence. Set RMSDresidues
+    seqDataObj = nmrCalcRun.findFirstData(name="definedResidues")
+    # seqIds = seqDataObj.residueSeqIds # will not work - seqIds is empty when takingwhole chain
+    seqIds = [x.seqId for x in seqDataObj.sortedResidues()]
+    ss = intUtil.integerListExpression(seqIds, fieldSep="..")
+    nmrCalcRun.newRunParameter(name="definedResidueString", code="rmsdrange", textValue=ss)
 
-  # Sequence. Set RMSDresidues
-  seqDataObj = nmrCalcRun.findFirstData(name='definedResidues')
-  #seqIds = seqDataObj.residueSeqIds # will not work - seqIds is empty when takingwhole chain
-  seqIds = [x.seqId for x in seqDataObj.sortedResidues()]
-  ss = intUtil.integerListExpression(seqIds,fieldSep='..')
-  nmrCalcRun.newRunParameter(name='definedResidueString', code='rmsdrange',
-                             textValue=ss)
+    # first and last residue numbers, for one-chain web version
+    nmrCalcRun.newRunParameter(name="firstSeqId", code="firstSeqId", intValue=min(seqIds))
+    nmrCalcRun.newRunParameter(name="lastSeqId", code="lastSeqId", intValue=max(seqIds))
 
-  # first and last residue numbers, for one-chain web version
-  nmrCalcRun.newRunParameter(name='firstSeqId', code='firstSeqId',
-                             intValue= min(seqIds))
-  nmrCalcRun.newRunParameter(name='lastSeqId', code='lastSeqId',
-                             intValue= max(seqIds))
+    # Spectrum tolerance
+    defaultTolPoints = 1.0
+    runParam = nmrCalcRun.findFirstRunParameter(name="defaultTolPoints")
+    if runParam:
+        val = runParam.floatValue
+        if val:
+            defaultTolPoints = val
 
-  # Spectrum tolerance
-  defaultTolPoints = 1.0
-  runParam = nmrCalcRun.findFirstRunParameter(name='defaultTolPoints')
-  if runParam:
-    val = runParam.floatValue
-    if val:
-      defaultTolPoints = val
+    minTol = 0.02
+    runParam = nmrCalcRun.findFirstRunParameter(name="minTolPpm")
+    if runParam:
+        val = runParam.floatValue
+        if val:
+            minTol = val
 
-  minTol = 0.02
-  runParam = nmrCalcRun.findFirstRunParameter(name='minTolPpm')
-  if runParam:
-    val = runParam.floatValue
-    if val:
-      minTol = val
+    # random number seed
+    nmrCalcRun.newRunParameter(name="ranseed", code="seed", intValue=random.randint(1, 10000000))
 
-  # random number seed
-  nmrCalcRun.newRunParameter(name='ranseed', code='seed',
-                             intValue= random.randint(1,10000000))
+    # set 'peaks' and 'tolerance' parameters
 
-  #set 'peaks' and 'tolerance' parameters
+    # First get data
+    peakFiles = []
+    dataSources = []
+    peakListObjs = [x for x in nmrCalcRun.sortedData() if x.className == "PeakListData"]
 
-  # First get data
-  peakFiles = []
-  dataSources = []
-  peakListObjs = [x for x in nmrCalcRun.sortedData()
-                  if x.className == 'PeakListData']
+    if peakListObjs:
+        for peakListData in peakListObjs:
+            runParameter = peakListData.findFirstRunParameter(name="fileName")
+            peakFiles.append(runParameter.textValue)
 
+            dataSources.append(peakListData.peakList.dataSource)
 
-  if peakListObjs:
+        # set 'peaks' parameter
+        nmrCalcRun.newRunParameter(name="peakFileNames", code="peaks", textValue=",".join(peakFiles))
 
-    for peakListData in peakListObjs:
-      runParameter = peakListData.findFirstRunParameter(name='fileName')
-      peakFiles.append(runParameter.textValue)
+    customTolerances = nmrCalcRun.findFirstRunParameter(name="assignmentTolerances")
+    if customTolerances is None:
+        tolValues = intUtil.getAmalgamatedTolerances(
+            dataSources, defaultTolPoints, minTol, tagOrder=("hx2", "hx1", "x1", "x2")
+        )
+        nmrCalcRun.newRunParameter(
+            name="toleranceString", code="tolerance", textValue=",".join(str(x) for x in tolValues)
+        )
+    else:
+        tolValues = str(customTolerances.textValue)
+        print("tolvalues", tolValues)
 
-      dataSources.append(peakListData.peakList.dataSource)
+        nmrCalcRun.newRunParameter(name="toleranceString", code="tolerance", textValue=tolValues)
 
-    # set 'peaks' parameter
-    nmrCalcRun.newRunParameter(name='peakFileNames', code='peaks',
-                               textValue=','.join(peakFiles))
-
-  customTolerances = nmrCalcRun.findFirstRunParameter(name='assignmentTolerances')
-  if customTolerances is None:
-    tolValues = intUtil.getAmalgamatedTolerances(dataSources, defaultTolPoints,
-                                                   minTol,
-                                                   tagOrder=('hx2', 'hx1',
-                                                             'x1', 'x2'))
-    nmrCalcRun.newRunParameter(name='toleranceString', code='tolerance',
-                               textValue=','.join(str(x) for x in tolValues))
-  else:
-    tolValues = str(customTolerances.textValue)
-    print('tolvalues',tolValues)
-
-    nmrCalcRun.newRunParameter(name='toleranceString', code='tolerance',
-                               textValue=tolValues)
-
-  # Check number of shift lists
-  shiftListObjs = [x for x in nmrCalcRun.sortedData()
-                   if x.className == 'MeasurementListData'
-                   and x.measurementList.className == 'ShiftList']
-  if len(shiftListObjs) == 1:
-
-    shiftListObj = shiftListObjs[0]
-    fileNameObj = shiftListObj.findFirstRunParameter(name='fileName')
-    nmrCalcRun.newRunParameter(name='shiftFileName', code='prot',
-                                textValue=fileNameObj.textValue,
-                                data=shiftListObj)
-  else:
-    # raise Exception("Required 1 shiftList, %s found" % len(shiftListObjs))
-    pass
+    # Check number of shift lists
+    shiftListObjs = [
+        x
+        for x in nmrCalcRun.sortedData()
+        if x.className == "MeasurementListData" and x.measurementList.className == "ShiftList"
+    ]
+    if len(shiftListObjs) == 1:
+        shiftListObj = shiftListObjs[0]
+        fileNameObj = shiftListObj.findFirstRunParameter(name="fileName")
+        nmrCalcRun.newRunParameter(
+            name="shiftFileName", code="prot", textValue=fileNameObj.textValue, data=shiftListObj
+        )
+    else:
+        # raise Exception("Required 1 shiftList, %s found" % len(shiftListObjs))
+        pass

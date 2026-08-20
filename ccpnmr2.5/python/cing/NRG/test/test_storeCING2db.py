@@ -2,18 +2,17 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_storeCING2db.py
 """
-from cing import cingDirTestsData #@UnusedImport
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import ARCHIVE_NRG_ID
-from cing.NRG import NRG_DB_NAME
-from cing.NRG import PDBJ_DB_NAME
-from cing.NRG import PDBJ_DB_USER_NAME
-from cing.NRG.PDBEntryLists import * #@UnusedWildImport
-from cing.PluginCode.sqlAlchemy import CsqlAlchemy
-from unittest import TestCase
-from sqlalchemy.sql.expression import select
 import unittest
+from unittest import TestCase
+
+from sqlalchemy.sql.expression import select
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import ARCHIVE_NRG_ID, NRG_DB_NAME, PDBJ_DB_NAME, PDBJ_DB_USER_NAME
+from cing.NRG.PDBEntryLists import *  #@UnusedWildImport
+from cing.PluginCode.sqlAlchemy import CsqlAlchemy
+
 
 class AllChecks(TestCase):
 

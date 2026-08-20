@@ -5,35 +5,6 @@ NTutils imports these extensions after it loads it's own code.
 
 Meant to delineate the classes.
 '''
-from cing.Libs.NTutils import nTcodeerror
-from cing.Libs.NTutils import nTcodeerrorT
-from cing.Libs.NTutils import nTdebug
-from cing.Libs.NTutils import nTdebugT
-from cing.Libs.NTutils import nTdetail
-from cing.Libs.NTutils import nTdetailT
-from cing.Libs.NTutils import NTdict
-from cing.Libs.NTutils import nTerror
-from cing.Libs.NTutils import nTerrorT
-from cing.Libs.NTutils import nTexception
-from cing.Libs.NTutils import nTexceptionT
-from cing.Libs.NTutils import NTlist
-from cing.Libs.NTutils import nTmessage
-from cing.Libs.NTutils import nTmessageList
-from cing.Libs.NTutils import nTmessageNoEOL
-from cing.Libs.NTutils import nTmessageNoEOLT
-from cing.Libs.NTutils import nTmessageT
-from cing.Libs.NTutils import nTnothingT
-from cing.Libs.NTutils import nTwarning
-from cing.Libs.NTutils import nTwarningT
-from cing.Libs.NTutils import getDeepByKeysOrAttributes
-from cing.Libs.NTutils import nTfill
-from cing.Libs.NTutils import readTextFromFile
-from cing.Libs.NTutils import sprintf
-from cing.Libs.fpconst import isNaN
-from cing.core.constants import * #@UnusedWildImport
-from random import randint
-from random import seed
-from traceback import format_exc
 import datetime
 import inspect
 import math
@@ -41,6 +12,38 @@ import os
 import re
 import sys
 import time
+from random import randint, seed
+from traceback import format_exc
+
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.fpconst import isNaN
+from cing.Libs.NTutils import (
+    NTdict,
+    NTlist,
+    getDeepByKeysOrAttributes,
+    nTcodeerror,
+    nTcodeerrorT,
+    nTdebug,
+    nTdebugT,
+    nTdetail,
+    nTdetailT,
+    nTerror,
+    nTerrorT,
+    nTexception,
+    nTexceptionT,
+    nTfill,
+    nTmessage,
+    nTmessageList,
+    nTmessageNoEOL,
+    nTmessageNoEOLT,
+    nTmessageT,
+    nTnothingT,
+    nTwarning,
+    nTwarningT,
+    readTextFromFile,
+    sprintf,
+)
+
 
 class NTlistOfLists(NTlist):
     """
@@ -197,7 +200,7 @@ def switchOutput( showOutput, doStdOut=True, doStdErr=False):
 class MsgHoL(NTdict):
     def __init__(self):
         NTdict.__init__(self)
-        self[ ERROR_ID ] =  NTlist()        
+        self[ ERROR_ID ] =  NTlist()
         self[ WARNING_ID ] =  NTlist()
         self[ MESSAGE_ID ] =  NTlist()
         self[ DEBUG_ID ] =  NTlist()
@@ -218,7 +221,7 @@ class MsgHoL(NTdict):
         typeReportFunctionList = { ERROR_ID: nTerror, WARNING_ID: nTwarning, MESSAGE_ID: nTmessage,  DEBUG_ID: nTdebug }
 
         for t in typeCountList:
-            if not self.has_key(t):
+            if t not in self:
                 continue
 
             typeCount = typeCountList[ t ]
@@ -266,7 +269,7 @@ def nTlist2dict(lst):
     """Takes a list of keys and turns it into a dict where the values are counts of how many times the key ocurred."""
     dic = {}
     for k in lst:
-        if dic.has_key(k):
+        if k in dic:
             dic[k] = dic[k] + 1
         else:
             dic[k] = 1
@@ -436,12 +439,12 @@ def getUniqueName(objectListWithNameAttribute, baseName, nameFormat = "%s_%d" ):
 #    nTdebug("Already have names: %s" % str(nameList))
 
     nameDict = nTlist2dict(nameList)
-    if not nameDict.has_key( baseName):
+    if  baseName not in nameDict:
         return baseName
     i = 1
     while i < MAX_TRIES_UNIQUE_NAME: # This code is optimal unless number of objects get to 10**5.
         newName = sprintf( nameFormat, baseName, i)
-        if not nameDict.has_key( newName ):
+        if  newName  not in nameDict:
             return newName
         i += 1
 # end def
@@ -508,7 +511,7 @@ def getRevDateCingLog( fileName ):
         nTerror("In %s failed to find at least two lines in %s" % ( getCallerName(), fileName))
         return None
     txtLine = txtLineList[1]
-    reMatch = re.compile('^.+\(r(\d+)\)') # The number between brackets.
+    reMatch = re.compile(r'^.+\(r(\d+)\)') # The number between brackets.
     searchObj = reMatch.search(txtLine)
     if not searchObj:
         nTerror("In %s failed to find a regular expression match for the revision number in line %s" % ( getCallerName(), txtLine))
@@ -519,7 +522,7 @@ def getRevDateCingLog( fileName ):
         nTerror("In %s failed to find at least four lines in %s" % ( getCallerName(), fileName))
         return None
     txtLine = txtLineList[3]
-    reMatch = re.compile('^.+\(\d+\) (.+)$') # The 24 character standard notation from time.asctime()
+    reMatch = re.compile(r'^.+\(\d+\) (.+)$') # The 24 character standard notation from time.asctime()
     searchObj = reMatch.search(txtLine)
     if not searchObj:
         nTerror("In %s failed to find a regular expression match for the start timestamp in line %s" % ( getCallerName(), txtLine))
@@ -572,7 +575,7 @@ def transpose(a):
     m = len(a)
     n = len(a[0])
     at = []
-    for i in range(n): 
+    for i in range(n):
         at.append([0.0]*m)
     for i in range(m):
         for j in range(n):
@@ -588,10 +591,10 @@ def lenRecursive(obj, max_depth = 5):
     if not isinstance(obj, (list, tuple, dict)):
         nTerror("In lenRecursive the input was not a dict or list instance but was a %s" % str(obj))
         return None
-    count = 0    
+    count = 0
     eList = obj
     if isinstance(obj, dict):
-        eList = obj.values()        
+        eList = obj.values()
     for element in eList:
         if element == None:
             count += 1
@@ -600,10 +603,10 @@ def lenRecursive(obj, max_depth = 5):
             new_depth = max_depth - 1
             if new_depth < 0:
                 count += 1 # still count but do not go to infinity and beyond
-                continue 
+                continue
             count += lenRecursive(element, new_depth)
             continue
-        count += 1        
+        count += 1
     # end for
     return count
 # end def

@@ -1,16 +1,15 @@
 # Execute like:
 # cd $D/NRG-CING/data/br/1brv; python -u $CINGROOT/python/cing/Scripts/interactive/updateProjectHtml.py 1brv 9
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.helper import getStartMessage
-from cing.Libs.helper import getStopMessage
-from cing.NRG.Utils import getArchiveIdFromDirectoryName
 from cing.core.classes import Project
+from cing.Libs.helper import getStartMessage, getStopMessage
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.Utils import getArchiveIdFromDirectoryName
 
 
-def updateProjectHtml(pdb_id, extraArgListStr):    
+def updateProjectHtml(pdb_id, extraArgListStr):
 #    extraArgList = extraArgListStr.split()
-    htmlOnly = True        
+    htmlOnly = True
     project = Project.open(pdb_id, status='old')
     nTmessage("Opened existing project")
     if not project:
@@ -20,7 +19,7 @@ def updateProjectHtml(pdb_id, extraArgListStr):
     archive_id = getArchiveIdFromDirectoryName( os.getcwd() )
     # Derives the related entry codes in PDB and BMRB.
     project.molecule.setArchiveId( archive_id )
-    if True: # DEFAULT: True 
+    if True: # DEFAULT: True
         nTmessage("Updating project html")
     #    project.runCingChecks(toFile=True, ranges=ranges)
         project.setupHtml()
@@ -33,7 +32,7 @@ def updateProjectHtml(pdb_id, extraArgListStr):
 
 if __name__ == '__main__':
     # Give it a good header and footer for automated checking later on.
-    starttime = time.time()    
+    starttime = time.time()
     nTmessage( header )
     nTmessage( getStartMessage())
     pdb_id = sys.argv[1]
@@ -44,4 +43,3 @@ if __name__ == '__main__':
     # end if
     nTmessage( getStopMessage(starttime))
 # end if
-        

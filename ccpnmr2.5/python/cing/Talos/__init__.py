@@ -8,8 +8,9 @@
 # ====================================
 #
 # """
+import os
+
 from cing.Talos.nmrPipeTable import NmrPipeTable
-import  os
 
 talosPath = os.path.split( __file__)[0]
 

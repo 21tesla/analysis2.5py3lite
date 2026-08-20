@@ -2,9 +2,10 @@
 Run like:
 python $CINGROOT/python/cing/NRG/pdbj_mine.py $CINGROOT/python/cing/NRG/sql/tmp.sql
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
 import csv
 import urllib
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 STACKTRACE_LENGHT_MIN = 1000
 # Number of characters to constitute a stacktrace

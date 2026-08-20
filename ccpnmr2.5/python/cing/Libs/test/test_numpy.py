@@ -2,11 +2,14 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTplotDihedral2D.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from numpy import * #@UnusedWildImport
-from numpy.testing.utils import assert_equal
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from numpy import *  #@UnusedWildImport
+from numpy.testing.utils import assert_equal
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
     'Test case.'

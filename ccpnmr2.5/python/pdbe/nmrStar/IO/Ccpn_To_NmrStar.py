@@ -288,7 +288,7 @@ class Ccpn_To_NmrStar:
   
     name = self.exportClass.writeStarTableDict['ccpnMap']
   
-    if not self.customSerials.has_key(name):
+    if name not in self.customSerials:
       self.customSerials[name] = 0
       
     self.customSerials[name] += 1
@@ -892,7 +892,7 @@ class Ccpn_To_NmrStar:
       for molRes in molecule.sortedMolResidues():
         resType = molRes.molType
 
-        if not residueTypes.has_key(resType):
+        if resType not in residueTypes:
           residueTypes[resType] = 0
 
         residueTypes[resType] += 1
@@ -901,7 +901,7 @@ class Ccpn_To_NmrStar:
           residueTypeHighest = [resType,residueTypes[resType] ]
 
       if residueTypeHighest[0] != 'other':
-        if residueTypes.has_key('other') and (
+        if 'other' in residueTypes and (
           (residueTypes['other'] < 3 and len(molecule.molResidues) > 5) or
           (residueTypes['other'] * 1.0 / len(molecule.molResidues) < 0.1) ):
           molType = residueTypeHighest[0]
@@ -928,7 +928,7 @@ class Ccpn_To_NmrStar:
 
     molType = self.getApproxMolType(molecule)
 
-    if self.constants_ByVersion['molTypes'].has_key(molType):
+    if molType in self.constants_ByVersion['molTypes']:
       starPolymerType = self.constants_ByVersion['molTypes'][molType]
     else:
       starPolymerType = unknownMapping
@@ -1348,10 +1348,10 @@ class Ccpn_To_NmrStar:
       'SpectralDensityList': 'spectral_density_values'}
 
     for ml in nmrEntry.sortedMeasurementLists():
-      if not self.trackCustomObjects.has_key(ml.className):
+      if ml.className not in self.trackCustomObjects:
         self.trackCustomObjects[ml.className] = {}
 
-      if self.trackCustomObjects[ml.className].has_key(ml):
+      if ml in self.trackCustomObjects[ml.className]:
         continue
 
       if not ml.className in self.dataListCounts:
@@ -1360,14 +1360,14 @@ class Ccpn_To_NmrStar:
         self.dataListCounts[ml.className].incrementCount()
 
     for ml in nmrEntry.sortedMeasurementLists():
-      if not self.trackCustomObjects[ml.className].has_key(ml):
+      if ml not in self.trackCustomObjects[ml.className]:
         self.trackCustomObjects[ml.className][ml] = self.dataListCounts[ml.className]
 
     for ddl in nmrEntry.sortedDerivedDataLists():
-      if not self.trackCustomObjects.has_key(ddl.className):
+      if ddl.className not in self.trackCustomObjects:
         self.trackCustomObjects[ddl.className] = {}
 
-      if self.trackCustomObjects[ddl.className].has_key(ddl):
+      if ddl in self.trackCustomObjects[ddl.className]:
         continue
 
       if not ddl.className in self.dataListCounts:
@@ -1376,16 +1376,16 @@ class Ccpn_To_NmrStar:
         self.dataListCounts[ddl.className].incrementCount()
 
     for ddl in nmrEntry.sortedDerivedDataLists():
-      if not self.trackCustomObjects[ddl.className].has_key(ddl):
+      if ddl not in self.trackCustomObjects[ddl.className]:
         self.trackCustomObjects[ddl.className][ddl] = self.dataListCounts[ddl.className]
 
     for exp in nmrEntry.sortedExperiments():
       for ds in exp.sortedDataSources():
         for pl in ds.sortedPeakLists():
-          if not self.trackCustomObjects.has_key(pl.className):
+          if pl.className not in self.trackCustomObjects:
             self.trackCustomObjects[pl.className] = {}
 
-          if self.trackCustomObjects[pl.className].has_key(pl):
+          if pl in self.trackCustomObjects[pl.className]:
             continue
 
           if not pl.className in self.dataListCounts:
@@ -1396,7 +1396,7 @@ class Ccpn_To_NmrStar:
     for exp in nmrEntry.sortedExperiments():
       for ds in exp.sortedDataSources():
         for pl in ds.sortedPeakLists():
-          if not self.trackCustomObjects[pl.className].has_key(pl):
+          if pl not in self.trackCustomObjects[pl.className]:
             self.trackCustomObjects[pl.className][pl] = self.dataListCounts[pl.className]
 
     return sorted(self.dataListCounts.values() )
@@ -1443,10 +1443,10 @@ class Ccpn_To_NmrStar:
           else:
             continue
 
-          if not self.trackCustomObjects.has_key(name):
+          if name not in self.trackCustomObjects:
             self.trackCustomObjects[name] = {}
 
-          if self.trackCustomObjects[name].has_key(measurement):
+          if measurement in self.trackCustomObjects[name]:
             continue
 
           if name not in self.dataCounts:
@@ -1459,10 +1459,10 @@ class Ccpn_To_NmrStar:
 
         for measurement in ml.sortedMeasurements():
 
-          if not self.trackCustomObjects.has_key(name):
+          if name not in self.trackCustomObjects:
             self.trackCustomObjects[name] = {}
 
-          if self.trackCustomObjects[name].has_key(measurement):
+          if measurement in self.trackCustomObjects[name]:
             continue
 
           if name not in self.dataCounts:
@@ -1489,7 +1489,7 @@ class Ccpn_To_NmrStar:
         else:
           name = measurementListNameDict[ml.className]
 
-        if not self.trackCustomObjects[name].has_key(measurement):
+        if measurement not in self.trackCustomObjects[name]:
           self.trackCustomObjects[name][measurement] = self.dataCounts[name]
 
     for ddl in nmrEntry.sortedDerivedDataLists():
@@ -1502,10 +1502,10 @@ class Ccpn_To_NmrStar:
       for dd in ddl.sortedDerivations():
         for data in dd.sortedDerivedData():
 
-          if not self.trackCustomObjects.has_key(name):
+          if name not in self.trackCustomObjects:
             self.trackCustomObjects[name] = {}
 
-          if self.trackCustomObjects[name].has_key(data):
+          if data in self.trackCustomObjects[name]:
             continue
 
           if name not in self.dataCounts:
@@ -1522,7 +1522,7 @@ class Ccpn_To_NmrStar:
 
       for dd in ddl.sortedDerivations():
         for data in dd.sortedDerivedData():
-          if not self.trackCustomObjects[name].has_key(data):
+          if data not in self.trackCustomObjects[name]:
             self.trackCustomObjects[name][data] = self.dataCounts[name]
 
     return sorted(self.dataCounts.values() )
@@ -1640,13 +1640,13 @@ class Ccpn_To_NmrStar:
     atomName = atom.name
     
     # Track in dictionary for speed purposes
-    if not self.chemAtomSysNames.has_key(residue):
+    if residue not in self.chemAtomSysNames:
       chemCompVar = residue.chemCompVar
       chemAtomSysNames = findAllSysNamesByChemAtomOrSet(chemCompVar.chemComp,chemCompVar.chemAtoms,'PDB_REMED')
 
       self.chemAtomSysNames[residue] = (chemAtomSysNames, {})    
     
-    if not self.chemAtomSysNames[residue][1].has_key(atomName):
+    if atomName not in self.chemAtomSysNames[residue][1]:
     
       sysAtomName = None
       
@@ -1950,7 +1950,7 @@ class Ccpn_To_NmrStar:
 
     self.sampleCondSets = []
 
-    if not self.trackCustomObjects.has_key('ionicStrength'):
+    if 'ionicStrength' not in self.trackCustomObjects:
       self.trackCustomObjects['ionicStrength'] = {}
 
     for exp in experiments:
@@ -1960,7 +1960,7 @@ class Ccpn_To_NmrStar:
       if exp.sample and exp.sample.ionicStrength:
         
         # Make sure doesn't exist already. If not, then make sure that you track it.
-        if not self.trackCustomObjects['ionicStrength'].has_key(exp.sampleConditionSet):
+        if exp.sampleConditionSet not in self.trackCustomObjects['ionicStrength']:
           ionicCond = IonicStrengthCondition(exp.sample.ionicStrength, exp.sampleConditionSet)
           self.trackCustomObjects['ionicStrength'][exp.sampleConditionSet] = ionicCond
 
@@ -1972,7 +1972,7 @@ class Ccpn_To_NmrStar:
 
     issc = None
 
-    if self.trackCustomObjects['ionicStrength'].has_key(scs):
+    if scs in self.trackCustomObjects['ionicStrength']:
       issc = self.trackCustomObjects['ionicStrength'][scs]
       if issc not in self.sampleConds:
         self.sampleConds.append(issc)
@@ -2558,10 +2558,10 @@ class Ccpn_To_NmrStar:
           if shiftRefsIdStr and shiftRefsIdStr not in shiftRefsIds:
             shiftRefsIds.append(shiftRefsIdStr)
 
-            if not self.trackCustomObjects.has_key('chemShiftRef'):
+            if 'chemShiftRef' not in self.trackCustomObjects:
               self.trackCustomObjects['chemShiftRef'] = {}
 
-            if self.trackCustomObjects['chemShiftRef'].has_key(shiftRefsSetUse):
+            if shiftRefsSetUse in self.trackCustomObjects['chemShiftRef']:
               continue
 
             self.shiftReferenceList.append(ChemShiftRefList(Id=shiftRefsIdStr) )
@@ -2650,10 +2650,10 @@ class Ccpn_To_NmrStar:
       elif symbol in ('2H', '29Si', '19F', '17O'):
         otherFlag = 'yes'
 
-    if not self.trackCustomObjects.has_key('chemShiftRefFlags'):
+    if 'chemShiftRefFlags' not in self.trackCustomObjects:
       self.trackCustomObjects['chemShiftRefFlags'] = {}
 
-    if not self.trackCustomObjects['chemShiftRefFlags'].has_key(chemShiftRefList):
+    if chemShiftRefList not in self.trackCustomObjects['chemShiftRefFlags']:
       self.trackCustomObjects['chemShiftRef'][chemShiftRefList] = (protonFlag, carbonFlag, nitrogenFlag, phosphorusFlag, otherFlag)
 
     return chemShiftRefData

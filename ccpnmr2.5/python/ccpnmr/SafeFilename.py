@@ -1,32 +1,35 @@
 """
 Functions to append a number to the end of a filename if it already exists
 """
-#=========================================================================================
+
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: CCPN $"
 __dateModified__ = "$dateModified: 2017-07-07 16:32:59 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: CCPN $"
 __date__ = "$Date: 2017-06-16 16:28:31 +0000 (Fri, June 16, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
-import itertools
 import errno
+import itertools
 import os
 import sys
 from contextlib import contextmanager
@@ -43,7 +46,7 @@ def _iter_incrementing_file_names(path):
     yield path
     prefix, ext = os.path.splitext(path)
     for i in itertools.count(start=1, step=1):
-        yield prefix + f'({i})' + ext
+        yield prefix + f"({i})" + ext
 
 
 @contextmanager
@@ -66,7 +69,7 @@ def safeOpen(path, mode):
     """
     flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
 
-    if 'b' in mode and sys.platform.system() == 'Windows' and hasattr(os, 'O_BINARY'):
+    if "b" in mode and sys.platform.system() == "Windows" and hasattr(os, "O_BINARY"):
         flags |= os.O_BINARY
 
     # repeat over filenames with iterating number
@@ -87,7 +90,8 @@ def safeOpen(path, mode):
             # ...and exit
             return
 
-def getSafeFilename(path, mode='w'):
+
+def getSafeFilename(path, mode="w"):
     """Get the first safe filename from the given path
 
     :param path: filepath and filename.
@@ -96,7 +100,7 @@ def getSafeFilename(path, mode='w'):
     """
     flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
 
-    if 'b' in mode and sys.platform.system() == 'Windows' and hasattr(os, 'O_BINARY'):
+    if "b" in mode and sys.platform.system() == "Windows" and hasattr(os, "O_BINARY"):
         flags |= os.O_BINARY
 
     # repeat over filenames with iterating number

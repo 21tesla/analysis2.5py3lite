@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,83 +45,83 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-from memops.gui.Frame import Frame
-from memops.gui.PulldownList import PulldownList
 
+from memops.gui.PulldownList import PulldownList
 from memops.universal import Output
 
-tkNames = [ 'Helvetica', 'Times', 'Courier' ]
-tkSizes = [ 6, 8, 10, 12, 14, 16, 18, 20, 22, 24 ]
+tkNames = ["Helvetica", "Times", "Courier"]
+tkSizes = [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
 
-glNames = tkNames + ['Roman', 'MonoRoman']
+glNames = tkNames + ["Roman", "MonoRoman"]
 glSizes = {
-  'Helvetica': [ 10, 12, 18 ],
-  'Times': [ 10, 24 ],
-  'Courier': [ 13, 15 ],
-  'Roman': tkSizes,
-  'MonoRoman': tkSizes,
+    "Helvetica": [10, 12, 18],
+    "Times": [10, 24],
+    "Courier": [13, 15],
+    "Roman": tkSizes,
+    "MonoRoman": tkSizes,
 }
 
 printNames = Output.font_names
 printSizes = Output.font_sizes
 
-fontModes = ['OpenGL', 'Tk', 'Print']
+fontModes = ["OpenGL", "Tk", "Print"]
+
 
 class FontList(PulldownList):
- 
-  def __init__(self, parent, selected=None,
-               mode='Tk', callback=None, extraTexts=None, *args, **kw):
- 
-    assert mode in fontModes, 'mode = %s' % mode
+    def __init__(self, parent, selected=None, mode="Tk", callback=None, extraTexts=None, *args, **kw):
 
-    self.mode = mode
-    
-    if not selected:
-      selected = 'Helvetica 10'
+        assert mode in fontModes, "mode = %s" % mode
 
-    if not extraTexts:
-      extraTexts = []
+        self.mode = mode
 
-    PulldownList.__init__(self, parent, callback, *args, **kw)
- 
-    texts = extraTexts
-    cats = len(texts)*[None]
- 
-    if mode == 'OpenGL':
-      for name in glNames:
-        for size in glSizes[name]:
-          text = '%s %d' % (name, size)
-          texts.append(text)
-          cats.append(name)
-      
-    elif mode == 'Tk':
-      for name in tkNames:
-        for size in tkSizes:
-          text = '%s %d' % (name, size)
-          texts.append(text)
-          cats.append(name)
+        if not selected:
+            selected = "Helvetica 10"
 
-    else: # mode == 'Print':
-      for name in printNames:
-        for size in printSizes:
-          text = '%s %d' % (name, size)
-          texts.append(text)
-          cats.append(name)
+        if not extraTexts:
+            extraTexts = []
 
-    if selected in texts:
-      index = texts.index(selected)
-    else:
-      index = 0
+        PulldownList.__init__(self, parent, callback, *args, **kw)
 
-    PulldownList.setup(self, texts, texts, index, categories=cats)
+        texts = extraTexts
+        cats = len(texts) * [None]
 
-if __name__ == '__main__':
+        if mode == "OpenGL":
+            for name in glNames:
+                for size in glSizes[name]:
+                    text = "%s %d" % (name, size)
+                    texts.append(text)
+                    cats.append(name)
 
-  def myCallback(font):
-    print('myCallback', font)
+        elif mode == "Tk":
+            for name in tkNames:
+                for size in tkSizes:
+                    text = "%s %d" % (name, size)
+                    texts.append(text)
+                    cats.append(name)
 
-  import Tkinter
-  r = Tkinter.Tk()
-  f = FontList(r, isOpenGL=True, callback=myCallback)
-  f.grid()
-  r.mainloop()
+        else:  # mode == 'Print':
+            for name in printNames:
+                for size in printSizes:
+                    text = "%s %d" % (name, size)
+                    texts.append(text)
+                    cats.append(name)
+
+        if selected in texts:
+            index = texts.index(selected)
+        else:
+            index = 0
+
+        PulldownList.setup(self, texts, texts, index, categories=cats)
+
+
+if __name__ == "__main__":
+
+    def myCallback(font):
+        print("myCallback", font)
+
+    import Tkinter
+
+    r = Tkinter.Tk()
+    f = FontList(r, isOpenGL=True, callback=myCallback)
+    f.grid()
+    r.mainloop()

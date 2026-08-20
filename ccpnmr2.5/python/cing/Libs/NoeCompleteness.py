@@ -4,8 +4,8 @@ Created on May 30, 2011
 @author: jd
 '''
 from cing import cingDirLibs
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.classes import * #@UnusedWildImport
+from cing.core.classes import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 OVER_NUMBER_OF_SIGMAS_STR    = ">sigma"
 NO_MULTIMER_STR              = "no multimer"
@@ -18,11 +18,11 @@ MAX_SHELLS_OBSERVED = 9
 class NoeCompleteness( NTdict ):
     'Simple class for getting artificial distance restraints and in the future to get the NOE completeness'
     def __init__(self, project, **kwds):
-        NTdict.__init__(self, **kwds)        
+        NTdict.__init__(self, **kwds)
         self.project = project
         self.lib = NoeCompletenessAtomLib()
         self.modelCount = self.project.molecule.modelCount
-        self.resList = NTlist()        
+        self.resList = NTlist()
         self.atomList = NTlist() # only observables.
         self.atomHash = NTdict() # hash of atomList
         self.resDistanceHoH = {}  # only up to self.max_dist_expectedOverall
@@ -50,8 +50,8 @@ class NoeCompleteness( NTdict ):
         self.isPerShellRun                  = None
         self.vSet = None
         self.xSet = None
-        
-    def doCompletenessCheck( self, 
+
+    def doCompletenessCheck( self,
              max_dist_expectedOverall = 4.0,
              min_dist_observed = 2.0,
              max_dist_observed = 4.0,
@@ -67,11 +67,11 @@ class NoeCompleteness( NTdict ):
              summaryFileNameCompleteness = "tmp_dir/XXXX_compl_sum",
              write_dc_lists = True,
              file_name_base_dc  = "tmp_dir/XXXX_compl",
-             hbOnly=False,             
-             resList = None, # Subset of residues                                  
+             hbOnly=False,
+             resList = None, # Subset of residues
              ):
         'Convenience method.    Return None on error or completeness on success. '
-        
+
         self.max_dist_expectedOverall       = max_dist_expectedOverall
         self.min_dist_expected              = min_dist_expected
         self.max_dist_expected              = max_dist_expected
@@ -82,16 +82,16 @@ class NoeCompleteness( NTdict ):
         self.avg_power_models               = avg_power_models # Unused as of yet.
         self.avg_method                     = avg_method
         self.monomers                       = monomers
-        self.use_intra                      = use_intra                  
-        self.ob_file_name                   = ob_file_name               
+        self.use_intra                      = use_intra
+        self.ob_file_name                   = ob_file_name
         self.summaryFileNameCompleteness    = summaryFileNameCompleteness
-        self.write_dc_lists                 = write_dc_lists             
+        self.write_dc_lists                 = write_dc_lists
         self.file_name_base_dc              = file_name_base_dc
-        self.hbOnly                         = hbOnly  
+        self.hbOnly                         = hbOnly
         self.excludeBonded                  = True
-        self.resList                        = resList        
+        self.resList                        = resList
         self.isPerShellRun                  = False
-        
+
         nTmessage("max_dist_expectedOverall     : %8.3f" % self.max_dist_expectedOverall   )
         nTmessage("min_dist_expected            : %8.3f" % self.min_dist_expected          )
         nTmessage("max_dist_expected            : %8.3f" % self.max_dist_expected          )
@@ -108,13 +108,13 @@ class NoeCompleteness( NTdict ):
         nTmessage("write_dc_lists               : %s   " % self.write_dc_lists             )
         nTmessage("file_name_base_dc            : %s   " % self.file_name_base_dc          )
         nTmessage("resList                      : %s   " % str(self.resList)               )
-        nTmessage("hbOnly                       : %s   " % self.hbOnly                     )               
-        nTmessage("excludeBonded                : %s   " % self.excludeBonded              )               
+        nTmessage("hbOnly                       : %s   " % self.hbOnly                     )
+        nTmessage("excludeBonded                : %s   " % self.excludeBonded              )
         nTmessage("isPerShellRun                : %s   " % self.isPerShellRun              )
-        
+
         if ob_file_name:
             self.lib.readStarFile(ob_file_name)
-            
+
         if self.cacheDistanceInformation():
             nTerror("Failed to cacheDistanceInformation")
             return
@@ -128,26 +128,26 @@ class NoeCompleteness( NTdict ):
         # end for
         return True
     # end def
-    
+
     def cacheDistanceInformation(self):
         'Fills below distance sets for later use. Return True on error.'
-        
-        nTdebug("Now in %s" % getCallerName())        
-        
+
+        nTdebug("Now in %s" % getCallerName())
+
         resListNew = NTlist()
         for residue in self.resList:
-            if not self.lib.obsHoH.has_key(residue.resName):
-                nTdebug("Skipping %s" % residue)            
+            if residue.resName not in self.lib.obsHoH:
+                nTdebug("Skipping %s" % residue)
                 continue
             # end if
             resListNew.append(residue)
         # end for
         self.resList = resListNew
-        
+
         if not self.getAtomList():
             nTerror("Failed getAtomList")
             return True
-        
+
         self.resDistanceHoH = {}  # only up to self.max_dist_expectedOverall
         self.resRadiusHash = {}   # don't pollute our data model but store locally. Key residue, value: radius float
         self.atomDistanceHoH = {} # only up to self.max_dist_expectedOverall
@@ -156,10 +156,10 @@ class NoeCompleteness( NTdict ):
 #        m = len(self.atomList)
         for r in range(n): # rows by columns; rc
             residue = self.resList[r]
-            if not self.lib.obsHoH.has_key(residue.resName):
-                nTdebug("Skipping %s" % residue)            
+            if residue.resName not in self.lib.obsHoH:
+                nTdebug("Skipping %s" % residue)
                 continue
-#            nTdebug("Doing radius of %s" % residue)            
+#            nTdebug("Doing radius of %s" % residue)
             radiusList = residue.radius()
 #            nTdebug("Found radii: %s" % str(radiusList))
             if not radiusList:
@@ -168,16 +168,16 @@ class NoeCompleteness( NTdict ):
             radius = max(radiusList)
             setDeepByKeys(self.resRadiusHash, radius, residue)
         # end for
-    
+
         for r in range(n): # rows by columns; rc
             residue1 = self.resList[r]
-#            nTdebug("Caching distances starting from %s" % residue1)            
+#            nTdebug("Caching distances starting from %s" % residue1)
             residue1Radius = getDeepByKeysOrAttributes(self.resRadiusHash, residue1)
             if not residue1Radius:
                 residue1Radius = 0.0
             rStart = r + 1
             if self.use_intra:
-                rStart = r            
+                rStart = r
             for c in range(rStart, n): # Just do above the diagonal
                 residue2 = self.resList[c]
                 residue2Radius = getDeepByKeysOrAttributes(self.resRadiusHash, residue2)
@@ -199,7 +199,7 @@ class NoeCompleteness( NTdict ):
                 # end if
             # end for
         # end for
-                
+
         key1List = self.resDistanceHoH.keys()
         key1List.sort()
         for r,residue1 in enumerate(key1List):
@@ -209,10 +209,10 @@ class NoeCompleteness( NTdict ):
 #            nTdebug("Getting precise distances starting from residue1 %s" % residue1)
             atom1List = NTlist()
             for atom1 in residue1.allAtoms():
-                if self.atomHash.has_key(atom1):
+                if atom1 in self.atomHash:
                     atom1List.append(atom1)
-                # end if  
-            # end for  
+                # end if
+            # end for
 #            nTdebug("Working on atom1 %s" % atom1)
 #            presenceResidue1 = getDeepByKeysOrAttributes( self.resDistanceHoH, residue1 )
 #            if not presenceResidue1:
@@ -222,8 +222,8 @@ class NoeCompleteness( NTdict ):
             key2List = resDistanceHash.keys()
             key2List.sort()
             for c,residue2 in enumerate(key2List):
-#                nTdebug("Getting precise distances starting from residue2 %s" % residue2)                                
-                
+#                nTdebug("Getting precise distances starting from residue2 %s" % residue2)
+
 #                distanceResidue1and2 = getDeepByKeysOrAttributes( self.resDistanceHoH, residue1, residue2 )
 #                if distanceResidue1and2 == None: # Watch out zero is allowed for the distance
 ##                    nTdebug("Skipping missing combo residue1/2 %s/%s for atom1/2 %s/%s" % ( residue1, residue2, atom1, atom2))
@@ -239,10 +239,10 @@ class NoeCompleteness( NTdict ):
                 # Only here do we loop over possible atom combos
                 atom2List = NTlist()
                 for atom2 in residue2.allAtoms():
-                    if self.atomHash.has_key(atom2):
+                    if atom2 in self.atomHash:
                         atom2List.append(atom2)
-                    # end if  
-                # end for  
+                    # end if
+                # end for
 
                 for atom1 in atom1List:
 #                    nTdebug("Working on atom1 %s" % atom1)
@@ -254,7 +254,7 @@ class NoeCompleteness( NTdict ):
                         if atom1 == atom2:
                             continue
                         # end if
-                              
+
 #                        nTdebug("Working on atom2 %s" % atom2)
                         if self.hbOnly and not atom1.canFormHydrogenBondWith( atom2 ):
                             continue
@@ -283,14 +283,14 @@ class NoeCompleteness( NTdict ):
                 # end for
             # end for
         # end for
-        nTdebug("resList          count: %s" % len(self.resList))            
-        nTdebug("atomList         count: %s" % len(self.atomList))            
+        nTdebug("resList          count: %s" % len(self.resList))
+        nTdebug("atomList         count: %s" % len(self.atomList))
         nTdebug("resDistanceHoH   count: %s" % lenRecursive( self.resDistanceHoH ))
         nTdebug("resRadiusHash    count: %s" % lenRecursive( self.resRadiusHash ))
         nTdebug("atomDistanceHoH  count: %s" % lenRecursive( self.atomDistanceHoH ))
     # end def
-        
-    
+
+
     def addTheoreticalConstraints(self):
         'Using the prehashed info getting the actual precise distances.'
         result = DistanceRestraintList('Vset')
@@ -314,11 +314,11 @@ class NoeCompleteness( NTdict ):
                 atomPairs = NTlist(atomPairsTuple)
                 dr = DistanceRestraint(atomPairs=atomPairs, lower = atomDistance, upper = atomDistance) # Looks weird in xplor otherwise.
                 result.append(dr)
-            # end for 
-        # end for 
+            # end for
+        # end for
         return result
     # end def
-         
+
     def doCompletenessCheckInnerLoop( self ):
         """
     Analyzes the completeness of selected residues.
@@ -337,7 +337,7 @@ class NoeCompleteness( NTdict ):
         if not self.isPerShellRun:
             self.max_dist_expected = self.max_dist_expectedOverall
         # end def
-        
+
 
 #        Create the sets anew
         dcSetNameList = [
@@ -371,7 +371,7 @@ class NoeCompleteness( NTdict ):
 #        if ( dcSelectedInEntryCount < 1 ) {
 #            General.showWarning("No selected dcs in first selected entry.");
 #            return true;
-#        }                
+#        }
 
         _doc = """
         if self.getAtomsObservableObjects(resList)) {
@@ -431,8 +431,8 @@ class NoeCompleteness( NTdict ):
         }
         BitSet[] setsToWrite    = {  USet,   vSet,   WSet,   ESet,   OSet,   ISet,   SSet,   ASet,   BSet,   MSet,   CSet,   DSet };
 """
-        
-        
+
+
 #        setsToWriteStrList =  'USet vSet WSet ESet OSet ISet SSet ASet BSet MSet CSet DSet'.split() # for future
         setsToWriteStrList =  'vSet '.split()
 
@@ -460,7 +460,7 @@ class NoeCompleteness( NTdict ):
         ASet.andNot( OSet ); // keeps shrinking
 """
 #// THEO
-    
+
         result = self.addTheoreticalConstraints()
         if not result:
             nTerror("Failed to addTheoreticalConstraints")
@@ -470,7 +470,7 @@ class NoeCompleteness( NTdict ):
         self.vSet =  result
         self.xSet.union( self.vSet )    # keeps shrinking
 #        xSet.or( ASet);
-        
+
         _doc = """
 // INTRAS
         status = dc.classify(xSet);
@@ -570,7 +570,7 @@ class NoeCompleteness( NTdict ):
         gumbo.mol.selected.clear();  // clearing the molecules will disable writing them
         gumbo.atom.selected.clear(); // clearing the atoms     will disable writing them
         """
-        if self.write_dc_lists and not self.isPerShellRun:                        
+        if self.write_dc_lists and not self.isPerShellRun:
             for i,setName in enumerate(setsToWriteStrList):
                 drl = getDeepByKeysOrAttributes(self, setName)
                 if drl == None:
@@ -681,11 +681,11 @@ class NoeCompleteness( NTdict ):
     }
     """
         return True
-    # end def        
-    
+    # end def
+
     def getAtomList( self ):
         'Return list or None on error.'
-        nTdebug("Now in %s" % getCallerName())        
+        nTdebug("Now in %s" % getCallerName())
         self.atomList = NTlist()
         if not self.resList:
             nTdebug("Setting resList to all residues")
@@ -694,7 +694,7 @@ class NoeCompleteness( NTdict ):
             for atom in res.allAtoms():
                 if not atom.hasCoordinates(allRealAtomCoordinatesNeeded=True):
                     continue
-                parent = atom.getParent()                
+                parent = atom.getParent()
                 if self.lib.inLib(parent.resName, atom.name):
 #                    nTdebug("Found observable atom: %s" % atom)
                     self.atomList.append(atom)
@@ -706,10 +706,10 @@ class NoeCompleteness( NTdict ):
         self.atomHash = NTdict()
         self.atomHash.appendFromList(self.atomList)
         return self.atomList
-    # end def    
+    # end def
 # end class
 
-            
+
 def doCompleteness( project,
              max_dist_expectedOverall = 4.0,
              min_dist_observed = 2.0,
@@ -726,9 +726,9 @@ def doCompleteness( project,
              summaryFileNameCompleteness = "tmp_dir/XXXX_compl_sum",
              write_dc_lists = True,
              file_name_base_dc  = "tmp_dir/XXXX_compl",
-             hbOnly = False,             
+             hbOnly = False,
              resList = None, # Subset of residues
-             ):    
+             ):
     """
         NB it will not yet do a full completeness check it's just framed this way for future work.
         
@@ -754,7 +754,7 @@ def doCompleteness( project,
        
        Return None on error or completeness on success. 
 """
-    nTdebug("Now in %s" % getCallerName())        
+    nTdebug("Now in %s" % getCallerName())
     nc = NoeCompleteness(project)
     return nc.doCompletenessCheck(
              max_dist_expectedOverall   = max_dist_expectedOverall   ,
@@ -772,8 +772,8 @@ def doCompleteness( project,
              summaryFileNameCompleteness= summaryFileNameCompleteness,
              write_dc_lists             = write_dc_lists             ,
              file_name_base_dc          = file_name_base_dc          ,
-             hbOnly = hbOnly,             
-             resList = resList           
+             hbOnly = hbOnly,
+             resList = resList
             )
 # end def
 
@@ -787,15 +787,15 @@ class NoeCompletenessAtomLib:
     tagNameCompID                  = "_Comp_ID"
     tagNameAtomID                  = "_Atom_ID"
     fileName = None
-        
-        
+
+
 #    /** Creates a new instance of AtomMap */
-    def __init__(self, fn = None):  
+    def __init__(self, fn = None):
         self.obsHoH = NTdict() # Set in readStarFile.
         self.obs = None #  Set in readStarFile.  # table of 2 columns
         if not self.readStarFile(fn=fn):
             nTerror("Failed to readStarFile")
-        
+
     def toHoH(self):
         'Create the observable Hash of Hash'
         self.obsHoH = NTdict()
@@ -803,19 +803,19 @@ class NoeCompletenessAtomLib:
         self.obsHoH.appendFromTableGeneric(self.obs, *idxColumnKeyList, invertFirst=True, appendBogusColumn=True)
 #        nTdebug("self.obs: %s" % str(self.obs))
         nTdebug("self.obsHoH: %r" % self.obsHoH)
-        return self.obsHoH 
-        
+        return self.obsHoH
+
     def inLib(self, k1, k2):
         'Convenience method.'
         v = getDeepByKeysOrAttributes( self.obsHoH, k1, k2 )
 #        nTdebug('In %s atom._parent.resName, atom.name: [%s] [%s] [%s]' % ( getCallerName(), atom._parent.resName, atom.name, v ))
         return v
-    
+
     def readStarFile( self, fn = None):
         'Get the STAR info'
         if not fn:
             fn = os.path.join( cingDirLibs, self.STR_FILE_DIR, self.STR_FILE_NAME)
-        nTdebug("Now in %s reading from fn: [%s]" % (getCallerName(), fn))              
+        nTdebug("Now in %s reading from fn: [%s]" % (getCallerName(), fn))
         starFile = File(filename=fn)
         starFile.read()
 
@@ -838,8 +838,8 @@ class NoeCompletenessAtomLib:
         self.obs = [varCompID, varAtomID]
         atomCount = tT.getRowCount()
         nTdebug("Found number of elements in obs : %s" % atomCount)
-        self.obsHoH = self.toHoH() # Hashed by resName and atomName/dihedralName          
-        return self.obs 
+        self.obsHoH = self.toHoH() # Hashed by resName and atomName/dihedralName
+        return self.obs
 # end class
 
 class TheoreticalDihedralLib(NoeCompletenessAtomLib):
@@ -848,41 +848,41 @@ class TheoreticalDihedralLib(NoeCompletenessAtomLib):
     saveframeNodeCategoryName      = "theoretical_dihedral_observable_info"
     tagNameAtomID                  = "_Dih_ID" # overloaded for simplicity
 # end class
-                        
+
 class TheoreticalDihedral( NoeCompleteness ):
     'Small class akin to NoeCompleteness super class.'
     def __init__(self, project, **kwds):
-        NoeCompleteness.__init__(self, project, **kwds)        
+        NoeCompleteness.__init__(self, project, **kwds)
         self.project = project
         self.lib = TheoreticalDihedralLib()
-        self.variance                = None         
-        self.write_ac_lists          = None   
+        self.variance                = None
+        self.write_ac_lists          = None
         self.file_name_base_ac       = None
 
-    def doTheoreticalDihedral( self, 
-             variance           = 10.0, 
+    def doTheoreticalDihedral( self,
+             variance           = 10.0,
              ob_file_name       = None,
              write_ac_lists     = True,
              file_name_base_ac  = THEORETICAL_RESTRAINT_LIST_STR,
              resList            = None, # Subset of residues
              ):
         'Convenience method.    Return None on error or completeness on success. '
-        
-        self.variance                = variance         
-        self.ob_file_name            = ob_file_name         
-        self.write_ac_lists          = write_ac_lists   
+
+        self.variance                = variance
+        self.ob_file_name            = ob_file_name
+        self.write_ac_lists          = write_ac_lists
         self.file_name_base_ac       = file_name_base_ac
-        self.resList                 = resList          
-        
+        self.resList                 = resList
+
         nTmessage("variance          : %8.3f" % self.variance            )
         nTmessage("write_ac_lists    : %s"    % self.write_ac_lists      )
         nTmessage("file_name_base_ac : %s"    % self.file_name_base_ac   )
         nTmessage("resList           : %s   " % str(self.resList)        )
-        
+
         if ob_file_name:
             self.lib.readStarFile(ob_file_name)
-            
-            
+
+
         result = DihedralRestraintList('Vset')
         for residue in self.resList:
             residueDef = residue.db
@@ -902,19 +902,19 @@ class TheoreticalDihedral( NoeCompleteness ):
                 dihedralAverage = dihedral.calculateValues()
                 if not dihedralAverage or isNaN(dihedralAverage[0]):
                     nTerror("Failed to find dihedralAverage for " + comboStr)
-                    continue                    
+                    continue
                 cav, _cv = dihedralAverage
                 lower = cav - variance
                 upper = cav + variance
                 dihedralRestraint = DihedralRestraint(atoms=atoms, lower=lower, upper=upper)
                 result.append(dihedralRestraint)
-            # end for 
-        # end for 
-        if self.write_ac_lists:                        
+            # end for
+        # end for
+        if self.write_ac_lists:
             if not result:
                 nTdebug("Found empty result list")
                 return result
-        # end if 
+        # end if
         nTmessage("Writing the list to file name base: " + self.file_name_base_ac
                 + " with number of restraints: %s" % len(result))
         result.export2cyana( self.file_name_base_ac + '.aco', convention=CYANA2)    # pylint: disable=E1101
@@ -922,15 +922,15 @@ class TheoreticalDihedral( NoeCompleteness ):
         return result
     # end def
 # end class
-           
-           
+
+
 def doTheoreticalDihedral( project,
-             variance           = 10.0, 
+             variance           = 10.0,
              ob_file_name       = None,
              write_ac_lists     = True,
              file_name_base_ac  = THEORETICAL_RESTRAINT_LIST_STR,
              resList            = None, # Subset of residues
-             ):    
+             ):
     """        
        variance  = Plus and minus deviation from target allowed (10.0 suggested)
        write_ac_lists            = Should constraints be written (y suggested)
@@ -939,13 +939,13 @@ def doTheoreticalDihedral( project,
        
        Return None on error or completeness on success. 
     """
-    nTdebug("Now in %s" % getCallerName())        
+    nTdebug("Now in %s" % getCallerName())
     td = TheoreticalDihedral(project)
     return td.doTheoreticalDihedral(
              variance           = variance           ,
              ob_file_name       = ob_file_name       ,
              write_ac_lists     = write_ac_lists     ,
              file_name_base_ac  = file_name_base_ac  ,
-             resList            = resList           
+             resList            = resList
             )
 # end def

@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,90 +54,91 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import string
 
+from ccp.format.general.formatIO import Sequence, SequenceElement
+from ccp.format.shiftx.generalIO import ShiftxGenericFile
+
 # Import general functions
 from memops.universal.Util import returnInt
-from ccp.format.shiftx.generalIO import ShiftxGenericFile
-from ccp.format.general.formatIO import Sequence, SequenceElement
 
 #####################
 # Class definitions #
 #####################
-      
+
+
 class ShiftxSequenceFile(ShiftxGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.sequences = []
+    """
+    Information on file level
+    """
 
-  def read(self,verbose = 0):
+    def initialize(self):
 
-    if verbose == 1:
-      print("Reading %s sequence file %s" % (self.format,self.name))
+        self.sequences = []
 
-    self.sequences.append(ShiftxSequence())
+    def read(self, verbose=0):
 
-    fin = open(self.name)
-    
-    headerCols = []
+        if verbose == 1:
+            print("Reading %s sequence file %s" % (self.format, self.name))
 
-    # Read, look for first line
-    line = fin.readline()
-    
-    colLen = None
-    lastSeqCode = None
+        self.sequences.append(ShiftxSequence())
 
-    while line:
+        fin = open(self.name)
 
-      if self.patt['emptyline'].search(line):
+        headerCols = []
 
+        # Read, look for first line
         line = fin.readline()
-        continue
-              
-      #
-      # Get the info... 
-      #
-      
-      cols = line.split()
-      
-      if cols[0] == 'NUM' and not colLen:
-        headerCols = line.split()
-        colLen = len(headerCols)
-        
-      elif len(cols) == colLen and not cols[0].count("-"):
-        
-        # These are fishy shifts, need to remove the *!
-        if cols[0][0] == '*':
-          cols[0] = cols[0][1:]
-        
-        seqCode = returnInt(cols[0])
-        resLabel = cols[1]
-        
-        if lastSeqCode == None:
-          lastSeqCode = seqCode
-        elif lastSeqCode != seqCode - 1:
-          for tmpSeqCode in range(lastSeqCode + 1, seqCode):
-            self.sequences[-1].elements.append(ShiftxSequenceElement(tmpSeqCode,'X'))
-          lastSeqCode = seqCode
-        else:
-          lastSeqCode = seqCode
-        
-        self.sequences[-1].elements.append(ShiftxSequenceElement(seqCode,resLabel))
 
-      line = fin.readline()
+        colLen = None
+        lastSeqCode = None
 
-    fin.close()
-    
+        while line:
+            if self.patt["emptyline"].search(line):
+                line = fin.readline()
+                continue
+
+            #
+            # Get the info...
+            #
+
+            cols = line.split()
+
+            if cols[0] == "NUM" and not colLen:
+                headerCols = line.split()
+                colLen = len(headerCols)
+
+            elif len(cols) == colLen and not cols[0].count("-"):
+                # These are fishy shifts, need to remove the *!
+                if cols[0][0] == "*":
+                    cols[0] = cols[0][1:]
+
+                seqCode = returnInt(cols[0])
+                resLabel = cols[1]
+
+                if lastSeqCode == None:
+                    lastSeqCode = seqCode
+                elif lastSeqCode != seqCode - 1:
+                    for tmpSeqCode in range(lastSeqCode + 1, seqCode):
+                        self.sequences[-1].elements.append(ShiftxSequenceElement(tmpSeqCode, "X"))
+                    lastSeqCode = seqCode
+                else:
+                    lastSeqCode = seqCode
+
+                self.sequences[-1].elements.append(ShiftxSequenceElement(seqCode, resLabel))
+
+            line = fin.readline()
+
+        fin.close()
+
+
 ShiftxSequence = Sequence
 
-class ShiftxSequenceElement(SequenceElement):
 
-  def setResidueCode(self,*args):
-  
-    code1Letter = args[0]
-    
-    if code1Letter:
-      self.code1Letter = string.upper(code1Letter)
-    else:
-      self.code1Letter = 'X'
+class ShiftxSequenceElement(SequenceElement):
+    def setResidueCode(self, *args):
+
+        code1Letter = args[0]
+
+        if code1Letter:
+            self.code1Letter = string.upper(code1Letter)
+        else:
+            self.code1Letter = "X"

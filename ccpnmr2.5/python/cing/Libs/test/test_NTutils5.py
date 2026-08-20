@@ -3,14 +3,16 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils5.py
 """
 
-from cing import cingDirTmp
-from cing import cingRoot
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import globLast
-from cing.core.database import NTdb
-from numpy import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from numpy import *  #@UnusedWildImport
+
+from cing import cingDirTmp, cingRoot
+from cing.core.database import NTdb
+from cing.Libs.disk import globLast
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTutils5' )
@@ -119,7 +121,7 @@ class AllChecks(TestCase):
             self.assertEqual( stringMeansBooleanTrue(inputStr), resultList[i]==1)
 
     def testAsci2list(self):
-        
+
         _help = """
         Possible 5 situations:
         a      # 1 # positive int

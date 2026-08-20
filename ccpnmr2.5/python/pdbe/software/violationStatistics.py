@@ -39,27 +39,24 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, sys, math, string
+import math
+import os
+import string
+import sys
+
+from ccp.general.Geometry import calcAngleViolation, calcTorsionAngleDegrees, getDistanceFromCoordinates
+from ccp.general.Util import getAtomPositionType, getResidueSsCode, getSortContactDist
+from memops.general.Io import loadProject
+
+# Angle and coordinate stuff
+from memops.universal.Geometry import angleNormaliseAroundZero, angleStats
 
 # TODO this should be replaced by other functions in order to work for all!
 # NB meanwhile moved into functions def to allow load, at least.
 #from rpy import r
-
 from memops.universal.Util import drawBox, getRms
-from memops.general.Io import loadProject
-
-from ccp.general.Util import getAtomPositionType, getSortContactDist
-from ccp.general.Util import getResidueSsCode
-
-# Angle and coordinate stuff
-from memops.universal.Geometry import angleStats
-from memops.universal.Geometry import angleNormaliseAroundZero
-from ccp.general.Geometry import getDistanceFromCoordinates
-from ccp.general.Geometry import calcTorsionAngleDegrees
-from ccp.general.Geometry import calcAngleViolation
-
-from pdbe.software.Util import HtmlPage, ResonanceCoordinateHandler, ContactOccurrenceHandler
 from pdbe.software.Constants import styleSheet
+from pdbe.software.Util import ContactOccurrenceHandler, HtmlPage, ResonanceCoordinateHandler
 
 contactDistToType = {
 
@@ -77,32 +74,32 @@ contactDistToType = {
 class InfoTypes:
 
   dictInfo = {
-    
+
       'contact': 'contactTypes',
       'atom':    'atomTypes',
       'secStruc':'ssTypes',
       'residues':'residues'
-      
+
       }
 
    # Order in which produced is found in ViolationStatistics!!
-   
+
 class ViolationInfo(InfoTypes):
 
   keysInList = ['secStruc','residues']
 
   def __init__(self,violation,contactTypes,atomTypes,ssTypes,residues):
-  
+
     self.violation = violation
     self.contactTypes = contactTypes
     self.atomTypes = atomTypes
     self.ssTypes = ssTypes
     self.residues = residues
-    
+
   def setInfo(self,violationDict):
 
     violationDict['all'].append(self.violation)
-    
+
     for dictKey in self.dictInfo.keys():
 
       otherDataDict = getattr(self,self.dictInfo[dictKey])
@@ -110,107 +107,107 @@ class ViolationInfo(InfoTypes):
 
       # Can't really use item contributions for a violation, so using the whole thing...
       for dictSecondKey in dictSecondKeyList:
-        if not violationDict[dictKey].has_key(dictSecondKey):
+        if dictSecondKey not in violationDict[dictKey]:
           violationDict[dictKey][dictSecondKey] = [[],0,0]
         violationDict[dictKey][dictSecondKey][0].append(self.violation)
         violationDict[dictKey][dictSecondKey][1] += otherDataDict[dictSecondKey] # Total item contrib
         violationDict[dictKey][dictSecondKey][2] += 1 # Total violations
-      
+
     return self.violation
 
 class ConstraintCount(InfoTypes):
 
   def __init__(self):
-  
+
     self.infoDict = {}
-    
+
     for dictKey in self.dictInfo.keys():
       self.infoDict[dictKey] = {}
 
   def addValues(self,contactTypes,atomTypes,ssTypes,residues):
-  
+
     self.setListValue('contact',contactTypes)
     self.setListValue('atom',atomTypes)
-    
+
     for ssType in ssTypes.keys():
       self.setValue('secStruc',ssType,ssTypes[ssType])
-    
+
     residueKeys = {}
     for residue in residues.keys():
       residueKey = (residue.chain.code,residue.seqCode,residue.ccpCode)
       self.setValue('residues',residueKey,residues[residue])
       residueKeys[residueKey] = residues[residue]
-    
+
     return residueKeys
-    
+
   def setListValue(self,dictKey,dictSecondKeyDict):
 
     dictSecondKeys = dictSecondKeyDict.keys()
-    
+
     for dictSecondKey in dictSecondKeys:
       self.setValue(dictKey,dictSecondKey,dictSecondKeyDict[dictSecondKey])
-      
+
     return dictSecondKeys
-  
+
   def setValue(self,dictKey,dictSecondKey,itemContrib):
 
-    if not self.infoDict[dictKey].has_key(dictSecondKey):
+    if dictSecondKey not in self.infoDict[dictKey]:
       self.infoDict[dictKey][dictSecondKey] = [0,0]
     self.infoDict[dictKey][dictSecondKey][0] += itemContrib
     self.infoDict[dictKey][dictSecondKey][1] += 1   # Also track directly the number of constraints this element occurs, for use in violation analysis!
-    
+
     return dictSecondKey
-      
+
 class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
   # TODO should be customisable from GUI or something!
 
-  infoTags =    ("Number","Total","Percent","Rms","Average","Median")  
+  infoTags =    ("Number","Total","Percent","Rms","Average","Median")
   infoTypeKeyList = ('contact','atom','secStruc','residues')
-  
+
   largeViolations = {'distance': 0.5, 'dihedral': 10.0}
   smallViolations = {'distance': 0.1, 'dihedral': 5.0}
-  
+
   output = {'ensemble': {}, 'model': {}}
-  
+
   getStatisticsExecuted = False
-  
+
   # TODO: get this from contact occurrence stuff (if available)?
   maxRangeCheck = 6
-          
+
   HtmlPage = HtmlPage
   styleSheet = styleSheet
 
   def __init__(self,nmrProject,strucGen = None, excludeStructures = None, useContactOccurrence = True, chainCodeFilter = None):
-  
+
     self.projectName = nmrProject.name
     self.dataType = 'orig'
-    
+
     if not excludeStructures:
       self.excludeStructures = []
-    
+
     if not strucGen:
       strucGen = nmrProject.findFirstStructureGeneration()
     self.strucGen = strucGen
-    
+
     self.structureList = strucGen.structureEnsemble.sortedModels()
-    
+
     self.useContactOccurrence = useContactOccurrence
-    
+
     self.chainCodeFilter = chainCodeFilter
-    
+
   def getSecondaryStructureInfo(self):
-  
+
     #
     # Get the original data with sec struc info
     #
-    
+
     origResidueList = self.createOrigResidueList()
 
     #
     # Get the number of chains for non-original info
     #
-    
+
     chainCodes = []
     if self.dataType != 'orig':
       for residue in self.assignedResidues:
@@ -220,25 +217,25 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     #
     # Get the info
     #
-    
+
     self.residueSecStruc = {}
     origChainCodes = []
 
     for residue in origResidueList:
-      
+
       ssCode = getResidueSsCode(residue, defaultSsCode = 'C')
-      
+
       residueKey = self.getResidueKey(residue)
-  
-      self.residueSecStruc[residueKey] = ssCode  
-      
-      if not residueKey[0] in origChainCodes:
+
+      self.residueSecStruc[residueKey] = ssCode
+
+      if residueKey[0] not in origChainCodes:
         origChainCodes.append(residueKey[0])
-      
+
     #
     # Some after-interpretation
     #
-    
+
     if len(origChainCodes) == 1 and len(chainCodes) == 1 and origChainCodes[0] != chainCodes[0]:
       for residueKey in self.residueSecStruc.keys()[:]:
         newResidueKey = (chainCodes[0],residueKey[1])
@@ -250,54 +247,54 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     return self.assignedResidues
 
   def getResidueKey(self,residue):
-  
+
     return (residue.chain.code,residue.seqId)
-  
+
   def getStatistics(self,testMode):
-    
+
     if self.getStatisticsExecuted:
       return
-  
+
     invSixth = -1.0 / 6.0
 
     ncs = self.strucGen.nmrConstraintStore
     fixedResonances = ncs.fixedResonances
 
     self.setAssignedAtomsAndResidues(fixedResonances,chainCodeFilter=self.chainCodeFilter)
-    
+
     if self.useContactOccurrence:
       self.setupContactOccurrenceInfo(ncs)
-        
+
     #
     # Get secondary structure info
     #
-    
+
     self.getSecondaryStructureInfo()
 
     #
     # Set up reference info for structure coords
     #
-        
+
     if testMode:
       self.structureList = self.structureList[:2]
     else:
       self.structureList = self.structureList[:]
-      
+
     self.numStructures = len(self.structureList)
 
     if self.numStructures == 1:
       print("  Warning: only one structure used in analysis!")
-    
+
     self.validStructures = self.numStructures
     if self.excludeStructures:
       for strucIndex in range(self.numStructures):
         if strucIndex in self.excludeStructures:
           self.validStructures -= 1
-          
+
     #
     # Create a dictionary with coordinate info for the relevant atoms
     #
-    
+
     self.createCoordAtomInfoDict()
 
     #
@@ -310,8 +307,8 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     #
     # TODO NEED TO COMBINE RESTRAINTS WITH SAME INFO FIRST AS WELL!!?!?! Not crucial at this stage..
-    #    
-    
+    #
+
     self.constraintCount = {}
     violatedConstraints = {}
     overallViolations = {}
@@ -319,7 +316,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     for strucIndex in range(self.numStructures):
       modelViolations[strucIndex] = {}
-    
+
     allDistanceConstraintLists = list(ncs.findAllConstraintLists(className = 'DistanceConstraintList')) + list(ncs.findAllConstraintLists(className = 'HBondConstraintList'))
 
     if allDistanceConstraintLists:
@@ -353,17 +350,17 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           numConstraints += 1
 
           constraintItems = constraint.sortedItems()
-          
+
           if not constraintItems:
             continue
 
           #lowerDist = constraint.lowerLimit
           lowerDist = 1.0 # TODO have to check how low this can get between two methyls!
           upperDist = constraint.upperLimit
-          
+
           if upperDist == None:
             upperDist = constraint.targetValue
-          
+
           if upperDist == None:
             print(' No value for distance limit, ignoring...')
             continue
@@ -378,14 +375,14 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           atomTypes = {}
           ssTypes = {}
           residues = {}
-          
+
           # Make sure to handle ambiguous constraints correctly!!
           itemContrib = 1.0 / len(constraintItems)
 
           for item in constraintItems:
 
             resonances = item.orderedResonances
-            
+
             # Can't count on above returning something...
             if not resonances:
               resonances = list(item.resonances)
@@ -396,7 +393,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
             for resIndex in range(2):
               resonance = resonances[resIndex]
-              if self.resObjectMapping.has_key(resonance):
+              if resonance in self.resObjectMapping:
                 (residue,atomList) = self.resObjectMapping[resonance]
                 allAtomList.append(atomList)
                 itemResidueKeys.append((residue.chain,residue.seqId))
@@ -404,7 +401,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                 atomType = getAtomPositionType(atomRefName)
                 atomContactType.append(atomType)
 
-                if not residue in residues.keys():
+                if residue not in residues.keys():
                   residues[residue] = 0
                 residues[residue] += itemContrib / 2.0  # Here also divided in half, so each constraint counts for half for each of the residues involved...
 
@@ -412,13 +409,13 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                 ssCode = 'C'
                 if residueKey in self.residueSecStruc.keys():
                   ssCode = self.residueSecStruc[residueKey]
-                if not ssCode in ssTypes.keys():
+                if ssCode not in ssTypes.keys():
                   ssTypes[ssCode] = 0
                 ssTypes[ssCode] += itemContrib / 2.0  # Note that this is per resonances, so need to divide in half...
 
             atomContactType.sort()
             atomContactType = tuple(atomContactType)
-            if not atomContactType in atomTypes.keys():
+            if atomContactType not in atomTypes.keys():
               atomTypes[atomContactType] = 0
             atomTypes[atomContactType] += itemContrib
 
@@ -427,20 +424,20 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
             (sortType,contactDist) = getSortContactDist(itemResidueKeys[0],itemResidueKeys[1],self.maxRangeCheck)
 
-            if contactDistToType.has_key(contactDist):
+            if contactDist in contactDistToType:
               contactType = contactDistToType[contactDist]
             else:
               contactType = 'i+%d' % contactDist
-            
-            if not contactType in contactTypes.keys():
+
+            if contactType not in contactTypes.keys():
               contactTypes[contactType] = 0
             contactTypes[contactType] += itemContrib
 
             # Should in principle do sets, but this will do for now.
             for atom in allAtomList[0]:
-              if self.coordAtomInfo.has_key(atom):
+              if atom in self.coordAtomInfo:
                 for otherAtom in allAtomList[1]:
-                  if self.coordAtomInfo.has_key(otherAtom):
+                  if otherAtom in self.coordAtomInfo:
 
                     atomComb = set((atom,otherAtom))
 
@@ -456,7 +453,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                       coord = self.coordAtomInfo[atom][strucIndex]
                       otherCoord = self.coordAtomInfo[otherAtom][strucIndex]
 
-                      if coord and otherCoord: 
+                      if coord and otherCoord:
                         distance = getDistanceFromCoordinates(coord,otherCoord)
                         distPerStruc[strucIndex].append(distance)
 
@@ -504,25 +501,25 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                 violated = True
 
               elif avgDist < lowerDist:
-                overallViolations['lower'][dcl][constraint] = ViolationInfo(lowerDist - avgDist,contactTypes,atomTypes,ssTypes,residues)              
+                overallViolations['lower'][dcl][constraint] = ViolationInfo(lowerDist - avgDist,contactTypes,atomTypes,ssTypes,residues)
                 violated = True
 
-            if violated and not constraint in violatedConstraints[dcl]:
-              violatedConstraints[dcl].append(constraint)       
-            
+            if violated and constraint not in violatedConstraints[dcl]:
+              violatedConstraints[dcl].append(constraint)
+
     #
     # Now do dihedrals
     #
-    
+
     allDihedralConstraintLists = list(ncs.findAllConstraintLists(className = 'DihedralConstraintList'))
 
     if allDihedralConstraintLists:
-    
+
       print("--> Found dihedral restraints for analysis")
-    
+
       overallViolations['dihedral'] = {}
       for strucIndex in range(self.numStructures):
-        if not modelViolations.has_key(strucIndex):
+        if strucIndex not in modelViolations:
           modelViolations[strucIndex] = {}
         modelViolations[strucIndex]['dihedral'] = {}
 
@@ -563,7 +560,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
           for resIndex in range(4):
             resonance = resonances[resIndex]
-            if self.resObjectMapping.has_key(resonance):
+            if resonance in self.resObjectMapping:
               (residue,atomList) = self.resObjectMapping[resonance]
 
               # Only relevant if one atom!
@@ -577,12 +574,12 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
               residues[residue] += 1
 
               residueKey = self.getResidueKey(residue)
-              
+
               ssKey = 'C'
               if residueKey in self.residueSecStruc.keys():
                 ssKey = self.residueSecStruc[residueKey]
-  
-              if not ssTypeCount.has_key(ssKey):
+
+              if ssKey not in ssTypeCount:
                 ssTypeCount[ssKey] = 0
               ssTypeCount[ssKey] += 1
               ssTypeList.append(ssKey)
@@ -605,7 +602,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
               break
             else:
               ssType = ssTypeList[-1]
-            
+
           if ssType not in ssTypes.keys():
             ssTypes[ssType] = 0
           ssTypes[ssType] += 1
@@ -621,8 +618,8 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
             angleCoords = []
             for atom in allAtomList:
-              if self.coordAtomInfo.has_key(atom):
-                coord = self.coordAtomInfo[atom][strucIndex]                
+              if atom in self.coordAtomInfo:
+                coord = self.coordAtomInfo[atom][strucIndex]
                 if coord:
                   angleCoords.append((coord.x,coord.y,coord.z))
                 else:
@@ -635,7 +632,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
           #
           # Now take the average angle - TODO should really only do this if the circular variance
-          # is below a cutoff value, otherwise this doesn't make sense... 
+          # is below a cutoff value, otherwise this doesn't make sense...
           #
 
           if len(dihedralPerStruc) > 1:
@@ -662,7 +659,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
             #
             # Structure level violations
-            #            
+            #
 
             violated = False
 
@@ -717,22 +714,22 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             # Keep track if constraint violated
             #
 
-            if violated and not constraint in violatedConstraints[dhcl]:
-              violatedConstraints[dhcl].append(constraint)       
+            if violated and constraint not in violatedConstraints[dhcl]:
+              violatedConstraints[dhcl].append(constraint)
 
     #
     # Set up dictionaries to handle violations
     #
-    
+
     specificKeys = InfoTypes().dictInfo.keys()
 
     self.violTypes = overallViolations.keys()
     self.violTypes.sort()
-    
+
     # Ignore lower for now... not very interesting
     if 'lower' in self.violTypes:
       self.violTypes.pop(self.violTypes.index('lower'))
-    
+
     allViolations = {}
     allModelViolations = {}
     for violType in self.violTypes:
@@ -740,26 +737,26 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       allModelViolations[violType] = {}
       for strucIndex in range(self.numStructures):
         allModelViolations[violType][strucIndex] = {}
-      
+
       allViolations[violType]['all'] = []
       for strucIndex in range(self.numStructures):
         allModelViolations[violType][strucIndex]['all'] = []
-      
+
       for specificKey in specificKeys:
         allViolations[violType][specificKey] = {}
         for strucIndex in range(self.numStructures):
           allModelViolations[violType][strucIndex][specificKey] = {}
-          
+
     #
     # Set up info for output
     #
-    
+
     modelRms = {}
-    
+
     self.output['constraintInfo'] = {}
     self.output['ensemble']['constraintLists'] = {}
     self.output['models'] = {}
-    
+
     for strucIndex in range(self.numStructures):
       self.output['models'][strucIndex] = {}
       self.output['models'][strucIndex]['constraintLists'] = {}
@@ -767,7 +764,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     #
     # Set up info for distance constraint lists...
     #
-    
+
     clKeys = {'distance': [], 'dihedral': []}
     clDict = {}
     self.clTypeDict = {}
@@ -785,13 +782,13 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
         cl = clDict[clKey]
         constraintsNumber = len(cl.constraints)
-        
+
         if not constraintsNumber:
           print("  Error: %s constraint list %d has no constraints - ignored." % (clType,clKey))
           continue
 
         self.output['constraintInfo'][clKey] = {}
-        
+
         self.output['ensemble']['constraintLists'][clKey] = {}
         self.output['ensemble']['constraintLists'][clKey]['total'] = constraintsNumber
         self.output['ensemble']['constraintLists'][clKey]['violations'] = {}
@@ -811,8 +808,8 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           # TODO HACK THIS HAS TO BE BETTER!
           if not self.isValidType(violType,clType):
             continue
-            
-          violationNumber = len(overallViolations[violType][cl])  
+
+          violationNumber = len(overallViolations[violType][cl])
           self.output['ensemble']['constraintLists'][clKey]['violations'][violType] = {
 
                 'number': violationNumber,
@@ -821,7 +818,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                 }
 
           for strucIndex in range(self.numStructures):
-            violationNumber = len(modelViolations[strucIndex][violType][cl])  
+            violationNumber = len(modelViolations[strucIndex][violType][cl])
             self.output['models'][strucIndex]['constraintLists'][clKey]['violations'][violType] = {
 
                 'number': violationNumber,
@@ -845,25 +842,25 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             numViolations = 0
             hasLargeViolation = False
 
-            if overallViolations[violType][cl].has_key(cons):
+            if cons in overallViolations[violType][cl]:
 
               overallViolation = overallViolations[violType][cl][cons].setInfo(allViolations[violType])
 
               if overallViolation:
-                if not self.output['ensemble']['constraintLists'][clKey]['constraints'].has_key(consKey):
+                if consKey not in self.output['ensemble']['constraintLists'][clKey]['constraints']:
                   self.output['ensemble']['constraintLists'][clKey]['constraints'][consKey] = {}
                 self.output['ensemble']['constraintLists'][clKey]['constraints'][consKey][violType] = overallViolation
 
             for strucIndex in range(self.numStructures):
               if strucIndex in self.excludeStructures:
                 continue
-              if modelViolations[strucIndex][violType][cl].has_key(cons):
+              if cons in modelViolations[strucIndex][violType][cl]:
 
                 violation = modelViolations[strucIndex][violType][cl][cons].setInfo(allModelViolations[violType][strucIndex])
 
                 if violation:
                   numViolations += 1
-                  if not self.output['models'][strucIndex]['constraintLists'][clKey]['constraints'].has_key(consKey):
+                  if consKey not in self.output['models'][strucIndex]['constraintLists'][clKey]['constraints']:
                     self.output['models'][strucIndex]['constraintLists'][clKey]['constraints'][consKey] = {}
                   self.output['models'][strucIndex]['constraintLists'][clKey]['constraints'][consKey][violType] = violation
 
@@ -871,10 +868,10 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                     hasLargeViolation = True
 
             if violation:
-            
+
               if clType == 'distance':
 
-                if not self.output['constraintInfo'][clKey].has_key(consKey):
+                if consKey not in self.output['constraintInfo'][clKey]:
 
                   # Set generic constraint info only once...
 
@@ -898,17 +895,17 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
                     #
                     # Set contact occurrence for each item if required...
-                    # 
-                    
+                    #
+
                     contactOccurrence = 0.0
-                    
+
                     if self.useContactOccurrence:
 
                       resInfo = []
 
                       for i in range(2):
                         resonance = resonances[i]
-                        if self.resMapping.has_key(resonance):
+                        if resonance in self.resMapping:
                           (residue,atomNameTuple) = self.resMapping[resonance]
                           # Can happen
                           if atomNameTuple.count(None):
@@ -917,24 +914,24 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
                       if len(resInfo) == 2:
                         ssCodes = []
-                        
+
                         # Note: was originally self.residueSecStrucDict.
                         if self.residueSecStruc:
                           for residueKey in (resInfo[0][1],resInfo[1][1]):
                             ssCode = None
-                            if self.residueSecStruc.has_key(residueKey):
+                            if residueKey in self.residueSecStruc:
                               ssCode = self.residueSecStruc[residueKey]
                             ssCodes.append(ssCode)
-                            
+
                         ssCodes = tuple(ssCodes)
 
                         # Or should getContactOccurrence be a separate bit of code after all?
                         (contactOccurrence,atomNameTuple,averageDist) = self.getContactOccurrence(resInfo[:], ssCodes = ssCodes, contactOccurrenceDefault = 0.0)
-                      
+
                     self.output['constraintInfo'][clKey][consKey]['items'].append((resTexts,contactOccurrence))
-                      
+
                   self.output['constraintInfo'][clKey][consKey]['items'].sort()
-                  
+
                 #
                 # Set violation information info
                 #
@@ -946,10 +943,10 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                   'hasLargeViolation': hasLargeViolation
 
                 }
-                
+
               elif clType == 'dihedral':
 
-                if not self.output['constraintInfo'][clKey].has_key(consKey):
+                if consKey not in self.output['constraintInfo'][clKey]:
 
                   # Set generic constraint info only once...
 
@@ -972,20 +969,20 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                   'hasLargeViolation': hasLargeViolation
 
                 }
-                
-                
+
+
                 for item in cons.items:
                   self.output['constraintInfo'][clKey][consKey][violType]['limits'].append((item.upperLimit,item.lowerLimit))
                 self.output['constraintInfo'][clKey][consKey][violType]['limits'].sort()
-                
+
     #
     # Analyse overall violations
     #
-    
+
     for clType in clKeys.keys():
-    
+
       for violType in self.violTypes:
-      
+
         if violType == 'dihedral':
           tempNum = numDihedralConstraints
         else:
@@ -994,7 +991,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         if not self.isValidType(violType,clType):
           continue
 
-        self.output['ensemble']['violations'][violType] = {}      
+        self.output['ensemble']['violations'][violType] = {}
         numViolations = len(allViolations[violType]['all'])
         self.output['ensemble']['violations'][violType]['all'] = self.getListStats((allViolations[violType]['all'],numViolations,numViolations),(tempNum,tempNum))
 
@@ -1011,28 +1008,28 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           # Track RMS for sorting structure order in violation overview
           if violType == 'upper':
             rmsValue = self.output['models'][strucIndex]['violations'][violType]['all'][3]
-            if not modelRms.has_key(rmsValue):
+            if rmsValue not in modelRms:
               modelRms[rmsValue] = []
             modelRms[rmsValue].append(strucIndex)
 
           for infoTypeKey in self.constraintCount[clType].infoDict.keys():
             self.output['models'][strucIndex]['violations'][violType][infoTypeKey] = self.getSpecificListStats(self.constraintCount[clType].infoDict[infoTypeKey],allModelViolations[violType][strucIndex][infoTypeKey],infoTypeKey)
-     
+
     #
     # Sort strucs by RMS
     #
-    
+
     self.output['modelOrder'] = []
-    
+
     rmsValues = modelRms.keys()
     rmsValues.sort()
-    
+
     for rmsValue in rmsValues:
       self.output['modelOrder'].extend(modelRms[rmsValue])
-    
+
     self.getStatisticsExecuted = True
 
-  def isValidType(self,violType,clType):            
+  def isValidType(self,violType,clType):
 
     if violType == clType == 'dihedral':
       validType = True
@@ -1040,8 +1037,8 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       validType = True
     else:
       validType = False
-    
-    return validType 
+
+    return validType
 
   def getResonanceTexts(self,resonances):
 
@@ -1058,7 +1055,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           if atom.chemAtom.chemAtomSet:
             chemAtomSet = atom.chemAtom.chemAtomSet
             atomSetName = chemAtomSet.name
-            if not atomSets.has_key(atomSetName):
+            if atomSetName not in atomSets:
               atomSets[atomSetName] = [[],len(chemAtomSet.chemAtoms)]
             atomSets[atomSetName][0].append(atom.name)
 
@@ -1095,24 +1092,24 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       infoTypeText = "%s.%d.%s" % (infoTypeValue[0],infoTypeValue[1],infoTypeValue[2])
 
     return infoTypeText
-      
+
   def getListStats(self,valueList,constrValues):
-  
+
     from rpy import r
-    
+
     if valueList[0]:
-      
+
       contribCount = constrValues[0]
       totalCount = constrValues[1]
-      
+
       violList = valueList[0]
       violContribCount = valueList[1]
       violTotalCount = valueList[2]
-      
+
       statSummary = r.summary(violList)
       mean = statSummary['Mean']
       median = statSummary['Median']
-      
+
       rms = getRms(valueList[0],total = totalCount)
 
       percent = violContribCount * 100.0 / contribCount
@@ -1120,28 +1117,28 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     else:
       infoValues = (0.0,constrValues[0],0.0,0.0,0.0,0.0)
-      
+
     return infoValues
 
   def getSpecificListStats(self,constraintCountInfoDict,violationDict,infoTypeKey):
-  
+
     infoValuesList = []
 
     infoTypeValueList = constraintCountInfoDict.keys()
     infoTypeValueList.sort()
 
     for infoTypeValue in infoTypeValueList:
-    
-      if violationDict.has_key(infoTypeValue):
+
+      if infoTypeValue in violationDict:
         violationList = violationDict[infoTypeValue]
       else:
         violationList = ([],None)
-    
+
       infoValues = self.getListStats(violationList,constraintCountInfoDict[infoTypeValue])
       infoTypeText = self.getInfoTypeText(infoTypeKey,infoTypeValue)
-      
+
       infoValuesList.append((infoTypeText,infoValues))
-      
+
     return infoValuesList
 
   def getSummaryText(self):
@@ -1234,19 +1231,19 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
   def getViolationData(self,consDict,consKey,violType,clType):
 
     violation = 0.000
-  
-    if consDict.has_key(consKey) and consDict[consKey].has_key(violType):
+
+    if consKey in consDict and violType in consDict[consKey]:
       violation = consDict[consKey][violType]
       #print "%.3f " % violation,
 
     return violation
-  
+
   ######################
   # File/screen output #
   ######################
-  
+
   def writeText(self,fout,verbose = True, testMode = False):
-  
+
     self.getStatistics(testMode)
 
     #
@@ -1254,37 +1251,37 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     #
 
     infoTagFormat = "%6s  "
-    infoFormats = ("  %5.1f  ","  %5.1f  "," %5.1f%% "," %6.3f "," %6.3f "," %6.3f ") 
+    infoFormats = ("  %5.1f  ","  %5.1f  "," %5.1f%% "," %6.3f "," %6.3f "," %6.3f ")
 
     typeTagFormat = "      %-15s:"
-    
+
     self.fout = fout
-  
+
     #
     # Below is screen/file output - TODO replace print by fout.write()!!
     #
-    
+
     for violType in self.violTypes:
 
       fout.write("\n")
       fout.write(drawBox("%s bound violations overview" % (violType.capitalize())))
       fout.write("\n" * 2)
-      
+
       dclKeys = self.output['ensemble']['constraintLists'].keys()
       dclKeys.sort()
-      
+
       for dclKey in dclKeys:
-      
+
         clType = self.clTypeDict[dclKey]
-        
+
         if not self.isValidType(violType,clType):
           continue
-      
+
         dclDict = self.output['ensemble']['constraintLists'][dclKey]
 
         fout.write("  Constraint list %d (%d constraints, ensemble violations %d)" % (dclKey,dclDict['total'],dclDict['violations'][violType]['number']))
         fout.write("\n" * 2)
-        
+
         fout.write("    %-12s" % "Model:")
         for strucIndex in range(self.numStructures):
           fout.write("  %3d  " % (strucIndex + 1))
@@ -1295,7 +1292,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         for strucIndex in range(self.numStructures):
           violDict = self.output['models'][strucIndex]['constraintLists'][dclKey]['violations'][violType]
           fout.write("  %3d  " % (violDict['number']))
-        
+
         # Track large/small violations
         numLargeViolations = []
         numSmallViolations = []
@@ -1310,16 +1307,16 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
               numSmall += 1
           numLargeViolations.append(numLarge)
           numSmallViolations.append(numSmall)
-          
+
 
         fout.write("\n")
         fout.write("    %-12s" % "    Large:")
-        for strucIndex in range(self.numStructures):          
+        for strucIndex in range(self.numStructures):
           fout.write("  %3d  " % numLargeViolations[strucIndex])
-          
+
         fout.write("\n")
         fout.write("    %-12s" % "    Small:")
-        for strucIndex in range(self.numStructures):          
+        for strucIndex in range(self.numStructures):
           fout.write("  %3d  " % numSmallViolations[strucIndex])
 
 
@@ -1332,17 +1329,17 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         fout.write("\n" * 2)
 
         if verbose:
-        
+
           consKeys = dclDict['constraints'].keys()
           consKeys.sort()
-          
+
           for consKey in consKeys:
-          
-            if dclDict['constraints'][consKey].has_key(violType):
-              
+
+            if violType in dclDict['constraints'][consKey]:
+
               overallViolation = dclDict['constraints'][consKey][violType]
               consInfo = self.output['constraintInfo'][dclKey][consKey]
- 
+
               fout.write("    %d: %.3f  (%s  %s)\n" % (consKey,overallViolation,consInfo['contactTypes'],consInfo['atomTypes']))
 
               for (resTexts,contactOccurrence) in consInfo['items']:
@@ -1350,7 +1347,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
                   addText = " (%6.3f)" % contactOccurrence
                 else:
                   addText = ""
-                
+
                 fout.write("      %-20s - %-20s%s\n" % (resTexts[0],resTexts[1],addText))
 
               fout.write("\n")
@@ -1373,7 +1370,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         fout.write(typeTagFormat % "")
         for infoTag in self.infoTags:
           fout.write(infoTagFormat % infoTag)
- 
+
         fout.write("\n" * 2)
 
         self.outputValues(typeTagFormat,"Total",self.output['ensemble']['violations'][violType]['all'],infoFormats)
@@ -1386,7 +1383,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             continue
 
           self.outputSpecificValues(self.output['ensemble']['violations'][violType][infoTypeKey],typeTagFormat,infoFormats)
-          
+
         fout.write("\n")
 
       else:
@@ -1403,7 +1400,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         fout.write(infoTagFormat % infoTag)
 
       fout.write("\n" * 2)
-      
+
       self.minMaxValues = {'min': [None] * (len(infoFormats) ), 'max': [None] * (len(infoFormats) )}
 
       for strucIndex in range(self.numStructures):
@@ -1422,7 +1419,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     for i in range(len(infoValues)):
       self.fout.write(infoFormats[i] % infoValues[i])
-      
+
       if trackMinMax:
         for trackType in ('min','max'):
           if self.minMaxValues[trackType][i] == None:
@@ -1432,7 +1429,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
               self.minMaxValues[trackType][i] = infoValues[i]
             elif trackType == 'max' and self.minMaxValues[trackType][i] < infoValues[i]:
               self.minMaxValues[trackType][i] = infoValues[i]
-      
+
     self.fout.write("\n")
 
   def outputSpecificValues(self,valuesList,typeTagFormat,infoFormats):
@@ -1447,11 +1444,11 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
   #####################
   # HTML PAGES output #
   #####################
-  
+
   def getFullSideMenuList(self,sideMenuItems):
-    
+
     fullSideMenuList = []
-    
+
     for sideMenuItem in sideMenuItems:
       fullSideMenuList.append((sideMenuItem,'%s.html' % sideMenuItem))
       fullSideMenuList.append([])
@@ -1465,68 +1462,68 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       for (subMenuItem,subMenuLink) in subMenuList:
         fullSideMenuList[-1].append((subMenuItem,subMenuLink % sideMenuItem))
- 
+
     return fullSideMenuList
 
   def writeHtml(self,saveDir, sideMenuItems = None, testMode = False):
-  
+
     self.getStatistics(testMode)
 
-    self.infoFormats = ("%5.1f","%5.1f","%5.1f%%","%6.3f","%6.3f","%6.4f") 
-  
+    self.infoFormats = ("%5.1f","%5.1f","%5.1f%%","%6.3f","%6.3f","%6.4f")
+
     self.baseName = self.dataType
-    
+
     if not sideMenuItems:
       sideMenuItems = []
- 
-    if not self.baseName in sideMenuItems:
+
+    if self.baseName not in sideMenuItems:
       sideMenuItems.append(self.baseName)
 
     self.fullSideMenuList = self.getFullSideMenuList(sideMenuItems)
-    
+
     #
     # Directory creation and handling...
     #
-    
+
     saveDir = os.path.join(saveDir,'html')
     if not os.path.exists(saveDir):
       os.mkdir(saveDir)
-    
+
     subDirName = self.projectName
-    
+
     htmlDir = os.path.join(saveDir,subDirName)
     if not os.path.exists(htmlDir):
       os.mkdir(htmlDir)
-    
+
     self.mainSaveDir = htmlDir  # TODO this to be used further on for subpages
-    
+
     htmlDetailsDir = os.path.join(htmlDir,self.baseName)
     if not os.path.exists(htmlDetailsDir):
       os.mkdir(htmlDetailsDir)
-    
+
     #
     # Set up graph stuff
     #
 
     self.graphDir = "graphs"
     self.xValues = range(0,self.validStructures + 1)
-    
+
     #
     # Write out main overview page
     #
-      
-    self.createMainPage(htmlDir)    
+
+    self.createMainPage(htmlDir)
 
     #
     # Details for ensemble and models...
     #
-    
+
     self.createDetailsPage(htmlDetailsDir,'ensemble',self.output['ensemble'])
-    
+
     #
     # Info per model
     #
-    
+
     modelNames = []
     for strucIndex in range(self.numStructures):
       modelName = 'model_%d' % (strucIndex + 1)
@@ -1535,13 +1532,13 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         self.createDetailsPage(htmlDetailsDir,modelName,self.output['models'][strucIndex])
 
     self.createModelTopPage(htmlDetailsDir,'models',modelNames)
-    
+
     #
     # Info per constraint list
     #
-    
+
     constraintListNames = []
- 
+
     dclKeys = self.output['ensemble']['constraintLists'].keys()
     dclKeys.sort()
 
@@ -1552,11 +1549,11 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
 
   def createMainPage(self,htmlDir):
-    
+
     #
     # Initialize (generic)
     #
-    
+
     localGraphDir = self.getLocalGraphDir(htmlDir)
 
     htmlBaseName = self.getHtmlBaseName(htmlDir)
@@ -1569,7 +1566,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     #
     # Create pages
-    # 
+    #
 
     mainPage = self.HtmlPage(os.path.join(htmlDir,"%s.html" % (self.baseName)), htmlBaseName = "Void", styleSheet = self.styleSheet)
 
@@ -1579,17 +1576,17 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     mainPage.createFullSideMenu(self.fullSideMenuList, activeItem = (self.baseName,))
 
     mainPage.mainPageHtml("Summary of all violations")
-    
-    
+
+
     for violType in self.violTypes:
-    
+
       graphInfo = self.initialiseGraphInfo(violType,ignoreInfoTags,self.baseName,localGraphDir)
 
       mainPage.setEmptyRow(colspan = 99)
 
       # Top level row
       mainPage.writeTableHeader('%s limit violations (out of %d constraints)' % (violType.capitalize(),self.output['ensemble']['violations'][violType]['all'][1]), colspan = 99)
-      
+
       # Write column header info
       mainPage.addMainTableRow()
       mainPage.addMainTableColumn("Level",addText = ' class="subheading"')
@@ -1610,22 +1607,22 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           mainPage.addMainTableColumn(self.infoFormats[j] % infoValues[j], addText = ' class="centered"')
           graphInfo['data'][infoTag].append(infoValues[j])
       mainPage.closeMainTableRow()
-      
+
       mainPage.setEmptyRow(colspan = 99)
 
       # Write data values for models
       for strucIndex in range(self.numStructures):
-      
+
         strucNum = strucIndex + 1
 
         mainPage.addMainTableRow()
 
         if strucIndex not in self.excludeStructures:
-          
+
           #
           # Structure included in analysis
           #
-          
+
           mainPage.addMainTableColumn("<a href='%s'>Model %s</a>" % (os.path.join(self.baseName,'model_%d.html' % strucNum),strucNum), addText = ' class="subheading"')
 
           infoValues = self.output['models'][strucIndex]['violations'][violType]['all']
@@ -1634,13 +1631,13 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             if infoTag not in ignoreInfoTags:
               mainPage.addMainTableColumn(self.infoFormats[j] % infoValues[j], addText = ' class="centered"')
               graphInfo['data'][infoTag].append(infoValues[j])
-        
+
         else:
-          
+
           #
           # Structure not included in analysis
           #
-          
+
           mainPage.addMainTableColumn("Model %s" % strucNum, addText = ' class="subheading"')
 
           infoValues = ("Not included",) + ("n/a",) * (len(self.infoTags) - 1)
@@ -1648,26 +1645,26 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             infoTag = self.infoTags[j]
             if infoTag not in ignoreInfoTags:
               mainPage.addMainTableColumn("%s" % infoValues[j], addText = ' class="centered"')
-        
+
         mainPage.closeMainTableRow()
-      
+
       #
       # Create graphs...
       #
-      
+
       for infoTag in graphInfo['data'].keys():
         title = "%s values for %s (%s limit)" % (infoTag,self.baseName,violType)
         self.writePlot(graphInfo['fileNames'][infoTag],self.xValues,graphInfo['data'][infoTag],title,"Models (0 is ensemble)",infoTag)
-    
+
     mainPage.closeMainTable()
-    mainPage.finishHtml()    
+    mainPage.finishHtml()
 
   def createDetailsPage(self,htmlDetailsDir,htmlPageName,infoDict):
 
     #
     # Initialize (generic)
     #
-    
+
     localGraphDir = self.getLocalGraphDir(htmlDetailsDir)
 
     htmlBaseName = self.getHtmlBaseName(htmlDetailsDir)
@@ -1682,7 +1679,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     #
     # Create page
-    # 
+    #
 
     htmlPage = self.HtmlPage(os.path.join(htmlDetailsDir,"%s.html" % (htmlPageName)), htmlBaseName = htmlBaseName, styleSheet = self.styleSheet)
 
@@ -1699,7 +1696,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       # Top level row
       htmlPage.writeTableHeader('%s limit violations' % (violType.capitalize()), colspan = 99)
-      
+
       #
       # Write constraint list level info
       #
@@ -1713,39 +1710,39 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       dclKeys = infoDict['constraintLists'].keys()
       dclKeys.sort()
-      
+
       for dclKey in dclKeys:
-      
+
         clType = self.clTypeDict[dclKey]
-        
+
         if not self.isValidType(violType,clType):
           continue
-      
+
         constraintListName = "constraintList_%d" % dclKey
         dclDict = infoDict['constraintLists'][dclKey]
-        
+
         htmlPage.addMainTableRow()
         htmlPage.addMainTableColumn("<a href='%s.html'>%s</a>" % (constraintListName,dclKey), addText = ' class="subheading"')
-        
-        
+
+
         htmlPage.addMainTableColumn("%5.1f" % dclDict['violations'][violType]['number'], addText = ' class="centered"')
         htmlPage.addMainTableColumn("%5.1f%%" % dclDict['violations'][violType]['percent'], addText = ' class="centered"')
         htmlPage.addMainTableColumn("%5.1f" % dclDict['total'], addText = ' class="centered"')
 
         htmlPage.closeMainTableRow()
-     
+
       #
       # Write information type level info
       #
 
       for mainInfoTypeKey in self.infoTypeKeyList:
-      
+
         # These are not relevant for dihedral constraints
         if violType == 'dihedral' and mainInfoTypeKey in ('contact','atom'):
           continue
-        
+
         mainInfoTypeText = mainInfoTypeKey.capitalize()
-        
+
         if mainInfoTypeKey not in ignoreInfoTypeKeyGraphs:
           graphBaseName = "%s_%s" % (self.baseName,mainInfoTypeKey)
           graphInfo = self.initialiseGraphInfo(violType,ignoreInfoTags,graphBaseName,localGraphDir)
@@ -1767,7 +1764,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
         # Write data values for ensemble
         valuesList = infoDict['violations'][violType][mainInfoTypeKey]
-        
+
         for (infoTypeText,infoValues) in valuesList:
           if mainInfoTypeKey not in ignoreInfoTypeKeyValues:
             htmlPage.addMainTableRow()
@@ -1791,7 +1788,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             self.writePlot(graphInfo['fileNames'][infoTag],range(1,len(valuesList)+1),graphInfo['data'][infoTag],title,mainInfoTypeText,infoTag,lab = (int(len(valuesList)/10),10,2))
 
     htmlPage.closeMainTable()
-    htmlPage.finishHtml()    
+    htmlPage.finishHtml()
 
   def createModelTopPage(self,htmlDetailsDir,htmlPageName,modelNames):
 
@@ -1803,7 +1800,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     #
     # Create page
-    # 
+    #
 
     htmlPage = self.HtmlPage(os.path.join(htmlDetailsDir,"%s.html" % (htmlPageName)), htmlBaseName = htmlBaseName, styleSheet = self.styleSheet)
 
@@ -1820,27 +1817,27 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       htmlPage.closeMainTableRow()
 
     htmlPage.closeMainTable()
-    htmlPage.finishHtml()    
-  
+    htmlPage.finishHtml()
+
 
   def createConstraintListPage(self,htmlDetailsDir,htmlPageName,dclKey):
 
     #
     # Initialize (generic)
     #
-    
+
     #localGraphDir = self.getLocalGraphDir(htmlDetailsDir)
     htmlBaseName = self.getHtmlBaseName(htmlDetailsDir)
 
     #
     # Initialize (non generic)
     #
-    
+
     clType = self.clTypeDict[dclKey]
 
     #
     # Create page
-    # 
+    #
 
     htmlPage = self.HtmlPage(os.path.join(htmlDetailsDir,"%s.html" % (htmlPageName)), htmlBaseName = htmlBaseName, styleSheet = self.styleSheet)
 
@@ -1851,7 +1848,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
     htmlPage.mainPageHtml("Details of violations")
 
     for violType in self.violTypes:
-    
+
       if not self.isValidType(violType,clType):
         continue
 
@@ -1859,7 +1856,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       # Top level row
       htmlPage.writeTableHeader('%s limit violations' % (violType.capitalize()), colspan = 99)
-      
+
       #
       # Write constraint list level info
       #
@@ -1867,17 +1864,17 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       # Write column info
       htmlPage.addMainTableRow()
       htmlPage.addMainTableColumn("Constraint",addText = ' class="subheading" rowspan=2')
-      
+
       if clType == 'distance':
         htmlPage.addMainTableColumn("Limit",addText = ' class="subheading" rowspan=2')
         htmlPage.addMainTableColumn("Items",addText = ' class="subheading" rowspan=2 colspan=2')
         if self.useContactOccurrence:
           htmlPage.addMainTableColumn("Occurrence",addText = ' class="subheading" rowspan=2 colspan=1')
-        
-      elif clType == 'dihedral':  
+
+      elif clType == 'dihedral':
         htmlPage.addMainTableColumn("Atoms",addText = ' class="subheading" rowspan=2')
         htmlPage.addMainTableColumn("Limits",addText = ' class="subheading" rowspan=2 colspan=2')
-      
+
       htmlPage.addMainTableColumn("<a href='ensemble.html'>Ensemble</a>",addText = ' class="subheading" rowspan=2')
       htmlPage.addMainTableColumn("Models",addText = ' class="subheading" colspan=%d' % self.validStructures)
       htmlPage.closeMainTableRow()
@@ -1893,7 +1890,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
 
       # TODO might want to put this info back in here...
-      #dclDict = 
+      #dclDict =
 
       #numConstraints = dclDict['total']
       #numViolations = dclDict['violations'][violType]
@@ -1904,7 +1901,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
       consKeys = self.output['constraintInfo'][dclKey].keys()
       consKeys.sort()
-          
+
       for consKey in consKeys:
         consInfo = self.output['constraintInfo'][dclKey][consKey]
 
@@ -1916,7 +1913,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
         htmlPage.addMainTableRow()
         htmlPage.addMainTableColumn(consKey, addText = ' class="subheading"')
-        
+
         if clType == 'distance':
           htmlPage.addMainTableColumn("%s%.2f%s" % (prefix,consInfo[violType]['limit'],suffix), addText = ' class="centered"')
 
@@ -1930,11 +1927,11 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
           for i in range(2):
             htmlResText = '<BR>'.join(htmlResTexts[i])
             htmlPage.addMainTableColumn(htmlResText, addText = ' class="centered"')
-          
+
           if self.useContactOccurrence:
             htmlOccText = "<BR>".join(occurrenceTexts)
             htmlPage.addMainTableColumn(htmlOccText, addText = ' class="centered"')
-        
+
         elif clType == 'dihedral':
           htmlPage.addMainTableColumn("%s%s%s" % (prefix,string.join(consInfo['atoms'],'-'),suffix), addText = ' class="centered"')
 
@@ -1942,29 +1939,29 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
             for limit in limits:
               htmlLimitText = "%s%.1f%s" % (prefix,limit,suffix)
               htmlPage.addMainTableColumn("%s <BR>" % htmlLimitText, addText = ' class="centered"')
-        
+
         # Coloured by severity of violation!
         self.writeViolationColumn(htmlPage,self.output['ensemble']['constraintLists'][dclKey]['constraints'],consKey,violType,clType)
-        
+
         for strucIndex in self.output['modelOrder']:
           if strucIndex in self.excludeStructures:
             continue
           self.writeViolationColumn(htmlPage,self.output['models'][strucIndex]['constraintLists'][dclKey]['constraints'],consKey,violType,clType)
-        
+
         htmlPage.closeMainTableRow()
 
     htmlPage.closeMainTable()
-    htmlPage.finishHtml()    
+    htmlPage.finishHtml()
 
   def writePlot(self,fileName,xValues,yValues,main,xlab,ylab, lab = None):
 
     from rpy import r
-    
+
     if not lab:
       lab = r.c(len(xValues),len(yValues),2)
 
     r.bitmap(fileName, res=200)
-    
+
     ylim = (0,r.max(yValues))
     xlim = (r.min(xValues),r.max(xValues))
 
@@ -1973,7 +1970,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     # Turn off this print - otherwise end up with a load of different threads.
     r.dev_off()
-  
+
   def getLocalGraphDir(self,htmlDir):
 
     localGraphDir = os.path.join(htmlDir,self.graphDir)
@@ -1988,11 +1985,11 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       htmlDir = self.baseName
     else:
       htmlDir = htmlDir.replace("%s/" % self.mainSaveDir,'')
-  
+
     return htmlDir
 
   def initialiseGraphInfo(self,violType,ignoreInfoTags,graphBaseName,localGraphDir):
-      
+
     graphInfo = {'data': {}, 'fileNames': {}, 'links': {}}
 
     for infoTag in self.infoTags:
@@ -2002,38 +1999,38 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         graphName = "%s_%s_%s.png" % (graphBaseName,violType,infoTag)
         graphInfo['links'][infoTag] =  os.path.join(self.graphDir,graphName)
         graphInfo['fileNames'][infoTag] = os.path.join(localGraphDir,graphName)
-    
-    return graphInfo      
-        
+
+    return graphInfo
+
   def writeViolationColumn(self,htmlPage,consDict,consKey,violType,clType):
-  
-    if consDict.has_key(consKey) and consDict[consKey].has_key(violType):
+
+    if consKey in consDict and violType in consDict[consKey]:
       violation = consDict[consKey][violType]
       htmlFormat = "%.2f"
       if violation > self.largeViolations[clType]:
         htmlFormat = '<font color="#FF0000">%.2f</font>'
       elif violation > self.smallViolations[clType]:
         htmlFormat = '<font color="#880000">%.2f</font>'
-      
+
       htmlPage.addMainTableColumn(htmlFormat % violation, addText = ' class="centered"')
 
     else:
       htmlPage.addMainTableColumn("-", addText = ' class="centered"')
 
 if __name__ == '__main__':
-  
+
   import sys
-  
+
   if len(sys.argv) > 1:
     projDir = sys.argv[1]
   else:
     projDir ="/Users/wim/workspace/stable/all/data/coco/1qnd/coco/ccpn"
-      
+
   ccpnProject = loadProject(projDir)
   nmrProject = ccpnProject.currentNmrProject
   if not nmrProject:
     nmrProject = ccpnProject.findFirstNmrProject()
   strucGen = nmrProject.findFirstStructureGeneration()
-  
+
   violationStatistics = ViolationStatistics(nmrProject, strucGen = strucGen) # Can also pass in structures to exclude (by index)
   violationStatistics.writeHtml("local/test",testMode = False)

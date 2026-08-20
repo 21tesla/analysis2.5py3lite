@@ -14,9 +14,9 @@ scp -P 39676 localhost-nmr:/Users/jd/t.txt .
 @author: jd
 '''
 
-from glob import glob
 import os
 import time
+from glob import glob
 
 os.chdir('/Library/WebServer/Documents/tmp/cing/ano')
 

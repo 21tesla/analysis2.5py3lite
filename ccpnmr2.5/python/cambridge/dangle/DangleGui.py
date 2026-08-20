@@ -58,29 +58,25 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 import sys
-import tkinter
 
-from memops.api                    import Implementation
-from memops.universal.Io           import normalisePath
-from memops.general.Implementation import ApiError
-
-from memops.general.Application    import Application
-from memops.general.Io             import saveProject, loadProject
-from memops.general.Util           import isProjectModified
-
-from memops.gui.DataEntry       import askString, askDir, askFile
-from memops.gui.FontMenu        import FontMenu
-from memops.gui.Frame           import Frame
-from memops.gui.Menu            import Menu
-from memops.gui.ScrolledGraph   import ScrolledGraph
-from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
+from cambridge.dangle.DangleFrame import DangleFrame
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.api import Implementation
 
 #from memops.editor.BackupProjectPopup   import BackupProjectPopup
-from memops.editor.OpenProjectPopup     import OpenProjectPopup
-from memops.editor.SaveProjectPopup     import SaveProjectPopup
-
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-from cambridge.dangle.DangleFrame import DangleFrame
+from memops.editor.OpenProjectPopup import OpenProjectPopup
+from memops.editor.SaveProjectPopup import SaveProjectPopup
+from memops.general.Application import Application
+from memops.general.Implementation import ApiError
+from memops.general.Io import loadProject
+from memops.general.Util import isProjectModified
+from memops.gui.DataEntry import askDir, askFile, askString
+from memops.gui.FontMenu import FontMenu
+from memops.gui.Frame import Frame
+from memops.gui.Menu import Menu
+from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
+from memops.gui.ScrolledGraph import ScrolledGraph
+from memops.universal.Io import normalisePath
 
 PROGRAM_NAME = 'DANGLE'
 
@@ -130,16 +126,16 @@ class DangleGui(BasePopup):
     self.parent = root
     self.programName = programName
     # Application object needed to store application-specific data with project
-    self.application = Application(name=PROGRAM_NAME) 
+    self.application = Application(name=PROGRAM_NAME)
     self.versionInfo = 'Version ' + VERSION
     self.graphPopup  = None
     self.analysisProfile = None
-    
+
     # Application popup is a superclass of memops.editor.BasePoup
     BasePopup.__init__(self, parent=root, title=PROGRAM_NAME,
                        location='+100+100', class_=self.application.name, **kw)
-                       
-    
+
+
   def body(self, guiParent):
 
     # Ensure that the first row and column in popup expand
@@ -147,7 +143,7 @@ class DangleGui(BasePopup):
     guiParent.grid_columnconfigure(0, weight=1, minsize=200)
     frame = Frame(guiParent) # Body widgets can be put in this frame
     frame.grid(row=1, column=0, sticky='nsew')
-    
+
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1, minsize=200)
 
@@ -156,7 +152,7 @@ class DangleGui(BasePopup):
 
     # Dictionary to store popups opened by this application - e.g. need to close upon quit
     self.popups = {}
-    
+
     # Default font
     self.font   = 'Helvetica 10'
 
@@ -167,8 +163,8 @@ class DangleGui(BasePopup):
     self.projectMenu = self.makeProjectMenu()
     self.viewMenu    = self.viewFileMenu()
     self.otherMenu   = self.makeAppearanceMenu()
-    
-    # Put the main menu 
+
+    # Put the main menu
     self.config(menu=self.mainMenu)
 
     self.initProject()
@@ -195,7 +191,7 @@ class DangleGui(BasePopup):
     menu.add_command(label='Version', shortcut='V', command=self.showVersion)
     self.mainMenu.add_cascade(label='Project', shortcut='P', menu=menu)
 
-    menu.options = ['New','Open','Close','Save','Save As','Backup','Quit','Version']  
+    menu.options = ['New','Open','Close','Save','Save As','Backup','Quit','Version']
     return menu
 
 
@@ -208,12 +204,12 @@ class DangleGui(BasePopup):
                      tipText='Show a graphical view of the poredicted backbone dihedral angles')
     self.mainMenu.add_cascade(label='View', shortcut='V', menu=menu)
 
-    menu.options = ['Prediction Graph']  
+    menu.options = ['Prediction Graph']
     return menu
 
 
   def makeAppearanceMenu(self):
-    
+
     # The fonts menu is a pre-created widget
     fontsMenu = FontMenu(self.mainMenu, self.setFont, sizes=(8,10,12),
                          doItalic=0, doBoldItalic=0, tearoff=0)
@@ -236,56 +232,56 @@ class DangleGui(BasePopup):
     return menu
 
   def colorSchemeRed(self):
-  
+
     self.dangleFrame.colorScheme = 'red'
-    
+
   def colorSchemeRainbow(self):
-  
+
     self.dangleFrame.colorScheme = 'rainbow'
 
   def colorSchemeBlack(self):
-  
+
     self.dangleFrame.colorScheme = 'black'
 
   def colorSchemeWhite(self):
-  
+
     self.dangleFrame.colorScheme = 'white'
-  
+
   def viewGraph(self):
-    
+
     phiData, psiData = self.dangleFrame.getPhiPsiPredictions()
-    
+
     if self.graphPopup:
       self.graphPopup.open()
     else:
       self.graphPopup = DangleGraphPopup(self)
-    
+
     dangleChain = self.dangleFrame.dangleChain
-    
+
     good = []
     med = []
     bad = []
     if dangleChain:
-      
+
       resNum = 0 # In case no residues
-      
+
       for dResidue in dangleChain.dangleResidues:
         resNum = dResidue.residue.seqCode
         nIslands = dResidue.numIslands
-        
+
         if nIslands < 2:
           good.append((resNum, nIslands))
         elif nIslands < 4:
           med.append((resNum, nIslands))
         else:
           bad.append((resNum, nIslands))
-      
+
       good.append((resNum, 0)) # To bias the graph
-      
+
     islandData = [good, med, bad]
-    
+
     self.graphPopup.update(phiData,psiData,islandData)
-    
+
 
   def newProject(self):
 
@@ -310,20 +306,20 @@ class DangleGui(BasePopup):
         return
 
     self.openPopup('open_project', OpenProjectPopup, callback=self.initProject)
-                   
+
   def openPopup(self, popup_name, clazz, *args, **kw):
 
     popup = self.popups.get(popup_name)
-  
+
     if popup:
       popup.open()
-      
+
     else:
       if self.analysisProfile:
         transient = self.analysisProfile.transientWindows
       else:
         transient = True
-        
+
       # Below automatically opens popup
       popup = self.popups[popup_name] = clazz(self, project=self.project, transient=transient, *args, **kw)
 
@@ -342,7 +338,7 @@ class DangleGui(BasePopup):
 
     self.destroyPopups()
     self.initProject()
- 
+
     return True
 
   def saveProject(self):
@@ -372,25 +368,25 @@ class DangleGui(BasePopup):
       if self.analysisProfile:
         # Get font specification saved as project application data
         self.font = self.analysisProfile.font
-    
+
     else:
       self.font = fontName
       if self.analysisProfile:
         # Set font specification as project application data
         self.analysisProfile.font = fontName
-    
+
     if not popup:
       popup = self
-      
+
     childList = popup.children.values()
-    
+
     classes = [Tkinter.Button,
                Tkinter.Label,
                Tkinter.Menu,
                Tkinter.Entry,
                Tkinter.Checkbutton,
                Tkinter.Radiobutton]
-    
+
     for child in childList:
       for clazz in classes:
         if isinstance(child, clazz):
@@ -400,7 +396,7 @@ class DangleGui(BasePopup):
           else:
             child.config( font=self.font )
           break
-    
+
       if hasattr(child, 'children'):
         childList.extend( child.children.values() )
 
@@ -410,7 +406,7 @@ class DangleGui(BasePopup):
       self.project = project
     else:
       project = self.project
-    
+
     self.setTitle(self.programName)
 
     if project:
@@ -425,19 +421,19 @@ class DangleGui(BasePopup):
           project.currentAnalysisProfile = analysisProfiles[0]
         else:
           project.newAnalysisProfile(name=project.name)
- 
+
       self.analysisProfile = project.currentAnalysisProfile
-    
+
     self.setMenuState()
-  
+
   def setupSoftware(self):
-    
+
      project = self.project
-    
+
      methodStore = project.currentMethodStore or \
                    project.findFirstMethodStore() or \
                    project.newMethodStore(name=project.name)
-        
+
      software = methodStore.findFirstSoftware(name=PROGRAM_NAME, version=VERSION)
      if not software:
        software = methodStore.newSoftware(name=PROGRAM_NAME, version=VERSION)
@@ -446,7 +442,7 @@ class DangleGui(BasePopup):
      #software.vendorAddress = ''
      #software.vendorWebAddress = 'http:'
      #software.details = ''
-      
+
   def setMenuState(self):
 
     if self.project:
@@ -460,7 +456,7 @@ class DangleGui(BasePopup):
       self.projectMenu.entryconfig(i, state=state)
 
     # Disable bits of the project menu if not stand-alone
-    if hasattr(self.parent, 'project'): 
+    if hasattr(self.parent, 'project'):
       for option in ('New','Open','Close'):
         i = self.projectMenu.options.index(option)
         self.projectMenu.entryconfig(i, state=Tkinter.DISABLED)
@@ -469,8 +465,8 @@ class DangleGui(BasePopup):
     for menu in [self.otherMenu,self.viewMenu]: # Include more menus in this list
       for i in range(len(menu.options)):
         menu.entryconfig(i, state=state)
-      
-      
+
+
   def askSaveFile(self):
 
     popup = self.openPopup('save_project', SaveProjectPopup)
@@ -508,7 +504,7 @@ class DangleGui(BasePopup):
       self.project.saveModified()
       print('Successfully saved project')
       return True
-      
+
     except OSError as e:
       showError('Saving file', str(e))
       return False
@@ -527,7 +523,7 @@ class DangleGui(BasePopup):
 
   def quit(self):
 
-    if not hasattr(self.parent, 'project'): 
+    if not hasattr(self.parent, 'project'):
       if not showYesNo('Quit ' + self.programName, 'Quit ' + self.programName + '?'):
         return
 
@@ -537,18 +533,18 @@ class DangleGui(BasePopup):
 
     self.destroy()
 
-    # Only exit system of not inside another app 
-    if not hasattr(self.parent, 'project'): 
+    # Only exit system of not inside another app
+    if not hasattr(self.parent, 'project'):
       # Need the below code to fix the problem with Bash
       # where the command line was getting screwed up on exit.
       if os.name == 'posix':
         os.system('stty sane')
- 
+
       # sys.exit(0)
       os._exit(0)
 
   def destroy(self):
-  
+
     BasePopup.destroy(self)
 
 
@@ -559,7 +555,7 @@ def launchDangle(filename=None):
   root = Tkinter.Tk()
   root.withdraw()
   top  = DangleGui(root)
- 
+
   project = None
   if filename:
     file    = normalisePath(filename)
@@ -573,18 +569,18 @@ def launchDangle(filename=None):
                             askFile=askfile)
     except ApiError as e:
       showError('Reading project', e.error_msg)
- 
+
   top.update_idletasks()
-  
+
   if project:
     top.initProject(project)
-    
-  root.mainloop()  
-  
-  
-  
+
+  root.mainloop()
+
+
+
 class DangleGraphPopup(BasePopup):
-  
+
   def __init__(self, parent):
 
     BasePopup.__init__(self, parent=parent, title=" Dangle Prediction Graph",
@@ -595,10 +591,10 @@ class DangleGraphPopup(BasePopup):
     self.geometry('700x700+50+50')
 
   def body(self, guiFrame):
- 
+
     guiFrame.expandGrid(0,0)
     guiFrame.expandGrid(1,0)
- 
+
     self.anglesGraph = ScrolledGraph(guiFrame, xLabel='Residue',yLabel='Angle',
                                      relief='flat', symbolSize=1, grid=(0,0),
                                      zoom=1.0,width=500,height=200,
@@ -614,12 +610,12 @@ class DangleGraphPopup(BasePopup):
     self.islandsGraph.draw()
 
   def update(self, phiData, psiData, islandData):
-    
-    self.anglesGraph.update(dataSets=[phiData,psiData])   
+
+    self.anglesGraph.update(dataSets=[phiData,psiData])
     self.islandsGraph.update(dataSets=islandData)
-  
-  
-  
+
+
+
 
 if (__name__ == '__main__'):
 

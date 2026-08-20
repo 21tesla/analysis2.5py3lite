@@ -53,7 +53,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, sys
+import os
+import sys
 
 ARIA_ROOT_DIR = os.environ.get('ARIA2')
 FAIL = 'CcpnToAriaXml Failure: '
@@ -184,7 +185,7 @@ def makeAriaProject(ccpnProject, ariaProjectPath, workingDir=None, template=None
 
       #  for constraintList in constraintLists:
       #    constraintData.append((dataObj, constraintList))
-      if nmrConstraintStore and (dataObj.constraintLists or 
+      if nmrConstraintStore and (dataObj.constraintLists or
                                  nmrConstraintStore.constraintLists):
           constraintData=True
 
@@ -260,7 +261,7 @@ def addAriaGeneralData(project, run, externalTemplate):
 def addAriaCcpnData(project, run):
 
   import aria.DataContainer as DC
-  from aria.ariabase import YES, NO
+  from aria.ariabase import YES
 
   ccpnProject = run.root
   url = ccpnProject.findFirstRepository(name='userData').url
@@ -293,17 +294,17 @@ def addAriaMolSystem(project, run):
     dataObj = run.findFirstData(className='MolResidueData', ioRole='input')
     if dataObj:
       chains = [dataObj.chain]
-  
+
   if not dataObj:
     raise Exception(FAIL + 'No MolSystem in CCPN run')
   else:
     molSystem = dataObj.molSystem
 
   #chains = dataObj.chains
-  
+
   if not chains:
     chains = molSystem.sortedChains()
-  
+
   chainKeys = [getObjectKeyString(molSystem),] + [ch.code for ch in chains]
 
   seq_data['format'] = DC.DATA_CCPN
@@ -312,7 +313,7 @@ def addAriaMolSystem(project, run):
 def addAriaPeakList(project, run):
 
   import aria.DataContainer as DC
-  from aria.ariabase import YES, NO
+  from aria.ariabase import NO, YES
 
   for dataObj in run.sortedInputs():
     className = dataObj.className
@@ -349,7 +350,7 @@ def addAriaPeakList(project, run):
 def addAriaConstraints(project, run):
 
   import aria.DataContainer as DC
-  from aria.ariabase import YES, NO
+  from aria.ariabase import NO, YES
 
   for dataObj in run.sortedInputs():
     className = dataObj.className

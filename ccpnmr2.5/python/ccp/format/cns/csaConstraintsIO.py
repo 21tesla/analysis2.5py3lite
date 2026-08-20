@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,142 +52,137 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-from memops.universal.Util import returnInt
-from memops.universal.Util import returnFloat
-
 from ccp.format.cns.generalIO import CnsGenericFile
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class CnsCsaConstraintFile(CnsGenericFile):
+    def initialize(self):
 
-  def initialize(self):
+        self.constraints = []
 
-    self.constraints = []
-    
-    self.constraintElements = 5
+        self.constraintElements = 5
 
-  def checkLinePattern(self,line):
-  
-    return True
+    def checkLinePattern(self, line):
 
-  def read(self,verbose = False):
+        return True
 
-    if verbose:
-      print("Reading %s CSA constraint list %s" % (self.format,self.name))
+    def read(self, verbose=False):
 
-    return self.readGeneric(CnsCsaConstraint)
+        if verbose:
+            print("Reading %s CSA constraint list %s" % (self.format, self.name))
 
-  def write(self,includeWeight = False, verbose = 0):
+        return self.readGeneric(CnsCsaConstraint)
 
-    #
-    # Output format is (example following):
-    #
-    # assign ( resid 501  and name OO   )
-    #  ( resid 501  and name Z   )
-    #  ( resid 501  and name X   )
-    #  ( resid 501  and name Y   )
-    #  ( resid   4  and name CA   )   -0.0400  0.15000
-    # ...
+    def write(self, includeWeight=False, verbose=0):
 
-    if verbose == 1:
-      print("Writing %s CSA constraint list %s" % (self.format,self.name))
+        #
+        # Output format is (example following):
+        #
+        # assign ( resid 501  and name OO   )
+        #  ( resid 501  and name Z   )
+        #  ( resid 501  and name X   )
+        #  ( resid 501  and name Y   )
+        #  ( resid   4  and name CA   )   -0.0400  0.15000
+        # ...
 
-    fout = open(self.name,'w')
+        if verbose == 1:
+            print("Writing %s CSA constraint list %s" % (self.format, self.name))
 
-    for constraint in self.constraints:
+        fout = open(self.name, "w")
 
-      fout.write(" ASSIGN ")
+        for constraint in self.constraints:
+            fout.write(" ASSIGN ")
 
-      for i in range(0,len(constraint.items)): # Should be only 1
+            for i in range(0, len(constraint.items)):  # Should be only 1
+                item = constraint.items[i]
 
-        item = constraint.items[i] 
+                for j in range(0, len(item.members)):
+                    member = item.members[j]
 
-        for j in range(0,len(item.members)):
+                    if member.chainCode != self.defaultMolCode:
+                        # TODO: this is not correct! Contact Jens!!
+                        segIdString = 'segid "%4s" and ' % member.chainCode
+                    else:
+                        segIdString = ""
 
-          member = item.members[j]
+                    if j >= 1:
+                        startSpace = "        "
+                    else:
+                        startSpace = ""
 
-          if member.chainCode != self.defaultMolCode:
-            # TODO: this is not correct! Contact Jens!!
-            segIdString = "segid \"%4s\" and " % member.chainCode
-          else:
-            segIdString = ""
+                    fout.write(
+                        "%s %s%sresid %-4d and name %-4s%s"
+                        % (startSpace, "(", segIdString, member.seqCode, member.atomName, ")")
+                    )
+                    if j < 4:
+                        fout.write(self.newline)
 
-          if j >= 1:
-            startSpace = '        '
-          else:
-            startSpace = ''
+                    if j == 4:
+                        fout.write(
+                            " %7.4f %7.4f"
+                            % (
+                                constraint.value,
+                                constraint.error,
+                            )
+                        )
 
-          fout.write("%s %s%sresid %-4d and name %-4s%s" % (startSpace,
-                                        	'(',
-                                        	segIdString,
-            member.seqCode,
-            member.atomName,
-            ')'))
-          if j < 4:
+                        if includeWeight:
+                            fout.write(" %7.4f" % constraint.weight)
+
+                        fout.write(self.newline)
+
             fout.write(self.newline)
 
-          if j == 4:
-            fout.write(" %7.4f %7.4f" % (constraint.value,
-                                         constraint.error,
-                                         ))
-            
-            if includeWeight:
-              fout.write(" %7.4f" % constraint.weight)
-            
-            fout.write(self.newline)
+        fout.close()
 
-      fout.write(self.newline)
-
-    fout.close()
 
 class CnsCsaConstraint:
+    def __init__(self, Id, origId, patt=None, format=None):
 
-  def __init__(self,Id,origId,patt=None,format=None):
-    
-    self.Id = returnInt(Id)
-    
-    if origId != None:
-      self.origId = returnInt(origId)
-    else:
-      self.origId = None
-    
-    self.items = []
-    
-    self.patt = patt
-    self.format = format
-    
-  def setCsaData(self,value,error,weight):
-  
-    self.value = returnFloat(value)
-    self.error = returnFloat(error)
-    self.weight = returnFloat(weight)
-        
-  def getSpecificInfo(self,assiLine): 
+        self.Id = returnInt(Id)
 
-    #
-    # Get distances and peaknum, ...
-    #
-  
-    csaPatt = self.patt[self.format + 'RestrCsa'].search(assiLine)
-  
-    lineRead = False
-    
-    if csaPatt:
+        if origId != None:
+            self.origId = returnInt(origId)
+        else:
+            self.origId = None
 
-      value = csaPatt.group(1)
-      error = csaPatt.group(2)
-      
-      if csaPatt.group(3):
-        weight = csaPatt.group(3)
-      else:
-        weight = 1.0
+        self.items = []
 
-      self.setCsaData(value,error,weight)
-    
-      lineRead = True
-      
-    return lineRead
-  
+        self.patt = patt
+        self.format = format
+
+    def setCsaData(self, value, error, weight):
+
+        self.value = returnFloat(value)
+        self.error = returnFloat(error)
+        self.weight = returnFloat(weight)
+
+    def getSpecificInfo(self, assiLine):
+
+        #
+        # Get distances and peaknum, ...
+        #
+
+        csaPatt = self.patt[self.format + "RestrCsa"].search(assiLine)
+
+        lineRead = False
+
+        if csaPatt:
+            value = csaPatt.group(1)
+            error = csaPatt.group(2)
+
+            if csaPatt.group(3):
+                weight = csaPatt.group(3)
+            else:
+                weight = 1.0
+
+            self.setCsaData(value, error, weight)
+
+            lineRead = True
+
+        return lineRead

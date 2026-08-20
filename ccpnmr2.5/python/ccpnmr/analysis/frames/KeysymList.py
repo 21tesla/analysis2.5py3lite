@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -44,70 +43,75 @@ import string
 
 from memops.gui.PulldownList import PulldownList
 
-no_keysym = 'None'
+no_keysym = "None"
+
 
 class KeysymList(PulldownList):
- 
-  def __init__(self, parent, callback = None, *args, **kw):
- 
-    fkey_entries = [ 'F%d' % (n+1) for n in range(12) ]
+    def __init__(self, parent, callback=None, *args, **kw):
 
-    misc_entries = [ \
-      'Home',
-      'End',
-      'Prior',
-      'Next',
-      'Up',
-      'Down',
-      'Right',
-      'Left',
-      'Delete',
-    ]
+        fkey_entries = ["F%d" % (n + 1) for n in range(12)]
 
-    # remove 0-9 because used for spectrum shortcuts
-    texts      = [no_keysym]
-    categories = [None,]
-    objects    = [None,]
-    for category, sublabels in (('a-z', string.lowercase[:26]),
-                               ('A-Z', string.uppercase[:26]),
-                               #('0-9', string.digits),
-                               ('F keys', fkey_entries),
-                               ('Misc', misc_entries)):
-      
-      for text in sublabels:
-        texts.append(text)
-        objects.append(text)
-        categories.append(category)
-      
+        misc_entries = [
+            "Home",
+            "End",
+            "Prior",
+            "Next",
+            "Up",
+            "Down",
+            "Right",
+            "Left",
+            "Delete",
+        ]
 
-    PulldownList.__init__(self, parent, callback=callback, texts=texts,
-                          objects=objects, categories=categories, *args, **kw)
+        # remove 0-9 because used for spectrum shortcuts
+        texts = [no_keysym]
+        categories = [
+            None,
+        ]
+        objects = [
+            None,
+        ]
+        for category, sublabels in (
+            ("a-z", string.lowercase[:26]),
+            ("A-Z", string.uppercase[:26]),
+            # ('0-9', string.digits),
+            ("F keys", fkey_entries),
+            ("Misc", misc_entries),
+        ):
+            for text in sublabels:
+                texts.append(text)
+                objects.append(text)
+                categories.append(category)
 
-if (__name__ == '__main__'):
+        PulldownList.__init__(
+            self, parent, callback=callback, texts=texts, objects=objects, categories=categories, *args, **kw
+        )
 
-  import Tkinter
 
-  def callback(selected_indices, entry):
+if __name__ == "__main__":
+    import Tkinter
 
-    print('callback', selected_indices, entry)
+    def callback(selected_indices, entry):
 
-  root = Tkinter.Tk()
+        print("callback", selected_indices, entry)
 
-  menu = KeysymList(root, callback=callback)
-  menu.grid()
+    root = Tkinter.Tk()
 
-  def getSelected():
-    selected = menu.getSelected()
-    print('getSelected', selected)
+    menu = KeysymList(root, callback=callback)
+    menu.grid()
 
-  def getSelectedInd():
-    selected = menu.getSelectedIndex()
-    print('getSelectedInd', selected)
+    def getSelected():
+        selected = menu.getSelected()
+        print("getSelected", selected)
 
-  button = Tkinter.Button(root, text='getSelected', command=getSelected)
-  button.grid()
+    def getSelectedInd():
+        selected = menu.getSelectedIndex()
+        print("getSelectedInd", selected)
 
-  button = Tkinter.Button(root, text='getSelectedInd', command=getSelectedInd)
-  button.grid()
+    button = Tkinter.Button(root, text="getSelected", command=getSelected)
+    button.grid()
 
-  root.mainloop()
+    button = Tkinter.Button(root, text="getSelectedInd", command=getSelectedInd)
+    button.grid()
+
+    root.mainloop()

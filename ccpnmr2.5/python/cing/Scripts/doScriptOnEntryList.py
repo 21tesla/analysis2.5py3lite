@@ -2,10 +2,10 @@
 Run script on set of entries given their input/output locations
 and a file with a list of their names.
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import ForkOff
-from cing.Libs.forkoff import do_cmd
 from random import shuffle
+
+from cing.Libs.forkoff import ForkOff, do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 # Doing procheck on MacOSX.5.3/MacBook Pro best performance is
 # for when using 3 processes.
@@ -47,60 +47,60 @@ def doScriptOnEntryList(pythonScriptFileName,
           entryList                      = () # as an alternative to a file.
           ):
     """Return True on error"""
-    
+
     if True: # DEFAULT: True
         pid = os.getpid()
         nTmessage("Use kill -2 %s (sending a INT (interrupt) to this Process ID) twice to kill all child processes." % pid)
-        nTmessage("entryListFileName            : %s" % entryListFileName)        
-        nTmessage("startDir                     : %s" % startDir                     )        
-        nTmessage("processes_max                : %s" % processes_max                )        
-        nTmessage("max_time_to_wait             : %s" % max_time_to_wait             )        
-        nTmessage("delay_between_submitting_jobs: %s" % delay_between_submitting_jobs)        
-        nTmessage("extraArgList                 : %s" % str(extraArgList            ))        
-        nTmessage("start_entry_id               : %s" % start_entry_id               )        
-        nTmessage("max_entries_todo             : %s" % max_entries_todo             )        
-        nTmessage("expectPdbEntryList           : %s" % expectPdbEntryList           )        
+        nTmessage("entryListFileName            : %s" % entryListFileName)
+        nTmessage("startDir                     : %s" % startDir                     )
+        nTmessage("processes_max                : %s" % processes_max                )
+        nTmessage("max_time_to_wait             : %s" % max_time_to_wait             )
+        nTmessage("delay_between_submitting_jobs: %s" % delay_between_submitting_jobs)
+        nTmessage("extraArgList                 : %s" % str(extraArgList            ))
+        nTmessage("start_entry_id               : %s" % start_entry_id               )
+        nTmessage("max_entries_todo             : %s" % max_entries_todo             )
+        nTmessage("expectPdbEntryList           : %s" % expectPdbEntryList           )
         nTmessage("shuffleBeforeSelecting       : %s" % shuffleBeforeSelecting       )
-    # end if        
+    # end if
 #    if os.chdir(cingDirTmp):
 #        raise SetupError("Failed to change to directory for temporary test files: "+cingDirTmp)
 
     # Empty list means no filtering done.
     entryCodeListFilter = []
 #    entryCodeListFilter = string.split("1n62")
-    
+
     if entryListFileName:
         entryList = [line.strip() for line in open(entryListFileName)]
     entryList = [x for x in entryList if x]
     entryCountTotal = len(entryList)
-    
+
     if expectPdbEntryList:
         chainCodeList = []
         entryCodeList = []
         for ss in entryList:
- 
+
             entryCode = ss[:4].lower()
             if entryCode not in entryCodeListFilter:
- 
+
                 if len(ss) > 4:
                     chainCode = ss[4].upper()
                 else:
                     chainCode = ''
- 
+
                 entryCodeList.append(entryCode)
                 chainCodeList.append(chainCode)
-          
+
         entryCountSelected = len(entryCodeList)
-    
+
     else:
         #Non-PDB
         entryCodeList = [x for x in entryList if x not in entryCodeListFilter]
         entryCountSelected = len(entryCodeList)
         chainCodeList = [''] * entryCountSelected
-    
-    
+
+
     # lastEntryId is id of last entry excluding the entry itself.
-    lastEntryId = min(len(entryCodeList), start_entry_id+max_entries_todo)    
+    lastEntryId = min(len(entryCodeList), start_entry_id+max_entries_todo)
     if shuffleBeforeSelecting:
         nTmessage("Shuffling entry list before selecting entries.")
         entryCodeListCopy = entryCodeList[:]
@@ -185,7 +185,7 @@ def doScriptOnEntryList(pythonScriptFileName,
         _do_cmd, cmdTuple = job
         cmd = cmdTuple[0]
         nTerror("In doScriptOnEntryList failed forked: %s" % cmd)
-        
+
 def doFunctionOnEntryList(
           f,
           entryListFileName,
@@ -199,20 +199,20 @@ def doFunctionOnEntryList(
           entryList                      = None # as an alternative to a file.
           ):
     """Return True on error"""
-    
+
     if True: # DEFAULT: True
         pid = os.getpid()
         nTmessage("Use kill -2 %s (sending a INT (interrupt) to this Process ID) twice to kill all child processes." % pid)
-        nTmessage("entryListFileName            : %s" % entryListFileName)        
-        nTmessage("processes_max                : %s" % processes_max                )        
-        nTmessage("max_time_to_wait             : %s" % max_time_to_wait             )        
-        nTmessage("delay_between_submitting_jobs: %s" % delay_between_submitting_jobs)        
-        nTmessage("extraArgList                 : %s" % str(extraArgList            ))        
-        nTmessage("start_entry_id               : %s" % start_entry_id               )        
-        nTmessage("max_entries_todo             : %s" % max_entries_todo             )        
+        nTmessage("entryListFileName            : %s" % entryListFileName)
+        nTmessage("processes_max                : %s" % processes_max                )
+        nTmessage("max_time_to_wait             : %s" % max_time_to_wait             )
+        nTmessage("delay_between_submitting_jobs: %s" % delay_between_submitting_jobs)
+        nTmessage("extraArgList                 : %s" % str(extraArgList            ))
+        nTmessage("start_entry_id               : %s" % start_entry_id               )
+        nTmessage("max_entries_todo             : %s" % max_entries_todo             )
         nTmessage("shuffleBeforeSelecting       : %s" % shuffleBeforeSelecting       )
-        nTmessage("entryList                    : %s" % entryList)        
-    # end if        
+        nTmessage("entryList                    : %s" % entryList)
+    # end if
 #    if os.chdir(cingDirTmp):
 #        raise SetupError("Failed to change to directory for temporary test files: "+cingDirTmp)
 
@@ -237,10 +237,10 @@ def doFunctionOnEntryList(
         entryCodeList = entryList
         entryCountTotal = len( entryList )
     # end if
-    
+
     entryCountSelected = len( entryCodeList )
     # lastEntryId is id of last entry excluding the entry itself.
-    lastEntryId = min(len(entryCodeList), start_entry_id+max_entries_todo)    
+    lastEntryId = min(len(entryCodeList), start_entry_id+max_entries_todo)
     if shuffleBeforeSelecting:
         nTmessage("Shuffling entry list before selecting entries.")
         entryCodeListCopy = entryCodeList[:]

@@ -1,16 +1,17 @@
+import shutil
+from shutil import rmtree
+
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.disk import rmdir
 from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
 from cing.NRG import ARCHIVE_CASP_ID
 from cing.NRG.storeCING2db import doStoreCING2db
 from cing.Scripts.validateEntry import retrieveTgzFromUrl
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from shutil import rmtree
-import shutil
+
 #from cing.NRG.CasdNmrMassageCcpnProject import getRangesForTarget
 #from cing.NRG.CasdNmrMassageCcpnProject import getTargetForFullEntryName
 #from cing.Scripts.Analysis.PyRPF import DEFAULT_CONSIDER_ALIASED_POSITIONS

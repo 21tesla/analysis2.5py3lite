@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,31 +54,23 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import string, copy
-
-from memops.universal.Io import joinPath, splitPath 
-
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
-from ccp.format.general.Constants import defaultSeqInsertCode
-
-from ccpnmr.format.general.Constants import distanceConstraintDefaultLowerLimit
 
 class DiscoverFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'discover'
-    self.IOkeywords = IOkeywords
+        self.format = "discover"
+        self.IOkeywords = IOkeywords
 
-  def setGenericImports(self):
+    def setGenericImports(self):
 
-    self.getConstraints = self.getConstraintsGeneric
+        self.getConstraints = self.getConstraintsGeneric
 
-  #
-  # Functions different to default functions in DataFormat
-  #
+    #
+    # Functions different to default functions in DataFormat
+    #
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getMultiChainFormatPresetChainMapping(chainList)
+    def getPresetChainMapping(self, chainList):
+
+        return self.getMultiChainFormatPresetChainMapping(chainList)

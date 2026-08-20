@@ -1,37 +1,39 @@
 """
 Module Documentation here
 """
-#=========================================================================================
+
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: Ed Brooksbank $"
 __dateModified__ = "$dateModified: 2017-07-07 16:32:41 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: Ed Brooksbank $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
 import sys
 from functools import wraps
 
-
-NEF_STANDARD = 'standard'
-NEF_SILENT = 'silent'
-NEF_STRICT = 'strict'
+NEF_STANDARD = "standard"
+NEF_SILENT = "silent"
+NEF_STRICT = "strict"
 
 NEFVALID = 0
 NEFERROR_GENERICGETTABLEERROR = -1
@@ -76,24 +78,27 @@ class ErrorLog:
 
       mode = logginMode     return the current mode.
     """
+
     _availableModes = (NEF_STANDARD, NEF_SILENT, NEF_STRICT)
-    NEFERRORS = {NEFERROR_BADADDSAVEFRAME      : 'bad add saveFrame',
-                 NEFERROR_BADCATEGORIES        : 'bad categories',
-                 NEFERROR_BADFUNCTION          : '',
-                 NEFERROR_BADLISTTYPE          : 'bad listType',
-                 NEFERROR_BADTABLENAMES        : 'bad table names',
-                 NEFERROR_LISTTYPEERROR        : 'list type error',
-                 NEFERROR_BADMULTICOLUMNVALUES : 'bad multiColumnValues',
-                 NEFERROR_BADFROMSTRING        : 'bad convert from string',
-                 NEFERROR_BADTOSTRING          : 'bad convert to string',
-                 NEFERROR_ERRORSAVINGFILE      : 'error saving file',
-                 NEFERROR_ERRORLOADINGFILE     : 'error loading file',
-                 NEFERROR_SAVEFRAMEDOESNOTEXIST: 'saveFrame does not exist',
-                 NEFERROR_TABLEDOESNOTEXIST    : 'table does not exist',
-                 NEFERROR_GENERICGETTABLEERROR : 'table error',
-                 NEFERROR_READATTRIBUTENAMES   : 'error reading attribute names',
-                 NEFERROR_READATTRIBUTE        : 'error reading attribute',
-                 NEFERROR_BADKEYS              : 'error reading keys'}
+    NEFERRORS = {
+        NEFERROR_BADADDSAVEFRAME: "bad add saveFrame",
+        NEFERROR_BADCATEGORIES: "bad categories",
+        NEFERROR_BADFUNCTION: "",
+        NEFERROR_BADLISTTYPE: "bad listType",
+        NEFERROR_BADTABLENAMES: "bad table names",
+        NEFERROR_LISTTYPEERROR: "list type error",
+        NEFERROR_BADMULTICOLUMNVALUES: "bad multiColumnValues",
+        NEFERROR_BADFROMSTRING: "bad convert from string",
+        NEFERROR_BADTOSTRING: "bad convert to string",
+        NEFERROR_ERRORSAVINGFILE: "error saving file",
+        NEFERROR_ERRORLOADINGFILE: "error loading file",
+        NEFERROR_SAVEFRAMEDOESNOTEXIST: "saveFrame does not exist",
+        NEFERROR_TABLEDOESNOTEXIST: "table does not exist",
+        NEFERROR_GENERICGETTABLEERROR: "table error",
+        NEFERROR_READATTRIBUTENAMES: "error reading attribute names",
+        NEFERROR_READATTRIBUTE: "error reading attribute",
+        NEFERROR_BADKEYS: "error reading keys",
+    }
 
     def __init__(self, logOutput=sys.stderr.write, loggingMode=NEF_STANDARD, errorCode=NEFVALID):
         """
@@ -185,9 +190,9 @@ class ErrorLog:
         Clear the last error code and error string
         """
         self._lastError = NEFVALID
-        self._lastErrorString = ''
+        self._lastErrorString = ""
 
-    def _logError(self, errorCode=NEFVALID, errorString=''):
+    def _logError(self, errorCode=NEFVALID, errorString=""):
         """
         Log errorCode to the current logger
         :param errorCode:
@@ -198,7 +203,7 @@ class ErrorLog:
             self._lastError = errorCode
             if not errorString:
                 errorString = self.NEFERRORS[errorCode]
-            self._lastErrorString = 'runtimeError: ' + str(errorCode) + ' ' + errorString + '\n'
+            self._lastErrorString = "runtimeError: " + str(errorCode) + " " + errorString + "\n"
             if self._loggingMode != NEF_SILENT:
                 try:
                     self._logOutput(self._lastErrorString)

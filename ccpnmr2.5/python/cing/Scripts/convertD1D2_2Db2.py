@@ -11,28 +11,24 @@ Run:
 python $CINGROOT/python/cing/Scripts/convertD1D2_2Db2.py
 """
 
-from cing import cingDirData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqDssp import to3StateDssp
-from cing.Scripts.getPhiPsiWrapper import BFACTOR_COLUMN
-from cing.Scripts.getPhiPsiWrapper import DEFAULT_BFACTOR_PERCENTAGE_FILTER
-from cing.Scripts.getPhiPsiWrapper import DEFAULT_MAX_BFACTOR
-from cing.Scripts.getPhiPsiWrapper import IDX_COLUMN
-from cing.core.database import NTdb
-from cing.core.molecule import common20AAList
-from cing.core.validate import binCount
-from cing.core.validate import bins360
-from cing.core.validate import plotparams360
-from cing.core.validate import xGrid360
-from cing.core.validate import yGrid360
-from matplotlib.pyplot import hist
-from numpy.ma.core import multiply
-from numpy.matrixlib.defmatrix import mat # pylint: disable=E0611
-import pickle
 import csv
 
+from matplotlib.pyplot import hist
+from numpy.ma.core import multiply
+from numpy.matrixlib.defmatrix import mat  # pylint: disable=E0611
 
+from cing import cingDirData, cingDirTmp
+from cing.core.database import NTdb
+from cing.core.molecule import common20AAList
+from cing.core.validate import binCount, bins360, plotparams360, xGrid360, yGrid360
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqDssp import to3StateDssp
+from cing.Scripts.getPhiPsiWrapper import (
+    BFACTOR_COLUMN,
+    DEFAULT_BFACTOR_PERCENTAGE_FILTER,
+    DEFAULT_MAX_BFACTOR,
+    IDX_COLUMN,
+)
 
 file_name_base = 'cb4ncb4c_wi_db'
 #file_name_base2 = 'cb4ncb4c_wi_db2'
@@ -83,7 +79,7 @@ def main():
         if lineCount > lineCountMax:
             break
         entryId = row[0]
-        if not linesByEntry.has_key(entryId):
+        if entryId not in linesByEntry:
             linesByEntry[ entryId ] = []
         linesByEntry[ entryId ].append( row )
 
@@ -148,9 +144,9 @@ def main():
                 nTerror("d1 not in range for row: %s" % str(row))
                 return
 
-            if not (resType in common20AAList):
+            if resType not in common20AAList:
     #            nTmessage("Skipping uncommon residue: %s" % resType)
-                if not ( resType in skippedResTypes):
+                if resType not in skippedResTypes:
                     skippedResTypes.append( resType )
                 continue
 
@@ -227,7 +223,7 @@ def main():
                 for resTypeNext in keyListSorted4:
                     hist1 = getDeepByKeys(histd1BySs0AndResTypes, ssType, resType, resTypePrev) # x-axis
                     # This was bug! It needs to be hashed on the ssType of resType -not- on resTypeNext
-                    hist2 = getDeepByKeys(histd1BySs1AndResTypes, ssType, resTypeNext, resType) 
+                    hist2 = getDeepByKeys(histd1BySs1AndResTypes, ssType, resTypeNext, resType)
                     if hist1 == None:
                         nTdebug('skipping for hist1 is empty for [%s] [%s] [%s]' % (ssType, resTypePrev, resType))
                         continue

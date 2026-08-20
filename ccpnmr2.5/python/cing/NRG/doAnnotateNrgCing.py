@@ -4,25 +4,22 @@ Execute like:
 python -u $CINGROOT/python/cing/NRG/doAnnotateNrgCing.py $x $y
 '''
 
+import tarfile
+from shutil import rmtree
+
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.forkoff import do_cmd
-from cing.NRG.PDBEntryLists import getBmrbLinks
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
 from cing.NRG.nrgCing import NrgCing
+from cing.NRG.PDBEntryLists import getBmrbLinks
 from cing.NRG.settings import bmrbDir
 from cing.NRG.shiftPresetDict import presetDict
 from cing.Scripts.FC.convertStar2Ccpn import importStarChemicalShifts
 from cing.Scripts.FC.utils import swapCheck
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.main import getStartMessage
-from cing.main import getStopMessage
-from memops.general.Io import loadProject
-from memops.general.Io import saveProject
-from shutil import rmtree
-import tkinter
-import tarfile
-
+from memops.general.Io import loadProject, saveProject
 
 n = NrgCing()
 if False:
@@ -142,7 +139,7 @@ def annotateEntry(entry_code, bmrb_id, *extraArgList):
 #            nTmessage('found ccpnMolSystem: %s' % ccpnMolSystem)
 #    print 'status: %s' % ccpnMolSystem.setCode(projectName) # impossible; reported to ccpn team.
 
-    importStarChemicalShifts(ccpnProject, inputStarDir, guiRoot, allowPopups=allowPopups, minimalPrompts=minimalPrompts, 
+    importStarChemicalShifts(ccpnProject, inputStarDir, guiRoot, allowPopups=allowPopups, minimalPrompts=minimalPrompts,
                              verbose=verbose, **presets)
 
     if doSwapCheck:

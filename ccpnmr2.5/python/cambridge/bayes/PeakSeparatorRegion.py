@@ -13,16 +13,17 @@ maxHeight,
 
 """
 
-from ccp.api.general.DataLocation       import NumericMatrix
-from ccpnmr.analysis.core.UnitConverter import ppm2pnt
-from memops.gui.MessageReporter         import showError, showWarning
+from PeakSeparatorPeakList import getPeakListParams
 
-from PeakSeparatorPeakList              import getPeakListParams
+from ccp.api.general.DataLocation import NumericMatrix
+from ccpnmr.analysis.core.UnitConverter import ppm2pnt
+from memops.gui.MessageReporter import showError, showWarning
+
 
 def getRegionParams(params, argServer=None, HEIGHT_MULTIPLIER=2.5):
   """ given region in spec return params """
 
-  # general variables 
+  # general variables
   xyz = ['x', 'y', 'z1', 'z2', 'z3']
 
   if argServer:
@@ -53,7 +54,7 @@ def getRegionParams(params, argServer=None, HEIGHT_MULTIPLIER=2.5):
   # make sure that dragged region and peak list match!
   if not spectrumWindowView:
     peakListName = '%s:%s:%s' % (spectrum.experiment.name, spectrum.name, peakList.serial)
-    showWarning( 'Incorrect Peak List', 
+    showWarning( 'Incorrect Peak List',
       "Peak list '%s' doesn't match selected spectral region, please select another peak list." % peakListName )
     return
 

@@ -1,7 +1,7 @@
-import sys
 import smtplib
-
+import sys
 from email.MIMEText import MIMEText
+
 
 def getShiftList(entry):
 

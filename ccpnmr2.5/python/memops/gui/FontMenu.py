@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,13 +54,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 # import Tkinter as tk
 from memops.gui.Menu import Menu
 
-fontNames = ('Courier','Helvetica','Lucida','System','Times')
-BOLD = 'bold'
-ITALIC = 'italic'
+fontNames = ("Courier", "Helvetica", "Lucida", "System", "Times")
+BOLD = "bold"
+ITALIC = "italic"
 
 
 class FontMenu(Menu):
-
     def __init__(self, parent, setFunc, sizes=(8, 10, 12, 14), doBold=1, doItalic=1, doBoldItalic=0, *args, **kw):
 
         Menu.__init__(self, parent, *args, **kw)
@@ -76,29 +75,29 @@ class FontMenu(Menu):
             subMenus[fontName] = Menu(self, tearoff=0)
 
             for s in sizes:
-                spec = '%s %d' % (fontName, s)
-                label = '%dpt' % s
+                spec = "%s %d" % (fontName, s)
+                label = "%dpt" % s
                 # fontSpec = (fontName, s)
                 subMenus[fontName].add_command(label=label, font=spec, command=lambda fnt=spec: setFunc(fnt))
 
             if doBold:
                 for s in sizes:
-                    spec = '%s %d %s' % (fontName, s, BOLD)
-                    label = '%dpt %s' % (s, BOLD)
+                    spec = "%s %d %s" % (fontName, s, BOLD)
+                    label = "%dpt %s" % (s, BOLD)
                     # fontSpec = (fontName, s, BOLD)
                     subMenus[fontName].add_command(label=label, font=spec, command=lambda fnt=spec: setFunc(fnt))
 
             if doItalic:
                 for s in sizes:
-                    spec = '%s %d %s' % (fontName, s, ITALIC)
-                    label = '%dpt %s' % (s, ITALIC)
+                    spec = "%s %d %s" % (fontName, s, ITALIC)
+                    label = "%dpt %s" % (s, ITALIC)
                     # fontSpec = (fontName, s, ITALIC)
                     subMenus[fontName].add_command(label=label, font=spec, command=lambda fnt=spec: setFunc(fnt))
 
             if doBoldItalic:
                 for s in sizes:
-                    spec = '%s %d %s %s' % (fontName, s, BOLD, ITALIC)
-                    label = '%dpt %s %s' % (s, BOLD, ITALIC)
+                    spec = "%s %d %s %s" % (fontName, s, BOLD, ITALIC)
+                    label = "%dpt %s %s" % (s, BOLD, ITALIC)
                     # fontSpec = (fontName, s, BOLD, ITALIC)
                     subMenus[fontName].add_command(label=label, font=spec, command=lambda fnt=spec: setFunc(fnt))
 

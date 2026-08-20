@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,20 +56,14 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.nmrStar.generalIO import NmrStarConstraintFile
-from ccp.format.nmrStar.generalIO import NmrStarFile
-from ccp.format.nmrStar.generalIO import GenericConstraint
-
 #
 # For DIANA torsion angle name information
 #
-
 from ccp.format.cyana.cyanaLibParser import CyanaLibrary
-
 from ccp.format.general.Constants import defaultMolCode
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.nmrStar.generalIO import GenericConstraint, NmrStarConstraintFile, NmrStarFile
+from memops.universal.Io import getTopDirectory
 
 #####################
 # Class definitions #
@@ -77,299 +71,298 @@ from ccp.format.general.Util import getSeqAndInsertCode
 
 
 class NmrStarFile(NmrStarFile):
+    def initialize(self, version="2.1.1"):
 
-  def initialize(self, version = '2.1.1'):
-  
-    self.constraintFiles = []
-    self.files = self.constraintFiles
+        self.constraintFiles = []
+        self.files = self.constraintFiles
 
-    if not self.version:
-      self.version = version
-    
-    if self.version == '3.1':
-      self.saveFrameName = 'RDC_constraints'    
-    else:
-      self.saveFrameName = 'residual_dipolar_couplings'
+        if not self.version:
+            self.version = version
 
-    self.DataClassFile = NmrStarRdcConstraintFile
-    
-    self.components = [self.saveFrameName]
-    self.setComponents()
+        if self.version == "3.1":
+            self.saveFrameName = "RDC_constraints"
+        else:
+            self.saveFrameName = "residual_dipolar_couplings"
 
-  def read(self,verbose = 0):
-  
-    self.readComponent(verbose = verbose) 
+        self.DataClassFile = NmrStarRdcConstraintFile
+
+        self.components = [self.saveFrameName]
+        self.setComponents()
+
+    def read(self, verbose=0):
+
+        self.readComponent(verbose=verbose)
+
 
 class NmrStarRdcConstraintFile(NmrStarConstraintFile):
+    def initialize(self, parent, saveFrame=None):
 
-  def initialize(self,parent,saveFrame = None):
+        self.constraints = []
 
-    self.constraints = []
-    
-    self.constraintElements = 2
-    
-    self.cyanaLibUsed = 0
-    self.cyanaLib = CyanaLibrary()
-    
-    self.saveFrame = saveFrame
-         
-    self.parent = parent
-    self.version = parent.version
+        self.constraintElements = 2
 
-    if self.saveFrame:
-      self.parseSaveFrame()
+        self.cyanaLibUsed = 0
+        self.cyanaLib = CyanaLibrary()
 
-  def parseSaveFrame(self):
-    
-    if not self.checkVersion():
-      return
+        self.saveFrame = saveFrame
 
-    #
-    # Set up reference info
-    #
-    
-    tableTagNames = {}
-    
-    if self.version == '2.1.1':
+        self.parent = parent
+        self.version = parent.version
 
-      tableName = '_Residual_dipolar_coupling_ID'
-      tableTagNames['ID'] = tableName
+        if self.saveFrame:
+            self.parseSaveFrame()
 
-      tableTagNames['atomPresent'] = "_Atom_two_atom_name"
-      tableTagNames['position'] = ['one','two']
-  
-      tableTagNames['code'] = '_Residual_dipolar_coupling_code'
-      tableTagNames['value'] = '_Residual_dipolar_coupling_value'
-      
-      #
-      # Hack - both of these occur in the files for some reason
-      #
-      
-      if self.saveFrame.tables.has_key(tableName):
+    def parseSaveFrame(self):
 
-        constraintTableTags = self.saveFrame.tables[tableName].tags
+        if not self.checkVersion():
+            return
 
-        # This value not necessarily available...
-        if constraintTableTags.has_key('_Residual_dipolar_coupling_value_error'):
-          tableTagNames['error'] = '_Residual_dipolar_coupling_value_error'
-        elif constraintTableTags.has_key('_Residual_dipolar_coupling_error'):
-          tableTagNames['error'] = '_Residual_dipolar_coupling_error'
+        #
+        # Set up reference info
+        #
 
-      tableTagNames['lowerValue'] = '_Residual_dipolar_coupling_lower_bound_value'
-      tableTagNames['upperValue'] = '_Residual_dipolar_coupling_upper_bound_value'
-      
-      # Same as in dihedralConstraintsIO!
-      tableTagNames['chainCode'] = "_Atom_%s_mol_system_component_name"
-      tableTagNames['seqCode'] = "_Atom_%s_residue_seq_code"
-      tableTagNames['atomName'] = "_Atom_%s_atom_name"
-      tableTagNames['resLabel'] = "_Atom_%s_residue_label"
-      
-    elif self.version[0] == '3':
-    
-      tableName = '_RDC_constraint'
-      tableTagNames['ID'] = 'ID'
+        tableTagNames = {}
 
-      tableTagNames['position'] = ['1','2']
-  
-      #tableTagNames['code'] = '_Residual_dipolar_coupling_code'
-      tableTagNames['value'] = 'RDC_val'
-      tableTagNames['error'] = 'RDC_val_err'
-      tableTagNames['lowerValue'] = 'RDC_lower_bound'
-      tableTagNames['upperValue'] = 'RDC_upper_bound'
- 
-      if self.version == '3.0':
-        tableTagNames['atomPresent'] = "Label_atom_ID_2"
-        tableTagNames['chainCode'] = "Label_entity_assembly_ID_%s"
-        tableTagNames['seqCode'] = "Label_comp_index_ID_%s"
-        tableTagNames['atomName'] = "Label_atom_ID_%s"
-        tableTagNames['resLabel'] = "Label_comp_ID_%s"
+        if self.version == "2.1.1":
+            tableName = "_Residual_dipolar_coupling_ID"
+            tableTagNames["ID"] = tableName
 
-      elif self.version == '3.1':
-        tableTagNames['atomPresent'] = "Atom_ID_2"
-        tableTagNames['chainCode'] =   "Entity_assembly_ID_%s"
-        tableTagNames['seqCode'] =     "Comp_index_ID_%s"
-        tableTagNames['atomName'] =    "Atom_ID_%s"
-        tableTagNames['resLabel'] =    "Comp_ID_%s"
- 
-      if self.saveFrame.tables.has_key(tableName) and not self.saveFrame.tables[tableName].tags[tableTagNames['seqCode'] % 1][0]:
-        tableTagNames['atomPresent'] = "Auth_atom_ID_2"
-        
-        if self.version == '3.0':
-          tableTagNames['chainCode'] = "Auth_segment_code_%s"
-        elif self.version == '3.1':
-          tableTagNames['chainCode'] = "Auth_asym_ID_%s"
-        
-        tableTagNames['seqCode'] = "Auth_seq_ID_%s"
-        tableTagNames['atomName'] = "Auth_atom_ID_%s"
-        tableTagNames['resLabel'] = "Auth_comp_ID_%s"
-    
-    #
-    # Could be missing...
-    #
+            tableTagNames["atomPresent"] = "_Atom_two_atom_name"
+            tableTagNames["position"] = ["one", "two"]
 
-    if self.saveFrame.tables.has_key(tableName):
-      
-      constraintTableTags = self.saveFrame.tables[tableName].tags
+            tableTagNames["code"] = "_Residual_dipolar_coupling_code"
+            tableTagNames["value"] = "_Residual_dipolar_coupling_value"
 
-      for i in range(0,len(constraintTableTags[tableTagNames['ID']])):
+            #
+            # Hack - both of these occur in the files for some reason
+            #
 
-        rdcConstraint = NmrStarRdcConstraint()
-        rdcConstraint.setData(constraintTableTags,i,tableTagNames)
+            if tableName in self.saveFrame.tables:
+                constraintTableTags = self.saveFrame.tables[tableName].tags
 
-        self.constraints.append(rdcConstraint)
+                # This value not necessarily available...
+                if "_Residual_dipolar_coupling_value_error" in constraintTableTags:
+                    tableTagNames["error"] = "_Residual_dipolar_coupling_value_error"
+                elif "_Residual_dipolar_coupling_error" in constraintTableTags:
+                    tableTagNames["error"] = "_Residual_dipolar_coupling_error"
 
-        rdcConstraint.setErrors(self.saveFrame.tables[tableName].tagErrors,tableTagNames,i)
+            tableTagNames["lowerValue"] = "_Residual_dipolar_coupling_lower_bound_value"
+            tableTagNames["upperValue"] = "_Residual_dipolar_coupling_upper_bound_value"
 
-        if rdcConstraint.Id and not constraintTableTags[tableTagNames['atomPresent']][i]:
+            # Same as in dihedralConstraintsIO!
+            tableTagNames["chainCode"] = "_Atom_%s_mol_system_component_name"
+            tableTagNames["seqCode"] = "_Atom_%s_residue_seq_code"
+            tableTagNames["atomName"] = "_Atom_%s_atom_name"
+            tableTagNames["resLabel"] = "_Atom_%s_residue_label"
 
-          #
-          # Only one atom given - find other one... also set code to something for
-          # output later on (hack for writing constraint nmrStar files for Jurgen)
-          #
+        elif self.version[0] == "3":
+            tableName = "_RDC_constraint"
+            tableTagNames["ID"] = "ID"
 
-          rdcConstraint.setAtomMembers(constraintTableTags,i,self.cyanaLib,tableTagNames)
-          rdcConstraint.code = True
+            tableTagNames["position"] = ["1", "2"]
 
-          self.cyanaLibUsed = 1
+            # tableTagNames['code'] = '_Residual_dipolar_coupling_code'
+            tableTagNames["value"] = "RDC_val"
+            tableTagNames["error"] = "RDC_val_err"
+            tableTagNames["lowerValue"] = "RDC_lower_bound"
+            tableTagNames["upperValue"] = "RDC_upper_bound"
 
-        else:
+            if self.version == "3.0":
+                tableTagNames["atomPresent"] = "Label_atom_ID_2"
+                tableTagNames["chainCode"] = "Label_entity_assembly_ID_%s"
+                tableTagNames["seqCode"] = "Label_comp_index_ID_%s"
+                tableTagNames["atomName"] = "Label_atom_ID_%s"
+                tableTagNames["resLabel"] = "Label_comp_ID_%s"
 
-          rdcConstraint.nodes.append(NmrStarRdcConstraintItem())
+            elif self.version == "3.1":
+                tableTagNames["atomPresent"] = "Atom_ID_2"
+                tableTagNames["chainCode"] = "Entity_assembly_ID_%s"
+                tableTagNames["seqCode"] = "Comp_index_ID_%s"
+                tableTagNames["atomName"] = "Atom_ID_%s"
+                tableTagNames["resLabel"] = "Comp_ID_%s"
 
-          for position in tableTagNames['position']:
+            if (
+                tableName in self.saveFrame.tables
+                and not self.saveFrame.tables[tableName].tags[tableTagNames["seqCode"] % 1][0]
+            ):
+                tableTagNames["atomPresent"] = "Auth_atom_ID_2"
 
-            rdcConstraint.nodes[-1].members.append(NmrStarRdcConstraintMember())
-            rdcConstraint.nodes[-1].members[-1].addStarInfo(constraintTableTags,i,position,tableTagNames)
+                if self.version == "3.0":
+                    tableTagNames["chainCode"] = "Auth_segment_code_%s"
+                elif self.version == "3.1":
+                    tableTagNames["chainCode"] = "Auth_asym_ID_%s"
 
-    #
-    # Comments
-    #
-        
-    self.parseCommentsLoop()
+                tableTagNames["seqCode"] = "Auth_seq_ID_%s"
+                tableTagNames["atomName"] = "Auth_atom_ID_%s"
+                tableTagNames["resLabel"] = "Auth_comp_ID_%s"
+
+        #
+        # Could be missing...
+        #
+
+        if tableName in self.saveFrame.tables:
+            constraintTableTags = self.saveFrame.tables[tableName].tags
+
+            for i in range(0, len(constraintTableTags[tableTagNames["ID"]])):
+                rdcConstraint = NmrStarRdcConstraint()
+                rdcConstraint.setData(constraintTableTags, i, tableTagNames)
+
+                self.constraints.append(rdcConstraint)
+
+                rdcConstraint.setErrors(self.saveFrame.tables[tableName].tagErrors, tableTagNames, i)
+
+                if rdcConstraint.Id and not constraintTableTags[tableTagNames["atomPresent"]][i]:
+                    #
+                    # Only one atom given - find other one... also set code to something for
+                    # output later on (hack for writing constraint nmrStar files for Jurgen)
+                    #
+
+                    rdcConstraint.setAtomMembers(constraintTableTags, i, self.cyanaLib, tableTagNames)
+                    rdcConstraint.code = True
+
+                    self.cyanaLibUsed = 1
+
+                else:
+                    rdcConstraint.nodes.append(NmrStarRdcConstraintItem())
+
+                    for position in tableTagNames["position"]:
+                        rdcConstraint.nodes[-1].members.append(NmrStarRdcConstraintMember())
+                        rdcConstraint.nodes[-1].members[-1].addStarInfo(constraintTableTags, i, position, tableTagNames)
+
+        #
+        # Comments
+        #
+
+        self.parseCommentsLoop()
+
 
 class NmrStarRdcConstraint(GenericConstraint):
+    def __init__(self, Id=None):
 
-  def __init__(self,Id = None):
-    
-    self.Id = Id
-    self.nodes = []   # THIS IS A HACK! Not really a node...
-    self.errors = []
-    self.code = None
-  
-  def setData(self,constraintLogicTableTags,i,tableTagNames):
+        self.Id = Id
+        self.nodes = []  # THIS IS A HACK! Not really a node...
+        self.errors = []
+        self.code = None
 
-    self.Id = constraintLogicTableTags[tableTagNames['ID']][i]
+    def setData(self, constraintLogicTableTags, i, tableTagNames):
 
-    self.value = constraintLogicTableTags[tableTagNames['value']][i]
-    
-    if tableTagNames.has_key('error'):
-      self.error = constraintLogicTableTags[tableTagNames['error']][i]
-    else:
-      self.error = None
-    
-    if constraintLogicTableTags.has_key(tableTagNames['lowerValue']):
-      self.lowerValue = constraintLogicTableTags[tableTagNames['lowerValue']][i]
-      
-    if constraintLogicTableTags.has_key(tableTagNames['upperValue']):
-      self.upperValue = constraintLogicTableTags[tableTagNames['upperValue']][i]
-    
-    if tableTagNames.has_key('code') and constraintLogicTableTags.has_key(tableTagNames['code']):
-      self.code = constraintLogicTableTags[tableTagNames['code']][i]
-    
-  def setAtomMembers(self,constraintTableTags,i,cyanaLib,tableTagNames):
-   
-    #
-    # Need to set two members... for DIANA-CYANA only one available.
-    # Using DIANA library to find out where the 'other' atom is...
-    #
-  
-    chainCode = constraintTableTags[tableTagNames['chainCode'] % tableTagNames['position'][0]][i]
+        self.Id = constraintLogicTableTags[tableTagNames["ID"]][i]
 
-    if not chainCode:
-      chainCode = defaultMolCode
+        self.value = constraintLogicTableTags[tableTagNames["value"]][i]
 
-    seqCode = constraintTableTags[tableTagNames['seqCode'] % tableTagNames['position'][0]][i]
-    resLabel = constraintTableTags[tableTagNames['resLabel'] % tableTagNames['position'][0]][i]
-    refAtomName = constraintTableTags[tableTagNames['atomName'] % tableTagNames['position'][0]][i]
-    
-    refAtom = cyanaLib.findAtom(resLabel,refAtomName)
+        if "error" in tableTagNames:
+            self.error = constraintLogicTableTags[tableTagNames["error"]][i]
+        else:
+            self.error = None
 
-    if not refAtom:
-      print("  Error: atom %s (%s %s, chain '%s') not found in Cyana library!" % (refAtomName,resLabel,seqCode,chainCode))
-    
-    elif refAtom.bondedAtomSerials.count(0) != 3:
-      print("  Error: invalid single atom %s (%s %s, chain '%s'). No or multiple bonded atoms" % (refAtomName,resLabel,seqCode,chainCode))
-    
-    else:
-    
-      self.nodes.append(NmrStarRdcConstraintItem())
+        if tableTagNames["lowerValue"] in constraintLogicTableTags:
+            self.lowerValue = constraintLogicTableTags[tableTagNames["lowerValue"]][i]
 
-      self.nodes[-1].members.append(NmrStarRdcConstraintMember(chainCode,seqCode,refAtomName,resLabel))
+        if tableTagNames["upperValue"] in constraintLogicTableTags:
+            self.upperValue = constraintLogicTableTags[tableTagNames["upperValue"]][i]
 
-      atomSerial = refAtom.bondedAtomSerials[0]     
-      bondedAtom = cyanaLib.findAtomBySerial(resLabel,atomSerial)
-    
-      self.nodes[-1].members.append(NmrStarRdcConstraintMember(chainCode,seqCode,bondedAtom.name,resLabel))
+        if "code" in tableTagNames and tableTagNames["code"] in constraintLogicTableTags:
+            self.code = constraintLogicTableTags[tableTagNames["code"]][i]
+
+    def setAtomMembers(self, constraintTableTags, i, cyanaLib, tableTagNames):
+
+        #
+        # Need to set two members... for DIANA-CYANA only one available.
+        # Using DIANA library to find out where the 'other' atom is...
+        #
+
+        chainCode = constraintTableTags[tableTagNames["chainCode"] % tableTagNames["position"][0]][i]
+
+        if not chainCode:
+            chainCode = defaultMolCode
+
+        seqCode = constraintTableTags[tableTagNames["seqCode"] % tableTagNames["position"][0]][i]
+        resLabel = constraintTableTags[tableTagNames["resLabel"] % tableTagNames["position"][0]][i]
+        refAtomName = constraintTableTags[tableTagNames["atomName"] % tableTagNames["position"][0]][i]
+
+        refAtom = cyanaLib.findAtom(resLabel, refAtomName)
+
+        if not refAtom:
+            print(
+                "  Error: atom %s (%s %s, chain '%s') not found in Cyana library!"
+                % (refAtomName, resLabel, seqCode, chainCode)
+            )
+
+        elif refAtom.bondedAtomSerials.count(0) != 3:
+            print(
+                "  Error: invalid single atom %s (%s %s, chain '%s'). No or multiple bonded atoms"
+                % (refAtomName, resLabel, seqCode, chainCode)
+            )
+
+        else:
+            self.nodes.append(NmrStarRdcConstraintItem())
+
+            self.nodes[-1].members.append(NmrStarRdcConstraintMember(chainCode, seqCode, refAtomName, resLabel))
+
+            atomSerial = refAtom.bondedAtomSerials[0]
+            bondedAtom = cyanaLib.findAtomBySerial(resLabel, atomSerial)
+
+            self.nodes[-1].members.append(NmrStarRdcConstraintMember(chainCode, seqCode, bondedAtom.name, resLabel))
+
 
 class NmrStarRdcConstraintItem:
+    def __init__(self):
 
-  def __init__(self):
-    
-    self.Id = 1
-    self.members = []    
-    
+        self.Id = 1
+        self.members = []
+
+
 class NmrStarRdcConstraintMember:
+    def __init__(self, chainCode=None, seqCode=None, atomName=None, resLabel=None):
 
-  def __init__(self,chainCode = None,seqCode = None, atomName = None, resLabel = None):
-    
-    self.chainCode = chainCode
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.atomName = atomName
-    self.resLabel = resLabel
-    
-    self.defaultMolCode = defaultMolCode
-    
-  def addStarInfo(self,constraintTableTags,i,position,tableTagNames):
+        self.chainCode = chainCode
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.atomName = atomName
+        self.resLabel = resLabel
 
-    # Tag can be missing in 2.1.1 files...
-    if constraintTableTags.has_key(tableTagNames['chainCode'] % position):
-      self.chainCode = constraintTableTags[tableTagNames['chainCode'] % position][i]
-    else:
-      self.chainCode = None
+        self.defaultMolCode = defaultMolCode
 
-    if not self.chainCode:
-      self.chainCode = self.defaultMolCode
+    def addStarInfo(self, constraintTableTags, i, position, tableTagNames):
 
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(constraintTableTags[tableTagNames['seqCode'] % position][i])
-    self.atomName = constraintTableTags[tableTagNames['atomName'] % position][i]
-    self.resLabel = constraintTableTags[tableTagNames['resLabel'] % position][i]
+        # Tag can be missing in 2.1.1 files...
+        if tableTagNames["chainCode"] % position in constraintTableTags:
+            self.chainCode = constraintTableTags[tableTagNames["chainCode"] % position][i]
+        else:
+            self.chainCode = None
+
+        if not self.chainCode:
+            self.chainCode = self.defaultMolCode
+
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(
+            constraintTableTags[tableTagNames["seqCode"] % position][i]
+        )
+        self.atomName = constraintTableTags[tableTagNames["atomName"] % position][i]
+        self.resLabel = constraintTableTags[tableTagNames["resLabel"] % position][i]
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    files = [  # ['../reference/ccpNmr/jurgenBmrb/1jwe/restraints.star','2.1.1'],
+        # ['../reference/ccpNmr/jurgenBmrb/1j7p/restraints.star','2.1.1']
+        ["../reference/ccpNmr/jurgenBmrb/1b4c/1b4c.str", "3.0"]
+    ]
 
-  files = [#['../reference/ccpNmr/jurgenBmrb/1jwe/restraints.star','2.1.1'],
-           #['../reference/ccpNmr/jurgenBmrb/1j7p/restraints.star','2.1.1']
-           ['../reference/ccpNmr/jurgenBmrb/1b4c/1b4c.str','3.0']
-          ]
-  
-  for (file,version) in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    nmrStarFile = NmrStarFile(file,version = version)
+    for file, version in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    nmrStarFile.read(verbose = 1)
+        nmrStarFile = NmrStarFile(file, version=version)
 
-    for constraintFile in nmrStarFile.constraintFiles:
-      for constraint in constraintFile.constraints:
+        nmrStarFile.read(verbose=1)
 
-        print(constraint.Id, constraint.value, constraint.error, constraint.lowerValue, constraint.upperValue)
+        for constraintFile in nmrStarFile.constraintFiles:
+            for constraint in constraintFile.constraints:
+                print(constraint.Id, constraint.value, constraint.error, constraint.lowerValue, constraint.upperValue)
 
-        for item in constraint.nodes:
-          mlist = []
-          for member in item.members:
-            mlist.append([member.seqCode,member.atomName])
-          print("   " + str(mlist))
+                for item in constraint.nodes:
+                    mlist = []
+                    for member in item.members:
+                        mlist.append([member.seqCode, member.atomName])
+                    print("   " + str(mlist))

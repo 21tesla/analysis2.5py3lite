@@ -2,21 +2,22 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_queeny.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
+import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
 from cing.NRG.storeCING2db import doStoreCING2db
 from cing.PluginCode.required.reqCcpn import CCPN_STR
-from cing.PluginCode.required.reqQueeny import * #@UnusedWildImport
-from cing.core.classes import Project
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
-import unittest
+from cing.PluginCode.required.reqQueeny import *  #@UnusedWildImport
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
+    pass
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
@@ -97,7 +98,6 @@ class AllChecks(TestCase):
             if doStoreCheck:
 #                # Does require:
                 try:
-                    from cing.PluginCode.sqlAlchemy import CsqlAlchemy #@UnusedImport # pylint: disable=W0612,W0404
                     pdbEntryId = entryId[0:4]
                     if doStoreCING2db( pdbEntryId, ARCHIVE_DEV_NRG_ID, project=project):
                         nTerror("Failed to store CING project's data to DB but continuing.")

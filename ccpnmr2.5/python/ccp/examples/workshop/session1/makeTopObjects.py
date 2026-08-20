@@ -29,50 +29,63 @@
 
 from memops.api.Implementation import MemopsRoot
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # New CCPN project - called a MemopsRoot.
 
-  # New CCPN project - called a MemopsRoot.
+    project = MemopsRoot(name="topObjectTest")
 
-  project = MemopsRoot(name = 'topObjectTest')
+    # Use the new<Class> factory methods available to the MemopsRoot class.
 
-  # Use the new<Class> factory methods available to the MemopsRoot class.
+    # NmrEntry
+    entryStore = project.newNmrEntryStore(name="myEntry")
 
-  # NmrEntry
-  entryStore = project.newNmrEntryStore(name = 'myEntry')
+    # Nmr
+    nmrProject = project.newNmrProject(name="myNmrProject")
 
-  # Nmr
-  nmrProject = project.newNmrProject(name = 'myNmrProject')
+    # Affiliation
+    affStore = project.newAffiliationStore(name="myAffiliation")
 
-  # Affiliation
-  affStore = project.newAffiliationStore(name = 'myAffiliation')
+    # Citation
+    citStore = project.newCitationStore(name="myCitation")
 
-  # Citation
-  citStore = project.newCitationStore(name = 'myCitation')
+    # DbRef
+    database = project.newDatabase(name="UniProt")
 
-  # DbRef
-  database = project.newDatabase(name = 'UniProt')
+    # Taxonomy
+    taxonomy = project.newTaxonomy(name="myTaxonomy")
 
-  # Taxonomy
-  taxonomy = project.newTaxonomy(name = 'myTaxonomy')
+    # Classification
+    classification = project.newClassification(namingSystem="myClassification")
 
-  # Classification
-  classification = project.newClassification(namingSystem = 'myClassification')
+    # Print the actual objects as strings.
 
-  # Print the actual objects as strings.
-
-  print('''
+    print(
+        """
 Project: [%s]; \nEntryStore: [%s]; \nNmrProject: [%s]\nAffiliation: [%s]; 
 Citation: [%s]; \nDatabase: [%s]; \nTaxonomy: [%s]; \nClassification: [%s].
-''' % (project, entryStore, nmrProject, affStore, citStore, database, taxonomy, classification))
+"""
+        % (project, entryStore, nmrProject, affStore, citStore, database, taxonomy, classification)
+    )
 
-  # Print the object names.
+    # Print the object names.
 
-  print('''
+    print(
+        """
 Project: [%s]; \nEntryStore: [%s]; \nNmrProject: [%s]; \nAffiliation: [%s];
 Citation: [%s]; \nDatabase: [%s]; \nTaxonomy: [%s]; \nClassification: [%s].
-''' % (project.name, entryStore.name, nmrProject.name, affStore.name,
-       citStore.name, database.name, taxonomy.name, classification.namingSystem))
+"""
+        % (
+            project.name,
+            entryStore.name,
+            nmrProject.name,
+            affStore.name,
+            citStore.name,
+            database.name,
+            taxonomy.name,
+            classification.namingSystem,
+        )
+    )
 
-  # Save the project.
+    # Save the project.
 
-  project.saveModified()
+    project.saveModified()

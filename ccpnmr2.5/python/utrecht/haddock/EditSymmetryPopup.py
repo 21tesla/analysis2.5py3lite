@@ -81,17 +81,16 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-from memops.gui.ButtonList      import ButtonList
-from memops.gui.CheckButton     import CheckButton
-from memops.gui.IntEntry        import IntEntry
-from memops.gui.LabelFrame      import LabelFrame
-from memops.gui.Label           import Label
-from memops.gui.MultiWidget     import MultiWidget
-from memops.gui.PulldownMenu    import PulldownMenu
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
+from memops.editor.BasePopup import BasePopup
+from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.CheckButton import CheckButton
+from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.MultiWidget import MultiWidget
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
-from memops.editor.BasePopup    import BasePopup
-from memops.editor.Util         import createDismissHelpButtonList
 
 class EditSymmetryPopup(BasePopup):
 
@@ -146,8 +145,8 @@ class EditSymmetryPopup(BasePopup):
     editWidgets      = [None, self.symmCodePulldown, self.segLengthEntry, self.setChainMulti, self.setSegmentMulti]
     editGetCallbacks = [None, self.getSymmCode, self.getSegLength, self.getChains, self.getSegments]
     editSetCallbacks = [None, self.setSymmCode, self.setSegLength, self.setChains, self.setSegments]
- 
-    headings = ['#','Symmetry\nType','Segment\nLength','Chains','Segment\nPositions']                   
+
+    headings = ['#','Symmetry\nType','Segment\nLength','Chains','Segment\nPositions']
     self.symmetryMatrix = ScrolledMatrix(frame,headingList=headings,
                                          callback=self.selectSymmetry,
                                          editWidgets=editWidgets,
@@ -175,30 +174,30 @@ class EditSymmetryPopup(BasePopup):
     BasePopup.open(self)
 
   def notify(self, notifyFunc):
-  
+
     for func in ('__init__', 'delete', 'setSymmetryCode','setSegmentLength'):
         notifyFunc(self.updateSymmetriesAfter, 'molsim.Symmetry.Symmetry', func)
 
     for func in ('__init__', 'delete','setfirstSeqId'):
         notifyFunc(self.updateSymmetriesAfter, 'molsim.Symmetry.Segment', func)
 
-  def getSymmCode(self, symmetryOp): 
-    
+  def getSymmCode(self, symmetryOp):
+
     """Get allowed symmetry operators from the model"""
-    
+
     symmetryOpCodes = symmetryOp.parent.metaclass.container.getElement('SymmetryOpCode').enumeration
     index = 0
-    
+
     if symmetryOp.symmetryCode in symmetryOpCodes: index = symmetryOpCodes.index(symmetryOp.symmetryCode)
-    
+
     self.symmCodePulldown.setup(symmetryOpCodes, index)
-      
+
   def getSegLength(self, symmetryOp):
-  
+
     if symmetryOp and symmetryOp.segmentLength: self.segLengthEntry.set(symmetryOp.segmentLength)
-  
-  def getChains(self, symmetryOp): 
-  
+
+  def getChains(self, symmetryOp):
+
     chains = []
     for chain in self.molSystem.chains:
         if chain.residues:
@@ -213,7 +212,7 @@ class EditSymmetryPopup(BasePopup):
     self.setChainMulti.set(values=values,options=chains)
 
   def getSegments(self, symmetryOp):
- 
+
     values = []; names  = []
 
     if symmetryOp:
@@ -226,21 +225,21 @@ class EditSymmetryPopup(BasePopup):
     self.setSegmentMulti.minRows = n
     self.setSegmentMulti.set(values=values,options=names)
 
-  def setSymmCode(self, index, name=None): 
-   
+  def setSymmCode(self, index, name=None):
+
     """Set the symmetry code as NCS,C2,C3,C4,C5,C6"""
 
     if self.symmetryOp:
         symmCode = self.symmCodePulldown.getSelected()
         self.symmetryOp.symmetryCode = symmCode
- 
+
   def setSegLength(self, event):
-  
+
     value = self.segLengthEntry.get() or 1
     self.symmetryOp.segmentLength = value
 
   def setChains(self, obj):
-  
+
     if self.symmetryOp and obj:
         codes   = self.setChainMulti.options
         segment = self.symmetryOp.findFirstSegment()
@@ -261,18 +260,18 @@ class EditSymmetryPopup(BasePopup):
                 else:
                     residue = chain.sortedResidues()[0]
                     seqId = residue.seqId
-                    
+
                 residue2 = chain.findFirstResidue(seqid=seqId+self.symmetryOp.segmentLength)
                 if not residue2:
                     residue2 = chain.sortedResidues()[-1]
                     self.symmetryOp.segmentLength = (residue2.seqId - seqId) + 1
 
                 segment = self.symmetryOp.newSegment(chainCode=codes[i],firstSeqId=seqId)
-                
+
     self.symmetryMatrix.keyPressEscape()
-    
+
   def setSegments(self, obj):
-  
+
     if self.symmetryOp and obj:
         segments = self.symmetryOp.sortedSegments()
         values   = self.setSegmentMulti.get()
@@ -281,20 +280,20 @@ class EditSymmetryPopup(BasePopup):
             seqCode = values[i]
             chain = self.molSystem.findFirstChain(code=segments[i].chainCode)
             residue = chain.findFirstResidue(seqCode=seqCode)
-  
+
             if residue: seqId = residue.seqId
             if segments[i].firstSeqId != seqId:
                 segments[i].delete()
                 segments[i] = self.symmetryOp.newSegment(chainCode=chain.code,firstSeqId=seqId)
 
     self.symmetryMatrix.keyPressEscape()
-  
+
   def selectSymmetry(self, obj, row, col):
-  
+
     self.symmetryOp = obj
 
   def addSymmOp(self):
-  
+
     if self.molSystem:
         if not self.symmetrySet: self.symmetrySet = self.molSystem.findFirstMolSystemSymmetrySet()
 
@@ -306,11 +305,11 @@ class EditSymmetryPopup(BasePopup):
         symmetry = self.symmetrySet.newSymmetry(segmentLength=segLen)
 
   def removeSymmOp(self):
-  
+
     if self.symmetryOp: self.symmetryOp.delete()
 
   def toggleSingleMolecule(self, boolean):
-  
+
     self.singleMolecule = not boolean
     self.updateMolSystems()
     self.updateMolecules()
@@ -324,28 +323,28 @@ class EditSymmetryPopup(BasePopup):
             if chain and (chain.molecule not in molecules): segment.delete()
 
   def selectMolecule(self, index, name):
-  
+
     self.setMolecules(self.getMolecules()[index])
     self.updateSymmetries()
 
   def getMolecules(self):
-  
+
     counts = {}; moleculesList = []
 
     for chain in self.molSystem.chains:
         molecule = chain.molecule
         counts[molecule] = counts.get(molecule, 0) + 1
-  
+
     molecules = counts.keys()
     if self.singleMolecule:
         for molecule in counts:
-            if counts[molecule] > 1: moleculesList.append([molecule,]) 
+            if counts[molecule] > 1: moleculesList.append([molecule,])
 
     elif molecules:
         molecules = counts.keys()
         n = len(molecules)
         moleculesList.append([molecules[0],])
- 
+
         if n > 1:
             moleculesList.append([molecules[1],])
             moleculesList.append([molecules[0],molecules[1]])
@@ -364,29 +363,29 @@ class EditSymmetryPopup(BasePopup):
             moleculesList.append([molecules[0],molecules[2],molecules[3]])
             moleculesList.append([molecules[1],molecules[2],molecules[3]])
             moleculesList.append([molecules[0],molecules[1],molecules[2],molecules[3]])
- 
+
     return moleculesList
 
   def updateMolecules(self):
-    
+
     names = []; index = -1
     moleculesList = self.getMolecules()
     if moleculesList:
         if self.molecules not in moleculesList:
             self.setMolecules(moleculesList[0])
             self.symmetrySet = self.molSystem.findFirstMolSystemSymmetrySet()
-            
-        index = moleculesList.index(self.molecules)  
+
+        index = moleculesList.index(self.molecules)
 
         names = []
         for molecules in moleculesList: names.append(','.join([mol.name for mol in molecules]))
-  
+
     else: self.molecules = []
 
     self.moleculePulldown.setup(names, index)
 
   def selectMolSystem(self, index, name):
-  
+
     self.molSystem = self.getMolSystems()[index]
     self.symmetrySet = self.molSystem.findFirstMolSystemSymmetrySet()
     self.updateSymmetries()
@@ -399,36 +398,36 @@ class EditSymmetryPopup(BasePopup):
 
         if self.singleMolecule and (n > 1): molSystems.append(molSystem)
         elif n > 0: molSystems.append(molSystem)
-        
+
     return molSystems
 
   def updateMolSystems(self):
-  
+
     names = []; index = -1
     molSystems = self.getMolSystems()
 
     if molSystems:
         if self.molSystem not in molSystems: self.molSystem = molSystems[0]
-    
+
         index = molSystems.index(self.molSystem)
-        names = [ms.code for ms in molSystems]  
+        names = [ms.code for ms in molSystems]
     else: self.molSystem = None
 
     self.molSystemPulldown.setup(names, index)
 
   def updateSymmetriesAfter(self, obj=None):
-  
+
     if self.waiting: return
     else:
         self.waiting = True
         self.after_idle(self.updateSymmetries)
 
   def updateSymmetries(self):
-  
+
     textMatrix  = []; objectList  = []
     if self.symmetrySet:
         for symmetryOp in self.symmetrySet.symmetries:
-            chains = []; segments = [] 
+            chains = []; segments = []
             length = symmetryOp.segmentLength
 
             for segment in symmetryOp.sortedSegments():
@@ -450,7 +449,7 @@ class EditSymmetryPopup(BasePopup):
     self.waiting = False
 
   def destroy(self):
-  
+
     self.notify(self.unregisterNotify)
     BasePopup.destroy(self)
 

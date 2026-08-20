@@ -28,31 +28,31 @@ and other STAR variants satisfying the following requirements:
   as are the parts of tags before the first '.'
 """
 
-
-
-#=========================================================================================
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: CCPN $"
 __dateModified__ = "$dateModified: 2017-07-07 16:33:02 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: CCPN $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 
 # NB Assumes that file was parsed with lowercaseTags = True
 
@@ -64,7 +64,6 @@ import os
 
 from . import GenericStarParser
 
-
 NULLSTRING = GenericStarParser.NULLSTRING
 TRUESTRING = GenericStarParser.TRUESTRING
 FALSESTRING = GenericStarParser.FALSESTRING
@@ -73,13 +72,13 @@ UnquotedValue = GenericStarParser.UnquotedValue
 
 # Make target string (translator) for mapping, to work in Python 2 and 3 both
 # Unprintable characters map to '_', bytes above 128 map to '?'
-ll = 33 * ['_'] + list(chr(x) for x in range(33, 127)) + ['_'] + 128 * ['?']
+ll = 33 * ["_"] + list(chr(x) for x in range(33, 127)) + ["_"] + 128 * ["?"]
 # "'# (double quote, single quote, and pound sign) map to '?'
-ll[34] = ll[35] = ll[39] = '?'
-latin_1_to_framecode_translator = ''.join(ll)
+ll[34] = ll[35] = ll[39] = "?"
+latin_1_to_framecode_translator = "".join(ll)
 
 
-def parseNmrStar(text, mode='standard'):
+def parseNmrStar(text, mode="standard"):
     """load NMRSTAR file"""
     dataExtent = GenericStarParser.parse(text, mode)
     converter = _StarDataConverter(dataExtent)
@@ -89,25 +88,25 @@ def parseNmrStar(text, mode='standard'):
     return result
 
 
-def parseNef(text, mode='standard'):
+def parseNef(text, mode="standard"):
     """load NEF from string"""
 
     dataExtent = GenericStarParser.parse(text, mode)
-    converter = _StarDataConverter(dataExtent, fileType='nef')
+    converter = _StarDataConverter(dataExtent, fileType="nef")
     converter.preValidate()
     result = converter.convert()
     #
     return result
 
 
-def parseNmrStarFile(fileName, mode='standard', wrapInDataBlock=False):
+def parseNmrStarFile(fileName, mode="standard", wrapInDataBlock=False):
     """parse NMRSTAR from file
 
     if wrapInDataBlock missing DataBlock start will be provided"""
     with open(fileName) as fp:
         text = fp.read()
 
-    if wrapInDataBlock and 'save_' in text and not 'data_' in text:
+    if wrapInDataBlock and "save_" in text and "data_" not in text:
         text = "data_dummy \n\n" + text
     dataExtent = GenericStarParser.parse(text, mode)
     converter = _StarDataConverter(dataExtent)
@@ -117,17 +116,17 @@ def parseNmrStarFile(fileName, mode='standard', wrapInDataBlock=False):
     return result
 
 
-def parseNefFile(fileName, mode='standard', wrapInDataBlock=False):
+def parseNefFile(fileName, mode="standard", wrapInDataBlock=False):
     """parse NEF from file
 
     if wrapInDataBlock missing DataBlock start will be provided"""
     with open(fileName) as fp:
         text = fp.read()
 
-    if wrapInDataBlock and 'save_' in text and not 'data_' in text:
+    if wrapInDataBlock and "save_" in text and "data_" not in text:
         text = "data_dummy \n\n" + text
     dataExtent = GenericStarParser.parse(text, mode)
-    converter = _StarDataConverter(dataExtent, fileType='nef')
+    converter = _StarDataConverter(dataExtent, fileType="nef")
     converter.preValidate()
 
     result = converter.convert()
@@ -137,7 +136,7 @@ def parseNefFile(fileName, mode='standard', wrapInDataBlock=False):
 
 def string2FramecodeString(text):
     # Replace code points outside latin-1 range (more than one byte)  with '?'
-    result = text.encode('latin_1', 'replace').decode('latin_1')
+    result = text.encode("latin_1", "replace").decode("latin_1")
 
     # Translate string, using preset translator
     result = result.translate(latin_1_to_framecode_translator)
@@ -151,6 +150,7 @@ class StarValidationError(ValueError):
 
 class NmrDataExtent(GenericStarParser.DataExtent):
     """Top level container (OrderedDict) for NMRSTAR/NEF object tree"""
+
     pass
 
 
@@ -160,6 +160,7 @@ class NmrDataExtent(GenericStarParser.DataExtent):
 # parseNefFile.__annotations__['return'] = NmrDataExtent
 # parseNmrStar.__annotations__['return'] = NmrDataExtent
 # parseNmrStarFile.__annotations__['return'] = NmrDataExtent
+
 
 class NmrLoop(GenericStarParser.Loop):
     """Loop for NMRSTAR/NEF object tree
@@ -176,7 +177,7 @@ class NmrLoop(GenericStarParser.Loop):
     @property
     def tagPrefix(self):
         """Prefix to use before item tags on output"""
-        return '_%s.' % self.name
+        return "_%s." % self.name
 
 
 class NmrSaveFrame(GenericStarParser.SaveFrame):
@@ -189,7 +190,7 @@ class NmrSaveFrame(GenericStarParser.SaveFrame):
     @property
     def tagPrefix(self):
         """Prefix to use before item tags on output"""
-        return '_%s.' % self.category
+        return "_%s." % self.category
 
     def newLoop(self, name, columns):
         """Make new NmrLoop and add it to the NmrSaveFrame"""
@@ -206,13 +207,13 @@ class NmrDataBlock(GenericStarParser.DataBlock):
         name = string2FramecodeString(name)
         saveFrame = NmrSaveFrame(name, category=category)
         self.addItem(name, saveFrame)
-        saveFrame.addItem('sf_category', category)
-        saveFrame.addItem('sf_framecode', name)
+        saveFrame.addItem("sf_category", category)
+        saveFrame.addItem("sf_framecode", name)
         return saveFrame
 
     def addSaveFrame(self, saveFrame):
         """Add existing NmrSaveFrame to the DataBlock"""
-        self.addItem(saveFrame['sf_framecode'], saveFrame)
+        self.addItem(saveFrame["sf_framecode"], saveFrame)
 
 
 class NmrLoopRow(GenericStarParser.LoopRow):
@@ -225,10 +226,9 @@ class _StarDataConverter:
     NB Function assumes valid data as output from GeneralStarParser with lowerCaseTags settings
     and does not double check validity."""
 
-    validFileTypes = ('nef', 'star')
+    validFileTypes = ("nef", "star")
 
-    def __init__(self, dataExtent, fileType='star',
-                 specification=None, convertColumnNames=True):
+    def __init__(self, dataExtent, fileType="star", specification=None, convertColumnNames=True):
 
         # Set option settings
         if specification is None:
@@ -256,7 +256,7 @@ class _StarDataConverter:
         except StarValidationError:
             raise
         except:
-            print(self._errorMessage('System error:'))
+            print(self._errorMessage("System error:"))
             raise
 
     def convert(self):
@@ -272,7 +272,7 @@ class _StarDataConverter:
         except StarValidationError:
             raise
         except:
-            print(self._errorMessage('System error:'))
+            print(self._errorMessage("System error:"))
             raise
         #
         return nmrDataExtent
@@ -282,16 +282,16 @@ class _StarDataConverter:
         self.stack.append(dataBlock)
 
         name = dataBlock.name
-        if name != 'global_' and not name.startswith('data_'):
+        if name != "global_" and not name.startswith("data_"):
             self.raiseValidationError("DataBlock name  must be 'global_' or start with 'data_'")
 
         for tag, saveFrame in dataBlock.items():
-
             if isinstance(saveFrame, GenericStarParser.SaveFrame):
                 self.preValidateSaveFrame(saveFrame)
             else:
-                self.raiseValidationError("%s file DataBlock contains non-saveframe element %s:%s"
-                                          % (self.fileType, tag, saveFrame))
+                self.raiseValidationError(
+                    "%s file DataBlock contains non-saveframe element %s:%s" % (self.fileType, tag, saveFrame)
+                )
 
         self.stack.pop()
 
@@ -301,10 +301,10 @@ class _StarDataConverter:
 
         # get NmrDataBlock name
         name = dataBlock.name
-        if name.startswith('data_'):
-            name = name[5:] or '__MissingDataBlockName'
-        elif name == 'global_':
-            name = 'global'
+        if name.startswith("data_"):
+            name = name[5:] or "__MissingDataBlockName"
+        elif name == "global_":
+            name = "global"
 
         # Make NmrDataBlock and connect it
         nmrDataBlock = NmrDataBlock(name=name)
@@ -319,38 +319,38 @@ class _StarDataConverter:
     def preValidateSaveFrame(self, saveFrame):
 
         self.stack.append(saveFrame)
-        commonPrefix = os.path.commonprefix([tt[0] for tt in saveFrame.items()
-                                             if isinstance(tt[1], str)])
-        tt = commonPrefix.split('.', 1)
+        commonPrefix = os.path.commonprefix([tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)])
+        tt = commonPrefix.split(".", 1)
         if len(tt) == 2:
-            prefix = tt[0] + '.'
+            prefix = tt[0] + "."
         else:
             self.raiseValidationError(
-                    "Saveframe tags do not start with a common dot-separated prefix: %s"
-                    % [tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)]
-                    )
+                "Saveframe tags do not start with a common dot-separated prefix: %s"
+                % [tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)]
+            )
 
-        sf_category = saveFrame.get(prefix + 'sf_category')
+        sf_category = saveFrame.get(prefix + "sf_category")
         if sf_category is None:
             self.raiseValidationError("SaveFrame lacks .sf_category item")
-        sf_framecode = saveFrame.get(prefix + 'sf_framecode')
+        sf_framecode = saveFrame.get(prefix + "sf_framecode")
         if sf_framecode is None:
             self.raiseValidationError("SaveFrame lacks .sf_framecode item")
 
         sf_lowername = saveFrame.name  # NB tags are lower-cased from the parser
-        if sf_lowername.startswith('save_'):
+        if sf_lowername.startswith("save_"):
             sf_lowername = sf_lowername[5:]
         if sf_lowername != sf_framecode.lower():
-            self.raiseValidationError("Saveframe.name %s does not match sf_framecode %s"
-                                      % (sf_lowername, sf_framecode))
+            self.raiseValidationError("Saveframe.name %s does not match sf_framecode %s" % (sf_lowername, sf_framecode))
 
-        if self.fileType == 'nef':
+        if self.fileType == "nef":
             if not sf_framecode.startswith(sf_category):
-                self.raiseValidationError("NEF file sf_framecode %s does not start with the sf_category %s" %
-                                          (sf_framecode, sf_category))
+                self.raiseValidationError(
+                    "NEF file sf_framecode %s does not start with the sf_category %s" % (sf_framecode, sf_category)
+                )
             if prefix[1:-1] != sf_category:
-                self.raiseValidationError("NEF file sf_category %s does not match tag prefix %s" %
-                                          (sf_category, prefix))
+                self.raiseValidationError(
+                    "NEF file sf_category %s does not match tag prefix %s" % (sf_category, prefix)
+                )
         else:
             # NBNB TBD We do not check or store the tag prefix
             pass
@@ -361,8 +361,7 @@ class _StarDataConverter:
                 if tag == value.name:
                     self.preValidateLoop(value)
             elif not isinstance(value, str):
-                self.raiseValidationError("Saveframe contains item value of wrong type: %s"
-                                          % value)
+                self.raiseValidationError("Saveframe contains item value of wrong type: %s" % value)
             self.stack.pop()
 
         self.stack.pop()
@@ -371,37 +370,35 @@ class _StarDataConverter:
 
         self.stack.append(saveFrame)
 
-        #Get common dot-separated prefix from non-loop items
-        commonPrefix = os.path.commonprefix([tt[0] for tt in saveFrame.items()
-                                             if isinstance(tt[1], str)])
-        tt = commonPrefix.split('.', 1)
+        # Get common dot-separated prefix from non-loop items
+        commonPrefix = os.path.commonprefix([tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)])
+        tt = commonPrefix.split(".", 1)
         if len(tt) == 2:
-            prefix = tt[0] + '.'
+            prefix = tt[0] + "."
         else:
             self.raiseValidationError(
-                    "Saveframe tags do not start with a common dot-separated prefix: %s"
-                    % [tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)]
-                    )
+                "Saveframe tags do not start with a common dot-separated prefix: %s"
+                % [tt[0] for tt in saveFrame.items() if isinstance(tt[1], str)]
+            )
 
         # get category and framecode
         # The prevalidation has already established that there is exactly one tag for each
-        tags = [x for x in saveFrame if x.endswith('.sf_framecode')]
+        tags = [x for x in saveFrame if x.endswith(".sf_framecode")]
         sf_framecode = saveFrame[tags[0]]
-        tags = [x for x in saveFrame if x.endswith('.sf_category')]
+        tags = [x for x in saveFrame if x.endswith(".sf_category")]
         sf_category = saveFrame[tags[0]]
 
         newSaveFrame = NmrSaveFrame(name=sf_framecode, category=sf_category)
 
         lowerCaseCategory = newSaveFrame.category.lower()
         for tag, value in saveFrame.items():
-
             self.stack.append(tag)
 
             #
             if isinstance(value, str):
                 if isinstance(value, UnquotedValue):
                     value = self.convertValue(value, category=lowerCaseCategory, tag=tag)
-                objname = tag[len(prefix):]
+                objname = tag[len(prefix) :]
                 newSaveFrame.addItem(objname, value)
 
             elif isinstance(value, GenericStarParser.Loop):
@@ -420,10 +417,10 @@ class _StarDataConverter:
 
         columns = loop._columns
         commonPrefix = os.path.commonprefix(columns)
-        if len(commonPrefix.split('.', 1)) != 2:
+        if len(commonPrefix.split(".", 1)) != 2:
             self.raiseValidationError(
-                    "Column names of %s do not start with a common dot-separated prefix: %s" % (loop, columns)
-                    )
+                "Column names of %s do not start with a common dot-separated prefix: %s" % (loop, columns)
+            )
 
         self.stack.pop()
 
@@ -433,17 +430,16 @@ class _StarDataConverter:
 
         oldColumns = loop.columns
         commonPrefix = os.path.commonprefix(oldColumns)
-        tt = commonPrefix.split('.', 1)
+        tt = commonPrefix.split(".", 1)
         if len(tt) == 2:
             category = tt[0]
             lenPrefix = len(category) + 1
-            if category[0] == '_':
+            if category[0] == "_":
                 category = category[1:]
         else:
             self.raiseValidationError(
-                    "Column names of %s do not start with a common dot-separated prefix: %s" % (loop,
-                                                                                                oldColumns)
-                    )
+                "Column names of %s do not start with a common dot-separated prefix: %s" % (loop, oldColumns)
+            )
 
         columns = []
         for ss in oldColumns:
@@ -452,7 +448,7 @@ class _StarDataConverter:
             # Check for valid field names
             if tag and not tag.isalpha():
                 if self.convertColumnNames:
-                    tag = ''.join(x if x.isalnum() else '_' for x in tag)
+                    tag = "".join(x if x.isalnum() else "_" for x in tag)
                     while tag and not tag[0].isalpha():
                         tag = tag[1:]
                 else:
@@ -466,11 +462,11 @@ class _StarDataConverter:
             columns.append(tag)
 
         newLoop = NmrLoop(category, columns)
-        ff = self.convertValue  #convertValue(value, category=lowerCaseCategory, tag=tag)
+        ff = self.convertValue  # convertValue(value, category=lowerCaseCategory, tag=tag)
         for row in loop.data:
-            values = [ff(x, category, columns[ii]) if isinstance(x, UnquotedValue) else x
-                      for ii, x in enumerate(row.values())
-                      ]
+            values = [
+                ff(x, category, columns[ii]) if isinstance(x, UnquotedValue) else x for ii, x in enumerate(row.values())
+            ]
             newLoop.newRow(values)
 
         #
@@ -499,11 +495,11 @@ class _StarDataConverter:
             value = False
         elif value == UNKNOWNSTRING:
             value = None
-        elif value[0] == '$':
+        elif value[0] == "$":
             # SaveFrame reference
             value = value[1:]
         else:
-            if not (tag[-5:] in ('_code', '_name') or '_code_' in tag or '_name_' in tag):
+            if not (tag[-5:] in ("_code", "_name") or "_code_" in tag or "_name_" in tag):
                 # HACK - tags ending in '_code' or '_name' are assumed to be string type
                 # This takes care of e.g. 'sequence_code'
                 # that often might evaluate to a number otherwise
@@ -540,14 +536,12 @@ def splitNefSequence(rows):
     stretch = []
     inCyclic = False
     for row in rows:
-        linking = row.get('linking')
+        linking = row.get("linking")
 
-        if inCyclic and linking not in ('middle', 'cyclic', None):
-            raise ValueError(
-                    "Sequence contains 'cyclic' residue(s) that do not form a closed, cyclic molecule"
-                    )
+        if inCyclic and linking not in ("middle", "cyclic", None):
+            raise ValueError("Sequence contains 'cyclic' residue(s) that do not form a closed, cyclic molecule")
 
-        if linking == 'cyclic':
+        if linking == "cyclic":
             if inCyclic:
                 # End of cycle
                 inCyclic = False
@@ -555,38 +549,37 @@ def splitNefSequence(rows):
                 result.append(stretch)
                 stretch = []
             else:
-                #start of cycle
+                # start of cycle
                 inCyclic = True
                 if stretch:
                     result.append(stretch)
                 stretch = [row]
 
-        elif linking in ('single', 'nonlinear', 'dummy'):
+        elif linking in ("single", "nonlinear", "dummy"):
             # Always isolated. And last stretch, add new one, and prepare for the next one
             if stretch:
                 result.append(stretch)
             result.append([row])
             stretch = []
 
-        elif linking == 'start':
+        elif linking == "start":
             # Start new stretch
             if stretch:
                 result.append(stretch)
             stretch = [row]
 
-        elif linking == 'end':
+        elif linking == "end":
             # End stretch
             stretch.append(row)
             result.append(stretch)
             stretch = []
 
-        elif linking in ('middle', None):
+        elif linking in ("middle", None):
             # Continuation (we treat None as 'middle' as the most pragmatic approach
             # Validation of the NEF standard must be done elsewhere
             stretch.append(row)
 
-        elif linking == 'break':
-
+        elif linking == "break":
             # TODO NBNB This follows NEF spec as of July 2016 - which is rather confused
             # Propose change so that 'break' signals a chain break AFTER that residue,
             # and is ONLY used if there is a break between two 'middle' residues.
@@ -600,7 +593,6 @@ def splitNefSequence(rows):
                 # Start of stretch - put row on
                 stretch.append(row)
 
-
         else:
             raise ValueError("Illegal value of nef_sequence.linking: %s" % linking)
 
@@ -609,8 +601,6 @@ def splitNefSequence(rows):
         result.append(stretch)
 
     if inCyclic:
-        raise ValueError(
-                "Sequence contains 'cyclic' residue that is not terminated by matching 'cyclic residue"
-                )
+        raise ValueError("Sequence contains 'cyclic' residue that is not terminated by matching 'cyclic residue")
     #
     return result

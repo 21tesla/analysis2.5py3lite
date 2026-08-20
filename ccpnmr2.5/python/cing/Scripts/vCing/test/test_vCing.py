@@ -7,12 +7,13 @@ topos https://topos.grid.sara.nl/4.1
 
 '''
 
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import Process
-from cing.Scripts.vCing.vCing import Vcing
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.forkoff import Process
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.vCing.vCing import Vcing
 
 vc = Vcing()
 lockTimeOut = 6

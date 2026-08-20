@@ -6,28 +6,23 @@ cd /Users/jd/tmp/cingTmp
 python $CINGROOT/python/cing/Scripts/getPhiPsi.py 1aba A
 """
 
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+import yasara  #@UnresolvedImport
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Chain, commonAAList
 from cing.Libs.disk import copy
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.dssp import DSSP_STR
 from cing.PluginCode.procheck import SECSTRUCT_STR
-from cing.Scripts.getPhiPsiWrapper import Janin
-from cing.Scripts.getPhiPsiWrapper import Ramachandran
-from cing.Scripts.getPhiPsiWrapper import d1d2
-from cing.Scripts.getPhiPsiWrapper import dihedralComboTodo 
-from cing.Scripts.getPhiPsiWrapper import subdir
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Chain
-from cing.core.molecule import commonAAList
-import yasara #@UnresolvedImport
+from cing.Scripts.getPhiPsiWrapper import Janin, Ramachandran, d1d2, dihedralComboTodo, subdir
 
 # Keep a copy of the CING project.
 doSave = False
 
 try:
-    from cing.Scripts.localConstants import pdbz_dir #@UnresolvedImport # pylint: disable=E0611
+    from cing.Scripts.localConstants import pdbz_dir  #@UnresolvedImport # pylint: disable=E0611
 except:
     nTmessage("Missing localization module: cing.Scripts.localConstants")
 # end try
@@ -166,17 +161,17 @@ def doEntry( entryCode, chainCode ):
                 continue
 
             if dihedralComboTodo == Ramachandran:
-                if not (res.has_key(DIHEDRAL_NAME_1) and res.has_key(DIHEDRAL_NAME_2)):
+                if not (DIHEDRAL_NAME_1 in res and DIHEDRAL_NAME_2 in res):
                     nTdebug('Skipping residue without backbone angles complete in entry %s for chain code %s residue %s' % (
                                 entryCode, chainCode,res))
                     continue
             elif dihedralComboTodo == Janin:
-                if not (res.has_key(DIHEDRAL_NAME_1) or res.has_key(DIHEDRAL_NAME_2)):
+                if not (DIHEDRAL_NAME_1 in res or DIHEDRAL_NAME_2 in res):
                     nTdebug('Skipping residue without any of the requested angles complete in entry %s for chain code %s residue %s' % (
                                 entryCode, chainCode,res))
                     continue
             elif dihedralComboTodo == d1d2:
-                if not res.has_key(DIHEDRAL_NAME_1):
+                if DIHEDRAL_NAME_1 not in res:
                     nTdebug('Skipping residue because no first requested angle in entry %s for chain code %s residue %s' % (
                                 entryCode,chainCode,res))
                     continue

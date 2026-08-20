@@ -5,7 +5,7 @@ import sys
 
 # Documentation is intended to be processed by Epydoc.
 
-"""
+r"""
 Introduction
 ============
 

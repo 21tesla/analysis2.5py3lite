@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,104 +38,109 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-#False = 0
+# False = 0
+
 
 def addMarksToPeaks(argServer, peaks=None):
-  """Descrn: Adds position line markers to the selected peaks.
-     Inputs: ArgumentServer, List of Nmr.Peaks
-     Output: None
-  """
-  from ccpnmr.analysis.core.MarkBasic import createPeakMark
-  
-  if not peaks:
-    peaks = argServer.getCurrentPeaks()
+    """Descrn: Adds position line markers to the selected peaks.
+    Inputs: ArgumentServer, List of Nmr.Peaks
+    Output: None
+    """
+    from ccpnmr.analysis.core.MarkBasic import createPeakMark
 
-  # no peaks - nothing happens
-  for peak in peaks:
-    createPeakMark(peak, remove=0)
+    if not peaks:
+        peaks = argServer.getCurrentPeaks()
 
-def calcAveragePeakListIntensity(argServer, peakList=None, intensityType='height'):
-  """Descrn: Find the average height of peaks in a peak list.
-     Inputs: ArgumentServer, Nmr.PeakList
-     Output: Float
-  """
-  from ccpnmr.analysis.core.ConstraintBasic import getMeanPeakIntensity
-  
-  if not peakList:
-    peakList = argServer.getPeakList()
+    # no peaks - nothing happens
+    for peak in peaks:
+        createPeakMark(peak, remove=0)
 
-  if not peakList:
-    argServer.showWarning('No peak list selected')
-    return
-  
-  answer = argServer.askYesNo('Use peak volumes? Height will be used otherwise.')
 
-  if answer: # is true
-    intensityType = 'volume'
+def calcAveragePeakListIntensity(argServer, peakList=None, intensityType="height"):
+    """Descrn: Find the average height of peaks in a peak list.
+    Inputs: ArgumentServer, Nmr.PeakList
+    Output: Float
+    """
+    from ccpnmr.analysis.core.ConstraintBasic import getMeanPeakIntensity
 
-  spectrum   = peakList.dataSource
-  experiment = spectrum.experiment
+    if not peakList:
+        peakList = argServer.getPeakList()
 
-  intensity = getMeanPeakIntensity(peakList.peaks, intensityType=intensityType)
-  
-  argServer.showInfo('Mean peak %s for %s %s peak list %d is %e' % (intensityType,experiment.name,spectrum.name,peakList.serial,intensity))
-  
-  return intensity
+    if not peakList:
+        argServer.showWarning("No peak list selected")
+        return
+
+    answer = argServer.askYesNo("Use peak volumes? Height will be used otherwise.")
+
+    if answer:  # is true
+        intensityType = "volume"
+
+    spectrum = peakList.dataSource
+    experiment = spectrum.experiment
+
+    intensity = getMeanPeakIntensity(peakList.peaks, intensityType=intensityType)
+
+    argServer.showInfo(
+        "Mean peak %s for %s %s peak list %d is %e"
+        % (intensityType, experiment.name, spectrum.name, peakList.serial, intensity)
+    )
+
+    return intensity
 
 
 def openMyPopup(argServer):
-  """Descrn: Opens and example popup.
-     Inputs: ArgumentServer
-     Output: None
-  """
+    """Descrn: Opens and example popup.
+    Inputs: ArgumentServer
+    Output: None
+    """
 
-  peakList = argServer.getPeakList()
-  popup = MyPopup(argServer.parent, peakList)
+    peakList = argServer.getPeakList()
+    popup = MyPopup(argServer.parent, peakList)
 
 
+from ccpnmr.analysis.core.PeakBasic import getPeakHeight, getPeakVolume
 from memops.gui.BasePopup import BasePopup
 from memops.gui.ButtonList import ButtonList
 from memops.gui.ScrolledGraph import ScrolledGraph
-from ccpnmr.analysis.core.PeakBasic import getPeakHeight, getPeakVolume
+
 
 class MyPopup(BasePopup):
+    def __init__(self, parent, peakList, *args, **kw):
 
-  def __init__(self, parent, peakList, *args, **kw):
-     
-    self.peakList  = peakList
-    self.colours   = ['red', 'green']
-    self.dataSets  = []
-     
-    BasePopup.__init__(self, parent=parent,  title='Test Popup', **kw)
+        self.peakList = peakList
+        self.colours = ["red", "green"]
+        self.dataSets = []
 
-  def body(self, guiParent):
+        BasePopup.__init__(self, parent=parent, title="Test Popup", **kw)
 
-     row = 0
-     self.graph = ScrolledGraph(guiParent)
-     self.graph.grid(row=row, column=0, sticky='NSEW')
-     
-     row += 1
-     texts    = ['Draw graph','Goodbye']
-     commands = [self.draw, self.destroy]
-     buttons  = ButtonList(guiParent, texts=texts, commands = commands)
-     buttons.grid(row=row, column=0, sticky='NSEW')
+    def body(self, guiParent):
 
-  def draw(self):
-    
-    self.dataSets  = self.getData()
-    self.graph.update(self.dataSets, self.colours)
+        row = 0
+        self.graph = ScrolledGraph(guiParent)
+        self.graph.grid(row=row, column=0, sticky="NSEW")
 
-  def getData(self):
+        row += 1
+        texts = ["Draw graph", "Goodbye"]
+        commands = [self.draw, self.destroy]
+        buttons = ButtonList(guiParent, texts=texts, commands=commands)
+        buttons.grid(row=row, column=0, sticky="NSEW")
 
-    peakData = [( getPeakVolume(peak) or 0.0, peak) for peak in self.peakList.peaks]
-    peakData.sort()
-    
-    heights = []
-    volumes = []
-    i = 0
-    for volume, peak in peakData:
-      heights.append([i, getPeakHeight(peak) or 0.0])
-      volumes.append([i, volume])
-      i += 1
-  
-    return [heights, volumes]
+    def draw(self):
+
+        self.dataSets = self.getData()
+        self.graph.update(self.dataSets, self.colours)
+
+    def getData(self):
+
+        peakData = [(getPeakVolume(peak) or 0.0, peak) for peak in self.peakList.peaks]
+        peakData.sort()
+
+        heights = []
+        volumes = []
+        i = 0
+        for volume, peak in peakData:
+            heights.append([i, getPeakHeight(peak) or 0.0])
+            volumes.append([i, volume])
+            i += 1
+
+        return [heights, volumes]

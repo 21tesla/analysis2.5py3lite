@@ -4,7 +4,8 @@ nmrPipeTab.py
 gv 21 March 2006
 """
 from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class NmrPipeTabRow( NTdict ):
 
@@ -155,7 +156,7 @@ class NmrPipeTable( NTdict ):
     def column( self, cName ):
         """Return list of values of column cName or None on error
         """
-        if cName not in self: 
+        if cName not in self:
             return None
 
         col = NTlist()
@@ -170,7 +171,7 @@ class NmrPipeTable( NTdict ):
         Hide column(s) cNames
         """
         for c in cNames:
-            if not c in self:
+            if c not in self:
                 nTerror('NmrPipeTable.hideColumn: column "%s" not defined\n', c)
             else:
                 self[c].hide = True
@@ -183,7 +184,7 @@ class NmrPipeTable( NTdict ):
         Show column(s) cNames
         """
         for c in cNames:
-            if not c in self:
+            if c not in self:
                 nTerror('NmrPipeTable.showColumn: column "%s" not defined\n', c)
             else:
                 self[c].hide = False
@@ -252,14 +253,14 @@ class NmrPipeTable( NTdict ):
 
         fprintf(     stream, 'VARS    ' )
         for c in self.columnDefs:
-            if not c.hide: 
+            if not c.hide:
                 fprintf( stream, '%s ', c.name )
         #end for
         fprintf( stream, '\n' )
 
         fprintf(     stream, 'FORMAT  ' )
         for c in self.columnDefs:
-            if not c.hide: 
+            if not c.hide:
                 fprintf( stream, '%s ', c.fmt )
         #end for
         fprintf( stream, '\n' )

@@ -3,16 +3,17 @@ This script will use "validation Exercises" files to generate CING reports
 
 python -u $CINGROOT/python/cing/NRG/validationExercises.py
 """
-from cing import cingPythonCingDir
-from cing import cingRoot
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import get_cmd_output
-from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
-from cing.NRG.CaspNmrCing import MyDict
 import csv
 import shutil
 import string
 import urllib
+
+from cing import cingPythonCingDir, cingRoot
+from cing.Libs.forkoff import get_cmd_output
+from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.CaspNmrCing import MyDict
+
 
 class ValidationExercises(Lister):
 
@@ -309,7 +310,7 @@ class ValidationExercises(Lister):
         for x_entry_code in self.entry_list_done + [ None ]:
             if x_entry_code:
                 pdb_entry_code = x_entry_code
-                if self.matches_many2one.has_key(pdb_entry_code):
+                if pdb_entry_code in self.matches_many2one:
                     bmrb_entry_code = self.matches_many2one[pdb_entry_code]
                     bmrb_entry_code = bmrb_entry_code
                 else:
@@ -506,7 +507,7 @@ if __name__ == '__main__':
     new_hits_entry_list         = string.split("2jqv 2jnb 2jnv 2jvo 2jvr 2jy7 2jy8 2oq9 2osq 2osr 2otr 2rn9 2rnb")
 
     ## Initialize the project
-    m = ValidationExercises(max_entries_todo=max_entries_todo, max_time_to_wait=max_time_to_wait, 
+    m = ValidationExercises(max_entries_todo=max_entries_todo, max_time_to_wait=max_time_to_wait,
                 writeWhyNot=writeWhyNot, updateIndices=updateIndices, isProduction=isProduction)
 #    m.getCingEntriesTriedAndDone()
     m.update(new_hits_entry_list)

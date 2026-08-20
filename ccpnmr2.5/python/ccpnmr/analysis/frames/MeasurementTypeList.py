@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,25 +45,23 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
-from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
-class MeasurementTypeList(PulldownMenu):
- 
-  def __init__(self, parent, getMeasurementTypes, *args, **kw):
- 
-    self.getMeasurementTypes = getMeasurementTypes
- 
-    PulldownMenu.__init__(self, parent, *args, **kw)
- 
-  def destroy(self):
 
-    #print 'MeasurementTypeList destroy'
-    PulldownMenu.destroy(self)
- 
-  def setMeasurementTypes(self, *type):
- 
-    names = self.getMeasurementTypes()
-    self.replace(names, self.selected_index)
+class MeasurementTypeList(PulldownMenu):
+    def __init__(self, parent, getMeasurementTypes, *args, **kw):
+
+        self.getMeasurementTypes = getMeasurementTypes
+
+        PulldownMenu.__init__(self, parent, *args, **kw)
+
+    def destroy(self):
+
+        # print 'MeasurementTypeList destroy'
+        PulldownMenu.destroy(self)
+
+    def setMeasurementTypes(self, *type):
+
+        names = self.getMeasurementTypes()
+        self.replace(names, self.selected_index)

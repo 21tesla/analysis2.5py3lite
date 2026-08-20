@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,75 +54,70 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
+import os
+import string
 
+from ccp.format.discover.generalIO import DiscoverGenericConstraint, DiscoverGenericFile
 from memops.universal.Io import getTopDirectory
-
-from memops.universal.Util import returnInt, returnFloat
-
-from ccp.format.discover.generalIO import DiscoverGenericFile
-from ccp.format.discover.generalIO import DiscoverGenericConstraint
+from memops.universal.Util import returnFloat
 
 #####################
 # Class definitions #
 #####################
 
+
 class DiscoverDistanceConstraintFile(DiscoverGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.constraints = []
-    self.constraintElements = 2
+        self.constraints = []
+        self.constraintElements = 2
 
-    self.constraintType = None
-    
-    self.constraintFileType = 'distance_restraints'
-    
-  def read(self,verbose = 0):
+        self.constraintType = None
 
-    if verbose == 1:
-    
-      print("Reading %s distance constraint list %s" % (self.format,self.name))
-    
-    fin = open(self.name)
- 
-    #
-    # Start reading...
-    #
-    
-    line = fin.readline()
-        
-    constraintNum = 0
-    
-    while line:
+        self.constraintFileType = "distance_restraints"
 
-      if self.patt['emptyline'].search(line) or self.patt['exclamation'].search(line):
+    def read(self, verbose=0):
+
+        if verbose == 1:
+            print("Reading %s distance constraint list %s" % (self.format, self.name))
+
+        fin = open(self.name)
+
+        #
+        # Start reading...
+        #
+
         line = fin.readline()
-        continue
-      
-      elif self.patt['hash'].search(line):
-        
-        (void,self.constraintType) = string.split(line,'#')
-        line = fin.readline()
-        continue
 
-      cols = string.split(line)
+        constraintNum = 0
 
-      if cols[0] != '+':
-        constraintNum += 1
-      
-        constraint = DiscoverDistanceConstraint(self,constraintNum)
-        self.constraints.append(constraint)
-        
-        constraint.addDistance(cols[2:])
-        constraint.addItem(cols)
-      
-      else:
-        constraint.addItem(cols[1:])
-      
-      line = fin.readline()
+        while line:
+            if self.patt["emptyline"].search(line) or self.patt["exclamation"].search(line):
+                line = fin.readline()
+                continue
 
-  """      
+            elif self.patt["hash"].search(line):
+                (void, self.constraintType) = string.split(line, "#")
+                line = fin.readline()
+                continue
+
+            cols = string.split(line)
+
+            if cols[0] != "+":
+                constraintNum += 1
+
+                constraint = DiscoverDistanceConstraint(self, constraintNum)
+                self.constraints.append(constraint)
+
+                constraint.addDistance(cols[2:])
+                constraint.addItem(cols)
+
+            else:
+                constraint.addItem(cols[1:])
+
+            line = fin.readline()
+
+    """      
   def write(self,verbose = 0):
     
     if not self.constraints:
@@ -185,60 +180,69 @@ class DiscoverDistanceConstraintFile(DiscoverGenericFile):
         index += 1
 
         fout.write(self.newline)
-  """      
-    
+  """
+
+
 class DiscoverDistanceConstraint(DiscoverGenericConstraint):
-  
-  def addDistance(self,cols):
-  
-    self.lowerDist = returnFloat(cols[0])
-    self.upperDist = returnFloat(cols[1])
-  
-    
-    # TODO: Other information?
-    
-                
+    def addDistance(self, cols):
+
+        self.lowerDist = returnFloat(cols[0])
+        self.upperDist = returnFloat(cols[1])
+
+        # TODO: Other information?
+
+
 ###################
 # Main of program #
 ###################
 
 if __name__ == "__main__":
+    files = [
+        "../../reference/discover/1ed0.1.restr",
+        "../../reference/discover/1ed0.2.restr",
+        "../../reference/discover/1ir5.ambig.restr",
+    ]
 
-  files = ['../../reference/discover/1ed0.1.restr',
-           '../../reference/discover/1ed0.2.restr',
-           '../../reference/discover/1ir5.ambig.restr'
-          ]
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = DiscoverDistanceConstraintFile(file)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    constraintFile.read(verbose = 1)
-    
-    for constraint in constraintFile.constraints:
-      print(constraint.Id,)
-      print(constraint.upperDist, constraint.lowerDist,)
+        constraintFile = DiscoverDistanceConstraintFile(file)
 
-      #print constraint.peakNum, constraint.peakVol, constraint.ppms
-      for item in constraint.items:
-        for member in item.members:
-          print(member.chainCode,member.seqCode, member.atomName,)
-        print("|",)
-      
-      print()
-     
-    #constraintFile.name = 'local/testout'
+        constraintFile.read(verbose=1)
 
-    #constraintFile.write(verbose = 1)
-    """
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+            )
+            print(
+                constraint.upperDist,
+                constraint.lowerDist,
+            )
+
+            # print constraint.peakNum, constraint.peakVol, constraint.ppms
+            for item in constraint.items:
+                for member in item.members:
+                    print(
+                        member.chainCode,
+                        member.seqCode,
+                        member.atomName,
+                    )
+                print(
+                    "|",
+                )
+
+            print()
+
+        # constraintFile.name = 'local/testout'
+
+        # constraintFile.write(verbose = 1)
+        """
     sequence = {}
     
     for constraint in constraintFile.constraints:
       for item in constraint.items:
         for member in item.members:
-          if not sequence.has_key(member.seqCode):
+          if member.seqCode not in sequence:
             sequence[member.seqCode] = member.resLabel
 
     seqnums = sequence.keys()
@@ -247,9 +251,8 @@ if __name__ == "__main__":
       
       seqnum = i +1
       
-      if sequence.has_key(seqnum):
+      if seqnum in sequence:
         print(sequence[seqnum])
       else:
         print("ALA")
     """
-        

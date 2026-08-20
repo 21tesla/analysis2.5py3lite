@@ -6,38 +6,29 @@ Created by Daniel O'Donovan on 2008-09-22.
 Copyright (c) 2008 University of Cambridge. All rights reserved.
 """
 
-from ccp.api.nmr.Nmr                        import FreqDataDim, SampledDataDim
 
-from ccpnmr.analysis.core.ExperimentBasic   import getPrimaryDataDimRef
-from ccpnmr.analysis.core.PeakBasic         import pickPeak, searchPeaks, setManualPeakIntensity
-from ccpnmr.analysis.core.UnitConverter     import ppm2pnt, pnt2ppm, pnt2hz, hz2pnt
-from ccpnmr.analysis.core.Util              import getMethod
-
-from ccp.api.nmr.Nmr                        import FreqDataDim
-
-from memops.gui.MessageReporter             import showError, showWarning
+from ccpnmr.analysis.core.PeakBasic import pickPeak, searchPeaks, setManualPeakIntensity
+from ccpnmr.analysis.core.UnitConverter import pnt2hz, pnt2ppm
 
 try:
-  from cambridge.c                          import BayesPeakSeparator
+  from cambridge.c import BayesPeakSeparator
 except ImportError:
   print('Error, cannot import BayesPeakSeparator - peak separation will not work.')
 
-from cambridge.bayes.kmeans import kMeans
-
 import math
-import os, sys
 
+from cambridge.bayes.kmeans import kMeans
 
 ## Possibly a very poor way to interpret results...
 # def getPeaksFromResults( results, verbose=False ):
 #   """ Given BayeSys result list, pull out salient peak info """
 #   print 'BAD getPeaksFromResults !!! only use for PyMC !!!'
 #   npeaks = int( results[-1][1] )
-# 
+#
 #   peaks = [ results[-(i+1)] for i in range( npeaks )]
-# 
+#
 #   print peaks
-# 
+#
 #   return peaks
 
 def getPeaksFromResults( results, verbose=False ):
@@ -93,7 +84,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
 
   # As the Lorentz/Gaussian model not in use
   (params.maxQ, params.minQ) = (1., 1.)
-  
+
   # params.ClibKeys.sort()
   # for key in params.ClibKeys:
   #   print key, params.__dict__[key]
@@ -104,7 +95,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
 
   if routine == 'bayesys':
 
-    # Maybe a quick parameter check so that no one is doing anything silly ? 
+    # Maybe a quick parameter check so that no one is doing anything silly ?
     # Run the BayesPeakSeparator function in C
     results = BayesPeakSeparator.run_bayes(   \
                                     params.dataFile, params.Ndim, params.isBigEndian, params.nPoints,           #  4
@@ -171,7 +162,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
       # No longer a cluester peak! cluster_peak_position_point
       cluster_peak_position_point[i]  = float( params.sampleStart[i] ) + position[i] + 1.0
 
-      # Gauss Volume 
+      # Gauss Volume
       if params.peakShape == 3:
         cluster_peak_volume            *= sigma[i] * math.sqrt( 2.0 * math.pi )
 
@@ -217,7 +208,7 @@ def SeparatePeakRoutine(params, peakList, routine='bayesys'):
 
 
 ###############################################################################
-### These functions are for repicking existing peak lists 
+### These functions are for repicking existing peak lists
 def getNeighbourPoints( point, ndim ):
   """ Get neighbour points for given point, up to ndim """
 
@@ -310,7 +301,7 @@ def SeparatePeaksInPeakList( params, HEIGHT_MULTIPLIER=2.5 ):
     return
 
   peakList = params.peakList
-  
+
   # all this just to get the baseLevel (lowest contour level)
   dataSource        = peakList.dataSource
   analysisSpectrum  = dataSource.analysisSpectrum

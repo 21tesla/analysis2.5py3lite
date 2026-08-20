@@ -5,15 +5,16 @@ python $CINGROOT/python/cing/Libs/test/test2_pdb.py
 Because of the name of this file it will not be executed when doing:
 cing --test
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
-from unittest import TestCase
 import profile
 import pstats
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.classes import Project
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

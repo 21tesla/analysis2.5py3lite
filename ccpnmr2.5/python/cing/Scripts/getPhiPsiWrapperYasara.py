@@ -4,9 +4,8 @@ python $CINGROOT/python/cing/Scripts/getPhiPsiWrapper.py
 Use below to find the entries done and todo:
 
 """
-from cing import cingDirScripts
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing import cingDirScripts, cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.Scripts.getPhiPsi import doYasaraAddHydrogens
 
 Ramachandran = 'Ramachandran'

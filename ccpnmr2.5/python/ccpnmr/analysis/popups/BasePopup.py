@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,67 +38,63 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import os
-
-from memops.gui.Base import getPopup
-
-from memops.universal.Io import splitPath
-from memops.universal.Io import getTopDirectory
 
 import memops.editor.BasePopup
-
 from ccpnmr.analysis.Analysis import LOCAL_HELP_DOC_DIR
+from memops.gui.Base import getPopup
+from memops.universal.Io import getTopDirectory
+
 
 class BasePopup(memops.editor.BasePopup.BasePopup):
+    def __init__(self, parent, *args, **kw):
 
-  def __init__(self, parent, *args, **kw):
+        helpUrl = kw.get("help_url")
+        if not helpUrl:
+            helpUrl = determineHelpUrl(self.__class__)
 
-    helpUrl = kw.get('help_url')
-    if not helpUrl:
-      helpUrl = determineHelpUrl(self.__class__)
-      
-    self.help_url = helpUrl
+        self.help_url = helpUrl
 
-    project = kw.get('project')
-    parentPopup = getPopup(parent)
-    if not project and hasattr(parentPopup, 'project'):
-      project = parentPopup.project
+        project = kw.get("project")
+        parentPopup = getPopup(parent)
+        if not project and hasattr(parentPopup, "project"):
+            project = parentPopup.project
 
-    self.project = project
+        self.project = project
 
-    if project:
-      self.nmrProject = project.currentNmrProject
-      self.analysisProject = project.currentAnalysisProject
-      self.analysisProfile = project.currentAnalysisProfile
-    else:
-      self.nmrProject = None
-      self.analysisProject = None
-      self.analysisProfile = None
+        if project:
+            self.nmrProject = project.currentNmrProject
+            self.analysisProject = project.currentAnalysisProject
+            self.analysisProfile = project.currentAnalysisProfile
+        else:
+            self.nmrProject = None
+            self.analysisProject = None
+            self.analysisProfile = None
 
-    application = kw.get('application')
-    if not application:
-      if hasattr(self, 'application'):
-        application = self.application
-      elif hasattr(parent, 'application'):
-        application = parent.application
+        application = kw.get("application")
+        if not application:
+            if hasattr(self, "application"):
+                application = self.application
+            elif hasattr(parent, "application"):
+                application = parent.application
 
-    self.project = project
-    self.application = application
+        self.project = project
+        self.application = application
 
-    memops.editor.BasePopup.BasePopup.__init__(self, parent, *args, **kw)
+        memops.editor.BasePopup.BasePopup.__init__(self, parent, *args, **kw)
 
-def determineHelpUrl(clazz = None, name = None):
 
-  assert clazz or name
+def determineHelpUrl(clazz=None, name=None):
 
-  topDir = getTopDirectory()
+    assert clazz or name
 
-  #dir = splitPath(__file__)[0]
-  #if (dir):
-  #  dir = dir + '/'
+    topDir = getTopDirectory()
 
-  if (not name):
-    name = clazz.__name__
-  help_url = 'file:' + topDir + LOCAL_HELP_DOC_DIR + 'popups/' + name + '.html'
+    # dir = splitPath(__file__)[0]
+    # if (dir):
+    #  dir = dir + '/'
 
-  return help_url
+    if not name:
+        name = clazz.__name__
+    help_url = "file:" + topDir + LOCAL_HELP_DOC_DIR + "popups/" + name + ".html"
+
+    return help_url

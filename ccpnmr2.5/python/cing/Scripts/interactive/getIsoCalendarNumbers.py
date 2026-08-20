@@ -1,7 +1,9 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer3.py
 
 from datetime import datetime
-from numpy import * #@UnusedWildImport
+
+from numpy import *  #@UnusedWildImport
+
 dt = datetime.now()
 print(datetime.isocalendar(dt))
 

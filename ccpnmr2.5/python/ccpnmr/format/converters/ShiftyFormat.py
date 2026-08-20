@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,112 +52,104 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, traceback, sys
-
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
-from ccpnmr.format.general.Util import getResName
-
+from ccpnmr.format.converters.DataFormat import DataFormat
 from ccpnmr.format.general.Constants import defaultMolCode
 
-import ccp.api.nmr.Nmr as Nmr
 
 class ShiftyFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'shifty'
-    
-  def setGenericImports(self):
-    
-    #self.getSequence = self.getSequenceGeneric
-    
-    self.getMeasurements = self.getMeasurementsGeneric
-    self.createMeasurementFile = self.createMeasurementFileGeneric
+        self.format = "shifty"
 
-  #
-  # Deviations from generic import stuff
-  #
-    
-  #
-  # Functions different to default functions in DataFormat
-  #
-    
-  def initChemShiftFileResidue(self):
-    
-    """
-    
-    Different from DataFormat because have to set self.seqCodeLabel dictionary
-    
-    Use seqCode of residue to write out to chemical shift file
-    Use seqId for identification
-    
-    """
-    
-    self.seqId = self.residue.seqId
-    self.seqCode = self.getExportSeqCode(self.chainDict[self.chain][1],self.residue)
-    
-    residueLabel = self.residue.molResidue.chemComp.code1Letter
-    
-    if not residueLabel:
-      residueLabel = 'X'
-    
-    self.measurementFile.seqCodeLabels[self.seqCode] = residueLabel
+    def setGenericImports(self):
 
-  def setChemShiftFileValue(self):
-    
-    if self.atomNamesDict.has_key(self.atomName):
-    
-      resonanceToAtom = self.atomNamesDict[self.atomName]
-      residueLabel = self.getResidueLabelOneLetter(resonanceToAtom)
+        # self.getSequence = self.getSequenceGeneric
 
-      # Need some special handling for HA values and others
-      # WARNING: in older format N was HN, H was H, but now N is N and H is HN, very confusing!
-      searchMatch = False
-      if residueLabel == 'G' and self.atomName[:2] == 'HA':
-        shiftyAtomName = 'HA'
-        if self.atomName in ('HA2','HA3'):
-          searchMatch = True
-      elif self.atomName == 'H*':
-        shiftyAtomName = 'HN'
-        searchMatch = True
-      elif self.atomName == 'H':
-        shiftyAtomName = 'HN'
-      #elif self.atomName == 'N':
-      #  shiftyAtomName = 'HN'
-      elif self.atomName == 'C':
-        shiftyAtomName = 'CO'
-      else:
-        shiftyAtomName = self.atomName
-      
-      #
-      # Export all atoms (not necessarily written!)
-      #
+        self.getMeasurements = self.getMeasurementsGeneric
+        self.createMeasurementFile = self.createMeasurementFileGeneric
 
-      measurement = self.origAtomMeasurements[resonanceToAtom]
+    #
+    # Deviations from generic import stuff
+    #
 
-      if searchMatch:
-        searchMatch = False
-        for rawMeasurement in self.measurementFileValues:
-          if rawMeasurement.seqCode == self.seqCode and rawMeasurement.atomName == shiftyAtomName:
-            rawMeasurement.value = (rawMeasurement.value + measurement.value) / 2
-            searchMatch = True
-            break
+    #
+    # Functions different to default functions in DataFormat
+    #
 
-      if not searchMatch:
+    def initChemShiftFileResidue(self):
+        """
 
-        self.measurementFileValues.append(
+        Different from DataFormat because have to set self.seqCodeLabel dictionary
 
-               self.rawMeasurementClass(self.measurementFile,
-                                        measurement.value,
-                                        shiftyAtomName,
-                                        self.seqCode,
-                                        residueLabel,
-                                        defaultMolCode))
-        
-      if self.atomMeasurements.has_key(resonanceToAtom):
-        del(self.atomMeasurements[resonanceToAtom])
-                           
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)
+        Use seqCode of residue to write out to chemical shift file
+        Use seqId for identification
+
+        """
+
+        self.seqId = self.residue.seqId
+        self.seqCode = self.getExportSeqCode(self.chainDict[self.chain][1], self.residue)
+
+        residueLabel = self.residue.molResidue.chemComp.code1Letter
+
+        if not residueLabel:
+            residueLabel = "X"
+
+        self.measurementFile.seqCodeLabels[self.seqCode] = residueLabel
+
+    def setChemShiftFileValue(self):
+
+        if self.atomName in self.atomNamesDict:
+            resonanceToAtom = self.atomNamesDict[self.atomName]
+            residueLabel = self.getResidueLabelOneLetter(resonanceToAtom)
+
+            # Need some special handling for HA values and others
+            # WARNING: in older format N was HN, H was H, but now N is N and H is HN, very confusing!
+            searchMatch = False
+            if residueLabel == "G" and self.atomName[:2] == "HA":
+                shiftyAtomName = "HA"
+                if self.atomName in ("HA2", "HA3"):
+                    searchMatch = True
+            elif self.atomName == "H*":
+                shiftyAtomName = "HN"
+                searchMatch = True
+            elif self.atomName == "H":
+                shiftyAtomName = "HN"
+            # elif self.atomName == 'N':
+            #  shiftyAtomName = 'HN'
+            elif self.atomName == "C":
+                shiftyAtomName = "CO"
+            else:
+                shiftyAtomName = self.atomName
+
+            #
+            # Export all atoms (not necessarily written!)
+            #
+
+            measurement = self.origAtomMeasurements[resonanceToAtom]
+
+            if searchMatch:
+                searchMatch = False
+                for rawMeasurement in self.measurementFileValues:
+                    if rawMeasurement.seqCode == self.seqCode and rawMeasurement.atomName == shiftyAtomName:
+                        rawMeasurement.value = (rawMeasurement.value + measurement.value) / 2
+                        searchMatch = True
+                        break
+
+            if not searchMatch:
+                self.measurementFileValues.append(
+                    self.rawMeasurementClass(
+                        self.measurementFile,
+                        measurement.value,
+                        shiftyAtomName,
+                        self.seqCode,
+                        residueLabel,
+                        defaultMolCode,
+                    )
+                )
+
+            if resonanceToAtom in self.atomMeasurements:
+                del self.atomMeasurements[resonanceToAtom]
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

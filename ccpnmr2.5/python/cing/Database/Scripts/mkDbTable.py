@@ -1,8 +1,6 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-from cing.Libs.NTutils import *
-from cing.core.database import ResidueDef
 from cing import NTdb
-import cing
+from cing.Libs.NTutils import *
 
 stream = open('dbTable.new', 'w')
 NTdb.exportDef(stream=stream, convention='INTERNAL_1')

@@ -2,435 +2,421 @@ import re
 
 from memops.gui.MessageReporter import showError
 
+
 def getStarIsotopeLabeling(refComp):
 
-  bmrbLabelDict = {'NatAbun':      'natural abundance',
-                   'uni_15N':      'U-95% 15N',
-                   'uni_15N13C':   'U-95% 13C; U-95% 15N',
-                   'uni_15N13C2H': 'U-95% 13C; U-95% 15N; U-95% 2H'}
+    bmrbLabelDict = {
+        "NatAbun": "natural abundance",
+        "uni_15N": "U-95% 15N",
+        "uni_15N13C": "U-95% 13C; U-95% 15N",
+        "uni_15N13C2H": "U-95% 13C; U-95% 15N; U-95% 2H",
+    }
 
-  molecule = None
+    molecule = None
 
-  if hasattr(refComp, 'molecule'):
-    molecule = refComp.molecule
-
-  else:
-    return
-
-  labelMix = refComp.labeledMixture
-  if not labelMix:
-    return
-
-  # wb104 9 Jul 2013: do not just go up and down from labeledMixture to find a random molLabel
-  # instead use averageComposition, if it exists
-  molLabel = labelMix.averageComposition
-  if not molLabel:
-    labelMol = labelMix.parent
-    molLabel = labelMol.findFirstMolLabel()
-
-  firstBmrbLabel = ''
-  ccpCodes = []
-  resLabFracFlag = False
-  atomLabFlag = False
-
-  for resLabel in molLabel.sortedResLabels():
-    bmrbLabel = ''
-
-    resLabFrac = resLabel.findFirstResLabelFraction()
-
-    if resLabFrac:
-      if atomLabFlag:
-        print('  Warning: mixture of labelling types in molecule %s' % molecule.name)
-        break
-
-      resLabFracFlag = True
-
-      bmrbLabel = bmrbLabelDict[resLabFrac.schemeName]
-      #print 'BMRB: [%s]' % bmrbLabel
+    if hasattr(refComp, "molecule"):
+        molecule = refComp.molecule
 
     else:
-      if resLabFracFlag:
-        print('  Warning: mixture of labelling types in molecule %s' % molecule.name)
-        break
+        return
 
-      atomLabFlag = True
+    labelMix = refComp.labeledMixture
+    if not labelMix:
+        return
 
+    # wb104 9 Jul 2013: do not just go up and down from labeledMixture to find a random molLabel
+    # instead use averageComposition, if it exists
+    molLabel = labelMix.averageComposition
+    if not molLabel:
+        labelMol = labelMix.parent
+        molLabel = labelMol.findFirstMolLabel()
 
-      atomLabel13 = resLabel.findFirstAtomLabel(massNumber=13)
+    firstBmrbLabel = ""
+    ccpCodes = []
+    resLabFracFlag = False
+    atomLabFlag = False
 
-      if atomLabel13:
-        if bmrbLabel:
-          bmrbLabel += '; '
+    for resLabel in molLabel.sortedResLabels():
+        bmrbLabel = ""
 
-        if atomLabel13.className == 'UniformAtomLabel' and atomLabel13.elementName == 'C':
+        resLabFrac = resLabel.findFirstResLabelFraction()
 
-          if atomLabel13.weight == 0.00:
-            bmrbLabel += 'U-%s%s' % (atomLabel13.massNumber, atomLabel13.elementName)
-          else:
-            percent = atomLabel13.weight*100
-            bmrbLabel += 'U-%d%% %s%s' % (percent, atomLabel13.massNumber, atomLabel13.elementName)
+        if resLabFrac:
+            if atomLabFlag:
+                print("  Warning: mixture of labelling types in molecule %s" % molecule.name)
+                break
 
-        else:
+            resLabFracFlag = True
 
-          if atomLabel13.weight == 0.00:
-            bmrbLabel += '%s%s' % (atomLabel13.massNumber, atomLabel13.atomName)
-          else:
-            percent = atomLabel13.weight*100
-            bmrbLabel += '%d%% %s%s' % (percent, atomLabel13.massNumber, atomLabel13.atomName)
-
-
-      atomLabel15 = resLabel.findFirstAtomLabel(massNumber=15)
-
-      if atomLabel15:
-        if bmrbLabel:
-          bmrbLabel += '; '
-
-        if atomLabel15.className == 'UniformAtomLabel' and atomLabel15.elementName == 'N':
-
-          if atomLabel15.weight == 0.00:
-            bmrbLabel += 'U-%s%s' % (atomLabel15.massNumber, atomLabel15.elementName)
-          else:
-            percent = atomLabel15.weight*100
-            bmrbLabel += 'U-%d%% %s%s' % (percent, atomLabel15.massNumber, atomLabel15.elementName)
+            bmrbLabel = bmrbLabelDict[resLabFrac.schemeName]
+            # print 'BMRB: [%s]' % bmrbLabel
 
         else:
+            if resLabFracFlag:
+                print("  Warning: mixture of labelling types in molecule %s" % molecule.name)
+                break
 
-          if atomLabel15.weight == 0.00:
-            bmrbLabel += '%s%s' % (atomLabel15.massNumber, atomLabel15.atomName)
-          else:
-            percent = atomLabel15.weight*100
-            bmrbLabel += '%d%% %s%s' % (percent, atomLabel15.massNumber, atomLabel15.atomName)
+            atomLabFlag = True
 
+            atomLabel13 = resLabel.findFirstAtomLabel(massNumber=13)
 
-      atomLabel2 = resLabel.findFirstAtomLabel(massNumber=2)
+            if atomLabel13:
+                if bmrbLabel:
+                    bmrbLabel += "; "
 
-      if atomLabel2:
+                if atomLabel13.className == "UniformAtomLabel" and atomLabel13.elementName == "C":
+                    if atomLabel13.weight == 0.00:
+                        bmrbLabel += "U-%s%s" % (atomLabel13.massNumber, atomLabel13.elementName)
+                    else:
+                        percent = atomLabel13.weight * 100
+                        bmrbLabel += "U-%d%% %s%s" % (percent, atomLabel13.massNumber, atomLabel13.elementName)
+
+                else:
+                    if atomLabel13.weight == 0.00:
+                        bmrbLabel += "%s%s" % (atomLabel13.massNumber, atomLabel13.atomName)
+                    else:
+                        percent = atomLabel13.weight * 100
+                        bmrbLabel += "%d%% %s%s" % (percent, atomLabel13.massNumber, atomLabel13.atomName)
+
+            atomLabel15 = resLabel.findFirstAtomLabel(massNumber=15)
+
+            if atomLabel15:
+                if bmrbLabel:
+                    bmrbLabel += "; "
+
+                if atomLabel15.className == "UniformAtomLabel" and atomLabel15.elementName == "N":
+                    if atomLabel15.weight == 0.00:
+                        bmrbLabel += "U-%s%s" % (atomLabel15.massNumber, atomLabel15.elementName)
+                    else:
+                        percent = atomLabel15.weight * 100
+                        bmrbLabel += "U-%d%% %s%s" % (percent, atomLabel15.massNumber, atomLabel15.elementName)
+
+                else:
+                    if atomLabel15.weight == 0.00:
+                        bmrbLabel += "%s%s" % (atomLabel15.massNumber, atomLabel15.atomName)
+                    else:
+                        percent = atomLabel15.weight * 100
+                        bmrbLabel += "%d%% %s%s" % (percent, atomLabel15.massNumber, atomLabel15.atomName)
+
+            atomLabel2 = resLabel.findFirstAtomLabel(massNumber=2)
+
+            if atomLabel2:
+                if bmrbLabel:
+                    bmrbLabel += "; "
+
+                if atomLabel2.className == "UniformAtomLabel" and atomLabel2.elementName == "H":
+                    if atomLabel2.weight == 0.00:
+                        bmrbLabel += "U-%s%s" % (atomLabel2.massNumber, atomLabel2.elementName)
+                    else:
+                        percent = atomLabel2.weight * 100
+                        bmrbLabel += "U-%d%% %s%s" % (percent, atomLabel2.massNumber, atomLabel2.elementName)
+
+                else:
+                    if atomLabel2.weight == 0.00:
+                        bmrbLabel += "%s%s" % (atomLabel2.massNumber, atomLabel2.atomName)
+                    else:
+                        percent = atomLabel2.weight * 100
+                        bmrbLabel += "%d%% %s%s" % (percent, atomLabel2.massNumber, atomLabel2.atomName)
+
         if bmrbLabel:
-          bmrbLabel += '; '
+            if firstBmrbLabel:
+                if firstBmrbLabel != bmrbLabel:
+                    print("  Warning: multiple labels for this molecule %s" % molecule.name)
+                    break
 
-        if atomLabel2.className == 'UniformAtomLabel' and atomLabel2.elementName == 'H':
+            else:
+                firstBmrbLabel = bmrbLabel
 
-          if atomLabel2.weight == 0.00:
-            bmrbLabel += 'U-%s%s' % (atomLabel2.massNumber, atomLabel2.elementName)
-          else:
-            percent = atomLabel2.weight*100
-            bmrbLabel += 'U-%d%% %s%s' % (percent, atomLabel2.massNumber, atomLabel2.elementName)
+            if molecule and len(molecule.molResidues) > 1:
+                ccpCode = molecule.findFirstMolResidue(serial=resLabel.resId).ccpCode
 
-        else:
+                if molecule.molType in ("DNA", "RNA", "DNA/RNA"):
+                    nucTlcDict = {"A": "Ade", "C": "Cyt", "G": "Gua", "T": "Thy", "U": "Ura"}
 
-          if atomLabel2.weight == 0.00:
-            bmrbLabel += '%s%s' % (atomLabel2.massNumber, atomLabel2.atomName)
-          else:
-            percent = atomLabel2.weight*100
-            bmrbLabel += '%d%% %s%s' % (percent, atomLabel2.massNumber, atomLabel2.atomName)
+                    ccpCode = nucTlcDict[ccpCode]
 
+                ccpCodes.append(ccpCode)
 
-    if bmrbLabel:
+    if firstBmrbLabel and firstBmrbLabel != "natural abundance":
+        firstBmrbLabel = "[" + firstBmrbLabel + "]"
 
-      if firstBmrbLabel:
+        if ccpCodes:
+            firstCcpCode = ccpCodes[0]
+            resFlag = True
 
-        if firstBmrbLabel != bmrbLabel:
-          print('  Warning: multiple labels for this molecule %s' % molecule.name)
-          break
+            for ccpCode in ccpCodes:
+                if ccpCode != firstCcpCode:
+                    resFlag = False
+                    break
 
-      else:
-        firstBmrbLabel = bmrbLabel
+            if resFlag:
+                firstBmrbLabel += "-" + firstCcpCode
 
-      if molecule and len(molecule.molResidues) > 1:
-        ccpCode = molecule.findFirstMolResidue(serial=resLabel.resId).ccpCode
+    return firstBmrbLabel
 
-        if molecule.molType in ('DNA', 'RNA', 'DNA/RNA'):
-
-          nucTlcDict = {'A': 'Ade',
-                        'C': 'Cyt',
-                        'G': 'Gua',
-                        'T': 'Thy',
-                        'U': 'Ura'}
-
-          ccpCode = nucTlcDict[ccpCode]
-
-        ccpCodes.append(ccpCode)
-
-  if firstBmrbLabel and firstBmrbLabel != 'natural abundance':
-    firstBmrbLabel = '[' + firstBmrbLabel + ']'
-
-    if ccpCodes:
-      firstCcpCode = ccpCodes[0]
-      resFlag = True
-
-      for ccpCode in ccpCodes:
-        if ccpCode != firstCcpCode:
-          resFlag = False
-          break
-
-      if resFlag:
-        firstBmrbLabel += '-' + firstCcpCode
-
-  return firstBmrbLabel
 
 def parseBmrbLabelName(bmrbLabelName):
 
-  specificResidue = None
+    specificResidue = None
 
-  resLabPatt = re.compile("\]\-([A-Za-z\d]+)$")
+    resLabPatt = re.compile(r"\]\-([A-Za-z\d]+)$")
 
-  searchObj = resLabPatt.search(bmrbLabelName)
+    searchObj = resLabPatt.search(bmrbLabelName)
 
-  if searchObj:
-    specificResidue = searchObj.group(1)
+    if searchObj:
+        specificResidue = searchObj.group(1)
 
-  bmrbLabelName = resLabPatt.sub(']', bmrbLabelName)
+    bmrbLabelName = resLabPatt.sub("]", bmrbLabelName)
 
-  #print 'SPEC: [%s] [%s]' % (bmrbLabelName, specificResidue)
+    # print 'SPEC: [%s] [%s]' % (bmrbLabelName, specificResidue)
 
-  if bmrbLabelName.count(';'):
-    labels = bmrbLabelName.split(';')
-
-  else:
-    labels = [bmrbLabelName]
-
-  labelInfo = []
-
-  for label in labels:
-    label = label.strip('[] \t')
-
-    #print 'LABEL: [%s]' % label
-
-    if label == 'natural abundance':
-      return None # pass ???
+    if bmrbLabelName.count(";"):
+        labels = bmrbLabelName.split(";")
 
     else:
-      labelPatt = re.compile("^(U\-)?(\d+%)? ?(\d+)([HCN])([A-Z]*)$")
+        labels = [bmrbLabelName]
 
-      searchObj = labelPatt.search(label)
+    labelInfo = []
 
-      if searchObj:
-        uniform  = searchObj.group(1)
-        percent  = searchObj.group(2)
-        mass     = searchObj.group(3)
-        atomType = searchObj.group(4)
-        specificAtom = searchObj.group(5)
+    for label in labels:
+        label = label.strip("[] \t")
 
-        labelInfo.append( (uniform, percent, mass, atomType, specificResidue, specificAtom) )
+        # print 'LABEL: [%s]' % label
 
-  return labelInfo
+        if label == "natural abundance":
+            return None  # pass ???
+
+        else:
+            labelPatt = re.compile(r"^(U\-)?(\d+%)? ?(\d+)([HCN])([A-Z]*)$")
+
+            searchObj = labelPatt.search(label)
+
+            if searchObj:
+                uniform = searchObj.group(1)
+                percent = searchObj.group(2)
+                mass = searchObj.group(3)
+                atomType = searchObj.group(4)
+                specificAtom = searchObj.group(5)
+
+                labelInfo.append((uniform, percent, mass, atomType, specificResidue, specificAtom))
+
+    return labelInfo
+
 
 def makeUniformLabels(resLabel, atomType, mass, percent):
 
-  isotopeMasses = {'C': '13',
-                   'N': '15',
-                   'H': '2'}
+    isotopeMasses = {"C": "13", "N": "15", "H": "2"}
 
-  isotopeNuclei = {'C': 'carbon',
-                   'N': 'nitrogen',
-                   'H': 'hydrogen'}
+    isotopeNuclei = {"C": "carbon", "N": "nitrogen", "H": "hydrogen"}
 
-  if mass != isotopeMasses[atomType]:
-    print('  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType]))
-    return
+    if mass != isotopeMasses[atomType]:
+        print(
+            "  Warning: labelled %s isotope does not have mass of %s"
+            % (isotopeNuclei[atomType], isotopeMasses[atomType])
+        )
+        return
 
-  if not percent:
-    weight = 0.00
-  else:
-    weight = float(percent[:-1])/100.0
+    if not percent:
+        weight = 0.00
+    else:
+        weight = float(percent[:-1]) / 100.0
 
-  if weight < 0 and weight > 1:
-    print('  Warning: degree of isotope labelling not in the correct range (0-100%)')
-    return
+    if weight < 0 and weight > 1:
+        print("  Warning: degree of isotope labelling not in the correct range (0-100%)")
+        return
 
+    uniformAtomLabel2 = None
 
-  uniformAtomLabel2 = None
+    uniformAtomLabel1 = resLabel.newUniformAtomLabel(elementName=atomType, massNumber=int(mass), weight=weight)
 
-  uniformAtomLabel1 = resLabel.newUniformAtomLabel(elementName=atomType, massNumber=int(mass), weight=weight)
+    if weight != 1.00:
+        uniformAtomLabel2 = resLabel.newUniformAtomLabel(
+            elementName=atomType, massNumber=int(mass) - 1, weight=1.00 - weight
+        )
 
-  if weight != 1.00:
-    uniformAtomLabel2 = resLabel.newUniformAtomLabel(elementName=atomType, massNumber=int(mass)-1, weight=1.00-weight)
+    return (uniformAtomLabel1, uniformAtomLabel2)
 
-  return (uniformAtomLabel1, uniformAtomLabel2)
 
 def makeSpecAtomLabels(resLabel, atomType, mass, percent, specificAtom):
 
-  isotopeMasses = {'C': '13',
-                   'N': '15',
-                   'H': '2'}
+    isotopeMasses = {"C": "13", "N": "15", "H": "2"}
 
-  isotopeNuclei = {'C': 'carbon',
-                   'N': 'nitrogen',
-                   'H': 'hydrogen'}
+    isotopeNuclei = {"C": "carbon", "N": "nitrogen", "H": "hydrogen"}
 
-  if mass != isotopeMasses[atomType]:
-    print('  Warning: labelled %s isotope does not have mass of %s' % (isotopeNuclei[atomType], isotopeMasses[atomType]))
-    return
+    if mass != isotopeMasses[atomType]:
+        print(
+            "  Warning: labelled %s isotope does not have mass of %s"
+            % (isotopeNuclei[atomType], isotopeMasses[atomType])
+        )
+        return
 
-  if not percent:
-    weight = 0.00
-  else:
-    weight = float(percent[:-1])/100.0
+    if not percent:
+        weight = 0.00
+    else:
+        weight = float(percent[:-1]) / 100.0
 
-  if weight < 0 and weight > 1:
-    print('  Warning: degree of isotope labelling not in the correct range (0-100%)')
-    return
+    if weight < 0 and weight > 1:
+        print("  Warning: degree of isotope labelling not in the correct range (0-100%)")
+        return
 
-  specAtomLabel2 = None
+    specAtomLabel2 = None
 
-  specAtomLabel1 = resLabel.newSingleAtomLabel(atomName=atomType + specificAtom, massNumber=int(mass), weight=weight)
-  if weight != 1.00:
-    specAtomLabel2 = resLabel.newSingleAtomLabel(atomName=atomType + specificAtom, massNumber=int(mass)-1, weight=1.00-weight)
+    specAtomLabel1 = resLabel.newSingleAtomLabel(atomName=atomType + specificAtom, massNumber=int(mass), weight=weight)
+    if weight != 1.00:
+        specAtomLabel2 = resLabel.newSingleAtomLabel(
+            atomName=atomType + specificAtom, massNumber=int(mass) - 1, weight=1.00 - weight
+        )
 
-  #print 'SPECS: [%s] [%s]' % (specAtomLabel1, specAtomLabel2)
+    # print 'SPECS: [%s] [%s]' % (specAtomLabel1, specAtomLabel2)
 
-  return (specAtomLabel1, specAtomLabel2)
+    return (specAtomLabel1, specAtomLabel2)
+
 
 def doLabels(labelInfo, bmrbLabelName, molLabel, molecule=None, molRes=None):
 
-  schemeNameDict = {'natural abundance':                'NatAbun',
-                    '[U-95% 15N]':                      'uni_15N',
-                    '[U-95% 13C; U-95% 15N]':           'uni_15N13C',
-                    '[U-95% 13C; U-95% 15N; U-95% 2H]': 'uni_15N13C2H'}
+    schemeNameDict = {
+        "natural abundance": "NatAbun",
+        "[U-95% 15N]": "uni_15N",
+        "[U-95% 13C; U-95% 15N]": "uni_15N13C",
+        "[U-95% 13C; U-95% 15N; U-95% 2H]": "uni_15N13C2H",
+    }
 
-  if molRes is None:
-    molResId = 1
-  else:
-    molResId = molRes.serial
+    if molRes is None:
+        molResId = 1
+    else:
+        molResId = molRes.serial
 
-  resLabel = molLabel.findFirstResLabel(resId=molResId)
-  if not resLabel:
-    resLabel = molLabel.newResLabel(resId=molResId)
+    resLabel = molLabel.findFirstResLabel(resId=molResId)
+    if not resLabel:
+        resLabel = molLabel.newResLabel(resId=molResId)
 
-  #for key in resLabel.__dict__['resLabelFractions'].keys():
-  #  del(resLabel.__dict__['resLabelFractions'][key])
-  #for key in resLabel.__dict__['atomLabels'].keys():
-  #  del(resLabel.__dict__['atomLabels'][key])
+    # for key in resLabel.__dict__['resLabelFractions'].keys():
+    #  del(resLabel.__dict__['resLabelFractions'][key])
+    # for key in resLabel.__dict__['atomLabels'].keys():
+    #  del(resLabel.__dict__['atomLabels'][key])
 
-  for rlf in resLabel.resLabelFractions:
-    rlf.delete()
-  for al in resLabel.atomLabels:
-    al.delete()
+    for rlf in resLabel.resLabelFractions:
+        rlf.delete()
+    for al in resLabel.atomLabels:
+        al.delete()
 
-  if bmrbLabelName in schemeNameDict:
-    #resLabelFrac = resLabel.findFirstResLabelFraction(schemeName=schemeNameDict[bmrbLabelName])
+    if bmrbLabelName in schemeNameDict:
+        # resLabelFrac = resLabel.findFirstResLabelFraction(schemeName=schemeNameDict[bmrbLabelName])
 
-    #if not resLabelFrac:
-    #  pass
-    resLabelFrac = resLabel.newResLabelFraction(schemeName=schemeNameDict[bmrbLabelName])
+        # if not resLabelFrac:
+        #  pass
+        resLabelFrac = resLabel.newResLabelFraction(schemeName=schemeNameDict[bmrbLabelName])
 
-  else:
-    uniformLabels = None
+    else:
+        uniformLabels = None
 
-    if labelInfo:
-      for label in labelInfo:
+        if labelInfo:
+            for label in labelInfo:
+                (uniform, percent, mass, atomType, specificResidue, specificAtom) = label
 
-        (uniform, percent, mass, atomType, specificResidue, specificAtom) = label
+                ccpCode = ""
 
-        ccpCode = ''
+                if molecule and molRes:
+                    if molecule.molType in ("DNA", "RNA", "DNA/RNA"):
+                        nucTlcDict = {"A": "Ade", "C": "Cyt", "G": "Gua", "T": "Thy", "U": "Ura"}
 
-        if molecule and molRes:
+                        ccpCode = nucTlcDict[molRes.ccpCode]
 
-          if molecule.molType in ('DNA', 'RNA', 'DNA/RNA'):
+                    elif molecule.molType == "protein":
+                        ccpCode = molRes.ccpCode
 
-            nucTlcDict = {'A': 'Ade',
-                          'C': 'Cyt',
-                          'G': 'Gua',
-                          'T': 'Thy',
-                          'U': 'Ura'}
+                    # elif sugar  # TODO: ???
 
-            ccpCode = nucTlcDict[molRes.ccpCode]
+                # print "DATA: [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]" % (uniform, percent, mass, atomType, specificResidue, molRes, molRes.ccpCode, ccpCode, specificAtom)
 
-          elif molecule.molType == 'protein':
+                if specificResidue is not None and specificResidue != ccpCode:
+                    continue
 
-            ccpCode = molRes.ccpCode
+                if uniform == "U-":
+                    # print 'Making uniform labels'
+                    uniformLabels = makeUniformLabels(resLabel, atomType, mass, percent)
 
-          #elif sugar  # TODO: ???
+                    if uniformLabels is None:
+                        continue
 
-        #print "DATA: [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]" % (uniform, percent, mass, atomType, specificResidue, molRes, molRes.ccpCode, ccpCode, specificAtom)
+                elif specificAtom:
+                    # print 'Making specific labels'
+                    specAtomLabels = makeSpecAtomLabels(resLabel, atomType, mass, percent, specificAtom)
 
-        if specificResidue is not None and specificResidue != ccpCode:
-          continue
+                else:
+                    continue
 
-        if uniform == 'U-':
-          #print 'Making uniform labels'
-          uniformLabels = makeUniformLabels(resLabel, atomType, mass, percent)
+        # print 'RES2: [%s] [%s] [%s]' % (resLabel, uniformLabels[0], uniformLabels[1])
 
-          if uniformLabels is None:
-            continue
-
-        elif specificAtom:
-          #print 'Making specific labels'
-          specAtomLabels = makeSpecAtomLabels(resLabel, atomType, mass, percent, specificAtom)
-
-        else:
-          continue
-
-    #print 'RES2: [%s] [%s] [%s]' % (resLabel, uniformLabels[0], uniformLabels[1])
 
 def makeLabelObjects(mr, refComp, bmrbLabelName):
 
-  # TBD: wb104 15 Aug 2012: before the refComp.className did not have to be
-  # 'MolComponent' but that then causes a problem with creating a LabeledMolecule,
-  # which has to have a Molecule with that name.  Look at again.
-  if not refComp.className == 'MolComponent':
-    showError('Not a MolComponent', 'refComponent is not a MolComponent')
-    return
+    # TBD: wb104 15 Aug 2012: before the refComp.className did not have to be
+    # 'MolComponent' but that then causes a problem with creating a LabeledMolecule,
+    # which has to have a Molecule with that name.  Look at again.
+    if not refComp.className == "MolComponent":
+        showError("Not a MolComponent", "refComponent is not a MolComponent")
+        return
 
-  molecule = refComp.molecule
-  if not molecule:
-    showError('No Molecule', 'refComponent has no Molecule')
-    return
+    molecule = refComp.molecule
+    if not molecule:
+        showError("No Molecule", "refComponent has no Molecule")
+        return
 
-  name = molecule.name
-    
-  labMol = mr.findFirstLabeledMolecule(name=name)
-  if not labMol:
-    labMol = mr.newLabeledMolecule(name=name)
+    name = molecule.name
 
-  # wb104 9 Jul 2013: do not just use first MolLabel found
-  """
+    labMol = mr.findFirstLabeledMolecule(name=name)
+    if not labMol:
+        labMol = mr.newLabeledMolecule(name=name)
+
+    # wb104 9 Jul 2013: do not just use first MolLabel found
+    """
   molLabel = labMol.findFirstMolLabel()
   if not molLabel:
     molLabel = labMol.newMolLabel()
 """
 
-  # wb104 9 Jul 2013: check if labeledMixture set and if not always create a new one
-  labMix = refComp.labeledMixture
-  if not labMix:
-    labMix = labMol.newLabeledMixture()
+    # wb104 9 Jul 2013: check if labeledMixture set and if not always create a new one
+    labMix = refComp.labeledMixture
+    if not labMix:
+        labMix = labMol.newLabeledMixture()
 
-  # wb104 9 Jul 2013: set up link from LabeledMixture to new MolLabel if needed
-  molLabel = labMix.averageComposition
-  if not molLabel:
-    molLabel = labMix.averageComposition = labMol.newMolLabel()
-  """
+    # wb104 9 Jul 2013: set up link from LabeledMixture to new MolLabel if needed
+    molLabel = labMix.averageComposition
+    if not molLabel:
+        molLabel = labMix.averageComposition = labMol.newMolLabel()
+    """
   # previous way of doing it
   labMix = labMol.findFirstLabeledMixture()
   if not labMix:
     labMix = labMol.newLabeledMixture()
 """
 
-  # wb104 9 Jul 2013: old fashioned way to do this (and makes grepping worse)
-  #refComp.setLabeledMixture(labMix)
-  refComp.labeledMixture = labMix
+    # wb104 9 Jul 2013: old fashioned way to do this (and makes grepping worse)
+    # refComp.setLabeledMixture(labMix)
+    refComp.labeledMixture = labMix
 
-  molLabelFrac = labMix.findFirstMolLabelFraction(molLabel=molLabel)
-  if not molLabelFrac:
-    molLabelFrac = labMix.newMolLabelFraction(molLabel=molLabel)
+    molLabelFrac = labMix.findFirstMolLabelFraction(molLabel=molLabel)
+    if not molLabelFrac:
+        molLabelFrac = labMix.newMolLabelFraction(molLabel=molLabel)
 
-  labelInfo = parseBmrbLabelName(bmrbLabelName)
+    labelInfo = parseBmrbLabelName(bmrbLabelName)
 
-  molecule = None
+    molecule = None
 
-  if refComp.className == 'MolComponent':
-    molecule = refComp.molecule
+    if refComp.className == "MolComponent":
+        molecule = refComp.molecule
 
-    if molecule and not molecule.isFinalised:
-      molecule.isFinalised = True
+        if molecule and not molecule.isFinalised:
+            molecule.isFinalised = True
 
-  if molecule:
-    for molRes in molecule.sortedMolResidues():
-      doLabels(labelInfo, bmrbLabelName, molLabel, molecule, molRes)
+    if molecule:
+        for molRes in molecule.sortedMolResidues():
+            doLabels(labelInfo, bmrbLabelName, molLabel, molecule, molRes)
 
-  else:
-    doLabels(labelInfo, bmrbLabelName, molLabel)
+    else:
+        doLabels(labelInfo, bmrbLabelName, molLabel)
 
-if __name__ == '__main__':
 
-  pass
+if __name__ == "__main__":
+    pass

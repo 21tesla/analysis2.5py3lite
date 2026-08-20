@@ -88,18 +88,17 @@ Citing:          If you are using this software for academic purposes, we
 
 import os
 
-#from ccp.general.Io                      import getStdChemComps, getChemComp
-#from ccpnmr.analysis.core.MoleculeBasic  import findMatchingChain, getLinkedResidue
-#from ccpnmr.analysis.core.StructureBasic import getBestNamingSystem, findMatchingMolSystemAtom
-from ccpnmr.format.converters.CnsFormat  import CnsFormat
+from HaddockLocal import daniProtocolStore, rdcProtocolStore
+
 #from ccp.util.Molecule                   import makeChain, addMolResidues, makeMolecule, nextChainCode
 #from memops.gui.MessageReporter          import showOkCancel,showWarning,showYesNo
 #from memops.universal.Util               import returnInt, returnFloat
-
 # New import, replaces previous code duplication
-from ccp.lib.StructureIo import getStructureFromFile
+#from ccp.general.Io                      import getStdChemComps, getChemComp
+#from ccpnmr.analysis.core.MoleculeBasic  import findMatchingChain, getLinkedResidue
+#from ccpnmr.analysis.core.StructureBasic import getBestNamingSystem, findMatchingMolSystemAtom
+from ccpnmr.format.converters.CnsFormat import CnsFormat
 
-from HaddockLocal                        import rdcProtocolStore, daniProtocolStore
 
 def addRdcParam(run,termId):
 
@@ -107,7 +106,7 @@ def addRdcParam(run,termId):
        be linked to its RDC energy protocol
     """
     energyTermStore = run.newHaddockEnergyTerm(code='rdcProtocolStore',termId=termId)
-    
+
     terms = rdcProtocolStore['terms'].keys()
     for term in terms:
         energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=rdcProtocolStore['terms'][term])
@@ -140,9 +139,9 @@ def getPdbString(model,chains,chainRename=None,blankchain=False,fileEnd='END'):
 
     if blankchain: forceExportChainId = " "
     else: forceExportChainId = forceExportSegId
-    
+
     if not chains: chainlist = project.findFirstMolSystem().sortedChains()
-    
+
     cnsFormat.writeCoordinates('void',
                                 structures = [model],
                                 forceExportSegId = forceExportSegId,
@@ -157,7 +156,7 @@ def getPdbString(model,chains,chainRename=None,blankchain=False,fileEnd='END'):
     return cnsFormat.coordinateFile.coordFileString
 
 def getAirSegments(haddockPartner):
-    
+
     """Description: Get lists of the active and passive residues for ambiguous
                        interaction restraints from a haddock interacting partner.
                        Numbers output are in the HADDOCK numbering system for the
@@ -166,20 +165,20 @@ def getAirSegments(haddockPartner):
        Output:         Dict of Lists (Dict['active'/'passive'] = List of residues)
     """
     segmentDict = {'active':[],'passive':[]}
-    
+
     for chain in haddockPartner.chains:
         residues = [(r.residue.seqCode, r) for r in chain.residues]
         residues.sort()
-        
+
         for seqId, residue in residues:
             interaction = residue.interaction
             if interaction == 'active': segmentDict['active'].append(seqId)
             elif interaction == 'passive': segmentDict['passive'].append(seqId)
-    
+
     return segmentDict
 
 def getFlexibleResidues(haddockPartner,export='zone'):
-    
+
     """Description: Get lists of the flexible and semi-flexible residues for a
                        haddock interacting partner. Numbers output are in the HADDOCK
                        numbering system for the partner (i.e. may be different from CCPN chains)
@@ -191,16 +190,16 @@ def getFlexibleResidues(haddockPartner,export='zone'):
        Output:         Dict of Lists (Dict['semi'/'full'] = List of residues)
     """
     segmentDict = {'semi':[],'full':[]}
-    
+
     for chain in haddockPartner.chains:
         residues = [(r.residue.seqCode, r) for r in chain.residues]
         residues.sort()
-        
+
         for seqId, residue in residues:
             flexibility = residue.flexibility
             if flexibility == 'semi': segmentDict['semi'].append(seqId)
             elif flexibility == 'full': segmentDict['full'].append(seqId)
-    
+
     if export == 'zone':
         for flex in segmentDict:
             if len(segmentDict[flex]):
@@ -216,13 +215,13 @@ def getFlexibleResidues(haddockPartner,export='zone'):
                     else:
                         flexzones.append((start,flexresidues[r]))
                 segmentDict[flex] = flexzones
-        return segmentDict         
+        return segmentDict
     else: return segmentDict
 
 def makeBackup(infile):
-    
+
     """Make backup of files or directories by checking if file (or backup as _*) is there and rename"""
-    
+
     if os.path.isfile(infile) or os.path.isdir(infile):
         i = 1
         while i < 100:
@@ -263,10 +262,10 @@ def copyRun(run, nmrConstraintStore=None):
                                         name=term.name,
                                         fileName=term.fileName,
                                         details=term.details)
-        
+
         if run.nmrConstraintStore is nmrConstraintStore:
             termB.constraintList = term.constraintList
-    
+
         for param in term.energyTermParameters:
             termB.newEnergyParameter(code=param.code, value=param.value)
 
@@ -284,9 +283,9 @@ def setRunConstraintSet(run, nmrConstraintStore):
     if nmrConstraintStore is not run.nmrConstraintStore:
         for term in run.haddockEnergyTerms:
             term.constraintList = None
-        
+
         run.__dict__['nmrConstraintStore'] = nmrConstraintStore
-        
+
     return run
 
 def setPartnerEnsemble(haddockPartner, ensemble):
@@ -383,8 +382,8 @@ class evalWcPairing:
                         ('O2','N2'),
                         ('O4','N6'),
                         ('N6','O4')]
-        self.hbond = hbond**2    
-        self.pairs = []                
+        self.hbond = hbond**2
+        self.pairs = []
 
         if partner.isDna:
             self.__makeAtomSelection__()
@@ -438,5 +437,5 @@ class evalWcPairing:
             if dist[2] <= self.hbond:
                 pair1 = (dist[0].residue,dist[1].residue)
                 pair2 = (dist[1].residue,dist[0].residue)
-                if not pair1 in self.pairs and not pair2 in self.pairs:
+                if pair1 not in self.pairs and pair2 not in self.pairs:
                     self.pairs.append(pair1)

@@ -3,7 +3,7 @@ Use the CYANA names as a basis and then do some subs.
 """
 
 from cing import NTdb
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 
 nuclList = ('GUA', 'CYT', 'ADE', 'THY', 'URA',
             'RGUA', 'RCYT', 'RADE', 'RTHY', 'RURA',
@@ -17,7 +17,7 @@ mapCyana2Xplor = {
 mapCyana2XplorKeys=mapCyana2Xplor.keys()
 
 for res in NTdb:
-    if not res.name in nuclList:
+    if res.name not in nuclList:
         continue
     for atm in res:
         atm.nameDict[XPLOR] = atm.nameDict[CYANA]

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,62 +51,60 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-
-from memops.universal.Io import joinPath
-
-from memops.gui.Label import Label
-from memops.gui.Util import createDismissHelpButtonList
-from memops.gui.PulldownMenu import PulldownMenu
 
 from ccpnmr.format.general.Io import getHelpUrlDir
-
 from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
+from memops.gui.Label import Label
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.Util import createDismissHelpButtonList
+from memops.universal.Io import joinPath
+
 
 class NamingSystemPopup(TemporaryBasePopup):
- 
-  help_url = joinPath(getHelpUrlDir(),'NamingSystem.html')
+    help_url = joinPath(getHelpUrlDir(), "NamingSystem.html")
 
-  def __init__(self, parent, namingSysList = None, namingSysDict = None):
+    def __init__(self, parent, namingSysList=None, namingSysDict=None):
 
-    # Constructor doesn't do much except call body
-    # The parent is self.parent (parent of the popup)
-   
-    self.namingSys = None
-    
-    self.namingSysList = namingSysList
-    self.namingSysDict = namingSysDict
+        # Constructor doesn't do much except call body
+        # The parent is self.parent (parent of the popup)
 
-    # modal = true means that it won't continue unless this one returns value
-    TemporaryBasePopup.__init__(self, parent=parent, title='Choose namingSys', modal=False, transient=True)
+        self.namingSys = None
 
-  def body(self, master):
-    
-    #
-    # Popup gui
-    #
+        self.namingSysList = namingSysList
+        self.namingSysDict = namingSysDict
 
-    # First row
-    row = 0
-    label = Label(master, text= "Choose a naming system:")
-    label.grid(row=row, column=0, sticky=Tkinter.W)
+        # modal = true means that it won't continue unless this one returns value
+        TemporaryBasePopup.__init__(self, parent=parent, title="Choose namingSys", modal=False, transient=True)
 
-    row = row + 1
-    label = Label(master, text= "(% matches in brackets)")
-    label.grid(row=row, column=0, sticky=Tkinter.W)
+    def body(self, master):
 
-    row = row + 1
-    self.menu = PulldownMenu(master, entries = self.namingSysList)
-    self.menu.grid(row=row, column=0, sticky=Tkinter.EW)
-   
-    row = row + 1
-    texts = [ 'OK' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createDismissHelpButtonList(master, texts=texts, commands=commands, dismiss_text = 'Exit', help_url=self.help_url)
-    buttons.grid(row=row, column=0)
+        #
+        # Popup gui
+        #
 
-  def apply(self):
-    
-    self.namingSysName = self.namingSysDict[self.menu.getSelected()]
-    
-    return True
+        # First row
+        row = 0
+        label = Label(master, text="Choose a naming system:")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
+
+        row = row + 1
+        label = Label(master, text="(% matches in brackets)")
+        label.grid(row=row, column=0, sticky=Tkinter.W)
+
+        row = row + 1
+        self.menu = PulldownMenu(master, entries=self.namingSysList)
+        self.menu.grid(row=row, column=0, sticky=Tkinter.EW)
+
+        row = row + 1
+        texts = ["OK"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createDismissHelpButtonList(
+            master, texts=texts, commands=commands, dismiss_text="Exit", help_url=self.help_url
+        )
+        buttons.grid(row=row, column=0)
+
+    def apply(self):
+
+        self.namingSysName = self.namingSysDict[self.menu.getSelected()]
+
+        return True

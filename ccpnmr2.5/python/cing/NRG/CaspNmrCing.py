@@ -22,19 +22,18 @@ or similar. The minus of -15 is necessary because it needs to signal it's childr
 Execute like:
 python -u $CINGROOT/python/cing/NRG/CaspNmrCing.py
 """
-from cing import cingPythonCingDir
-from cing import cingRoot
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import get_cmd_output
-from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
-from cing.NRG import CASP_NMR_BASE_NAME
-from cing.NRG.CaspNmrMassageCcpnProject import baseDir
-from cing.NRG.CaspNmrMassageCcpnProject import entryList
-from glob import glob
 import csv
 import shutil
 import string
+from glob import glob
+
+from cing import cingPythonCingDir, cingRoot
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.forkoff import get_cmd_output
+from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import CASP_NMR_BASE_NAME
+from cing.NRG.CaspNmrMassageCcpnProject import baseDir
 
 
 # pylint: disable=R0903
@@ -330,7 +329,7 @@ class CaspNmrCing(Lister):
                     if line.count('ERROR:'):
                         nTerror("Matched line: %s" % line)
 
-                    hasPseudoErrorListed = line.count(" .Q") 
+                    hasPseudoErrorListed = line.count(" .Q")
                     # ignore the errors for pseudos e.g. in CGR26ALyon Hopefully this is unique enough; tested well.
                     if line.count("Error: Not linking atom"):
                         if not hasPseudoErrorListed:
@@ -370,7 +369,7 @@ class CaspNmrCing(Lister):
                 if entryCrashed:
                     continue # don't mark it as stopped anymore.
 
-                if not self.timeTakenDict.has_key(entry_code):
+                if entry_code not in self.timeTakenDict:
                     # was stopped by time out or by user or by system (any other type of stop but stack trace)
                     nTmessage("%s Since CING end message was not found assumed to have stopped" % entry_code)
                     self.entry_anno_list_stopped.append(entry_code)
@@ -541,7 +540,7 @@ class CaspNmrCing(Lister):
         for x_entry_code in self.entry_list_done + [ None ]:
             if x_entry_code:
                 pdb_entry_code = x_entry_code
-                if self.matches_many2one.has_key(pdb_entry_code):
+                if pdb_entry_code in self.matches_many2one:
                     bmrb_entry_code = self.matches_many2one[pdb_entry_code]
                     bmrb_entry_code = bmrb_entry_code
                 else:
@@ -747,7 +746,7 @@ if __name__ == '__main__':
 #    new_hits_entry_list         = string.split("2jqv 2jnb 2jnv 2jvo 2jvr 2jy7 2jy8 2oq9 2osq 2osr 2otr 2rn9 2rnb")
 
     ## Initialize the project
-    m = CaspNmrCing(max_entries_todo=max_entries_todo, max_time_to_wait=max_time_to_wait, writeWhyNot=writeWhyNot, 
+    m = CaspNmrCing(max_entries_todo=max_entries_todo, max_time_to_wait=max_time_to_wait, writeWhyNot=writeWhyNot,
                     updateIndices=updateIndices, isProduction=isProduction)
 #    m.getCingEntriesTriedAndDone()
     m.update(new_hits_entry_list,doCheckAnnotation=doCheckAnnotation)

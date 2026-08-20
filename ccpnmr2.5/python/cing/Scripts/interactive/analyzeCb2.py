@@ -5,10 +5,10 @@
 # execute:
 # %run -i /Users/jd/workspace35/cing/python/cing/Scripts/analyzeCb2.py
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 from cing.core.molecule import Dihedral
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
 
 project = p #@UndefinedVariable
 
@@ -57,16 +57,16 @@ for res in project.molecule.A.allResidues():
                         continue
                     angles = NTlist() # store phi, psi, chi1, chi2
                     for angle in ['PHI','PSI','CHI1','CHI2']:
-                        if res.has_key(angle):
+                        if angle in res:
                             angles.append( res[angle][i] )
                         else:
                             angles.append( 0.0 )
                     #end for
                     if bb<20.0: # Arbitrary 20 bb occurences as cuttoff for now
-                        fprintf(fpBad,'%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), 
+                        fprintf(fpBad,'%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "),
                                 res, res.dssp.consensus)
                     else:
-                        fprintf(fpGood,'%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "), 
+                        fprintf(fpGood,'%4d   %7.2f  %7.2f  %7.2f  %s  %s %s\n', res.resNum, d1[i], d2[i], bb, angles.format("%7.2f  "),
                                 res, res.dssp.consensus)
             #end if
         #end if

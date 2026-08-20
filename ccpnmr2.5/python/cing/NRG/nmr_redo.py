@@ -13,15 +13,15 @@ $C/python/cing/NRG/nmr_redo.py updateIndexFiles
 """
 
 from cing import cingDirScripts
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.helper import * #@UnusedWildImport
+from cing.Libs.helper import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG import ARCHIVE_NMR_REDO_ID
-from cing.NRG.nrgCing import NrgCing
-from cing.NRG.nrgCing import runNrgCing
-from cing.NRG.settings import * #@UnusedWildImport
+from cing.NRG.nrgCing import NrgCing, runNrgCing
+from cing.NRG.settings import *  #@UnusedWildImport
 from cing.NRG.validateEntryForCasp import ARCHIVE_TYPE_BY_CH23_BY_ENTRY
 from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
 from cing.Scripts.validateEntry import PROJECT_TYPE_CING
+
 
 class NmrRedo(NrgCing):
     """Main class for preparing and running NMR recalculations."""
@@ -29,7 +29,7 @@ class NmrRedo(NrgCing):
                  useTopos=False,
                  getTodoList=True,
                  max_entries_todo=1,
-                 max_time_to_wait=86400*2, # two days. 1d8v (263 residues) took the longest: about 26 hours. 
+                 max_time_to_wait=86400*2, # two days. 1d8v (263 residues) took the longest: about 26 hours.
                  processes_max=None,
 #                 prepareInput=False,
 #                 writeWhyNot=True,
@@ -37,11 +37,11 @@ class NmrRedo(NrgCing):
 #                 updateIndices=True,
 #                 isProduction=True
                 ):
-        kwds = NTdict( 
+        kwds = NTdict(
                  useTopos=useTopos, # There must be an introspection possible for this.
                  getTodoList=getTodoList,
                  max_entries_todo=max_entries_todo,
-                 max_time_to_wait=max_time_to_wait, # one day. 2p80 took the longest: 5.2 hours. 
+                 max_time_to_wait=max_time_to_wait, # one day. 2p80 took the longest: 5.2 hours.
 #                 But <Molecule "2ku1" (C:7,R:1659,A:36876,M:30)> is taking longer. 2ku2 is taking over 12 hrs now.
                  processes_max=processes_max,
 #                 prepareInput=prepareInput,
@@ -51,21 +51,21 @@ class NmrRedo(NrgCing):
 #                 isProduction=isProduction,
 )
         kwds = kwds.toDict()
-        NrgCing.__init__( self, **kwds ) # Steal most from super class. 
+        NrgCing.__init__( self, **kwds ) # Steal most from super class.
         self.results_base = results_base_redo
 
 
         self.entry_to_delete_count_max = 0 # can be as many as fail every time.
         self.usedCcpnInput = 0  # For NMR_REDO it is not from the start.
         self.nrgCing = NrgCing() # Use as little as possible thru this inconvenience variable.
-                
-        self.archive_id = ARCHIVE_NMR_REDO_ID        
-        self.validateEntryExternalDone = False # DEFAULT: True 
+
+        self.archive_id = ARCHIVE_NMR_REDO_ID
+        self.validateEntryExternalDone = False # DEFAULT: True
 #        in the future and then it won't change but for NrgCing it is True from the start.
         self.updateDerivedResourceSettings() # The paths previously initialized in NrgCing. Will also chdir.
-        
+
         if 0:
-            self.entry_list_todo.clear() 
+            self.entry_list_todo.clear()
             # Random set of 10 from RECOORD still present in PDB.
             self.entry_list_todo += "1mmc 1ks0 1b4r 1nxi 1eww 1hp3 1iox 2u2f 1kjs 1orx".split()
 #            self.entry_list_todo += "1brv".split()
@@ -81,9 +81,9 @@ class NmrRedo(NrgCing):
             self.searchPdbEntries()
             self.entry_list_todo = readLinesFromFile(os.path.join(self.results_dir, 'entry_list_prep_todo.csv'))
             self.entry_list_todo = NTlist( *self.entry_list_todo )
-    # end def  
-        
-    
+    # end def
+
+
     def refine(self):
         """On self.entry_list_todo.
         Return True on error.
@@ -118,12 +118,12 @@ class NmrRedo(NrgCing):
                             delay_between_submitting_jobs = 5, # why is this so long? because of time outs at tang?
                             max_time_to_wait = self.max_time_to_wait,
                             start_entry_id = 0,
-                            max_entries_todo = self.max_entries_todo,                            
+                            max_entries_todo = self.max_entries_todo,
                             extraArgList=extraArgList):
             nTerror("Failed to doScriptOnEntryList")
             return True
         # end if
-    # end def        
+    # end def
 # end class.
 
 if __name__ == '__main__':

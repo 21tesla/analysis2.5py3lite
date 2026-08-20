@@ -3,8 +3,7 @@ Created on Oct 26, 2011
 
 @author: jd
 '''
-from cing.Libs.NTutils import nTerror
-from cing.Libs.NTutils import nTwarning
+from cing.Libs.NTutils import nTerror, nTwarning
 from cing.NRG import mapBase2Archive
 from cing.NRG.settings import results_baseList
 
@@ -26,8 +25,8 @@ def getArchiveIdFromDirectoryName(dirName):
             baseName = baseTry
             break
         # end if
-    # end def    
-    if not baseName in mapBase2Archive.keys():
+    # end def
+    if baseName not in mapBase2Archive.keys():
         nTwarning("Failed to map dirName [%s] with baseName [%s] because baseName is an unenumerated baseName." % (dirName, baseName))
         return None
     # end if

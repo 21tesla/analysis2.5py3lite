@@ -15,7 +15,6 @@ XPLOR        XPLOR nomenclature
 Axes descriptors:
 X_AXIS, Y_AXIS, Z_AXIS, A_AXIS
 """
-import cing
 
 OS_TYPE_MAC = 'darwin'
 OS_TYPE_LINUX = 'linux'
@@ -24,7 +23,7 @@ OS_TYPE_UNKNOWN = 'unknown'
 
 # 0.11+ is iPython version 2.
 IPYTHON_VERSION_A = 'iPythonVersion_A'
-IPYTHON_VERSION_B = 'iPythonVersion_B' 
+IPYTHON_VERSION_B = 'iPythonVersion_B'
 
 AQUA       = 'AQUA' # not up-to-date with BMRB DG/G difference.
 IUPAC      = 'IUPAC'
@@ -82,8 +81,8 @@ A_AXIS = 3
 
 SYMMETRY_C1_STR = 'SYMMETRY_C1' # No symmetry or undetermined. Use None for unknown.
 SYMMETRY_C2_STR = 'SYMMETRY_C2' # Homodimer such as 1hue
-SYMMETRY_C3_STR = 'SYMMETRY_C3' # 
-SYMMETRY_C5_STR = 'SYMMETRY_C5' # 2kyv all helical 
+SYMMETRY_C3_STR = 'SYMMETRY_C3' #
+SYMMETRY_C5_STR = 'SYMMETRY_C5' # 2kyv all helical
 SYMMETRY_D2_STR = 'SYMMETRY_D2' # 1olg  No symmetry
 
 # In NMR the symmetry is not always enfoced so really these cutoffs have little use.
@@ -339,7 +338,7 @@ JVM_HEADNESS    = '-Djava.awt.headless=true'
 #JVM_CMD_STD     = '/local/tmp/jdk1.6.0_41/bin/java -Xmx%s %s %s' % ( JVM_MAX_MEM, JVM_TYPE, JVM_HEADNESS )
 JVM_CMD_STD     = '/usr/bin/java -Xmx%s %s %s' % ( JVM_MAX_MEM, JVM_TYPE, JVM_HEADNESS )
 #JVM_CMD_STD     = 'echo helloJvm; which java; ' + JVM_CMD_STD # DEFAULT OFF
-    
+
 DEFAULT_SML_HANDLER_STRING = 'Default handler from SMLhandled'
 
 #: Don't report on the next atoms

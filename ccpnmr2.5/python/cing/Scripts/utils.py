@@ -3,10 +3,11 @@ Created on Apr 6, 2010
 
 @author: jd
 '''
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.pdb import defaultPrintChainCode
 from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.pdb import defaultPrintChainCode
+
 
 def printSequenceFromPdbFile(fn):
     verbosityOriginal = cing.verbosity

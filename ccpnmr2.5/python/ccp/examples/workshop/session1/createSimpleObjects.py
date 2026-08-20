@@ -22,36 +22,34 @@
 
 from memops.api.Implementation import MemopsRoot
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    project = MemopsRoot(name="objTest")
+    projectName = project.name
 
-  project = MemopsRoot(name = 'objTest')
-  projectName = project.name
+    # Create a new AffiliationStore top object.
 
-  # Create a new AffiliationStore top object.
+    affStore = project.newAffiliationStore(name=projectName)
 
-  affStore = project.newAffiliationStore(name = projectName)
+    # Create a new CitationStore top object.
 
-  # Create a new CitationStore top object.
+    citStore = project.newCitationStore(name=projectName)
 
-  citStore = project.newCitationStore(name = projectName)
+    # Create a new Person object from the AffiliationStore top object.
 
-  # Create a new Person object from the AffiliationStore top object.
+    person = affStore.newPerson(familyName="Smith", givenName="John")
 
-  person = affStore.newPerson(familyName = 'Smith', givenName = 'John')
+    # Create a new JournalCitation object from the CitationStore top object.
 
-  # Create a new JournalCitation object from the CitationStore top object.
+    journal = citStore.newJournalCitation(title="My paper", journalAbbreviation="JMB")
 
-  journal = citStore.newJournalCitation(title = 'My paper',
-                                        journalAbbreviation = 'JMB')
+    # Make a link between the person and the citation.
 
-  # Make a link between the person and the citation.
+    journal.addAuthor(person)
 
-  journal.addAuthor(person)
+    # Navigate from the person to his citation.
 
-  # Navigate from the person to his citation.
+    person_citation = person.findFirstAuthorCitation(journalAbbreviation="JMB")
 
-  person_citation = person.findFirstAuthorCitation(journalAbbreviation = 'JMB')
+    # Print some info about the person and his citation.
 
-  # Print some info about the person and his citation.
-
-  print('Person: [%s]; Journal [%s]' % (person.familyName, person_citation.title))
+    print("Person: [%s]; Journal [%s]" % (person.familyName, person_citation.title))

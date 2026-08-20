@@ -1,7 +1,9 @@
 """
 Classes for dealing with STAR syntax
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
+
 class SaveFrame (Lister):
     """
     Saveframe class

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,14 +45,13 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 import array
 import os
 
-from memops.universal.Util import isBigEndian
-
-from memops.general.Implementation import ApiError
-
 from ccp.format.spectra.params.ExternalParams import ExternalParams
+from memops.general.Implementation import ApiError
+from memops.universal.Util import isBigEndian
 
 ndim_index = 9
 npts_index = (99, 219, 15, 32)
@@ -66,165 +64,170 @@ nuc_index = (18, 16, 20, 22)
 
 value_index = 199
 
-head = 4*512
+head = 4 * 512
+
 
 class NmrPipeParams(ExternalParams):
+    format = "NmrPipe"
 
-  format = 'NmrPipe'
+    def __init__(self, file, **kw):
 
-  def __init__(self, file, **kw):
+        self.dataFile = file
+        self.head = head
+        ExternalParams.__init__(self, **kw)
 
-    self.dataFile = file
-    self.head = head
-    ExternalParams.__init__(self, **kw)
+    # ExternalParams requires this to be defined
+    def parseFile(self):
 
-  # ExternalParams requires this to be defined
-  def parseFile(self):
+        (s, x, self.big_endian, self.swap) = getHeader(self.dataFile)
 
-    (s, x, self.big_endian, self.swap) = getHeader(self.dataFile)
+        ndim = self.ndim = int(x[ndim_index])
 
-    ndim = self.ndim = int(x[ndim_index])
+        if (ndim < 1) or (ndim > 4):
+            raise ApiError("ndim = %d, should be between 1 and 4" % ndim)
 
-    if ((ndim < 1) or (ndim > 4)):
-      raise ApiError('ndim = %d, should be between 1 and 4' % ndim)
+        self.initDims()
 
-    self.initDims()
+        for i in range(ndim):
+            j = int(x[order_index[i]]) - 1
+            # c = int(x[complex_index[j]])
+            c = int(x[complex_index[i]])
+            if c == 0:
+                raise ApiError("data is complex in dim %d, can only cope with real data so far" % (i + 1))
+            # self.npts[i] = int(x[npts_index[j]])
+            self.npts[i] = int(x[npts_index[i]])
+            if i == 0:
+                self.block[i] = self.npts[i]
+            else:
+                self.block[i] = 1
+            self.sw[i] = x[sw_index[j]]
+            if self.sw[i] == 0:
+                self.sw[i] = 1000  # TBD: TEMP hack
+            self.sf[i] = x[sf_index[j]]
+            o = x[origin_index[j]]
+            self.refppm[i] = (self.sw[i] + o) / self.sf[i]
+            self.refpt[i] = 0
+            n = 4 * nuc_index[j]
+            nuc = s[n : n + 4].strip()
+            # get rid of null termination
+            m = nuc.find(chr(0))
+            if m >= 0:
+                nuc = nuc[:m]
+            if nuc == "ID" or nuc == "TAU":  # TBD: do not know if this is necessary or sufficient
+                self.nuc[i] = None
+            else:
+                self.nuc[i] = standardNucleusNameFromPipe(nuc)
 
-    for i in range(ndim):
-      j = int(x[order_index[i]]) - 1
-      #c = int(x[complex_index[j]])
-      c = int(x[complex_index[i]])
-      if (c == 0):
-        raise ApiError('data is complex in dim %d, can only cope with real data so far' % (i+1))
-      #self.npts[i] = int(x[npts_index[j]])
-      self.npts[i] = int(x[npts_index[i]])
-      if (i == 0):
-        self.block[i] = self.npts[i]
-      else:
-        self.block[i] = 1
-      self.sw[i] = x[sw_index[j]]
-      if (self.sw[i] == 0): self.sw[i] = 1000 # TBD: TEMP hack
-      self.sf[i] = x[sf_index[j]]
-      o = x[origin_index[j]]
-      self.refppm[i] = (self.sw[i] + o) / self.sf[i]
-      self.refpt[i] = 0
-      n = 4 * nuc_index[j]
-      nuc = s[n:n+4].strip()
-      # get rid of null termination
-      m = nuc.find(chr(0))
-      if m >= 0:
-        nuc = nuc[:m]
-      if nuc == 'ID' or nuc == 'TAU': # TBD: do not know if this is necessary or sufficient
-        self.nuc[i] = None
-      else:
-        self.nuc[i] = standardNucleusNameFromPipe(nuc)
 
 def getHeader(fileName):
 
     try:
-      fp = open(fileName, 'rb')
+        fp = open(fileName, "rb")
     except OSError as e:
-      raise ApiError(str(e))
+        raise ApiError(str(e))
 
     s = fp.read(head)
     fp.close()
 
-    if (len(s) < head):
-      raise ApiError('file shorter than expected length (%d bytes) of header (never mind data)' % head)
+    if len(s) < head:
+        raise ApiError("file shorter than expected length (%d bytes) of header (never mind data)" % head)
 
-    x = array.array('f')
+    x = array.array("f")
     x.fromstring(s)
 
-    if (x[0] != 0):
-      raise ApiError('first word of header = %s, should be 0' % x[0])
+    if x[0] != 0:
+        raise ApiError("first word of header = %s, should be 0" % x[0])
 
-    byte_order = [ 0x40, 0x16, 0x14, 0x7b ]
-    t = [ ord(c) for c in s[8:12] ]
-    if (t == byte_order):
-      big_endian = True
+    byte_order = [0x40, 0x16, 0x14, 0x7B]
+    t = [ord(c) for c in s[8:12]]
+    if t == byte_order:
+        big_endian = True
     else:
-      t.reverse()
-      if (t == byte_order):
-        big_endian = False
-      else:
-        raise ApiError('bytes 8 through 11 should be [ 0x40, 0x16, 0x14, 0x7b ] or reverse')
+        t.reverse()
+        if t == byte_order:
+            big_endian = False
+        else:
+            raise ApiError("bytes 8 through 11 should be [ 0x40, 0x16, 0x14, 0x7b ] or reverse")
 
     big_endian = big_endian
     swap = not (big_endian == isBigEndian())
 
-    if (swap):
-      x.byteswap()
+    if swap:
+        x.byteswap()
 
     return (s, x, big_endian, swap)
 
-def getDataFileName(template, z, a = None):
-  """Get NMRPipe fileName given template and z and (optionally) a.
-     Note that z and a start counting at 0, not 1.
-  """
 
-  if a is None:
-    name = template % (z+1)
-  else:
-    name = template % (a+1, z+1)
+def getDataFileName(template, z, a=None):
+    """Get NMRPipe fileName given template and z and (optionally) a.
+    Note that z and a start counting at 0, not 1.
+    """
 
-  return name
+    if a is None:
+        name = template % (z + 1)
+    else:
+        name = template % (a + 1, z + 1)
+
+    return name
+
 
 def getSampledValue(fileName):
-  """Get sampled value from NMRPipe header for file specified by template in directory
-  """
+    """Get sampled value from NMRPipe header for file specified by template in directory"""
 
-  (s, x, big_endian, swap) = getHeader(fileName)
-  value = float(x[value_index])
+    (s, x, big_endian, swap) = getHeader(fileName)
+    value = float(x[value_index])
 
-  return value
+    return value
+
 
 def getSampledValues(directory, template):
-  """Get sampled values from NMRPipe 2D headers for files specified by template in directory
-  """
+    """Get sampled values from NMRPipe 2D headers for files specified by template in directory"""
 
-  values = []
+    values = []
 
-  z = 0
-  while 1:
-    try:
-      file = getDataFileName(template, z)
-    except:
-      raise ApiError('template not valid')
-    fullfile = os.path.join(directory, file)
-    if os.path.exists(fullfile) and os.path.isfile(fullfile):
-      value = getSampledValue(fullfile)
-      values.append(value)
-    else:
-      break
-    z = z + 1
+    z = 0
+    while 1:
+        try:
+            file = getDataFileName(template, z)
+        except:
+            raise ApiError("template not valid")
+        fullfile = os.path.join(directory, file)
+        if os.path.exists(fullfile) and os.path.isfile(fullfile):
+            value = getSampledValue(fullfile)
+            values.append(value)
+        else:
+            break
+        z = z + 1
 
-  return values
+    return values
+
 
 def standardNucleusNameFromPipe(name):
-  """ Given Pipe nucleus name, return standard nucleus name
-      Replaces standardNucleusName in format.general.Util 
-  """
+    """Given Pipe nucleus name, return standard nucleus name
+    Replaces standardNucleusName in format.general.Util
+    """
 
-  full_nucs = ('1H',    '13C',    '15N',    '31P')
-  nucs      = {'H':'1H','C':'13C','N':'15N','P':'31P'}
+    full_nucs = ("1H", "13C", "15N", "31P")
+    nucs = {"H": "1H", "C": "13C", "N": "15N", "P": "31P"}
 
-  for f in full_nucs:
-    if name.count( f ) > 0:
-      return f
+    for f in full_nucs:
+        if name.count(f) > 0:
+            return f
 
-  if name and name[0].upper() in nucs.keys():
-    return nucs[ name[0].upper() ]
+    if name and name[0].upper() in nucs.keys():
+        return nucs[name[0].upper()]
 
-  else:
-    # default name (as in standardNucleusName)
-    return '1H'
+    else:
+        # default name (as in standardNucleusName)
+        return "1H"
 
-if (__name__ == '__main__'):
 
-  import sys
-  if (len(sys.argv) != 2):
-    print('Error: correct syntax: <script> <NMRPipe_file>')
-    sys.exit(1)
+if __name__ == "__main__":
+    import sys
 
-  nmrpipe_file = sys.argv[1]
-  params = NmrPipeParams(nmrpipe_file)
+    if len(sys.argv) != 2:
+        print("Error: correct syntax: <script> <NMRPipe_file>")
+        sys.exit(1)
+
+    nmrpipe_file = sys.argv[1]
+    params = NmrPipeParams(nmrpipe_file)

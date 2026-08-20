@@ -1,8 +1,9 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer2.py
 
-from cing.Libs.NTutils import * #@UnusedWildImport
+from pylab import *  #@UnusedWildImport
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.nrgCingRdb import bin_by
-from pylab import * #@UnusedWildImport
 
 cing.verbosity = 9
 yearMin = 1990 # inclusive start

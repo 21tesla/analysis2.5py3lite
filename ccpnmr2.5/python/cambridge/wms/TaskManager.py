@@ -33,14 +33,13 @@
 #__version__ = "0.1"
 
 
-import os, sys, time
-
+import time
 from threading import Thread
-
-from cambridge.wms.TestTask1Manager import TestTask1Manager
 
 from SharedBeanService_services import *
 from WSString import *
+
+from cambridge.wms.TestTask1Manager import TestTask1Manager
 
 """
 
@@ -67,7 +66,7 @@ class TaskManager(Thread):
 
         # read from config. We need to be a lot cleverer
         # about how we set these up. There needs to be a ranking
-        # and all sort of things        
+        # and all sort of things
         self._slaveTaskTypes = ['TestTask1']
 
         # max number of slave threads at once
@@ -149,7 +148,7 @@ class TaskManager(Thread):
 
             print('checking slave ', slave)
             print('DICT ', slave.__dict__)
-            
+
 
             if slave.isComplete:
 
@@ -163,7 +162,7 @@ class TaskManager(Thread):
             # FIXME JMCI
 
             # add timeout block here too?
-                    
+
         self._slaves = tmp
 
     """
@@ -174,7 +173,7 @@ class TaskManager(Thread):
     type.
 
     """
-        
+
     def _allocate_slaves(self):
 
         print("allocating tasks ", time.time())
@@ -189,7 +188,7 @@ class TaskManager(Thread):
         loc = SharedBeanServiceLocator()
         port = loc.getSharedBean()
 
-        request1 = getList();
+        request1 = getList()
 
         # need to decide precisely how to handle these. Should we
         # be able to choose which status we want to pick up?
@@ -197,14 +196,14 @@ class TaskManager(Thread):
         a2 = ['PROVISIONAL','PENDING']
         h2 = {'status' : a2 }
         wsstr_in = WSString(h2)
-        
 
-        request1._arg0 = 'org.pimslims.applet.server.TaskBean';
-        request1._arg1 = 'getListWithFields';
+
+        request1._arg0 = 'org.pimslims.applet.server.TaskBean'
+        request1._arg1 = 'getListWithFields'
         request1._arg2 = wsstr_in.str
 
         response1 = port.getList(request1)
-        
+
         wsstr1 = WSString(response1._return)
         ss1 = wsstr1.getStruct()
 
@@ -217,7 +216,7 @@ class TaskManager(Thread):
         repository = self.parent.repList.currentRepository
         i = 0
         while len(self._slaves) < self._MAX_SLAVE_TASKS and i < len(ss1):
-            
+
             print('calling ', ss1[i]['status'], ' on task ',  ss1[i]['serial'],'(', ss1[i]['type'], ')')
             print('monitoring length ', len(self._slaves))
 
@@ -228,10 +227,10 @@ class TaskManager(Thread):
             self._slaves.append(slave)
 
             print('monitoring final length ', len(self._slaves), ', ', len(ss1))
-            # finally, increment i 
+            # finally, increment i
             i += 1
 
             print('monitoring final contents ', self._slaves)
 
 
-    
+

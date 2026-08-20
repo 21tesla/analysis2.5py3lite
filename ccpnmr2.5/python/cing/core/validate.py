@@ -30,36 +30,28 @@ Atom:
 
 import time
 
+from numpy.lib.index_tricks import ogrid
+from numpy.lib.twodim_base import histogram2d
+
+from cing.core.classes2 import RestraintList
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Atom, Chain, Molecule, Residue
+from cing.core.parameters import plotParameters, plugins
+from cing.core.ROGscore import CingResult
+from cing.Libs.cython.superpose import NTcVector  #@UnresolvedImport
 from cing.Libs.Geometry import violationAngle
+from cing.Libs.html import addPreTagLines, hPlot, removePreTagLines
 from cing.Libs.NTplot import ssIdxToType
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.cython.superpose import NTcVector #@UnresolvedImport
-from cing.Libs.html import addPreTagLines
-from cing.Libs.html import hPlot
-from cing.Libs.html import removePreTagLines
-from cing.Libs.numpyInterpolation import circularlizeMatrix
-from cing.Libs.numpyInterpolation import interpn_linear
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.numpyInterpolation import circularlizeMatrix, interpn_linear
 from cing.Libs.peirceTest import peirceTest
-from cing.PluginCode.required.reqDssp import DSSP_STR
-from cing.PluginCode.required.reqDssp import getDsspSecStructConsensus
+from cing.PluginCode.required.reqDssp import DSSP_STR, getDsspSecStructConsensus
 from cing.PluginCode.required.reqNih import NIH_STR
 from cing.PluginCode.required.reqProcheck import PROCHECK_STR
 from cing.PluginCode.required.reqShiftx import SHIFTX_STR
 from cing.PluginCode.required.reqVasco import VASCO_STR
-from cing.PluginCode.required.reqWattos import WATTOS_STR
-from cing.PluginCode.required.reqWattos import WATTOS_SUMMARY_STR
+from cing.PluginCode.required.reqWattos import WATTOS_STR, WATTOS_SUMMARY_STR
 from cing.PluginCode.required.reqWhatif import WHATIF_STR
-from cing.core.ROGscore import CingResult
-from cing.core.classes2 import RestraintList
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Atom
-from cing.core.molecule import Chain
-from cing.core.molecule import Molecule
-from cing.core.molecule import Residue
-from cing.core.parameters import plotParameters
-from cing.core.parameters import plugins
-from numpy.lib.index_tricks import ogrid
-from numpy.lib.twodim_base import histogram2d
 
 CUTOFF_SALTBRIDGE_BY_Calpha = 20.0 # DEFAULT: 20
 TRANS_OMEGA_VALUE           = 179.6
@@ -118,7 +110,7 @@ def validate( project, ranges=None, parseOnly=False, htmlOnly=False,
             doShiftx = False
     if validateFastest or validateImageLess:
         htmlOnly = True
-    
+
     t0 = tx = time.time()
 #    nTdebug('Starting validate#validate with toFile True')
     if doShiftx and getDeepByKeysOrAttributes(plugins, SHIFTX_STR, IS_INSTALLED_STR):
@@ -214,7 +206,7 @@ def criticizePeaks( project, toFile=True ):
         return
     #end if
 
-    for atm in project.molecule.allAtoms(): 
+    for atm in project.molecule.allAtoms():
         atm.peakPositions = NTlist()
 
     # criticize peak based on deviation of assigned value
@@ -304,8 +296,8 @@ def _criticizeResidue( residue, valSets ):
 
 #    result = NTdict()
     # WHATIF
-    #print residue, residue.has_key(WHATIF_STR), residue.hasProperties('protein')
-    if residue.has_key(WHATIF_STR) and residue.hasProperties('protein'):
+    #print residue, WHATIF_STR in residue, residue.hasProperties('protein')
+    if WHATIF_STR in residue and residue.hasProperties('protein'):
         #print '>', residue, residue.rogScore
         for key in ['BBCCHK', 'C12CHK', 'RAMCHK']:
 #            nTdebug('Now criticizing %s, whatif key %s', residue, key )
@@ -341,7 +333,7 @@ def _criticizeResidue( residue, valSets ):
     #end if
 
     #Procheck
-    if residue.has_key('procheck'):
+    if 'procheck' in residue:
         for key in ['gf']:
 #            nTdebug('Now criticizing %s, procheck key %s', residue, key )
 
@@ -376,7 +368,7 @@ def _criticizeResidue( residue, valSets ):
         #end for
     #end if
 
-    #OMEGA refs from: Wilson et al. Who checks the checkers? Four validation tools applied to eight atomic resolution structures. 
+    #OMEGA refs from: Wilson et al. Who checks the checkers? Four validation tools applied to eight atomic resolution structures.
     #J Mol Biol (1998) vol. 276 pp. 417-436
     for key in ['OMEGA']:
         if residue.hasProperties('protein') and key in residue and residue[key]:
@@ -387,7 +379,7 @@ def _criticizeResidue( residue, valSets ):
                 v = violationAngle(value=value, lowerBound=TRANS_OMEGA_VALUE, upperBound=TRANS_OMEGA_VALUE)
                 if v > 90.: # Check a cis
                     v = violationAngle(value=value, lowerBound=CIS_OMEGA_VALUE, upperBound=CIS_OMEGA_VALUE)
-#                nTdebug('found residue %s model %d omega to violate from square trans/cis: %8.3f (omega: %8.3f)' % ( 
+#                nTdebug('found residue %s model %d omega to violate from square trans/cis: %8.3f (omega: %8.3f)' % (
 #                            residue, modelId, v, value) )
                 vList.append(v)
             #end for
@@ -417,7 +409,7 @@ def _criticizeResidue( residue, valSets ):
         #end if
     # end for
 
-    if residue.has_key(CHK_STR) and residue.hasProperties('protein'):
+    if CHK_STR in residue and residue.hasProperties('protein'):
 #        print '>', residue, residue.rogScore
         for key in [RAMACHANDRAN_CHK_STR, CHI1CHI2_CHK_STR, D1D2_CHK_STR]: # TODO: disable those not needed.
 #        for key in [D1D2_CHK_STR]: # TODO: disable those not needed.
@@ -482,7 +474,7 @@ def criticize(project, toFile=True):
     for drl in project.allRestraintLists():
         drl.criticize(project, toFile=toFile)
     # end for
-    
+
     #Peaks
     criticizePeaks( project, toFile=toFile )
 
@@ -513,15 +505,15 @@ def criticize(project, toFile=True):
             elif len(project.molecule[COLOR_ORANGE]) > 0:
                 color = COLOR_ORANGE
             # end if
-        # end if        
+        # end if
         if color == None:
             nTerror("Failed to determine the entry rog score color")
-        else:                
+        else:
             # TODO: NB if the rog was more severe before it will not be reset here.
-#            nTdebug("If worse, setting molecule rog color to: %s" % color) 
+#            nTdebug("If worse, setting molecule rog color to: %s" % color)
             project.molecule.rogScore.setMaxColor(color, 'Inferred from residue ROG scores')
         # end if
-                
+
         if toFile:
             path = project.moleculePath('analysis', 'ROG.txt')
             f = file(path,'w')
@@ -604,7 +596,7 @@ def summaryForProject( project, toFile = True, ranges=None ):
 #    msg += sprintf( '%s\n', mol.format() )
 
     skippedRmsd = False # keep logic simple.
-    if mol.has_key( RMSD_STR ) and mol.rmsd:
+    if  RMSD_STR  in mol and mol.rmsd:
         # Next msg isn't returning when no models are present in CING.
         msgNext = mol.rmsd.format(allowHtml=True)
         if msgNext:
@@ -676,7 +668,7 @@ def summaryForProject( project, toFile = True, ranges=None ):
 #            nTmessage('runShiftx: not a single amino acid in the molecule so skipping this step.')
             incompleteItems.append( SHIFTX_STR )
     topMsg = sprintf( '%s CING SUMMARY project %s %s', dots, project.name, dots )
-    
+
     # Block from storeCING2db keep synced.
     p_assignmentCountMap = project.molecule.getAssignmentCountMap()
     p_cs_count = p_assignmentCountMap.overallCount()
@@ -684,7 +676,7 @@ def summaryForProject( project, toFile = True, ranges=None ):
     p_distance_count = project.distances.lenRecursive(max_depth = 1)
     p_dihedral_count = 0
     for dihList in project.dihedrals:
-        if dihList.isFromTalos(): 
+        if dihList.isFromTalos():
             continue
         # end if
         p_dihedral_count += len(dihList)
@@ -693,7 +685,7 @@ def summaryForProject( project, toFile = True, ranges=None ):
     hasExperimentalData = p_distance_count or p_dihedral_count or p_rdc_count or p_peak_count or p_cs_count
     bestMsg = '\nAll applicable programs/checks were performed.'
     if not hasExperimentalData:
-        bestMsg = '\nBecause there were no experimental data, this project was not fully validated. %s' % (  
+        bestMsg = '\nBecause there were no experimental data, this project was not fully validated. %s' % (
                    '\nAll applicable programs/checks for the coordinate data were performed.' )
     else:
         if False: # DEFAULT: False
@@ -703,14 +695,14 @@ def summaryForProject( project, toFile = True, ranges=None ):
                 p_rdc_count      =  %(p_rdc_count)5d      
                 p_peak_count     =  %(p_peak_count)5d     
                 p_cs_count       =  %(p_cs_count)5d       
-            """ % dict( 
+            """ % dict(
                            p_distance_count= p_distance_count,
                            p_dihedral_count= p_dihedral_count,
                            p_rdc_count     = p_rdc_count,
                            p_peak_count    = p_peak_count,
-                           p_cs_count      = p_cs_count            
+                           p_cs_count      = p_cs_count
                         )
-            nTdebug(debugMsg)        
+            nTdebug(debugMsg)
         # end if
     # end if
     if not incompleteItems:
@@ -772,8 +764,8 @@ def partitionRestraints( project ):
     for drl in project.dihedrals:
         for restraint in drl:
             atom = restraint.atoms[2]
-            if not atom: 
-                # Failed for entry 8psh but in fact this shouldn't occur because the atoms should not exist then. 
+            if not atom:
+                # Failed for entry 8psh but in fact this shouldn't occur because the atoms should not exist then.
                 #NB this only happens after restoring.
                 nTerror("Found restraint without an atom at index 2. For restraint: %s" % restraint)
                 continue
@@ -809,7 +801,7 @@ def validateRestraints( project, toFile = True):
 #    fps = []
 #    fps.append( sys.stdout )
 
-    if not project.molecule: 
+    if not project.molecule:
         return
 
     msg = ""
@@ -855,7 +847,7 @@ def validateRestraints( project, toFile = True):
         rL.addList(drl)
     #end for
     getStatsRestraintNTlist(rL)
-    
+
     # Process the per residue restraints data
     msg += sprintf( '%s Per residue scores %s\n', dots, dots )
     for restraintListAtribute in ( 'distanceRestraints', 'dihedralRestraints'):
@@ -866,15 +858,15 @@ def validateRestraints( project, toFile = True):
 
             # print every 10 lines
             if not count % 30:
-                msg += sprintf('%-18s %15s  %15s   %s\n', '--- RESIDUE ---', '--- PHI ---', '--- PSI ---', 
+                msg += sprintf('%-18s %15s  %15s   %s\n', '--- RESIDUE ---', '--- PHI ---', '--- PSI ---',
                                '-- dist 0.1A 0.3A 0.5A   rmsd   violAv violMaxAll --')
             #end if
-            if res.has_key('PHI'):
+            if 'PHI' in res:
                 phi = NTvalue( res.PHI.cav, res.PHI.cv, fmt='%7.1f %7.2f', fmt2='%7.1f' )
             else:
                 phi = NTvalue( '-', '-', fmt='%7s %7s', fmt2='%7s' )
             #end if
-            if res.has_key('PSI'):
+            if 'PSI' in res:
                 psi = NTvalue( res.PSI.cav, res.PSI.cv, fmt='%7.1f %7.2f', fmt2='%7.1f' )
             else:
                 psi = NTvalue( '-', '-', fmt='%7s %7s', fmt2='%7s' )
@@ -1279,9 +1271,9 @@ def checkHbond( donorH, acceptor,
         #end if
         result.modelCount += 1
     #end for
-    if len(distances) > 0: 
+    if len(distances) > 0:
         result.distance, result.distanceSD, _n = distances.average()
-    if len(angles) > 0: 
+    if len(angles) > 0:
         result.angle, result.angleCV, _n = angles.cAverage()
     result.accepted = ((float(len( result.acceptedModels)) / float(len( result.data ))) >= fraction)
     del distances
@@ -1438,10 +1430,10 @@ def moleculeValidateAssignments( molecule  ):
                     msg = sprintf('%.1f*sd from (%.2f,%.2f)', delta, av, sd )
 #                    debug_msg = sprintf('    shift %.2f, ' % shift)
 #                    nTdebug(debug_msg)
-                    if delta > 3.0:                        
+                    if delta > 3.0:
                         result.append( atm )
                         atm.validateAssignment.append(msg)
-#                        nTdebug("Found situation 2: " + msg)                        
+#                        nTdebug("Found situation 2: " + msg)
                     else:
                         pass
 #                        nTdebug("Found situation 3: " + msg)
@@ -1647,9 +1639,9 @@ def validateDihedrals(self):
 
     for res in self.molecule.allResidues():
         for dihed in res.db.dihedrals.zap('name'):
-            if not dihed in res:
+            if dihed not in res:
                 continue
-            if not res.has_key(dihed):
+            if dihed not in res:
                 continue
 
             d = res[dihed]
@@ -1760,7 +1752,7 @@ def validateDihedralCombinations(project):
 #                    nTdebug( 'Skipping residue without triplet %s' % residue)
                     continue
                 # Note that this was a major bug before June 3, 2010.
-#                resTypeList = [getDeepByKeys(triplet[i].db.nameDict, IUPAC) for i in tripletIdxList]  
+#                resTypeList = [getDeepByKeys(triplet[i].db.nameDict, IUPAC) for i in tripletIdxList]
                 resTypeList = [getDeepByKeys(triplet[i].db.nameDict, IUPAC) for i in range(3)]
             else:
                 nTcodeerror("validateDihedralCombinations called for non Rama/Janin/d1d2")
@@ -1882,7 +1874,7 @@ def validateDihedralCombinations(project):
                     ensembleValueList[modelIdx] = max(ensembleValueLoL[modelIdx])
 #                    if modelIdx == 0:
                     if False:
-                        nTdebug("For modelIdx %s found: %s and selected max: %s" % (modelIdx, str(ensembleValueLoL[modelIdx]), 
+                        nTdebug("For modelIdx %s found: %s and selected max: %s" % (modelIdx, str(ensembleValueLoL[modelIdx]),
                                                                                     ensembleValueList[modelIdx] ))
         # end for checkIdx
     # end for residue

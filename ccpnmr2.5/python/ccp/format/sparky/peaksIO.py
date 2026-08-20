@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,456 +54,440 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import re
 
-# Import general functions
-from memops.universal.Util import returnFloat, returnFloats
-from memops.universal.Util import returnInt
 from ccp.format.sparky.generalIO import SparkyGenericFile
 from memops.universal.Io import splitPath
+
+# Import general functions
+from memops.universal.Util import returnFloat, returnFloats, returnInt
 
 #####################
 # Class definitions #
 #####################
 
-      
+
 class SparkyPeakFile(SparkyGenericFile):
-  
-  """
-  Information on file level
-  """
-  
-  def initialize(self):
-    
-    self.peaks = []
-    
-    self.specFiles = [None]
-    self.specNumPoints = [None]
-    
-    self.assignSep = '-'
-    
-    # Only relevant for export!
-    self.volumeIntensityType = ['volume']
-    
-    
-    #
-    # Field info:
-    #
-    # (sparkyCode,numHeaderCol,numDataCol,colLen,refInfo,regExpPatt) 
-    #
-    
-    self.refData = [
-    
-           ['assignment',1,1,18,None,"Assignment"],
-           ['freqDimsPpm',1,1,11,'ndim',"(w[1-5]\s*)"],
-           ['freqDimsHz',1,1,11,'ndim',"(w[1-5]\s+\(Hz\)\s*)"],
-           ['volume',1,2,14,None,"Volume"],
-           ['dataHeight',2,1,13,None,"Data Height"],
-           ['fitHeight',2,1,13,None,"Fit Height"],
-           ['height',1,1,11,None,"Height"],
-           ['intensity',1,1,13,None,"Intensity"],
-           ['details',1,1,0,None,'Note']
-              
-                   ]
-          
-    for (sparkyCode,numHeaderCol,numDataCol,colLen,refInfo,regExpPatt) in self.refData:
+    """
+    Information on file level
+    """
 
-      self.patt[self.format + sparkyCode] = re.compile(regExpPatt)
+    def initialize(self):
 
-  def setSpectrumInfo(self,specName,ndim):
-  
-    self.specNames = [specName]
-    self.numDims = [ndim]
+        self.peaks = []
 
-  def read(self,verbose = 0):
+        self.specFiles = [None]
+        self.specNumPoints = [None]
 
-    dataColCodes = []
-    dataColLengths = []
-    dataColNum = []
+        self.assignSep = "-"
 
-    ndim = 0
-
-    if verbose == 1:
-      print("Reading sparky peak list %s" % self.name)
-
-    fin = open(self.name)
-
-    #
-    # Start reading, look for header line
-    #
-
-    line = fin.readline()
-
-    while line:
-      cols = line.split()
-
-      if len(cols) == 0 or self.patt['hash'].search(line):
-        pass
-
-      else:
+        # Only relevant for export!
+        self.volumeIntensityType = ["volume"]
 
         #
-        # First line should have column header names
+        # Field info:
+        #
+        # (sparkyCode,numHeaderCol,numDataCol,colLen,refInfo,regExpPatt)
         #
 
-        numHeaderCols = 0
-        numDataCols = 0
+        self.refData = [
+            ["assignment", 1, 1, 18, None, "Assignment"],
+            ["freqDimsPpm", 1, 1, 11, "ndim", r"(w[1-5]\s*)"],
+            ["freqDimsHz", 1, 1, 11, "ndim", r"(w[1-5]\s+\(Hz\)\s*)"],
+            ["volume", 1, 2, 14, None, "Volume"],
+            ["dataHeight", 2, 1, 13, None, "Data Height"],
+            ["fitHeight", 2, 1, 13, None, "Fit Height"],
+            ["height", 1, 1, 11, None, "Height"],
+            ["intensity", 1, 1, 13, None, "Intensity"],
+            ["details", 1, 1, 0, None, "Note"],
+        ]
 
-        dataColLen = 2      # Space and newline at end of line
-        headerLine = line.strip()
-        oldHeaderLine = None
-        
-        while (headerLine):
+        for sparkyCode, numHeaderCol, numDataCol, colLen, refInfo, regExpPatt in self.refData:
+            self.patt[self.format + sparkyCode] = re.compile(regExpPatt)
 
-          for refDatum in self.refData:
-  
-            (sparkyCode,numHeaderCol,numDataCol,colLen,refInfo,regExpPatt) = refDatum
-  
-            allMatches = self.patt[self.format + sparkyCode].findall(headerLine)
-  
-            # Make sure that it handles the column header info from left to right!
-            if allMatches and not headerLine[:headerLine.index(allMatches[0])].strip():
-              numMatches = len(allMatches)
-  
-              #
-              # Number of total columns in header and for data
-              #
-  
-              numHeaderCols += numHeaderCol * numMatches
-              numDataCols += numDataCol * numMatches
-  
-              #
-              # Keep track of column info
-              #
-  
-              for i in range(numMatches):
-                dataColCodes.append(sparkyCode)
-                dataColNum.append(numDataCol)
-                dataColLengths.append(colLen)
-  
-              #
-              # This one to check data lines later
-              #
-  
-              dataColLen += colLen * numMatches                    
-  
-              #
-              # Set ndim (number of dimensions)
-              #
-  
-              if refInfo == 'ndim':
-                ndim = numMatches
-                
-              for match in allMatches:
-                headerLine = headerLine.replace(match,'').strip()
+    def setSpectrumInfo(self, specName, ndim):
 
-          # Exit if no matches found
-          if oldHeaderLine == headerLine:
-            headerLine = None
-          
-          oldHeaderLine = headerLine
+        self.specNames = [specName]
+        self.numDims = [ndim]
+
+    def read(self, verbose=0):
+
+        dataColCodes = []
+        dataColLengths = []
+        dataColNum = []
+
+        ndim = 0
+
+        if verbose == 1:
+            print("Reading sparky peak list %s" % self.name)
+
+        fin = open(self.name)
 
         #
-        # Exit if there's column names that are not recognized: no use trying
-        # to read these for Sparky (very loose format)
-        #
-
-        if numHeaderCols != len(cols):
-          print("  Unrecognized column headers: can't read sparky file... ")
-          print(dataColCodes)
-          print(dataColNum)
-          print(dataColLengths)
-
-          return
-
-
-        #
-        # Initialize peak file
-        #
-
-        (path,specName) = splitPath(self.name)
-        self.setSpectrumInfo(specName,ndim)
-        
-        #
-        # Check if there are columns that can be empty (e.g. Note)
-        #
-        
-        numPossibleEmptyCols = dataColLengths.count(0)
-
-        #             
-        # Start reading data
+        # Start reading, look for header line
         #
 
         line = fin.readline()
 
         while line:
+            cols = line.split()
 
-          cols = line.split()
-
-          if len(cols) == 0 or self.patt['hash'].search(line):
-            pass
-
-          else:
-
-            #
-            # Two methods to read file:
-            #  - default one based on plain column split
-            #  - second one assuming valid data line, using expected column length to parse (only works in some cases)
-            #
-
-            obligColumnFound = 0
-
-            if len(cols) == numDataCols or len(line) == dataColLen:
-              dataColCodesLen = len(dataColCodes)
-              
-            elif numPossibleEmptyCols and (len(cols) == numDataCols - numPossibleEmptyCols):
-            
-              dataColCodesLen = len(dataColCodes)
+            if len(cols) == 0 or self.patt["hash"].search(line):
+                pass
 
             else:
-
-              #
-              # If problems, still try to read in essential bits (all until 'ndim' column)
-              #
-
-              print("  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,)
-
-              for i in range(len(dataColCodes)):            
-
-                sparkyCode = dataColCodes[i]
-
-                for (refSparkyCode,numHeaderCol,numDataCol,colLen,refInfo,regExpPatt) in self.refData:
-
-                  if sparkyCode == refSparkyCode:
-
-                    if refInfo == 'ndim' and obligColumnFound == 0:
-                      obligColumnFound = 1
-                      break
-
-                    elif refInfo == None and obligColumnFound == 1:
-                      obligColumnFound = -1
-                      break
-
                 #
-                # Obligatory columns found, other ones starting: quit
+                # First line should have column header names
                 #
 
-                if obligColumnFound == -1:
-                  dataColCodesLen = i
-                  break
+                numHeaderCols = 0
+                numDataCols = 0
 
-              if obligColumnFound != -1:
-                print("  Can't read... ")
+                dataColLen = 2  # Space and newline at end of line
+                headerLine = line.strip()
+                oldHeaderLine = None
+
+                while headerLine:
+                    for refDatum in self.refData:
+                        (sparkyCode, numHeaderCol, numDataCol, colLen, refInfo, regExpPatt) = refDatum
+
+                        allMatches = self.patt[self.format + sparkyCode].findall(headerLine)
+
+                        # Make sure that it handles the column header info from left to right!
+                        if allMatches and not headerLine[: headerLine.index(allMatches[0])].strip():
+                            numMatches = len(allMatches)
+
+                            #
+                            # Number of total columns in header and for data
+                            #
+
+                            numHeaderCols += numHeaderCol * numMatches
+                            numDataCols += numDataCol * numMatches
+
+                            #
+                            # Keep track of column info
+                            #
+
+                            for i in range(numMatches):
+                                dataColCodes.append(sparkyCode)
+                                dataColNum.append(numDataCol)
+                                dataColLengths.append(colLen)
+
+                            #
+                            # This one to check data lines later
+                            #
+
+                            dataColLen += colLen * numMatches
+
+                            #
+                            # Set ndim (number of dimensions)
+                            #
+
+                            if refInfo == "ndim":
+                                ndim = numMatches
+
+                            for match in allMatches:
+                                headerLine = headerLine.replace(match, "").strip()
+
+                    # Exit if no matches found
+                    if oldHeaderLine == headerLine:
+                        headerLine = None
+
+                    oldHeaderLine = headerLine
+
+                #
+                # Exit if there's column names that are not recognized: no use trying
+                # to read these for Sparky (very loose format)
+                #
+
+                if numHeaderCols != len(cols):
+                    print("  Unrecognized column headers: can't read sparky file... ")
+                    print(dataColCodes)
+                    print(dataColNum)
+                    print(dataColLengths)
+
+                    return
+
+                #
+                # Initialize peak file
+                #
+
+                (path, specName) = splitPath(self.name)
+                self.setSpectrumInfo(specName, ndim)
+
+                #
+                # Check if there are columns that can be empty (e.g. Note)
+                #
+
+                numPossibleEmptyCols = dataColLengths.count(0)
+
+                #
+                # Start reading data
+                #
+
                 line = fin.readline()
-                continue
-              else:
-                print("  Reading first %d columns only." % dataColCodesLen)
-                print()
 
-            values = {}
+                while line:
+                    cols = line.split()
 
-            colNum = 0
+                    if len(cols) == 0 or self.patt["hash"].search(line):
+                        pass
 
-            for i in range(0,len(dataColCodes)):
+                    else:
+                        #
+                        # Two methods to read file:
+                        #  - default one based on plain column split
+                        #  - second one assuming valid data line, using expected column length to parse (only works in some cases)
+                        #
 
-              sparkyCode = dataColCodes[i]
+                        obligColumnFound = 0
 
-              if not values.has_key(sparkyCode):
-                values[sparkyCode] = []
+                        if len(cols) == numDataCols or len(line) == dataColLen:
+                            dataColCodesLen = len(dataColCodes)
 
-              if len(cols) == numDataCols or len(cols) == numDataCols - numPossibleEmptyCols or obligColumnFound == -1:
+                        elif numPossibleEmptyCols and (len(cols) == numDataCols - numPossibleEmptyCols):
+                            dataColCodesLen = len(dataColCodes)
 
-                values[sparkyCode].append(" ".join(cols[colNum:colNum + dataColNum[i]]))
+                        else:
+                            #
+                            # If problems, still try to read in essential bits (all until 'ndim' column)
+                            #
 
-                if dataColNum[i] > 1:
-                  colNum += dataColNum[i] - 1
+                            print(
+                                "  Warning: Bad column match for following Sparky line. Trying to read...\n%s" % line,
+                            )
 
-              else:
+                            for i in range(len(dataColCodes)):
+                                sparkyCode = dataColCodes[i]
 
-                values[sparkyCode].append(line[0:dataColLengths[i]])
-                line = line[dataColLengths[i]:]
+                                for (
+                                    refSparkyCode,
+                                    numHeaderCol,
+                                    numDataCol,
+                                    colLen,
+                                    refInfo,
+                                    regExpPatt,
+                                ) in self.refData:
+                                    if sparkyCode == refSparkyCode:
+                                        if refInfo == "ndim" and obligColumnFound == 0:
+                                            obligColumnFound = 1
+                                            break
 
-              colNum += 1
+                                        elif refInfo == None and obligColumnFound == 1:
+                                            obligColumnFound = -1
+                                            break
 
-            self.peaks.append(SparkyPeak(self,values))          
+                                #
+                                # Obligatory columns found, other ones starting: quit
+                                #
 
-          line = fin.readline()
+                                if obligColumnFound == -1:
+                                    dataColCodesLen = i
+                                    break
 
-      line = fin.readline()
+                            if obligColumnFound != -1:
+                                print("  Can't read... ")
+                                line = fin.readline()
+                                continue
+                            else:
+                                print("  Reading first %d columns only." % dataColCodesLen)
+                                print()
 
-    fin.close()
+                        values = {}
 
+                        colNum = 0
 
+                        for i in range(0, len(dataColCodes)):
+                            sparkyCode = dataColCodes[i]
 
-  def write(self, verbose = 0):
+                            if sparkyCode not in values:
+                                values[sparkyCode] = []
 
-    if verbose == 1:
-      print("Writing Sparky peak list %s" % self.name)
+                            if (
+                                len(cols) == numDataCols
+                                or len(cols) == numDataCols - numPossibleEmptyCols
+                                or obligColumnFound == -1
+                            ):
+                                values[sparkyCode].append(" ".join(cols[colNum : colNum + dataColNum[i]]))
 
-    fout = open(self.name,'w')
+                                if dataColNum[i] > 1:
+                                    colNum += dataColNum[i] - 1
 
-    #
-    # Write out header
-    #
+                            else:
+                                values[sparkyCode].append(line[0 : dataColLengths[i]])
+                                line = line[dataColLengths[i] :]
 
-    fout.write("      Assignment")
+                            colNum += 1
 
-    #
-    # Write out dimension codes
-    #
+                        self.peaks.append(SparkyPeak(self, values))
 
-    for dim in range(self.numDims[0]):
-      fout.write("         w%d" % (dim + 1))
+                    line = fin.readline()
 
-    self.volumeIntensityType.sort() # Make sure Height comes first
-    for volType in self.volumeIntensityType:
-      fout.write("       %s" % volType.capitalize())
+            line = fin.readline()
 
-    fout.write(self.newline)
+        fin.close()
 
-    #
-    # Write out peaks - this is the 'Python export' format
-    #  
+    def write(self, verbose=0):
 
-    for peak in self.peaks:
-    
-      line = "%17s" % peak.getAssignmentText()
+        if verbose == 1:
+            print("Writing Sparky peak list %s" % self.name)
 
-      for dim in range(self.numDims[0]):
+        fout = open(self.name, "w")
 
-        line += "%11.3f"  % peak.ppm[dim]
+        #
+        # Write out header
+        #
 
-      line += ' '
-      
-      for volType in self.volumeIntensityType:
-        volOrInt = peak.getVolOrInt(volType)
-        
-        if volOrInt == None:
-          volOrInt = 0.0
-        
-        if volType == 'height':
-          line += "%10.2E " % (volOrInt)
-        else:  
-          line += "%10.2E %2s" % (volOrInt,peak.getVolumeMethodCode())
-      
-      fout.write(line)
-      fout.write(self.newline)
+        fout.write("      Assignment")
 
-    fout.close()
+        #
+        # Write out dimension codes
+        #
+
+        for dim in range(self.numDims[0]):
+            fout.write("         w%d" % (dim + 1))
+
+        self.volumeIntensityType.sort()  # Make sure Height comes first
+        for volType in self.volumeIntensityType:
+            fout.write("       %s" % volType.capitalize())
+
+        fout.write(self.newline)
+
+        #
+        # Write out peaks - this is the 'Python export' format
+        #
+
+        for peak in self.peaks:
+            line = "%17s" % peak.getAssignmentText()
+
+            for dim in range(self.numDims[0]):
+                line += "%11.3f" % peak.ppm[dim]
+
+            line += " "
+
+            for volType in self.volumeIntensityType:
+                volOrInt = peak.getVolOrInt(volType)
+
+                if volOrInt == None:
+                    volOrInt = 0.0
+
+                if volType == "height":
+                    line += "%10.2E " % (volOrInt)
+                else:
+                    line += "%10.2E %2s" % (volOrInt, peak.getVolumeMethodCode())
+
+            fout.write(line)
+            fout.write(self.newline)
+
+        fout.close()
+
 
 class SparkyPeak:
+    def __init__(self, parent, values):
 
-  def __init__(self,parent,values):
+        self.num = None
+        self.intensityFit = None
+        self.intensity = None
+        self.volume = None
+        self.volumeMethod = None
+        self.ppm = []
+        self.hz = []
+        self.assign = []
+        self.widths = []
 
-    self.num = None
-    self.intensityFit = None
-    self.intensity = None
-    self.volume = None
-    self.volumeMethod = None
-    self.ppm = []
-    self.hz = []
-    self.assign = []
-    self.widths = []
-    
-    self.parent = parent
+        self.parent = parent
 
-    for valueKey in values.keys():
+        for valueKey in values.keys():
+            self.setValue(valueKey, values[valueKey])
 
-      self.setValue(valueKey,values[valueKey])
+    def setValue(self, valueKey, values):
 
-  def setValue(self,valueKey,values):
-    
-    if len(values) == 1 and type(values[0]) == str:
+        if len(values) == 1 and type(values[0]) == str:
+            value = values[0]
 
-      value = values[0]
-      
-      if not self.parent.patt['emptyline'].search(value):
-      
-        if valueKey == 'num':
-          self.num = returnInt(value)
+            if not self.parent.patt["emptyline"].search(value):
+                if valueKey == "num":
+                    self.num = returnInt(value)
 
-        elif valueKey == 'assignment':
-          assignment = value.strip()
-          self.assign = assignment.split(self.parent.assignSep)
+                elif valueKey == "assignment":
+                    assignment = value.strip()
+                    self.assign = assignment.split(self.parent.assignSep)
 
-        elif self.intensity == None and valueKey in ('dataHeight','height'):
-          self.intensity = returnFloat(value)
+                elif self.intensity == None and valueKey in ("dataHeight", "height"):
+                    self.intensity = returnFloat(value)
 
-        elif valueKey == 'fitHeight':
-          self.intensityFit = returnFloat(value)
+                elif valueKey == "fitHeight":
+                    self.intensityFit = returnFloat(value)
 
-        elif valueKey == 'intensity':
-          self.intensity = returnFloat(value)
-   
-        elif valueKey == 'volume':
-          (volume,volumeMethod) = value.strip().split()
-          self.volume = returnFloat(volume)
+                elif valueKey == "intensity":
+                    self.intensity = returnFloat(value)
 
-          if volumeMethod == 'ga':
-            self.volumeMethod = 'Gaussian'
-          elif volumeMethod == 'lo':
-            self.volumeMethod = 'Lorentzian'
-          elif volumeMethod == 'bx':
-            self.volumeMethod = 'Sum over box'
-          elif volumeMethod == 'el':
-            self.volumeMethod = 'Sum over ellipse'
-          elif volumeMethod == '--':
-            self.volumeMethod = 'Unknown method'
-          else:
-            self.volumeMethod = 'Unknown method'
-            print("  Error: unknown volume method %s in sparky peaks file (please define)." % volumeMethod)
+                elif valueKey == "volume":
+                    (volume, volumeMethod) = value.strip().split()
+                    self.volume = returnFloat(volume)
 
-    elif len(values) >= 1:
-    
-      if valueKey == 'freqDimsPpm':
-        self.ppm = returnFloats(values)
+                    if volumeMethod == "ga":
+                        self.volumeMethod = "Gaussian"
+                    elif volumeMethod == "lo":
+                        self.volumeMethod = "Lorentzian"
+                    elif volumeMethod == "bx":
+                        self.volumeMethod = "Sum over box"
+                    elif volumeMethod == "el":
+                        self.volumeMethod = "Sum over ellipse"
+                    elif volumeMethod == "--":
+                        self.volumeMethod = "Unknown method"
+                    else:
+                        self.volumeMethod = "Unknown method"
+                        print("  Error: unknown volume method %s in sparky peaks file (please define)." % volumeMethod)
 
-      elif valueKey == 'freqDimsHz':
-        self.hz = returnFloats(values)
+        elif len(values) >= 1:
+            if valueKey == "freqDimsPpm":
+                self.ppm = returnFloats(values)
 
-      elif valueKey == 'freqDimsWidth':
-        self.widths = returnFloats(values[:-1])
-        
-    else:
-    
-      print("  Warning: empty data field for Sparky peak file.")
-      pass
+            elif valueKey == "freqDimsHz":
+                self.hz = returnFloats(values)
 
-  def getVolumeMethodCode(self):
-  
-    if self.volumeMethod == 'Gaussian':
-      return 'ga'
-    elif self.volumeMethod == 'Lorentzian':
-      return 'lo'
-    elif self.volumeMethod == 'Sum over box':
-      return 'bx'
-    elif self.volumeMethod == 'Sum over ellipse':
-      return 'el'
-    elif self.volumeMethod == 'Unknown method':
-      return '--'
-    else:
-      return None
-  
-  def getVolOrInt(self,volType):
-    
-    volOrInt = None
-    if volType == 'height':
-      if self.intensity:
-        volOrInt = self.intensity
-      elif self.intensityFit:
-        volOrInt = self.intensityFit
-    else:
-      volOrInt = self.volume
-  
-    return volOrInt
-  
-  def getAssignmentText(self):
-  
-    assignText = []
+            elif valueKey == "freqDimsWidth":
+                self.widths = returnFloats(values[:-1])
 
-    for assign in self.assign:
-    
-      if not assign:
-        assignText.append("?")
-      else:
-        assignText.append(assign)
-    
-    return self.parent.assignSep.join(assignText)
+        else:
+            print("  Warning: empty data field for Sparky peak file.")
+            pass
+
+    def getVolumeMethodCode(self):
+
+        if self.volumeMethod == "Gaussian":
+            return "ga"
+        elif self.volumeMethod == "Lorentzian":
+            return "lo"
+        elif self.volumeMethod == "Sum over box":
+            return "bx"
+        elif self.volumeMethod == "Sum over ellipse":
+            return "el"
+        elif self.volumeMethod == "Unknown method":
+            return "--"
+        else:
+            return None
+
+    def getVolOrInt(self, volType):
+
+        volOrInt = None
+        if volType == "height":
+            if self.intensity:
+                volOrInt = self.intensity
+            elif self.intensityFit:
+                volOrInt = self.intensityFit
+        else:
+            volOrInt = self.volume
+
+        return volOrInt
+
+    def getAssignmentText(self):
+
+        assignText = []
+
+        for assign in self.assign:
+            if not assign:
+                assignText.append("?")
+            else:
+                assignText.append(assign)
+
+        return self.parent.assignSep.join(assignText)

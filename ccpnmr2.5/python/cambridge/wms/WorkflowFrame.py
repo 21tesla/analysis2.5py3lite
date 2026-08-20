@@ -1,46 +1,39 @@
 
-# Essentially the same as the ExtendNMR GUI for now. 
+# Essentially the same as the ExtendNMR GUI for now.
 
 
-import os
 
 # added jmci; do we need this??
-import tkinter
 #from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.Frame import Frame
-from memops.gui.LabelFrame import LabelFrame
-from memops.gui.Label import Label
-from memops.gui.Text import Text
-from memops.gui.LinkChart import LinkChart
-from memops.gui.LinkChart import PrototypeNode
-from memops.gui.Tree import Tree
-from memops.gui.Tree import Node
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.LinkChart import LinkChart, PrototypeNode
+from memops.gui.Text import Text
+from memops.gui.Tree import Tree
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class WorkflowPopup(BasePopup):
 
   def __init__(self, parent, ccpnProject):
 
     self.parent      = parent
     self.ccpnProject = ccpnProject
-    
+
     BasePopup.__init__(self, parent=parent, title='WMS Workflow')
 
-                       
+
   def body(self, guiFrame):
 
 
@@ -48,11 +41,11 @@ class WorkflowPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('650x600')
-    
+
     self.update_idletasks()
- 
+
 
 class WorkflowFrame(Frame):
 
@@ -69,12 +62,12 @@ class WorkflowFrame(Frame):
     #self.unregisterNotify=basePopup.unregisterNotify
 
     Frame.__init__(self, guiParent)
-  
+
     self.grid_rowconfigure(0, weight=0)
     self.grid_rowconfigure(1, weight=0, minsize=100)
     self.grid_rowconfigure(2, weight=1)
     self.grid_rowconfigure(3, weight=0, minsize=30)
-    
+
     self.grid_columnconfigure(0, weight=0)
     self.grid_columnconfigure(1, weight=1)
     self.grid_columnconfigure(2, weight=0)
@@ -94,13 +87,13 @@ class WorkflowFrame(Frame):
     # needs custom version
     self.filter = FilterFrame(self, self.basePopup, text='Filter')
 
-    # no bean udnerneath for now so mock up nodes    
+    # no bean udnerneath for now so mock up nodes
     self.wfTree = Tree(self, width=35)
 
     wfButtonOpts=['Load','Save']
     wfButtonCmds=[self.tmpCall,self.tmpCall]
     self.wfButtons = ButtonList(self, wfButtonOpts, wfButtonCmds)
-    
+
 
     self.drawFrame()
 
@@ -118,7 +111,7 @@ class WorkflowFrame(Frame):
       callbacks.append(None)
       parents.append(None)
 
-    self.wfTree.update(parents, objects, texts, icons, callbacks)  
+    self.wfTree.update(parents, objects, texts, icons, callbacks)
 
     self.lcA.grid(row=1, column=1, padx=5, pady=5, sticky='new')
     self.lcB.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
@@ -137,17 +130,17 @@ class WorkflowFrame(Frame):
                            coords=(50+x*90, 50), object=None)
 
       x += 1
-    
-      
+
+
     self.lcA.draw()
     self.lcB.draw()
 
-    
+
 
   def tmpCall(self):
 
     pass
-    
+
   def administerNotifiers(self, notifyFunc):
 
       for func in ('__init__','delete','setName'):
@@ -172,11 +165,11 @@ class WorkflowFrame(Frame):
 
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
@@ -206,7 +199,7 @@ class FilterFrame(LabelFrame):
 
     LabelFrame.__init__(self, guiParent, borderRelief, text, justify,
                         width, font, height, *args, **kw)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -241,7 +234,7 @@ class FilterFrame(LabelFrame):
 
     self.nameText.xlear()
     self.userText.clear()
-    
+
 
   def tmpCall(self, event=None):
 
@@ -264,11 +257,11 @@ class FilterFrame(LabelFrame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
@@ -278,11 +271,12 @@ class FilterFrame(LabelFrame):
 if __name__ == "__main__":
 
   import sys
+
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   if len(sys.argv) == 2:
     path = sys.argv[1]
     from ccp.gui.Io import loadProject
@@ -291,5 +285,5 @@ if __name__ == "__main__":
     ccpnProject = None
 
   popup = WorkflowFramePopup(root, ccpnProject=ccpnProject)
-  
+
   root.mainloop()

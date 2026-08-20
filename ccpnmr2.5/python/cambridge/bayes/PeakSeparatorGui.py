@@ -7,33 +7,26 @@ Copyright (c) 2008 University of Cambridge. All rights reserved.
 
 """
 
-import sys, os
 
-from memops.gui.ButtonList          import ButtonList, UtilityButtonList
-from memops.gui.FloatEntry          import FloatEntry
-from memops.gui.Frame               import Frame
-from memops.gui.IntEntry            import IntEntry
-from memops.gui.Label               import Label
-from memops.gui.LabelDivider        import LabelDivider
-from memops.gui.LabelFrame          import LabelFrame
-from memops.gui.Menu                import Menu
-from memops.gui.MessageReporter     import showError
-from memops.gui.PulldownList        import PulldownList
-from memops.gui.RadioButtons        import RadioButtons
-from memops.gui.ScrolledMatrix      import ScrolledMatrix
-from memops.gui.TabbedFrame         import TabbedFrame
+from PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
+from PeakSeparatorParams import PeakSeparatorParams
+from PeakSeparatorPeakList import getPeakListParams
+from PeakSeparatorRegion import getRegionParams
 
-from ccp.api.nmr.Nmr                        import FreqDataDim
+from ccpnmr.analysis.core.UnitConverter import hz2pnt, pnt2hz
+from ccpnmr.analysis.core.WindowBasic import getSpectrumViews
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import ButtonList, UtilityButtonList
+from memops.gui.FloatEntry import FloatEntry
+from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
+from memops.gui.LabelDivider import LabelDivider
+from memops.gui.MessageReporter import showError
+from memops.gui.PulldownList import PulldownList
+from memops.gui.RadioButtons import RadioButtons
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.TabbedFrame import TabbedFrame
 
-from ccpnmr.analysis.core.ExperimentBasic   import getPrimaryDataDimRef
-from ccpnmr.analysis.core.WindowBasic       import getSpectrumViews
-from ccpnmr.analysis.core.UnitConverter     import pnt2hz, hz2pnt
-from ccpnmr.analysis.popups.BasePopup       import BasePopup
-
-from PeakSeparatorParams            import PeakSeparatorParams
-from PeakSeparatorPeakList          import getPeakListParams
-from PeakSeparatorRegion            import getRegionParams
-from PeakSeparator                  import SeparatePeakRoutine, SeparatePeaksInPeakList
 
 class PeakSeparatorGui(BasePopup):
   """
@@ -116,7 +109,7 @@ class PeakSeparatorGui(BasePopup):
 
     self.params = PeakSeparatorParams()
 
-    BasePopup.__init__(self, parent=parent, title=programName, 
+    BasePopup.__init__(self, parent=parent, title=programName,
                         location='+100+100', **kw)
 
     if not self.analysisProject:
@@ -156,7 +149,7 @@ class PeakSeparatorGui(BasePopup):
 
     frameA.grid_columnconfigure(1, weight=1)
     row = 0 # Label row
-    
+
     row += 1
     div = LabelDivider(frameA, text='Peak Separator Parameters')
     div.grid(row=row, column=0, columnspan=2, sticky='ew')
@@ -183,7 +176,7 @@ class PeakSeparatorGui(BasePopup):
     entries = ['False', 'True']
     self.posPeaksButtons = RadioButtons(frameA, entries=entries,
                                     select_callback=self.applyChange,
-                                    direction='horizontal', 
+                                    direction='horizontal',
                                     tipTexts=['Search for both positive and negative intensity peaks',
                                               'Limit search to only positive peaks'])
     self.posPeaksButtons.grid(row=row, column=1, sticky='n')
@@ -208,7 +201,7 @@ class PeakSeparatorGui(BasePopup):
     row += 1
     label = Label(frameA, text='Peak List:')
     label.grid(row=row, column=0, sticky='nw')
-    self.peakListPulldown = PulldownList(frameA, callback=self.setManuallyPickPeakList, 
+    self.peakListPulldown = PulldownList(frameA, callback=self.setManuallyPickPeakList,
                                         tipText='Select which peak list new peaks are to be added to')
     self.peakListPulldown.grid(row=row, column=1, sticky='nw')
 
@@ -240,7 +233,7 @@ class PeakSeparatorGui(BasePopup):
     row += 1
     texts = ['Add Region' ]
     commands = [ self.updateFromRegion ]
-    self.addResetButtons = ButtonList(frameA, texts=texts, commands=commands, 
+    self.addResetButtons = ButtonList(frameA, texts=texts, commands=commands,
           tipTexts=['Add selected specrtral region'])
     self.addResetButtons.grid(row=row, column=0, columnspan=2, sticky='ew')
 
@@ -310,7 +303,7 @@ class PeakSeparatorGui(BasePopup):
     div.grid(row=row,column=0,columnspan=2,sticky='ew')
     row += 1
 
-    self.repickListPulldown = PulldownList(frameB, callback=self.setRePickPeakList, 
+    self.repickListPulldown = PulldownList(frameB, callback=self.setRePickPeakList,
                                                           tipText='Select which peak list to repick (new peaks will be put into a new peak list)')
     self.repickListPulldown.grid(row=row, column=0, sticky='nw')
 
@@ -367,7 +360,7 @@ class PeakSeparatorGui(BasePopup):
 
   ###########################################################################
   # update parameters from PS PeakList
-  
+
   def updateFromPeakList(self):
 
     if not self.params.peakList:
@@ -387,7 +380,7 @@ class PeakSeparatorGui(BasePopup):
   def runPeakSeparator(self):
     """ run the peak separator """
 
-    # hack for Macs - focus isn't always lost on mouse move 
+    # hack for Macs - focus isn't always lost on mouse move
     # so bind event not always called. Shouldn't affect other OS.
     self.applyChange()
 
@@ -399,7 +392,7 @@ class PeakSeparatorGui(BasePopup):
 
   def runRepickPeaks( self ):
     """ Run the Peak Separator on entire chosen peak list """
-    # hack for Macs - focus isn't always lost on mouse move 
+    # hack for Macs - focus isn't always lost on mouse move
     # so bind event not always called. Shouldn't affect other OS.
     self.applyChange()
 

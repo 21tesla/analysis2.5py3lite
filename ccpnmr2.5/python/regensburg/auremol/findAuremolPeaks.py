@@ -1,12 +1,13 @@
 from ccpnmr.analysis.core.ExperimentBasic import getPrimaryDataDimRef
 from ccpnmr.analysis.core.PeakBasic import setManualPeakIntensity
 
+
 # internal function
 def setupCPeak(peak):
 
   if not hasattr(peak, 'cPeakList'): # should not exist but protect against this
     peak.cPeakList = peak.peakList.cPeakList
-  
+
   if not hasattr(peak, 'cPeak'): # should not exist but protect against this
     peak.cPeak = peak.cPeakList.addPeak()
 
@@ -19,10 +20,10 @@ def setupCPeakList(peakList):
     return
 
   spectrum = peakList.dataSource
-    
+
   # TBD: below assumes all dataDims are freqDataDims
   npoints = [ dataDim.numPoints for dataDim in spectrum.sortedDataDims() ]
-   
+
   peakList.cPeakList = CPeakList(npoints)
   peaks = peakList.sortedPeaks()
   for peak in peaks:

@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,97 +52,101 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import string, Tkinter, sys
-
-from memops.universal.Io import joinPath
-
-from ccpnmr.format.general.Io import getHelpUrlDir
-from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
+import Tkinter
 
 from ccp.general.Util import setCurrentStore
-
-from memops.gui.ScrolledMatrix import ScrolledMatrix, FilterMatrix
-from memops.gui.HelpPopup import showHelpUrl
-from memops.gui.Label import Label
+from ccpnmr.format.general.Io import getHelpUrlDir
+from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
 from memops.gui.DataEntry import askString
+from memops.gui.Label import Label
 from memops.gui.MessageReporter import showError
-
+from memops.gui.ScrolledMatrix import FilterMatrix, ScrolledMatrix
 from memops.gui.Util import createDismissHelpButtonList
+from memops.universal.Io import joinPath
+
 
 class ExperimentCreatePopup(TemporaryBasePopup):
+    help_url = joinPath(getHelpUrlDir(), "ExperimentCreate.html")
 
-  help_url = joinPath(getHelpUrlDir(),'ExperimentCreate.html')
+    def __init__(self, parent, project, numDim=None, topText=None, expName=""):
 
-  def __init__(self, parent, project, numDim = None, topText = None, expName = ''):
-  
-    self.parent = parent
-    self.project = project
-    self.numDim = numDim
-    self.topText = topText
-    self.skip = 1
-    self.expName = expName
-    
-    setCurrentStore(project,'ChemElementStore')
+        self.parent = parent
+        self.project = project
+        self.numDim = numDim
+        self.topText = topText
+        self.skip = 1
+        self.expName = expName
 
-    TemporaryBasePopup.__init__(self, parent=parent, title="Project '%s': " % project.name + 'Create Experiment', modal=False, transient=True)
+        setCurrentStore(project, "ChemElementStore")
 
-  def body(self, parent):
+        TemporaryBasePopup.__init__(
+            self,
+            parent=parent,
+            title="Project '%s': " % project.name + "Create Experiment",
+            modal=False,
+            transient=True,
+        )
 
-    row = 0
-    columnspan = 3
-    
-    if self.numDim != None:
-      columnspan += 1
+    def body(self, parent):
 
-    if self.topText:
-      label = Label(parent, text= self.topText)
-      label.grid(row=row, column=0, columnspan = columnspan, sticky=Tkinter.EW)
-    
-      row = row + 1
-      
-    if self.expName:
-      expNameText = " for experiment '%s'" % self.expName
-    else:
-      expNameText = ''
+        row = 0
+        columnspan = 3
 
-    label = Label(parent, text= 'Select a reference experiment%s from the list below, then press Create' % expNameText)
-    label.grid(row=row, column=0, columnspan = columnspan, sticky=Tkinter.EW)
+        if self.numDim != None:
+            columnspan += 1
 
-    row = row + 1
-      
-    colHeadings = self.getHeadings()
-      
-    parent.grid_rowconfigure(row, weight=1, minsize=300)
-    parent.grid_columnconfigure(0, weight=1, minsize=100)
-    
-    self.table = ScrolledMatrix(parent, headingList=colHeadings,callback=None)
-    self.table.grid(row = row, column = 0, columnspan = columnspan, sticky=Tkinter.NSEW)
-    
-    row = row + 1
+        if self.topText:
+            label = Label(parent, text=self.topText)
+            label.grid(row=row, column=0, columnspan=columnspan, sticky=Tkinter.EW)
 
-    texts = [ 'Create' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
+            row = row + 1
 
-    if self.numDim != None:
-      texts.append('Show all experiments')
-      commands.append(self.showAll)
+        if self.expName:
+            expNameText = " for experiment '%s'" % self.expName
+        else:
+            expNameText = ""
 
-    buttons = createDismissHelpButtonList(parent, texts=texts, commands=commands, dismiss_text = 'Skip', help_url=self.help_url)
-    buttons.grid(row=row, column=0)
-    
-    self.update()
-        
-  def update(self):
+        label = Label(
+            parent, text="Select a reference experiment%s from the list below, then press Create" % expNameText
+        )
+        label.grid(row=row, column=0, columnspan=columnspan, sticky=Tkinter.EW)
 
-    textMatrix = []
-    objectList = []
-  
-    for nep in self.project.sortedNmrExpPrototypes():
-    
-      #print "%d: %s (%s)   %s" % (nep.serial, nep.name, nep.category, nep.synonym)
-    
-      for re in nep.refExperiments:
-        """
+        row = row + 1
+
+        colHeadings = self.getHeadings()
+
+        parent.grid_rowconfigure(row, weight=1, minsize=300)
+        parent.grid_columnconfigure(0, weight=1, minsize=100)
+
+        self.table = ScrolledMatrix(parent, headingList=colHeadings, callback=None)
+        self.table.grid(row=row, column=0, columnspan=columnspan, sticky=Tkinter.NSEW)
+
+        row = row + 1
+
+        texts = ["Create"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+
+        if self.numDim != None:
+            texts.append("Show all experiments")
+            commands.append(self.showAll)
+
+        buttons = createDismissHelpButtonList(
+            parent, texts=texts, commands=commands, dismiss_text="Skip", help_url=self.help_url
+        )
+        buttons.grid(row=row, column=0)
+
+        self.update()
+
+    def update(self):
+
+        textMatrix = []
+        objectList = []
+
+        for nep in self.project.sortedNmrExpPrototypes():
+            # print "%d: %s (%s)   %s" % (nep.serial, nep.name, nep.category, nep.synonym)
+
+            for re in nep.refExperiments:
+                """
         #print "  %s:" % re.name,
         atomDimList = []
         for refExpDim in re.refExpDims:
@@ -157,55 +160,58 @@ class ExperimentCreatePopup(TemporaryBasePopup):
               addText = "(%s)" % expMeasurement.measurementType
             atomDimList.append("%s%s" % (string.join(atoms,''),addText))
             string.join(atomDimList,'-'),
-        """ 
-        valueList = [nep.synonym,re.name,len(re.refExpDims),nep.name,nep.category]
-        objectList.append(re)
-        textMatrix.append(valueList)
-    
-    self.table.update(textMatrix = textMatrix, objectList = objectList)
+        """
+                valueList = [nep.synonym, re.name, len(re.refExpDims), nep.name, nep.category]
+                objectList.append(re)
+                textMatrix.append(valueList)
 
-    if self.numDim != None:
-      filterClass = FilterMatrix(self.table.parent, self.table, searchString = str(self.numDim), column = 2)
-      filterClass.apply()
-  
-  def showAll(self):
-  
-    self.numDim = None
-    self.update()
-  
-  def getHeadings(self):
-  
-    colHeadings = ['Common pathway name','Experiment','Dimensions','Pathway name','Category']
-    
-    return colHeadings
-    
-  def apply(self):
-  
-    self.refExperiment = self.table.currentObject
-    
-    names = [exp.name for exp in self.project.currentNmrProject.sortedExperiments()]
+        self.table.update(textMatrix=textMatrix, objectList=objectList)
 
-    while 1:
-      self.name = askString('Give the name of the experiment','Experiment name:',initial_value = self.expName, parent = self.parent)
-      
-      if (self.name in names):
-        showError('Repeated experiment name', 'Name already used - choose another.')
-      else:
-        break
+        if self.numDim != None:
+            filterClass = FilterMatrix(self.table.parent, self.table, searchString=str(self.numDim), column=2)
+            filterClass.apply()
 
-    self.skip = 0
-    
-    return True
+    def showAll(self):
 
-if __name__ == '__main__':
+        self.numDim = None
+        self.update()
 
-  root = Tkinter.Tk()
+    def getHeadings(self):
 
-  from memops.api import Implementation
-  from ccp.api.nmr import Nmr
-  project = Implementation.MemopsRoot(name = 'test')
-  nmrProject = Nmr.NmrProject(project, name = project.name)
-  
-  popup = ExperimentCreatePopup(root,project,numDim = 2)
-  
-  root.mainloop()
+        colHeadings = ["Common pathway name", "Experiment", "Dimensions", "Pathway name", "Category"]
+
+        return colHeadings
+
+    def apply(self):
+
+        self.refExperiment = self.table.currentObject
+
+        names = [exp.name for exp in self.project.currentNmrProject.sortedExperiments()]
+
+        while 1:
+            self.name = askString(
+                "Give the name of the experiment", "Experiment name:", initial_value=self.expName, parent=self.parent
+            )
+
+            if self.name in names:
+                showError("Repeated experiment name", "Name already used - choose another.")
+            else:
+                break
+
+        self.skip = 0
+
+        return True
+
+
+if __name__ == "__main__":
+    root = Tkinter.Tk()
+
+    from ccp.api.nmr import Nmr
+    from memops.api import Implementation
+
+    project = Implementation.MemopsRoot(name="test")
+    nmrProject = Nmr.NmrProject(project, name=project.name)
+
+    popup = ExperimentCreatePopup(root, project, numDim=2)
+
+    root.mainloop()

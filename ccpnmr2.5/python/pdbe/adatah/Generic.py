@@ -2,14 +2,18 @@
 # General class to make a CCPN project from archive files #
 ###########################################################
 
-import sys, os, time, traceback, shutil
+import os
+import shutil
+import sys
+import time
+import traceback
+
+from ccpnmr.format.process.matchResonToMolSys import matchResonToMolSys
+from ccpnmr.format.process.sequenceCompare import SequenceCompare
 
 # Import Api and related
 from memops.api import Implementation
 from memops.universal.Util import drawBox
-
-from ccpnmr.format.process.matchResonToMolSys import matchResonToMolSys
-from ccpnmr.format.process.sequenceCompare import SequenceCompare
 
 #
 # This is a generic class to handle high-throughput creation of CCPN projects from
@@ -26,7 +30,7 @@ class DataHandler:
   fileWrittenNameFormat = '%s.DONE'
   noExperimentalDataName = 'NO_EXP_DATA'
   logFileFormat = '%s.log'
-  
+
   #
   # Have to set following in subclass:
   #
@@ -38,7 +42,7 @@ class DataHandler:
   #
 
   class DataHandlerError(StandardError):
-    
+
     def __init__(self, value):
       self.value = value
     def __str__(self):
@@ -47,15 +51,15 @@ class DataHandler:
   #
   # Initialisation
   #
-    
+
   def __init__(self,setupArgs):
-  
+
     #
     # Track current output to reset later
     #
-    
+
     self.curStdout = sys.stdout
-  
+
     #
     # Handle input arguments for setting up script...
     #
@@ -65,26 +69,26 @@ class DataHandler:
     #
     # In case need to tweak baseName, can do this here...
     #
-    
+
     self.setBaseName()
-          
+
     #
     # Initialise some vars (needs to be set up in subclass!)
     #
-    
+
     self.initialiseVars()
 
     #
     # Decide whether current pdb code should be converted or not,
     # and set up output files if necessary
-    #   
+    #
 
     skipEntry = self.setupConversion(forceWrite = forceWrite)
 
     if not skipEntry:
 
       try:
-      
+
         self.runSpecific()
 
         self.writeDoneFile()
@@ -101,11 +105,11 @@ class DataHandler:
     sys.stdout = self.curStdout
 
   def setBaseName(self):
-  
+
     return
-    
+
   def initialiseVars(self):
-    
+
     #
     # Sets up some file information - can be set to 'pass' if none of these required.
     #
@@ -115,7 +119,7 @@ class DataHandler:
     self.logFile = self.logFileFormat % self.baseName                          # File to write the log info to
 
   def loadProject(self):
-  
+
     # Can put in function in subclasses to load data if available here...
     return False
 
@@ -155,25 +159,25 @@ class DataHandler:
     #
     # Do not write out files - depends on implementation which files, if any!
     #
-    
+
     if '-noWrite' in sysArgs:
       self.writeFiles = False
     else:
       self.writeFiles = True
-      
+
     #
     # Loading only mode (not always implemented!)
     #
-    
+
     if '-load' in sysArgs:
       self.loadOnly = True
     else:
       self.loadOnly = False
-      
+
     #
     # Test mode (not always implemented!)
     #
-    
+
     if '-test' in sysArgs:
       self.testMode = True
     else:
@@ -189,7 +193,7 @@ class DataHandler:
       # No GUI interaction for setting up chains this way.
       #
 
-      self.guiRoot = None 
+      self.guiRoot = None
 
     else:
 
@@ -199,11 +203,11 @@ class DataHandler:
 
       import Tkinter
       self.guiRoot = Tkinter.Tk()
-    
+
     #
     # Class specific arguments
     #
-    
+
     self.handleSpecificArguments(sysArgs)
 
     #
@@ -216,32 +220,32 @@ class DataHandler:
     return (raiseError,forceWrite,timeFlag)
 
   def handleSpecificArguments(self,sysArgs):
-  
+
     pass
-  
+
   def conversionPrecheck(self):
-    
+
     skipFlag = False
-    
+
     if not self.idCode:
       skipFlag = True
-      
+
     return skipFlag
 
   def setupConversion(self,forceWrite = False):
-  
+
     #
     # Precheck in case argument handling failed
     #
-    
+
     skipFlag = self.conversionPrecheck()
-    
+
     #
     # Set up entry, load if possible
     #
-  
+
     if not skipFlag:
-    
+
       #
       # Code to set up the files for a conversion.
       #
@@ -257,7 +261,7 @@ class DataHandler:
       if not forceWrite:
         if self.loadProject():
           skipFlag = True
-      
+
       else:
         ccpnProjectDir = os.path.join(self.entryDir,self.baseName)
         if os.path.exists(ccpnProjectDir):
@@ -276,7 +280,7 @@ class DataHandler:
 
       if not os.path.exists(self.entryDir):
         os.mkdir(self.entryDir)
-    
+
       #
       # Check if idCode needs to be handled, if it does then set up necessary info
       #
@@ -299,9 +303,9 @@ class DataHandler:
     return skipFlag
 
   def setSkipFlag(self):
-  
+
     skipFlag = False
-  
+
     tempFiles = os.listdir(self.entryDir)
 
     if self.projectDone(tempFiles = tempFiles):
@@ -316,13 +320,13 @@ class DataHandler:
     if 'SKIPTEMP' in tempFiles:
       self.curStdout.write("Skipping temporarily %s...\n" % self.idCode)
       skipFlag = True
-      
+
     return skipFlag
 
   def projectDone(self,tempFiles = None):
-    
+
     projectDone = False
-    
+
     if not tempFiles:
       if os.path.exists(self.entryDir):
         tempFiles = os.listdir(self.entryDir)
@@ -330,21 +334,21 @@ class DataHandler:
         tempFiles = []
 
     if self.fileWrittenName in tempFiles:
-      projectDone = True  
-    
-    return projectDone    
+      projectDone = True
+
+    return projectDone
 
   def setPresets(self):
 
-    if self.presetDict.has_key(self.idCode):
+    if self.idCode in self.presetDict:
       self.curStdout.write("  Using preset values...\n")
-      self.presets = self.presetDict[self.idCode]        
+      self.presets = self.presetDict[self.idCode]
 
       #
       # Print out comment if available
       #
 
-      if self.presetDict[self.idCode].has_key('comment'):
+      if 'comment' in self.presetDict[self.idCode]:
         commentLines = self.presetDict[self.idCode]['comment'].split("\n")
         for commentLine in commentLines:
           self.curStdout.write("    > %s\n" % commentLine)
@@ -362,20 +366,20 @@ class DataHandler:
       sys.stdout = fout
 
   def setupProject(self):
-  
+
     #
     # Create a CCPN project (defined locally in script!)
     #
 
     self.ccpnProject = Implementation.MemopsRoot(name = self.idCode)
     self.nmrProject = self.ccpnProject.newNmrProject(name = self.ccpnProject.name)
-    
+
     # Tag with the data (new as of 17/11/2008)
     appDataCreationDate = Implementation.AppDataString(application = "DataHandler", keyword = 'creationDate', value = self.timeFlag)
     self.nmrProject.addApplicationData(appDataCreationDate)
-  
+
   def initialiseCcpn(self):
-  
+
     self.setupProject()
     self.setupMolSystem()
 
@@ -387,17 +391,17 @@ class DataHandler:
 
   def setupMolSystem(self):
 
-    # 
+    #
     # Create a molSystem for the PDB information
     #
 
     self.molSystem = self.ccpnProject.newMolSystem(code = self.idCode)
 
   def setupEntry(self,studyTitle,entryTitle,entryDetails,textArgs = None,entryName = None):
-  
+
     if not textArgs:
       textArgs = (self.idCode,)
-      
+
     if not entryName:
       entryName = self.baseName
 
@@ -410,32 +414,32 @@ class DataHandler:
       nmrEntryStore = self.ccpnProject.findFirstNmrEntryStore()
     if not nmrEntryStore:
       nmrEntryStore = self.ccpnProject.newNmrEntryStore(name = self.ccpnProject.name)
-    
+
     #
     # Set up a study
     #
-    
+
     # Doesn't need a %s in there any more, if not required.
     if studyTitle.count("%"):
       studyName = studyTitle % textArgs
     else:
       studyName = studyTitle
-      
+
     study = nmrEntryStore.findFirstStudy(name = studyName)
     if not study:
       study = nmrEntryStore.newStudy(name = studyName,studyType = 'NMR')
-    
+
     #
     # Create a new entry
     #
-    
+
     self.entry = nmrEntryStore.newEntry(
                            molSystem = self.molSystem,
                            name = '%s_%s' % (entryName,'_'.join(textArgs)),
                            title = entryTitle % textArgs,
                            details = entryDetails % textArgs,
                            study = study)
-   
+
   def setupStructureGeneration(self,strucGenName = 'Original constraints'):
 
     #
@@ -473,37 +477,37 @@ class DataHandler:
     # Get relevant info from presets
     #
 
-    if self.presets.has_key('linkResonances'):
+    if 'linkResonances' in self.presets:
 
       scriptPresets = self.presets['linkResonances']
 
-      if scriptPresets.has_key('runs'):
+      if 'runs' in scriptPresets:
 
         runs = scriptPresets['runs']
 
-      if scriptPresets.has_key('keywds'):
+      if 'keywds' in scriptPresets:
 
         keywds = scriptPresets['keywds']
 
     #
     # Define type of info to be linked...
     #
-    
+
     if resonanceType == 'fixed':
-    
+
       if not nmrConstraintStore:
 
         if hasattr(self,'strucGen'):
           strucGen = self.strucGen
         else:
           strucGen = self.entry.findFirstStructureGeneration()
-        
+
         nmrConstraintStore = strucGen.nmrConstraintStore
-        
+
       if not nmrConstraintStore:
         nmrConstraintStore = self.nmrProject.findFirstNmrConstraintStore()
-      
-      resonances = nmrConstraintStore.sortedFixedResonances()  
+
+      resonances = nmrConstraintStore.sortedFixedResonances()
 
       keywds['globalStereoAssign'] = True
       keywds['nmrConstraintStore'] = nmrConstraintStore
@@ -512,11 +516,11 @@ class DataHandler:
       strucGen = None
       resonances = self.entry.root.currentNmrProject.sortedResonances()
       keywds['globalStereoAssign']    = False
-    
+
     #
     # Set default keywords - can be reset in specificLinkResonancesSettings!
     #
-    
+
     keywds['setSingleProchiral']    = True
     keywds['setSinglePossEquiv']    = True
     keywds['minimalPrompts']        = True
@@ -524,35 +528,35 @@ class DataHandler:
     keywds['useAmbiguity']          = useAmbiguity
     keywds['useLinkResonancePopup'] = False
     keywds['useEmptyNamingSystems'] = False
-    
+
     if formatName[1:] != assignFormat[1:]:
       keywds['assignFormat'] = assignFormat
-    
+
     #
     # Specific things to do before running linkResonances
     #
-    
+
     self.specificLinkResonancesSettings(keywds)
-      
+
     #
     # Check if need to do automapping
     #
 
-    if not keywds.has_key('forceDefaultChainMapping') and not keywds.has_key('forceChainMappings'):
-      
-      self.drawBoxDelimiter("Attempting automatic chain mapping (no valid presets available)")    
+    if 'forceDefaultChainMapping' not in keywds and 'forceChainMappings' not in keywds:
+
+      self.drawBoxDelimiter("Attempting automatic chain mapping (no valid presets available)")
 
       # Use automapping in this case
       forceChainMappings = matchResonToMolSys(resonances,self.molSystem,assignFormat = assignFormat,test=self.testMode)
 
       if forceChainMappings:
-      
+
         keywds['forceChainMappings'] = forceChainMappings
-        
+
         print("  Automatically setting chain mappings to %s" % str(forceChainMappings))
-        
+
       else:
-      
+
         # Try more refined mapping - this is run afterwards because it will give different results, should
         # only be run for new cases.
         sequenceComparison = SequenceCompare()
@@ -564,14 +568,14 @@ class DataHandler:
         sequenceComparison.createCcpnChainInformation(self.molSystem.sortedChains())
 
         sequenceComparison.getFormatFileInformation(resonances,assignFormat)
-        
+
         # Write out error file if no data available...
         if not sequenceComparison.formatFileResidueDict:
           self.writeNoExperimentalDataFile()
           forceChainMappings = {}
-          
+
         else:
-        
+
           sequenceComparison.createFormatFileChainInformation()
 
           #
@@ -579,7 +583,7 @@ class DataHandler:
           #
 
           forceChainMappings = sequenceComparison.compareFormatFileToCcpnInfo()
-        
+
         if forceChainMappings:
           keywds['forceChainMappings'] = forceChainMappings
 
@@ -597,13 +601,13 @@ class DataHandler:
       self.formatObjectDict[formatName].linkResonances(**keywds)
 
   def specificLinkResonancesSettings(self,keywds):
-    
+
     # Can redefine things in here for specific import
-    
+
     pass
 
   def checkAssignmentLevel(self, resonancesStore):
-  
+
     allResonances = 0
     assignedResonances = 0
 
@@ -611,37 +615,37 @@ class DataHandler:
       resonances = resonancesStore.resonances
     else:
       resonances = resonancesStore.fixedResonances
-    
+
     for resonance in resonances:
       allResonances += 1
       if resonance.resonanceSet:
         assignedResonances += 1
-        
+
     if not assignedResonances:
       raise self.DataHandlerError("No assigned resonances present - entry ignored.")
-      
+
     elif (assignedResonances * 1.0 / allResonances) < 0.98:
       raise self.DataHandlerError("Less than 98% of resonances assigned - entry ignored.")
 
   def setCcpnProjectRepository(self,ccpnDir = 'ccpn'):
-  
+
     # Replaces setCcpnProjectPaths
 
-    outputPath = os.path.join(self.entryDir,ccpnDir) 
-    
+    outputPath = os.path.join(self.entryDir,ccpnDir)
+
     # In new API have to make sure that old files are removed first!
     if os.path.exists(outputPath):
       shutil.rmtree(outputPath)
-    
+
     repository = self.ccpnProject.findFirstRepository(name = 'userData')
     repository.url = Implementation.Url(path = outputPath)
-   
+
   def writeNoExperimentalDataFile(self):
 
     noExpDataFile = open(os.path.join(self.entryDir,self.noExperimentalDataName),'w')
     noExpDataFile.write(time.strftime("%Y-%b-%d.%H.%M", time.gmtime(time.time())))
     noExpDataFile.close()
-     
+
   def writeDoneFile(self):
 
     #
@@ -668,7 +672,7 @@ class DataHandler:
 
       ferrors = open(os.path.join(self.projectDirectory,self.idCode,self.errorFile + timeFlag),'w')
 
-      ferrors.write(self.idCode)       
+      ferrors.write(self.idCode)
       ferrors.write(error)
       ferrors.write(os.linesep)
       ferrors.flush()

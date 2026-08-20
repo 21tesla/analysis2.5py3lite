@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,44 +51,42 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
+
+from ccp.format.cyana.generalIO import getFormat
+from ccp.format.dyana.dihedralConstraintsIO import DyanaDihedralConstraint, DyanaDihedralConstraintFile
 from memops.universal.Io import getTopDirectory
 
 
-from ccp.format.dyana.dihedralConstraintsIO import DyanaDihedralConstraintFile
-from ccp.format.dyana.dihedralConstraintsIO import DyanaDihedralConstraint
-from ccp.format.cyana.generalIO import getFormat
-
 class CyanaDihedralConstraintFile(DyanaDihedralConstraintFile):
+    def setFormat(self):
 
-  def setFormat(self):
+        self.format = getFormat()
 
-    self.format = getFormat()
-    
+
 class CyanaDihedralConstraint(DyanaDihedralConstraint):
+    pass
 
-  pass
-  
-  
+
 if __name__ == "__main__":
+    files = ["../reference/diana/example.dihedrals"]
 
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-  files = ['../reference/diana/example.dihedrals']
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    constraintFile = CyanaDihedralConstraintFile(file)
+        constraintFile = CyanaDihedralConstraintFile(file)
 
-    constraintFile.read(verbose = 1)
-  
-    for constraint in constraintFile.constraints:
-      print(constraint.Id, constraint.name,)
+        constraintFile.read(verbose=1)
 
-      print(constraint.seqCode, constraint.lowerAngle, constraint.upperAngle, constraint.energyCst)
+        for constraint in constraintFile.constraints:
+            print(
+                constraint.Id,
+                constraint.name,
+            )
 
-    constraintFile.name = 'local/dihedral.testout'
+            print(constraint.seqCode, constraint.lowerAngle, constraint.upperAngle, constraint.energyCst)
 
-    constraintFile.write(verbose = 1)
+        constraintFile.name = "local/dihedral.testout"
 
+        constraintFile.write(verbose=1)

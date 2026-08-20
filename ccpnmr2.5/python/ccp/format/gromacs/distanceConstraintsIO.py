@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,30 +52,22 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
-
-from memops.universal.Io import getTopDirectory
-
-from memops.universal.Util import returnInt, returnFloat
-
 from ccp.format.gromacs.generalIO import GromacsGenericFile
-from ccp.format.gromacs.generalIO import GromacsConstraintItem
-from ccp.format.gromacs.generalIO import GromacsConstraintMember
 
 #####################
 # Class definitions #
 #####################
 
-class GromacsDistanceConstraintFile(GromacsGenericFile):
 
-  def initialize(self):
-  
-    self.constraints = []
-    self.constraintElements = 2
-    
-    self.constraintFileType = 'distance_restraints'
- 
-  """
+class GromacsDistanceConstraintFile(GromacsGenericFile):
+    def initialize(self):
+
+        self.constraints = []
+        self.constraintElements = 2
+
+        self.constraintFileType = "distance_restraints"
+
+    """
   def read(self,verbose = False):
 
     if verbose:
@@ -85,52 +77,48 @@ class GromacsDistanceConstraintFile(GromacsGenericFile):
     fin = open(self.name, 'rU')
      
   """
-      
-  def write(self,verbose = False):
 
-    """
-    Note: in example the column widths don't seem to matter much; as long as they're separated! See local/ dir for explanation
-    """
-    
-    if not self.constraints:
-      return
+    def write(self, verbose=False):
+        """
+        Note: in example the column widths don't seem to matter much; as long as they're separated! See local/ dir for explanation
+        """
 
-    if verbose: 
-      print("Writing %s distance constraint list %s" % (self.format,self.name))
-    
-    fout = open(self.name,'w')
+        if not self.constraints:
+            return
 
-    #
-    # Write out distance constraints
-    #
-    
-    fout.write(f"[ {self.constraintFileType} ]{self.newline}")
-    fout.write(";   ai     aj  type index type'  low    up1    up2  fac" + self.newline)
-    
-    for constraint in self.constraints:
-      # Note: items should be expanded so that one atom member on every side!
-      for item in constraint.items:
+        if verbose:
+            print("Writing %s distance constraint list %s" % (self.format, self.name))
 
-        for i in range(self.constraintElements):
-        
-          member = item.members[i]          
-          fout.write(f"{member.atomSerial:7d}")
+        fout = open(self.name, "w")
 
-        fout.write(f"  1 {constraint.serial:7d}  1  {constraint.lowerLimit:6.3f} {constraint.upperLimit1:6.3f} {constraint.upperLimit2:6.3f} 1.0")
-        fout.write(self.newline)
+        #
+        # Write out distance constraints
+        #
+
+        fout.write(f"[ {self.constraintFileType} ]{self.newline}")
+        fout.write(";   ai     aj  type index type'  low    up1    up2  fac" + self.newline)
+
+        for constraint in self.constraints:
+            # Note: items should be expanded so that one atom member on every side!
+            for item in constraint.items:
+                for i in range(self.constraintElements):
+                    member = item.members[i]
+                    fout.write(f"{member.atomSerial:7d}")
+
+                fout.write(
+                    f"  1 {constraint.serial:7d}  1  {constraint.lowerLimit:6.3f} {constraint.upperLimit1:6.3f} {constraint.upperLimit2:6.3f} 1.0"
+                )
+                fout.write(self.newline)
 
 
 class GromacsDistanceConstraint:
+    def __init__(self, serial):
 
-  def __init__(self,serial):
-    
-    self.serial = serial
-    self.items = []
-  
-  def setDistances(self,lowerLimit,upperLimit1,upperLimit2):
-    
-    self.lowerLimit = lowerLimit
-    self.upperLimit1 = upperLimit1
-    self.upperLimit2 = upperLimit2
-    
-    
+        self.serial = serial
+        self.items = []
+
+    def setDistances(self, lowerLimit, upperLimit1, upperLimit2):
+
+        self.lowerLimit = lowerLimit
+        self.upperLimit1 = upperLimit1
+        self.upperLimit2 = upperLimit2

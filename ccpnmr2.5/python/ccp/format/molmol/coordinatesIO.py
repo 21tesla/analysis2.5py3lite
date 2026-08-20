@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,215 +54,226 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
+import os
+import string
 
-# Import general functions
-from memops.universal.Util import returnInt, returnFloat
+from ccp.format.general.Constants import defaultSeqInsertCode
+from ccp.format.general.Util import getRegularExpressions
+from ccp.format.molmol.generalIO import MolmolGenericFile
 from memops.universal.Io import getTopDirectory
 
-from ccp.format.general.Util import getRegularExpressions
-from ccp.format.general.Constants import defaultSeqInsertCode
-
-from ccp.format.molmol.generalIO import MolmolGenericFile
+# Import general functions
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class MolmolCoordinateFile(MolmolGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.modelCoordinates = {}
-    
-    self.patt.update(getRegularExpressions('pdb'))
-    
-    self.chains = []
+        self.modelCoordinates = {}
 
-  def read(self,maxNum = 999):
+        self.patt.update(getRegularExpressions("pdb"))
 
-    atomRead = 1
-    modelNum = ''
-    oldChainId = ''
-    compoundName = None
+        self.chains = []
 
-    #
-    # Read coordinates and other info
-    #
+    def read(self, maxNum=999):
 
-    fin = open(self.name)
-    line = fin.readline()
+        atomRead = 1
+        modelNum = ""
+        oldChainId = ""
+        compoundName = None
 
-    while line:
-      
-      if self.patt['pdbNewModel'].search(line): # Not necessarily there!! Is empty if so
-        modelNum = returnInt(self.patt['pdbNewModel'].search(line).group(1))
+        #
+        # Read coordinates and other info
+        #
 
-        if modelNum > maxNum:
-          atomRead = 0
-          break
+        fin = open(self.name)
+        line = fin.readline()
 
-        self.modelCoordinates[modelNum] = []
-        
-      elif self.patt['pdbHeader'].search(line):
-      
-        if line.find('MOLMOL') < 0:
-          print("  Warning: probably invalid molmol file!")
-      
-      elif self.patt['pdbCompound'].search(line):
-      
-        compoundName = string.strip(line[6:])
+        while line:
+            if self.patt["pdbNewModel"].search(line):  # Not necessarily there!! Is empty if so
+                modelNum = returnInt(self.patt["pdbNewModel"].search(line).group(1))
 
-      elif atomRead == 1 and self.patt['pdbAllAtom'].search(line):
+                if modelNum > maxNum:
+                    atomRead = 0
+                    break
 
-        # Case one model only
-        if modelNum == '':
-          modelNum = 1
-          self.modelCoordinates[modelNum] = []
+                self.modelCoordinates[modelNum] = []
 
-        serial = line[6:11]
-        atomName = line[12:16]
-        altLoc = line[16:17]
-        resName = line[17:20]
-        chainId = line[21:22]
-        seqCode = line[22:26]
-        insertionCode = line[26:27]
-        x = line[30:38]
-        y = line[38:46]
-        z = line[46:54]
-        occupancy = line[54:60]
-        tempFactor = line[60:66]
-        segId = line[72:76]
+            elif self.patt["pdbHeader"].search(line):
+                if line.find("MOLMOL") < 0:
+                    print("  Warning: probably invalid molmol file!")
 
-        self.modelCoordinates[modelNum].append(MolmolCoordinate(self,serial,atomName,resName,chainId,seqCode,x,y,z,segId,insertionCode = insertionCode))
+            elif self.patt["pdbCompound"].search(line):
+                compoundName = string.strip(line[6:])
 
-        if chainId != oldChainId:
-          
-          oldChainId = chainId
-          
-          foundChain = 0
-          
-          for chain in self.chains:
-            if chain.chainId == chainId:
-              foundChain = 1
-              break
-              
-          if not foundChain:  
+            elif atomRead == 1 and self.patt["pdbAllAtom"].search(line):
+                # Case one model only
+                if modelNum == "":
+                    modelNum = 1
+                    self.modelCoordinates[modelNum] = []
 
-            self.chains.append(MolmolChain(chainId, compoundName = compoundName))
-            
-        # TODO: add in occupancy, tempFactor, ... fields if needed!
+                serial = line[6:11]
+                atomName = line[12:16]
+                altLoc = line[16:17]
+                resName = line[17:20]
+                chainId = line[21:22]
+                seqCode = line[22:26]
+                insertionCode = line[26:27]
+                x = line[30:38]
+                y = line[38:46]
+                z = line[46:54]
+                occupancy = line[54:60]
+                tempFactor = line[60:66]
+                segId = line[72:76]
 
-      line = fin.readline()
+                self.modelCoordinates[modelNum].append(
+                    MolmolCoordinate(
+                        self, serial, atomName, resName, chainId, seqCode, x, y, z, segId, insertionCode=insertionCode
+                    )
+                )
 
-    fin.close()
+                if chainId != oldChainId:
+                    oldChainId = chainId
 
-  def write(self,verbose = 0):
+                    foundChain = 0
 
-    if verbose == 1:
-      print("Writing %s coordinate file %s" % (self.format,self.name))
+                    for chain in self.chains:
+                        if chain.chainId == chainId:
+                            foundChain = 1
+                            break
 
-    fout = open(self.name,'w')
+                    if not foundChain:
+                        self.chains.append(MolmolChain(chainId, compoundName=compoundName))
 
-    #
-    # TODO: CURRENTLY NO HEADER!
-    #
-    
-    multipleModels = 0
-    
-    if len(self.modelCoordinates) > 1:
-      multipleModels = 1
-      
-    modelNums = self.modelCoordinates.keys()
-    modelNums.sort()
-      
-    for modelNum in modelNums:
-        
-      oldChainId = self.modelCoordinates[modelNum][0].chainId
+                # TODO: add in occupancy, tempFactor, ... fields if needed!
 
-      if multipleModels:
-      
-        fout.write("MODEL %7s" % modelNum + self.newline)
-        
-      for coord in self.modelCoordinates[modelNum]:
-      
-        if oldChainId != coord.chainId:
-          fout.write("TER" + self.newline)
-          oldChainId = coord.chainId
-      
-        atomText = 'ATOM'
-        atomFormat = " %-3s"
-       
-        if self.patt['onlydigit'].search(coord.atomName[0]) or len(coord.atomName) == 4:
-          
-          atomFormat = "%-4s"
-      
-        lineFormat = "%-6s%5d " + atomFormat + "%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %-4s%2s%2s"
-      
-        fout.write(lineFormat %
-        
-                    (atomText,coord.serial,coord.atomName,'',coord.resName,coord.chainId,
-                     coord.seqCode,coord.insertionCode,coord.x,coord.y,coord.z,1.00,0.00,coord.segId,'',''))
-                     
-        fout.write(self.newline)
-            
-      fout.write("TER" + self.newline)
-      
-      if multipleModels:
-      
-        fout.write("ENDMDL" + self.newline)
+            line = fin.readline()
 
-    fout.write("END" + self.newline)
+        fin.close()
 
-    fout.close()
+    def write(self, verbose=0):
+
+        if verbose == 1:
+            print("Writing %s coordinate file %s" % (self.format, self.name))
+
+        fout = open(self.name, "w")
+
+        #
+        # TODO: CURRENTLY NO HEADER!
+        #
+
+        multipleModels = 0
+
+        if len(self.modelCoordinates) > 1:
+            multipleModels = 1
+
+        modelNums = self.modelCoordinates.keys()
+        modelNums.sort()
+
+        for modelNum in modelNums:
+            oldChainId = self.modelCoordinates[modelNum][0].chainId
+
+            if multipleModels:
+                fout.write("MODEL %7s" % modelNum + self.newline)
+
+            for coord in self.modelCoordinates[modelNum]:
+                if oldChainId != coord.chainId:
+                    fout.write("TER" + self.newline)
+                    oldChainId = coord.chainId
+
+                atomText = "ATOM"
+                atomFormat = " %-3s"
+
+                if self.patt["onlydigit"].search(coord.atomName[0]) or len(coord.atomName) == 4:
+                    atomFormat = "%-4s"
+
+                lineFormat = "%-6s%5d " + atomFormat + "%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %-4s%2s%2s"
+
+                fout.write(
+                    lineFormat
+                    % (
+                        atomText,
+                        coord.serial,
+                        coord.atomName,
+                        "",
+                        coord.resName,
+                        coord.chainId,
+                        coord.seqCode,
+                        coord.insertionCode,
+                        coord.x,
+                        coord.y,
+                        coord.z,
+                        1.00,
+                        0.00,
+                        coord.segId,
+                        "",
+                        "",
+                    )
+                )
+
+                fout.write(self.newline)
+
+            fout.write("TER" + self.newline)
+
+            if multipleModels:
+                fout.write("ENDMDL" + self.newline)
+
+        fout.write("END" + self.newline)
+
+        fout.close()
+
 
 class MolmolChain:
+    def __init__(self, chainId, compoundName=None):
 
-  def __init__(self,chainId, compoundName = None):
+        self.chainId = chainId
 
-    self.chainId = chainId
-    
-    self.compoundName = None
-    if compoundName:
-      self.compoundName = compoundName
+        self.compoundName = None
+        if compoundName:
+            self.compoundName = compoundName
+
 
 class MolmolCoordinate:
+    def __init__(
+        self, parent, serial, atomName, resName, chainId, seqCode, x, y, z, segId, insertionCode=defaultSeqInsertCode
+    ):
 
-  def __init__(self,parent,serial,atomName,resName,chainId,seqCode,x,y,z,segId, insertionCode = defaultSeqInsertCode):
-  
-    self.parent = parent
-    self.serial = returnInt(serial)
-    self.atomName = string.strip(atomName)
-    self.resName = string.strip(resName)
-    self.chainId = chainId      
-    self.seqCode = returnInt(seqCode)
-    self.x = returnFloat(x)
-    self.y = returnFloat(y)
-    self.z = returnFloat(z)
-    self.segId = string.strip(segId)
-    self.insertionCode = insertionCode
-    
-    if not self.segId:
-      self.segId = self.chainId
+        self.parent = parent
+        self.serial = returnInt(serial)
+        self.atomName = string.strip(atomName)
+        self.resName = string.strip(resName)
+        self.chainId = chainId
+        self.seqCode = returnInt(seqCode)
+        self.x = returnFloat(x)
+        self.y = returnFloat(y)
+        self.z = returnFloat(z)
+        self.segId = string.strip(segId)
+        self.insertionCode = insertionCode
+
+        if not self.segId:
+            self.segId = self.chainId
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+    file = os.path.join(getTopDirectory(), "../../reference/ccpNmr/markNijmegen/nbd.pdb")
+    molmolFile = MolmolCoordinateFile(file)
 
-  file = os.path.join(getTopDirectory(),'../../reference/ccpNmr/markNijmegen/nbd.pdb')
-  molmolFile = MolmolCoordinateFile(file)
-  
-  molmolFile.read(maxNum = 1)
+    molmolFile.read(maxNum=1)
 
-  for mc in molmolFile.modelCoordinates:
-  
-    for coo in molmolFile.modelCoordinates[mc]:
-      print(coo.serial, coo.resName)
-      
-  for chain in molmolFile.chains:
-    print(chain.chainId)
+    for mc in molmolFile.modelCoordinates:
+        for coo in molmolFile.modelCoordinates[mc]:
+            print(coo.serial, coo.resName)
 
-  molmolFile.name = 'local/test.coord'  
-  molmolFile.write()
+    for chain in molmolFile.chains:
+        print(chain.chainId)
+
+    molmolFile.name = "local/test.coord"
+    molmolFile.write()

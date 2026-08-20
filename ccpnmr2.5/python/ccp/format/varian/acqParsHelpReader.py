@@ -1,5 +1,3 @@
-
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -13,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,54 +51,51 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import os
 
-from memops.universal.Util import joinUnquote
-
 from ccp.format.varian.generalIO import VarianGenericFile
-
 from memops.universal.Io import getTopDirectory
+from memops.universal.Util import joinUnquote
 
 #####################
 # Class definitions #
 #####################
 
+
 class VarianAcqParHelp(VarianGenericFile):
+    def initialize(self):
 
-  def initialize(self):
-  
-    self.readParsHelpFile()
+        self.readParsHelpFile()
 
-  def readParsHelpFile(self):
+    def readParsHelpFile(self):
 
-    self.tags = {}
-    
-    fileLocation = os.path.join(getTopDirectory(),'data','ccp','varian','parhelp.txt')
-  
-    fin = open(fileLocation)
-    line = fin.readline()
+        self.tags = {}
 
-    while line:
-    
-      if not (self.patt['emptyline'].search(line) or self.patt['hash'].search(line)):
-        cols = line.split()
-        if len(cols) < 3 or cols[1] != '=':
+        fileLocation = os.path.join(getTopDirectory(), "data", "ccp", "varian", "parhelp.txt")
 
-          print("Error parsing following line:" + self.newline + line + self.newline)
+        fin = open(fileLocation)
+        line = fin.readline()
 
-        else:
-          # Sort out tag
-          tag = cols[0]
+        while line:
+            if not (self.patt["emptyline"].search(line) or self.patt["hash"].search(line)):
+                cols = line.split()
+                if len(cols) < 3 or cols[1] != "=":
+                    print("Error parsing following line:" + self.newline + line + self.newline)
 
-          # Sort out value (remove ' and rejoin with single spaces)
-          value = joinUnquote(cols[2:],"'")
+                else:
+                    # Sort out tag
+                    tag = cols[0]
 
-          self.tags[tag] = value
+                    # Sort out value (remove ' and rejoin with single spaces)
+                    value = joinUnquote(cols[2:], "'")
 
-      line=fin.readline()
+                    self.tags[tag] = value
 
-if __name__ == '__main__':
+            line = fin.readline()
 
-  aqhelp = VarianAcqParHelp('help')
-  
-  print(aqhelp.tags)
+
+if __name__ == "__main__":
+    aqhelp = VarianAcqParHelp("help")
+
+    print(aqhelp.tags)

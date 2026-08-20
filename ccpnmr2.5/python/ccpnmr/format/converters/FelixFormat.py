@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -53,115 +53,113 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 import string
 
+from ccpnmr.format.converters.DataFormat import DataFormat
+from ccpnmr.format.general.Constants import defaultMolCode, rawToCcpnAttrNameDict
+from ccpnmr.format.general.Util import getResName
 from memops.universal.Util import returnFloat
 
-import ccp.api.nmr.Nmr as Nmr
-
-from ccpnmr.format.general.Util import getResName
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-from ccpnmr.format.general.Constants import rawToCcpnAttrNameDict
-from ccpnmr.format.general.Constants import defaultMolCode
 
 class FelixFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = 'felix'
-    
-    self.columnContents = (
-       
-       ('None',None,None),
-       ('pointPosition','point',returnFloat),
-       ('pointPositionDev','pointDev',returnFloat),
-       ('ppmPosition','ppm',returnFloat),
-       ('ppmPositionDev','ppmDev',returnFloat),
-       ('assignment','assign',str)
-       
-       )
-       
-  def setGenericImports(self):
-    
-    self.getPeaks = self.getPeaksGeneric
+        self.format = "felix"
 
-  #
-  # Deviations from generic import stuff
-  #
+        self.columnContents = (
+            ("None", None, None),
+            ("pointPosition", "point", returnFloat),
+            ("pointPositionDev", "pointDev", returnFloat),
+            ("ppmPosition", "ppm", returnFloat),
+            ("ppmPositionDev", "ppmDev", returnFloat),
+            ("assignment", "assign", str),
+        )
 
-  #
-  # Functions different to default functions in DataFormat
-  #
+    def setGenericImports(self):
 
-  def setRawPeakFileFormatSpecific(self):
-    
-    numCols = 4
-    
-    valueList = []
-    for i in range(numCols):
-      valueList.append([])
-    
-    for rawPeak in self.peakFile.peaks:
-      for i in range(numCols):
-        values = getattr(rawPeak,'column%d' % (i+1))
-        valueList[i].extend(values)
+        self.getPeaks = self.getPeaksGeneric
 
-    interaction = self.multiDialog.ColumnInfoSelection(self.guiParent,valueList,self.columnContents,title = "Column information selection for %s peak list '%s'" % (self.formatLabel,self.peakList.name))    
+    #
+    # Deviations from generic import stuff
+    #
 
-    self.rawToCcpnAttrNames = {}
-    
-    if interaction:
-      columnConvert = interaction.columnConvert
-      
-      for i in range(numCols):
-         # Only keep track if not None and not assign (is handled separately)
-        if columnConvert[i] and columnConvert[i][0] in rawToCcpnAttrNameDict.keys():
-          self.rawToCcpnAttrNames[columnConvert[i][0]] = rawToCcpnAttrNameDict[columnConvert[i][0]]
-    
-      for rawPeak in self.peakFile.peaks:
+    #
+    # Functions different to default functions in DataFormat
+    #
+
+    def setRawPeakFileFormatSpecific(self):
+
+        numCols = 4
+
+        valueList = []
         for i in range(numCols):
-          if columnConvert[i]:
-            value = getattr(rawPeak,'column%d' % (i+1))
-            if columnConvert[i][1]:
-              for j in range(len(value)):
-                value[j] = columnConvert[i][1](value[j])
-              
-            setattr(rawPeak,columnConvert[i][0],value)
-   
-  def getPeakResNames(self):
-  
-    self.resNames = []
+            valueList.append([])
 
-    if hasattr(self.rawPeak,'assign'):
- 
-      if self.rawPeak.assign[self.rawPeakDimIndex] not in [None,'?','null','','0']:
-      
-        # TODO is this 'standard' felix type stuff?
-        (residueInfo,atomName) = string.split(self.rawPeak.assign[self.rawPeakDimIndex],':')
-        (residueCode,seqCode) = string.split(residueInfo,'_')
-        
-        self.resNames.append(getResName(defaultMolCode,seqCode,atomName))
+        for rawPeak in self.peakFile.peaks:
+            for i in range(numCols):
+                values = getattr(rawPeak, "column%d" % (i + 1))
+                valueList[i].extend(values)
 
-  def setPeakIntensity(self):
+        interaction = self.multiDialog.ColumnInfoSelection(
+            self.guiParent,
+            valueList,
+            self.columnContents,
+            title="Column information selection for %s peak list '%s'" % (self.formatLabel, self.peakList.name),
+        )
 
-    # TODO: PeakIntensity attributes!!!
-    
-    # What are they in the Felix file?!
-    
-    pass
+        self.rawToCcpnAttrNames = {}
 
-  def setPeakDim(self):
+        if interaction:
+            columnConvert = interaction.columnConvert
 
-    dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
+            for i in range(numCols):
+                # Only keep track if not None and not assign (is handled separately)
+                if columnConvert[i] and columnConvert[i][0] in rawToCcpnAttrNameDict.keys():
+                    self.rawToCcpnAttrNames[columnConvert[i][0]] = rawToCcpnAttrNameDict[columnConvert[i][0]]
 
-    self.peakDim = self.peak.findFirstPeakDim(dim = dataDimRef.dataDim.dim)
+            for rawPeak in self.peakFile.peaks:
+                for i in range(numCols):
+                    if columnConvert[i]:
+                        value = getattr(rawPeak, "column%d" % (i + 1))
+                        if columnConvert[i][1]:
+                            for j in range(len(value)):
+                                value[j] = columnConvert[i][1](value[j])
 
-    self.peakDim.dataDimRef = dataDimRef
-    
-    for rawAttrName in self.rawToCcpnAttrNames.keys():
-      ccpnAttrName = self.rawToCcpnAttrNames[rawAttrName]
-      setattr(self.peakDim,ccpnAttrName,getattr(self.rawPeak,rawAttrName)[self.rawPeakDimIndex])
+                        setattr(rawPeak, columnConvert[i][0], value)
 
-  def getPresetChainMapping(self,chainList):
-  
-    return self.getSingleChainFormatPresetChainMapping(chainList)
+    def getPeakResNames(self):
+
+        self.resNames = []
+
+        if hasattr(self.rawPeak, "assign"):
+            if self.rawPeak.assign[self.rawPeakDimIndex] not in [None, "?", "null", "", "0"]:
+                # TODO is this 'standard' felix type stuff?
+                (residueInfo, atomName) = string.split(self.rawPeak.assign[self.rawPeakDimIndex], ":")
+                (residueCode, seqCode) = string.split(residueInfo, "_")
+
+                self.resNames.append(getResName(defaultMolCode, seqCode, atomName))
+
+    def setPeakIntensity(self):
+
+        # TODO: PeakIntensity attributes!!!
+
+        # What are they in the Felix file?!
+
+        pass
+
+    def setPeakDim(self):
+
+        dataDimRef = self.dataDimRefs[self.rawPeakDimIndex]
+
+        self.peakDim = self.peak.findFirstPeakDim(dim=dataDimRef.dataDim.dim)
+
+        self.peakDim.dataDimRef = dataDimRef
+
+        for rawAttrName in self.rawToCcpnAttrNames.keys():
+            ccpnAttrName = self.rawToCcpnAttrNames[rawAttrName]
+            setattr(self.peakDim, ccpnAttrName, getattr(self.rawPeak, rawAttrName)[self.rawPeakDimIndex])
+
+    def getPresetChainMapping(self, chainList):
+
+        return self.getSingleChainFormatPresetChainMapping(chainList)

@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,104 +56,104 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import string
 
-# Import general functions
-from memops.universal.Util import returnInt
-from ccp.format.monte.generalIO import MonteGenericFile
 from ccp.format.general.formatIO import Sequence, SequenceElement
+from ccp.format.monte.generalIO import MonteGenericFile
+
+# Import general functions
 
 #####################
 # Class definitions #
 #####################
-      
+
+
 class MonteSequenceFile(MonteGenericFile):
-  """
-  Information on file level
-  """
-  def initialize(self):
-  
-    self.sequences = []
+    """
+    Information on file level
+    """
 
-  def read(self,verbose = False):
+    def initialize(self):
 
-    if verbose:
-      print("Reading %s sequence file %s" % (self.format,self.name))
+        self.sequences = []
 
-    self.sequences.append(MonteSequence())
+    def read(self, verbose=False):
 
-    seqCode = 1
-    badCodes = 0
+        if verbose:
+            print("Reading %s sequence file %s" % (self.format, self.name))
 
-    fin = open(self.name)
+        self.sequences.append(MonteSequence())
 
-    # Read, look for first line
-    line = fin.readline()
+        seqCode = 1
+        badCodes = 0
 
-    while line:
-      cols = line.split()
+        fin = open(self.name)
 
-      if len(cols) == 0 or self.patt['%sComment' % self.format].search(line):
-        pass
-      
-      else:
-      
+        # Read, look for first line
+        line = fin.readline()
+
+        while line:
+            cols = line.split()
+
+            if len(cols) == 0 or self.patt["%sComment" % self.format].search(line):
+                pass
+
+            else:
+                #
+                # Assuming three-letter codes, with multiple ones on same line possible
+                #
+
+                for col in cols:
+                    tmpCode = col.strip()
+
+                    if len(tmpCode) == 3:
+                        self.sequences[-1].elements.append(MonteSequenceElement(seqCode, col))
+                        seqCode += 1
+                    else:
+                        badCodes += 1
+
+            line = fin.readline()
+
+        fin.close()
+
         #
-        # Assuming three-letter codes, with multiple ones on same line possible
+        # Validity check
         #
 
-        for col in cols:
-          
-          tmpCode = col.strip()
-          
-          if len(tmpCode) == 3:
-            self.sequences[-1].elements.append(MonteSequenceElement(seqCode,col))
-            seqCode += 1
-          else:
-            badCodes += 1
+        fileReadOk = True
 
-      line = fin.readline()
+        if seqCode == 1 or badCodes > seqCode * 0.1:
+            self.sequences = []
+            fileReadOk = False
 
-    fin.close()
-    
-    #
-    # Validity check
-    #
-    
-    fileReadOk = True
-    
-    if seqCode == 1 or badCodes > seqCode * 0.1:
-      self.sequences = []
-      fileReadOk = False
-      
-    return fileReadOk
+        return fileReadOk
 
-  def write(self,verbose = 0):
+    def write(self, verbose=0):
 
-    if verbose == 1:
-      print("Writing %s sequence file %s" % (self.format,self.name))
+        if verbose == 1:
+            print("Writing %s sequence file %s" % (self.format, self.name))
 
-    if len(self.sequences) > 1:
-      print("Warning: multiple sequences - writing to same file.")
+        if len(self.sequences) > 1:
+            print("Warning: multiple sequences - writing to same file.")
 
-    fout = open(self.name,'w')
-    
-    stepLen = 4
+        fout = open(self.name, "w")
 
-    for sequence in self.sequences:
+        stepLen = 4
 
-      #
-      # Write three letter codes (do 4 per line - see stepLen)
-      #
-      
-      seqLen = len(sequence.elements)
+        for sequence in self.sequences:
+            #
+            # Write three letter codes (do 4 per line - see stepLen)
+            #
 
-      for i in range(0,seqLen,stepLen):
-        for j in range(i,min(i+stepLen,seqLen)):
-          residue = sequence.elements[j]
+            seqLen = len(sequence.elements)
 
-          fout.write("%3s " % (string.upper(residue.code3Letter)))
-        fout.write(self.newline)
+            for i in range(0, seqLen, stepLen):
+                for j in range(i, min(i + stepLen, seqLen)):
+                    residue = sequence.elements[j]
 
-    fout.close()
-    
+                    fout.write("%3s " % (string.upper(residue.code3Letter)))
+                fout.write(self.newline)
+
+        fout.close()
+
+
 MonteSequence = Sequence
 MonteSequenceElement = SequenceElement

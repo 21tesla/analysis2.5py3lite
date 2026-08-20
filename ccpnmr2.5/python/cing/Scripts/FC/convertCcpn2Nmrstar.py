@@ -4,10 +4,12 @@
 """
 Original from Wim Vranken.
 """
-from memops.general.Io import loadProject
-from pdbe.nmrStar.IO.NmrStarExport import NmrStarExport # valid for use with python from API
 import os
 import sys
+
+from memops.general.Io import loadProject
+from pdbe.nmrStar.IO.NmrStarExport import NmrStarExport  # valid for use with python from API
+
 #from msd.nmrStar.IO import NmrStarExport # valid for use with python from Analysis
 #from ccpnmr.eci import NmrStarExport
 

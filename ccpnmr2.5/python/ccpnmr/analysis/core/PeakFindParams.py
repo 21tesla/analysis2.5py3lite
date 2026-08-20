@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,51 +39,51 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+from ccpnmr.analysis.core.Util import getAnalysisDataDim, getAnalysisProject
 from memops.universal.Util import upperFirst
-from ccpnmr.analysis.core.Util import getAnalysisProject, getAnalysisDataDim
 
-peakFindKeys = ( 'scale', 'buffer', 'thickness', 'drop', 'nonadjacent',
-                 'haveHigh', 'haveLow', 'volumeMethod' )
-keywordPrefix = 'peakFind'
+peakFindKeys = ("scale", "buffer", "thickness", "drop", "nonadjacent", "haveHigh", "haveLow", "volumeMethod")
+keywordPrefix = "peakFind"
+
 
 def getPeakFindParams(project):
 
-  params = {}
-  analysisProject = getAnalysisProject(project)
-  
-  for key in peakFindKeys:
-    keyword = keywordPrefix + upperFirst(key)
-    value = getattr(analysisProject, keyword)
-    params[key] = value
+    params = {}
+    analysisProject = getAnalysisProject(project)
 
-  return params
+    for key in peakFindKeys:
+        keyword = keywordPrefix + upperFirst(key)
+        value = getattr(analysisProject, keyword)
+        params[key] = value
+
+    return params
 
 
 def setPeakFindParams(project, params):
 
- analysisProject = getAnalysisProject(project)
- 
- for key in params.keys():
-    keyword = keywordPrefix + upperFirst(key)
-    value = params[key]
-    setattr(analysisProject, keyword, value)
+    analysisProject = getAnalysisProject(project)
+
+    for key in params.keys():
+        keyword = keywordPrefix + upperFirst(key)
+        value = params[key]
+        setattr(analysisProject, keyword, value)
 
 
 def getPeakFindMinLinewidth(dataDim):
-  
-  return getAnalysisDataDim(dataDim).peakFindMinLineWidth
+
+    return getAnalysisDataDim(dataDim).peakFindMinLineWidth
 
 
 def setPeakFindMinLinewidth(dataDim, min_lw):
- 
-  getAnalysisDataDim(dataDim).peakFindMinLineWidth = min_lw
+
+    getAnalysisDataDim(dataDim).peakFindMinLineWidth = min_lw
 
 
 def getPeakFindBoxwidth(dataDim):
 
-  return getAnalysisDataDim(dataDim).peakFindBoxWidth
+    return getAnalysisDataDim(dataDim).peakFindBoxWidth
 
 
 def setPeakFindBoxwidth(dataDim, boxwidth):
- 
-  getAnalysisDataDim(dataDim).peakFindBoxWidth = boxwidth
+
+    getAnalysisDataDim(dataDim).peakFindBoxWidth = boxwidth

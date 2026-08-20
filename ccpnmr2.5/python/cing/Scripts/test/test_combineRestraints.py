@@ -2,20 +2,21 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_combineRestraints.py
 """
-from cing import cingDirTestsData #@UnusedImport
-from cing.Libs.NTutils import * #@UnusedWildImport
+import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData  #@UnusedImport
 from cing.Libs.forkoff import do_cmd
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqYasara import YASARA_STR
 from cing.Scripts.CombineRestraints import alterRestraintsForLeus
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
-import unittest
 
 # Import using optional plugins.
 try:
-    from cing.PluginCode.yasaraPlugin import yasaraShell #@UnusedImport needed to throw a ImportWarning so that test is handled properly.
     # A bit redundant with above line.
-    from cing.Scripts.rotateLeucines import * #@UnusedWildImport Relies on Yasara as well.
+    from cing.Scripts.rotateLeucines import *  #@UnusedWildImport Relies on Yasara as well.
 except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % (YASARA_STR, getCallerFileName()))
     raise SkipTest(YASARA_STR)
@@ -68,7 +69,7 @@ class AllChecks(TestCase):
         threshold = 0              # minimal violation, necessary to classify the restraints.
         deasHB = True              # first deassign all HBs in the specified leucines
         dihrCHI2 = True            # add a dihedral restraint on the leucines.
-        useAll = False             # DEFAULT: False. use all leucines regardless of state        
+        useAll = False             # DEFAULT: False. use all leucines regardless of state
         useLeuList = False         # If useAll is False and useLeuList is False then the leucines will be automatically detected
         doPrepCingProject = False   # DEFAULT: True  # NB If False this script will prefer a restore from the virgin .tgz
         doRunRotateLeucines = False # DEFAULT: True  # NB If False this script will prefer a restore from the virgin .tgz
@@ -80,7 +81,7 @@ class AllChecks(TestCase):
 #        elif entryId == '2loj':            # Commented out will lead to automatic detection.
 #            useLeuList = (('A', 50),('A', 61),)
         # end if
-        
+
         nTmessage("Starting %s" % getCallerName())
         nTmessage("entryId             %s" % entryId            )
         nTmessage("modelCount          %s" % modelCount         )
@@ -118,9 +119,9 @@ class AllChecks(TestCase):
             self.assertFalse(status)
         # end if
         # Restore the 2 projects. The first project will be modified based on the info in the second project.
-        proj1 = Project.open(entryId, status='old') # NB Will prefer a restore from the virgin .tgz 
+        proj1 = Project.open(entryId, status='old') # NB Will prefer a restore from the virgin .tgz
         proj2 = Project.open(entry2Id, status='old')
-        self.assertTrue(proj1 and proj2)            
+        self.assertTrue(proj1 and proj2)
         project = proj1
         #### BLOCK BEGIN repeated in rotateLeucines
         if not useAll and useLeuList:
@@ -128,7 +129,7 @@ class AllChecks(TestCase):
             if not leuList:
                 nTerror('Failed to decodeResidueList')
                 return True
-            # end if            
+            # end if
         else:
             leuList = selectBadLeucineList(project, CV_THRESHOLD_SELECTION, useAll=useAll)
         # end if
@@ -136,7 +137,7 @@ class AllChecks(TestCase):
             nTerror('Failed to selectBadLeucineList')
             return True
         # end if
-        #### BLOCK BEGIN                
+        #### BLOCK BEGIN
         status = alterRestraintsForLeus(leuList, proj1, proj2, threshold, deasHB, dihrCHI2)
         self.assertTrue(status)
         proj1.save()

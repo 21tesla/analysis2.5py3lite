@@ -1,7 +1,9 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
-from cing.core.classes import Project
 from shutil import rmtree
+
+from cing.core.classes import Project
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import *  #@UnusedWildImport
+
 
 def run():
     nTdebug("Remove previous project if present")
@@ -23,4 +25,4 @@ if __name__ == "__main__":
     n = '2kua'
     run()
 # end if
-    
+

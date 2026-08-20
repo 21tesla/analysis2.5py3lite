@@ -58,29 +58,22 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
-import ccp.api.molecule.MolStructure
-import ccp.api.molecule.MolSystem
-import ccp.api.nmr.NmrConstraint
 import memops.api.AccessControl
 import memops.api.Implementation
-import molsim.api.AnnealProtocol
-import molsim.api.Symmetry
 
 metaPackage = memops.api.Implementation.topPackage.metaObjFromQualName('utrecht.Haddock')
 
@@ -93,9 +86,9 @@ class Chain(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'chain', 'haddockPartner', 'parent', 'residues', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.Chain
@@ -137,7 +130,7 @@ class Chain(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -194,7 +187,7 @@ class Chain(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -220,13 +213,13 @@ class Chain(memops.api.Implementation.DataObject):
 
     residues = dataDict.get('residues').values()
     for residue in residues:
-      if (not (residue in objsToBeDeleted)):
+      if (residue not in objsToBeDeleted):
         objsToBeDeleted.add(residue)
         objsToBeChecked.append(residue)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.Chain:   deletes
@@ -237,11 +230,11 @@ class Chain(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     haddockPartner = dataDict.get('haddockPartner')
-    if (not (haddockPartner in objsToBeDeleted)):
+    if (haddockPartner not in objsToBeDeleted):
       objKey = dataDict.get('chain')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -253,7 +246,7 @@ class Chain(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.Chain
@@ -284,7 +277,7 @@ class Chain(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('haddockPartner')
         dd = value.__dict__.get('chains')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'haddockPartner' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -351,7 +344,7 @@ class Chain(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -359,7 +352,7 @@ class Chain(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -377,7 +370,7 @@ class Chain(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -394,7 +387,7 @@ class Chain(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: chain:
          Link chain between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -417,7 +410,7 @@ class Chain(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('chain')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: residues:
            non-reciprocal link residues from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -450,7 +443,7 @@ class Chain(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllResidues(self, **conditions):
     """
     FindAll for utrecht.Haddock.Chain.residues
@@ -464,7 +457,7 @@ class Chain(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('residues').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -475,28 +468,28 @@ class Chain(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -507,7 +500,7 @@ class Chain(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstResidue(self, **conditions):
     """
     FindFirst for utrecht.Haddock.Chain.residues
@@ -540,7 +533,7 @@ class Chain(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('residues').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -551,28 +544,28 @@ class Chain(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -581,7 +574,7 @@ class Chain(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.Chain
@@ -594,7 +587,7 @@ class Chain(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.Chain
@@ -641,7 +634,7 @@ class Chain(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getChain(self):
     """
     Get for utrecht.Haddock.Chain.chain
@@ -655,7 +648,7 @@ class Chain(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.Chain
@@ -675,7 +668,7 @@ class Chain(memops.api.Implementation.DataObject):
     result.append(dataDict.get('chain'))
 
     return result
-  
+
   def getHaddockPartner(self):
     """
     Get for utrecht.Haddock.Chain.haddockPartner
@@ -687,7 +680,7 @@ class Chain(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.Chain
@@ -701,7 +694,7 @@ class Chain(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.Chain.parent
@@ -711,7 +704,7 @@ class Chain(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getResidues(self):
     """
     Get for utrecht.Haddock.Chain.residues
@@ -724,7 +717,7 @@ class Chain(memops.api.Implementation.DataObject):
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newResidue(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.Residue
@@ -732,7 +725,7 @@ class Chain(memops.api.Implementation.DataObject):
     return Residue(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.Chain
@@ -743,7 +736,7 @@ class Chain(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setChain(self, value):
     """
     Set for utrecht.Haddock.Chain.chain
@@ -793,7 +786,7 @@ class Chain(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setChain:
          Link chain between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -803,14 +796,14 @@ class Chain(memops.api.Implementation.DataObject):
     dataDict['chain'] = value
 
     # doNotifies
-  
+
   def sortedResidues(self):
     """
     Sorted for utrecht.Haddock.Chain.residues
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('residues')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -839,19 +832,19 @@ class Chain(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   chain = property(getChain, setChain, None,
   r"""MolSystem.chain that corresponds to Haddock.Chain. Key for the object
   """)
-  
+
   haddockPartner = property(getHaddockPartner,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for haddockPartner
   """)
-  
+
   residues = property(getResidues,  None, None,
   r"""child link to class Residue
   """)
@@ -869,9 +862,9 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'code', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'value', 'access', 'activeAccess', 'haddockEnergyTerm', 'parent', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.EnergyTermParameter
@@ -913,7 +906,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -970,7 +963,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -996,7 +989,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.EnergyTermParameter:   deletes
@@ -1007,11 +1000,11 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     haddockEnergyTerm = dataDict.get('haddockEnergyTerm')
-    if (not (haddockEnergyTerm in objsToBeDeleted)):
+    if (haddockEnergyTerm not in objsToBeDeleted):
       objKey = dataDict.get('code')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -1023,14 +1016,14 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.EnergyTermParameter
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for utrecht.Haddock.EnergyTermParameter
@@ -1051,7 +1044,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('haddockEnergyTerm')
         dd = value.__dict__.get('energyTermParameters')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'haddockEnergyTerm' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1163,7 +1156,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1171,7 +1164,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1189,7 +1182,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1237,7 +1230,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.EnergyTermParameter
@@ -1250,7 +1243,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.EnergyTermParameter
@@ -1311,7 +1304,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for utrecht.Haddock.EnergyTermParameter.code
@@ -1323,7 +1316,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.EnergyTermParameter
@@ -1346,7 +1339,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     result.append(dataDict.get('code'))
 
     return result
-  
+
   def getHaddockEnergyTerm(self):
     """
     Get for utrecht.Haddock.EnergyTermParameter.haddockEnergyTerm
@@ -1358,7 +1351,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.EnergyTermParameter
@@ -1372,7 +1365,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.EnergyTermParameter.parent
@@ -1386,7 +1379,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getValue(self):
     """
     Get for utrecht.Haddock.EnergyTermParameter.value
@@ -1396,7 +1389,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.EnergyTermParameter
@@ -1407,7 +1400,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for utrecht.Haddock.EnergyTermParameter.code
@@ -1474,7 +1467,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setValue(self, value):
     """
     Set for utrecht.Haddock.EnergyTermParameter.value
@@ -1537,13 +1530,13 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setValue')
       if ll:
         for notify in ll:
@@ -1555,7 +1548,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Parameter name as defined in the program. Key for class
   """)
@@ -1573,7 +1566,7 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   value = property(getValue, setValue, None,
   r"""Value of parameter
   """)
@@ -1581,11 +1574,11 @@ class EnergyTermParameter(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   haddockEnergyTerm = property(getHaddockEnergyTerm,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for haddockEnergyTerm
   """)
@@ -1603,9 +1596,9 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'code', 'details', 'fieldNames', 'fileName', 'inConstructor', 'isDeleted', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'termId', 'access', 'activeAccess', 'constraintList', 'energyTerm', 'energyTermParameters', 'parent', 'root', 'run', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.HaddockEnergyTerm
@@ -1653,7 +1646,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1718,7 +1711,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1749,13 +1742,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
 
     energyTermParameters = dataDict.get('energyTermParameters').values()
     for energyTermParameter in energyTermParameters:
-      if (not (energyTermParameter in objsToBeDeleted)):
+      if (energyTermParameter not in objsToBeDeleted):
         objsToBeDeleted.add(energyTermParameter)
         objsToBeChecked.append(energyTermParameter)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.HaddockEnergyTerm:   deletes
@@ -1766,16 +1759,16 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     energyTerm = dataDict.get('energyTerm')
-    if (energyTerm is not None and not (energyTerm in objsToBeDeleted)):
+    if (energyTerm is not None and energyTerm not in objsToBeDeleted):
       haddockEnergyTerms = energyTerm.__dict__.get('haddockEnergyTerms')
       haddockEnergyTerms.remove(self)
 
     run = dataDict.get('run')
-    if (not (run in objsToBeDeleted)):
+    if (run not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('code')
       ll.append(objKey)
@@ -1795,7 +1788,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.HaddockEnergyTerm
@@ -1834,7 +1827,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('run')
         dd = value.__dict__.get('haddockEnergyTerms')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'run' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2020,7 +2013,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2028,7 +2021,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2046,7 +2039,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2065,7 +2058,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
         xx1 = dataDict.get('run')
         xx2 = xx1.__dict__.get('nmrConstraintStore')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx2 is yy1)):
+        if (xx2 is not yy1):
           raise ApiError("""%s.checkValid: constraintList:
            Link constraintList between objects from separate partitions
            - utrecht.Haddock.Run.nmrConstraintStore not set correctly""" % self.qualifiedName
@@ -2082,7 +2075,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
           )
 
         oldSelves = value.__dict__.get('haddockEnergyTerms')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: energyTerm:
            non-reciprocal link energyTerm from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2097,7 +2090,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('haddockEnergyTerm')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: energyTermParameters:
            non-reciprocal link energyTermParameters from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2148,7 +2141,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllEnergyTermParameters(self, **conditions):
     """
     FindAll for utrecht.Haddock.HaddockEnergyTerm.energyTermParameters
@@ -2162,7 +2155,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('energyTermParameters').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2173,28 +2166,28 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2205,7 +2198,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstEnergyTermParameter(self, **conditions):
     """
     FindFirst for utrecht.Haddock.HaddockEnergyTerm.energyTermParameters
@@ -2238,7 +2231,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('energyTermParameters').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2249,28 +2242,28 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2279,7 +2272,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.HaddockEnergyTerm
@@ -2292,7 +2285,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.HaddockEnergyTerm
@@ -2349,7 +2342,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.code
@@ -2357,7 +2350,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('code')
     return result
-  
+
   def getConstraintList(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.constraintList
@@ -2365,7 +2358,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('constraintList')
     return result
-  
+
   def getDetails(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.details
@@ -2373,7 +2366,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('details')
     return result
-  
+
   def getEnergyTerm(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.energyTerm
@@ -2381,7 +2374,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('energyTerm')
     return result
-  
+
   def getEnergyTermParameters(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.energyTermParameters
@@ -2394,7 +2387,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFileName(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.fileName
@@ -2402,7 +2395,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('fileName')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.HaddockEnergyTerm
@@ -2427,7 +2420,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.HaddockEnergyTerm
@@ -2445,7 +2438,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.name
@@ -2457,7 +2450,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.parent
@@ -2469,7 +2462,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRun(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.run
@@ -2477,7 +2470,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('run')
     return result
-  
+
   def getTermId(self):
     """
     Get for utrecht.Haddock.HaddockEnergyTerm.termId
@@ -2487,7 +2480,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newEnergyTermParameter(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.EnergyTermParameter
@@ -2495,7 +2488,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     return EnergyTermParameter(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.HaddockEnergyTerm
@@ -2506,7 +2499,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCode(self, value):
     """
     Set for utrecht.Haddock.HaddockEnergyTerm.code
@@ -2573,7 +2566,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setConstraintList(self, value):
     """
     Set for utrecht.Haddock.HaddockEnergyTerm.constraintList
@@ -2622,7 +2615,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
         xx1 = dataDict.get('run')
         xx2 = xx1.__dict__.get('nmrConstraintStore')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx2 is yy1)):
+        if (xx2 is not yy1):
           raise ApiError("""%s.setConstraintList:
            Link constraintList between objects from separate partitions
            - utrecht.Haddock.Run.nmrConstraintStore not set correctly""" % self.qualifiedName
@@ -2637,13 +2630,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setConstraintList')
       if ll:
         for notify in ll:
@@ -2712,13 +2705,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -2787,7 +2780,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
         xx1 = dataDict.get('run')
         xx2 = xx1.__dict__.get('annealProtocol')
         yy1 = value.__dict__.get('annealProtocol')
-        if (not (xx2 is yy1)):
+        if (xx2 is not yy1):
           raise ApiError("""%s.setEnergyTerm:
            Link energyTerm between objects from separate partitions
            - utrecht.Haddock.Run.annealProtocol not set correctly""" % self.qualifiedName
@@ -2816,13 +2809,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setEnergyTerm')
       if ll:
         for notify in ll:
@@ -2890,13 +2883,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFileName')
       if ll:
         for notify in ll:
@@ -2971,13 +2964,13 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -3039,14 +3032,14 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict['termId'] = value
 
     # doNotifies
-  
+
   def sortedEnergyTermParameters(self):
     """
     Sorted for utrecht.Haddock.HaddockEnergyTerm.energyTermParameters
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('energyTermParameters')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -3057,18 +3050,18 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Code for potential term. Part of class key. Should probably be made into 
   an enumerated data type.
   """)
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   fileName = property(getFileName, setFileName, None,
   r"""name of input file (non-CCPN)
   """)
@@ -3078,7 +3071,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""User-intelligible name for Energy Term
   """)
@@ -3088,7 +3081,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   termId = property(getTermId, setTermId, None,
   r"""Index of Energy term - distinguishes betweem different terms with the 
   same code. Part of the class key
@@ -3097,25 +3090,25 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   constraintList = property(getConstraintList, setConstraintList, None,
   r"""ccp NmrConstraint.ConstraintList associated with HaddockConstraintList
   """)
-  
+
   energyTerm = property(getEnergyTerm, setEnergyTerm, None,
   r"""AnnealProtocol EnergyTerm used.
   """)
-  
+
   energyTermParameters = property(getEnergyTermParameters,  None, None,
   r"""child link to class EnergyTermParameter
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for run
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   run = property(getRun,  None, None,
   r"""parent link
   """)
@@ -3131,9 +3124,9 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('airUpperDistanceLimit', 'applicationData', 'autoHistidinePstate', 'className', 'code', 'fieldNames', 'fileNames', 'forceFieldCode', 'inConstructor', 'isDeleted', 'isDna', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'semiFlexMode', 'access', 'activeAccess', 'chains', 'haddockProject', 'molSystem', 'parent', 'root', 'structureEnsemble', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.HaddockPartner
@@ -3185,7 +3178,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3242,7 +3235,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3268,13 +3261,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
     chains = dataDict.get('chains').values()
     for chain in chains:
-      if (not (chain in objsToBeDeleted)):
+      if (chain not in objsToBeDeleted):
         objsToBeDeleted.add(chain)
         objsToBeChecked.append(chain)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.HaddockPartner:   deletes
@@ -3285,11 +3278,11 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     haddockProject = dataDict.get('haddockProject')
-    if (not (haddockProject in objsToBeDeleted)):
+    if (haddockProject not in objsToBeDeleted):
       objKey = dataDict.get('code')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3301,7 +3294,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addFileName(self, value):
     """
     Add for utrecht.Haddock.HaddockPartner.fileNames
@@ -3359,13 +3352,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addFileName')
       if ll:
         for notify in ll:
@@ -3402,7 +3395,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('haddockProject')
         dd = value.__dict__.get('haddockPartners')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'haddockProject' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3445,7 +3438,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
           )
 
       value = dataDict.get('autoHistidinePstate')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: autoHistidinePstate:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3502,7 +3495,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
           )
 
       value = dataDict.get('forceFieldCode')
-      if (not (value in ['TOPALLHDG', 'DNA', 'RNA'])):
+      if (value not in ['TOPALLHDG', 'DNA', 'RNA']):
         raise ApiError("""%s.checkValid: forceFieldCode:
          utrecht.Haddock.ForceFieldCode input is not in enumeration ['TOPALLHDG', 'DNA', 'RNA']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3515,7 +3508,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('isDna')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isDna:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3556,7 +3549,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('semiFlexMode')
-      if (not (value in ['manual', 'automatic'])):
+      if (value not in ['manual', 'automatic']):
         raise ApiError("""%s.checkValid: semiFlexMode:
          utrecht.Haddock.SemiFlexMode input is not in enumeration ['manual', 'automatic']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3582,7 +3575,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3590,7 +3583,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3608,7 +3601,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3624,7 +3617,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('haddockPartner')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: chains:
            non-reciprocal link chains from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3647,7 +3640,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: molSystem:
          Link molSystem between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3665,7 +3658,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: structureEnsemble:
            Link structureEnsemble between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3740,7 +3733,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
     value = dataDict.get('structureEnsemble')
     if (value is not None):
-      if (not (value.molSystem is self.molSystem)):
+      if (value.molSystem is not self.molSystem):
         raise ApiError("""%s.checkValid: structureEnsemble:
          structureEnsemble constraint value_MolSystem_is_selfMolSystem violated by value""" % self.qualifiedName
          + ": %s" % (value,)
@@ -3749,7 +3742,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllChains(self, **conditions):
     """
     FindAll for utrecht.Haddock.HaddockPartner.chains
@@ -3763,7 +3756,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('chains').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3774,28 +3767,28 @@ class HaddockPartner(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3806,7 +3799,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstChain(self, **conditions):
     """
     FindFirst for utrecht.Haddock.HaddockPartner.chains
@@ -3839,7 +3832,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('chains').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3850,28 +3843,28 @@ class HaddockPartner(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3880,7 +3873,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.HaddockPartner
@@ -3891,7 +3884,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAirUpperDistanceLimit(self):
     """
     Get for utrecht.Haddock.HaddockPartner.airUpperDistanceLimit
@@ -3901,7 +3894,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getAutoHistidinePstate(self):
     """
     Get for utrecht.Haddock.HaddockPartner.autoHistidinePstate
@@ -3909,7 +3902,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('autoHistidinePstate')
     return result
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.HaddockPartner
@@ -3952,7 +3945,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getChains(self):
     """
     Get for utrecht.Haddock.HaddockPartner.chains
@@ -3963,7 +3956,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return result
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCode(self):
     """
     Get for utrecht.Haddock.HaddockPartner.code
@@ -3975,7 +3968,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFileNames(self):
     """
     Get for utrecht.Haddock.HaddockPartner.fileNames
@@ -3984,7 +3977,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('fileNames')
     result = tuple(tempVar)
     return result
-  
+
   def getForceFieldCode(self):
     """
     Get for utrecht.Haddock.HaddockPartner.forceFieldCode
@@ -3992,7 +3985,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('forceFieldCode')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.HaddockPartner
@@ -4010,7 +4003,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     result.append(dataDict.get('code'))
 
     return result
-  
+
   def getHaddockProject(self):
     """
     Get for utrecht.Haddock.HaddockPartner.haddockProject
@@ -4022,7 +4015,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getIsDna(self):
     """
     Get for utrecht.Haddock.HaddockPartner.isDna
@@ -4030,7 +4023,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('isDna')
     return result
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.HaddockPartner
@@ -4040,7 +4033,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getMolSystem(self):
     """
     Get for utrecht.Haddock.HaddockPartner.molSystem
@@ -4052,7 +4045,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.HaddockPartner.parent
@@ -4064,7 +4057,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSemiFlexMode(self):
     """
     Get for utrecht.Haddock.HaddockPartner.semiFlexMode
@@ -4072,7 +4065,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('semiFlexMode')
     return result
-  
+
   def getStructureEnsemble(self):
     """
     Get for utrecht.Haddock.HaddockPartner.structureEnsemble
@@ -4082,7 +4075,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newChain(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.Chain
@@ -4090,7 +4083,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     return Chain(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeFileName(self, value):
     """
     Remove for utrecht.Haddock.HaddockPartner.fileNames
@@ -4137,7 +4130,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
        called on deleted object""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeFileName:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -4154,13 +4147,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeFileName')
       if ll:
         for notify in ll:
@@ -4175,7 +4168,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setAirUpperDistanceLimit(self, value):
     """
     Set for utrecht.Haddock.HaddockPartner.airUpperDistanceLimit
@@ -4244,13 +4237,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAirUpperDistanceLimit')
       if ll:
         for notify in ll:
@@ -4258,13 +4251,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
             notify(self)
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setAutoHistidinePstate(self, value):
     """
     Set for utrecht.Haddock.HaddockPartner.autoHistidinePstate
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setAutoHistidinePstate:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -4311,13 +4304,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAutoHistidinePstate')
       if ll:
         for notify in ll:
@@ -4390,7 +4383,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict['code'] = value
 
     # doNotifies
-  
+
   def setFileNames(self, values):
     """
     Set for utrecht.Haddock.HaddockPartner.fileNames
@@ -4453,13 +4446,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFileNames')
       if ll:
         for notify in ll:
@@ -4471,7 +4464,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.HaddockPartner.forceFieldCode
     """
     dataDict = self.__dict__
-    if (not (value in ['TOPALLHDG', 'DNA', 'RNA'])):
+    if (value not in ['TOPALLHDG', 'DNA', 'RNA']):
       raise ApiError("""%s.setForceFieldCode:
        utrecht.Haddock.ForceFieldCode input is not in enumeration ['TOPALLHDG', 'DNA', 'RNA']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -4524,13 +4517,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setForceFieldCode')
       if ll:
         for notify in ll:
@@ -4542,7 +4535,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.HaddockPartner.isDna
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setIsDna:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -4589,13 +4582,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setIsDna')
       if ll:
         for notify in ll:
@@ -4653,7 +4646,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setMolSystem:
          Link molSystem between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4668,13 +4661,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setMolSystem')
       if ll:
         for notify in ll:
@@ -4686,7 +4679,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.HaddockPartner.semiFlexMode
     """
     dataDict = self.__dict__
-    if (not (value in ['manual', 'automatic'])):
+    if (value not in ['manual', 'automatic']):
       raise ApiError("""%s.setSemiFlexMode:
        utrecht.Haddock.SemiFlexMode input is not in enumeration ['manual', 'automatic']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -4739,13 +4732,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSemiFlexMode')
       if ll:
         for notify in ll:
@@ -4799,7 +4792,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setStructureEnsemble:
            Link structureEnsemble between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4808,7 +4801,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
       if (notInConstructor):
         if (value is not None):
-          if (not (value.molSystem is self.molSystem)):
+          if (value.molSystem is not self.molSystem):
             raise ApiError("""%s.setStructureEnsemble:
              structureEnsemble constraint value_MolSystem_is_selfMolSystem violated by value""" % self.qualifiedName
              + ": %s" % (value,)
@@ -4822,13 +4815,13 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setStructureEnsemble')
       if ll:
         for notify in ll:
@@ -4841,38 +4834,38 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('chains')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
 
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
-  
+
   airUpperDistanceLimit = property(getAirUpperDistanceLimit, setAirUpperDistanceLimit, None,
   r"""Sets the upper distance cutoff for Ambiguous Interaction
   """)
 
   applicationData = memops.api.Implementation.DataObject.applicationData
-  
+
   autoHistidinePstate = property(getAutoHistidinePstate, setAutoHistidinePstate, None,
   r"""auto_his - automatically determine histidine protonation state.
   """)
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   code = property(getCode, setCode, None,
   r"""Haddock ChainCode
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   fileNames = property(getFileNames, setFileNames, None,
   r"""Names of files containing ensemble structures.
   NB Classic case only. 
   Obsolescent.
   """)
-  
+
   forceFieldCode = property(getForceFieldCode, setForceFieldCode, None,
   r"""Code for force field usedfor HaddockPartner
   """)
@@ -4880,7 +4873,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   isDna = property(getIsDna, setIsDna, None,
   r"""
   """)
@@ -4892,7 +4885,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   semiFlexMode = property(getSemiFlexMode, setSemiFlexMode, None,
   r"""Either set the semi-flexible residues manually or have  
   them defined 
@@ -4904,25 +4897,25 @@ class HaddockPartner(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   chains = property(getChains,  None, None,
   r"""child link to class Chain
   """)
-  
+
   haddockProject = property(getHaddockProject,  None, None,
   r"""parent link
   """)
-  
+
   molSystem = property(getMolSystem, setMolSystem, None,
   r"""MolSystem that HaddockPartner belongs to
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for haddockProject
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   structureEnsemble = property(getStructureEnsemble, setStructureEnsemble, None,
   r"""StructureEnsemble used for Haddock simulations for partner
   """)
@@ -4938,9 +4931,9 @@ class HaddockProject(memops.api.Implementation.TopObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'createdBy', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'workingDir', 'access', 'activeAccess', 'activeRepositories', 'haddockPartners', 'memopsRoot', 'packageLocator', 'parent', 'root', 'runs', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.HaddockProject
@@ -4998,7 +4991,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -5079,7 +5072,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -5108,7 +5101,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
     haddockPartners = dataDict.get('haddockPartners').values()
     for haddockPartner in haddockPartners:
-      if (not (haddockPartner in objsToBeDeleted)):
+      if (haddockPartner not in objsToBeDeleted):
         objsToBeDeleted.add(haddockPartner)
         objsToBeChecked.append(haddockPartner)
 
@@ -5119,13 +5112,13 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
     runs = dataDict.get('runs').values()
     for run in runs:
-      if (not (run in objsToBeDeleted)):
+      if (run not in objsToBeDeleted):
         objsToBeDeleted.add(run)
         objsToBeChecked.append(run)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.HaddockProject:   deletes
@@ -5140,11 +5133,11 @@ class HaddockProject(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentHaddockProject'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -5161,7 +5154,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.HaddockProject
@@ -5199,7 +5192,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('haddockProjects')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5297,7 +5290,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -5429,7 +5422,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5437,7 +5430,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5455,7 +5448,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5471,7 +5464,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('haddockProject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: haddockPartners:
            non-reciprocal link haddockPartners from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5501,7 +5494,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -5517,7 +5510,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('haddockProject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: runs:
            non-reciprocal link runs from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -5583,7 +5576,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllHaddockPartners(self, **conditions):
     """
     FindAll for utrecht.Haddock.HaddockProject.haddockPartners
@@ -5603,7 +5596,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('haddockPartners').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5614,28 +5607,28 @@ class HaddockProject(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5644,7 +5637,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllRuns(self, **conditions):
     """
     FindAll for utrecht.Haddock.HaddockProject.runs
@@ -5664,7 +5657,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('runs').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5675,28 +5668,28 @@ class HaddockProject(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5709,7 +5702,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstHaddockPartner(self, **conditions):
     """
     FindFirst for utrecht.Haddock.HaddockProject.haddockPartners
@@ -5751,7 +5744,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('haddockPartners').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5762,28 +5755,28 @@ class HaddockProject(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5792,7 +5785,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstRun(self, **conditions):
     """
     FindFirst for utrecht.Haddock.HaddockProject.runs
@@ -5834,7 +5827,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('runs').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -5845,28 +5838,28 @@ class HaddockProject(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -5875,7 +5868,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.HaddockProject
@@ -5890,7 +5883,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.HaddockProject
@@ -5923,7 +5916,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.HaddockProject
@@ -5939,7 +5932,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     return result
 
   getGuid = memops.api.Implementation.TopObject.getGuid
-  
+
   def getHaddockPartners(self):
     """
     Get for utrecht.Haddock.HaddockProject.haddockPartners
@@ -5965,7 +5958,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.HaddockProject
@@ -5973,7 +5966,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for utrecht.Haddock.HaddockProject.memopsRoot
@@ -5983,7 +5976,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for utrecht.Haddock.HaddockProject.name
@@ -5997,7 +5990,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.HaddockProject.parent
@@ -6009,7 +6002,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRuns(self):
     """
     Get for utrecht.Haddock.HaddockProject.runs
@@ -6023,7 +6016,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWorkingDir(self):
     """
     Get for utrecht.Haddock.HaddockProject.workingDir
@@ -6035,13 +6028,13 @@ class HaddockProject(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newHaddockPartner(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.HaddockPartner
     """
     return HaddockPartner(self, **attrlinks)
-  
+
   def newRun(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.Run
@@ -6057,7 +6050,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.HaddockProject
@@ -6076,7 +6069,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setName(self, value):
     """
     Set for utrecht.Haddock.HaddockProject.name
@@ -6146,7 +6139,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def setWorkingDir(self, value):
     """
     Set for utrecht.Haddock.HaddockProject.workingDir
@@ -6216,13 +6209,13 @@ class HaddockProject(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWorkingDir')
       if ll:
         for notify in ll:
@@ -6238,12 +6231,12 @@ class HaddockProject(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('haddockPartners')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedRuns(self):
     """
     Sorted for utrecht.Haddock.HaddockProject.runs
@@ -6253,7 +6246,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('runs')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -6288,7 +6281,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""name of project serves as identifier
   """)
@@ -6298,7 +6291,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   workingDir = property(getWorkingDir, setWorkingDir, None,
   r"""Working directory where all project files are found.
   NB Classic only.
@@ -6309,23 +6302,23 @@ class HaddockProject(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   haddockPartners = property(getHaddockPartners,  None, None,
   r"""child link to class HaddockPartner
   """)
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   runs = property(getRuns,  None, None,
   r"""child link to class Run
   """)
@@ -6341,9 +6334,9 @@ class Residue(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'flexibility', 'haddockSeqId', 'inConstructor', 'interaction', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'chain', 'parent', 'residue', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.Residue
@@ -6387,7 +6380,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -6444,7 +6437,7 @@ class Residue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -6470,7 +6463,7 @@ class Residue(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.Residue:   deletes
@@ -6481,11 +6474,11 @@ class Residue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     chain = dataDict.get('chain')
-    if (not (chain in objsToBeDeleted)):
+    if (chain not in objsToBeDeleted):
       objKey = dataDict.get('residue')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -6497,14 +6490,14 @@ class Residue(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.Residue
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for utrecht.Haddock.Residue
@@ -6525,7 +6518,7 @@ class Residue(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('chain')
         dd = value.__dict__.get('residues')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'chain' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6545,7 +6538,7 @@ class Residue(memops.api.Implementation.DataObject):
           )
 
       value = dataDict.get('flexibility')
-      if (not (value in ['semi', 'full', 'none'])):
+      if (value not in ['semi', 'full', 'none']):
         raise ApiError("""%s.checkValid: flexibility:
          utrecht.Haddock.ResidueFlexibility input is not in enumeration ['semi', 'full', 'none']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -6569,7 +6562,7 @@ class Residue(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('interaction')
-      if (not (value in ['active', 'passive', 'none'])):
+      if (value not in ['active', 'passive', 'none']):
         raise ApiError("""%s.checkValid: interaction:
          utrecht.Haddock.HaddockInteraction input is not in enumeration ['active', 'passive', 'none']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -6629,7 +6622,7 @@ class Residue(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6637,7 +6630,7 @@ class Residue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6655,7 +6648,7 @@ class Residue(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6680,7 +6673,7 @@ class Residue(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('chain')
       xx2 = xx1.__dict__.get('chain')
       yy1 = value.__dict__.get('chain')
-      if (not (xx2 is yy1)):
+      if (xx2 is not yy1):
         raise ApiError("""%s.checkValid: residue:
          Link residue between objects from separate partitions
          - utrecht.Haddock.Chain.chain not set correctly""" % self.qualifiedName
@@ -6735,7 +6728,7 @@ class Residue(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.Residue
@@ -6748,7 +6741,7 @@ class Residue(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.Residue
@@ -6799,7 +6792,7 @@ class Residue(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getChain(self):
     """
     Get for utrecht.Haddock.Residue.chain
@@ -6813,7 +6806,7 @@ class Residue(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFlexibility(self):
     """
     Get for utrecht.Haddock.Residue.flexibility
@@ -6821,7 +6814,7 @@ class Residue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('flexibility')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.Residue
@@ -6843,7 +6836,7 @@ class Residue(memops.api.Implementation.DataObject):
     result.append(dataDict.get('residue'))
 
     return result
-  
+
   def getHaddockSeqId(self):
     """
     Get for utrecht.Haddock.Residue.haddockSeqId
@@ -6853,7 +6846,7 @@ class Residue(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInteraction(self):
     """
     Get for utrecht.Haddock.Residue.interaction
@@ -6863,7 +6856,7 @@ class Residue(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.Residue
@@ -6877,7 +6870,7 @@ class Residue(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.Residue.parent
@@ -6887,7 +6880,7 @@ class Residue(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getResidue(self):
     """
     Get for utrecht.Haddock.Residue.residue
@@ -6901,7 +6894,7 @@ class Residue(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.Residue
@@ -6912,13 +6905,13 @@ class Residue(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setFlexibility(self, value):
     """
     Set for utrecht.Haddock.Residue.flexibility
     """
     dataDict = self.__dict__
-    if (not (value in ['semi', 'full', 'none'])):
+    if (value not in ['semi', 'full', 'none']):
       raise ApiError("""%s.setFlexibility:
        utrecht.Haddock.ResidueFlexibility input is not in enumeration ['semi', 'full', 'none']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -6971,13 +6964,13 @@ class Residue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setFlexibility')
       if ll:
         for notify in ll:
@@ -7040,13 +7033,13 @@ class Residue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHaddockSeqId')
       if ll:
         for notify in ll:
@@ -7058,7 +7051,7 @@ class Residue(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Residue.interaction
     """
     dataDict = self.__dict__
-    if (not (value in ['active', 'passive', 'none'])):
+    if (value not in ['active', 'passive', 'none']):
       raise ApiError("""%s.setInteraction:
        utrecht.Haddock.HaddockInteraction input is not in enumeration ['active', 'passive', 'none']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -7111,13 +7104,13 @@ class Residue(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInteraction')
       if ll:
         for notify in ll:
@@ -7174,7 +7167,7 @@ class Residue(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('chain')
       xx2 = xx1.__dict__.get('chain')
       yy1 = value.__dict__.get('chain')
-      if (not (xx2 is yy1)):
+      if (xx2 is not yy1):
         raise ApiError("""%s.setResidue:
          Link residue between objects from separate partitions
          - utrecht.Haddock.Chain.chain not set correctly""" % self.qualifiedName
@@ -7192,18 +7185,18 @@ class Residue(memops.api.Implementation.DataObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   flexibility = property(getFlexibility, setFlexibility, None,
   r"""Residue flexibility during Haddock run
   """)
-  
+
   haddockSeqId = property(getHaddockSeqId, setHaddockSeqId, None,
   r"""HAddock seq Id - giving residue number in the Haddock system consisting 
   of a single (virtual) chain.
   """)
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   interaction = property(getInteraction, setInteraction, None,
   r"""Residue behaviour as a Haddock restraint. Either active, passive, or 
   none.
@@ -7222,15 +7215,15 @@ class Residue(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   chain = property(getChain,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for chain
   """)
-  
+
   residue = property(getResidue, setResidue, None,
   r"""MolSystem.Residue corresponding to Haddock.Residue
   """)
@@ -7248,9 +7241,9 @@ class Run(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'applicationData', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'className', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'fieldNames', 'haddockDir', 'inConstructor', 'initialRigidBodyMinim', 'isDeleted', 'metaclass', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'packageName', 'packageShortName', 'qualifiedName', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'activeAccess', 'annealProtocol', 'haddockEnergyTerms', 'haddockProject', 'nmrConstraintStore', 'parent', 'root', 'scoringWeights', 'symmetryRestraints', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.Run
@@ -7353,7 +7346,7 @@ class Run(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -7421,7 +7414,7 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -7452,13 +7445,13 @@ class Run(memops.api.Implementation.DataObject):
 
     haddockEnergyTerms = dataDict.get('haddockEnergyTerms').values()
     for haddockEnergyTerm in haddockEnergyTerms:
-      if (not (haddockEnergyTerm in objsToBeDeleted)):
+      if (haddockEnergyTerm not in objsToBeDeleted):
         objsToBeDeleted.add(haddockEnergyTerm)
         objsToBeChecked.append(haddockEnergyTerm)
 
     scoringWeights = dataDict.get('scoringWeights').values()
     for scoringWeight in scoringWeights:
-      if (not (scoringWeight in objsToBeDeleted)):
+      if (scoringWeight not in objsToBeDeleted):
         objsToBeDeleted.add(scoringWeight)
         objsToBeChecked.append(scoringWeight)
 
@@ -7470,7 +7463,7 @@ class Run(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.Run:   deletes objects
@@ -7480,21 +7473,21 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     annealProtocol = dataDict.get('annealProtocol')
-    if (annealProtocol is not None and not (annealProtocol in objsToBeDeleted)):
+    if (annealProtocol is not None and annealProtocol not in objsToBeDeleted):
       haddockRuns = annealProtocol.__dict__.get('haddockRuns')
       haddockRuns.remove(self)
 
     for symmetryRestraint in dataDict.get('symmetryRestraints'):
-      if (not (symmetryRestraint in objsToBeDeleted)):
+      if (symmetryRestraint not in objsToBeDeleted):
         haddockRuns = symmetryRestraint.__dict__.get('haddockRuns')
         haddockRuns.remove(self)
 
     haddockProject = dataDict.get('haddockProject')
-    if (not (haddockProject in objsToBeDeleted)):
+    if (haddockProject not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -7506,7 +7499,7 @@ class Run(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addSymmetryRestraint(self, value):
     """
     Add for utrecht.Haddock.Run.symmetryRestraints
@@ -7563,7 +7556,7 @@ class Run(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.addSymmetryRestraint:
            Link symmetryRestraints between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -7580,13 +7573,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addSymmetryRestraint')
       if ll:
         for notify in ll:
@@ -7627,7 +7620,7 @@ class Run(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('haddockProject')
         dd = value.__dict__.get('runs')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'haddockProject' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -7733,7 +7726,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
       value = dataDict.get('calcDesolvation')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: calcDesolvation:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -7763,7 +7756,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('centerOfMassRestraints')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: centerOfMassRestraints:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -7808,7 +7801,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('dielectricType')
-      if (not (value in ['cdie', 'rdie'])):
+      if (value not in ['cdie', 'rdie']):
         raise ApiError("""%s.checkValid: dielectricType:
          utrecht.Haddock.DielectricType input is not in enumeration ['cdie', 'rdie']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -7821,56 +7814,56 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('doAirScaling')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doAirScaling:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doIncludeDihEnergy')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doIncludeDihEnergy:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doRigidBodyElectrostatics')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doRigidBodyElectrostatics:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doRigidBodyWaterTrans')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doRigidBodyWaterTrans:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doRigidTranslations')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doRigidTranslations:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doSAElectrostatics')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doSAElectrostatics:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doWaterAnalysis')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doWaterAnalysis:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('doWaterDock')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: doWaterDock:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -7915,7 +7908,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('initialRigidBodyMinim')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: initialRigidBodyMinim:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -7956,7 +7949,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('nonBondedType')
-      if (not (value in ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG'])):
+      if (value not in ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG']):
         raise ApiError("""%s.checkValid: nonBondedType:
          utrecht.Haddock.NonBondedType input is not in enumeration ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8150,14 +8143,14 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('radomizeStartOriention')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: radomizeStartOriention:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('randomAmbigRestraints')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: randomAmbigRestraints:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8175,7 +8168,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('randomExcludeAir')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: randomExcludeAir:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8193,7 +8186,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('removeNonPolarH')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: removeNonPolarH:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8217,14 +8210,14 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('rotate180It0')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: rotate180It0:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('rotate180It1')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: rotate180It1:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8265,7 +8258,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('solvent')
-      if (not (value in ['water', 'dmso'])):
+      if (value not in ['water', 'dmso']):
         raise ApiError("""%s.checkValid: solvent:
          utrecht.Haddock.Solvent input is not in enumeration ['water', 'dmso']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8301,7 +8294,7 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('surfaceContactRestraints')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: surfaceContactRestraints:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8325,21 +8318,21 @@ class Run(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('useDbSolvateMethod')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: useDbSolvateMethod:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('useDnaRestraints')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: useDnaRestraints:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
         )
 
       value = dataDict.get('useHBondRestraints')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: useHBondRestraints:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -8509,7 +8502,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8517,7 +8510,7 @@ class Run(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8535,7 +8528,7 @@ class Run(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8552,7 +8545,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
         oldSelves = value.__dict__.get('haddockRuns')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: annealProtocol:
            non-reciprocal link annealProtocol from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8567,7 +8560,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('run')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: haddockEnergyTerms:
            non-reciprocal link haddockEnergyTerms from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8591,7 +8584,7 @@ class Run(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: nmrConstraintStore:
            Link nmrConstraintStore between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -8607,7 +8600,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('run')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: scoringWeights:
            non-reciprocal link scoringWeights from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -8623,7 +8616,7 @@ class Run(memops.api.Implementation.DataObject):
           )
 
         oldSelves = value.__dict__.get('haddockRuns')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: symmetryRestraints:
            non-reciprocal link symmetryRestraints from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -9038,7 +9031,7 @@ class Run(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllHaddockEnergyTerms(self, **conditions):
     """
     FindAll for utrecht.Haddock.Run.haddockEnergyTerms
@@ -9052,7 +9045,7 @@ class Run(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('haddockEnergyTerms').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9063,28 +9056,28 @@ class Run(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9093,7 +9086,7 @@ class Run(memops.api.Implementation.DataObject):
             result.add(v)
 
     return result
-  
+
   def findAllScoringWeights(self, **conditions):
     """
     FindAll for utrecht.Haddock.Run.scoringWeights
@@ -9107,7 +9100,7 @@ class Run(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('scoringWeights').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9118,28 +9111,28 @@ class Run(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9148,7 +9141,7 @@ class Run(memops.api.Implementation.DataObject):
             result.add(v)
 
     return result
-  
+
   def findAllSymmetryRestraints(self, **conditions):
     """
     FindAll for utrecht.Haddock.Run.symmetryRestraints
@@ -9162,7 +9155,7 @@ class Run(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('symmetryRestraints')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9173,28 +9166,28 @@ class Run(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9205,7 +9198,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstHaddockEnergyTerm(self, **conditions):
     """
     FindFirst for utrecht.Haddock.Run.haddockEnergyTerms
@@ -9246,7 +9239,7 @@ class Run(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('haddockEnergyTerms').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9257,28 +9250,28 @@ class Run(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9287,7 +9280,7 @@ class Run(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def findFirstScoringWeight(self, **conditions):
     """
     FindFirst for utrecht.Haddock.Run.scoringWeights
@@ -9328,7 +9321,7 @@ class Run(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('scoringWeights').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9339,28 +9332,28 @@ class Run(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9369,7 +9362,7 @@ class Run(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def findFirstSymmetryRestraint(self, **conditions):
     """
     FindFirst for utrecht.Haddock.Run.symmetryRestraints
@@ -9386,7 +9379,7 @@ class Run(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('symmetryRestraints')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -9397,28 +9390,28 @@ class Run(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -9427,7 +9420,7 @@ class Run(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.Run
@@ -9438,7 +9431,7 @@ class Run(memops.api.Implementation.DataObject):
   getAccess = memops.api.Implementation.DataObject.getAccess
 
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
-  
+
   def getAnalysisClustRmsd(self):
     """
     Get for utrecht.Haddock.Run.analysisClustRmsd
@@ -9446,7 +9439,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('analysisClustRmsd')
     return result
-  
+
   def getAnalysisClustSize(self):
     """
     Get for utrecht.Haddock.Run.analysisClustSize
@@ -9454,7 +9447,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('analysisClustSize')
     return result
-  
+
   def getAnalysisDistHBond(self):
     """
     Get for utrecht.Haddock.Run.analysisDistHBond
@@ -9462,7 +9455,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('analysisDistHBond')
     return result
-  
+
   def getAnalysisDistNonbond(self):
     """
     Get for utrecht.Haddock.Run.analysisDistNonbond
@@ -9470,7 +9463,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('analysisDistNonbond')
     return result
-  
+
   def getAnnealProtocol(self):
     """
     Get for utrecht.Haddock.Run.annealProtocol
@@ -9480,7 +9473,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.Run
@@ -9523,7 +9516,7 @@ class Run(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getCalcDesolvation(self):
     """
     Get for utrecht.Haddock.Run.calcDesolvation
@@ -9531,7 +9524,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('calcDesolvation')
     return result
-  
+
   def getCenterOfMassConstant(self):
     """
     Get for utrecht.Haddock.Run.centerOfMassConstant
@@ -9539,7 +9532,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('centerOfMassConstant')
     return result
-  
+
   def getCenterOfMassRestraints(self):
     """
     Get for utrecht.Haddock.Run.centerOfMassRestraints
@@ -9549,7 +9542,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCnsExecutable(self):
     """
     Get for utrecht.Haddock.Run.cnsExecutable
@@ -9557,7 +9550,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('cnsExecutable')
     return result
-  
+
   def getCpuNumber(self):
     """
     Get for utrecht.Haddock.Run.cpuNumber
@@ -9565,7 +9558,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('cpuNumber')
     return result
-  
+
   def getDielectricType(self):
     """
     Get for utrecht.Haddock.Run.dielectricType
@@ -9573,7 +9566,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('dielectricType')
     return result
-  
+
   def getDoAirScaling(self):
     """
     Get for utrecht.Haddock.Run.doAirScaling
@@ -9581,7 +9574,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doAirScaling')
     return result
-  
+
   def getDoIncludeDihEnergy(self):
     """
     Get for utrecht.Haddock.Run.doIncludeDihEnergy
@@ -9589,7 +9582,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doIncludeDihEnergy')
     return result
-  
+
   def getDoRigidBodyElectrostatics(self):
     """
     Get for utrecht.Haddock.Run.doRigidBodyElectrostatics
@@ -9597,7 +9590,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doRigidBodyElectrostatics')
     return result
-  
+
   def getDoRigidBodyWaterTrans(self):
     """
     Get for utrecht.Haddock.Run.doRigidBodyWaterTrans
@@ -9605,7 +9598,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doRigidBodyWaterTrans')
     return result
-  
+
   def getDoRigidTranslations(self):
     """
     Get for utrecht.Haddock.Run.doRigidTranslations
@@ -9613,7 +9606,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doRigidTranslations')
     return result
-  
+
   def getDoSAElectrostatics(self):
     """
     Get for utrecht.Haddock.Run.doSAElectrostatics
@@ -9621,7 +9614,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doSAElectrostatics')
     return result
-  
+
   def getDoWaterAnalysis(self):
     """
     Get for utrecht.Haddock.Run.doWaterAnalysis
@@ -9629,7 +9622,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doWaterAnalysis')
     return result
-  
+
   def getDoWaterDock(self):
     """
     Get for utrecht.Haddock.Run.doWaterDock
@@ -9637,7 +9630,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('doWaterDock')
     return result
-  
+
   def getEpsilon(self):
     """
     Get for utrecht.Haddock.Run.epsilon
@@ -9649,7 +9642,7 @@ class Run(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.Run
@@ -9667,7 +9660,7 @@ class Run(memops.api.Implementation.DataObject):
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getHaddockDir(self):
     """
     Get for utrecht.Haddock.Run.haddockDir
@@ -9675,7 +9668,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('haddockDir')
     return result
-  
+
   def getHaddockEnergyTerms(self):
     """
     Get for utrecht.Haddock.Run.haddockEnergyTerms
@@ -9684,7 +9677,7 @@ class Run(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('haddockEnergyTerms').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getHaddockProject(self):
     """
     Get for utrecht.Haddock.Run.haddockProject
@@ -9694,7 +9687,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInitialRigidBodyMinim(self):
     """
     Get for utrecht.Haddock.Run.initialRigidBodyMinim
@@ -9704,7 +9697,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.Run
@@ -9714,7 +9707,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getNTrails(self):
     """
     Get for utrecht.Haddock.Run.nTrails
@@ -9722,7 +9715,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('nTrails')
     return result
-  
+
   def getNcsRestraintConstant(self):
     """
     Get for utrecht.Haddock.Run.ncsRestraintConstant
@@ -9730,7 +9723,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('ncsRestraintConstant')
     return result
-  
+
   def getNmrConstraintStore(self):
     """
     Get for utrecht.Haddock.Run.nmrConstraintStore
@@ -9738,7 +9731,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('nmrConstraintStore')
     return result
-  
+
   def getNonBondedType(self):
     """
     Get for utrecht.Haddock.Run.nonBondedType
@@ -9746,7 +9739,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('nonBondedType')
     return result
-  
+
   def getNumAmbRestautoAir(self):
     """
     Get for utrecht.Haddock.Run.numAmbRestautoAir
@@ -9754,7 +9747,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numAmbRestautoAir')
     return result
-  
+
   def getNumAnalysisStructures(self):
     """
     Get for utrecht.Haddock.Run.numAnalysisStructures
@@ -9762,7 +9755,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numAnalysisStructures')
     return result
-  
+
   def getNumInitWaterShells(self):
     """
     Get for utrecht.Haddock.Run.numInitWaterShells
@@ -9770,7 +9763,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numInitWaterShells')
     return result
-  
+
   def getNumIt0Structures(self):
     """
     Get for utrecht.Haddock.Run.numIt0Structures
@@ -9778,7 +9771,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numIt0Structures')
     return result
-  
+
   def getNumIt1Structures(self):
     """
     Get for utrecht.Haddock.Run.numIt1Structures
@@ -9786,7 +9779,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numIt1Structures')
     return result
-  
+
   def getNumUnambRestautoAir(self):
     """
     Get for utrecht.Haddock.Run.numUnambRestautoAir
@@ -9794,7 +9787,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('numUnambRestautoAir')
     return result
-  
+
   def getNumWrefStructures(self):
     """
     Get for utrecht.Haddock.Run.numWrefStructures
@@ -9806,7 +9799,7 @@ class Run(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.Run.parent
@@ -9816,7 +9809,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getQueueCommand(self):
     """
     Get for utrecht.Haddock.Run.queueCommand
@@ -9824,7 +9817,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('queueCommand')
     return result
-  
+
   def getRadomizeStartOriention(self):
     """
     Get for utrecht.Haddock.Run.radomizeStartOriention
@@ -9832,7 +9825,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('radomizeStartOriention')
     return result
-  
+
   def getRandomAmbigRestraints(self):
     """
     Get for utrecht.Haddock.Run.randomAmbigRestraints
@@ -9840,7 +9833,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('randomAmbigRestraints')
     return result
-  
+
   def getRandomExclParts(self):
     """
     Get for utrecht.Haddock.Run.randomExclParts
@@ -9848,7 +9841,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('randomExclParts')
     return result
-  
+
   def getRandomExcludeAir(self):
     """
     Get for utrecht.Haddock.Run.randomExcludeAir
@@ -9856,7 +9849,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('randomExcludeAir')
     return result
-  
+
   def getRandomSeed(self):
     """
     Get for utrecht.Haddock.Run.randomSeed
@@ -9864,7 +9857,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('randomSeed')
     return result
-  
+
   def getRemoveNonPolarH(self):
     """
     Get for utrecht.Haddock.Run.removeNonPolarH
@@ -9872,7 +9865,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('removeNonPolarH')
     return result
-  
+
   def getRigidbodyIMinteractScaling(self):
     """
     Get for utrecht.Haddock.Run.rigidbodyIMinteractScaling
@@ -9882,7 +9875,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRotate180It0(self):
     """
     Get for utrecht.Haddock.Run.rotate180It0
@@ -9890,7 +9883,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('rotate180It0')
     return result
-  
+
   def getRotate180It1(self):
     """
     Get for utrecht.Haddock.Run.rotate180It1
@@ -9898,7 +9891,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('rotate180It1')
     return result
-  
+
   def getScoringWeights(self):
     """
     Get for utrecht.Haddock.Run.scoringWeights
@@ -9907,7 +9900,7 @@ class Run(memops.api.Implementation.DataObject):
     tempVar = dataDict.get('scoringWeights').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getSerial(self):
     """
     Get for utrecht.Haddock.Run.serial
@@ -9915,7 +9908,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getSkipStructures(self):
     """
     Get for utrecht.Haddock.Run.skipStructures
@@ -9923,7 +9916,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('skipStructures')
     return result
-  
+
   def getSolvent(self):
     """
     Get for utrecht.Haddock.Run.solvent
@@ -9931,7 +9924,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('solvent')
     return result
-  
+
   def getSurfaceContactConstant(self):
     """
     Get for utrecht.Haddock.Run.surfaceContactConstant
@@ -9939,7 +9932,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('surfaceContactConstant')
     return result
-  
+
   def getSurfaceContactRestraints(self):
     """
     Get for utrecht.Haddock.Run.surfaceContactRestraints
@@ -9947,7 +9940,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('surfaceContactRestraints')
     return result
-  
+
   def getSymmetryRestraintConstant(self):
     """
     Get for utrecht.Haddock.Run.symmetryRestraintConstant
@@ -9955,7 +9948,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('symmetryRestraintConstant')
     return result
-  
+
   def getSymmetryRestraints(self):
     """
     Get for utrecht.Haddock.Run.symmetryRestraints
@@ -9966,7 +9959,7 @@ class Run(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getUseDbSolvateMethod(self):
     """
     Get for utrecht.Haddock.Run.useDbSolvateMethod
@@ -9974,7 +9967,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('useDbSolvateMethod')
     return result
-  
+
   def getUseDnaRestraints(self):
     """
     Get for utrecht.Haddock.Run.useDnaRestraints
@@ -9982,7 +9975,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('useDnaRestraints')
     return result
-  
+
   def getUseHBondRestraints(self):
     """
     Get for utrecht.Haddock.Run.useHBondRestraints
@@ -9990,7 +9983,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('useHBondRestraints')
     return result
-  
+
   def getWaterInitRestCutoff(self):
     """
     Get for utrecht.Haddock.Run.waterInitRestCutoff
@@ -9998,7 +9991,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterInitRestCutoff')
     return result
-  
+
   def getWaterRestCutoff(self):
     """
     Get for utrecht.Haddock.Run.waterRestCutoff
@@ -10006,7 +9999,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterRestCutoff')
     return result
-  
+
   def getWaterRestScale(self):
     """
     Get for utrecht.Haddock.Run.waterRestScale
@@ -10014,7 +10007,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterRestScale')
     return result
-  
+
   def getWaterSurfaceCutoff(self):
     """
     Get for utrecht.Haddock.Run.waterSurfaceCutoff
@@ -10022,7 +10015,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterSurfaceCutoff')
     return result
-  
+
   def getWaterToAddRandom(self):
     """
     Get for utrecht.Haddock.Run.waterToAddRandom
@@ -10030,7 +10023,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterToAddRandom')
     return result
-  
+
   def getWaterToKeep(self):
     """
     Get for utrecht.Haddock.Run.waterToKeep
@@ -10038,13 +10031,13 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('waterToKeep')
     return result
-  
+
   def newHaddockEnergyTerm(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.HaddockEnergyTerm
     """
     return HaddockEnergyTerm(self, **attrlinks)
-  
+
   def newScoringWeight(self, **attrlinks):
     """
     Factory function to create utrecht.Haddock.ScoringWeight
@@ -10052,7 +10045,7 @@ class Run(memops.api.Implementation.DataObject):
     return ScoringWeight(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeSymmetryRestraint(self, value):
     """
     Remove for utrecht.Haddock.Run.symmetryRestraints
@@ -10099,7 +10092,7 @@ class Run(memops.api.Implementation.DataObject):
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeSymmetryRestraint:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -10118,13 +10111,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeSymmetryRestraint')
       if ll:
         for notify in ll:
@@ -10145,10 +10138,10 @@ class Run(memops.api.Implementation.DataObject):
 
     if self.nmrConstraintStore is value:
       return
-    
+
     for x in self.haddockEnergyTerms:
       x.constraintList = None
-    
+
     root = self.root
     wasOverride = root.override
     try:
@@ -10156,7 +10149,7 @@ class Run(memops.api.Implementation.DataObject):
       self.nmrConstraintStore = value
     finally:
       root.override = wasOverride
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.Run
@@ -10165,7 +10158,7 @@ class Run(memops.api.Implementation.DataObject):
     setattr(self, name, value)
 
   setAccess = memops.api.Implementation.DataObject.setAccess
-  
+
   def setAnalysisClustRmsd(self, value):
     """
     Set for utrecht.Haddock.Run.analysisClustRmsd
@@ -10234,13 +10227,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnalysisClustRmsd')
       if ll:
         for notify in ll:
@@ -10309,13 +10302,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnalysisClustSize')
       if ll:
         for notify in ll:
@@ -10390,13 +10383,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnalysisDistHBond')
       if ll:
         for notify in ll:
@@ -10471,13 +10464,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnalysisDistNonbond')
       if ll:
         for notify in ll:
@@ -10545,7 +10538,7 @@ class Run(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setAnnealProtocol:
            Link annealProtocol between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -10574,13 +10567,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setAnnealProtocol')
       if ll:
         for notify in ll:
@@ -10588,13 +10581,13 @@ class Run(memops.api.Implementation.DataObject):
             notify(self)
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCalcDesolvation(self, value):
     """
     Set for utrecht.Haddock.Run.calcDesolvation
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setCalcDesolvation:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -10641,13 +10634,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCalcDesolvation')
       if ll:
         for notify in ll:
@@ -10722,13 +10715,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCenterOfMassConstant')
       if ll:
         for notify in ll:
@@ -10740,7 +10733,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.centerOfMassRestraints
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setCenterOfMassRestraints:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -10787,13 +10780,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCenterOfMassRestraints')
       if ll:
         for notify in ll:
@@ -10866,13 +10859,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCnsExecutable')
       if ll:
         for notify in ll:
@@ -10941,13 +10934,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCpuNumber')
       if ll:
         for notify in ll:
@@ -10959,7 +10952,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.dielectricType
     """
     dataDict = self.__dict__
-    if (not (value in ['cdie', 'rdie'])):
+    if (value not in ['cdie', 'rdie']):
       raise ApiError("""%s.setDielectricType:
        utrecht.Haddock.DielectricType input is not in enumeration ['cdie', 'rdie']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11012,13 +11005,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDielectricType')
       if ll:
         for notify in ll:
@@ -11030,7 +11023,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doAirScaling
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoAirScaling:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11077,13 +11070,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoAirScaling')
       if ll:
         for notify in ll:
@@ -11095,7 +11088,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doIncludeDihEnergy
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoIncludeDihEnergy:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11142,13 +11135,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoIncludeDihEnergy')
       if ll:
         for notify in ll:
@@ -11160,7 +11153,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doRigidBodyElectrostatics
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoRigidBodyElectrostatics:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11207,13 +11200,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoRigidBodyElectrostatics')
       if ll:
         for notify in ll:
@@ -11225,7 +11218,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doRigidBodyWaterTrans
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoRigidBodyWaterTrans:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11272,13 +11265,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoRigidBodyWaterTrans')
       if ll:
         for notify in ll:
@@ -11290,7 +11283,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doRigidTranslations
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoRigidTranslations:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11337,13 +11330,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoRigidTranslations')
       if ll:
         for notify in ll:
@@ -11355,7 +11348,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doSAElectrostatics
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoSAElectrostatics:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11402,13 +11395,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoSAElectrostatics')
       if ll:
         for notify in ll:
@@ -11420,7 +11413,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doWaterAnalysis
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoWaterAnalysis:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11467,13 +11460,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoWaterAnalysis')
       if ll:
         for notify in ll:
@@ -11485,7 +11478,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.doWaterDock
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setDoWaterDock:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11532,13 +11525,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDoWaterDock')
       if ll:
         for notify in ll:
@@ -11607,13 +11600,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setEpsilon')
       if ll:
         for notify in ll:
@@ -11686,13 +11679,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHaddockDir')
       if ll:
         for notify in ll:
@@ -11704,7 +11697,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.initialRigidBodyMinim
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setInitialRigidBodyMinim:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -11751,13 +11744,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInitialRigidBodyMinim')
       if ll:
         for notify in ll:
@@ -11826,13 +11819,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNTrails')
       if ll:
         for notify in ll:
@@ -11901,13 +11894,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNcsRestraintConstant')
       if ll:
         for notify in ll:
@@ -11959,7 +11952,7 @@ class Run(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setNmrConstraintStore:
            Link nmrConstraintStore between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -11969,13 +11962,13 @@ class Run(memops.api.Implementation.DataObject):
     dataDict['nmrConstraintStore'] = value
 
     # doNotifies
-  
+
   def setNonBondedType(self, value):
     """
     Set for utrecht.Haddock.Run.nonBondedType
     """
     dataDict = self.__dict__
-    if (not (value in ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG'])):
+    if (value not in ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG']):
       raise ApiError("""%s.setNonBondedType:
        utrecht.Haddock.NonBondedType input is not in enumeration ['OPLSX', 'PROLSQ', 'PARMALLH6', 'PARALLHDG']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -12028,13 +12021,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNonBondedType')
       if ll:
         for notify in ll:
@@ -12103,13 +12096,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumAmbRestautoAir')
       if ll:
         for notify in ll:
@@ -12178,13 +12171,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumAnalysisStructures')
       if ll:
         for notify in ll:
@@ -12253,13 +12246,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumInitWaterShells')
       if ll:
         for notify in ll:
@@ -12328,13 +12321,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumIt0Structures')
       if ll:
         for notify in ll:
@@ -12403,13 +12396,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumIt1Structures')
       if ll:
         for notify in ll:
@@ -12478,13 +12471,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumUnambRestautoAir')
       if ll:
         for notify in ll:
@@ -12553,13 +12546,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNumWrefStructures')
       if ll:
         for notify in ll:
@@ -12639,13 +12632,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setQueueCommand')
       if ll:
         for notify in ll:
@@ -12657,7 +12650,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.radomizeStartOriention
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRadomizeStartOriention:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -12704,13 +12697,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRadomizeStartOriention')
       if ll:
         for notify in ll:
@@ -12722,7 +12715,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.randomAmbigRestraints
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRandomAmbigRestraints:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -12769,13 +12762,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRandomAmbigRestraints')
       if ll:
         for notify in ll:
@@ -12838,13 +12831,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRandomExclParts')
       if ll:
         for notify in ll:
@@ -12856,7 +12849,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.randomExcludeAir
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRandomExcludeAir:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -12903,13 +12896,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRandomExcludeAir')
       if ll:
         for notify in ll:
@@ -12972,13 +12965,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRandomSeed')
       if ll:
         for notify in ll:
@@ -12990,7 +12983,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.removeNonPolarH
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRemoveNonPolarH:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13037,13 +13030,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRemoveNonPolarH')
       if ll:
         for notify in ll:
@@ -13112,13 +13105,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRigidbodyIMinteractScaling')
       if ll:
         for notify in ll:
@@ -13130,7 +13123,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.rotate180It0
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRotate180It0:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13177,13 +13170,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRotate180It0')
       if ll:
         for notify in ll:
@@ -13195,7 +13188,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.rotate180It1
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setRotate180It1:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13242,13 +13235,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setRotate180It1')
       if ll:
         for notify in ll:
@@ -13312,7 +13305,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setSkipStructures(self, value):
     """
     Set for utrecht.Haddock.Run.skipStructures
@@ -13375,13 +13368,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSkipStructures')
       if ll:
         for notify in ll:
@@ -13393,7 +13386,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.solvent
     """
     dataDict = self.__dict__
-    if (not (value in ['water', 'dmso'])):
+    if (value not in ['water', 'dmso']):
       raise ApiError("""%s.setSolvent:
        utrecht.Haddock.Solvent input is not in enumeration ['water', 'dmso']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13446,13 +13439,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSolvent')
       if ll:
         for notify in ll:
@@ -13527,13 +13520,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSurfaceContactConstant')
       if ll:
         for notify in ll:
@@ -13545,7 +13538,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.surfaceContactRestraints
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setSurfaceContactRestraints:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13592,13 +13585,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSurfaceContactRestraints')
       if ll:
         for notify in ll:
@@ -13667,13 +13660,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSymmetryRestraintConstant')
       if ll:
         for notify in ll:
@@ -13717,12 +13710,12 @@ class Run(memops.api.Implementation.DataObject):
         topObjectsToCheck.add(topObject)
 
       for pv in currentValues:
-        if (not (pv in values)):
+        if (pv not in values):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
       for pv in values:
-        if (not (pv in currentValues)):
+        if (pv not in currentValues):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
@@ -13751,7 +13744,7 @@ class Run(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       for value in values:
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setSymmetryRestraints:
            Link symmetryRestraints between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -13759,12 +13752,12 @@ class Run(memops.api.Implementation.DataObject):
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         oldSelves = cv.__dict__.get('haddockRuns')
         oldSelves.remove(self)
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelves = cv.__dict__.get('haddockRuns')
         oldSelves.add(self)
 
@@ -13776,13 +13769,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSymmetryRestraints')
       if ll:
         for notify in ll:
@@ -13794,7 +13787,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.useDbSolvateMethod
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setUseDbSolvateMethod:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13841,13 +13834,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUseDbSolvateMethod')
       if ll:
         for notify in ll:
@@ -13859,7 +13852,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.useDnaRestraints
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setUseDnaRestraints:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13906,13 +13899,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUseDnaRestraints')
       if ll:
         for notify in ll:
@@ -13924,7 +13917,7 @@ class Run(memops.api.Implementation.DataObject):
     Set for utrecht.Haddock.Run.useHBondRestraints
     """
     dataDict = self.__dict__
-    if (not (value in [True, False])):
+    if (value not in [True, False]):
       raise ApiError("""%s.setUseHBondRestraints:
        memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
        + ": %s" % (value,)
@@ -13971,13 +13964,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setUseHBondRestraints')
       if ll:
         for notify in ll:
@@ -14052,13 +14045,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterInitRestCutoff')
       if ll:
         for notify in ll:
@@ -14133,13 +14126,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterRestCutoff')
       if ll:
         for notify in ll:
@@ -14214,13 +14207,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterRestScale')
       if ll:
         for notify in ll:
@@ -14295,13 +14288,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterSurfaceCutoff')
       if ll:
         for notify in ll:
@@ -14382,13 +14375,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterToAddRandom')
       if ll:
         for notify in ll:
@@ -14469,13 +14462,13 @@ class Run(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setWaterToKeep')
       if ll:
         for notify in ll:
@@ -14488,24 +14481,24 @@ class Run(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('haddockEnergyTerms')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedScoringWeights(self):
     """
     Sorted for utrecht.Haddock.Run.scoringWeights
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('scoringWeights')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedSymmetryRestraints(self):
     """
     Sorted for utrecht.Haddock.Run.symmetryRestraints
@@ -14513,104 +14506,104 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     ll = dataDict.get('symmetryRestraints')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
 
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
-  
+
   analysisClustRmsd = property(getAnalysisClustRmsd, setAnalysisClustRmsd, None,
   r"""
   """)
-  
+
   analysisClustSize = property(getAnalysisClustSize, setAnalysisClustSize, None,
   r"""
   """)
-  
+
   analysisDistHBond = property(getAnalysisDistHBond, setAnalysisDistHBond, None,
   r"""
   """)
-  
+
   analysisDistNonbond = property(getAnalysisDistNonbond, setAnalysisDistNonbond, None,
   r"""
   """)
 
   applicationData = memops.api.Implementation.DataObject.applicationData
-  
+
   calcDesolvation = property(getCalcDesolvation, setCalcDesolvation, None,
   r"""
   """)
-  
+
   centerOfMassConstant = property(getCenterOfMassConstant, setCenterOfMassConstant, None,
   r"""
   """)
-  
+
   centerOfMassRestraints = property(getCenterOfMassRestraints, setCenterOfMassRestraints, None,
   r"""(cmrest)
   """)
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   cnsExecutable = property(getCnsExecutable, setCnsExecutable, None,
   r"""Defines the path to the CNS exacutable
   """)
-  
+
   cpuNumber = property(getCpuNumber, setCpuNumber, None,
   r""" Defines the number of cpu's used in a cluster for  
   submission of 
   Haddock jobs.
   """)
-  
+
   dielectricType = property(getDielectricType, setDielectricType, None,
   r"""(dielec)
   """)
-  
+
   doAirScaling = property(getDoAirScaling, setDoAirScaling, None,
   r"""Use automated distance restraints weighting. cns name: air_scaling
   """)
-  
+
   doIncludeDihEnergy = property(getDoIncludeDihEnergy, setDoIncludeDihEnergy, None,
   r"""(dihedflag)
   """)
-  
+
   doRigidBodyElectrostatics = property(getDoRigidBodyElectrostatics, setDoRigidBodyElectrostatics, None,
   r"""(elecflag_0)
   """)
-  
+
   doRigidBodyWaterTrans = property(getDoRigidBodyWaterTrans, setDoRigidBodyWaterTrans, None,
   r"""Allows translation of water molecules during rigid-body docking. cns 
   name: transwater
   """)
-  
+
   doRigidTranslations = property(getDoRigidTranslations, setDoRigidTranslations, None,
   r"""
   """)
-  
+
   doSAElectrostatics = property(getDoSAElectrostatics, setDoSAElectrostatics, None,
   r"""(elecflag_1)
   """)
-  
+
   doWaterAnalysis = property(getDoWaterAnalysis, setDoWaterAnalysis, None,
   r"""Do some water analysis. cns name: water_analysis
   """)
-  
+
   doWaterDock = property(getDoWaterDock, setDoWaterDock, None,
   r"""Do water docking (waterdock)	
   """)
-  
+
   epsilon = property(getEpsilon, setEpsilon, None,
   r"""(epsilon)
   """)
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   haddockDir = property(getHaddockDir, setHaddockDir, None,
   r"""Defines the path to the Haddock software directory.
   """)
 
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
-  
+
   initialRigidBodyMinim = property(getInitialRigidBodyMinim, setInitialRigidBodyMinim, None,
   r"""
   """)
@@ -14618,46 +14611,46 @@ class Run(memops.api.Implementation.DataObject):
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   nTrails = property(getNTrails, setNTrails, None,
   r"""
   """)
-  
+
   ncsRestraintConstant = property(getNcsRestraintConstant, setNcsRestraintConstant, None,
   r"""Force constant for ncs restraints (kncs)
   """)
-  
+
   nonBondedType = property(getNonBondedType, setNonBondedType, None,
   r"""Run non-bonded interaction type
   """)
-  
+
   numAmbRestautoAir = property(getNumAmbRestautoAir, setNumAmbRestautoAir, None,
   r"""Define the number of AIR restraints for automated weighting. cns name: 
   numAmbRestautoAir
   """)
-  
+
   numAnalysisStructures = property(getNumAnalysisStructures, setNumAnalysisStructures, None,
   r"""Number of structures to nalyse (anastruc_1)
   """)
-  
+
   numInitWaterShells = property(getNumInitWaterShells, setNumInitWaterShells, None,
   r"""Number of different initial solvation shells to generate. cns name: 
   waterensemble
   """)
-  
+
   numIt0Structures = property(getNumIt0Structures, setNumIt0Structures, None,
   r"""Number of iteration 0 (rigid dynamics) structures. (structures_0)
   """)
-  
+
   numIt1Structures = property(getNumIt1Structures, setNumIt1Structures, None,
   r"""Number of iteration 1 (flexible dynamics) structures.
   """)
-  
+
   numUnambRestautoAir = property(getNumUnambRestautoAir, setNumUnambRestautoAir, None,
   r"""Number of distance restraints for automated weighting. cns name: 
   tot_unamb
   """)
-  
+
   numWrefStructures = property(getNumWrefStructures, setNumWrefStructures, None,
   r"""Number of water refinemetn structures (waterrefine)
   """)
@@ -14667,111 +14660,111 @@ class Run(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   queueCommand = property(getQueueCommand, setQueueCommand, None,
   r""" Defines the queue type for Haddock job submission. 'csh'  
   is default 
   for running on a single machine in C-shell.
   """)
-  
+
   radomizeStartOriention = property(getRadomizeStartOriention, setRadomizeStartOriention, None,
   r"""
   """)
-  
+
   randomAmbigRestraints = property(getRandomAmbigRestraints, setRandomAmbigRestraints, None,
   r"""Use random ambiguos interaction restraints (ranair)
   """)
-  
+
   randomExclParts = property(getRandomExclParts, setRandomExclParts, None,
   r"""Number of partitons for random exclusion (ncvpart)
   """)
-  
+
   randomExcludeAir = property(getRandomExcludeAir, setRandomExcludeAir, None,
   r"""Randomly exclude ambiguous interaction restraints (noecv)
   """)
-  
+
   randomSeed = property(getRandomSeed, setRandomSeed, None,
   r"""
   """)
-  
+
   removeNonPolarH = property(getRemoveNonPolarH, setRemoveNonPolarH, None,
   r"""Remove non-polar hydrogens (delenph)
   """)
-  
+
   rigidbodyIMinteractScaling = property(getRigidbodyIMinteractScaling, setRigidbodyIMinteractScaling, None,
   r"""(inter_rigid) 
   """)
-  
+
   rotate180It0 = property(getRotate180It0, setRotate180It0, None,
   r"""
   """)
-  
+
   rotate180It1 = property(getRotate180It1, setRotate180It1, None,
   r"""
   """)
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   skipStructures = property(getSkipStructures, setSkipStructures, None,
   r"""
   """)
-  
+
   solvent = property(getSolvent, setSolvent, None,
   r"""
   """)
-  
+
   surfaceContactConstant = property(getSurfaceContactConstant, setSurfaceContactConstant, None,
   r"""(ksurf)
   """)
-  
+
   surfaceContactRestraints = property(getSurfaceContactRestraints, setSurfaceContactRestraints, None,
   r"""
   """)
-  
+
   symmetryRestraintConstant = property(getSymmetryRestraintConstant, setSymmetryRestraintConstant, None,
   r"""Force constant for symmetry restraints ((ksym)
   """)
-  
+
   useDbSolvateMethod = property(getUseDbSolvateMethod, setUseDbSolvateMethod, None,
   r"""Use database driven solvation method? cns name: solvate_method
   """)
-  
+
   useDnaRestraints = property(getUseDnaRestraints, setUseDnaRestraints, None,
   r"""(dnarest_on)
   """)
-  
+
   useHBondRestraints = property(getUseHBondRestraints, setUseHBondRestraints, None,
   r"""
   """)
-  
+
   waterInitRestCutoff = property(getWaterInitRestCutoff, setWaterInitRestCutoff, None,
   r"""Initial cutoff for restraints solvating method. cns name 
   water_restraint_initial
   """)
-  
+
   waterRestCutoff = property(getWaterRestCutoff, setWaterRestCutoff, None,
   r"""Cutoff for restraints solvating method. cns name: waterRestCutoff
   """)
-  
+
   waterRestScale = property(getWaterRestScale, setWaterRestScale, None,
   r"""Force constant for restraints solvating method. cns name: 
   water_restraint_scale
   """)
-  
+
   waterSurfaceCutoff = property(getWaterSurfaceCutoff, setWaterSurfaceCutoff, None,
   r"""Water-protein surface-cutoff. cns name water_surfcutoff
   """)
-  
+
   waterToAddRandom = property(getWaterToAddRandom, setWaterToAddRandom, None,
   r"""Random fraction to be added to the fraction of water to keep. cns name: 
   water_randfrac
   """)
-  
+
   waterToKeep = property(getWaterToKeep, setWaterToKeep, None,
   r"""Fraction of water to keep. cns name: water_tokeep
   """)
@@ -14779,33 +14772,33 @@ class Run(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   annealProtocol = property(getAnnealProtocol, setAnnealProtocol, None,
   r"""
   """)
-  
+
   haddockEnergyTerms = property(getHaddockEnergyTerms,  None, None,
   r"""child link to class HaddockEnergyTerm
   """)
-  
+
   haddockProject = property(getHaddockProject,  None, None,
   r"""parent link
   """)
-  
+
   nmrConstraintStore = property(getNmrConstraintStore, setNmrConstraintStore, None,
   r"""CCP NmrConstraintStore where data come from
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for haddockProject
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   scoringWeights = property(getScoringWeights,  None, None,
   r"""child link to class ScoringWeight
   """)
-  
+
   symmetryRestraints = property(getSymmetryRestraints, setSymmetryRestraints, None,
   r"""MolSystem symmetry operations used as restraints. The type depends on 
   the symmetryCode of the Symmetry linked to.
@@ -14822,9 +14815,9 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   _packageName = 'utrecht.Haddock'
   _packageShortName = 'HADD'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'stage', 'term', 'value', 'access', 'activeAccess', 'parent', 'root', 'run', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for utrecht.Haddock.ScoringWeight
@@ -14867,7 +14860,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -14932,7 +14925,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -14958,7 +14951,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for utrecht.Haddock.ScoringWeight:   deletes
@@ -14969,11 +14962,11 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     run = dataDict.get('run')
-    if (not (run in objsToBeDeleted)):
+    if (run not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('term')
       ll.append(objKey)
@@ -14993,14 +14986,14 @@ class ScoringWeight(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for utrecht.Haddock.ScoringWeight
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for utrecht.Haddock.ScoringWeight
@@ -15029,7 +15022,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('run')
         dd = value.__dict__.get('scoringWeights')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'run' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -15100,7 +15093,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
         )
 
       value = dataDict.get('term')
-      if (not (value in ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv'])):
+      if (value not in ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv']):
         raise ApiError("""%s.checkValid: term:
          utrecht.Haddock.ScoringTerm input is not in enumeration ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv']""" % self.qualifiedName
          + ": %s" % (value,)
@@ -15144,7 +15137,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -15152,7 +15145,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -15170,7 +15163,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -15219,7 +15212,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for utrecht.Haddock.ScoringWeight
@@ -15232,7 +15225,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for utrecht.Haddock.ScoringWeight
@@ -15293,7 +15286,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for utrecht.Haddock.ScoringWeight
@@ -15318,7 +15311,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for utrecht.Haddock.ScoringWeight
@@ -15340,7 +15333,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for utrecht.Haddock.ScoringWeight.parent
@@ -15352,7 +15345,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getRun(self):
     """
     Get for utrecht.Haddock.ScoringWeight.run
@@ -15360,7 +15353,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('run')
     return result
-  
+
   def getStage(self):
     """
     Get for utrecht.Haddock.ScoringWeight.stage
@@ -15368,7 +15361,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('stage')
     return result
-  
+
   def getTerm(self):
     """
     Get for utrecht.Haddock.ScoringWeight.term
@@ -15378,7 +15371,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getValue(self):
     """
     Get for utrecht.Haddock.ScoringWeight.value
@@ -15388,7 +15381,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for utrecht.Haddock.ScoringWeight
@@ -15399,7 +15392,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setStage(self, value):
     """
     Set for utrecht.Haddock.ScoringWeight.stage
@@ -15455,13 +15448,13 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     dataDict['stage'] = value
 
     # doNotifies
-  
+
   def setTerm(self, value):
     """
     Set for utrecht.Haddock.ScoringWeight.term
     """
     dataDict = self.__dict__
-    if (not (value in ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv'])):
+    if (value not in ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv']):
       raise ApiError("""%s.setTerm:
        utrecht.Haddock.ScoringTerm input is not in enumeration ['vdw', 'elec', 'dist', 'sani', 'dani', 'vean', 'cdih', 'sym', 'bsa', 'deint', 'desolv']""" % self.qualifiedName
        + ": %s" % (value,)
@@ -15507,7 +15500,7 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     dataDict['term'] = value
 
     # doNotifies
-  
+
   def setValue(self, value):
     """
     Set for utrecht.Haddock.ScoringWeight.value
@@ -15565,13 +15558,13 @@ class ScoringWeight(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setValue')
       if ll:
         for notify in ll:
@@ -15597,15 +15590,15 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   stage = property(getStage, setStage, None,
   r"""Number of stage being scored
   """)
-  
+
   term = property(getTerm, setTerm, None,
   r"""Term being scored
   """)
-  
+
   value = property(getValue, setValue, None,
   r"""Value of scoring weight
   """)
@@ -15613,13 +15606,13 @@ class ScoringWeight(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for run
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   run = property(getRun,  None, None,
   r"""parent link
   """)

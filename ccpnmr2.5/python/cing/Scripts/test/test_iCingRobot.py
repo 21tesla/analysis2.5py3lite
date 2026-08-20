@@ -2,12 +2,16 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_iCingRobot.py
 """
-from cing import cingDirTestsData #@UnusedImport
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.iCingRobot import * #@UnusedWildImport
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import (
+    cingDirTestsData,  #@UnusedImport
+    cingDirTmp,
+)
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.iCingRobot import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

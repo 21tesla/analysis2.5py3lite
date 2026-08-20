@@ -1,4 +1,3 @@
-
 LICENSE = """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,25 +39,26 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-TIMEOUT = 2.0 # seconds
-REGISTER_URL = 'http://www.ccpn.ac.uk/cgi-bin/register/register'
+TIMEOUT = 2.0  # seconds
+REGISTER_URL = "http://www.ccpn.ac.uk/cgi-bin/register/register"
 
 from ccpnmr.analysis import Version
 from memops.universal.Url import fetchUrl
 
+
 def updateRegister(analysisProfile):
 
-  url = REGISTER_URL
-  values = {}
-  for attr in ('userName', 'userOrganisation', 'userEmail'):
-    values[attr] = getattr(analysisProfile, attr)
-  values['version'] = Version.version
+    url = REGISTER_URL
+    values = {}
+    for attr in ("userName", "userOrganisation", "userEmail"):
+        values[attr] = getattr(analysisProfile, attr)
+    values["version"] = Version.version
 
-  result = fetchUrl(url, values, timeout=TIMEOUT)
+    result = fetchUrl(url, values, timeout=TIMEOUT)
 
-  return result
+    return result
+
 
 def isRegistered(analysisProfile):
 
-  return analysisProfile.userName and analysisProfile.userOrganisation and analysisProfile.userEmail
-
+    return analysisProfile.userName and analysisProfile.userOrganisation and analysisProfile.userEmail

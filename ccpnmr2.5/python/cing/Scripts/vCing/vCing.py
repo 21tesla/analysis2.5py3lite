@@ -11,26 +11,22 @@ For killing use the shootall script.
 Author: Jurgen F. Doreleijers
 Thu Oct 14 23:56:36 CEST 2010
 """
-from cing import cingDirScripts
-from cing import cingDirTmp
-from cing import cingPythonDir
-from cing import cingRoot
-from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.forkoff import * #@UnusedWildImport
-from cing.Libs.network import * #@UnusedWildImport
-from cing.NRG import * #@UnusedWildImport
-from cing.Scripts.vCing.Utils import prepareMaster
-from cing.main import getStartMessage
-from cing.main import getStopMessage
 from datetime import datetime
+
+from cing import cingDirScripts, cingDirTmp, cingPythonDir, cingRoot, header
+from cing.Libs.forkoff import *  #@UnusedWildImport
+from cing.Libs.network import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.main import getStartMessage, getStopMessage
+from cing.NRG import *  #@UnusedWildImport
+from cing.Scripts.vCing.Utils import prepareMaster
 
 # Will be overridden by local settings.
 master_ssh_url_local    = 'i@nmr'
 master_d_local          = '/Volumes/joe/D'
 pool_postfix_local      = 'joe'
 try:
-    from cing.Scripts.vCing.localConstants import * #@UnusedWildImport # pylint: disable=E0611
+    from cing.Scripts.vCing.localConstants import *  #@UnusedWildImport # pylint: disable=E0611
 except:
     pass
 #    NTtracebackError() # codes below are nonsense.
@@ -131,7 +127,7 @@ class Vcing(Lister):
     # end def
 
     def keepLockFresh(self, lockname, lockTimeOut):
-        maxSleapingTime = self.max_time_to_wait_per_job + 100 
+        maxSleapingTime = self.max_time_to_wait_per_job + 100
         # process will be killed outside first so we give it some extra time here for it to be reaped.
         sleepTime = lockTimeOut / 2 + 1
         sleptTime = 0
@@ -168,7 +164,7 @@ class Vcing(Lister):
         if len(resultList) != 2:
             nTerror("Failed to find tokeninfo as expected with 2 parts from: %s" % tokeninfo)
             return None
-        # end if        
+        # end if
         return [status] + resultList
     # end def
 
@@ -287,7 +283,7 @@ class Vcing(Lister):
                 #nTdebug("Time is %s" % str(datetime.now()))
                 time.sleep(self.time_sleep_when_no_token)
                 continue
-            # end if            
+            # end if
             time.sleep(2)
             pid = p.process_fork(self.keepLockFresh, [tokenLock, self.lockTimeOut])
             nTdebug("Created a background process [%s] keeping the lock" % pid)
@@ -303,16 +299,16 @@ class Vcing(Lister):
                 continue
             # end if
             tokensTried += 1
-            nTmessage("In %d/%d/%d (finished/total/iterations) got token %s with lock: %s" % (tokensFinished, 
+            nTmessage("In %d/%d/%d (finished/total/iterations) got token %s with lock: %s" % (tokensFinished,
                         tokensTried, iterationsTried, token, tokenLock))
 
             # The script needs itself to send the results all included.
             nTmessage("Found tokenContent: %s" % tokenContent)
-            nTdebug("Time is %s" % str(datetime.now()))  
+            nTdebug("Time is %s" % str(datetime.now()))
             tokenPartList = tokenContent.split()
             cmdToken = tokenPartList[0]
             parTokenListStr = ' '.join(tokenPartList[1:])
-            if not cmdDict.has_key(cmdToken):
+            if cmdToken not in cmdDict:
                 self.slaveEndAndLog(self.LEVEL_ERROR_STR, token, tokenContent, self.BAD_COMMAND_TOKEN_STR)
                 continue
             # end if
@@ -476,4 +472,4 @@ if __name__ == "__main__":
         nTmessage(getStopMessage(cing.starttime))
     # end try
 # end if main
-    
+

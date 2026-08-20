@@ -1,14 +1,13 @@
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.html import HTMLfile
-from cing.core.classes import Project
-from cing.core.classes import ROGscore
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.molecule import Atom
-from cing.core.molecule import Ensemble
-from cing.core.molecule import Molecule
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.core.classes import Project, ROGscore
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.molecule import Atom, Ensemble, Molecule
+from cing.Libs.html import HTMLfile
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 class AllChecks(TestCase):
 

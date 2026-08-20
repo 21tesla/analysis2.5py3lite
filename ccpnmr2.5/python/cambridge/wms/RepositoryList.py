@@ -35,7 +35,7 @@ class RepositoryList:
 
         self.repositories.append(rep)
 
-            
+
     def newRepository(self, repName, repConnect, user, type=None):
 
         rep = Repository(self, repName, repConnect, user, type)
@@ -46,4 +46,4 @@ class RepositoryList:
     def getRepositories(self):
 
         return self.repositories
-            
+

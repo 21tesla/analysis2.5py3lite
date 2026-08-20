@@ -1,5 +1,5 @@
 from cing import __author__
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqCcpn import CCPN_LOWERCASE_STR
 
 __author__ += 'Tim Stevens '
@@ -16,7 +16,7 @@ class RPF:
         nTmessage("starting toRPFFile")
 
         if not hasattr(self.project, CCPN_LOWERCASE_STR):
-            nTdebug("Failed to find ccpn attribute project. Happens when no CCPN project was read first.") 
+            nTdebug("Failed to find ccpn attribute project. Happens when no CCPN project was read first.")
             # TODO: change when cing to ccpn code works.
             return
 

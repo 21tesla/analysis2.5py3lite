@@ -5,14 +5,14 @@
 #
 # NB this script fails if the MySql backend is not installed.
 from cing import header
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode.required.reqDssp import * #@UnusedWildImport
-from cing.PluginCode.required.reqWattos import * #@UnusedWildImport
-from cing.PluginCode.required.reqWhatif import * #@UnusedWildImport
-from cing.PluginCode.sqlAlchemy import CsqlAlchemy
 from cing.core.classes import Project
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.main import getStartMessage
+from cing.PluginCode.required.reqDssp import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWattos import *  #@UnusedWildImport
+from cing.PluginCode.required.reqWhatif import *  #@UnusedWildImport
+from cing.PluginCode.sqlAlchemy import CsqlAlchemy
 
 cing.verbosity = verbosityDebug
 

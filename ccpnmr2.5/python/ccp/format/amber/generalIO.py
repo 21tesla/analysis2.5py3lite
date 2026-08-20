@@ -11,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,136 +52,129 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
 # Import general functions
-from memops.universal.Util import returnInt
-
-from ccp.format.general.formatIO import FormatFile
-
 from ccp.format.general.Constants import defaultMolCode
+from ccp.format.general.formatIO import FormatFile
 from ccp.format.general.Util import getSeqAndInsertCode
-
-from memops.universal.Util import returnFloat
-from memops.universal.Util import returnInt
+from memops.universal.Util import returnFloat, returnInt
 
 #####################
 # Class definitions #
 #####################
 
+
 class AmberGenericFile(FormatFile):
+    def setGeneric(self):
 
-  def setGeneric(self):
-    
-    self.format = 'amber'
-    self.defaultMolCode = defaultMolCode
-    
-  def readConstraints(self):
-       
-    #
-    # Start reading...
-    #
+        self.format = "amber"
+        self.defaultMolCode = defaultMolCode
 
-    fin = open(self.name)
-    lines = fin.readlines()
-    fin.close()
-    
-    #
-    # Parse data...
-    #
-          
-    constraintNum = 0
-    constraintLines = []
-    
-    for line in lines:
+    def readConstraints(self):
 
-      if self.patt['emptyline'].search(line) or self.patt['hash'].search(line):
-        continue
-      
-      newConstraint = False
-      
-      restraintStartSearch = self.patt[self.format + 'RestraintStart'].search(line)
-      if restraintStartSearch:
-        line = line.replace(restraintStartSearch.group(1),'')
-        constraintNum += 1
-        newConstraint = True
-        
-      restraintEndSearch = self.patt[self.format + 'RestraintEnd'].search(line)
-      if restraintEndSearch:
-        line = line.replace(restraintEndSearch.group(1),'')
-              
-      if newConstraint:
-        constraintLines.append(line.strip())
-      else:
-        constraintLines[-1] += line.strip()
-    
-    #
-    # Put info in dictionary
-    #
-    
-    constraintInfoList = []
+        #
+        # Start reading...
+        #
 
-    for constraintLine in constraintLines:
-      
-      constraintCols = constraintLine.split(',')
-      constraintContent = {}
-      curConstraintKey = None
+        fin = open(self.name)
+        lines = fin.readlines()
+        fin.close()
 
-      for constraintCol in constraintCols:
-      
-        constraintCol = constraintCol.strip()
-        
-        if not constraintCol:
-          continue
-        
-        if constraintCol.count('='):
-          (constraintKey,constraintValue) = constraintCol.split('=')
-          curConstraintKey = constraintKey.strip()
-          constraintContent[curConstraintKey] = []
-        else:
-          constraintValue = constraintCol
-        
-        constraintValue = constraintValue.strip()
-        if constraintValue.count('.'):
-          value = returnFloat(constraintValue)
-        else:
-          value = returnInt(constraintValue)
-          
-        constraintContent[curConstraintKey].append(value)
-      
-      constraintInfoList.append(constraintContent)
-    
-    return constraintInfoList
+        #
+        # Parse data...
+        #
+
+        constraintNum = 0
+        constraintLines = []
+
+        for line in lines:
+            if self.patt["emptyline"].search(line) or self.patt["hash"].search(line):
+                continue
+
+            newConstraint = False
+
+            restraintStartSearch = self.patt[self.format + "RestraintStart"].search(line)
+            if restraintStartSearch:
+                line = line.replace(restraintStartSearch.group(1), "")
+                constraintNum += 1
+                newConstraint = True
+
+            restraintEndSearch = self.patt[self.format + "RestraintEnd"].search(line)
+            if restraintEndSearch:
+                line = line.replace(restraintEndSearch.group(1), "")
+
+            if newConstraint:
+                constraintLines.append(line.strip())
+            else:
+                constraintLines[-1] += line.strip()
+
+        #
+        # Put info in dictionary
+        #
+
+        constraintInfoList = []
+
+        for constraintLine in constraintLines:
+            constraintCols = constraintLine.split(",")
+            constraintContent = {}
+            curConstraintKey = None
+
+            for constraintCol in constraintCols:
+                constraintCol = constraintCol.strip()
+
+                if not constraintCol:
+                    continue
+
+                if constraintCol.count("="):
+                    (constraintKey, constraintValue) = constraintCol.split("=")
+                    curConstraintKey = constraintKey.strip()
+                    constraintContent[curConstraintKey] = []
+                else:
+                    constraintValue = constraintCol
+
+                constraintValue = constraintValue.strip()
+                if constraintValue.count("."):
+                    value = returnFloat(constraintValue)
+                else:
+                    value = returnInt(constraintValue)
+
+                constraintContent[curConstraintKey].append(value)
+
+            constraintInfoList.append(constraintContent)
+
+        return constraintInfoList
+
 
 class AmberGenericConstraint:
+    def __init__(self, parent, Id):
 
-  def __init__(self,parent,Id):
-    
-    self.parent = parent
-    self.Id = returnInt(Id)
-    
-    self.items = []
+        self.parent = parent
+        self.Id = returnInt(Id)
 
-  def addItem(self,coordinateAtoms):
-     
-    item = AmberConstraintItem()
-    self.items.append(item)
-    
-    for coordinateAtom in coordinateAtoms:
-      
-      item.members.append(AmberConstraintMember(coordinateAtom.chainId,coordinateAtom.resName,coordinateAtom.seqCode,coordinateAtom.atomName))
-    
+        self.items = []
+
+    def addItem(self, coordinateAtoms):
+
+        item = AmberConstraintItem()
+        self.items.append(item)
+
+        for coordinateAtom in coordinateAtoms:
+            item.members.append(
+                AmberConstraintMember(
+                    coordinateAtom.chainId, coordinateAtom.resName, coordinateAtom.seqCode, coordinateAtom.atomName
+                )
+            )
+
+
 class AmberConstraintItem:
+    def __init__(self):
 
-  def __init__(self):
-    
-    self.members = []
-    
+        self.members = []
+
+
 class AmberConstraintMember:
+    def __init__(self, chainCode, resLabel, seqCode, atomName):
 
-  def __init__(self,chainCode,resLabel,seqCode,atomName):
-    
-    self.chainCode = chainCode
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(seqCode)
-    self.atomName = atomName
-    self.resLabel = resLabel
+        self.chainCode = chainCode
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(seqCode)
+        self.atomName = atomName
+        self.resLabel = resLabel

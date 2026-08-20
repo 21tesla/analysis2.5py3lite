@@ -46,29 +46,26 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import os
 
+from ccpnmr.eci.EntryCompletionGui import EntryCompletionGui
+from ccpnmr.format.general.Constants import fileTypeDict
+from ccpnmr.format.gui.SelectionListPopup import SelectionListPopup
 from memops.gui.Base import getPopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
+from memops.gui.FileSelect import FileType
+from memops.gui.FileSelectPopup import FileSelectPopup
+
 #from memops.gui.DataEntry import askString
 from memops.gui.Frame import Frame
 from memops.gui.HelpPopup import showHelpText
 from memops.gui.Label import Label
 from memops.gui.LabelDivider import LabelDivider
-from memops.gui.MessageReporter import showYesNo, showOkCancel, showWarning, showInfo
+from memops.gui.MessageReporter import showInfo, showWarning, showYesNo
 from memops.gui.PulldownList import PulldownList
 from memops.gui.Separator import Separator
 from memops.gui.TabbedFrame import TabbedFrame
-from memops.gui.Text import Text
 
-from memops.gui.FileSelectPopup import FileSelectPopup
-from memops.gui.FileSelect import FileType
-
-from ccpnmr.format.gui.SelectionListPopup import SelectionListPopup
-from ccpnmr.format.general.Constants import fileTypeDict
-
-from ccpnmr.eci.EntryCompletionGui import EntryCompletionGui
 
 class DataFileImportFrame(Frame):
 
@@ -90,7 +87,7 @@ class DataFileImportFrame(Frame):
     #
     # Variable initialisation
     #
-    
+
     self.fcWrapper = basePopup.fcWrapper
     self.project = basePopup.project
     self.basePopup = basePopup
@@ -102,22 +99,22 @@ class DataFileImportFrame(Frame):
       if not self.entry:
         self.entry = self.project.currentNmrEntryStore.newEntry(name=self.project.name)
     else:
-      self.nmrProject = None  
+      self.nmrProject = None
 
     self.sequenceCoordinatesLoaded = False
     self.shiftsLoaded = False
     self.linkResDone = False
-    
+
     self.currentShiftList = None
     self.shiftListChainPairs = []
 
     self.moleculeList = []
     self.moleculeDict = {}
-      
+
     #
     # Frame setup
     #
-    
+
     Frame.__init__(self, parent, **kw)
 
     self.grid_columnconfigure(1, weight=1)
@@ -135,7 +132,7 @@ class DataFileImportFrame(Frame):
     # Main
     #
 
-    frameA.grid_columnconfigure(0, weight=1)  
+    frameA.grid_columnconfigure(0, weight=1)
     #frameA.grid_columnconfigure(1, weight=1) # Change to 2 if want 2 columns
     frameA.grid_rowconfigure(12, weight=1)
     #frameA.grid_rowconfigure(12, weight=1)
@@ -143,9 +140,9 @@ class DataFileImportFrame(Frame):
     row = 0
 
     div = LabelDivider(frameA, text='Select the full coordinate file or a sequence file (with info for a single molecule).', justify = 'center', grid=(row,0), gridSpan=(1,1))
-    
+
     row += 1
-    
+
     self.sequenceCoordinatesImport = Button(frameA, text = self.defaultSelectText , command = self.importSequenceOrCoords, foreground = self.fontDefaultColor)
     self.sequenceCoordinatesImport.grid(row=row, column=0, sticky='ew')
 
@@ -153,42 +150,42 @@ class DataFileImportFrame(Frame):
 
     label =Label(frameA,text="")
     label.grid(row=row,column=0,sticky='ew')
-    
+
     row += 1
 
     div = LabelDivider(frameA, text='Select the molecule relevant for your chemical shift file.', justify = 'center', grid=(row,0), gridSpan=(1,1))
-    
+
     row += 1
-    
+
     self.moleculeSelect = Label(frameA, text = "None available yet - import valid file first", foreground = self.fontBadColor)
     self.moleculeSelect.grid(row=row, column=0, sticky='ew')
     self.moleculeSelectRow = row
-    
+
     row += 1
 
     label =Label(frameA,text="")
     label.grid(row=row,column=0,sticky='ew')
-    
+
     row += 1
 
     div = LabelDivider(frameA, text='Select a chemical shift file with values only for the above molecule.', justify = 'center', grid=(row,0), gridSpan=(1,1))
-    
+
     row += 1
 
     self.shiftImport = Button(frameA, text = self.defaultSelectText , command = self.importShifts, foreground = self.fontDefaultColor)
     self.shiftImport.grid(row=row, column=0, sticky='ew')
-    
+
     row += 1
 
     label =Label(frameA,text="")
     label.grid(row=row,column=0,sticky='ew')
 
-    row += 1              
+    row += 1
 
     div = LabelDivider(frameA, text='Consistency check between molecule and shift information.', justify = 'center', grid=(row,0), gridSpan=(2,1))
 
     row += 1
-    
+
     self.linkResCheckInfo = Label(frameA, text='')
     self.linkResCheckInfo.grid(row=row, column=0, sticky='ew')
 
@@ -204,9 +201,9 @@ class DataFileImportFrame(Frame):
     self.mainButtons = ButtonList(frameA, texts=texts, commands=commands)
     self.mainButtons.grid(row=row, column=0, columnspan=2, sticky='ew')
     self.mainButtons.buttons[0].config(foreground = self.fontDefaultColor)
-    
+
     #print row
-    
+
     self.frameA = frameA
 
     #
@@ -225,23 +222,23 @@ class DataFileImportFrame(Frame):
 
     frameD.grid_columnconfigure(0, weight=1)
     frameD.grid_rowconfigure(5, weight=1)
-    
+
     self.frameD = frameD
 
     row = 0
 
     div = LabelDivider(frameD, text='Imported data.', justify = 'center', grid=(row,0), gridSpan=(1,2))
-    
+
     row += 1
-    
+
     self.depositionImportText = "\nImported %d shift list(s) for a total of %d shifts.\n\nImported %d molecule(s) and %d chain(s).\n\nImported %d model(s) for a total of %d atom coordinates.\n\nLinked %.2f%% of imported NMR information to %d chain(s)."
     self.depositionImportLoc = (row,0)
-    
+
     # These used for setting text above...
     self.depositionImportNums = [0,0,0,0,0,0,0.0,0]
     self.importedShiftLists = []
     self.connectedChains = []
-    
+
     self.depositionImportLabel = Label(frameD, text = self.depositionImportText % tuple(self.depositionImportNums), foreground = self.fontBadColor)
     self.depositionImportLabel.grid(row=row, column=0, sticky='ew')
 
@@ -253,24 +250,24 @@ class DataFileImportFrame(Frame):
     #
     # Finalize the import part, proceed to ECI.
     #
-    
+
     row += 1
 
     div = LabelDivider(frameD, text='Import completed, save project and start Entry Completion Interface.', justify = 'center', grid=(row,0), gridSpan=(1,1))
-    
+
     row += 1
 
     self.eciStart = Button(frameD, text = "Finalise import" , command = self.finaliseImport, foreground = self.fontBadColor)
     self.eciStart.grid(row=row, column=0, sticky='ew')
-      
+
   def finaliseImport(self):
-  
+
     if not self.depositionImportNums[6]:
       showWarning('Failure','Need connected molecule and shift information first')
-      return  
-  
+      return
+
     if showYesNo("Save project and continue annotation","Are you sure you want to save this project and continue?",parent=self):
-      
+
       if self.depositionImportNums[5] or showYesNo("No coordinates","No coordinates are available - are you sure you want to continue?",parent=self):
 
         showInfo("Project name","Your project will be saved in the %s directory." % self.project.name,parent=self)
@@ -285,26 +282,26 @@ class DataFileImportFrame(Frame):
 
         eci  = EntryCompletionGui(self.basePopup.root)
         eci.initProject(self.project)
-  
+
   #
   # File type determination and import
   #
-  
+
   def createFileTypes(self,dataTypes):
 
     fileTypes = [FileType('all', ['*'])]
-    
+
     for dataType in dataTypes:
       formatNames = fileTypeDict[dataType].keys()
       formatNames.sort()
       for formatName in formatNames:
         if formatName in self.fcWrapper.formatNameLists[dataType]:
           fileTypes.append( FileType(formatName, fileTypeDict[dataType][formatName]))
-          
+
     return fileTypes
-  
+
   def getFileName(self,title,fileTypes):
-  
+
     fileSelectPopup = FileSelectPopup(self, file_types=fileTypes,
                         title=title, dismiss_text='Cancel',
                         selected_file_must_exist=True, multiSelect=False,)
@@ -314,44 +311,44 @@ class DataFileImportFrame(Frame):
     if not self.fileName:
       showWarning('Failure','Please select an existing file.', parent=self)
       return False
-    
+
     return True
-  
+
   def importSequenceOrCoords(self):
-    
+
     dataTypes = ['sequence','coordinates']
     fileTypes = self.createFileTypes(dataTypes)
 
     if self.getFileName('Import sequence or coordinate file',fileTypes):
-    
+
       formatNameSuggestions = {}
-      
+
       for dataType in dataTypes:
-      
+
         tmpList = self.fcWrapper.determineFormatNamesForFile(dataType,self.fileName)
-        
+
         if tmpList:
           formatNameSuggestions[dataType] = tmpList
 
-      if not formatNameSuggestions:       
+      if not formatNameSuggestions:
         showWarning('Failure','This file cannot be read by this software.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
         return False
-      
+
       #
       # Let user select if multiple options, otherwise take default
       #
-            
+
       if len(formatNameSuggestions) == 1 and len(formatNameSuggestions[formatNameSuggestions.keys()[0]]) == 1:
-        
+
         dataType = formatNameSuggestions.keys()[0]
         formatName = formatNameSuggestions[dataType][0]
 
         if not showYesNo('File type detected', 'Reading as %s file in %s format. Is this correct?' % (dataType,formatName), parent=self):
           showWarning('Failure','This file cannot be read by this software.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
           return False
-       
+
       else:
-      
+
         #
         # Create a selection (hopefully user-understandable)
         #
@@ -363,7 +360,7 @@ class DataFileImportFrame(Frame):
 
           dataTypeString = dataType
 
-          if formatNameSuggestions.has_key(dataType):
+          if dataType in formatNameSuggestions:
             formatNames = formatNameSuggestions[dataType]
             formatNames.sort()
 
@@ -371,83 +368,83 @@ class DataFileImportFrame(Frame):
               selectionString = "%s file in %s format." % (dataTypeString,formatName)
               selectionList.append(selectionString)
               selectionDict[selectionString] = (dataType,formatName)
-                  
+
         interaction = SelectionListPopup(self, selectionList, title = 'File format selection', text = 'This is a:', selectionDict = selectionDict, dismissButton = True, modal = True)
 
         #
         # Check if anything was selected...
         #
-        
+
         dataType = formatName = None
-          
+
         if interaction.isSelected:
           (dataType,formatName) = interaction.selection
         else:
           showWarning('Failure','This file cannot by read without a format selection.\nIf the correct format is not available, please send the file with an explanation to %s' % self.email, parent=self)
           return False
-      
+
       #
       # Now read the file, need to do some field updates!
       #
-      
+
       (fileRead,fileInformation) = self.fcWrapper.readFile(dataType,formatName,self.fileName)
-                      
+
       if not fileRead:
         showWarning('Failure','This file cannot be read by this software:%s\nPlease send the file with an explanation to %s.' % (fileInformation,self.email), parent=self)
         return False
-      
+
       (conversionInfo,conversionSuccess) = (self.fcWrapper.formatConversion.conversionInfo,self.fcWrapper.formatConversion.conversionSuccess)
-      
+
       if not conversionSuccess:
         showWarning('Failure','This file was read by the software but contains invalid information.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
         return False
-      
+
       #
       # Set info if import worked OK
       #
-      
+
       conversionLines = conversionInfo.split(": ")
-      
+
       showInfo("Import coordinate and/or sequence information",":\n".join(conversionLines),parent=self)
-      
+
       if dataType == 'sequence':
         chains = self.fcWrapper.importReturns[dataType]
         models = []
       elif dataType == 'coordinates':
         models = self.fcWrapper.importReturns[dataType]
         chains = [cChain.chain for cChain in models[0].structureEnsemble.coordChains]
-      
+
       self.sequenceCoordinatesImport.setText(self.fileName) # TODO change color or something?
       self.sequenceCoordinatesImport.configure(foreground = self.fontOkColor)
 
       self.sequenceCoordinatesLoaded = True
-      
+
       #
       # Reset to list selector for further use
       #
-      
+
       moleculeName = None
-      
+
       for chain in chains:
-      
+
         if chain in self.moleculeDict.values():
           continue
-      
+
         numResidues = len(chain.residues)
         if numResidues == 1:
           residueText = "%s residue" % chain.findFirstResidue().ccpCode
         else:
           residueText = "%d residues" % numResidues
-      
+
         moleculeName = "%s (chain '%s', %s)" % (chain.molecule.name,chain.code,residueText)
-        
+
         self.moleculeList.append(moleculeName)
         self.moleculeDict[moleculeName] = chain
-        
+
       self.moleculeList.sort()
 
       self.moleculeSelect.destroy()
-      
+
       if len(chains) == 1 and moleculeName:
         selectedIndex = self.moleculeList.index(moleculeName)
       else:
@@ -455,22 +452,22 @@ class DataFileImportFrame(Frame):
 
       self.moleculeSelect = PulldownList(self.frameA, texts=self.moleculeList, index=selectedIndex, sticky='ew')
       self.moleculeSelect.grid(row=self.moleculeSelectRow, column=0)
-     
+
       #
       # Now update Deposition tab
       #
-      
+
       molecules = []
       for chain in chains:
-        if not chain.molecule in molecules:
+        if chain.molecule not in molecules:
           molecules.append(chain.molecule)
-      
+
       numCoords = 0
       for model in models:
         numCoords += len(model.coords)
 
       self.updateDepositionImportLabel(molecules=len(molecules),chains=len(chains),models=len(models),coordinates=numCoords)
-      
+
       # Add the molSystem to the entry!
       if chains and not chains[0].molSystem == self.entry.molSystem:
         self.entry.molSystem = chains[0].molSystem
@@ -478,120 +475,120 @@ class DataFileImportFrame(Frame):
     self.updateAll()
 
   def importShifts(self):
-    
+
     currentChain = self.getCurrentChain()
 
     if not currentChain:
       showWarning('Failure','Please first read in a sequence or coordinate file and select the molecule relevant for this shift list.', parent=self)
       return
-    
+
     elif self.currentShiftList:
       shiftListChainPair = (self.currentShiftList,currentChain)
-      
+
       if shiftListChainPair in self.shiftListChainPairs:
         showWarning('Failure',"You already read in chemical shifts for this chain.\nPlease read in related shifts for the other chain(s), if present, or press the 'Import new set of shifts' button to read in a new set of shifts.", parent=self)
-        return   
-    
+        return
+
     dataType = 'shifts'
-    
+
     fileTypes = self.createFileTypes([dataType])
 
     if self.getFileName('Import chemical shift file',fileTypes):
-      
+
       formatNameSuggestions = self.fcWrapper.determineFormatNamesForFile(dataType,self.fileName)
 
-      if not formatNameSuggestions:       
+      if not formatNameSuggestions:
         showWarning('Failure','This file cannot be read by this software.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
         return False
-      
+
       #
       # Let user select if multiple options, otherwise take default
       #
-            
+
       if len(formatNameSuggestions) == 1:
-        
+
         formatName = formatNameSuggestions[0]
 
         if not showYesNo('File type detected', 'Reading as a chemical shift file in %s format. Is this correct?' % formatName, parent=self):
           showWarning('Failure','This file cannot be read by this software.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
           return False
-        
+
       else:
-      
+
         #
         # Create a selection (hopefully user-understandable)
         #
 
         selectionList = []
         selectionDict = {}
-        
+
         formatNameSuggestions.sort()
 
         for formatName in formatNameSuggestions:
           selectionString = "chemical shift file in %s format." % (formatName)
           selectionList.append(selectionString)
           selectionDict[selectionString] = formatName
-                  
+
         interaction = SelectionListPopup(self, selectionList, title = 'File format selection', text = 'This is a:', selectionDict = selectionDict, dismissButton = True, modal = True)
 
         #
         # Check if anything was selected...
         #
-        
+
         formatName = None
-          
+
         if interaction.isSelected:
           formatName = interaction.selection
         else:
           showWarning('Failure','This file cannot by read without a format selection.\nIf the correct format is not available, please send the file with an explanation to %s' % self.email, parent=self)
           return False
-      
+
       #
       # Now read the file, need to do some field updates! Also make sure to re-use shift list for other molecules...
       #
-      
+
       (fileRead,fileInformation) = self.fcWrapper.readFile(dataType,formatName,self.fileName,addKeywords = {'measurementList': self.currentShiftList})
-              
+
       if not fileRead:
         showWarning('Failure','This file cannot be read by this software:%s\nPlease send the file with an explanation to %s.' % (fileInformation,self.email), parent=self)
         return False
-      
+
       (conversionInfo,conversionSuccess) = (self.fcWrapper.formatConversion.conversionInfo,self.fcWrapper.formatConversion.conversionSuccess)
-      
+
       if not conversionSuccess:
         showWarning('Failure','This file was read by the software but contains invalid information.\nPlease send the file with an explanation to %s.' % self.email, parent=self)
         return False
-      
+
       #
       # Set info if import worked OK
       #
-      
+
       conversionLines = conversionInfo.split(": ")
-      
+
       showInfo("Import chemical shift information",":\n".join(conversionLines),parent=self)
-      
+
       self.shiftImport.setText(self.fileName) # TODO change color or something?
       self.shiftImport.configure(foreground = self.fontOkColor)
       self.shiftsLoaded = True
       self.shiftsFormatName = formatName
 
       shiftList = self.fcWrapper.importReturns[dataType]
-      
+
       if not self.currentShiftList:
         self.currentShiftList = shiftList
-        
+
       self.shiftListChainPairs.append((self.currentShiftList,currentChain))
-            
+
       self.updateDepositionImportLabel(shiftList=shiftList)
 
-      if not shiftList in self.entry.measurementLists:
+      if shiftList not in self.entry.measurementLists:
         print(shiftList)
         self.entry.addMeasurementList(shiftList)
         print(self.entry.measurementLists)
 
     self.updateAll()
 
-  
+
   #
   # Updaters
   #
@@ -604,32 +601,32 @@ class DataFileImportFrame(Frame):
 
     for func in funcsDict[index]:
       func()
-      
+
   def updateMain(self):
-  
+
     pass
-    
+
   def updateCoordinates(self):
-  
+
     pass
-    
+
   def updateDeposition(self):
-  
+
     pass
 
   def updateAll(self):
 
     self.selectTab(self.tabbedFrame.selected)
-    
+
     if self.sequenceCoordinatesLoaded and self.shiftsLoaded:
       if showYesNo('Connect shifts to sequence', 'You have to check whether the chemical shift information matches the sequence. Do you want to this now?', parent=self):
         self.connectShiftsSequence()
-        
+
     self.waiting = False
 
 
   def getCurrentChain(self):
-  
+
     if len(self.moleculeList) == 1:
       chain = self.moleculeDict.values()[0]
     else:
@@ -638,44 +635,44 @@ class DataFileImportFrame(Frame):
         chain = self.moleculeDict[moleculeSelected]
       except:
         chain = None
-      
+
     return chain
-  
-  
+
+
   def connectShiftsSequence(self):
-  
+
     if not self.linkResDone:
-      
+
       changeResetColor = False
-      
+
       #
       # Get chain mapping and run linkResonances
       #
-      
+
       chain = self.getCurrentChain()
-      
+
       forceChainMappings = self.fcWrapper.linkResonancesToSequence(chain=chain)
-      self.fcWrapper.formatConversion.linkResonances(forceChainMappings=forceChainMappings,guiParent=self)        
-      
+      self.fcWrapper.formatConversion.linkResonances(forceChainMappings=forceChainMappings,guiParent=self)
+
       #
       # Get information about the linking process
       #
       # TODO Should only have an nmrProject (no restraint import, should be included?)
       # In any case, is always the LAST info in numResonancesLinked info
-      
+
       numResonancesLinked = self.fcWrapper.formatConversion.numResonancesLinked
       (origLinked,origUnlinked,linked,unlinked) = (numResonancesLinked['origLinked'][-1],numResonancesLinked['origUnlinked'][-1],numResonancesLinked['linked'][-1],numResonancesLinked['unlinked'][-1])
 
       #
       # Track number of new resonances, and reset for new import
       #
-      
+
       if self.fcWrapper.formatConversion.allResonancesLinked:
         status = 'All information matches (for all imports).'
         foreground = self.fontOkColor
         changeResetColor = True
       else:
-        if origUnlinked - unlinked == self.fcWrapper.numNewResonances: 
+        if origUnlinked - unlinked == self.fcWrapper.numNewResonances:
           status = 'All information matches (for this import)'
           foreground = self.fontOkColor
           changeResetColor = True
@@ -687,58 +684,58 @@ class DataFileImportFrame(Frame):
           else:
             status = 'No information matches (for this import).'
             foreground = self.fontBadColor
-          
+
           otherUnlinked = (origUnlinked - self.fcWrapper.numNewResonances)
           notLinked = unlinked - otherUnlinked
 
           status += "\nUnable to link %d out of %d imported shifts (%.2f%%)." % (notLinked,self.fcWrapper.numNewResonances,(notLinked * 100.0) / self.fcWrapper.numNewResonances)
 
-      self.linkResCheckInfo.set("Status: %s" % status)             
+      self.linkResCheckInfo.set("Status: %s" % status)
       self.linkResCheckInfo.config(foreground = foreground)
 
       self.linkResDone = True
-      
+
       #
       # Change the color of the reset button to indicate OK to do next one
       #
-      
+
       if changeResetColor:
-        
+
         self.mainButtons.buttons[0].config(foreground = self.fontOkColor)
-        
+
         self.updateDepositionImportLabel(shiftList=None,percentageLinked=(linked * 100.0/(unlinked+linked)),connectedChain=chain)
 
 
   def updateDepositionImportLabel(self,shiftList=None,molecules=0,chains=0,models=0,coordinates=0,percentageLinked=None,connectedChain=None):
-  
+
     if shiftList and shiftList not in self.importedShiftLists:
       self.importedShiftLists.append(shiftList)
       self.depositionImportNums[0] += 1
-      
+
     shifts = 0
     for shiftList in self.importedShiftLists:
       shifts += len(shiftList.measurements)
-    
+
     self.depositionImportNums[1] += shifts
     self.depositionImportNums[2] += molecules
     self.depositionImportNums[3] += chains
     self.depositionImportNums[4] += models
     self.depositionImportNums[5] += coordinates
-    
+
     if percentageLinked != None:
       self.depositionImportNums[6] = percentageLinked
-    
+
     if connectedChain and connectedChain not in self.connectedChains:
       self.depositionImportNums[7] += 1
       self.connectedChains.append(connectedChain)
-      
+
     self.depositionImportLabel.destroy()
-    
+
     finalForeground = self.fontBadColor
     if self.depositionImportNums[0] == 0 and self.depositionImportNums[2] == 0:
       # Nothing imported
       foreground = self.fontBadColor
-      
+
     elif self.depositionImportNums[6]:
       # Linked shifts available - TODO base this on % of shifts linked?
       foreground = self.fontOkColor
@@ -746,11 +743,11 @@ class DataFileImportFrame(Frame):
         finalForeground = self.fontOkColor
       else:
         finalForeground = self.fontCheckColor
-      
+
     else:
       # Intermediate state
       foreground = self.fontCheckColor
-    
+
     self.depositionImportLabel = Label(self.frameD, text = self.depositionImportText % tuple(self.depositionImportNums), foreground = foreground)
     self.depositionImportLabel.grid(row=self.depositionImportLoc[0], column=self.depositionImportLoc[1], sticky='ew')
 
@@ -764,21 +761,21 @@ class DataFileImportFrame(Frame):
       if showYesNo('Shifts not connected to sequence', 'You have not checked whether the imported chemical shift information matches the imported sequence. Do you want to this first? If not, the last imported data will be invalid.', parent=self):
         self.connectShiftsSequence()
         doReset = False
- 
+
     if doReset:
-    
+
       self.mainButtons.buttons[0].config(foreground = self.fontDefaultColor)
 
       self.sequenceCoordinatesLoaded = self.shiftsLoaded = self.linkResDone = False
 
-      self.sequenceCoordinatesImport.setText(self.defaultSelectText) 
+      self.sequenceCoordinatesImport.setText(self.defaultSelectText)
       self.sequenceCoordinatesImport.configure(foreground = self.fontDefaultColor)
-    
+
       self.moleculeSelect.destroy()
       self.moleculeSelect = Label(self.frameA, text = "None available yet - import valid file first", foreground = self.fontBadColor)
       self.moleculeSelect.grid(row=self.moleculeSelectRow, column=0, sticky='ew')
 
-      self.shiftImport.setText(self.defaultSelectText) 
+      self.shiftImport.setText(self.defaultSelectText)
       self.shiftImport.configure(foreground = self.fontDefaultColor)
 
       self.linkResCheckInfo.set("")
@@ -791,16 +788,16 @@ class DataFileImportFrame(Frame):
       if showYesNo('Shifts not connected to sequence', 'You have not checked whether the imported chemical shift information matches the imported sequence. Do you want to this first? If not, the last imported data will be invalid.', parent=self):
         self.connectShiftsSequence()
         doReset = False
- 
+
     if doReset:
-    
+
       self.mainButtons.buttons[1].config(foreground = self.fontDefaultColor)
 
       self.shiftsLoaded = self.linkResDone = False
 
       self.currentShiftList = None
-      
-      self.shiftImport.setText(self.defaultSelectText) 
+
+      self.shiftImport.setText(self.defaultSelectText)
       self.shiftImport.configure(foreground = self.fontDefaultColor)
 
       self.linkResCheckInfo.set("")
@@ -812,7 +809,7 @@ class DataFileImportFrame(Frame):
   #
   # Instructions
   #
-  
+
   def showMainInstructions(self):
 
     popup = getPopup(self)

@@ -22,11 +22,14 @@
 ##                                                                           ##
 ##############################################################################
 
-import sys, os, commands
+import os
+import sys
+
+import commands
 
 modules = os.path.join(os.environ['ISD_ROOT'], 'src', 'py')
 
-if not modules in sys.path:
+if modules not in sys.path:
     sys.path.insert(0, modules)
 
 from Isd.setup import *

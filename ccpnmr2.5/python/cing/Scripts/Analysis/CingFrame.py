@@ -1,26 +1,20 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-import os, sys, Tkinter
-
-from memops.gui.Button          import Button
-from memops.gui.ButtonList      import ButtonList
-from memops.gui.RadioButtons    import RadioButtons
-from memops.gui.CheckButton     import CheckButton
-from memops.gui.Entry           import Entry
-from memops.gui.FileSelect      import FileType
-from memops.gui.FileSelectPopup import FileSelectPopup
-from memops.gui.Frame           import Frame
-from memops.gui.Label           import Label
-from memops.gui.LabelFrame      import LabelFrame
-from memops.gui.LabelDivider    import LabelDivider
-from memops.gui.MessageReporter import showWarning, showOkCancel, showInfo, showYesNo
-from memops.gui.PulldownList    import PulldownList
-from memops.gui.ScrolledMatrix  import ScrolledMatrix
-from memops.gui.WebBrowser      import WebBrowser
-
-from memops.editor.Util      import createDismissHelpButtonList
+import os
 
 from ccpnmr.analysis.popups.EditCalculation import NmrSimRunFrame
-
+from memops.gui.Button import Button
+from memops.gui.ButtonList import ButtonList
+from memops.gui.Entry import Entry
+from memops.gui.FileSelect import FileType
+from memops.gui.FileSelectPopup import FileSelectPopup
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelDivider import LabelDivider
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.MessageReporter import showInfo, showOkCancel, showWarning, showYesNo
+from memops.gui.PulldownList import PulldownList
+from memops.gui.ScrolledMatrix import ScrolledMatrix
+from memops.gui.WebBrowser import WebBrowser
 from nijmegen.cing import iCingRobot
 
 # TBD

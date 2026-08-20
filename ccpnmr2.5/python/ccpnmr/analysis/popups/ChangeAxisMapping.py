@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,136 +38,134 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import string
 
-import tkinter
-
-
-from ccpnmr.api import Analysis
-
-from memops.gui.Label import Label
-from memops.gui.PulldownMenu import PulldownMenu
-from memops.gui.ButtonList import UtilityButtonList
-
-from ccpnmr.analysis.popups.BasePopup import BasePopup
 from ccpnmr.analysis.core.Util import haveTypeMatch
 from ccpnmr.analysis.core.WindowBasic import findDataDimAxisMapping, getWindowPaneName
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import UtilityButtonList
+from memops.gui.Label import Label
+from memops.gui.PulldownMenu import PulldownMenu
+
 
 class ChangeAxisMappingPopup(BasePopup):
+    def __init__(self, parent, spectrumWindowView, **kw):
 
-  def __init__(self, parent, spectrumWindowView, **kw):
+        self.spectrumWindowView = spectrumWindowView
 
-    self.spectrumWindowView = spectrumWindowView
+        BasePopup.__init__(self, parent=parent, title="Change axis mappings", modal=True, transient=False, **kw)
 
-    BasePopup.__init__(self, parent=parent, title='Change axis mappings',
-                       modal=True, transient=False, **kw)
+    def body(self, master):
 
-  def body(self, master):
+        master.grid_columnconfigure(1, weight=1)
+        master.grid_rowconfigure(0, weight=1)
 
-    master.grid_columnconfigure(1, weight=1)
-    master.grid_rowconfigure(0, weight=1)
+        view = self.spectrumWindowView
+        spectrum = view.analysisSpectrum.dataSource
+        dataDims = spectrum.sortedDataDims()
 
-    view = self.spectrumWindowView
-    spectrum = view.analysisSpectrum.dataSource
-    dataDims = spectrum.sortedDataDims()
-    
-    self.ndim = spectrum.numDim
-    self.prev_label = self.ndim * [ None ]
-    self.redraw = False
+        self.ndim = spectrum.numDim
+        self.prev_label = self.ndim * [None]
+        self.redraw = False
 
-    row = 0
-    label = Label(master, text='Window:')
-    label.grid(row=row, column=0, sticky='w')
-    
-    name = getWindowPaneName(self.spectrumWindowView.spectrumWindowPane)
-    tipText = 'The name of the window where the dimension mapping is changing '
-    label = Label(master, text=name, tipText=tipText)
-    label.grid(row=row, column=1, sticky='w')
+        row = 0
+        label = Label(master, text="Window:")
+        label.grid(row=row, column=0, sticky="w")
 
-    row += 1
-    label = Label(master, text='Experiment:')
-    label.grid(row=row, column=0, sticky='w')
-    tipText = 'The NMR experiment to change dimension mapping for'
-    label = Label(master, text=spectrum.experiment.name, tipText=tipText)
-    label.grid(row=row, column=1, sticky='w')
+        name = getWindowPaneName(self.spectrumWindowView.spectrumWindowPane)
+        tipText = "The name of the window where the dimension mapping is changing "
+        label = Label(master, text=name, tipText=tipText)
+        label.grid(row=row, column=1, sticky="w")
 
-    row += 1
-    label = Label(master, text='Spectrum:')
-    label.grid(row=row, column=0, sticky='w')
-    tipText = 'The spectrum data to change the dimension mapping for'
-    label = Label(master, text=spectrum.name, tipText=tipText)
-    label.grid(row=row, column=1, sticky='w')
+        row += 1
+        label = Label(master, text="Experiment:")
+        label.grid(row=row, column=0, sticky="w")
+        tipText = "The NMR experiment to change dimension mapping for"
+        label = Label(master, text=spectrum.experiment.name, tipText=tipText)
+        label.grid(row=row, column=1, sticky="w")
 
-    self.axis_lists = self.ndim * [0]
-    for n in range(self.ndim):
-      row += 1
-      callback = lambda entry_index, entry, dim=n: self.callback(dim, entry)
-      dataDim = dataDims[n]
-      axisMapping = findDataDimAxisMapping(view, dataDim)
-      entries = self.validAxisLabels(dataDim)
-      selected = axisMapping.label
-      if selected not in entries:
-        label = Label(master, text='Dimension %d:\n(sampled)' % (n+1,))
-        label.grid(row=row, column=0, sticky='w')
-      else:
-        label = Label(master, text='Dimension %d:' % (n+1,))
-        label.grid(row=row, column=0, sticky='w')
-        selected_index = entries.index(selected)
-        tipText = 'Selects which numbered spectrum dimension goes with which window axis'
-        self.axis_lists[n] = PulldownMenu(master, callback=callback,
-                                          entries=entries, tipText=tipText,
-                                          selected_index=selected_index)
-        self.axis_lists[n].grid(row=row, column=1, sticky='w')
+        row += 1
+        label = Label(master, text="Spectrum:")
+        label.grid(row=row, column=0, sticky="w")
+        tipText = "The spectrum data to change the dimension mapping for"
+        label = Label(master, text=spectrum.name, tipText=tipText)
+        label.grid(row=row, column=1, sticky="w")
 
-    row += 1
-    texts = commands = []
-    tipTexts = ['Commit any changes to the spectrum dimension to window axis mapping and close the popup',]
-    texts = [ ' Commit ',]
-    commands = [ self.ok,]
-    buttons = UtilityButtonList(master, texts=texts, tipTexts=tipTexts,
-                                commands=commands, doClone=False,
-                                helpUrl=self.help_url)
-    buttons.grid(row=row, column=0, columnspan=2, sticky='ew')
-    
-  def validAxisLabels(self, dataDim):
+        self.axis_lists = self.ndim * [0]
+        for n in range(self.ndim):
+            row += 1
+            callback = lambda entry_index, entry, dim=n: self.callback(dim, entry)
+            dataDim = dataDims[n]
+            axisMapping = findDataDimAxisMapping(view, dataDim)
+            entries = self.validAxisLabels(dataDim)
+            selected = axisMapping.label
+            if selected not in entries:
+                label = Label(master, text="Dimension %d:\n(sampled)" % (n + 1,))
+                label.grid(row=row, column=0, sticky="w")
+            else:
+                label = Label(master, text="Dimension %d:" % (n + 1,))
+                label.grid(row=row, column=0, sticky="w")
+                selected_index = entries.index(selected)
+                tipText = "Selects which numbered spectrum dimension goes with which window axis"
+                self.axis_lists[n] = PulldownMenu(
+                    master, callback=callback, entries=entries, tipText=tipText, selected_index=selected_index
+                )
+                self.axis_lists[n].grid(row=row, column=1, sticky="w")
 
-    axisPanels = self.spectrumWindowView.spectrumWindowPane.sortedAxisPanels()
-    labels = [ axisPanel.label for axisPanel in axisPanels if haveTypeMatch(axisPanel, dataDim) ]
+        row += 1
+        texts = commands = []
+        tipTexts = [
+            "Commit any changes to the spectrum dimension to window axis mapping and close the popup",
+        ]
+        texts = [
+            " Commit ",
+        ]
+        commands = [
+            self.ok,
+        ]
+        buttons = UtilityButtonList(
+            master, texts=texts, tipTexts=tipTexts, commands=commands, doClone=False, helpUrl=self.help_url
+        )
+        buttons.grid(row=row, column=0, columnspan=2, sticky="ew")
 
-    return labels
+    def validAxisLabels(self, dataDim):
 
-  def callback(self, n, entry):
+        axisPanels = self.spectrumWindowView.spectrumWindowPane.sortedAxisPanels()
+        labels = [axisPanel.label for axisPanel in axisPanels if haveTypeMatch(axisPanel, dataDim)]
 
-    prev_entry = self.prev_label[n]
-    self.prev_label[n] = entry
+        return labels
 
-    if (not prev_entry):
-      return
+    def callback(self, n, entry):
 
-    if (entry == prev_entry):
-      return
+        prev_entry = self.prev_label[n]
+        self.prev_label[n] = entry
 
-    for m in range(self.ndim):
-      if (m == n):
-        continue
-      if (entry == self.axis_lists[m].getSelected()):
-        self.prev_label[m] = prev_entry
-        self.axis_lists[m].setSelected(prev_entry)
-        break
+        if not prev_entry:
+            return
 
-  def apply(self):
+        if entry == prev_entry:
+            return
 
-    view = self.spectrumWindowView
-    for axisMapping in view.axisMappings:
-      axisMapping.delete()
+        for m in range(self.ndim):
+            if m == n:
+                continue
+            if entry == self.axis_lists[m].getSelected():
+                self.prev_label[m] = prev_entry
+                self.axis_lists[m].setSelected(prev_entry)
+                break
 
-    spectrum = view.analysisSpectrum.dataSource
-    dataDims = spectrum.sortedDataDims()
-    for n in range(self.ndim):
-      dataDim = dataDims[n]
-      label = self.axis_lists[n].getSelected()
-      view.newAxisMapping(label=label, analysisDataDim=dataDim.analysisDataDim)
+    def apply(self):
 
-    self.redraw = True
+        view = self.spectrumWindowView
+        for axisMapping in view.axisMappings:
+            axisMapping.delete()
 
-    return True
+        spectrum = view.analysisSpectrum.dataSource
+        dataDims = spectrum.sortedDataDims()
+        for n in range(self.ndim):
+            dataDim = dataDims[n]
+            label = self.axis_lists[n].getSelected()
+            view.newAxisMapping(label=label, analysisDataDim=dataDim.analysisDataDim)
+
+        self.redraw = True
+
+        return True

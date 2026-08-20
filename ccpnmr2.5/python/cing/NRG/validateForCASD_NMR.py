@@ -1,14 +1,13 @@
 # python -u $CINGROOT/python/cing/NRG/validateForCASD_NMR.py
-from cing import cingPythonDir
-from cing.NRG import CASD_NMR_BASE_NAME
-from cing.NRG.PDBEntryLists import writeEntryListToFile
-from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23_BY_ENTRY
-from cing.Scripts.validateEntry import PROJECT_TYPE_CCPN
-from cing.core import constants as cingConstants
-from cing.NRG import CasdScripts
+import json
+import os
+
 import cing
-import os, json
+from cing import cingPythonDir
+from cing.core import constants as cingConstants
+from cing.NRG import CASD_NMR_BASE_NAME
+from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23_BY_ENTRY, PROJECT_TYPE_CCPN
 
 cing.verbosity = cing.verbosityDebug
 #cing.verbosity = cing.verbosityDefault
@@ -39,7 +38,7 @@ calcData = json.load(open(calcDataFile))
 # Get all entries for CASD 2013
 #entryList = list(calcData.keys())
 #
-entryList = [tt[0] for tt in sorted(calcData.items()) 
+entryList = [tt[0] for tt in sorted(calcData.items())
             if tt[1].get('PDBcode') == '2M5O']
 #entryList.remove('2m2e_Lyon_263')
 #entryList = ['2m2e_Lyon_263',]

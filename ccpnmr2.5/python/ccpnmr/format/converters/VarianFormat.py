@@ -1,5 +1,3 @@
-
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -13,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,57 +52,56 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-
-from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
-
 from ccp.format.varian.acqParsHelpReader import VarianAcqParHelp
+from ccpnmr.format.converters.DataFormat import DataFormat
 
 #
 # Varian specific functions (should these be here?!?!)
 #
 
-format = 'varian'
+format = "varian"
+
 
 def hasVarianSwitchedPhaseOrder(rawData):
 
-  if rawData.name == format:
-    if rawData.storageOrder == ('dim3','dim2','phase1','phase2'):
-      return True
-      
-  return False
-  
+    if rawData.name == format:
+        if rawData.storageOrder == ("dim3", "dim2", "phase1", "phase2"):
+            return True
+
+    return False
+
+
 #
 # Real class
 #
 
+
 class VarianFormat(DataFormat):
+    def setFormat(self):
 
-  def setFormat(self):
-  
-    self.format = format
-    
-    #
-    # Only done once...
-    #
-    
-    self.acqParsHelp = VarianAcqParHelp('help')
+        self.format = format
 
-  def getAcqPars(self):
-    
-    self.acqParsData = self.AcqParsDataClass(self.fileName,self.numDim,self.acqParsHelp.tags)
-    self.acqParsData.get(verbose = self.verbose)
-    
-  #
-  #
-  # Here format specific stuff
-  #
-  #
-  
-  def setFidDataSourceSpecific(self):
-  
+        #
+        # Only done once...
+        #
+
+        self.acqParsHelp = VarianAcqParHelp("help")
+
+    def getAcqPars(self):
+
+        self.acqParsData = self.AcqParsDataClass(self.fileName, self.numDim, self.acqParsHelp.tags)
+        self.acqParsData.get(verbose=self.verbose)
+
     #
-    # TODO: need to check if file there - selection if not
     #
-    
-    self.setFidDataSourceLocation('fid')
-    
+    # Here format specific stuff
+    #
+    #
+
+    def setFidDataSourceSpecific(self):
+
+        #
+        # TODO: need to check if file there - selection if not
+        #
+
+        self.setFidDataSourceLocation("fid")

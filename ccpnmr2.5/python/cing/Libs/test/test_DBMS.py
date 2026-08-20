@@ -2,20 +2,16 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_DBMS.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing import cingRoot
-from cing.Libs.DBMS import DBMS
-from cing.Libs.DBMS import Relation
-from cing.Libs.DBMS import addColumnHeaderRowToCsvFile
-from cing.Libs.DBMS import sortRelationByColFromCsvFile
-from cing.Libs.DBMS import sort_table
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG.PDBEntryLists import matchBmrbPdbDataDir
+import unittest
 from glob import glob
 from shutil import copyfile
 from unittest import TestCase
-import unittest
+
+from cing import cingDirTestsData, cingDirTmp, cingRoot
+from cing.Libs.DBMS import DBMS, Relation, addColumnHeaderRowToCsvFile, sort_table, sortRelationByColFromCsvFile
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.PDBEntryLists import matchBmrbPdbDataDir
+
 
 class AllChecks(TestCase):
 

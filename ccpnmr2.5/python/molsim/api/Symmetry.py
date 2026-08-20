@@ -58,23 +58,20 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
-import ccp.api.molecule.MolSystem
 import memops.api.AccessControl
 import memops.api.Implementation
 
@@ -89,9 +86,9 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   _packageName = 'molsim.Symmetry'
   _packageShortName = 'SYMM'
   _fieldNames = ('applicationData', 'className', 'createdBy', 'details', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'symmetrySetId', 'access', 'activeAccess', 'activeRepositories', 'memopsRoot', 'molSystem', 'packageLocator', 'parent', 'root', 'symmetries', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.Symmetry.MolSystemSymmetrySet
@@ -150,7 +147,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -239,7 +236,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -278,13 +275,13 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
     symmetries_s = dataDict.get('symmetries').values()
     for symmetries in symmetries_s:
-      if (not (symmetries in objsToBeDeleted)):
+      if (symmetries not in objsToBeDeleted):
         objsToBeDeleted.add(symmetries)
         objsToBeChecked.append(symmetries)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.Symmetry.MolSystemSymmetrySet:   deletes
@@ -299,16 +296,16 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentMolSystemSymmetrySet'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     molSystem = dataDict.get('molSystem')
-    if (molSystem is not None and not (molSystem in objsToBeDeleted)):
+    if (molSystem is not None and molSystem not in objsToBeDeleted):
       molSystemSymmetrySets = molSystem.__dict__.get('molSystemSymmetrySets')
       molSystemSymmetrySets.remove(self)
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('molSystem')
       ll.append(objKey)
@@ -332,7 +329,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for molsim.Symmetry.MolSystemSymmetrySet
@@ -374,7 +371,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('molSystemSymmetrySets')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -495,7 +492,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -624,7 +621,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -632,7 +629,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -650,7 +647,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -674,7 +671,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         )
 
       oldSelves = value.__dict__.get('molSystemSymmetrySets')
-      if (not (self in oldSelves)):
+      if (self not in oldSelves):
         raise ApiError("""%s.checkValid: molSystem:
          non-reciprocal link molSystem from object""" % self.qualifiedName
          + ": %s" % (self,)
@@ -696,7 +693,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -712,7 +709,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('molSystemSymmetrySet')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: symmetries:
            non-reciprocal link symmetries from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -786,7 +783,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllSymmetries(self, **conditions):
     """
     FindAll for molsim.Symmetry.MolSystemSymmetrySet.symmetries
@@ -806,7 +803,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('symmetries').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -817,28 +814,28 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -851,7 +848,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstSymmetries(self, **conditions):
     """
     FindFirst for molsim.Symmetry.MolSystemSymmetrySet.symmetries
@@ -893,7 +890,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('symmetries').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -904,28 +901,28 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -934,7 +931,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.Symmetry.MolSystemSymmetrySet
@@ -949,7 +946,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.Symmetry.MolSystemSymmetrySet
@@ -986,7 +983,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
 
   getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
-  
+
   def getDetails(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.details
@@ -998,7 +995,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.Symmetry.MolSystemSymmetrySet
@@ -1029,7 +1026,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.Symmetry.MolSystemSymmetrySet
@@ -1045,7 +1042,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
         result = tuple(ll)
 
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.memopsRoot
@@ -1055,7 +1052,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getMolSystem(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.molSystem
@@ -1063,7 +1060,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('molSystem')
     return result
-  
+
   def getName(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.name
@@ -1077,7 +1074,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.parent
@@ -1089,7 +1086,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSymmetries(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.symmetries
@@ -1101,7 +1098,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     tempVar = dataDict.get('symmetries').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getSymmetrySetId(self):
     """
     Get for molsim.Symmetry.MolSystemSymmetrySet.symmetrySetId
@@ -1115,7 +1112,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newSymmetry(self, **attrlinks):
     """
     Factory function to create molsim.Symmetry.Symmetry
@@ -1131,7 +1128,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for molsim.Symmetry.MolSystemSymmetrySet
@@ -1144,7 +1141,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
 
   setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
-  
+
   def setDetails(self, value):
     """
     Set for molsim.Symmetry.MolSystemSymmetrySet.details
@@ -1210,13 +1207,13 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -1228,7 +1225,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setMolSystem(self, value):
     """
     Set for molsim.Symmetry.MolSystemSymmetrySet.molSystem
@@ -1281,7 +1278,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.setMolSystem:
          Link molSystem between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1305,7 +1302,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     dataDict['molSystem'] = value
 
     # doNotifies
-  
+
   def setName(self, value):
     """
     Set for molsim.Symmetry.MolSystemSymmetrySet.name
@@ -1377,13 +1374,13 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setName')
       if ll:
         for notify in ll:
@@ -1448,7 +1445,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
     dataDict['symmetrySetId'] = value
 
     # doNotifies
-  
+
   def sortedSymmetries(self):
     """
     Sorted for molsim.Symmetry.MolSystemSymmetrySet.symmetries
@@ -1458,7 +1455,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('symmetries')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -1473,7 +1470,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   createdBy = memops.api.Implementation.TopObject.createdBy
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -1497,7 +1494,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""Human-readable name of MolSystemSymmetrySet
   """)
@@ -1507,7 +1504,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   symmetrySetId = property(getSymmetrySetId, setSymmetrySetId, None,
   r"""Identifier of MolSystemSymmetrySet. Used to distinguish between objects 
   that belong to the same MolSystem. Part of object key.
@@ -1518,23 +1515,23 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
-  
+
   molSystem = property(getMolSystem, setMolSystem, None,
   r"""MolSystem that symmetry applies to. Part of object key
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   symmetries = property(getSymmetries,  None, None,
   r"""child link to class Symmetry
   """)
@@ -1550,9 +1547,9 @@ class Segment(memops.api.Implementation.DataObject):
   _packageName = 'molsim.Symmetry'
   _packageShortName = 'SYMM'
   _fieldNames = ('applicationData', 'chainCode', 'className', 'fieldNames', 'firstSeqId', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'parent', 'residues', 'root', 'symmetry', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.Symmetry.Segment
@@ -1594,7 +1591,7 @@ class Segment(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1659,7 +1656,7 @@ class Segment(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1685,7 +1682,7 @@ class Segment(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.Symmetry.Segment:   deletes
@@ -1696,11 +1693,11 @@ class Segment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     symmetry = dataDict.get('symmetry')
-    if (not (symmetry in objsToBeDeleted)):
+    if (symmetry not in objsToBeDeleted):
       ll = list()
       objKey = dataDict.get('chainCode')
       ll.append(objKey)
@@ -1720,14 +1717,14 @@ class Segment(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for molsim.Symmetry.Segment
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for molsim.Symmetry.Segment
@@ -1756,7 +1753,7 @@ class Segment(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('symmetry')
         dd = value.__dict__.get('segments')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'symmetry' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1862,7 +1859,7 @@ class Segment(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -1870,7 +1867,7 @@ class Segment(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1888,7 +1885,7 @@ class Segment(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -1907,7 +1904,7 @@ class Segment(memops.api.Implementation.DataObject):
         xx1 = dataDict.get('topObject')
         xx2 = xx1.__dict__.get('molSystem')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx2 is yy1)):
+        if (xx2 is not yy1):
           raise ApiError("""%s.checkValid: residues:
            Link residues between objects from separate partitions
            - molsim.Symmetry.MolSystemSymmetrySet.molSystem not set correctly""" % self.qualifiedName
@@ -1959,7 +1956,7 @@ class Segment(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllResidues(self, **conditions):
     """
     FindAll for molsim.Symmetry.Segment.residues
@@ -1973,7 +1970,7 @@ class Segment(memops.api.Implementation.DataObject):
     else:
       currentValues = self.getResidues()
       result = list()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -1984,28 +1981,28 @@ class Segment(memops.api.Implementation.DataObject):
               result.append(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.append(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2016,7 +2013,7 @@ class Segment(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstResidue(self, **conditions):
     """
     FindFirst for molsim.Symmetry.Segment.residues
@@ -2033,7 +2030,7 @@ class Segment(memops.api.Implementation.DataObject):
     else:
       currentValues = self.getResidues()
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2044,28 +2041,28 @@ class Segment(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2074,7 +2071,7 @@ class Segment(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.Symmetry.Segment
@@ -2087,7 +2084,7 @@ class Segment(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.Symmetry.Segment
@@ -2150,7 +2147,7 @@ class Segment(memops.api.Implementation.DataObject):
   getByKey = staticmethod(getByKey)
 
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
-  
+
   def getChainCode(self):
     """
     Get for molsim.Symmetry.Segment.chainCode
@@ -2164,7 +2161,7 @@ class Segment(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFirstSeqId(self):
     """
     Get for molsim.Symmetry.Segment.firstSeqId
@@ -2172,7 +2169,7 @@ class Segment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('firstSeqId')
     return result
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.Symmetry.Segment
@@ -2198,7 +2195,7 @@ class Segment(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.Symmetry.Segment
@@ -2220,7 +2217,7 @@ class Segment(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.Symmetry.Segment.parent
@@ -2230,7 +2227,7 @@ class Segment(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getResidues(self):
     """
     getter for derived link residues
@@ -2245,7 +2242,7 @@ class Segment(memops.api.Implementation.DataObject):
     return result
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSymmetry(self):
     """
     Get for molsim.Symmetry.Segment.symmetry
@@ -2257,7 +2254,7 @@ class Segment(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for molsim.Symmetry.Segment
@@ -2268,7 +2265,7 @@ class Segment(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setChainCode(self, value):
     """
     Set for molsim.Symmetry.Segment.chainCode
@@ -2335,7 +2332,7 @@ class Segment(memops.api.Implementation.DataObject):
     dataDict['chainCode'] = value
 
     # doNotifies
-  
+
   def setFirstSeqId(self, value):
     """
     Set for molsim.Symmetry.Segment.firstSeqId
@@ -2389,7 +2386,7 @@ class Segment(memops.api.Implementation.DataObject):
   toDetailedString = memops.api.Implementation.ComplexDataType.toDetailedString
 
   applicationData = memops.api.Implementation.DataObject.applicationData
-  
+
   chainCode = property(getChainCode, setChainCode, None,
   r"""chainCode for chain that segment belongs to. Part of class key
   """)
@@ -2397,7 +2394,7 @@ class Segment(memops.api.Implementation.DataObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   fieldNames = memops.api.Implementation.ComplexDataType.fieldNames
-  
+
   firstSeqId = property(getFirstSeqId, setFirstSeqId, None,
   r"""seqId of first residue in segment. Part of class key
   """)
@@ -2417,17 +2414,17 @@ class Segment(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for symmetry
   """)
-  
+
   residues = property(getResidues, None, None,
   r"""Residues that make up segment
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   symmetry = property(getSymmetry,  None, None,
   r"""parent link
   """)
@@ -2447,9 +2444,9 @@ a multichain MolSystem.
   _packageName = 'molsim.Symmetry'
   _packageShortName = 'SYMM'
   _fieldNames = ('applicationData', 'className', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'segmentLength', 'serial', 'symmetryCode', 'access', 'activeAccess', 'haddockRuns', 'molSystemSymmetrySet', 'parent', 'root', 'segments', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for molsim.Symmetry.Symmetry
@@ -2496,7 +2493,7 @@ a multichain MolSystem.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -2564,7 +2561,7 @@ a multichain MolSystem.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -2603,13 +2600,13 @@ a multichain MolSystem.
 
     segments = dataDict.get('segments').values()
     for segment in segments:
-      if (not (segment in objsToBeDeleted)):
+      if (segment not in objsToBeDeleted):
         objsToBeDeleted.add(segment)
         objsToBeChecked.append(segment)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for molsim.Symmetry.Symmetry:   deletes
@@ -2620,16 +2617,16 @@ a multichain MolSystem.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     for haddockRun in dataDict.get('haddockRuns'):
-      if (not (haddockRun in objsToBeDeleted)):
+      if (haddockRun not in objsToBeDeleted):
         symmetryRestraints = haddockRun.__dict__.get('symmetryRestraints')
         symmetryRestraints.remove(self)
 
     molSystemSymmetrySet = dataDict.get('molSystemSymmetrySet')
-    if (not (molSystemSymmetrySet in objsToBeDeleted)):
+    if (molSystemSymmetrySet not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -2641,7 +2638,7 @@ a multichain MolSystem.
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addHaddockRun(self, value):
     """
     Add for molsim.Symmetry.Symmetry.haddockRuns
@@ -2705,7 +2702,7 @@ a multichain MolSystem.
       if (value is not None):
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.addHaddockRun:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2722,13 +2719,13 @@ a multichain MolSystem.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addHaddockRun')
       if ll:
         for notify in ll:
@@ -2765,7 +2762,7 @@ a multichain MolSystem.
       else:
         value = dataDict.get('molSystemSymmetrySet')
         dd = value.__dict__.get('symmetries')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'molSystemSymmetrySet' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2896,7 +2893,7 @@ a multichain MolSystem.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2904,7 +2901,7 @@ a multichain MolSystem.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2922,7 +2919,7 @@ a multichain MolSystem.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2946,7 +2943,7 @@ a multichain MolSystem.
           )
 
         oldSelves = value.__dict__.get('symmetryRestraints')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: haddockRuns:
            non-reciprocal link haddockRuns from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2954,7 +2951,7 @@ a multichain MolSystem.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: haddockRuns:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2977,7 +2974,7 @@ a multichain MolSystem.
           )
 
         oldSelf = value.__dict__.get('symmetry')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: segments:
            non-reciprocal link segments from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3022,7 +3019,7 @@ a multichain MolSystem.
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllHaddockRuns(self, **conditions):
     """
     FindAll for molsim.Symmetry.Symmetry.haddockRuns
@@ -3050,7 +3047,7 @@ a multichain MolSystem.
 
       currentValues = dataDict.get('haddockRuns')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3061,28 +3058,28 @@ a multichain MolSystem.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3091,7 +3088,7 @@ a multichain MolSystem.
             result.add(v)
 
     return result
-  
+
   def findAllSegments(self, **conditions):
     """
     FindAll for molsim.Symmetry.Symmetry.segments
@@ -3105,7 +3102,7 @@ a multichain MolSystem.
     else:
       currentValues = dataDict.get('segments').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3116,28 +3113,28 @@ a multichain MolSystem.
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3148,7 +3145,7 @@ a multichain MolSystem.
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstHaddockRun(self, **conditions):
     """
     FindFirst for molsim.Symmetry.Symmetry.haddockRuns
@@ -3179,7 +3176,7 @@ a multichain MolSystem.
 
       currentValues = dataDict.get('haddockRuns')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3190,28 +3187,28 @@ a multichain MolSystem.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3220,7 +3217,7 @@ a multichain MolSystem.
             result = v; break
 
     return result
-  
+
   def findFirstSegment(self, **conditions):
     """
     FindFirst for molsim.Symmetry.Symmetry.segments
@@ -3261,7 +3258,7 @@ a multichain MolSystem.
         currentValues = dataDict.get('segments').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -3272,28 +3269,28 @@ a multichain MolSystem.
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -3302,7 +3299,7 @@ a multichain MolSystem.
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for molsim.Symmetry.Symmetry
@@ -3315,7 +3312,7 @@ a multichain MolSystem.
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for molsim.Symmetry.Symmetry
@@ -3372,7 +3369,7 @@ a multichain MolSystem.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for molsim.Symmetry.Symmetry
@@ -3391,7 +3388,7 @@ a multichain MolSystem.
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getHaddockRuns(self):
     """
     Get for molsim.Symmetry.Symmetry.haddockRuns
@@ -3411,7 +3408,7 @@ a multichain MolSystem.
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for molsim.Symmetry.Symmetry
@@ -3421,7 +3418,7 @@ a multichain MolSystem.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getMolSystemSymmetrySet(self):
     """
     Get for molsim.Symmetry.Symmetry.molSystemSymmetrySet
@@ -3433,7 +3430,7 @@ a multichain MolSystem.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for molsim.Symmetry.Symmetry.parent
@@ -3445,7 +3442,7 @@ a multichain MolSystem.
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSegmentLength(self):
     """
     Get for molsim.Symmetry.Symmetry.segmentLength
@@ -3453,7 +3450,7 @@ a multichain MolSystem.
     dataDict = self.__dict__
     result = dataDict.get('segmentLength')
     return result
-  
+
   def getSegments(self):
     """
     Get for molsim.Symmetry.Symmetry.segments
@@ -3462,7 +3459,7 @@ a multichain MolSystem.
     tempVar = dataDict.get('segments').values()
     result = frozenset(tempVar)
     return result
-  
+
   def getSerial(self):
     """
     Get for molsim.Symmetry.Symmetry.serial
@@ -3470,7 +3467,7 @@ a multichain MolSystem.
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getSymmetryCode(self):
     """
     Get for molsim.Symmetry.Symmetry.symmetryCode
@@ -3480,7 +3477,7 @@ a multichain MolSystem.
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def newSegment(self, **attrlinks):
     """
     Factory function to create molsim.Symmetry.Segment
@@ -3488,7 +3485,7 @@ a multichain MolSystem.
     return Segment(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeHaddockRun(self, value):
     """
     Remove for molsim.Symmetry.Symmetry.haddockRuns
@@ -3542,7 +3539,7 @@ a multichain MolSystem.
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeHaddockRun:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -3561,13 +3558,13 @@ a multichain MolSystem.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeHaddockRun')
       if ll:
         for notify in ll:
@@ -3584,7 +3581,7 @@ a multichain MolSystem.
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setHaddockRuns(self, values):
     """
     Set for molsim.Symmetry.Symmetry.haddockRuns
@@ -3629,12 +3626,12 @@ a multichain MolSystem.
         topObjectsToCheck.add(topObject)
 
       for pv in currentValues:
-        if (not (pv in values)):
+        if (pv not in values):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
       for pv in values:
-        if (not (pv in currentValues)):
+        if (pv not in currentValues):
           topObject = pv.__dict__.get('topObject')
           topObjectsToCheck.add(topObject)
 
@@ -3663,7 +3660,7 @@ a multichain MolSystem.
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       for value in values:
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setHaddockRuns:
            Link haddockRuns between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3671,12 +3668,12 @@ a multichain MolSystem.
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         oldSelves = cv.__dict__.get('symmetryRestraints')
         oldSelves.remove(self)
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelves = cv.__dict__.get('symmetryRestraints')
         oldSelves.add(self)
 
@@ -3688,13 +3685,13 @@ a multichain MolSystem.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setHaddockRuns')
       if ll:
         for notify in ll:
@@ -3758,13 +3755,13 @@ a multichain MolSystem.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSegmentLength')
       if ll:
         for notify in ll:
@@ -3828,7 +3825,7 @@ a multichain MolSystem.
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setSymmetryCode(self, value):
     """
     Set for molsim.Symmetry.Symmetry.symmetryCode
@@ -3897,13 +3894,13 @@ a multichain MolSystem.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSymmetryCode')
       if ll:
         for notify in ll:
@@ -3924,18 +3921,18 @@ a multichain MolSystem.
 
     ll = dataDict.get('haddockRuns')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
-  
+
   def sortedSegments(self):
     """
     Sorted for molsim.Symmetry.Symmetry.segments
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('segments')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -3960,18 +3957,18 @@ a multichain MolSystem.
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   segmentLength = property(getSegmentLength, setSegmentLength, None,
   r"""Length of segments that are symmetrical
   """)
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   symmetryCode = property(getSymmetryCode, setSymmetryCode, None,
   r"""
   """)
@@ -3979,21 +3976,21 @@ a multichain MolSystem.
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   haddockRuns = property(getHaddockRuns, setHaddockRuns, None,
   r"""Haddock Runs using the Symmetry
   """)
-  
+
   molSystemSymmetrySet = property(getMolSystemSymmetrySet,  None, None,
   r"""parent link
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for molSystemSymmetrySet
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   segments = property(getSegments,  None, None,
   r"""child link to class Segment
   """)

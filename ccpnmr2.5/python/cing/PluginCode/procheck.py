@@ -16,18 +16,16 @@ Residue
     procheck: NTdict instance with procheck values for this residue
 """
 
-from cing import cingPythonCingDir
-from cing.Libs import disk
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import copy
-from cing.PluginCode.required.reqProcheck import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
-from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE
-from cing.core.parameters import cingPaths
 from glob import glob
 
+from cing import cingPythonCingDir
+from cing.core.constants import *  #@UnusedWildImport
+from cing.core.parameters import PLEASE_ADD_EXECUTABLE_HERE, cingPaths
+from cing.Libs import disk
+from cing.Libs.AwkLike import AwkLike, AwkLikeS
+from cing.Libs.disk import copy
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode.required.reqProcheck import *  #@UnusedWildImport
 
 if True: # block
     useModule = True
@@ -339,7 +337,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
         if resCountTotal >= MAX_PROCHECK_TOTAL_RESIDUES:
             max_models_org = max_models
             max_models =  MAX_PROCHECK_TOTAL_RESIDUES / resCount
-            nTdebug("Reducing number of models from %s to %s to limit residue count to less than %s" % (max_models_org, max_models, 
+            nTdebug("Reducing number of models from %s to %s to limit residue count to less than %s" % (max_models_org, max_models,
                 MAX_PROCHECK_TOTAL_RESIDUES))
         if max_models < 1:
             nTerror("Molecule is to large for procheck to even run on a single model")
@@ -537,7 +535,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
 
         # reset the procheck dictionary of each residue
         for res in self.molecule.allResidues():
-            if res.has_key(PROCHECK_STR):
+            if PROCHECK_STR in res:
                 del(res[PROCHECK_STR])
             res.procheck = ProcheckResidueResult(res)
         #end for
@@ -613,13 +611,13 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
                     continue
                 # end if
                 # Truncate for those rare instances ( < 10 for > 9,000 entries )
-#pc gf phipsi can be extremely high: 
+#pc gf phipsi can be extremely high:
 # 1b64 SER      82        34.36      this might be an installation bug as it's value in PDBe is normal.
                 if value and (field in gf_LIST_STR):
                     if value > PCgFactorMaxErrorValue:
                         nTwarning("A pc g-factor for %s of %s will be truncated to %s" % ( field, value, PCgFactorMaxErrorValue))
                         value = PCgFactorMaxErrorValue
-                    # end if 
+                    # end if
                 # end if
                 residue.procheck[field] = value
             #end for
@@ -662,7 +660,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
     def postProcess(self):
 #        for item in [ SECSTRUCT_STR ]:
 #            for res in self.project.molecule.allResidues():
-#                if res.has_key( item ):
+#                if  item  in res:
 #                    itemList = res[ item ]
 #                    c = itemList.setConsensus()
 #                    nTdebug('consensus: %s', c)
@@ -708,7 +706,7 @@ def runProcheck(project, ranges=None, createPlots=True, runAqua=True, parseOnly 
         nTmessage("Skipping procheck as there is no protein in the current molecule")
         return
     # end if
-    if project.molecule.has_key(PROCHECK_STR):
+    if PROCHECK_STR in project.molecule:
         del(project.molecule[PROCHECK_STR])
     #end if
 

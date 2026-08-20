@@ -1,74 +1,71 @@
-"""Miscellaneous common utilities
-"""
+"""Miscellaneous common utilities"""
 
 
-
-#=========================================================================================
+# =========================================================================================
 # Licence, Reference and Credits
-#=========================================================================================
+# =========================================================================================
 
 __copyright__ = "Copyright (C) CCPN project (http://www.ccpn.ac.uk) 2014 - 2019"
-__credits__ = ("Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister")
-__licence__ = ("CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license")
-__reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
-                 "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
-                 "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y")
-#=========================================================================================
+__credits__ = "Ed Brooksbank, Luca Mureddu, Timothy J Ragan & Geerten W Vuister"
+__licence__ = "CCPN licence. See http://www.ccpn.ac.uk/v3-software/downloads/license"
+__reference__ = (
+    "Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, L.G., & Vuister, G.W.",
+    "CcpNmr AnalysisAssign: a flexible platform for integrated NMR analysis",
+    "J.Biomol.Nmr (2016), 66, 111-124, http://doi.org/10.1007/s10858-016-0060-y",
+)
+# =========================================================================================
 # Last code modification
-#=========================================================================================
+# =========================================================================================
 __modifiedBy__ = "$modifiedBy: CCPN $"
 __dateModified__ = "$dateModified: 2017-07-07 16:32:57 +0100 (Fri, July 07, 2017) $"
 __version__ = "$Revision: 3.0.0 $"
-#=========================================================================================
+# =========================================================================================
 # Created
-#=========================================================================================
+# =========================================================================================
 __author__ = "$Author: CCPN $"
 __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
-#=========================================================================================
+# =========================================================================================
 # Start of code
-#=========================================================================================
+# =========================================================================================
 """Common utilities
 """
 
 import datetime
+import itertools
 import os
 import random
-import sys
 import string
-import itertools
-from collections.abc import Iterable
-from . import Constants
+import sys
 from collections import OrderedDict
+from collections.abc import Iterable
 
+from . import Constants
 
 # Max value used for random integer. Set to be expressible as a signed 32-bit integer.
 maxRandomInt = 2000000000
 
-WHITESPACE_AND_NULL = {'\x00', '\t', '\n', '\r', '\x0b', '\x0c'}
+WHITESPACE_AND_NULL = {"\x00", "\t", "\n", "\r", "\x0b", "\x0c"}
 
 # valid characters for file names
 # NB string.ascii_letters and string.digits are not compatible
 # with Python 2.1 (used in ObjectDomain)
-defaultFileNameChar = '_'
-separatorFileNameChar = '+'
-validFileNamePartChars = ('abcdefghijklmnopqrstuvwxyz'
-                          'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-                          + defaultFileNameChar)
-validCcpnFileNameChars = validFileNamePartChars + '-.' + separatorFileNameChar
+defaultFileNameChar = "_"
+separatorFileNameChar = "+"
+validFileNamePartChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + defaultFileNameChar
+validCcpnFileNameChars = validFileNamePartChars + "-." + separatorFileNameChar
 
 
 # # Not used - Rasmus 20/2/2017
 # Sentinel = collections.namedtuple('Sentinel', ['value'])
 
 
-def convertStringToFileName(fileNameString, validChars=validCcpnFileNameChars,
-                            defaultChar=defaultFileNameChar):
+def convertStringToFileName(fileNameString, validChars=validCcpnFileNameChars, defaultChar=defaultFileNameChar):
     ll = [x for x in fileNameString]
     for ii, char in enumerate(ll):
         if char not in validChars:
             ll[ii] = defaultChar
     #
-    return ''.join(ll)
+    return "".join(ll)
 
 
 def getCcpFileString(fileNameString):
@@ -76,26 +73,25 @@ def getCcpFileString(fileNameString):
     Changes an input string to the one used for a component of file names.
     """
 
-    return convertStringToFileName(fileNameString, validFileNamePartChars,
-                                   defaultFileNameChar)
+    return convertStringToFileName(fileNameString, validFileNamePartChars, defaultFileNameChar)
 
 
 def incrementName(name):
-    """Add '_1' to name or change suffix '_n' to '_(n+1) """
-    ll = name.rsplit('_', 1)
+    """Add '_1' to name or change suffix '_n' to '_(n+1)"""
+    ll = name.rsplit("_", 1)
     if len(ll) == 2:
         try:
             ll[1] = str(int(ll[1]) + 1)
-            return '_'.join(ll)
+            return "_".join(ll)
 
         except ValueError:
             pass
 
-    return name + '_1'
+    return name + "_1"
 
 
 def recursiveImport(dirname, modname=None, ignoreModules=None, force=False):
-    """ recursively import all .py files
+    """recursively import all .py files
     (not starting with '__' and not containing internal '.' in their name)
     from directory dirname and all its subdirectories, provided they
     contain '__init__.py'
@@ -114,7 +110,7 @@ def recursiveImport(dirname, modname=None, ignoreModules=None, force=False):
 
     listdir = os.listdir(dirname)
     try:
-        listdir.remove('__init__.py')
+        listdir.remove("__init__.py")
     except ValueError:
         if not force:
             return
@@ -125,16 +121,16 @@ def recursiveImport(dirname, modname=None, ignoreModules=None, force=False):
         ignoreModules = []
 
     if modname is None:
-        prefix = ''
+        prefix = ""
     else:
-        prefix = modname + '.'
+        prefix = modname + "."
 
     listdir2 = []
     for name in listdir:
         head, ext = os.path.splitext(name)
         if (prefix + head) in ignoreModules:
             pass
-        elif ext == '.py' and head.find('.') == -1:
+        elif ext == ".py" and head.find(".") == -1:
             files.append(head)
         else:
             listdir2.append(name)
@@ -153,12 +149,12 @@ def recursiveImport(dirname, modname=None, ignoreModules=None, force=False):
 
     for name in listdir2:
         newdirname = Path.joinPath(dirname, name)
-        if os.path.isdir(newdirname) and name.find('.') == -1:
+        if os.path.isdir(newdirname) and name.find(".") == -1:
             recursiveImport(newdirname, prefix + name, ignoreModules)
 
 
 def isWindowsOS():
-    return sys.platform[:3].lower() == 'win'
+    return sys.platform[:3].lower() == "win"
 
 
 def parseSequenceCode(value):
@@ -176,7 +172,7 @@ def parseSequenceCode(value):
             tt[0] and int(tt[0]),  # None or an integer
             tt[1],  # Text string, possibly empty
             tt[2] and int(tt[2]),  # None or an integer
-            )
+        )
 
 
 def splitIntFromChars(value):
@@ -221,11 +217,12 @@ def isClose(a, b, relTolerance=1e-05, absTolerance=1e-08):
     Uses sum of relative (relTolerance) and absolute (absTolerance) difference
 
     Inspired by numpy.isclose()"""
-    return (abs(a - b) <= (absTolerance + relTolerance * abs(b)))
+    return abs(a - b) <= (absTolerance + relTolerance * abs(b))
+
 
 # NOTE:ED not 2.7 compatible
 def isIterable(obj):
-# def isIterable(obj) -> bool:
+    # def isIterable(obj) -> bool:
     "Returns True if obj is iterable"
     try:
         iter(obj)
@@ -244,13 +241,11 @@ def getUuid(programName, timeStamp=None):
     """Get UUid following the NEF convention"""
     if timeStamp is None:
         timeStamp = getTimeStamp()
-    return '%s-%s-%s' % (programName, timeStamp, random.randint(0, maxRandomInt))
+    return "%s-%s-%s" % (programName, timeStamp, random.randint(0, maxRandomInt))
 
 
 def name2IsotopeCode(name=None):
-    """Get standard isotope code matching atom name or axisCode string
-
-    """
+    """Get standard isotope code matching atom name or axisCode string"""
     if not name:
         return None
 
@@ -260,7 +255,7 @@ def name2IsotopeCode(name=None):
             ss = name.title()
             for key in Constants.isotopeRecords:
                 if ss.startswith(key):
-                    if name[:len(key)].isupper():
+                    if name[: len(key)].isupper():
                         result = key
                     break
         else:
@@ -304,7 +299,7 @@ def name2ElementSymbol(name):
         ss = name.title()
         for key, record in Constants.isotopeRecords.items():
             if ss.startswith(key):
-                if name[:len(key)].isupper():
+                if name[: len(key)].isupper():
                     return record.symbol.upper()
                 break
     #
@@ -317,7 +312,7 @@ def checkIsotope(text):
     This function is intended for external format isotope specifications, *not* for
     axisCodes or atom names, hence the difference to name2ElementSymbol.
     """
-    defaultIsotope = '1H'
+    defaultIsotope = "1H"
     name = text.strip().upper()
 
     if not name:
@@ -333,13 +328,12 @@ def checkIsotope(text):
             return isotopeCode
 
     # NB order of checking means that e.g. 'CA' returns Calcium rather than Carbon
-    result = (Constants.DEFAULT_ISOTOPE_DICT.get(name[:2])
-              or Constants.DEFAULT_ISOTOPE_DICT.get(name[0]))
+    result = Constants.DEFAULT_ISOTOPE_DICT.get(name[:2]) or Constants.DEFAULT_ISOTOPE_DICT.get(name[0])
 
     if result is None:
-        if name == 'D':
+        if name == "D":
             # special case
-            result = '2H'
+            result = "2H"
         else:
             result = defaultIsotope
     #
@@ -347,7 +341,7 @@ def checkIsotope(text):
 
 
 def axisCodeMatch(axisCode, refAxisCodes):
-    """Get refAxisCode that best matches axisCode """
+    """Get refAxisCode that best matches axisCode"""
     for ii, indx in enumerate(_axisCodeMapIndices([axisCode], refAxisCodes)):
         if indx == 0:
             # We have a match
@@ -391,7 +385,7 @@ def _axisCodeMapIndices(axisCodes, refAxisCodes):
     all axisCodes must match, but result can contain None if refAxisCodes is longer
     if axisCodes contain duplicates, you will get one of possible matches"""
 
-    #CCPNINTERNAL - used in multiple places to map display order and spectrum order
+    # CCPNINTERNAL - used in multiple places to map display order and spectrum order
 
     lenDifference = len(refAxisCodes) - len(axisCodes)
     if lenDifference < 0:
@@ -435,9 +429,13 @@ def _axisCodeMapIndices(axisCodes, refAxisCodes):
                         for jj in range(ii + 1, len(tryCodes)):
                             code2 = tryCodes[jj]
                             if len(code2) > 1:
-                                if (code[0].isupper() and code[0].lower() == code2[1] and
-                                        code2[0].isupper() and code2[0].lower() == code[1] and
-                                        code[2:] == code2[2:]):
+                                if (
+                                    code[0].isupper()
+                                    and code[0].lower() == code2[1]
+                                    and code2[0].isupper()
+                                    and code2[0].lower() == code[1]
+                                    and code[2:] == code2[2:]
+                                ):
                                     # Matches pair of bound atoms - e.g. Hc1, Ch1
                                     boundCodes[tryCodes.index(code)] = tryCodes.index(code2)
                                     boundCodes[tryCodes.index(code2)] = tryCodes.index(code)
@@ -470,7 +468,7 @@ def axisCodesCompare(code, code2, mismatch=0):
     elif code[0].islower():
         # 'fidX...' 'delay', etc. must match exactly
         score = mismatch
-    elif code.startswith('MQ'):
+    elif code.startswith("MQ"):
         # 'MQxy...' must match exactly
         score = mismatch
     elif len(code) == 1 or code[1].isdigit() or len(code2) == 1 or code2[1].isdigit():
@@ -481,16 +479,17 @@ def axisCodesCompare(code, code2, mismatch=0):
         score = len(os.path.commonprefix((code, code2))) or mismatch
         if score == 1:
             # Only first letter matches, second does not
-            if ((code.startswith('Hn') and code2.startswith('Hcn')) or
-                    (code.startswith('Hcn') and code2.startswith('Hn'))):
+            if (code.startswith("Hn") and code2.startswith("Hcn")) or (
+                code.startswith("Hcn") and code2.startswith("Hn")
+            ):
                 # Hn must matches Hcn
                 score = 2
             else:
                 # except as above we need at least two char match
 
                 # TODO:ED check matching codes when each contain more than 1 character; dict?
-                score = 3  #mismatch
-        elif code.startswith('J') and score == 2:
+                score = 3  # mismatch
+        elif code.startswith("J") and score == 2:
             # 'Jab' matches 'J' or 'Jab...', but NOT 'Ja...'
             score = mismatch
     #
@@ -520,12 +519,12 @@ def stringifier(*fields, **options):
     # and python 2 does not have keyword-only arguments
     # What we should do is the function definition below:
     # def stringifier(*fields, floatFormat=None):
-    if 'floatFormat' in options:
-        floatFormat = options.pop('floatFormat')
+    if "floatFormat" in options:
+        floatFormat = options.pop("floatFormat")
     else:
         floatFormat = None
     if options:
-        raise ValueError("Unknown options: %s" % ', '.join(sorted(options.keys())))
+        raise ValueError("Unknown options: %s" % ", ".join(sorted(options.keys())))
 
     # Proper body of function starts here
     if floatFormat is None:
@@ -537,9 +536,9 @@ def stringifier(*fields, **options):
     fieldFormats = []
     for field in fields:
         # String will be 'field1={_obj.field1}
-        fieldFormats.append(f'{field}={{_obj.{field}!r}}')
+        fieldFormats.append(f"{field}={{_obj.{field}!r}}")
 
-    formatString = '<{_obj.pid!s}| ' + ', '.join(fieldFormats) + '>'
+    formatString = "<{_obj.pid!s}| " + ", ".join(fieldFormats) + ">"
 
     def formatter(x):
         return localFormatter.format(format_string=formatString, _obj=x)
@@ -561,15 +560,14 @@ def resetSerial(apiObject, newSerial):
     # NB, needed both from V2 NefIo and V3, hence putting nit here,
     # even though it uses V2 objects
 
-    if not hasattr(apiObject, 'serial'):
-        raise ValueError("Cannot reset serial, %s does not have a 'serial' attribute"
-                         % apiObject)
+    if not hasattr(apiObject, "serial"):
+        raise ValueError("Cannot reset serial, %s does not have a 'serial' attribute" % apiObject)
     downlink = apiObject.__class__._metaclass.parentRole.otherRole.name
 
     parentDict = apiObject.parent.__dict__
     downdict = parentDict[downlink]
     oldSerial = apiObject.serial
-    serialDict = parentDict['_serialDict']
+    serialDict = parentDict["_serialDict"]
 
     if newSerial == oldSerial:
         return
@@ -579,7 +577,7 @@ def resetSerial(apiObject, newSerial):
 
     else:
         maxSerial = serialDict[downlink]
-        apiObject.__dict__['serial'] = newSerial
+        apiObject.__dict__["serial"] = newSerial
         downdict[newSerial] = apiObject
         del downdict[oldSerial]
         if newSerial > maxSerial:
@@ -604,11 +602,11 @@ def makeIterableList(inList=None):
             return []
 
 
-def _truncateText(text, splitter=' , ', maxWords=4):
+def _truncateText(text, splitter=" , ", maxWords=4):
     "Splits the text by the given splitter. If more then maxWords, it return the maxWord plus dots, otherwise just the text"
     words = text.split(splitter)
     if len(words) > maxWords:
-        return splitter.join(words[:maxWords]) + ' ...'
+        return splitter.join(words[:maxWords]) + " ..."
     else:
         return text
 
@@ -659,7 +657,9 @@ def splitDataFrameWithinRange(dataframe, column1, column2, minX, maxX, minY, max
               outers (rest) not included in inners
     """
 
-    bools = dataframe[column1].between(minX, maxX, inclusive=True) & dataframe[column2].between(minY, maxY, inclusive=True)
+    bools = dataframe[column1].between(minX, maxX, inclusive=True) & dataframe[column2].between(
+        minY, maxY, inclusive=True
+    )
     inners = dataframe[bools]
     outers = dataframe[-bools]
     filteredInners = inners.filter(items=[column1, column2])
@@ -671,7 +671,7 @@ def splitDataFrameWithinRange(dataframe, column1, column2, minX, maxX, minY, max
 class LocalFormatter(string.Formatter):
     """Overrides the string formatter to change the float formatting"""
 
-    def __init__(self, overrideFloatFormat='.6g'):
+    def __init__(self, overrideFloatFormat=".6g"):
         super().__init__()
         self.overrideFloatFormat = overrideFloatFormat
 
@@ -679,24 +679,24 @@ class LocalFormatter(string.Formatter):
         # do any conversion on the resulting object
         # NB, conversion parameter is not used
 
-        if hasattr(value, 'pid'):
+        if hasattr(value, "pid"):
             return str(value)
         elif isinstance(value, float):
             return format(value, self.overrideFloatFormat)
         elif type(value) == tuple:
             # Deliberate. We do NOT want to catch tuple subtypes here
-            end = ',)' if len(value) == 1 else ')'
-            return '(' + ', '.join(self.convert_field(x, 'r') for x in value) + end
+            end = ",)" if len(value) == 1 else ")"
+            return "(" + ", ".join(self.convert_field(x, "r") for x in value) + end
         elif type(value) == list:
             # Deliberate. We do NOT want to catch list subtypes here
-            return '[' + ', '.join(self.convert_field(x, 'r') for x in value) + ']'
+            return "[" + ", ".join(self.convert_field(x, "r") for x in value) + "]"
         elif conversion is None:
             return value
-        elif conversion == 's':
+        elif conversion == "s":
             return str(value)
-        elif conversion == 'r':
+        elif conversion == "r":
             return repr(value)
-        elif conversion == 'a':
+        elif conversion == "a":
             try:
                 return ascii(value)
             except NameError:
@@ -709,12 +709,13 @@ class LocalFormatter(string.Formatter):
 stdLocalFormatter = LocalFormatter()
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 20190507:ED new routines to match axis codes and return dict or indices
+
 
 # NOTE:ED not 2.7 compatible
 def _matchSingleAxisCode(code1=None, code2=None, exactMatch=False, allowLowercase=True):
-# def _matchSingleAxisCode(code1: str = None, code2: str = None, exactMatch: bool = False, allowLowercase=True) -> int:
+    # def _matchSingleAxisCode(code1: str = None, code2: str = None, exactMatch: bool = False, allowLowercase=True) -> int:
     """number of matching characters
     code1, code2 = strings
     e.g. 'Hn1', 'H1'
@@ -749,7 +750,7 @@ def _matchSingleAxisCode(code1=None, code2=None, exactMatch=False, allowLowercas
     ss = 0
 
     # add extra tests from v2.4
-    if code1.startswith('MQ') or code2.startswith('MQ'):
+    if code1.startswith("MQ") or code2.startswith("MQ"):
         return 0
     # char followed by digit already accounted for
 
@@ -761,12 +762,11 @@ def _matchSingleAxisCode(code1=None, code2=None, exactMatch=False, allowLowercas
 
     # another v2.4 test
     if ss:
-        if ((code1.startswith('Hn') and code2.startswith('Hcn')) or
-                (code1.startswith('Hcn') and code2.startswith('Hn'))):
+        if (code1.startswith("Hn") and code2.startswith("Hcn")) or (code1.startswith("Hcn") and code2.startswith("Hn")):
             # Hn must always match Hcn, give it a high score
             ss += 500
 
-        if code1.startswith('J'):
+        if code1.startswith("J"):
             if ss == 2:  # must be a 1, or (3 or more) letter match
                 return 0
 
@@ -775,22 +775,20 @@ def _matchSingleAxisCode(code1=None, code2=None, exactMatch=False, allowLowercas
 
 
 def _matchSingleAxisCodeLength(code1, code2):
-    """return a score based on the mismatch in length
-    """
+    """return a score based on the mismatch in length"""
     lenDiff = abs(len(code1) - len(code2))
 
-    return (100 + 800 // (lenDiff + 1))
+    return 100 + 800 // (lenDiff + 1)
 
 
 def _SortByMatch(item):
-    """quick sorting key for axisCode match tuples
-    """
+    """quick sorting key for axisCode match tuples"""
     return -item[2]  # sort from high to low
 
 
 # NOTE:ED not 2.7 compatible
 def getAxisCodeMatch(axisCodes, refAxisCodes, allMatches=False, exactMatch=False):
-# def getAxisCodeMatch(axisCodes, refAxisCodes, allMatches=False, exactMatch=False) -> OrderedDict:
+    # def getAxisCodeMatch(axisCodes, refAxisCodes, allMatches=False, exactMatch=False) -> OrderedDict:
     """Return an OrderedDict containing the mapping from the refAxisCodes to axisCodes
 
     There may be multiple matches, or None for each axis code.
@@ -832,7 +830,6 @@ def getAxisCodeMatch(axisCodes, refAxisCodes, allMatches=False, exactMatch=False
     for ii, code1 in enumerate(axisCodes):
         foundCodes = []
         for jj, code2 in enumerate(refAxisCodes):
-
             match = _matchSingleAxisCode(code1, code2, exactMatch=exactMatch)
             if match:
                 foundCodes.append((code2, jj, match))
@@ -870,7 +867,6 @@ def getAxisCodeMatchIndices(axisCodes, refAxisCodes, exactMatch=False):
     for ii, code1 in enumerate(axisCodes):
         foundCodes = []
         for jj, code2 in enumerate(refAxisCodes):
-
             match = _matchSingleAxisCode(code1, code2, exactMatch=exactMatch)
             if match:
                 foundCodes.append((code2, jj, match))

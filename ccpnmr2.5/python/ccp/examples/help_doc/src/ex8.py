@@ -1,19 +1,15 @@
 import os
-import tkinter
-
-from memops.api.Implementation import MemopsRoot
 
 from ccpnmr.format.converters.NmrViewFormat import NmrViewFormat
 from ccpnmr.format.converters.XEasyFormat import XEasyFormat
 
 # Pre-defined functions to create an NMR experiment and data source.
-from ccpnmr.format.general.Util import (
-    createExperiment, getRefExpFromOldExpType, createPpmFreqDataSource)
+from ccpnmr.format.general.Util import createExperiment, createPpmFreqDataSource, getRefExpFromOldExpType
+from memops.api.Implementation import MemopsRoot
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     # CCPN project.
-    project = MemopsRoot(name = 'nmrView2XEasy')
+    project = MemopsRoot(name="nmrView2XEasy")
 
     gui = Tkinter.Tk()
 
@@ -21,61 +17,58 @@ if __name__ == '__main__':
     nmrViewObj = NmrViewFormat(project, gui)
 
     # Location of the NmrView files.
-    nmrViewDir = '../data/nmrView'
+    nmrViewDir = "../data/nmrView"
 
     # Read in a sequence to set molecule and molSystem objects.
-    nmrViewSeq     = 'nmrView.seq'
+    nmrViewSeq = "nmrView.seq"
     nmrViewSeqFile = os.path.join(nmrViewDir, nmrViewSeq)
 
-    nmrViewObj.readSequence(nmrViewSeqFile, minimalPrompts = 1)
+    nmrViewObj.readSequence(nmrViewSeqFile, minimalPrompts=1)
 
     # At this point we need an nmrProject object to save chemical shifts,
     # peak lists, etc.
-    nmrProject = project.currentNmrProject = \
-        project.newNmrProject(name = project.name)
+    nmrProject = project.currentNmrProject = project.newNmrProject(name=project.name)
 
     # Read in a file containing chemical shifts.
-    nmrViewChemShifts    = 'ppm.out'
+    nmrViewChemShifts = "ppm.out"
     nmrViewChemShiftFile = os.path.join(nmrViewDir, nmrViewChemShifts)
 
-    nmrViewObj.readShifts(nmrViewChemShiftFile, minimalPrompts = 1)
+    nmrViewObj.readShifts(nmrViewChemShiftFile, minimalPrompts=1)
 
     # Find and print this shiftList in the CCPN data model.
-    shiftList = nmrProject.findFirstMeasurementList(className = 'ShiftList')
+    shiftList = nmrProject.findFirstMeasurementList(className="ShiftList")
 
-    print('ShiftList: [%s]' % shiftList)
+    print("ShiftList: [%s]" % shiftList)
 
-    # Create a reference NMR experiment. This is based on the 
+    # Create a reference NMR experiment. This is based on the
     # NmrExpPrototype setup.
-    refExpType = 'noesy_hsqc_HNH.hhn'  # 'Old' experiment type name.
+    refExpType = "noesy_hsqc_HNH.hhn"  # 'Old' experiment type name.
     refExp = getRefExpFromOldExpType(project, refExpType)
 
     # Should print 'H_H[N].NOESY'.
-    print('New experiment type name: [%s]' % refExp.name)
+    print("New experiment type name: [%s]" % refExp.name)
 
     # Create a real NMR experiment from this object and link it to the
     # CCPN project.
-    keywds = {'expName': 'noesyTest', 'refExperiment': refExp}
+    keywds = {"expName": "noesyTest", "refExperiment": refExp}
     nmrExp = createExperiment(project, **keywds)
 
     # Create a dataSource object (with the right number of dimensions etc.)
     # to hold peak list information.
-    keywds2 = {'dsName': 'test', 'dsType': 'processed', 'numDim': nmrExp.numDim}
+    keywds2 = {"dsName": "test", "dsType": "processed", "numDim": nmrExp.numDim}
     nmrDataSource = createPpmFreqDataSource(nmrExp, **keywds2)
 
-    # Read in a peak list connected to the experiment/dataSource that 
+    # Read in a peak list connected to the experiment/dataSource that
     # was just created.
-    nmrViewPeakLists    = 'nmrView.xpk'
+    nmrViewPeakLists = "nmrView.xpk"
     nmrViewPeakListFile = os.path.join(nmrViewDir, nmrViewPeakLists)
 
     # Do the reading - this will throw up a Tkinter popup window.
-    nmrViewObj.readPeaks(nmrViewPeakListFile,
-                         dataSource = nmrDataSource,
-                         minimalPrompts = 1)
+    nmrViewObj.readPeaks(nmrViewPeakListFile, dataSource=nmrDataSource, minimalPrompts=1)
 
     # Find and print this peakList in the CCPN data model.
     peakLists = nmrDataSource.sortedPeakLists()
-    print('Peaklists: [%s]' % peakLists)
+    print("Peaklists: [%s]" % peakLists)
 
     # Run linkResonances.
 
@@ -89,17 +82,15 @@ if __name__ == '__main__':
 
     # Many options are available - see ccpnmr/format/process/linkResonances.py.
     # Also see what happens when you comment this function out.
-    nmrViewObj.linkResonances(setSingleProchiral = 0,
-                              setSinglePossEquiv = 0,
-                              minimalPrompts = 1)
+    nmrViewObj.linkResonances(setSingleProchiral=0, setSinglePossEquiv=0, minimalPrompts=1)
 
     # Note that at this stage everything is inside the data model. Any code that
-    # works with the data model can be run at this stage (e.g., creating 
+    # works with the data model can be run at this stage (e.g., creating
     # a chemical shift list from a set of peak assignments).
 
     # Location to save XEasy files.
-    curDir   = os.path.abspath('../data')
-    xeasyDir = os.path.join(curDir, 'xEasy')
+    curDir = os.path.abspath("../data")
+    xeasyDir = os.path.join(curDir, "xEasy")
 
     if not os.path.exists(xeasyDir):
         os.mkdir(xeasyDir)
@@ -109,30 +100,26 @@ if __name__ == '__main__':
 
     # Write out sequence in XEasy format.
     chains = project.sortedMolSystems()[0].sortedChains()
- 
-    xeasySeq     = 'xeasy.seq'
+
+    xeasySeq = "xeasy.seq"
     xeasySeqFile = os.path.join(xeasyDir, xeasySeq)
 
     # Use the chains object to write out the sequence to a file.
-    xeasyObj.writeSequence(xeasySeqFile, chains = chains, minimalPrompts = 1)
+    xeasyObj.writeSequence(xeasySeqFile, chains=chains, minimalPrompts=1)
 
     # Write out chemical shifts in XEasy format.
-    xeasyChemShifts    = 'xeasy.prot'
+    xeasyChemShifts = "xeasy.prot"
     xeasyChemShiftFile = os.path.join(xeasyDir, xeasyChemShifts)
 
     # Use the shiftList object made earlier for printing.
-    xeasyObj.writeShifts(xeasyChemShiftFile,
-                         measurementList = shiftList,
-                         minimalPrompts = 1)
+    xeasyObj.writeShifts(xeasyChemShiftFile, measurementList=shiftList, minimalPrompts=1)
 
     # Write out peak lists in XEasy format.
-    xeasyPeakLists    = 'xeasy.xpk'
+    xeasyPeakLists = "xeasy.xpk"
     xeasyPeakListFile = os.path.join(xeasyDir, xeasyPeakLists)
 
     # Use the peakLists object made earlier for printing - throws up a popup.
-    xeasyObj.writePeaks(xeasyPeakListFile,
-                        peakLists = peakLists,
-                        minimalPrompts = 1)
+    xeasyObj.writePeaks(xeasyPeakListFile, peakLists=peakLists, minimalPrompts=1)
 
     # Save the project.
     project.saveModified()
@@ -141,18 +128,19 @@ if __name__ == '__main__':
     allResonances = project.currentNmrProject.sortedResonances()
     numResonances = len(allResonances)
 
-    print('\nNumber of resonances: [%d]' % numResonances)
+    print("\nNumber of resonances: [%d]" % numResonances)
 
     # Information about the NMR experiments in this project.
     allExpts = project.currentNmrProject.sortedExperiments()
 
     for nmrExp in allExpts:
-        print('Experiment: [%d], called [%s], type [%s], with [%d] dims.' % (
-            nmrExp.serial, nmrExp.name, nmrExp.experimentType, nmrExp.numDim))
+        print(
+            "Experiment: [%d], called [%s], type [%s], with [%d] dims."
+            % (nmrExp.serial, nmrExp.name, nmrExp.experimentType, nmrExp.numDim)
+        )
 
         # This line prints a different name as this is a 'reverse' experiment.
-        print('Reference pathway: [%s]' % (
-            nmrExp.refExperiment.nmrExpPrototype.name))
+        print("Reference pathway: [%s]" % (nmrExp.refExperiment.nmrExpPrototype.name))
 
     # List to save all the residues that are associated with these resonances.
     seqCodes = []
@@ -169,5 +157,5 @@ if __name__ == '__main__':
 
     seqCodes.sort()
 
-    print('Residue sequence codes connected to resonances:')
-    print(seqCodes, '\n')
+    print("Residue sequence codes connected to resonances:")
+    print(seqCodes, "\n")

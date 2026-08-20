@@ -12,17 +12,16 @@ Residue
 
 
 """
+from math import cos, pi, sin
+
+from cing.core.parameters import cingPaths
 from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.Libs.svd import SVDfit
 from cing.PluginCode.required.reqWhatif import *
-from cing.core.molecule import dots
-from cing.core.parameters import cingPaths
-from math import cos, sin, pi, sqrt, fabs, log, exp
-import math
-from random import random
+
 try:
-    from cing.PluginCode.Whatif import Whatif # JFD: this statement causes this plugin to be skipped on systems without Whatif.
+    pass
 except:
     pass
 
@@ -120,8 +119,9 @@ class PseudoRotation( SVDfit ):
            and pucker amplitudes, or (None,None,None) on error.
 
         """
-        from cing import printf, nTerror, NTlist
         from math import atan2
+
+        from cing import NTlist, nTerror
 
         if not residue.hasProperties('nucleic'):
             nTerror('PseudoRotation.calculate: residue %s is not nucleic acid', residue)
@@ -224,7 +224,7 @@ class PseudoRotation( SVDfit ):
     def cos_sin( teta, na ):
         """Return cos and sin for teta; NB na==2
         """
-        from math import cos, sin, pi
+        from math import cos
         return [cos(teta),sin(teta)]
     #end def
     cos_sin = staticmethod(cos_sin)
@@ -437,7 +437,7 @@ def procheck_old( project, ranges=None ):
         return None
     #end if
 
-    if project.molecule.has_key('procheck'):
+    if 'procheck' in project.molecule:
         del(project.molecule.procheck)
     #end if
 

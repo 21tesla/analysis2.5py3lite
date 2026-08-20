@@ -14,21 +14,12 @@ Usually however execution from within Eclipse is still easiest.
 """
 
 #import cing #@UnusedImport
-from cing import cingDirScripts
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.PluginCode import Whatif
-from cing.PluginCode import dssp
-from cing.PluginCode import molgrap
-from cing.PluginCode import procheck
-from cing.PluginCode import shiftx
+from cing import cingDirScripts, cingDirTmp
+from cing.core.parameters import directories, moleculeDirectories
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.PluginCode import Whatif, dssp, molgrap, procheck, shiftx
 from cing.Scripts.getPhiPsi import doYasaraRewritePdb
-from cing.Scripts.getPhiPsiWrapper import Janin
-from cing.Scripts.getPhiPsiWrapper import Ramachandran
-from cing.Scripts.getPhiPsiWrapper import d1d2
-from cing.Scripts.getPhiPsiWrapper import dihedralComboTodo
-from cing.core.parameters import directories
-from cing.core.parameters import moleculeDirectories
+from cing.Scripts.getPhiPsiWrapper import Janin, Ramachandran, d1d2, dihedralComboTodo
 
 if dihedralComboTodo == Ramachandran:
     subdir = 'phipsi_wi_db'

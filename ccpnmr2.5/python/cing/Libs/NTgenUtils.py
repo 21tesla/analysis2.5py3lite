@@ -4,8 +4,9 @@ Created on Nov 5, 2010
 @author: jd
 '''
 from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
 from cing.Libs.disk import globLast
+from cing.Libs.NTutils import *  #@UnusedWildImport
+
 
 def analyzeCingLog(logFile):
     """
@@ -61,21 +62,21 @@ def checkCingLogForErrors( entry_code, results_dir, log_dir, requiresLogFilePres
     if not os.path.exists(logDir):
         print("ERROR: Failed to find log dir: %s" % logDir)
         return True
-    # end if    
+    # end if
     logLastFile = globLast(logDir + '/*.log')
 #            nTdebug("logLastFile: %s" % logLastFile)
     if not logLastFile:
         if requiresLogFilePresent:
             print("ERROR: Failed to find any prep log file in directory: %s" % logDir)
             return True
-        # end if                            
+        # end if
         return
-    # end if            
+    # end if
     analysisResultTuple = analyzeCingLog(logLastFile)
     if not analysisResultTuple:
         print("ERROR: Failed to analyze log file: %s" % logLastFile)
         return True
-    # end if                    
+    # end if
     timeTaken, entryCrashed, nr_error, nr_warning, nr_message, nr_debug = analysisResultTuple
     if entryCrashed:
         print("ERROR: Detected a crash: %s in %s" % (entry_code, logLastFile))
@@ -186,7 +187,7 @@ ignoreLineXplorList = [
     "%NOE-ERR: problem at", # See above
     "%PATCH-ERR:",                                              # Happens for 2fwu when ions are tried to be patched as a regular AA.
     "%NOESET-ERR: duplicate class name specified.",             # Happens e.g. for 2kn9 for second restraint lists. Code runs fine though.
-    "%CSTRAN-ERR: selection has to contain exactly one atom.",  # Happens e.g. for 1uxc for 14 dihedrals    
+    "%CSTRAN-ERR: selection has to contain exactly one atom.",  # Happens e.g. for 1uxc for 14 dihedrals
 ]
 
 def analyzeXplorLog(logFile, extraIgnoreLineList=[], extraIgnoreCountList = []):

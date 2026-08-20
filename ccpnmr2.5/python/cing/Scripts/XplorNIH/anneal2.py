@@ -1,13 +1,15 @@
 # Original from Xplor-NIH retrieved on Feb 8, 2011
+import os
+
+import protocol
 from ivm import IVM
 from monteCarlo import randomizeTorsions
 from noePotTools import create_NOEPot
+
 #from psfGen import seqToPSF
-from simulationTools import * #@UnusedWildImport
+from simulationTools import *  #@UnusedWildImport
 from torsionTools import setTorsionsFromTable
-from xplorPot import XplorPot #@UnresolvedImport
-import os
-import protocol
+from xplorPot import XplorPot  #@UnresolvedImport
 
 #if 1: # Fails with current setup:
 #    sys.path.append("/Users/jd/workspace35/cing/python")

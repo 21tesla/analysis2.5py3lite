@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import getopt
-import http.client #@UnusedImport
 import os
 import re
 import sys
 import time
 import urllib.request
+
 from sgmllib import SGMLParser
 
 __author__="Jan Bot"
@@ -18,8 +18,8 @@ __date__ ="$Dec 16, 2009 12:33:54 PM$"
 class PoolParser(SGMLParser):
     """Parser for the ToPoS token pool directory."""
 
-    token_re = re.compile("\d+")
-    name_re = re.compile("[\w|\_]+")
+    token_re = re.compile(r"\d+")
+    name_re = re.compile(r"[\w|\_]+")
 
     def reset(self):
         SGMLParser.reset(self)
@@ -89,7 +89,7 @@ class TokenDownloader:
         """Download function that does all the work."""
         for token in self.tokens:
             path = ''
-            if(token.has_key('originalname')):
+            if('originalname' in token):
                 path = os.path.join(self.outdir, token['originalname'])
             else:
                 path = os.path.join(self.outdir, token['name'])
@@ -163,19 +163,19 @@ def downloadPool(pool, outdir, timeout, update,  useStamp):
             out = []
             for token in tokens:
                 nameOut = ''
-                if token.has_key('originalname'):
+                if 'originalname' in token:
                     nameOut = token['originalname']
                 else:
                     nameOut = token['name']
                 (start, end) = nameOut.rsplit('.', 1)
                 nameOut = start + '_' + token['created'] + '.' + end
-                if not nameOut in localfiles:
+                if nameOut not in localfiles:
                     out.append(token)
             tokens = out
         else:
             # if it is not set it is quite easy...
             tokens = [token for token in tokens
-                    if not token['originalname'] in localfiles]
+                    if token['originalname'] not in localfiles]
 
     print(len(tokens), " tokens to download from pool: ", pool)
     downloader = TokenDownloader(pool, tokens, outdir, timeout, useStamp)

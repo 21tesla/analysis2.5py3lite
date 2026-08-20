@@ -6,26 +6,21 @@ Execute like:
 
 python -u $CINGROOT/python/cing/NRG/pdbCing.py
 """
-from cing import cingDirScripts
-from cing import cingPythonCingDir
-from cing import cingRoot
-from cing.Libs.AwkLike import AwkLike
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import rmdir
-from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
-from cing.NRG.PDBEntryLists import getPdbEntries
-from cing.NRG.WhyNot import FAILED_TO_BE_VALIDATED_CING
-from cing.NRG.WhyNot import TO_BE_VALIDATED_BY_CING
-from cing.NRG.WhyNot import WhyNot
-from cing.NRG.WhyNot import WhyNotEntry
-from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
-from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23
-from cing.Scripts.validateEntry import PROJECT_TYPE_PDB
-from glob import glob
 import csv
 import shutil
 import string
 import urllib
+from glob import glob
+
+from cing import cingDirScripts, cingPythonCingDir, cingRoot
+from cing.Libs.AwkLike import AwkLike
+from cing.Libs.disk import rmdir
+from cing.Libs.html import GOOGLE_ANALYTICS_TEMPLATE
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.PDBEntryLists import getPdbEntries
+from cing.NRG.WhyNot import FAILED_TO_BE_VALIDATED_CING, TO_BE_VALIDATED_BY_CING, WhyNot, WhyNotEntry
+from cing.Scripts.doScriptOnEntryList import doScriptOnEntryList
+from cing.Scripts.validateEntry import ARCHIVE_TYPE_BY_CH23, PROJECT_TYPE_PDB
 
 skipList = NTlist(
 #            '2uva' # Issue xxx
@@ -33,7 +28,7 @@ skipList = NTlist(
 
 isProduction = False
 try:
-    from cing.NRG.localConstants import isProduction # pylint: disable=E0611
+    from cing.NRG.localConstants import isProduction  # pylint: disable=E0611
 except:
     pass
 
@@ -255,7 +250,7 @@ class PdbCing(Lister):
 #                nTdebug("Working on: " + entry_code)
 
                 entrySubDir = os.path.join(DATA_STR, subDir, entry_code)
-                if not entry_code in self.entry_list_pdb:
+                if entry_code not in self.entry_list_pdb:
                     nTwarning("Found entry %s in PDB-CING-CING but not in PDB. Will be obsoleted in PDB-CING too" % entry_code)
                     if len(self.entry_list_obsolete) < self.entry_to_delete_count_max:
                         rmdir(entrySubDir)
@@ -303,7 +298,7 @@ class PdbCing(Lister):
                     continue # don't mark it as stopped anymore.
 
                 # end for AwkLike
-                if not self.timeTakenDict.has_key(entry_code):
+                if entry_code not in self.timeTakenDict:
                     # was stopped by time out or by user or by system (any other type of stop but stack trace)
                     nTmessage("%s Since CING end message was not found assumed to have stopped" % entry_code)
                     self.entry_list_stopped.append(entry_code)
@@ -486,7 +481,7 @@ class PdbCing(Lister):
         example_str_template += """>%S</a><BR><a href=""" + self.bmrb_link_template + ">%b</a>"
 
         cingImage = '../data/%t/%s/%s.cing/%s/HTML/mol.gif'
-        example_str_template += '</td><td><a href="' + self.cing_link_template + '"><img SRC="' 
+        example_str_template += '</td><td><a href="' + self.cing_link_template + '"><img SRC="'
         example_str_template += cingImage + '" border=0 width="200" ></a></td>'
 #        file_name = os.path.join (self.base_dir, "data", "index.html")
         file_name = os.path.join (self.base_data_dir, "index.html")
@@ -515,7 +510,7 @@ class PdbCing(Lister):
         for x_entry_code in self.entry_list_done + [ None ]:
             if x_entry_code:
                 pdb_entry_code = x_entry_code
-                if self.matches_many2one.has_key(pdb_entry_code):
+                if pdb_entry_code in self.matches_many2one:
                     bmrb_entry_code = self.matches_many2one[pdb_entry_code]
                     bmrb_entry_code = bmrb_entry_code
                 else:

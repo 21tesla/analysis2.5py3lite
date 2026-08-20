@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -14,7 +13,7 @@ It may not be used, distributed, modified, transmitted, stored,
 or in any way accessed, except by members or employees of the CCPN,
 and by these people only until 31 December 2005 and in accordance with
 the guidelines of the CCPN.
- 
+
 A copy of this license can be found in ../../../license/CCPN.license.
 
 ======================COPYRIGHT/LICENSE END============================
@@ -46,52 +45,52 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+
 from memops.general import Implementation
 from memops.gui.PulldownMenu import PulldownMenu
 
-notify_funcs = ('__init__', 'delete')
+notify_funcs = ("__init__", "delete")
 
-separator = ':'
+separator = ":"
+
 
 class SpectrumViewList(PulldownMenu):
+    def __init__(self, parent, getSpectrumViews, extra_label="", *args, **kw):
 
-  def __init__(self, parent, getSpectrumViews, extra_label = '', *args, **kw):
+        self.getSpectrumViews = getSpectrumViews
+        self.extra_label = extra_label
 
-    self.getSpectrumViews = getSpectrumViews
-    self.extra_label = extra_label
+        PulldownMenu.__init__(self, parent, *args, **kw)
 
-    PulldownMenu.__init__(self, parent, *args, **kw)
+        for func in notify_funcs:
+            Implementation.registerNotify(self.setSpectrumViews, "ccpnmr.Analysis.SpectrumWindowView", func)
+        Implementation.registerNotify(self.setSpectrumViews, "ccp.nmr.Nmr.Experiment", "setName")
+        Implementation.registerNotify(self.setSpectrumViews, "ccp.nmr.Nmr.DataSource", "setName")
 
-    for func in notify_funcs:
-      Implementation.registerNotify(self.setSpectrumViews, 'ccpnmr.Analysis.SpectrumWindowView', func)
-    Implementation.registerNotify(self.setSpectrumViews, 'ccp.nmr.Nmr.Experiment', 'setName')
-    Implementation.registerNotify(self.setSpectrumViews, 'ccp.nmr.Nmr.DataSource', 'setName')
+    def destroy(self):
 
-  def destroy(self):
+        for func in notify_funcs:
+            Implementation.unregisterNotify(self.setSpectrumViews, "ccpnmr.Analysis.SpectrumWindowView", func)
+        Implementation.unregisterNotify(self.setSpectrumViews, "ccp.nmr.Nmr.Experiment", "setName")
+        Implementation.unregisterNotify(self.setSpectrumViews, "ccp.nmr.Nmr.DataSource", "setName")
 
-    for func in notify_funcs:
-      Implementation.unregisterNotify(self.setSpectrumViews, 'ccpnmr.Analysis.SpectrumWindowView', func)
-    Implementation.unregisterNotify(self.setSpectrumViews, 'ccp.nmr.Nmr.Experiment', 'setName')
-    Implementation.unregisterNotify(self.setSpectrumViews, 'ccp.nmr.Nmr.DataSource', 'setName')
+        PulldownMenu.destroy(self)
 
-    PulldownMenu.destroy(self)
+    def setSpectrumViews(self, *spectrumWindowView):
 
-  def setSpectrumViews(self, *spectrumWindowView):
- 
-    views = self.getSpectrumViews()
-    names = []
-    for view in views:
-      try:
-        # might be in notify where view is be being deleted
-        names.append(self.getName(view))
-      except:
-        pass
-    if (self.extra_label and (len(names) != 1)):
-      names = [self.extra_label] + names
-    self.replace(names, self.selected_index)
+        views = self.getSpectrumViews()
+        names = []
+        for view in views:
+            try:
+                # might be in notify where view is be being deleted
+                names.append(self.getName(view))
+            except:
+                pass
+        if self.extra_label and (len(names) != 1):
+            names = [self.extra_label] + names
+        self.replace(names, self.selected_index)
 
-  def getName(self, view):
+    def getName(self, view):
 
-    dataSource = view.analysisSpectrum.dataSource
-    return '%s:%s' % (dataSource.experiment.name, dataSource.name)
-
+        dataSource = view.analysisSpectrum.dataSource
+        return "%s:%s" % (dataSource.experiment.name, dataSource.name)

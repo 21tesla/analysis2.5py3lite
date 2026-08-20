@@ -45,5 +45,4 @@ log = sys.stderr.write
 log('Hello CGI, is this not a problem')
 
 
-from psycopg2.extras import DictCursor #@UnusedImport
 print("Done with:             from psycopg2.extras import DictCursor")

@@ -3,7 +3,8 @@ Created on Aug 30, 2010
 
 Simple class that doesn't import NTutils or sml in order to avoid cyclic behaviour.
 '''
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
+
 #from cing.core.sml import SMLhandler
 
 #class GumboObject(): # pylint: disable=R0903
@@ -32,10 +33,10 @@ class Formatted: # pylint: disable=R0903
 class Lister(Formatted): # pylint: disable=R0903
     """Example from 'Learning Python from O'Reilly publisher'"""
     MAX_LINE_SIZE_VALUE = 80 # who wants to see long lines of gibberish
-    
+
     def __init__(self):
         Formatted.__init__(self)
-            
+
     def __repr__(self):
         return ("<Instance of %s, address %s:\n%s>" %
            (self.__class__.__name__, id(self), self.attrnames()))

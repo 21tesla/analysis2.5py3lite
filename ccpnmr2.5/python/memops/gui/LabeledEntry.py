@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,65 +50,73 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
 
 from memops.gui.Entry import Entry
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 
+
 class LabeledEntry(Frame):
+    def __init__(
+        self,
+        parent,
+        label,
+        entry="",
+        separator=": ",
+        label_width=20,
+        entry_width=60,
+        label_anchor=Tkinter.E,
+        show="",
+        returnCallback=None,
+        tipText=None,
+        *args,
+        **kw,
+    ):
 
-  def __init__(self, parent, label, entry='', separator=': ',
-               label_width=20, entry_width=60,
-               label_anchor=Tkinter.E, show='',
-               returnCallback=None, tipText=None, *args, **kw):
+        apply(Frame.__init__, (self, parent) + args, kw)
 
-    apply(Frame.__init__, (self, parent) + args, kw)
+        self.grid_columnconfigure(1, weight=1)
 
-    self.grid_columnconfigure(1, weight=1)
+        self.separator = separator
 
-    self.separator = separator
+        text = label + separator
+        self.label = Label(self, text=text, width=label_width, anchor=label_anchor)
+        self.label.grid(row=0, column=0, sticky=Tkinter.EW)
 
-    text = label + separator
-    self.label = Label(self, text=text, width=label_width, anchor=label_anchor)
-    self.label.grid(row=0, column=0, sticky=Tkinter.EW)
+        self.entry = Entry(self, show=show, width=entry_width, returnCallback=returnCallback, tipText=tipText)
+        self.entry.insert(0, entry)
+        self.entry.grid(row=0, column=1, sticky=Tkinter.EW)
 
-    self.entry = Entry(self, show=show, width=entry_width,
-                       returnCallback=returnCallback,
-                       tipText=tipText)
-    self.entry.insert(0, entry)
-    self.entry.grid(row=0, column=1, sticky=Tkinter.EW)
+    def getLabel(self):
 
-  def getLabel(self):
+        text = self.label.get()
+        n = text.find(self.separator)
+        if n >= 0:
+            text = text[:n]
 
-    text = self.label.get()
-    n = text.find(self.separator)
-    if (n >= 0):
-      text = text[:n]
+        return text
 
-    return text
+    def setLabel(self, text=""):
 
-  def setLabel(self, text = ''):
+        text = text + self.separator
+        self.label.set(text)
 
-    text = text + self.separator
-    self.label.set(text)
+    def getEntry(self):
 
-  def getEntry(self):
+        return self.entry.get()
 
-    return self.entry.get()
+    def setEntry(self, text=""):
 
-  def setEntry(self, text = ''):
+        self.entry.set(text)
 
-    self.entry.set(text)
 
-if __name__ == '__main__':
-  
-  root = Tkinter.Tk()
+if __name__ == "__main__":
+    root = Tkinter.Tk()
 
-  label_entry1 = LabeledEntry(root, 'user', 'wab104')
-  label_entry1.grid()
+    label_entry1 = LabeledEntry(root, "user", "wab104")
+    label_entry1.grid()
 
-  label_entry2 = LabeledEntry(root, 'password', 'secret', show='*')
-  label_entry2.grid()
+    label_entry2 = LabeledEntry(root, "password", "secret", show="*")
+    label_entry2.grid()
 
-  root.mainloop()
+    root.mainloop()

@@ -1,48 +1,34 @@
-import os
 
 # required for WS layer
 from SharedBeanService_services import *
 from WSString import *
 
-# added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
-
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.LabelFrame import LabelFrame
-from memops.gui.Label import Label
-from memops.gui.Text import Text
 from memops.gui.Button import Button
-from memops.gui.ButtonList import ButtonList
-from memops.gui.Canvas import Canvas
-from memops.gui.Separator import Separator
 from memops.gui.Frame import Frame
-from memops.gui.Tree import Tree
-from memops.gui.Tree import Node
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.Text import Text
 
-from cambridge.wms.RepositoryList import RepositoryList
-from cambridge.wms.Repository import Repository
+# added jmci; do we need this??
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class FilterPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='Repository')
 
-                       
+
 
   def body(self, guiFrame):
 
@@ -53,11 +39,11 @@ class FilterPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('160x80')
-    
+
     self.update_idletasks()
- 
+
 class FilterFrame(LabelFrame):
 
   def __init__(self, guiParent, basePopup, borderRelief='raised', text=' ', justify='left',
@@ -78,7 +64,7 @@ class FilterFrame(LabelFrame):
 
     # get a port proxy instance
     # this should probably belong to the repository directly
-    
+
     loc = SharedBeanServiceLocator()
     self.port = loc.getSharedBean()
 
@@ -89,7 +75,7 @@ class FilterFrame(LabelFrame):
 
     LabelFrame.__init__(self, guiParent, borderRelief, text, justify,
                         width, font, height, *args, **kw)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -131,7 +117,7 @@ class FilterFrame(LabelFrame):
     self.nameText.xlear()
     self.dateText.clear()
     self.userText.clear()
-    
+
 
   def tmpCall(self, event=None):
 
@@ -154,25 +140,24 @@ class FilterFrame(LabelFrame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = FilterPopup(root)
 
-  
- 
+
+
   root.mainloop()

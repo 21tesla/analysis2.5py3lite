@@ -14,14 +14,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -55,149 +55,145 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os
-
-from memops.universal.Io import getTopDirectory
-
-from ccp.format.nmrStar.generalIO import NmrStarGenericFile
-from ccp.format.nmrStar.generalIO import NmrStarFile
-
 from ccp.format.general.Util import getSeqAndInsertCode
+from ccp.format.nmrStar.generalIO import NmrStarFile, NmrStarGenericFile
 
 #####################
 # Class definitions #
 #####################
 
+
 class NmrStarFile(NmrStarFile):
+    def initialize(self, version="3.1"):
 
-  def initialize(self, version = '3.1'):
-  
-    self.hExchProtectionFiles = []
-    
-    self.files = self.hExchProtectionFiles
-    
-    if not self.version:
-      self.version = version
-    
-    self.saveFrameName = 'H_exch_protection_factors'
-    self.DataClassFile = NmrStarHExchProtectionFile
-   
-    self.components = [self.saveFrameName]
-    self.setComponents()
+        self.hExchProtectionFiles = []
 
-  def read(self,verbose = 0):
+        self.files = self.hExchProtectionFiles
 
-    self.readComponent(verbose = verbose) 
+        if not self.version:
+            self.version = version
+
+        self.saveFrameName = "H_exch_protection_factors"
+        self.DataClassFile = NmrStarHExchProtectionFile
+
+        self.components = [self.saveFrameName]
+        self.setComponents()
+
+    def read(self, verbose=0):
+
+        self.readComponent(verbose=verbose)
 
 
 class NmrStarHExchProtectionFile(NmrStarGenericFile):
+    """
+    Information on file level
+    """
 
-  """
-  Information on file level
-  """
-  
-  def initialize(self,parent,saveFrame = None):
+    def initialize(self, parent, saveFrame=None):
 
-    self.attrToTagMappings = (
-      
-        ('details','Details',None),
-        ('units','Val_units',None),
-    
-    )
+        self.attrToTagMappings = (
+            ("details", "Details", None),
+            ("units", "Val_units", None),
+        )
 
-    self.hExchProtectionValues = []
-    
-    self.saveFrame = saveFrame
-    
-    self.parent = parent
-    self.version = parent.version
+        self.hExchProtectionValues = []
 
-    if self.saveFrame:
-      self.parseSaveFrame()
+        self.saveFrame = saveFrame
 
-  def parseSaveFrame(self):
+        self.parent = parent
+        self.version = parent.version
 
-    if not self.checkVersion():
-      return
+        if self.saveFrame:
+            self.parseSaveFrame()
 
-    for (attrName,tagName,default) in self.attrToTagMappings:
-      if self.saveFrame.tags.has_key(tagName):
-        attrValue = self.saveFrame.tags[tagName]
-      else:
-        attrValue = default
-        
-      if not hasattr(self,attrName) or not self.attrName:
-        setattr(self,attrName,attrValue)
+    def parseSaveFrame(self):
 
-    tableName = '_H_exch_protection_factor'
+        if not self.checkVersion():
+            return
 
-    if self.saveFrame.tables.has_key(tableName):
-      hExchProtectionTableTags = self.saveFrame.tables[tableName].tags
-      numHExchProtectionValues = len(hExchProtectionTableTags['ID'])
+        for attrName, tagName, default in self.attrToTagMappings:
+            if tagName in self.saveFrame.tags:
+                attrValue = self.saveFrame.tags[tagName]
+            else:
+                attrValue = default
 
-      for i in range(0,numHExchProtectionValues):
-      
-        tmpMolCode = str(hExchProtectionTableTags['Entity_assembly_ID'][i])
+            if not hasattr(self, attrName) or not self.attrName:
+                setattr(self, attrName, attrValue)
 
-        self.hExchProtectionValues.append(NmrStarHExchProtection(tmpMolCode,self))       
-        self.hExchProtectionValues[-1].setData(hExchProtectionTableTags,i)
+        tableName = "_H_exch_protection_factor"
 
-    tableName = '_H_exch_protection_fact_experiment'
-    self.setMeasureExperiments(tableName)
+        if tableName in self.saveFrame.tables:
+            hExchProtectionTableTags = self.saveFrame.tables[tableName].tags
+            numHExchProtectionValues = len(hExchProtectionTableTags["ID"])
 
-    tableName = '_H_exch_protect_fact_software'
-    self.setMeasureSoftwares(tableName)
+            for i in range(0, numHExchProtectionValues):
+                tmpMolCode = str(hExchProtectionTableTags["Entity_assembly_ID"][i])
+
+                self.hExchProtectionValues.append(NmrStarHExchProtection(tmpMolCode, self))
+                self.hExchProtectionValues[-1].setData(hExchProtectionTableTags, i)
+
+        tableName = "_H_exch_protection_fact_experiment"
+        self.setMeasureExperiments(tableName)
+
+        tableName = "_H_exch_protect_fact_software"
+        self.setMeasureSoftwares(tableName)
+
 
 class NmrStarHExchProtection:
+    def __init__(self, molCode, parent):
 
-  def __init__(self,molCode,parent):
+        self.molCode = molCode
+        self.parent = parent
 
-    self.molCode = molCode
-    self.parent = parent
-  
-  def setData(self,hExchProtectionTableTags,i):
-      
-    assignList = [['Id',            'ID',None],
-                  ['seqCode',       'Seq_ID',None],
-                  ['resLabel',      'Comp_ID',None],
-                  ['atomName',      'Atom_ID',None],
-                  ['atomType',      'Atom_type',None],
-                  ['value',         'Val',None],
-                  ['valueError',    'Val_err',0.0],
-                  ['calcRate',      'Calculated_intrinsic_rate',None],
-                  ['details',       'Details',None],
-                  ['authorSeqCode', 'Author_seq_ID',None]
-                  ]
+    def setData(self, hExchProtectionTableTags, i):
 
-    for (attrName,tagName,default) in assignList:
+        assignList = [
+            ["Id", "ID", None],
+            ["seqCode", "Seq_ID", None],
+            ["resLabel", "Comp_ID", None],
+            ["atomName", "Atom_ID", None],
+            ["atomType", "Atom_type", None],
+            ["value", "Val", None],
+            ["valueError", "Val_err", 0.0],
+            ["calcRate", "Calculated_intrinsic_rate", None],
+            ["details", "Details", None],
+            ["authorSeqCode", "Author_seq_ID", None],
+        ]
 
-      if hExchProtectionTableTags.has_key(tagName):
-        if hExchProtectionTableTags[tagName][i] != None:
-          setattr(self,attrName,hExchProtectionTableTags[tagName][i])
-        else:
-          setattr(self,attrName,default)
-          
-    # For completeness...
-    (self.seqCode,self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+        for attrName, tagName, default in assignList:
+            if tagName in hExchProtectionTableTags:
+                if hExchProtectionTableTags[tagName][i] != None:
+                    setattr(self, attrName, hExchProtectionTableTags[tagName][i])
+                else:
+                    setattr(self, attrName, default)
+
+        # For completeness...
+        (self.seqCode, self.seqInsertCode) = getSeqAndInsertCode(self.seqCode)
+
 
 ###################
 # Main of program #
 ###################
 
 if __name__ == "__main__":
+    # No test data
 
-  # No test data
+    files = ["/homes/penkett/project/nmrstar/files/bmr15230_3_pub.str"]
 
-  files = ['/homes/penkett/project/nmrstar/files/bmr15230_3_pub.str']
-  
-  for file in files:
-    
-    #file = os.path.join(getTopDirectory(), file)
-    
-    nmrStarFile = NmrStarFile(file, version='3.1')
+    for file in files:
+        # file = os.path.join(getTopDirectory(), file)
 
-    nmrStarFile.read(verbose = 1)
+        nmrStarFile = NmrStarFile(file, version="3.1")
 
-    for hExchProtectionFile in nmrStarFile.hExchProtectionFiles:
-      for hExchProtection in hExchProtectionFile.hExchProtectionValues:
-        print(hExchProtection.Id, hExchProtection.seqCode, hExchProtection.resLabel, hExchProtection.atomName, hExchProtection.value, hExchProtection.valueError)
+        nmrStarFile.read(verbose=1)
+
+        for hExchProtectionFile in nmrStarFile.hExchProtectionFiles:
+            for hExchProtection in hExchProtectionFile.hExchProtectionValues:
+                print(
+                    hExchProtection.Id,
+                    hExchProtection.seqCode,
+                    hExchProtection.resLabel,
+                    hExchProtection.atomName,
+                    hExchProtection.value,
+                    hExchProtection.valueError,
+                )

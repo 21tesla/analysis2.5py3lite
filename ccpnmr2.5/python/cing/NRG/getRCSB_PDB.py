@@ -6,9 +6,8 @@ Execute like:
 python $CINGROOT/python/cing/NRG/getRCSB_PDB.py
 """
 from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG.PDBEntryLists import getPdbEntries
-from cing.NRG.PDBEntryLists import writeEntryListToFile
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.PDBEntryLists import getPdbEntries, writeEntryListToFile
 
 cing.verbosity = cing.verbosityDebug
 cingDirTmpTest = os.path.join( cingDirTmp, 'getRCSB_PDB' )

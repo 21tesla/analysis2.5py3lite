@@ -58,23 +58,20 @@ and contains original contributions embedded in the framework
 ===========================REFERENCE END===============================
 """
 
-import io
 #import sets
-import traceback
-import types
-import operator
 
 # special function for fast whitespace checking.
 # used in DataType Word and Token handcode
 import re
-containsWhitespace = re.compile('\s').search
+
+containsWhitespace = re.compile(r'\s').search
 containsNonAlphanumeric = re.compile('[^a-zA-Z0-9_]').search
- 
+
 from memops.general import Implementation as implementation
+
 ApiError = implementation.ApiError
 
 # imported packages:
-import cambridge.api.WmsProtocol
 import ccp.api.general.Affiliation
 import ccp.api.nmr.NmrCalc
 import memops.api.AccessControl
@@ -91,9 +88,9 @@ class Project(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.Wms'
   _packageShortName = 'WMS'
   _fieldNames = ('applicationData', 'className', 'details', 'fieldNames', 'inConstructor', 'isDeleted', 'location', 'metaclass', 'name', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'nmrCalcInfo', 'parent', 'projectVersions', 'rawFiles', 'root', 'topObject', 'wmsSegment',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Wms.Project
@@ -142,7 +139,7 @@ class Project(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -203,7 +200,7 @@ class Project(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -229,19 +226,19 @@ class Project(memops.api.Implementation.DataObject):
 
     projectVersions = dataDict.get('projectVersions').values()
     for projectVersion in projectVersions:
-      if (not (projectVersion in objsToBeDeleted)):
+      if (projectVersion not in objsToBeDeleted):
         objsToBeDeleted.add(projectVersion)
         objsToBeChecked.append(projectVersion)
 
     rawFiles = dataDict.get('rawFiles').values()
     for rawFile in rawFiles:
-      if (not (rawFile in objsToBeDeleted)):
+      if (rawFile not in objsToBeDeleted):
         objsToBeDeleted.add(rawFile)
         objsToBeChecked.append(rawFile)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Wms.Project:   deletes
@@ -252,11 +249,11 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     wmsSegment = dataDict.get('wmsSegment')
-    if (not (wmsSegment in objsToBeDeleted)):
+    if (wmsSegment not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -268,7 +265,7 @@ class Project(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Wms.Project
@@ -303,7 +300,7 @@ class Project(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('wmsSegment')
         dd = value.__dict__.get('projects')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsSegment' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -476,7 +473,7 @@ class Project(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -484,7 +481,7 @@ class Project(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -502,7 +499,7 @@ class Project(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -520,7 +517,7 @@ class Project(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: nmrCalcInfo:
            Link nmrCalcInfo between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -536,7 +533,7 @@ class Project(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('project')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projectVersions:
            non-reciprocal link projectVersions from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -551,7 +548,7 @@ class Project(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('project')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: rawFiles:
            non-reciprocal link rawFiles from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -602,7 +599,7 @@ class Project(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProjectVersions(self, **conditions):
     """
     FindAll for cambridge.Wms.Project.projectVersions
@@ -616,7 +613,7 @@ class Project(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('projectVersions').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -627,28 +624,28 @@ class Project(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -657,7 +654,7 @@ class Project(memops.api.Implementation.DataObject):
             result.add(v)
 
     return result
-  
+
   def findAllRawFiles(self, **conditions):
     """
     FindAll for cambridge.Wms.Project.rawFiles
@@ -671,7 +668,7 @@ class Project(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('rawFiles').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -682,28 +679,28 @@ class Project(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -714,7 +711,7 @@ class Project(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProjectVersion(self, **conditions):
     """
     FindFirst for cambridge.Wms.Project.projectVersions
@@ -747,7 +744,7 @@ class Project(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('projectVersions').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -758,28 +755,28 @@ class Project(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -788,7 +785,7 @@ class Project(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def findFirstRawFile(self, **conditions):
     """
     FindFirst for cambridge.Wms.Project.rawFiles
@@ -821,7 +818,7 @@ class Project(memops.api.Implementation.DataObject):
         currentValues = dataDict.get('rawFiles').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -832,28 +829,28 @@ class Project(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -862,7 +859,7 @@ class Project(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Wms.Project
@@ -875,7 +872,7 @@ class Project(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Wms.Project
@@ -920,7 +917,7 @@ class Project(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDetails(self):
     """
     Get for cambridge.Wms.Project.details
@@ -932,7 +929,7 @@ class Project(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Wms.Project
@@ -954,7 +951,7 @@ class Project(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Wms.Project
@@ -962,7 +959,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getLocation(self):
     """
     Get for cambridge.Wms.Project.location
@@ -972,7 +969,7 @@ class Project(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.Wms.Project.name
@@ -980,7 +977,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getNmrCalcInfo(self):
     """
     getter for derived link nmrCalcInfo
@@ -988,7 +985,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = ccp.api.nmr.NmrCalc.Run.getByKey(self.root, (self.nmrCalcStoreName, self.nmrCalcRunSerial))
     return result
-  
+
   def getNmrCalcRunSerial(self):
     """
     Get for cambridge.Wms.Project.nmrCalcRunSerial
@@ -996,7 +993,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('nmrCalcRunSerial')
     return result
-  
+
   def getNmrCalcStoreName(self):
     """
     Get for cambridge.Wms.Project.nmrCalcStoreName
@@ -1008,7 +1005,7 @@ class Project(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Wms.Project.parent
@@ -1016,7 +1013,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('wmsSegment')
     return result
-  
+
   def getProjectVersions(self):
     """
     Get for cambridge.Wms.Project.projectVersions
@@ -1027,7 +1024,7 @@ class Project(memops.api.Implementation.DataObject):
     return result
 
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
-  
+
   def getRawFiles(self):
     """
     Get for cambridge.Wms.Project.rawFiles
@@ -1040,7 +1037,7 @@ class Project(memops.api.Implementation.DataObject):
   getRoot = memops.api.Implementation.MemopsObject.getRoot
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsSegment(self):
     """
     Get for cambridge.Wms.Project.wmsSegment
@@ -1048,13 +1045,13 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('wmsSegment')
     return result
-  
+
   def newProjectVersion(self, **attrlinks):
     """
     Factory function to create cambridge.Wms.ProjectVersion
     """
     return ProjectVersion(self, **attrlinks)
-  
+
   def newRawFile(self, **attrlinks):
     """
     Factory function to create cambridge.Wms.RawFile
@@ -1062,7 +1059,7 @@ class Project(memops.api.Implementation.DataObject):
     return RawFile(self, **attrlinks)
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Wms.Project
@@ -1073,7 +1070,7 @@ class Project(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setDetails(self, value):
     """
     Set for cambridge.Wms.Project.details
@@ -1136,13 +1133,13 @@ class Project(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -1202,13 +1199,13 @@ class Project(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLocation')
       if ll:
         for notify in ll:
@@ -1281,7 +1278,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def setNmrCalcInfo(self, value):
     """
     setter for derived link nmrCalcInfo
@@ -1392,13 +1389,13 @@ class Project(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNmrCalcRunSerial')
       if ll:
         for notify in ll:
@@ -1473,13 +1470,13 @@ class Project(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNmrCalcStoreName')
       if ll:
         for notify in ll:
@@ -1492,19 +1489,19 @@ class Project(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('projectVersions')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedRawFiles(self):
     """
     Sorted for cambridge.Wms.Project.rawFiles
     """
     dataDict = self.__dict__
     sortdd = dataDict.get('rawFiles')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -1515,7 +1512,7 @@ class Project(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -1525,21 +1522,21 @@ class Project(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   location = property(getLocation, setLocation, None,
   r"""Location of directory containing Project versions
   """)
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""name of project - key of class
   """)
-  
+
   nmrCalcRunSerial = property(getNmrCalcRunSerial, setNmrCalcRunSerial, None,
   r"""Serial of NmrCalc.Run used to store Project information overview
   """)
-  
+
   nmrCalcStoreName = property(getNmrCalcStoreName, setNmrCalcStoreName, None,
   r"""Name of NmrCalcStore where Project information overview is stored
   """)
@@ -1553,19 +1550,19 @@ class Project(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   nmrCalcInfo = property(getNmrCalcInfo, setNmrCalcInfo, None,
   r"""NmrCalc.Run used to store project information overview
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsSegment
   """)
-  
+
   projectVersions = property(getProjectVersions,  None, None,
   r"""child link to class ProjectVersion
   """)
-  
+
   rawFiles = property(getRawFiles,  None, None,
   r"""child link to class RawFile
   """)
@@ -1573,7 +1570,7 @@ class Project(memops.api.Implementation.DataObject):
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   wmsSegment = property(getWmsSegment,  None, None,
   r"""parent link
   """)
@@ -1587,9 +1584,9 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.Wms'
   _packageShortName = 'WMS'
   _fieldNames = ('applicationData', 'className', 'creationTime', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'packageName', 'packageShortName', 'qualifiedName', 'status', 'summary', 'versionTag', 'access', 'activeAccess', 'createdByTask', 'outputTasks', 'parent', 'project', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Wms.ProjectVersion
@@ -1635,7 +1632,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -1692,7 +1689,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -1718,7 +1715,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Wms.ProjectVersion:   deletes
@@ -1729,19 +1726,19 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     createdByTask = dataDict.get('createdByTask')
-    if (createdByTask is not None and not (createdByTask in objsToBeDeleted)):
+    if (createdByTask is not None and createdByTask not in objsToBeDeleted):
       createdByTask.__dict__['generatedVersion'] = None
 
     for outputTask in dataDict.get('outputTasks'):
-      if (not (outputTask in objsToBeDeleted)):
+      if (outputTask not in objsToBeDeleted):
         outputTask.__dict__['inputVersion'] = None
 
     project = dataDict.get('project')
-    if (not (project in objsToBeDeleted)):
+    if (project not in objsToBeDeleted):
       objKey = dataDict.get('versionTag')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -1753,7 +1750,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def addOutputTask(self, value):
     """
     Add for cambridge.Wms.ProjectVersion.outputTasks
@@ -1801,7 +1798,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.addOutputTask:
            Link outputTasks between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -1822,13 +1819,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('addOutputTask')
       if ll:
         for notify in ll:
@@ -1841,7 +1838,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.Wms.ProjectVersion
@@ -1862,7 +1859,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('project')
         dd = value.__dict__.get('projectVersions')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'project' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2024,7 +2021,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2032,7 +2029,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2050,7 +2047,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -2066,7 +2063,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('generatedVersion')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: createdByTask:
            non-reciprocal link createdByTask from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2074,7 +2071,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: createdByTask:
            Link createdByTask between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -2090,7 +2087,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('inputVersion')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: outputTasks:
            non-reciprocal link outputTasks from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -2098,7 +2095,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: outputTasks:
            Link outputTasks between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -2148,7 +2145,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   delete = memops.api.Implementation.DataObject.delete
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllOutputTasks(self, **conditions):
     """
     FindAll for cambridge.Wms.ProjectVersion.outputTasks
@@ -2162,7 +2159,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('outputTasks')
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2173,28 +2170,28 @@ class ProjectVersion(memops.api.Implementation.DataObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2205,7 +2202,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     return result
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstOutputTask(self, **conditions):
     """
     FindFirst for cambridge.Wms.ProjectVersion.outputTasks
@@ -2222,7 +2219,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     else:
       currentValues = dataDict.get('outputTasks')
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -2233,28 +2230,28 @@ class ProjectVersion(memops.api.Implementation.DataObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -2263,7 +2260,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Wms.ProjectVersion
@@ -2276,7 +2273,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Wms.ProjectVersion
@@ -2325,7 +2322,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getCreatedByTask(self):
     """
     Get for cambridge.Wms.ProjectVersion.createdByTask
@@ -2333,7 +2330,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('createdByTask')
     return result
-  
+
   def getCreationTime(self):
     """
     Get for cambridge.Wms.ProjectVersion.creationTime
@@ -2345,7 +2342,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Wms.ProjectVersion
@@ -2369,7 +2366,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Wms.ProjectVersion
@@ -2379,7 +2376,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getOutputTasks(self):
     """
     Get for cambridge.Wms.ProjectVersion.outputTasks
@@ -2392,7 +2389,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Wms.ProjectVersion.parent
@@ -2400,7 +2397,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('project')
     return result
-  
+
   def getProject(self):
     """
     Get for cambridge.Wms.ProjectVersion.project
@@ -2412,7 +2409,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getStatus(self):
     """
     Get for cambridge.Wms.ProjectVersion.status
@@ -2420,7 +2417,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('status')
     return result
-  
+
   def getSummary(self):
     """
     Get for cambridge.Wms.ProjectVersion.summary
@@ -2430,7 +2427,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getVersionTag(self):
     """
     Get for cambridge.Wms.ProjectVersion.versionTag
@@ -2440,7 +2437,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def removeOutputTask(self, value):
     """
     Remove for cambridge.Wms.ProjectVersion.outputTasks
@@ -2478,7 +2475,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
        called with deleted value""" % self.qualifiedName
       )
 
-    if (not (value in currentValues)):
+    if (value not in currentValues):
       raise ApiError("""%s.removeOutputTask:
        value not in list""" % self.qualifiedName
        + ": %s" % (self,)
@@ -2496,13 +2493,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('removeOutputTask')
       if ll:
         for notify in ll:
@@ -2519,7 +2516,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setCreatedByTask(self, value):
     """
     Set for cambridge.Wms.ProjectVersion.createdByTask
@@ -2566,7 +2563,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setCreatedByTask:
            Link createdByTask between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -2591,13 +2588,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCreatedByTask')
       if ll:
         for notify in ll:
@@ -2658,13 +2655,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setCreationTime')
       if ll:
         for notify in ll:
@@ -2725,7 +2722,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       xx1 = dataDict.get('topObject')
       for value in values:
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setOutputTasks:
            Link outputTasks between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -2733,11 +2730,11 @@ class ProjectVersion(memops.api.Implementation.DataObject):
           )
 
     for cv in currentValues:
-      if (not (cv in values)):
+      if (cv not in values):
         cv.__dict__['inputVersion'] = None
 
     for cv in values:
-      if (not (cv in currentValues)):
+      if (cv not in currentValues):
         oldSelf = cv.__dict__.get('inputVersion')
         if (oldSelf is not None):
           vv = oldSelf.__dict__.get('outputTasks')
@@ -2753,13 +2750,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setOutputTasks')
       if ll:
         for notify in ll:
@@ -2834,13 +2831,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setStatus')
       if ll:
         for notify in ll:
@@ -2915,13 +2912,13 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSummary')
       if ll:
         for notify in ll:
@@ -2994,7 +2991,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict['versionTag'] = value
 
     # doNotifies
-  
+
   def sortedOutputTasks(self):
     """
     Sorted for cambridge.Wms.ProjectVersion.outputTasks
@@ -3002,7 +2999,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     ll = dataDict.get('outputTasks')
     ll = [(x.getFullKey(),x) for x in ll]
-    
+
     ll.sort()
     result = [x[1] for x in ll]
     return result
@@ -3012,7 +3009,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   creationTime = property(getCreationTime, setCreationTime, None,
   r"""Timesamped for creation of project
   """)
@@ -3030,15 +3027,15 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   status = property(getStatus, setStatus, None,
   r"""Version status. To be changed to enumeration type
   """)
-  
+
   summary = property(getSummary, setSummary, None,
   r"""One-line description of project version.
   """)
-  
+
   versionTag = property(getVersionTag, setVersionTag, None,
   r"""string tag idnetifying version
   """)
@@ -3046,19 +3043,19 @@ class ProjectVersion(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   createdByTask = property(getCreatedByTask, setCreatedByTask, None,
   r"""
   """)
-  
+
   outputTasks = property(getOutputTasks, setOutputTasks, None,
   r"""
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for project
   """)
-  
+
   project = property(getProject,  None, None,
   r"""parent link
   """)
@@ -3076,9 +3073,9 @@ class RawFile(memops.api.Implementation.DataObject):
   _packageName = 'cambridge.Wms'
   _packageShortName = 'WMS'
   _fieldNames = ('applicationData', 'className', 'details', 'fieldNames', 'inConstructor', 'isDeleted', 'location', 'metaclass', 'packageName', 'packageShortName', 'path', 'qualifiedName', 'serial', 'access', 'activeAccess', 'parent', 'project', 'root', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Wms.RawFile
@@ -3122,7 +3119,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -3190,7 +3187,7 @@ class RawFile(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -3216,7 +3213,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Wms.RawFile:   deletes
@@ -3227,11 +3224,11 @@ class RawFile(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     project = dataDict.get('project')
-    if (not (project in objsToBeDeleted)):
+    if (project not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -3243,14 +3240,14 @@ class RawFile(memops.api.Implementation.DataObject):
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Wms.RawFile
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.Wms.RawFile
@@ -3271,7 +3268,7 @@ class RawFile(memops.api.Implementation.DataObject):
       else:
         value = dataDict.get('project')
         dd = value.__dict__.get('rawFiles')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'project' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3407,7 +3404,7 @@ class RawFile(memops.api.Implementation.DataObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -3415,7 +3412,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3433,7 +3430,7 @@ class RawFile(memops.api.Implementation.DataObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -3483,7 +3480,7 @@ class RawFile(memops.api.Implementation.DataObject):
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Wms.RawFile
@@ -3496,7 +3493,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Wms.RawFile
@@ -3545,7 +3542,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDetails(self):
     """
     Get for cambridge.Wms.RawFile.details
@@ -3557,7 +3554,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Wms.RawFile
@@ -3581,7 +3578,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Wms.RawFile
@@ -3589,7 +3586,7 @@ class RawFile(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getLocation(self):
     """
     Get for cambridge.Wms.RawFile.location
@@ -3603,7 +3600,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Wms.RawFile.parent
@@ -3611,7 +3608,7 @@ class RawFile(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('project')
     return result
-  
+
   def getPath(self):
     """
     Get for cambridge.Wms.RawFile.path
@@ -3619,7 +3616,7 @@ class RawFile(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     result = dataDict.get('path')
     return result
-  
+
   def getProject(self):
     """
     Get for cambridge.Wms.RawFile.project
@@ -3631,7 +3628,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.Wms.RawFile.serial
@@ -3643,7 +3640,7 @@ class RawFile(memops.api.Implementation.DataObject):
   getTopObject = memops.api.Implementation.DataObject.getTopObject
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Wms.RawFile
@@ -3654,7 +3651,7 @@ class RawFile(memops.api.Implementation.DataObject):
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setDetails(self, value):
     """
     Set for cambridge.Wms.RawFile.details
@@ -3717,13 +3714,13 @@ class RawFile(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -3783,13 +3780,13 @@ class RawFile(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setLocation')
       if ll:
         for notify in ll:
@@ -3862,13 +3859,13 @@ class RawFile(memops.api.Implementation.DataObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setPath')
       if ll:
         for notify in ll:
@@ -3938,7 +3935,7 @@ class RawFile(memops.api.Implementation.DataObject):
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -3948,7 +3945,7 @@ class RawFile(memops.api.Implementation.DataObject):
   inConstructor = memops.api.Implementation.ComplexDataType.inConstructor
 
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
-  
+
   location = property(getLocation, setLocation, None,
   r"""Url of directory containing file
   """)
@@ -3958,13 +3955,13 @@ class RawFile(memops.api.Implementation.DataObject):
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   path = property(getPath, setPath, None,
   r"""Path relative to dataUrl.url.
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
@@ -3975,11 +3972,11 @@ class RawFile(memops.api.Implementation.DataObject):
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for project
   """)
-  
+
   project = property(getProject,  None, None,
   r"""parent link
   """)
@@ -3998,9 +3995,9 @@ data.
   _packageName = 'cambridge.Wms'
   _packageShortName = 'WMS'
   _fieldNames = ('applicationData', 'className', 'dateCompleted', 'dateStarted', 'fieldNames', 'inConstructor', 'isDeleted', 'metaclass', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'packageName', 'packageShortName', 'protocolName', 'qualifiedName', 'serial', 'status', 'summary', 'access', 'activeAccess', 'generatedVersion', 'inputVersion', 'nmrCalcRun', 'operator', 'parent', 'root', 'topObject', 'wmsProtocol', 'wmsSegment',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Wms.Task
@@ -4053,7 +4050,7 @@ data.
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -4121,7 +4118,7 @@ data.
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -4147,7 +4144,7 @@ data.
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Wms.Task:   deletes objects
@@ -4157,20 +4154,20 @@ data.
     dataDict = self.__dict__
     dataDict['isDeleted'] = True
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     generatedVersion = dataDict.get('generatedVersion')
-    if (generatedVersion is not None and not (generatedVersion in objsToBeDeleted)):
+    if (generatedVersion is not None and generatedVersion not in objsToBeDeleted):
       generatedVersion.__dict__['createdByTask'] = None
 
     inputVersion = dataDict.get('inputVersion')
-    if (inputVersion is not None and not (inputVersion in objsToBeDeleted)):
+    if (inputVersion is not None and inputVersion not in objsToBeDeleted):
       outputTasks = inputVersion.__dict__.get('outputTasks')
       outputTasks.remove(self)
 
     wmsSegment = dataDict.get('wmsSegment')
-    if (not (wmsSegment in objsToBeDeleted)):
+    if (wmsSegment not in objsToBeDeleted):
       objKey = dataDict.get('serial')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -4182,14 +4179,14 @@ data.
           del dd[objKey]
 
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Wms.Task
     """
     dataDict = self.__dict__
     self.checkValid(complete)
-  
+
   def checkValid(self, complete=False):
     """
     CheckValid for cambridge.Wms.Task
@@ -4210,7 +4207,7 @@ data.
       else:
         value = dataDict.get('wmsSegment')
         dd = value.__dict__.get('tasks')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'wmsSegment' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4477,7 +4474,7 @@ data.
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4485,7 +4482,7 @@ data.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4503,7 +4500,7 @@ data.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4519,7 +4516,7 @@ data.
           )
 
         oldSelf = value.__dict__.get('createdByTask')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: generatedVersion:
            non-reciprocal link generatedVersion from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4534,7 +4531,7 @@ data.
           )
 
         oldSelves = value.__dict__.get('outputTasks')
-        if (not (self in oldSelves)):
+        if (self not in oldSelves):
           raise ApiError("""%s.checkValid: inputVersion:
            non-reciprocal link inputVersion from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -4551,7 +4548,7 @@ data.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: nmrCalcRun:
            Link nmrCalcRun between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4569,7 +4566,7 @@ data.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: operator:
            Link operator between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4587,7 +4584,7 @@ data.
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: wmsProtocol:
            Link wmsProtocol between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -4631,7 +4628,7 @@ data.
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Wms.Task
@@ -4644,7 +4641,7 @@ data.
   getActiveAccess = memops.api.Implementation.DataObject.getActiveAccess
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Wms.Task
@@ -4689,7 +4686,7 @@ data.
   getByNavigation = memops.api.Implementation.MemopsObject.getByNavigation
 
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
-  
+
   def getDateCompleted(self):
     """
     Get for cambridge.Wms.Task.dateCompleted
@@ -4697,7 +4694,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('dateCompleted')
     return result
-  
+
   def getDateStarted(self):
     """
     Get for cambridge.Wms.Task.dateStarted
@@ -4709,7 +4706,7 @@ data.
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Wms.Task
@@ -4727,7 +4724,7 @@ data.
     result.append(dataDict.get('serial'))
 
     return result
-  
+
   def getGeneratedVersion(self):
     """
     Get for cambridge.Wms.Task.generatedVersion
@@ -4737,7 +4734,7 @@ data.
     return result
 
   getInConstructor = memops.api.Implementation.ComplexDataType.getInConstructor
-  
+
   def getInputVersion(self):
     """
     Get for cambridge.Wms.Task.inputVersion
@@ -4747,7 +4744,7 @@ data.
     return result
 
   getIsDeleted = memops.api.Implementation.MemopsObject.getIsDeleted
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Wms.Task
@@ -4757,7 +4754,7 @@ data.
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getNmrCalcRun(self):
     """
     getter for derived link 'run'
@@ -4765,7 +4762,7 @@ data.
     dataDict = self.__dict__
     result = ccp.api.nmr.NmrCalc.Run.getByKey(self.root, (self.nmrCalcStoreName, self.nmrCalcRunSerial))
     return result
-  
+
   def getNmrCalcRunSerial(self):
     """
     Get for cambridge.Wms.Task.nmrCalcRunSerial
@@ -4773,7 +4770,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('nmrCalcRunSerial')
     return result
-  
+
   def getNmrCalcStoreName(self):
     """
     Get for cambridge.Wms.Task.nmrCalcStoreName
@@ -4781,7 +4778,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('nmrCalcStoreName')
     return result
-  
+
   def getOperator(self):
     """
     getter for derived linik operator
@@ -4791,7 +4788,7 @@ data.
     if result is not None:
       result = result.findFirstUser(name=self.operatorId)
     return result
-  
+
   def getOperatorId(self):
     """
     Get for cambridge.Wms.Task.operatorId
@@ -4803,7 +4800,7 @@ data.
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Wms.Task.parent
@@ -4811,7 +4808,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('wmsSegment')
     return result
-  
+
   def getProtocolName(self):
     """
     Get for cambridge.Wms.Task.protocolName
@@ -4823,7 +4820,7 @@ data.
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getSerial(self):
     """
     Get for cambridge.Wms.Task.serial
@@ -4831,7 +4828,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('serial')
     return result
-  
+
   def getStatus(self):
     """
     Get for cambridge.Wms.Task.status
@@ -4839,7 +4836,7 @@ data.
     dataDict = self.__dict__
     result = dataDict.get('status')
     return result
-  
+
   def getSummary(self):
     """
     Get for cambridge.Wms.Task.summary
@@ -4849,7 +4846,7 @@ data.
     return result
 
   getTopObject = memops.api.Implementation.DataObject.getTopObject
-  
+
   def getWmsProtocol(self):
     """
     getter for derived link 'wmsProtocol'.
@@ -4857,7 +4854,7 @@ data.
     dataDict = self.__dict__
     result = self.root.findFirstWmsProtocol(name=self.protocolName)
     return result
-  
+
   def getWmsSegment(self):
     """
     Get for cambridge.Wms.Task.wmsSegment
@@ -4867,7 +4864,7 @@ data.
     return result
 
   removeApplicationData = memops.api.Implementation.DataObject.removeApplicationData
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Wms.Task
@@ -4878,7 +4875,7 @@ data.
   setAccess = memops.api.Implementation.DataObject.setAccess
 
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
-  
+
   def setDateCompleted(self, value):
     """
     Set for cambridge.Wms.Task.dateCompleted
@@ -4928,13 +4925,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDateCompleted')
       if ll:
         for notify in ll:
@@ -4990,13 +4987,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDateStarted')
       if ll:
         for notify in ll:
@@ -5049,7 +5046,7 @@ data.
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setGeneratedVersion:
            Link generatedVersion between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5074,13 +5071,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setGeneratedVersion')
       if ll:
         for notify in ll:
@@ -5133,7 +5130,7 @@ data.
       if (value is not None):
         xx1 = dataDict.get('topObject')
         yy1 = value.__dict__.get('topObject')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.setInputVersion:
            Link inputVersion between objects from separate partitions
            - memops.Implementation.TopObject does not match""" % self.qualifiedName
@@ -5162,13 +5159,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setInputVersion')
       if ll:
         for notify in ll:
@@ -5285,13 +5282,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNmrCalcRunSerial')
       if ll:
         for notify in ll:
@@ -5366,13 +5363,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setNmrCalcStoreName')
       if ll:
         for notify in ll:
@@ -5447,13 +5444,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setOperatorId')
       if ll:
         for notify in ll:
@@ -5528,13 +5525,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setProtocolName')
       if ll:
         for notify in ll:
@@ -5598,7 +5595,7 @@ data.
     dataDict['serial'] = value
 
     # doNotifies
-  
+
   def setStatus(self, value):
     """
     Set for cambridge.Wms.Task.status
@@ -5667,13 +5664,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setStatus')
       if ll:
         for notify in ll:
@@ -5748,13 +5745,13 @@ data.
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setSummary')
       if ll:
         for notify in ll:
@@ -5766,11 +5763,11 @@ data.
   applicationData = memops.api.Implementation.DataObject.applicationData
 
   className = memops.api.Implementation.ComplexDataType.className
-  
+
   dateCompleted = property(getDateCompleted, setDateCompleted, None,
   r"""
   """)
-  
+
   dateStarted = property(getDateStarted, setDateStarted, None,
   r"""
   """)
@@ -5782,15 +5779,15 @@ data.
   isDeleted = memops.api.Implementation.MemopsObject.isDeleted
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   nmrCalcRunSerial = property(getNmrCalcRunSerial, setNmrCalcRunSerial, None,
   r"""Serial for NmrCalc.Run where Task run information is stored
   """)
-  
+
   nmrCalcStoreName = property(getNmrCalcStoreName, setNmrCalcStoreName, None,
   r"""Name of NmrCalcStore where Task run information is stored
   """)
-  
+
   operatorId = property(getOperatorId, setOperatorId, None,
   r"""User Id for operator running the task.
   """)
@@ -5798,24 +5795,24 @@ data.
   packageName = memops.api.Implementation.ComplexDataType.packageName
 
   packageShortName = memops.api.Implementation.ComplexDataType.packageShortName
-  
+
   protocolName = property(getProtocolName, setProtocolName, None,
   r"""Name of Wms protocol used for task. Key for derived link to Protocol
   """)
 
   qualifiedName = memops.api.Implementation.ComplexDataType.qualifiedName
-  
+
   serial = property(getSerial, setSerial, None,
   r"""Serial number of object. Serves as object main key. Serial numbers of 
   deleted objects are not re-used. Serial numbers can only be set by the 
   implementation. Values are in practice always positive, since negative 
   values are interpreted as a signal to set the next free serial
   """)
-  
+
   status = property(getStatus, setStatus, None,
   r"""Task status - to be turned into enumeration
   """)
-  
+
   summary = property(getSummary, setSummary, None,
   r"""One-line description of task
   """)
@@ -5823,23 +5820,23 @@ data.
   access = memops.api.Implementation.DataObject.access
 
   activeAccess = memops.api.Implementation.DataObject.activeAccess
-  
+
   generatedVersion = property(getGeneratedVersion, setGeneratedVersion, None,
   r"""
   """)
-  
+
   inputVersion = property(getInputVersion, setInputVersion, None,
   r"""
   """)
-  
+
   nmrCalcRun = property(getNmrCalcRun, setNmrCalcRun, None,
   r"""NmrCalc Run object that describes task.
   """)
-  
+
   operator = property(getOperator, None, None,
   r"""Operator carrying out task.
   """)
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for wmsSegment
   """)
@@ -5847,11 +5844,11 @@ data.
   root = memops.api.Implementation.MemopsObject.root
 
   topObject = memops.api.Implementation.DataObject.topObject
-  
+
   wmsProtocol = property(getWmsProtocol, None, None,
   r"""protocol used to perform task
   """)
-  
+
   wmsSegment = property(getWmsSegment,  None, None,
   r"""parent link
   """)
@@ -5865,9 +5862,9 @@ class WmsSegment(memops.api.Implementation.TopObject):
   _packageName = 'cambridge.Wms'
   _packageShortName = 'WMS'
   _fieldNames = ('applicationData', 'className', 'createdBy', 'details', 'fieldNames', 'guid', 'inConstructor', 'isDeleted', 'isLoaded', 'isModifiable', 'isModified', 'isReading', 'lastUnlockedBy', 'metaclass', 'name', 'packageName', 'packageShortName', 'qualifiedName', 'access', 'activeAccess', 'activeRepositories', 'memopsRoot', 'packageLocator', 'parent', 'projects', 'root', 'tasks', 'topObject',)
-  
+
   _notifies = {'':[]}
-  
+
   def __init__(self, parent, **attrlinks):
     """
     Constructor for cambridge.Wms.WmsSegment
@@ -5925,7 +5922,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       dataDict['inConstructor'] = True
       try:
-        
+
         for key, value in attrlinks.iteritems():
           try:
             func = getattr(self.__class__, key).fset
@@ -6006,7 +6003,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notOverride):
-      
+
       ll = self.__class__._notifies.get('__init__')
       if ll:
         for notify in ll:
@@ -6040,19 +6037,19 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
     projects = dataDict.get('projects').values()
     for project in projects:
-      if (not (project in objsToBeDeleted)):
+      if (project not in objsToBeDeleted):
         objsToBeDeleted.add(project)
         objsToBeChecked.append(project)
 
     tasks = dataDict.get('tasks').values()
     for task in tasks:
-      if (not (task in objsToBeDeleted)):
+      if (task not in objsToBeDeleted):
         objsToBeDeleted.add(task)
         objsToBeChecked.append(task)
 
     topObject = dataDict.get('topObject')
     topObjectsToCheck.add(topObject)
-  
+
   def _singleDelete(self, objsToBeDeleted):
     """
     singleDelete for cambridge.Wms.WmsSegment:   deletes
@@ -6067,11 +6064,11 @@ class WmsSegment(memops.api.Implementation.TopObject):
       memopsRoot.__dict__['currentWmsSegment'] = None
 
     access = dataDict.get('access')
-    if (access is not None and not (access in objsToBeDeleted)):
+    if (access is not None and access not in objsToBeDeleted):
       access.__dict__['dataObject'] = None
 
     memopsRoot = dataDict.get('memopsRoot')
-    if (not (memopsRoot in objsToBeDeleted)):
+    if (memopsRoot not in objsToBeDeleted):
       objKey = dataDict.get('name')
       if (objKey is None):
         raise ApiError("""%s._singleDelete:
@@ -6088,7 +6085,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   addApplicationData = memops.api.Implementation.DataObject.addApplicationData
 
   backup = memops.api.Implementation.TopObject.backup
-  
+
   def checkAllValid(self, complete=False):
     """
     CheckAllValid for cambridge.Wms.WmsSegment
@@ -6126,7 +6123,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       else:
         value = dataDict.get('memopsRoot')
         dd = value.__dict__.get('wmsSegments')
-        if (not (self is dd.get(objKey))):
+        if (self is not dd.get(objKey)):
           raise ApiError("""%s.checkValid:
            non-reciprocal parent link 'memopsRoot' from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6247,7 +6244,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
         )
 
       value = dataDict.get('isModifiable')
-      if (not (value in [True, False])):
+      if (value not in [True, False]):
         raise ApiError("""%s.checkValid: isModifiable:
          memops.Implementation.Boolean input is not in enumeration [True, False]""" % self.qualifiedName
          + ": %s" % (value,)
@@ -6358,7 +6355,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('dataObject')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: access:
            non-reciprocal link access from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6366,7 +6363,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: access:
            Link access between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6384,7 +6381,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
         xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
         yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-        if (not (xx1 is yy1)):
+        if (xx1 is not yy1):
           raise ApiError("""%s.checkValid: activeAccess:
            Link activeAccess between objects from separate partitions
            - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6415,7 +6412,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       xx1 = dataDict.get('topObject').__dict__.get('memopsRoot')
       yy1 = value.__dict__.get('topObject').__dict__.get('memopsRoot')
-      if (not (xx1 is yy1)):
+      if (xx1 is not yy1):
         raise ApiError("""%s.checkValid: packageLocator:
          Link packageLocator between objects from separate partitions
          - memops.Implementation.MemopsRoot does not match""" % self.qualifiedName
@@ -6431,7 +6428,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsSegment')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: projects:
            non-reciprocal link projects from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6446,7 +6443,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
           )
 
         oldSelf = value.__dict__.get('wmsSegment')
-        if (not (oldSelf is self)):
+        if (oldSelf is not self):
           raise ApiError("""%s.checkValid: tasks:
            non-reciprocal link tasks from object""" % self.qualifiedName
            + ": %s" % (self,)
@@ -6506,7 +6503,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   findAllActiveRepositories = memops.api.Implementation.TopObject.findAllActiveRepositories
 
   findAllApplicationData = memops.api.Implementation.DataObject.findAllApplicationData
-  
+
   def findAllProjects(self, **conditions):
     """
     FindAll for cambridge.Wms.WmsSegment.projects
@@ -6526,7 +6523,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projects').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6537,28 +6534,28 @@ class WmsSegment(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6567,7 +6564,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
             result.add(v)
 
     return result
-  
+
   def findAllTasks(self, **conditions):
     """
     FindAll for cambridge.Wms.WmsSegment.tasks
@@ -6587,7 +6584,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('tasks').values()
       result = set()
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6598,28 +6595,28 @@ class WmsSegment(memops.api.Implementation.TopObject):
               result.add(v)
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result.add(v)
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6632,7 +6629,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   findFirstActiveRepository = memops.api.Implementation.TopObject.findFirstActiveRepository
 
   findFirstApplicationData = memops.api.Implementation.DataObject.findFirstApplicationData
-  
+
   def findFirstProject(self, **conditions):
     """
     FindFirst for cambridge.Wms.WmsSegment.projects
@@ -6674,7 +6671,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('projects').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6685,28 +6682,28 @@ class WmsSegment(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6715,7 +6712,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def findFirstTask(self, **conditions):
     """
     FindFirst for cambridge.Wms.WmsSegment.tasks
@@ -6757,7 +6754,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
         currentValues = dataDict.get('tasks').values()
 
       result = None
-      
+
       items = conditions.items()
       if (nConditions == 1):
         (key, condition) = items[0]
@@ -6768,28 +6765,28 @@ class WmsSegment(memops.api.Implementation.TopObject):
               result = v; break
 
         else:
-          
+
           if isinstance(condition, list):
             condition = tuple(condition)
           elif isinstance(condition, set):
             condition = frozenset(condition)
-          
+
           for v in currentValues:
             if getattr(v, key, ApiError) == condition:
               # NB ApiError is a dummy object, never equal to condition
               result = v; break
 
       else:
-        
+
         for ii in range(nConditions):
           (key, condition) = items[ii]
           if isinstance(condition, list):
             items[ii] = (key, tuple(condition))
           elif isinstance(condition, set):
             items[ii] = (key, frozenset(condition))
-        
+
         for v in currentValues:
-        
+
           for (key, condition) in items:
             if getattr(v, key, ApiError) != condition:
               # NB ApiError is a dummy object, never equal to condition
@@ -6798,7 +6795,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
             result = v; break
 
     return result
-  
+
   def get(self, name):
     """
     GetAttr for cambridge.Wms.WmsSegment
@@ -6813,7 +6810,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getActiveRepositories = memops.api.Implementation.TopObject.getActiveRepositories
 
   getApplicationData = memops.api.Implementation.DataObject.getApplicationData
-  
+
   def getByKey(startObj, fullKey):
     """
     GetByKey for cambridge.Wms.WmsSegment
@@ -6842,7 +6839,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getClassName = memops.api.Implementation.ComplexDataType.getClassName
 
   getCreatedBy = memops.api.Implementation.TopObject.getCreatedBy
-  
+
   def getDetails(self):
     """
     Get for cambridge.Wms.WmsSegment.details
@@ -6854,7 +6851,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getExpandedKey = memops.api.Implementation.MemopsObject.getExpandedKey
 
   getFieldNames = memops.api.Implementation.ComplexDataType.getFieldNames
-  
+
   def getFullKey(self, useGuid=False):
     """
     GetFullKey for cambridge.Wms.WmsSegment
@@ -6884,7 +6881,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getIsReading = memops.api.Implementation.TopObject.getIsReading
 
   getLastUnlockedBy = memops.api.Implementation.TopObject.getLastUnlockedBy
-  
+
   def getLocalKey(self):
     """
     GetLocalKey for cambridge.Wms.WmsSegment
@@ -6892,7 +6889,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('name')
     return result
-  
+
   def getMemopsRoot(self):
     """
     Get for cambridge.Wms.WmsSegment.memopsRoot
@@ -6902,7 +6899,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     return result
 
   getMetaclass = memops.api.Implementation.ComplexDataType.getMetaclass
-  
+
   def getName(self):
     """
     Get for cambridge.Wms.WmsSegment.name
@@ -6916,7 +6913,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getPackageName = memops.api.Implementation.ComplexDataType.getPackageName
 
   getPackageShortName = memops.api.Implementation.ComplexDataType.getPackageShortName
-  
+
   def getParent(self):
     """
     Get for cambridge.Wms.WmsSegment.parent
@@ -6924,7 +6921,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict = self.__dict__
     result = dataDict.get('memopsRoot')
     return result
-  
+
   def getProjects(self):
     """
     Get for cambridge.Wms.WmsSegment.projects
@@ -6940,7 +6937,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   getQualifiedName = memops.api.Implementation.ComplexDataType.getQualifiedName
 
   getRoot = memops.api.Implementation.MemopsObject.getRoot
-  
+
   def getTasks(self):
     """
     Get for cambridge.Wms.WmsSegment.tasks
@@ -6958,13 +6955,13 @@ class WmsSegment(memops.api.Implementation.TopObject):
   load = memops.api.Implementation.TopObject.load
 
   loadFrom = memops.api.Implementation.TopObject.loadFrom
-  
+
   def newProject(self, **attrlinks):
     """
     Factory function to create cambridge.Wms.Project
     """
     return Project(self, **attrlinks)
-  
+
   def newTask(self, **attrlinks):
     """
     Factory function to create cambridge.Wms.Task
@@ -6980,7 +6977,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   save = memops.api.Implementation.TopObject.save
 
   saveTo = memops.api.Implementation.TopObject.saveTo
-  
+
   def set(self, name, value):
     """
     SetAttr for cambridge.Wms.WmsSegment
@@ -6993,7 +6990,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   setApplicationData = memops.api.Implementation.DataObject.setApplicationData
 
   setCreatedBy = memops.api.Implementation.TopObject.setCreatedBy
-  
+
   def setDetails(self, value):
     """
     Set for cambridge.Wms.WmsSegment.details
@@ -7059,13 +7056,13 @@ class WmsSegment(memops.api.Implementation.TopObject):
     # doNotifies
 
     if (notInConstructor and notOverride):
-      
+
       _notifies = self.__class__._notifies
-      
+
       ll1 = _notifies['']
       for notify in ll1:
         notify(self)
-      
+
       ll = _notifies.get('setDetails')
       if ll:
         for notify in ll:
@@ -7077,7 +7074,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   setIsModifiable = memops.api.Implementation.TopObject.setIsModifiable
 
   setLastUnlockedBy = memops.api.Implementation.TopObject.setLastUnlockedBy
-  
+
   def setName(self, value):
     """
     Set for cambridge.Wms.WmsSegment.name
@@ -7147,7 +7144,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
     dataDict['name'] = value
 
     # doNotifies
-  
+
   def sortedProjects(self):
     """
     Sorted for cambridge.Wms.WmsSegment.projects
@@ -7157,12 +7154,12 @@ class WmsSegment(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('projects')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
-  
+
   def sortedTasks(self):
     """
     Sorted for cambridge.Wms.WmsSegment.tasks
@@ -7172,7 +7169,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       self.load()
 
     sortdd = dataDict.get('tasks')
-    
+
     ll = sortdd.keys()
     ll.sort()
     result = [sortdd[x] for x in ll]
@@ -7187,7 +7184,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   className = memops.api.Implementation.ComplexDataType.className
 
   createdBy = memops.api.Implementation.TopObject.createdBy
-  
+
   details = property(getDetails, setDetails, None,
   r"""Free text, for notes, explanatory comments, etc.
   """)
@@ -7211,7 +7208,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
   lastUnlockedBy = memops.api.Implementation.TopObject.lastUnlockedBy
 
   metaclass = memops.api.Implementation.ComplexDataType.metaclass
-  
+
   name = property(getName, setName, None,
   r"""Name of WmsSegment - key for the class
   """)
@@ -7227,23 +7224,23 @@ class WmsSegment(memops.api.Implementation.TopObject):
   activeAccess = memops.api.Implementation.DataObject.activeAccess
 
   activeRepositories = memops.api.Implementation.TopObject.activeRepositories
-  
+
   memopsRoot = property(getMemopsRoot,  None, None,
   r"""parent link
   """)
 
   packageLocator = memops.api.Implementation.TopObject.packageLocator
-  
+
   parent = property(getParent, None, None,
   r"""link to parent object - synonym for memopsRoot
   """)
-  
+
   projects = property(getProjects,  None, None,
   r"""child link to class Project
   """)
 
   root = memops.api.Implementation.MemopsObject.root
-  
+
   tasks = property(getTasks,  None, None,
   r"""child link to class Task
   """)

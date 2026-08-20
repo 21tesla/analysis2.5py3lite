@@ -1,4 +1,3 @@
- 
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,46 +51,44 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+from memops.editor.Util import getKeyList, getObjectKey
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 
-from memops.editor.Util import getKeyList, getObjectKey
 
 class ObjectTable(ScrolledMatrix):
+    def __init__(self, parent, metaclass, objects=None, includeNumber=True, *args, **kw):
 
-  def __init__(self, parent, metaclass, objects = None, includeNumber = True,
-               *args, **kw):
+        self.metaclass = metaclass
+        self.includeNumber = includeNumber
 
-    self.metaclass = metaclass
-    self.includeNumber = includeNumber
+        headings = []
+        if includeNumber:
+            headings.append("Number")
 
-    headings = []
-    if (includeNumber):
-      headings.append('Number')
- 
-    self.keyList = keyList = getKeyList(metaclass)
-    for key in keyList:
-      attr = key[-1]
-      s = attr.name
-      if (len(key) > 1):
-        if (type(key[-2]) == int):
-          role = key[-3]
-          n = key[-2]
-          t = '%s[%d]' % (role.otherClass.name, n)
-        else:
-          role = key[-2]
-          t = role.otherClass.name
-      else:
-        t = metaclass.name
-      headings.append('%s\n%s' % (t, s))
+        self.keyList = keyList = getKeyList(metaclass)
+        for key in keyList:
+            attr = key[-1]
+            s = attr.name
+            if len(key) > 1:
+                if type(key[-2]) == int:
+                    role = key[-3]
+                    n = key[-2]
+                    t = "%s[%d]" % (role.otherClass.name, n)
+                else:
+                    role = key[-2]
+                    t = role.otherClass.name
+            else:
+                t = metaclass.name
+            headings.append("%s\n%s" % (t, s))
 
-    ScrolledMatrix.__init__(self, parent, headingList=headings, *args, **kw)
+        ScrolledMatrix.__init__(self, parent, headingList=headings, *args, **kw)
 
-    self.setObjects(objects)
+        self.setObjects(objects)
 
-    # do not need below for now since only have keys in ObjectTable (which are frozen)
-    #Implementation.registerNotify(self.updatedObject, metaclass.qualifiedName(), '')
+        # do not need below for now since only have keys in ObjectTable (which are frozen)
+        # Implementation.registerNotify(self.updatedObject, metaclass.qualifiedName(), '')
 
-  """
+    """
   def destroy(self):
 
     #Implementation.unregisterNotify(self.updatedObject, metaclass.qualifiedName(), '')
@@ -105,44 +102,43 @@ class ObjectTable(ScrolledMatrix):
       self.update(objectList=self.objectList)
   """
 
-  def setObjects(self, objects = None):
+    def setObjects(self, objects=None):
 
-    if (objects is None):
-      objects = []
+        if objects is None:
+            objects = []
 
-    n = 0
-    textMatrix = []
-    for object in objects:
+        n = 0
+        textMatrix = []
+        for object in objects:
+            n = n + 1
+            text = []
+            if self.includeNumber:
+                text.append(n)
 
-      n = n + 1
-      text = []
-      if (self.includeNumber):
-        text.append(n)
+            value = getObjectKey(object, self.keyList)
+            for v in value:
+                text.append(v)
 
-      value = getObjectKey(object, self.keyList)
-      for v in value:
-        text.append(v)
+            textMatrix.append(text)
 
-      textMatrix.append(text)
+        try:
+            self.update(objectList=objects, textMatrix=textMatrix)
+        except:
+            print("***", self.metaclass.name, textMatrix)
 
-    try:
-      self.update(objectList=objects, textMatrix=textMatrix)
-    except:
-      print('***', self.metaclass.name, textMatrix)
 
-if (__name__ == '__main__'):
+if __name__ == "__main__":
+    import Tkinter
 
-  import Tkinter
+    from memops.api import Implementation as Impl
 
-  from memops.api import Implementation as Impl
+    p = Impl.Project(name="test_project")
 
-  p = Impl.Project(name='test_project')
+    root = Tkinter.Tk()
+    root.grid_rowconfigure(0, weight=1)
+    root.grid_columnconfigure(0, weight=1)
 
-  root = Tkinter.Tk()
-  root.grid_rowconfigure(0, weight=1)
-  root.grid_columnconfigure(0, weight=1)
+    table = ObjectTable(root, metaclass=p.metaclass, objects=[p])
+    table.grid(sticky=Tkinter.NSEW)
 
-  table = ObjectTable(root, metaclass=p.metaclass, objects=[p])
-  table.grid(sticky=Tkinter.NSEW)
-
-  root.mainloop()
+    root.mainloop()

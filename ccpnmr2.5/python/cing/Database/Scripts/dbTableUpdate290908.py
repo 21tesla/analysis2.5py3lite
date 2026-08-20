@@ -1,11 +1,11 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-from cing.Libs.NTutils import *
-from cing.core.database import ResidueDef
-from cing import NTdb, printf
 import cing
+from cing import NTdb, printf
+from cing.Libs.NTutils import *
+
 
 def renameKey( theDict, oldKey, newKey):
-    if theDict.has_key(oldKey):
+    if oldKey in theDict:
         tmp = theDict[oldKey]
         del(theDict[oldKey])
         theDict[newKey] = tmp

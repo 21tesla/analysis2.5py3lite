@@ -13,14 +13,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -54,164 +54,160 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import os, string
-
-# Import general settings
-from memops.universal.Util import returnInt
-from memops.universal.Io import getTopDirectory
+import os
+import string
 
 from ccp.format.fasta.generalIO import FastaGenericFile
-
 from ccp.format.general.formatIO import Sequence, SequenceElement
+
+# Import general settings
+from memops.universal.Io import getTopDirectory
 
 #####################
 # Class definitions #
 #####################
-      
+
+
 class FastaSequenceFile(FastaGenericFile):
-  # Information on file level
+    # Information on file level
 
-  def initialize(self):
-    self.sequences = []
+    def initialize(self):
+        self.sequences = []
 
-  def read(self,verbose = 0):
+    def read(self, verbose=0):
 
-    if verbose == 1:
-      print("Reading %s sequence file %s" % (self.format,self.name))
+        if verbose == 1:
+            print("Reading %s sequence file %s" % (self.format, self.name))
 
-    sequenceRead = 0
-    sequenceLine = ""
+        sequenceRead = 0
+        sequenceLine = ""
 
-    fin = open(self.name)
+        fin = open(self.name)
 
-    lineErrors = []
-    validLines = 0
-    
-    # Read, look for first line
-    line = fin.readline()
+        lineErrors = []
+        validLines = 0
 
-    while line:
-      
-      validLines += 1
-      cols = line.split()
+        # Read, look for first line
+        line = fin.readline()
 
-      if self.patt['emptyline'].search(line):
-        validLines -= 1
-        pass
+        while line:
+            validLines += 1
+            cols = line.split()
 
-      elif line[0] == '>':
+            if self.patt["emptyline"].search(line):
+                validLines -= 1
+                pass
 
-        # Designates line with comment info
+            elif line[0] == ">":
+                # Designates line with comment info
 
-        # If sequenceLine present, then parse this info (one sequence already read)
+                # If sequenceLine present, then parse this info (one sequence already read)
+
+                if sequenceLine:
+                    self.sequences[-1].parseSequence(sequenceLine)
+
+                sequenceRead = 1
+                sequenceLine = ""
+                self.sequences.append(FastaSequence(molName=line[1:]))
+
+            elif sequenceRead:
+                sequenceLine += cols[0]
+
+            else:
+                lineErrors.append(line)
+
+            line = fin.readline()
+
+        fin.close()
 
         if sequenceLine:
-          self.sequences[-1].parseSequence(sequenceLine)
+            self.sequences[-1].parseSequence(sequenceLine)
 
-        sequenceRead = 1
-        sequenceLine = ""
-        self.sequences.append(FastaSequence(molName = line[1:]))
+        #
+        # Check
+        #
 
-      elif sequenceRead:
-        sequenceLine += cols[0]
+        fileReadOk = True
+        if len(lineErrors) > min(5, validLines * 0.5):
+            fileReadOk = False
+            self.sequences = []
+        elif lineErrors:
+            print("  Bad fasta format lines:%s" % self.newline)
+            for lineError in lineErrors:
+                print(lineError)
 
-      else:
-        lineErrors.append(line)
+        return fileReadOk
 
-      line = fin.readline()
+    def write(self, columnLength=60, verbose=0):
 
-    fin.close()
+        if verbose == 1:
+            print("Writing fasta sequence file %s" % self.name)
 
-    if sequenceLine:
-      self.sequences[-1].parseSequence(sequenceLine)
-      
-    #
-    # Check
-    #
-    
-    fileReadOk = True
-    if len(lineErrors) > min(5,validLines * 0.5):
-      fileReadOk = False
-      self.sequences = []
-    elif lineErrors:
-      print("  Bad fasta format lines:%s" % self.newline)
-      for lineError in lineErrors:
-        print(lineError)
-      
-    return fileReadOk
+        fout = open(self.name, "w")
 
-  def write(self,columnLength = 60, verbose = 0):
+        for sequence in self.sequences:
+            fout.write("> %s" % sequence.molName)
+            fout.write(self.newline)
 
-    if verbose == 1:
-      print("Writing fasta sequence file %s" % self.name)
+            sequenceCode1Letter = ""
+            for sequenceElement in sequence.elements:
+                sequenceCode1Letter += sequenceElement.code1Letter
 
-    fout = open(self.name,'w')
+            for i in range(0, len(sequenceCode1Letter), columnLength):
+                fout.write(sequenceCode1Letter[i : i + columnLength])
+                fout.write(self.newline)
 
-    for sequence in self.sequences:
+            fout.write(self.newline)
 
-      fout.write("> %s" % sequence.molName)
-      fout.write(self.newline)
+        fout.close()
 
-      sequenceCode1Letter = ""
-      for sequenceElement in sequence.elements:
-        sequenceCode1Letter += sequenceElement.code1Letter
-
-      for i in range(0,len(sequenceCode1Letter),columnLength):
-        fout.write(sequenceCode1Letter[i:i+columnLength])
-        fout.write(self.newline)
-
-      fout.write(self.newline)
-
-    fout.close()
 
 class FastaSequence(Sequence):
+    def parseSequence(self, sequenceLine):
 
-  def parseSequence(self,sequenceLine):
+        #
+        # Parse sequence
+        #
 
-    #
-    # Parse sequence
-    #
-  
-    seqCode = 1
+        seqCode = 1
 
-    for code1Letter in sequenceLine:
-      self.elements.append(FastaSequenceElement(seqCode,code1Letter))
-      seqCode += 1
+        for code1Letter in sequenceLine:
+            self.elements.append(FastaSequenceElement(seqCode, code1Letter))
+            seqCode += 1
+
 
 class FastaSequenceElement(SequenceElement):
+    def setResidueCode(self, *args):
 
-  def setResidueCode(self,*args):
-  
-    code1Letter = args[0]
-    
-    if code1Letter:
-      self.code1Letter = string.upper(code1Letter)
-    else:
-      self.code1Letter = 'X'
+        code1Letter = args[0]
+
+        if code1Letter:
+            self.code1Letter = string.upper(code1Letter)
+        else:
+            self.code1Letter = "X"
+
 
 ###################
 # Main of program #
 ###################
 
-if __name__ == "__main__":  
-                                                      
-  files = ['../reference/fasta/exampleMulti.seq']
-  
-  for file in files:
-    
-    file = os.path.join(getTopDirectory(), file)
-    
-    sequenceFile = FastaSequenceFile(file)
+if __name__ == "__main__":
+    files = ["../reference/fasta/exampleMulti.seq"]
 
-    sequenceFile.read(verbose = 1)
+    for file in files:
+        file = os.path.join(getTopDirectory(), file)
 
-    for seq in sequenceFile.sequences:
-      print(seq.molName)
-      for seqEl in seq.elements:
-        print(seqEl.seqCode, seqEl.code1Letter)
+        sequenceFile = FastaSequenceFile(file)
 
-    sequenceFile.name = 'local/seq.testout'
+        sequenceFile.read(verbose=1)
 
-    sequenceFile.write(verbose = 1)
+        for seq in sequenceFile.sequences:
+            print(seq.molName)
+            for seqEl in seq.elements:
+                print(seqEl.seqCode, seqEl.code1Letter)
 
-    # Writing tested 25/04/2003 - all OK (Wim)
+        sequenceFile.name = "local/seq.testout"
+
+        sequenceFile.write(verbose=1)
+
+        # Writing tested 25/04/2003 - all OK (Wim)

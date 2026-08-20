@@ -1,53 +1,41 @@
-import os, re, time
+import re
+import time
 
 # required for WS layer
 from SharedBeanService_services import *
 from WSString import *
 
-# added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
-
-#from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.FileSelectPopup import FileSelectPopup
-
-from memops.gui.Label import Label
-from memops.gui.Button import Button
-from memops.gui.ButtonList import ButtonList
-from memops.gui.Canvas import Canvas
-from memops.gui.Separator import Separator
-from memops.gui.Frame import Frame
-from memops.gui.Tree import Tree
-from memops.gui.Tree import Node
-from memops.gui.ScrolledListbox import ScrolledListbox
-from memops.gui.PulldownList import PulldownList
-from memops.gui.RadioButtons import RadioButtons
-
-from cambridge.wms.RepositoryList import RepositoryList
-from cambridge.wms.Repository import Repository
 from cambridge.wms.FilterFrame import FilterFrame
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# added jmci; do we need this??
+#from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from memops.gui.ButtonList import ButtonList
+from memops.gui.FileSelectPopup import FileSelectPopup
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.PulldownList import PulldownList
+from memops.gui.RadioButtons import RadioButtons
+from memops.gui.ScrolledListbox import ScrolledListbox
+from memops.gui.Tree import Tree
+
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
 
- 
+
 class RepositoryPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
+
     BasePopup.__init__(self, parent=parent, title='Repository')
 
-                       
+
 
   def body(self, guiFrame):
 
@@ -58,11 +46,11 @@ class RepositoryPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('200x40')
-    
+
     self.update_idletasks()
- 
+
 class RepositoryFrame(Frame):
 
   def __init__(self, guiParent, basePopup):
@@ -76,7 +64,7 @@ class RepositoryFrame(Frame):
     # should the screen autorefresh
     self.autoRefresh = False
 
-    # add this to shortcuts to ease navigation    
+    # add this to shortcuts to ease navigation
     self.basePopup.frameShortcuts['Repository'] = self
 
     # get a port proxy instance
@@ -86,7 +74,7 @@ class RepositoryFrame(Frame):
 
     # FIXME JMCI
     # need to work out how to get a number of these!
-    
+
     loc = SharedBeanServiceLocator()
     self.port = loc.getSharedBean()
 
@@ -96,7 +84,7 @@ class RepositoryFrame(Frame):
 
 
     Frame.__init__(self, guiParent)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -128,7 +116,7 @@ class RepositoryFrame(Frame):
 
     #self.repLabel = Label(self,text='All Projects in Repository')
     #self.dataWidgets.append(self.repLabel)
-    
+
     self.repTree = Tree(self, doubleCallback=self.goto_project_tab)
     self.dataWidgets.append(self.repTree)
 
@@ -176,20 +164,20 @@ class RepositoryFrame(Frame):
 
       for widget in self.dataWidgets:
         widget.grid_remove()
-        
+
       self.noRepLabel.grid(row=1, column=1, sticky='n')
-      
+
     else :
 
       self.repository = self.basePopup.repList.currentRepository
-      
+
       for widget in self.noDataWidgets:
         widget.grid_remove()
-        
+
       # Column headers
       # want to have a general admin panel; current repository, button to change, info
       # about login and so on
-      
+
       self.repTitle.set('Repository: ' + self.repository.user + '@' + self.repository.name + '  ( ' + self.repository.connect + ' )')
 
       self.repTitle.grid(row=1, column=1, sticky='w')
@@ -226,7 +214,7 @@ class RepositoryFrame(Frame):
     par = node.object
 
     # this should be associated with the repository object
-    request = getList();
+    request = getList()
 
     # FIXME JMCI
 
@@ -234,14 +222,14 @@ class RepositoryFrame(Frame):
     # 2. Currently there is bug in expansion/contraction
     # 3. Search needs to work off proxy method (not off
     #    generated stubs
-    
+
     # pass the parent name for now. may need other criteria later
     h1 = {'name':  par.__str__() }
     h2 = {'project': h1}
     wsstr_in = WSString(h2)
 
-    request._arg0 = 'org.pimslims.applet.server.ProjectVersionBean';
-    request._arg1 = 'getListWithFields';
+    request._arg0 = 'org.pimslims.applet.server.ProjectVersionBean'
+    request._arg1 = 'getListWithFields'
     request._arg2 = wsstr_in.str
 
     # get the response
@@ -263,7 +251,7 @@ class RepositoryFrame(Frame):
       obj = pv
       text= hm['versionTag'].__str__()
       callback=None
-      
+
       tree.add(node, obj, text, icon, callback)
 
   def set_refresh(self, text):
@@ -281,11 +269,11 @@ class RepositoryFrame(Frame):
     if self.autoRefresh:
       print('refreshing frame ', time.time())
       self.drawFrame()
-      
+
     self.after(5000, self.refresh)
 
 
-  # FIME JMCI 
+  # FIME JMCI
 
   # it would probably be a good idea to have a method that allowed
   # a user to unlock a given project version. Would need to check
@@ -315,8 +303,8 @@ class RepositoryFrame(Frame):
     versionTag = pv[matcher.end():]
 
     print('GOTO PROJECT ', name, ', ', versionTag)
-    
-    
+
+
     #versionTag = node.object.__str__()
     #name = node.parent.object.__str__()
 
@@ -337,8 +325,8 @@ class RepositoryFrame(Frame):
     # this would probably be to have this as a property of the project
     # returned in the main hash from Project.getFields().
 
-    self.basePopup.tabbedFrame.select(1)    
-    if self.basePopup.frameShortcuts.has_key('Project'):
+    self.basePopup.tabbedFrame.select(1)
+    if 'Project' in self.basePopup.frameShortcuts:
       self.basePopup.frameShortcuts['Project'].drawFrame()
 
 
@@ -347,19 +335,19 @@ class RepositoryFrame(Frame):
     # FIXME JMCI
 
     # need to preserve the current status. Take default from the
-    # Wms layer 
+    # Wms layer
     rootDir = self.basePopup.repList.current_import_dir
 
     fileSelectPopup = FileSelectPopup(self, None, rootDir)
 
     new_project_dir = fileSelectPopup.getDirectory()
     self.basePopup.repList.current_import_dir = new_project_dir
-    
+
     print('in import project with directory', new_project_dir)
 
     idx = new_project_dir.rfind('/')
     new_project_name = new_project_dir[idx+1:]
-    
+
 
     print('in import project with project', new_project_name)
 
@@ -385,10 +373,10 @@ class RepositoryFrame(Frame):
     name = node.parent.object.__str__()
     versionTag = node.object.__str__()[len(name)+2:]
 
-    
+
 
     # need to preserve the current status. Take a default from the
-    # Wms layer 
+    # Wms layer
     rootDir = self.basePopup.repList.current_export_dir
 
     # This should be obtained from a query box. Hard code for now
@@ -399,7 +387,7 @@ class RepositoryFrame(Frame):
 
     self.repository.export_project(name, versionTag, exp_project_dir)
 
-    
+
 
   def disconnectRepository(self):
 
@@ -409,7 +397,7 @@ class RepositoryFrame(Frame):
     # need an "are you sure" dialog box
 
     # need to protect
-    
+
     self.repository.repList.repositories.remove(self.repository)
     self.grid_remove()
     for ff in self.guiParent.guiParent.parent.frames[0].children.values():
@@ -435,11 +423,11 @@ class RepositoryFrame(Frame):
     # this should be associated with the repository object
     loc = SharedBeanServiceLocator()
     port = loc.getSharedBean()
-    request = getList();
+    request = getList()
 
     # these are actually static
-    request._arg0 = 'org.pimslims.applet.server.ProjectBean';
-    request._arg1 = 'getList';
+    request._arg0 = 'org.pimslims.applet.server.ProjectBean'
+    request._arg1 = 'getList'
     request._arg2 = ''
 
     # get the response
@@ -462,7 +450,7 @@ class RepositoryFrame(Frame):
     if len(ss) > 0:
       print('UPDATE: updating ')
       self.repTree.update(parents, objects, texts, icons, callbacks)
-    
+
 
   def administerNotifiers(self, notifyFunc):
 
@@ -479,25 +467,24 @@ class RepositoryFrame(Frame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = RepositoryPopup(root)
 
-  
- 
+
+
   root.mainloop()

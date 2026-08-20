@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -41,131 +40,146 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 
-from memops.universal.BlockData import determineBlockSizes
-
-from ccp.general.Io import getDataSourceFileName
-from ccp.util.ShapeUtil import getShapeFile, get1dShapeFile
-
 from ccp.api.general.DataLocation import BlockedBinaryMatrix
-
+from ccp.general.Io import getDataSourceFileName
+from ccp.util.ShapeUtil import get1dShapeFile, getShapeFile
 from ccpnmr.analysis.core.Util import getDimWrapped
 
-def getBlockFile(spectrum, mem_cache, writeable = False):
 
-  from memops.c import BlockFile
+def getBlockFile(spectrum, mem_cache, writeable=False):
 
-  fileName = getDataSourceFileName(spectrum)
-  if (not fileName or (not writeable and not os.path.exists(fileName))):
-    msg = 'Warning: spectrum (%s, %s): data file %s not accessible'
-    print(msg % (spectrum.experiment.name, spectrum.name, fileName))
-    block_file = None
+    from memops.c import BlockFile
 
-  else:
+    fileName = getDataSourceFileName(spectrum)
+    if not fileName or (not writeable and not os.path.exists(fileName)):
+        msg = "Warning: spectrum (%s, %s): data file %s not accessible"
+        print(msg % (spectrum.experiment.name, spectrum.name, fileName))
+        block_file = None
 
-    points = [ dataDim.numPoints for dataDim in spectrum.sortedDataDims() ]
-    
-    dataStore = spectrum.dataStore
-    
-    if isinstance(dataStore, BlockedBinaryMatrix):
-      blockSize = dataStore.blockSizes
-
-      dimWrapped = getDimWrapped(spectrum)
-
-      if dataStore.isBigEndian:
-        isBigEndian = 1
-      else:
-        isBigEndian = 0
-
-      isPadded = 1 # TBD: allow something else???
-
-      if dataStore.numberType == 'int':
-        isInteger = 1
-      else:
-        isInteger = 0
-
-      blockHeaderSize = 0
-      if hasattr(dataStore.root, 'application'):
-        # TBD: was temporary hack, now use just in case it was set this way
-        blockHeaderSize = dataStore.root.application.getValue(dataStore, 
-           'blockHeaderSize', defaultValue=0, deleteAppData=True)
-      if blockHeaderSize == 0:
-        blockHeaderSize = dataStore.blockHeaderSize
-      else:
-        dataStore.blockHeaderSize = blockHeaderSize
-
-      try:
-        block_file = BlockFile.BlockFile(fileName, spectrum.numDim,
-                             points, blockSize, dimWrapped, mem_cache,
-                             dataStore.nByte, isBigEndian, isPadded,
-                             dataStore.headerSize, isInteger, writeable, 
-                             blockHeaderSize)
-      except:  # TBD: temporary until blockHeaderSize C code is more widely available
-        try:
-          block_file = BlockFile.BlockFile(fileName, spectrum.numDim,
-                             points, blockSize, dimWrapped, mem_cache,
-                             dataStore.nByte, isBigEndian, isPadded,
-                             dataStore.headerSize, isInteger, writeable)
-        except BlockFile.error as e:
-          print('Warning, BlockFile error:', e)
-          block_file = None
-    
     else:
-      # probably a SHapeMatrix NBNB TBD how to handle this?
-      block_file = None
+        points = [dataDim.numPoints for dataDim in spectrum.sortedDataDims()]
 
-  return block_file
+        dataStore = spectrum.dataStore
+
+        if isinstance(dataStore, BlockedBinaryMatrix):
+            blockSize = dataStore.blockSizes
+
+            dimWrapped = getDimWrapped(spectrum)
+
+            if dataStore.isBigEndian:
+                isBigEndian = 1
+            else:
+                isBigEndian = 0
+
+            isPadded = 1  # TBD: allow something else???
+
+            if dataStore.numberType == "int":
+                isInteger = 1
+            else:
+                isInteger = 0
+
+            blockHeaderSize = 0
+            if hasattr(dataStore.root, "application"):
+                # TBD: was temporary hack, now use just in case it was set this way
+                blockHeaderSize = dataStore.root.application.getValue(
+                    dataStore, "blockHeaderSize", defaultValue=0, deleteAppData=True
+                )
+            if blockHeaderSize == 0:
+                blockHeaderSize = dataStore.blockHeaderSize
+            else:
+                dataStore.blockHeaderSize = blockHeaderSize
+
+            try:
+                block_file = BlockFile.BlockFile(
+                    fileName,
+                    spectrum.numDim,
+                    points,
+                    blockSize,
+                    dimWrapped,
+                    mem_cache,
+                    dataStore.nByte,
+                    isBigEndian,
+                    isPadded,
+                    dataStore.headerSize,
+                    isInteger,
+                    writeable,
+                    blockHeaderSize,
+                )
+            except:  # TBD: temporary until blockHeaderSize C code is more widely available
+                try:
+                    block_file = BlockFile.BlockFile(
+                        fileName,
+                        spectrum.numDim,
+                        points,
+                        blockSize,
+                        dimWrapped,
+                        mem_cache,
+                        dataStore.nByte,
+                        isBigEndian,
+                        isPadded,
+                        dataStore.headerSize,
+                        isInteger,
+                        writeable,
+                    )
+                except BlockFile.error as e:
+                    print("Warning, BlockFile error:", e)
+                    block_file = None
+
+        else:
+            # probably a SHapeMatrix NBNB TBD how to handle this?
+            block_file = None
+
+    return block_file
+
 
 def getShapeBlockFile(spectrum):
 
-  from memops.c import BlockFile
+    from memops.c import BlockFile
 
-  block_file = None
+    block_file = None
 
-  # below is short-term hack
-  if hasattr(spectrum, 'valuesList'):
-    valuesList = spectrum.valuesList
-  else:
-    valuesList = None
-
-  # TBD: why should we care about fileName: it's not used, is it?
-  fileName = getDataSourceFileName(spectrum)
-  if ((not fileName or not os.path.exists(fileName)) and 
-      (spectrum.numDim > 1 or not valuesList)):
-    msg = 'Warning: spectrum (%s, %s): data file %s not accessible'
-    print(msg % (spectrum.experiment.name, spectrum.name, fileName))
-
-  else:
-
-    points = [ dataDim.numPoints for dataDim in spectrum.sortedDataDims() ]
-    
-    ###blockSize = determineBlockSizes(points, totalBlockSize=64*1024)
-    ###blockSize = determineBlockSizes(points, totalBlockSize=1)
     # below is short-term hack
-    # want big block size in dimensions that being contoured
-    # and small block size in orthogonal dimensions
-    # so assume that first two dims are contoured (false in general)
-    ndim = spectrum.numDim
-    blockSize = ndim * [1]
-    if ndim > 1:
-      for i in range(2):
-        blockSize[i] = min(8, points[i])
+    if hasattr(spectrum, "valuesList"):
+        valuesList = spectrum.valuesList
     else:
-      blockSize[0] = points[0]
+        valuesList = None
 
-    dimWrapped = getDimWrapped(spectrum)
+    # TBD: why should we care about fileName: it's not used, is it?
+    fileName = getDataSourceFileName(spectrum)
+    if (not fileName or not os.path.exists(fileName)) and (spectrum.numDim > 1 or not valuesList):
+        msg = "Warning: spectrum (%s, %s): data file %s not accessible"
+        print(msg % (spectrum.experiment.name, spectrum.name, fileName))
 
-    if valuesList:
-      shapeFile = get1dShapeFile(spectrum, valuesList)
     else:
-      shapeFile = getShapeFile(spectrum)
+        points = [dataDim.numPoints for dataDim in spectrum.sortedDataDims()]
 
-    if shapeFile:
-      if not fileName:
-        fileName = ""
-      try:
-        block_file = BlockFile.ShapeBlockFile(fileName, ndim,
-                             points, blockSize, dimWrapped, shapeFile)
-      except BlockFile.error as e:
-        print('Warning, BlockFile error:', e)
+        ###blockSize = determineBlockSizes(points, totalBlockSize=64*1024)
+        ###blockSize = determineBlockSizes(points, totalBlockSize=1)
+        # below is short-term hack
+        # want big block size in dimensions that being contoured
+        # and small block size in orthogonal dimensions
+        # so assume that first two dims are contoured (false in general)
+        ndim = spectrum.numDim
+        blockSize = ndim * [1]
+        if ndim > 1:
+            for i in range(2):
+                blockSize[i] = min(8, points[i])
+        else:
+            blockSize[0] = points[0]
 
-  return block_file
+        dimWrapped = getDimWrapped(spectrum)
+
+        if valuesList:
+            shapeFile = get1dShapeFile(spectrum, valuesList)
+        else:
+            shapeFile = getShapeFile(spectrum)
+
+        if shapeFile:
+            if not fileName:
+                fileName = ""
+            try:
+                block_file = BlockFile.ShapeBlockFile(fileName, ndim, points, blockSize, dimWrapped, shapeFile)
+            except BlockFile.error as e:
+                print("Warning, BlockFile error:", e)
+
+    return block_file

@@ -39,69 +39,74 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-from math import sqrt
-
-from FileIO import writePdbCloud, readPdbCloud
 from HydrogenDynamics import *
-from FilterClouds import alignCloudsToRef, alignToMeanCloud, getMeanPairRmsd, filterClouds, alignClouds
 from NoeRelaxation import optimiseRelaxation
 from ResonanceIdentification import getCloudsResonanceList
 
 from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
 
+
 def midge(argServer=None):
-  
-  assert argServer
-  
-  (resonances,noesyPeaks,intensityFactors) = getCloudsResonanceList(argServer)
-  
-  # now make the noesy F2 assignments!
-  print(len(resonances), 'Resonances')
-  print(len(noesyPeaks), 'Noesy peaks')
-  
-  constraintList = optimiseRelaxation(resonances,noesyPeaks,intensityMax=36000000,intensityFactors=intensityFactors,tmix=60,sf=500,tcor=3,rleak=2)
-  
-  structure = argServer.getStructure()
-  
-  if structure:
-    for constraint in constraintList.constraints:
-      resonances = list(constraint,findFirstItem().resonances)
-    
-      atomSets1 = list(resonances[0].resonanceSet.atomSets)
-      atomSets2 = list(resonances[1].resonanceSet.atomSets)
-      distance = getAtomSetsDistance(atomSets1, atomSets2, structure)
-      constraint.setDetails('Known Dist: %4.3f' % (distance))
-  
-  return constraintList
 
-def hydrogenCloudsDynamics(numClouds,constraintList, resonances):
+    assert argServer
 
-  
-  coolingScheme = []
-  # initial temp, final temp, cooling steps, MD steps, MD tau, rep scale
-  coolingScheme.append([    1,    1,  3,  500, 0.001, 0])
-  coolingScheme.append([80000, 4000, 19, 1000, 0.001, 0])
-  coolingScheme.append([ 4000,    1,  5,  500, 0.001, 0])
-  coolingScheme.append([15000,    1,  3, 1000, 0.001, 0])
-  coolingScheme.append([    1,    1,  5,  500, 0.001, 0])
-  coolingScheme.append([ 8000,    1,  3, 1000, 0.001, 0])
-  coolingScheme.append([    1,    1,  5,  500, 0.001, 0])
-  coolingScheme.append([ 3000,   25, 60, 2500, 0.001, 1])
-  coolingScheme.append([   25,   25,  1, 7500, 0.001, 1])
-  coolingScheme.append([   10,   10,  1, 7500, 0.001, 1])
-  coolingScheme.append([ 0.01, 0.01,  1, 7500,0.0005, 1])
-   
-  cloudsFiles = generateClouds(numClouds, constraintList, resonances, coolingScheme)
-  return cloudsFiles
+    (resonances, noesyPeaks, intensityFactors) = getCloudsResonanceList(argServer)
 
-   
-if __name__ == '__main__':
-  
-  pass
-  #cloudsFiles = hydrogenCloudsDynamics(1000,None,None)
-  #cloudsFiles = []
-  #for i in range(100):
-  #  fileName = '/ccpn/clouds/coreCloud/core_cloud_%3.3d.pdb' % (i)
-  #  cloudsFiles.append(fileName)
-  #
-  #alignClouds(cloudsFiles,'/ccpn/clouds/coreCloud/core_align_')
+    # now make the noesy F2 assignments!
+    print(len(resonances), "Resonances")
+    print(len(noesyPeaks), "Noesy peaks")
+
+    constraintList = optimiseRelaxation(
+        resonances,
+        noesyPeaks,
+        intensityMax=36000000,
+        intensityFactors=intensityFactors,
+        tmix=60,
+        sf=500,
+        tcor=3,
+        rleak=2,
+    )
+
+    structure = argServer.getStructure()
+
+    if structure:
+        for constraint in constraintList.constraints:
+            resonances = list(constraint, findFirstItem().resonances)
+
+            atomSets1 = list(resonances[0].resonanceSet.atomSets)
+            atomSets2 = list(resonances[1].resonanceSet.atomSets)
+            distance = getAtomSetsDistance(atomSets1, atomSets2, structure)
+            constraint.setDetails("Known Dist: %4.3f" % (distance))
+
+    return constraintList
+
+
+def hydrogenCloudsDynamics(numClouds, constraintList, resonances):
+
+    coolingScheme = []
+    # initial temp, final temp, cooling steps, MD steps, MD tau, rep scale
+    coolingScheme.append([1, 1, 3, 500, 0.001, 0])
+    coolingScheme.append([80000, 4000, 19, 1000, 0.001, 0])
+    coolingScheme.append([4000, 1, 5, 500, 0.001, 0])
+    coolingScheme.append([15000, 1, 3, 1000, 0.001, 0])
+    coolingScheme.append([1, 1, 5, 500, 0.001, 0])
+    coolingScheme.append([8000, 1, 3, 1000, 0.001, 0])
+    coolingScheme.append([1, 1, 5, 500, 0.001, 0])
+    coolingScheme.append([3000, 25, 60, 2500, 0.001, 1])
+    coolingScheme.append([25, 25, 1, 7500, 0.001, 1])
+    coolingScheme.append([10, 10, 1, 7500, 0.001, 1])
+    coolingScheme.append([0.01, 0.01, 1, 7500, 0.0005, 1])
+
+    cloudsFiles = generateClouds(numClouds, constraintList, resonances, coolingScheme)
+    return cloudsFiles
+
+
+if __name__ == "__main__":
+    pass
+    # cloudsFiles = hydrogenCloudsDynamics(1000,None,None)
+    # cloudsFiles = []
+    # for i in range(100):
+    #  fileName = '/ccpn/clouds/coreCloud/core_cloud_%3.3d.pdb' % (i)
+    #  cloudsFiles.append(fileName)
+    #
+    # alignClouds(cloudsFiles,'/ccpn/clouds/coreCloud/core_align_')

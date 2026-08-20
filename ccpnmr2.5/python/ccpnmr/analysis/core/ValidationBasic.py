@@ -38,37 +38,38 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-ANALYSIS_RMSD_CONTEXT = 'RMSD'
+ANALYSIS_RMSD_CONTEXT = "RMSD"
 
-RMSD_KEYWORDS = ['backbone','all','CA','CB','H','O',]
+RMSD_KEYWORDS = [
+    "backbone",
+    "all",
+    "CA",
+    "CB",
+    "H",
+    "O",
+]
 
-from ccpnmr.analysis.core.Util import getSoftware
 from ccp.util import Validation
-
-def getEnsembleValidationStore(ensemble, context, keywords=None,
-                               definitions=None, synonyms=None,
-                               software=None):
-  """Get a CCPN object to store validation results for an ensemble
-             in a given program context. Requires a list of keywords which will
-             be used in this context. Allows optional lists of definitions and
-             user-friendly synonyms for these keywords.
-             Optional argument for passing software specification (otherwise
-             defaults to current CcpNmr Analysis)
-\n.. describe:: Input\n\nMolStructure.StructureEnsemble, Word, List of Words,
-             List of Lines, List of Words, Method.Software  
-\n.. describe:: Output\n\nValidation.ValidationStore
-  """
-  
-  if not software:
-    software = getSoftware(ensemble.root)
-    
-  getFunc = Validation.getEnsembleValidationStore
- 
-  validStore = getFunc(ensemble, context, keywords,
-                       definitions, synonyms, software)
-          
-  return validStore
+from ccpnmr.analysis.core.Util import getSoftware
 
 
+def getEnsembleValidationStore(ensemble, context, keywords=None, definitions=None, synonyms=None, software=None):
+    """Get a CCPN object to store validation results for an ensemble
+                 in a given program context. Requires a list of keywords which will
+                 be used in this context. Allows optional lists of definitions and
+                 user-friendly synonyms for these keywords.
+                 Optional argument for passing software specification (otherwise
+                 defaults to current CcpNmr Analysis)
+    \n.. describe:: Input\n\nMolStructure.StructureEnsemble, Word, List of Words,
+                 List of Lines, List of Words, Method.Software
+    \n.. describe:: Output\n\nValidation.ValidationStore
+    """
 
+    if not software:
+        software = getSoftware(ensemble.root)
 
+    getFunc = Validation.getEnsembleValidationStore
+
+    validStore = getFunc(ensemble, context, keywords, definitions, synonyms, software)
+
+    return validStore

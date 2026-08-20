@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -52,125 +51,112 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
-import tkinter
-import string
-
-from memops.universal.Io import joinPath
-
-from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
-from memops.gui.Label import Label
-from memops.gui.Entry import Entry
-from memops.gui.CheckButton import CheckButton
-from memops.gui.PulldownMenu import PulldownMenu
-from memops.gui.Util import createHelpButtonList
-from memops.gui.CheckButton import CheckButton
 
 from ccpnmr.format.general.Io import getHelpUrlDir
+from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
+from memops.gui.CheckButton import CheckButton
+from memops.gui.Entry import Entry
+from memops.gui.Label import Label
+from memops.gui.PulldownMenu import PulldownMenu
+from memops.gui.Util import createHelpButtonList
+from memops.universal.Io import joinPath
+
 
 class ChemCompInfoPopup(TemporaryBasePopup):
- 
-  help_url = joinPath(getHelpUrlDir(),'ChemCompInfo.html')
+    help_url = joinPath(getHelpUrlDir(), "ChemCompInfo.html")
 
-  def __init__(self, parent, formula, bondNumber, chemCompInfo):
-   
-    self.formula = formula
-    self.bondNumber = bondNumber
-    self.chemCompInfo = chemCompInfo
+    def __init__(self, parent, formula, bondNumber, chemCompInfo):
 
-    self.updated = 0
-    
-    self.nonEntryAttributes = {
-    
-      'molType': (PulldownMenu,['protein','DNA','RNA','carbohydrate','other']),
-      'hasStdChirality': (CheckButton,None)
-    
-    }
-        
-    TemporaryBasePopup.__init__(self, parent=parent, title='ChemComp creation', modal=False, transient=True)
+        self.formula = formula
+        self.bondNumber = bondNumber
+        self.chemCompInfo = chemCompInfo
 
-  def body(self, master):
-      
-    #
-    # Popup window
-    #
-    
-    self.widgets = []
+        self.updated = 0
 
-    row = 0
-    label = Label(master, text= "ChemComp formula '%s'" % self.formula)
-    label.grid(row=row, column=0, columnspan = 2, sticky=Tkinter.EW)
-      
-    row = row + 1
-    label = Label(master, text= "Number of bonds: %d" % self.bondNumber)
-    label.grid(row=row, column=0, columnspan = 2, sticky=Tkinter.EW)
-    
-    #
-    # Show relevant attributes...
-    #
-    
-    for chemCompAttrInfo in self.chemCompInfo:
-    
-      row = row + 1
-      
-      attrName = chemCompAttrInfo[0]
+        self.nonEntryAttributes = {
+            "molType": (PulldownMenu, ["protein", "DNA", "RNA", "carbohydrate", "other"]),
+            "hasStdChirality": (CheckButton, None),
+        }
 
-      label = Label(master, text = attrName)
-      label.grid(row=row, column=0, sticky=Tkinter.EW)     
-      
-      if attrName in self.nonEntryAttributes:
-      
-        widgetInfo = self.nonEntryAttributes[attrName]
-        
-        if widgetInfo[0] == PulldownMenu:
-        
-          self.widgets.append(PulldownMenu(master, entries = widgetInfo[1], selected_index = widgetInfo[1].index(chemCompAttrInfo[1])))
+        TemporaryBasePopup.__init__(self, parent=parent, title="ChemComp creation", modal=False, transient=True)
 
-        elif widgetInfo[0] == CheckButton:
+    def body(self, master):
 
-          self.widgets.append(CheckButton(master, selected = widgetInfo[1]))
-      
-      else:
-      
-        text = chemCompAttrInfo[1]
-        if not text:
-          text = ''
+        #
+        # Popup window
+        #
 
-        self.widgets.append(Entry(master, text = text))
-      
-      self.widgets[-1].grid(row=row, column=1, sticky=Tkinter.EW)     
+        self.widgets = []
 
-    row = row + 1
-    texts = [ 'OK' ]
-    commands = [ self.ok ]   # This calls 'ok' in BasePopup, this then calls 'apply' in here
-    buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
-    buttons.grid(row=row, column=0, columnspan = 2)
+        row = 0
+        label = Label(master, text="ChemComp formula '%s'" % self.formula)
+        label.grid(row=row, column=0, columnspan=2, sticky=Tkinter.EW)
 
-  def apply(self):
-  
-    self.updated = 1
-    
-    for widgetNum in range(0,len(self.chemCompInfo)):
-      
-      chemCompAttrInfo = self.chemCompInfo[widgetNum]
-    
-      attrName = chemCompAttrInfo[0]
-      
-      if attrName in self.nonEntryAttributes:
-      
-        widgetInfo = self.nonEntryAttributes[attrName]
-        
-        if widgetInfo[0] in [PulldownMenu,CheckButton]:
-        
-          value = self.widgets[widgetNum].getSelected()
-      
-      else:
-      
-        value = self.widgets[widgetNum].get()
-        
-        if value == '':
-          value = None
-    
-      self.chemCompInfo[widgetNum] = (attrName,value)
-        
-    return True
-  
+        row = row + 1
+        label = Label(master, text="Number of bonds: %d" % self.bondNumber)
+        label.grid(row=row, column=0, columnspan=2, sticky=Tkinter.EW)
+
+        #
+        # Show relevant attributes...
+        #
+
+        for chemCompAttrInfo in self.chemCompInfo:
+            row = row + 1
+
+            attrName = chemCompAttrInfo[0]
+
+            label = Label(master, text=attrName)
+            label.grid(row=row, column=0, sticky=Tkinter.EW)
+
+            if attrName in self.nonEntryAttributes:
+                widgetInfo = self.nonEntryAttributes[attrName]
+
+                if widgetInfo[0] == PulldownMenu:
+                    self.widgets.append(
+                        PulldownMenu(
+                            master, entries=widgetInfo[1], selected_index=widgetInfo[1].index(chemCompAttrInfo[1])
+                        )
+                    )
+
+                elif widgetInfo[0] == CheckButton:
+                    self.widgets.append(CheckButton(master, selected=widgetInfo[1]))
+
+            else:
+                text = chemCompAttrInfo[1]
+                if not text:
+                    text = ""
+
+                self.widgets.append(Entry(master, text=text))
+
+            self.widgets[-1].grid(row=row, column=1, sticky=Tkinter.EW)
+
+        row = row + 1
+        texts = ["OK"]
+        commands = [self.ok]  # This calls 'ok' in BasePopup, this then calls 'apply' in here
+        buttons = createHelpButtonList(master, texts=texts, commands=commands, help_url=self.help_url)
+        buttons.grid(row=row, column=0, columnspan=2)
+
+    def apply(self):
+
+        self.updated = 1
+
+        for widgetNum in range(0, len(self.chemCompInfo)):
+            chemCompAttrInfo = self.chemCompInfo[widgetNum]
+
+            attrName = chemCompAttrInfo[0]
+
+            if attrName in self.nonEntryAttributes:
+                widgetInfo = self.nonEntryAttributes[attrName]
+
+                if widgetInfo[0] in [PulldownMenu, CheckButton]:
+                    value = self.widgets[widgetNum].getSelected()
+
+            else:
+                value = self.widgets[widgetNum].get()
+
+                if value == "":
+                    value = None
+
+            self.chemCompInfo[widgetNum] = (attrName, value)
+
+        return True

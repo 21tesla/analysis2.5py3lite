@@ -11,26 +11,34 @@
 # [Separate Unexplained Peak List]
 # Are you sure you want to move these peaks to a separate list?
 
-from ccp.util.Software import getMethodStore
-from ccpnmr.analysis.core.AssignmentBasic import findMatchingPeakDimShifts, makeResonanceGuiName, getBoundResonances
-from ccpnmr.analysis.core.AssignmentBasic import clearPeakDim, assignResToDim
-from ccpnmr.analysis.core.ConstraintBasic import getPeakDimTolerance
-from ccpnmr.analysis.core.ExperimentBasic import getOnebondDataDims, getDataDimIsotopes, findSpectrumDimsByIsotope
-from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists, getDataDimRefFullRange, getPrimaryDataDimRef
-from ccpnmr.analysis.core.MarkBasic import createNonPeakMark
-from ccpnmr.analysis.core.Util import getAnalysisDataDim, getDataDimAssignmentTolerance
-from ccpnmr.analysis.core.Util import getAnalysisPeakList
-from ccpnmr.analysis.core.WindowBasic import getDataDimAxisMapping, getWindowPaneName
-from ccpnmr.analysis.core.PeakBasic import pickPeak, setupPeak
-from ccpnmr.analysis.frames.PeakTableFrame import PeakTableFrame
+import time
 from math import sqrt
 
-from ccp.lib.MoleculeQuery import getNumConnectingBonds, areResonancesBound, getBoundAtoms
+from ccp.lib.MoleculeQuery import areResonancesBound, getBoundAtoms, getNumConnectingBonds
 from ccp.lib.StructureLib import getAtomSetCoords, getAtomSetsDistance
-
+from ccp.util.Software import getMethodStore
+from ccpnmr.analysis.core.AssignmentBasic import (
+  assignResToDim,
+  clearPeakDim,
+  findMatchingPeakDimShifts,
+  getBoundResonances,
+)
+from ccpnmr.analysis.core.ConstraintBasic import getPeakDimTolerance
+from ccpnmr.analysis.core.ExperimentBasic import (
+  findSpectrumDimsByIsotope,
+  getDataDimIsotopes,
+  getDataDimRefFullRange,
+  getOnebondDataDims,
+  getPrimaryDataDimRef,
+  getThroughSpacePeakLists,
+)
+from ccpnmr.analysis.core.MarkBasic import createNonPeakMark
+from ccpnmr.analysis.core.PeakBasic import pickPeak, setupPeak
+from ccpnmr.analysis.core.Util import getAnalysisDataDim, getAnalysisPeakList
+from ccpnmr.analysis.core.WindowBasic import getDataDimAxisMapping
+from ccpnmr.analysis.frames.PeakTableFrame import PeakTableFrame
 from memops.editor.BasePopup import BasePopup
-from memops.gui.Button import Button
-from memops.gui.ButtonList import UtilityButtonList, ButtonList
+from memops.gui.ButtonList import ButtonList, UtilityButtonList
 from memops.gui.CheckButton import CheckButton
 from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Frame import Frame
@@ -42,12 +50,8 @@ from memops.gui.PulldownList import PulldownList
 from memops.gui.ScrolledGraph import ScrolledGraph
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.gui.TabbedFrame import TabbedFrame
-import time
-
-
 
 # This is the table for missing peaks with built-in functionalities
-from ccpnmr.analysis.frames.PeakTableFrame import PeakTableFrame
 
 
 # Colours for graphs
@@ -333,7 +337,7 @@ class PyRpfPopup(BasePopup):
                 'The discrimination potential; the amount of information imparted by peaks that surpasses random coil expectation',
                 'The number of peaks which do not correspond to short distances',
                 'The number of short distance pairs that would be expected to result in peaks, but do not']
-    
+
     self.resultsTable = ScrolledMatrix(frameC, headingList=headingList,
                                        multiSelect=True,
                                        callback=self.selectResult,
@@ -569,7 +573,7 @@ class PyRpfPopup(BasePopup):
     self.resultPulldownB.setup(namesP, resultSetsP, indexP)
     self.resultPulldownC.setup(namesR, resultSetsR, indexR)
 
-    
+
   def nextMissingPeak(self):
 
     table = self.missingPeakTable.scrolledMatrix
@@ -1157,13 +1161,13 @@ class RpfPeakTable(PeakTableFrame):
       for i in range(1,n):
         buttons[i].disable()
 
-    
+
   def getHeadings(self, n):
 
     dataList, tipTexts = PeakTableFrame.getHeadings(self, n)
 
     dataList.insert(n+3, 'Dist.')
-    tipTexts.insert(n+3, 'Structure distance between hydrogens')  
+    tipTexts.insert(n+3, 'Structure distance between hydrogens')
     return dataList, tipTexts
 
   def getPeakData(self, peak, n, simplified=True):
@@ -1178,7 +1182,7 @@ class RpfPeakTable(PeakTableFrame):
       atomSets = []
       peakDims = peak.sortedPeakDims()
       peakDimA = peakDims[distDims[0]]
-      peakDimB = peakDims[distDims[1]]      
+      peakDimB = peakDims[distDims[1]]
       for peakDim in (peakDimA, peakDimB):
         assignedSets = []
 
@@ -1735,7 +1739,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
 
             # Check to see whether we've seen this peak before
             # e.g. from another pair of resonances
-            if not explainedPeaks.has_key(peak):
+            if peak not in explainedPeaks:
 
               # Check no other resonance pairs are close for this peak
               for resonance3, resonance4, atom3, atom4 in peakPoss[peak]:
@@ -1817,7 +1821,7 @@ def calcRPF(ensembles, peakLists, tolerances, distThreshold=5.0, prochiralTolera
 
             # Check to see whether we've seen this peak before
             # e.g. from another pair of resonances
-            if not explainedPeaksFree.has_key(peak):
+            if peak not in explainedPeaksFree:
 
               # Check no other resonance pairs are close for this peak
               for resonance3, resonance4, atom3, atom4 in peakPoss[peak]:
@@ -2899,9 +2903,8 @@ def pyRpfApp(ensembles, peakLists, tolerances, distThreshold=5.0,
 
 if __name__ == '__main__':
 
-  from memops.general.Io import loadProject
-
   from ccpnmr.analysis.Analysis import Analysis
+  from memops.general.Io import loadProject
 
   #projectDirectory = '/home/tjs23/nmr/montelione/rpf/1brv_cs_pk_2mdl/'
   projectDirectory = '/home/tjs23/nmr/montelione/rpf/AtT13Org/'

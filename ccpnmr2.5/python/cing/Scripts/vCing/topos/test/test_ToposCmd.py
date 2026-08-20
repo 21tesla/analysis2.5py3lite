@@ -2,11 +2,12 @@
 Created on Oct 20, 2010
 '''
 
-from cing import cingDirTmp
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Scripts.vCing.vCing import Vcing
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Scripts.vCing.vCing import Vcing
 
 max_time_to_wait = 365 * 24 * 60 * 60 # a year in seconds
 time_sleep_when_no_token = 1 * 1 * 5 * 60 # 5 minutes

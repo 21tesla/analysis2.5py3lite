@@ -2,16 +2,15 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_NrgCingRdb.py
 """
-from cing import cingDirTmp
-from cing.Libs.DBMS import DBMS
-from cing.Libs.DBMS import Relation
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.NRG import NMR_REDO_DB_SCHEMA
-from cing.NRG import NRG_DB_NAME
-from cing.NRG import RECOORD_DB_SCHEMA
-from cing.NRG.nrgCingRdb import NrgCingRdb
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from cing import cingDirTmp
+from cing.Libs.DBMS import DBMS, Relation
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG import NMR_REDO_DB_SCHEMA, NRG_DB_NAME, RECOORD_DB_SCHEMA
+from cing.NRG.nrgCingRdb import NrgCingRdb
+
 
 class AllChecks(TestCase):
 
@@ -30,7 +29,7 @@ class AllChecks(TestCase):
 #        self.assertFalse( m.showCounts())
 #        self.assertFalse( m.createScatterPlots())
         self.assertFalse( m.createPlotsCompareBetweenDb(other_schema=NMR_REDO_DB_SCHEMA))
-        
+
         if False:
             a = m.getPdbIdList()
             nTdebug("pdbIdList length: %d %s" % (len(a), a))
@@ -57,8 +56,8 @@ class AllChecks(TestCase):
         r.fromLol(myLoL)
         r.writeCsvFile('myLoL')
     # end def
-        
-    
+
+
 if __name__ == "__main__":
     cing.verbosity = verbosityDebug
     unittest.main()

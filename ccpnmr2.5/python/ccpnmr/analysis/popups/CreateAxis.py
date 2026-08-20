@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -39,70 +38,73 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
-import tkinter
 
-
+from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.ButtonList import UtilityButtonList
 from memops.gui.Label import Label
 from memops.gui.PulldownList import PulldownList
 
-from ccpnmr.analysis.popups.BasePopup import BasePopup
 
 class CreateAxisPopup(BasePopup):
+    def __init__(self, parent, **kw):
 
-  def __init__(self, parent, **kw):
+        self.axisType = None
 
-    self.axisType = None
+        BasePopup.__init__(self, parent=parent, title="Create window axis", modal=True, transient=False, **kw)
 
-    BasePopup.__init__(self, parent=parent, title='Create window axis',
-                       modal=True, transient=False, **kw)
+    def body(self, master):
 
-  def body(self, master):
+        row = 0
+        label = Label(master, text="Axis type: ", grid=(row, 0))
+        tipText = "Selects what type of measurement is displayed along the window axis"
+        self.type_list = PulldownList(master, tipText=tipText, grid=(row, 1))
 
-    row = 0
-    label = Label(master, text='Axis type: ', grid=(row, 0))
-    tipText = 'Selects what type of measurement is displayed along the window axis'
-    self.type_list = PulldownList(master, tipText=tipText, grid=(row, 1))
+        row += 1
+        tipTexts = ["Make an axis of the selected type in the window & close this popup"]
+        texts = ["Create"]
+        commands = [self.ok]
+        buttons = UtilityButtonList(
+            master,
+            texts=texts,
+            doClone=False,
+            grid=(row, 0),
+            commands=commands,
+            helpUrl=self.help_url,
+            gridSpan=(1, 2),
+            tipTexts=tipTexts,
+        )
 
-    row += 1
-    tipTexts = ['Make an axis of the selected type in the window & close this popup']
-    texts = [ 'Create' ]
-    commands = [ self.ok ]
-    buttons = UtilityButtonList(master, texts=texts, doClone=False, grid=(row, 0),
-                                commands=commands, helpUrl=self.help_url,
-                                gridSpan=(1,2), tipTexts=tipTexts)
+        self.administerNotifiers(self.registerNotify)
+        self.update()
 
-    self.administerNotifiers(self.registerNotify)
-    self.update()
+    def administerNotifiers(self, notifyFunc):
 
-  def administerNotifiers(self, notifyFunc):
+        for func in ("__init__", "delete", "setName"):
+            notifyFunc(self.update, "ccpnmr.Analysis.AxisType", func)
 
-    for func in ('__init__', 'delete', 'setName'):
-      notifyFunc(self.update, 'ccpnmr.Analysis.AxisType', func)
+    def destroy(self):
 
-  def destroy(self):
+        self.administerNotifiers(self.unregisterNotify)
 
-    self.administerNotifiers(self.unregisterNotify)
+        BasePopup.destroy(self)
 
-    BasePopup.destroy(self)
+    def update(self, *extra):
 
-  def update(self, *extra):
+        axisType = self.axisType
+        axisTypes = self.parent.parent.getAxisTypes()
+        names = [x.name for x in axisTypes]
+        if axisTypes:
+            if axisType not in axisTypes:
+                self.axisType = axisType = axisTypes[0]
+            index = axisTypes.index(axisType)
+        else:
+            index = 0
+            self.axisType = None
 
-    axisType = self.axisType
-    axisTypes = self.parent.parent.getAxisTypes()
-    names = [x.name for x in axisTypes]
-    if axisTypes:
-      if axisType not in axisTypes:
-        self.axisType = axisType = axisTypes[0]
-      index = axisTypes.index(axisType)     
-    else:
-      index = 0
-      self.axisType = None
+        self.type_list.setup(names, axisTypes, index)
 
-    self.type_list.setup(names, axisTypes, index)
+    def apply(self):
 
-  def apply(self):
+        self.axisType = self.type_list.getObject()
 
-    self.axisType = self.type_list.getObject()
-
-    return True
+        return True

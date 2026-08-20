@@ -1,4 +1,3 @@
-
 """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -12,14 +11,14 @@ This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
- 
+
 A copy of this license can be found in ../../../license/LGPL.license
- 
+
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -51,62 +50,64 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+
 from memops.gui.WebBrowser import WebBrowser, WebBrowserPulldown, getDefaultBrowser
 
+
 class ProjectWebBrowser(WebBrowser):
+    def __init__(self, parent, name=None, popup=None, project=None):
 
-  def __init__(self, parent, name=None, popup=None, project=None):
-  
-    self.project = project
-    if project and (not name):
-      if hasattr(project,'application'):
-        name = getProjectWebBrowser(project)
-    
-    WebBrowser.__init__(self, parent, name=name, popup=popup)
-  
-  def open(self, url):
+        self.project = project
+        if project and (not name):
+            if hasattr(project, "application"):
+                name = getProjectWebBrowser(project)
 
-    if self.project:
-      name = getProjectWebBrowser(self.project)
-      if name:
-        self.name = name
+        WebBrowser.__init__(self, parent, name=name, popup=popup)
 
-    WebBrowser.open(self, url)
-    
+    def open(self, url):
+
+        if self.project:
+            name = getProjectWebBrowser(self.project)
+            if name:
+                self.name = name
+
+        WebBrowser.open(self, url)
+
+
 class ProjectWebBrowserPulldown(WebBrowserPulldown):
+    def __init__(self, parent, project=None, **kw):
 
-  def __init__(self, parent, project=None, **kw):
+        self.project = project
+        browser = None
 
-    self.project = project
-    browser = None
+        if project:
+            browser = getProjectWebBrowser(project)
 
-    if project:
-      browser = getProjectWebBrowser(project)
-            
-    WebBrowserPulldown.__init__(self, parent, browser=browser, **kw)
+        WebBrowserPulldown.__init__(self, parent, browser=browser, **kw)
 
-  def setWebBrowser(self, index, name):
-    # overwrites superclass function
+    def setWebBrowser(self, index, name):
+        # overwrites superclass function
 
-    if name != self.browser:
-      self.browser = name
-      if self.project:
-        setProjectWebBrowser(self.project, name)
+        if name != self.browser:
+            self.browser = name
+            if self.project:
+                setProjectWebBrowser(self.project, name)
+
 
 def getProjectWebBrowser(project):
 
-  browser = getDefaultBrowser()
-  if hasattr(project, 'application'):
-    application = project.application
-    ### TBD v2
-    ###browser = application.getValue(project, keyword='projectWebBrowser', defaultValue=browser)
+    browser = getDefaultBrowser()
+    if hasattr(project, "application"):
+        application = project.application
+        ### TBD v2
+        ###browser = application.getValue(project, keyword='projectWebBrowser', defaultValue=browser)
 
-  return browser
+    return browser
+
 
 def setProjectWebBrowser(project, name):
 
-  if hasattr(project, 'application'):
-    application = project.application
-    ### TBD v2
-    ###application.setValue(project, keyword='projectWebBrowser', value=name)
-  
+    if hasattr(project, "application"):
+        application = project.application
+        ### TBD v2
+        ###application.setValue(project, keyword='projectWebBrowser', value=name)

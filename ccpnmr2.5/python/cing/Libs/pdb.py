@@ -21,14 +21,11 @@ Methods:
 
 Speed check: 103.609s for pdbParser.importCoordinates: <Molecule "pdb2k0e" (C:1,R:152,A:2647,M:160)>
 """
-from cing.Libs import PyMMLib
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.core.constants import * #@UnusedWildImport
+from cing.core.constants import *  #@UnusedWildImport
 from cing.core.database import NTdb
-from cing.core.molecule import Molecule
-from cing.core.molecule import getNextAvailableChainId
-from cing.core.molecule import isValidChainId
-from cing.core.molecule import unmatchedAtomByResDictToString
+from cing.core.molecule import Molecule, getNextAvailableChainId, isValidChainId, unmatchedAtomByResDictToString
+from cing.Libs import PyMMLib
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 defaultPrintChainCode = '.'
 
@@ -92,7 +89,7 @@ class pdbParser:
         self.patchAtomNames = patchAtomNames
         self.skipWaters = skipWaters
         self.allowNonStandardResidue = allowNonStandardResidue
-        self.matchGame = MatchGame(convention=convention, patchAtomNames = patchAtomNames, 
+        self.matchGame = MatchGame(convention=convention, patchAtomNames = patchAtomNames,
                                    skipWaters = skipWaters, allowNonStandardResidue = allowNonStandardResidue)
 
         if not os.path.exists(pdbFile):
@@ -140,7 +137,7 @@ class pdbParser:
                 self.modelCount += 1
 
             if recordName == "ATOM" or recordName == "HETATM":
-                
+
                 # Not all PDB files have chainID's !@%^&*
                 # They do; if none returned then take the space that is always present!
                 # JFD adds: take a look at 1ai0
@@ -148,11 +145,11 @@ class pdbParser:
                 #    Luckily the residues all have non-overlapping numbers. So let's program against
                 #    this study case. Might have to be optimized.
                 chainId = ' '
-                if record.has_key('segID'): # Priority is given to chainID because xplor-nih doesn't write chain id in Refine setup.
+                if 'segID' in record: # Priority is given to chainID because xplor-nih doesn't write chain id in Refine setup.
                     chainId = record.segID.strip()
-                if record.has_key('chainID'):
+                if 'chainID' in record:
                     chainId = record.chainID
-                if mapChainId.has_key(chainId):
+                if chainId in mapChainId:
                     chainId = mapChainId[chainId]
                 if not isValidChainId(chainId):
                     chainIdNew = getNextAvailableChainId(chainIdListAlreadyUsed = chainIdListAlreadyUsed)
@@ -167,11 +164,11 @@ class pdbParser:
 
                 t = (chainId, fullResName, atmName)
 
-                if atomDict.has_key(t):
+                if t in atomDict:
                     atm = atomDict[t]
                 else:
 
-                    if not self.tree.has_key(chainId):
+                    if chainId not in self.tree:
                         chn = self.tree.addChild(name = chainId)
                         if chainId in chainIdListAlreadyUsed:
                             nTcodeerror("list out of sync in _records2tree")
@@ -185,7 +182,7 @@ class pdbParser:
                         continue
                     #end if
 
-                    if not chn.has_key(fullResName):
+                    if fullResName not in chn:
                         res = chn.addChild(name = fullResName, resName = resName, resNum = resNum)
                     else:
                         res = chn[fullResName]
@@ -195,7 +192,7 @@ class pdbParser:
                         continue
                     #end if
 
-                    if not res.has_key(atmName):
+                    if atmName not in res:
                         atm = res.addChild(atmName)
                     else:
                         atm = res[atmName]
@@ -230,7 +227,7 @@ class pdbParser:
             self.matchGame.matchResidue2Cing(res)
             for atm in res:
                 if not self.matchGame.matchAtom2Cing(atm):
-                    if not unmatchedAtomByResDict.has_key(res.resName):
+                    if res.resName not in unmatchedAtomByResDict:
                         unmatchedAtomByResDict[ res.resName ] = ([], [])
                     atmList = unmatchedAtomByResDict[res.resName][0]
                     resNumList = unmatchedAtomByResDict[res.resName][1]
@@ -319,7 +316,7 @@ class pdbParser:
 #                        atm.atom = molecule.decodeNameTuple(t)
                     if not atm.atom:
                         # JFD: Report all together now.
-                        if not unmatchedAtomByResDict.has_key(res.resName):
+                        if res.resName not in unmatchedAtomByResDict:
                             unmatchedAtomByResDict[ res.resName ] = ([], [])
                         atmList = unmatchedAtomByResDict[res.resName][0]
                         resNumList = unmatchedAtomByResDict[res.resName][1]
@@ -472,7 +469,7 @@ class MatchGame:
             if 'HD1' in res and 'HE2' in res:
                 #print 'HISH'
                 res.db = NTdb.getResidueDefByName('HIS+', convention = CYANA)
-            elif not 'HD1' in res and 'HE2' in res:
+            elif 'HD1' not in res and 'HE2' in res:
                 # print HISE
                 res.db = NTdb.getResidueDefByName('HIST', convention = CYANA)
             else:
@@ -481,9 +478,9 @@ class MatchGame:
                 res.db = NTdb.getResidueDefByName('HIS', convention = CYANA)
             #end if
         elif res.resName[0:3] == 'LYS':
-            if ('HZ1' in res and not 'HZ3' in res):
+            if ('HZ1' in res and 'HZ3' not in res):
                 res.db = NTdb.getResidueDefByName('LYS', convention = CYANA)
-            elif ('1HZ' in res and not '3HZ' in res): # Second set for CYANA 1.x
+            elif ('1HZ' in res and '3HZ' not in res): # Second set for CYANA 1.x
                 res.db = NTdb.getResidueDefByName('LYS', convention = CYANA)
             else:
                 # Default prot; this also assures most common for X-ray without protons

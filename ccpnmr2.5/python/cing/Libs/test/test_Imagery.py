@@ -2,18 +2,16 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_Imagery.py
 """
-from cing import cingDirTestsData
-from cing import cingDirTmp
-from cing.Libs.Imagery import convert2Web
-from cing.Libs.Imagery import convertImageMagick
-from cing.Libs.Imagery import joinPdfPagesByGhostScript
-from cing.Libs.Imagery import montage
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.Libs.disk import rmdir
-from cing.core.parameters import cingPaths
-from nose.plugins.skip import SkipTest
-from unittest import TestCase
 import unittest
+from unittest import TestCase
+
+from nose.plugins.skip import SkipTest
+
+from cing import cingDirTestsData, cingDirTmp
+from cing.core.parameters import cingPaths
+from cing.Libs.disk import rmdir
+from cing.Libs.Imagery import convert2Web, convertImageMagick, joinPdfPagesByGhostScript, montage
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 if not cingPaths.convert: # Requirement for test.
 #    raise ImportWarning('convert')
@@ -52,7 +50,7 @@ class AllChecks(TestCase):
         inputPathList = map(os.path.join, [inputPath]*2, ['residuePlotSetAll001.png', 'residuePlotSetAll002.png'] )
         outputPath = os.path.join( self.cingDirTmpTest, 'residuePlotSetAll.png' )
         self.assertFalse( montage(inputPathList, outputPath) )
-        
+
 #    def _testConvertImageMagick(self):
 #        x = convertImageMagick(inputPath,outputPath,options,extraOptions=None)
 #    # end def

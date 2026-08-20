@@ -1,5 +1,5 @@
 'required items for this plugin for CING setup'
-from cing.Libs.NTutils import * #@UnusedWildImport
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 PROCHECK_STR       = "procheck" # key to the entities (atoms, residues, etc under which the results will be stored
 PC_STR             = "pc" # key to the entities (atoms, residues, etc under which the results will be stored

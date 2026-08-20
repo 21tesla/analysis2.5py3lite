@@ -1,48 +1,42 @@
-import os, time
+import time
 
 # required for WS layer
 from SharedBeanService_services import *
 from WSString import *
 
 # added jmci; do we need this??
-import tkinter
-from memops.universal.Io import getTopDirectory
-
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
-
-from memops.editor.Util import createDismissHelpButtonList
+from memops.gui.Button import Button
+from memops.gui.Frame import Frame
+from memops.gui.Label import Label
+from memops.gui.LabelFrame import LabelFrame
+from memops.gui.RadioButtons import RadioButtons
+from memops.gui.ScrolledMatrix import ScrolledMatrix
 
 #from memops.gui.ScrolledFrame import ScrolledFrame
 from memops.gui.TabbedFrame import TabbedFrame
-from memops.gui.LabelFrame import LabelFrame
-from memops.gui.Frame import Frame
-from memops.gui.Label import Label
 from memops.gui.Text import Text
-from memops.gui.Button import Button
-from memops.gui.ScrolledMatrix import ScrolledMatrix
-from memops.gui.RadioButtons import RadioButtons
-
 
 #from cambridge.wms.FilterFrame import FilterFrame
 
-# # # # #   B I G   T O - D O  P O I N T S   # # # # # 
+# # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #
 
 
 # # # # #   L A T E R   T O - D O  P O I N T S    # # # # #
 #
- 
+
 class TasksPopup(BasePopup):
 
   def __init__(self, parent):
 
     self.parent      = parent
-    
- 
+
+
     BasePopup.__init__(self, parent=parent, title='Repository')
 
-                       
+
   def body(self, guiFrame):
 
     guiFrame.grid_rowconfigure(0, weight=1)
@@ -52,15 +46,15 @@ class TasksPopup(BasePopup):
     frame.grid(row=0, column=0, sticky='nsew')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     self.geometry('200x50')
-    
+
     self.update_idletasks()
 
 
 class TasksFrame(Frame):
 
-  
+
   def __init__(self, guiParent, basePopup):
 
     self.guiParent = guiParent
@@ -72,8 +66,8 @@ class TasksFrame(Frame):
 
     # should the screen autorefresh
     self.autoRefresh = False
-    
-    # add this to shortcuts to ease navigation    
+
+    # add this to shortcuts to ease navigation
     self.basePopup.frameShortcuts['Tasks'] = self
 
     #self.registerNotify=basePopup.registerNotify
@@ -88,7 +82,7 @@ class TasksFrame(Frame):
     # subtabs)
 
     Frame.__init__(self, guiParent)
-  
+
     # set up the grid
 
     self.grid_columnconfigure(0, weight=0, minsize=20)
@@ -110,7 +104,7 @@ class TasksFrame(Frame):
                                       doubleCallback=self.goto_task_tab)
 
     # Filters for narrowing down tasks. should probably code this
-    # specifically inside this package    
+    # specifically inside this package
     #self.filter = FilterFrame(self, self.basePopup, text='Filter')
     self.filter = TaskFilterFrame(self, self.basePopup, text='Filter')
 
@@ -153,9 +147,9 @@ class TasksFrame(Frame):
       self.filter.grid_remove()
       self.daemonSwitchLabel.grid_remove()
       self.daemonSwitch.grid_remove()
-      
+
     else:
-      
+
       strg = self.repository.user + '@' + self.repository.name + ' (' + self.repository.connect + ')'
 
       self.label_rep.set('TaskManager: Repository ' + strg)
@@ -167,25 +161,25 @@ class TasksFrame(Frame):
       loc = SharedBeanServiceLocator()
       port = loc.getSharedBean()
 
-      request1 = getList();
+      request1 = getList()
 
-      request1._arg0 = 'org.pimslims.applet.server.TaskBean';
-      request1._arg1 = 'getListWithFields';
+      request1._arg0 = 'org.pimslims.applet.server.TaskBean'
+      request1._arg1 = 'getListWithFields'
 
       if self.select==None:
         request1._arg2 = ''
       else:
         wsstr_in = WSString(self.select)
         request1._arg2 = wsstr_in.str
-        
+
 
       response1 = port.getList(request1)
 
       wsstr1 = WSString(response1._return)
       ss1 = wsstr1.getStruct()
 
-      matrix = [];
-      objs = [];
+      matrix = []
+      objs = []
 
       for el in ss1:
         new_row = (el['serial'], 'TestTask1', 'jionides', el['status'])
@@ -222,7 +216,7 @@ class TasksFrame(Frame):
       self.basePopup.taskDaemon.active = True
     else:
       self.basePopup.taskDaemon.active = False
-    
+
   def set_refresh(self, text):
 
     print('setting refresh ', text)
@@ -238,13 +232,13 @@ class TasksFrame(Frame):
     if self.autoRefresh:
       print('refreshing frame ', time.time())
       self.drawFrame()
-      
+
     self.after(5000, self.refresh)
 
   def goto_task_tab(self, obj, row, col):
 
     print(obj)
-    self.basePopup.currentTask =  obj['serial'].__str__()   
+    self.basePopup.currentTask =  obj['serial'].__str__()
 
     # This is really awkward because we actually have to go to the
     # correct tab. We have some horrible hacks here. Need a dictionary
@@ -255,14 +249,14 @@ class TasksFrame(Frame):
     #for ff in self.basePopup.tabbedFrame.frames[2].children.values():
     #  ff.tabbedFrame.select(0)
 
-    if self.basePopup.frameShortcuts.has_key('Task'):
+    if 'Task' in self.basePopup.frameShortcuts:
       taskFrame = self.basePopup.frameShortcuts['Task']
       # really need to check on the type of task
-      if taskFrame.frameShortcuts.has_key('Test1'):
+      if 'Test1' in taskFrame.frameShortcuts:
         taskFrame.frameShortcuts['Test1'].drawFrame()
     # also need to select the current tabbed frame
     self.basePopup.tabbedFrame.select(2)
-        
+
 
   def administerNotifiers(self, notifyFunc):
 
@@ -279,11 +273,11 @@ class TasksFrame(Frame):
       return
 
   def quit(self):
-  
+
     self.guiParent.parent.destroy()
-    
+
   def destroy(self):
-  
+
     #self.administerNotifiers(self.basePopup.unregisterNotify)
     Frame.destroy(self)
 
@@ -311,7 +305,7 @@ class TaskFilterFrame(LabelFrame):
 
     LabelFrame.__init__(self, guiParent, borderRelief, text, justify,
                         width, font, height, *args, **kw)
-  
+
 
     # set up the grid
 
@@ -355,7 +349,7 @@ class TaskFilterFrame(LabelFrame):
     self.projText.grid(row=4, column=1, sticky='nw')
     self.userLabel.grid(row=5, column=0, padx=2, sticky='nw')
     self.userText.grid(row=5, column=1, sticky='nw')
-    
+
     self.clearButton.grid(row=6, column=0, columnspan=2, sticky='nw')
     self.filterButton.grid(row=6, column=1, columnspan=2, sticky='ne')
 
@@ -400,12 +394,11 @@ class TaskFilterFrame(LabelFrame):
 
 if __name__ == "__main__":
 
-  import sys
   import Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()
-   
+
   popup = TasksPopup(root)
-  
+
   root.mainloop()

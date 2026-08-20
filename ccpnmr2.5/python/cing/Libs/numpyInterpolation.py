@@ -1,6 +1,7 @@
-from cing.Libs.NTutils import * #@UnusedWildImport
-from numpy import * #@UnusedWildImport
 import numpy
+from numpy import *  #@UnusedWildImport
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 # Absorbed from: http://www.scipy.org/PauGargallo/Interpolation
 
@@ -34,18 +35,18 @@ def interpn_linear(z, targetcoords, bincoords=None):
     JFD NB consider checking out interp2_linear to see what this function is actually doing.
     '''
     coords = interpn_check_data(z, targetcoords, bincoords)
-    
+
     indices = [ x.astype('i') for x in coords ]
     weights = [ x - i for x, i in zip(coords, indices) ]
-    
+
     res = z[indices] * 0
-    
+
     for selector in ndindex(*z.ndim * (2,)):
         weight = 1
         for w, s in zip(weights, selector):
-            if s: 
+            if s:
                 weight = weight * w
-            else: 
+            else:
                 weight = weight * (1 - w)
         value = z[ [ i + s for i, s in zip(indices, selector) ] ]
         res += weight * value
@@ -118,9 +119,9 @@ def interp2_linear(z, tx, ty, binx=None, biny=None):
     Toy function just like interpn_linear in 2 dimensions.
     This function exists just to help the understanding and maintaining of interpn_linear.
     '''
-    if not binx is None: 
+    if binx is not None:
         tx = array_coordinates(tx, binx)
-    if not biny is None: 
+    if biny is not None:
         ty = array_coordinates(ty, biny)
 
     ix = tx.astype('i')

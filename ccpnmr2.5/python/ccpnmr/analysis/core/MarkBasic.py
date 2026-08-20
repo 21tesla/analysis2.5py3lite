@@ -1,4 +1,3 @@
-
 LICENSE = """
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,385 +39,387 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 try:
-  import memops.gui.Color as Color
+    import memops.gui.Color as Color
 except ImportError:
-  pass # could lead to exception when using code below, but relevant code should not be in gui in the first place
+    pass  # could lead to exception when using code below, but relevant code should not be in gui in the first place
 
-from memops.general import Implementation
-
-from ccpnmr.analysis.core.Util        import getPeakListColor
 from ccpnmr.analysis.core.WindowBasic import getSpectrumWindowView
+from memops.general import Implementation
 
 markCounter = 0
 rulerCounter = 0
 
+
 def removeAllMarksAndRulers(argServer):
-  """
-  Macro to remove all marks and rulers in a project.
+    """
+    Macro to remove all marks and rulers in a project.
 
-  .. describe:: Input
-  
-  ArgumentServer 
-  
-  .. describe:: Output
-  
-  None
-  """
+    .. describe:: Input
 
-  project = argServer.getProject()
+    ArgumentServer
 
-  removeRulers(project, removeAll=True)
-  removeMarks(project,  removeAll=True)
-  
-  
+    .. describe:: Output
+
+    None
+    """
+
+    project = argServer.getProject()
+
+    removeRulers(project, removeAll=True)
+    removeMarks(project, removeAll=True)
+
+
 def removeMarks(project, removeAll=False):
-  """
-  Remove marks in a project. If removeAll = True then remove all marks.
-  Otherwise remove only marks above the user-specified limit maxMarks.
-  
-  .. describe:: Input
+    """
+    Remove marks in a project. If removeAll = True then remove all marks.
+    Otherwise remove only marks above the user-specified limit maxMarks.
 
-  Project, Boolean
-  
-  .. describe:: Output
+    .. describe:: Input
 
-  None
-  """
- 
-  analysisProject = project.currentAnalysisProject
+    Project, Boolean
 
-  if removeAll:
-    maxMarks = 0
-  else:
-    maxMarks = analysisProject.maxMarks
- 
-  marks = analysisProject.sortedMarks()
- 
-  m = len(marks) - maxMarks
-  for i in range(m):
-    marks[i].delete()
- 
- 
-def createPeakDimRuler(peakDim, windowPane, lineWidth=1, dashLength=3,
-                       gapLength=1, color = None, remove=True):
-  """
-  Create an Analysis ruler at a peakDim position given a window
-  
-  .. describe:: Input
-  
-  Nmr.Peak, Analysis.SpectrumWindowPane, Int, Int, Int,
-  Analysis.Color, Boolean
-  
-  .. describe:: Output
+    .. describe:: Output
 
-  Analysis.Ruler
-  """
- 
-  global rulerCounter
+    None
+    """
 
-  project  = peakDim.root
-  analysisProject = peakDim.topObject
-  spectrum = peakDim.peak.peakList.dataSource
-  
-  view = getSpectrumWindowView(windowPane, spectrum)
-  if not view:
-    return
-  
-  dataDimRef = peakDim.dataDimRef
-  if not dataDimRef: # Sampled
-    return
-    
-  analysisDataDim = dataDimRef.dataDim.analysisDataDim
-   
-  axisMapping = view.findFirstAxisMapping(analysisDataDim=analysisDataDim)
-  if not axisMapping:
-    return
+    analysisProject = project.currentAnalysisProject
 
-  axisPanel = windowPane.findFirstAxisPanel(label=axisMapping.label)
-  panelType = axisPanel.panelType
+    if removeAll:
+        maxMarks = 0
+    else:
+        maxMarks = analysisProject.maxMarks
 
-  if not color:
-    color = Color.grey.hex
- 
-  ruler = analysisProject.newRuler(panelType=panelType, position=peakDim.value,
-                                   lineWidth=lineWidth, dashLength=dashLength,
-                                   gapLength=gapLength, color=color)
- 
-  if remove:
-    removeRulers(project)
+    marks = analysisProject.sortedMarks()
 
-  return ruler
+    m = len(marks) - maxMarks
+    for i in range(m):
+        marks[i].delete()
+
+
+def createPeakDimRuler(peakDim, windowPane, lineWidth=1, dashLength=3, gapLength=1, color=None, remove=True):
+    """
+    Create an Analysis ruler at a peakDim position given a window
+
+    .. describe:: Input
+
+    Nmr.Peak, Analysis.SpectrumWindowPane, Int, Int, Int,
+    Analysis.Color, Boolean
+
+    .. describe:: Output
+
+    Analysis.Ruler
+    """
+
+    global rulerCounter
+
+    project = peakDim.root
+    analysisProject = peakDim.topObject
+    spectrum = peakDim.peak.peakList.dataSource
+
+    view = getSpectrumWindowView(windowPane, spectrum)
+    if not view:
+        return
+
+    dataDimRef = peakDim.dataDimRef
+    if not dataDimRef:  # Sampled
+        return
+
+    analysisDataDim = dataDimRef.dataDim.analysisDataDim
+
+    axisMapping = view.findFirstAxisMapping(analysisDataDim=analysisDataDim)
+    if not axisMapping:
+        return
+
+    axisPanel = windowPane.findFirstAxisPanel(label=axisMapping.label)
+    panelType = axisPanel.panelType
+
+    if not color:
+        color = Color.grey.hex
+
+    ruler = analysisProject.newRuler(
+        panelType=panelType,
+        position=peakDim.value,
+        lineWidth=lineWidth,
+        dashLength=dashLength,
+        gapLength=gapLength,
+        color=color,
+    )
+
+    if remove:
+        removeRulers(project)
+
+    return ruler
 
 
 def createPeakMark(peak, lineWidth=1, dashLength=2, gapLength=2, remove=True, axisTypeDict=None):
-  """
-  Create a mark positioned at a given peak
+    """
+    Create a mark positioned at a given peak
 
-  .. describe:: Input
-  
-  Nmr.Peak, Int, Int, Int, Boolean
+    .. describe:: Input
 
-  .. describe:: Output
-  
-  Analysis.Mark
-  """
+    Nmr.Peak, Int, Int, Int, Boolean
 
-  if not axisTypeDict:
-    axisTypeDict = {}
+    .. describe:: Output
 
-  peakList = peak.peakList
-  project = peakList.root
-  analysisProject = project.currentAnalysisProject
-  
-  analysisPeakList = peakList.analysisPeakList
-  if analysisPeakList:
-    color = analysisPeakList.symbolColor
-  elif project.currentAnalysisProfile:
-    color = project.currentAnalysisProfile.fgColor
-  else:
-    color = Color.grey.hex
+    Analysis.Mark
+    """
 
-  mark = analysisProject.newMark(lineWidth=lineWidth, dashLength=dashLength,
-                                 gapLength=gapLength, color=color)
+    if not axisTypeDict:
+        axisTypeDict = {}
 
-  for peakDim in peak.peakDims:
-    axisType = axisTypeDict.get(peakDim)
-    if not axisType:
-      dataDimRef = peakDim.dataDimRef
-  
-      if dataDimRef:
-        expDimRef = dataDimRef.expDimRef
-        isotopeCodes = expDimRef.isotopeCodes
-        axisType = analysisProject.findFirstAxisType(isotopeCodes=isotopeCodes)
-      
-        if not axisType:
-          msg = 'Unknown axis type isotope codes ' + isotopeCodes
-          raise Implementation.ApiError(msg)
-        
-    if axisType:
-      markDim = mark.newMarkDim(position=peakDim.value, axisType=axisType)
- 
-  mark.peak = peak
+    peakList = peak.peakList
+    project = peakList.root
+    analysisProject = project.currentAnalysisProject
 
-  if remove:
-    removeMarks(project)
-
-  return mark
-
-
-def createNonPeakMark(positions, axisTypes, lineWidth=1,
-                      dashLength=2, gapLength=2, color=None, remove=True):
-  """
-  Create a mark at a general (i.e. non-peak) position.
-  
-  .. describe:: Input
-
-  List of Floats (Analysis.Mark.positions), List of Analysis.AxisTypes,
-  Int, Int, Int, Word (Analysis.Color.name)
-  
-  .. describe:: Output
-
-  Analysis.Mark
-  """
- 
-  global markCounter
-
-  analysisProject = list(axisTypes)[0].topObject
-  project = analysisProject.root
-
-  if not color:
-    analysisProfile = project.currentAnalysisProfile
-    
-    if analysisProfile:
-      scheme = analysisProfile.marksColor
-  
-      if scheme:
-        colors = scheme.colors
-        n = len(colors)
-        color = colors[markCounter % n]
-        markCounter += 1
-      else:
-        color = analysisProfile.fgColor
-    
+    analysisPeakList = peakList.analysisPeakList
+    if analysisPeakList:
+        color = analysisPeakList.symbolColor
+    elif project.currentAnalysisProfile:
+        color = project.currentAnalysisProfile.fgColor
     else:
-      color = Color.red.hex      
- 
-  mark = analysisProject.newMark(lineWidth=lineWidth, dashLength=dashLength,
-                                 gapLength=gapLength, color=color)
+        color = Color.grey.hex
 
-  for n in range(len(positions)):
-    axisType = axisTypes[n]
-    
-    if axisType.name != 'value':
-      markDim = mark.newMarkDim(position=positions[n], axisType=axisType)
- 
-  mark.peak = None
+    mark = analysisProject.newMark(lineWidth=lineWidth, dashLength=dashLength, gapLength=gapLength, color=color)
 
-  if remove:
-    removeMarks(project)
+    for peakDim in peak.peakDims:
+        axisType = axisTypeDict.get(peakDim)
+        if not axisType:
+            dataDimRef = peakDim.dataDimRef
 
-  return mark
+            if dataDimRef:
+                expDimRef = dataDimRef.expDimRef
+                isotopeCodes = expDimRef.isotopeCodes
+                axisType = analysisProject.findFirstAxisType(isotopeCodes=isotopeCodes)
+
+                if not axisType:
+                    msg = "Unknown axis type isotope codes " + isotopeCodes
+                    raise Implementation.ApiError(msg)
+
+        if axisType:
+            markDim = mark.newMarkDim(position=peakDim.value, axisType=axisType)
+
+    mark.peak = peak
+
+    if remove:
+        removeMarks(project)
+
+    return mark
+
+
+def createNonPeakMark(positions, axisTypes, lineWidth=1, dashLength=2, gapLength=2, color=None, remove=True):
+    """
+    Create a mark at a general (i.e. non-peak) position.
+
+    .. describe:: Input
+
+    List of Floats (Analysis.Mark.positions), List of Analysis.AxisTypes,
+    Int, Int, Int, Word (Analysis.Color.name)
+
+    .. describe:: Output
+
+    Analysis.Mark
+    """
+
+    global markCounter
+
+    analysisProject = list(axisTypes)[0].topObject
+    project = analysisProject.root
+
+    if not color:
+        analysisProfile = project.currentAnalysisProfile
+
+        if analysisProfile:
+            scheme = analysisProfile.marksColor
+
+            if scheme:
+                colors = scheme.colors
+                n = len(colors)
+                color = colors[markCounter % n]
+                markCounter += 1
+            else:
+                color = analysisProfile.fgColor
+
+        else:
+            color = Color.red.hex
+
+    mark = analysisProject.newMark(lineWidth=lineWidth, dashLength=dashLength, gapLength=gapLength, color=color)
+
+    for n in range(len(positions)):
+        axisType = axisTypes[n]
+
+        if axisType.name != "value":
+            markDim = mark.newMarkDim(position=positions[n], axisType=axisType)
+
+    mark.peak = None
+
+    if remove:
+        removeMarks(project)
+
+    return mark
 
 
 def setPeakMarkColor(peakList):
-  """
-  Set the colour of marks positioned on peaks.
-  
-  .. describe:: Input
-  
-  Nmr.PeakList
-  
-  .. describe:: Output
-  
-  None
-  """
+    """
+    Set the colour of marks positioned on peaks.
 
-  project = peakList.root
-  analysisProject = project.currentAnalysisProject
+    .. describe:: Input
 
-  
-  for mark in analysisProject.marks:
-    if (hasattr(mark, 'peak') and mark.peak and (mark.peak.peakList == peakList)):
-      analysisPeakList = peakList.analysisPeakList
-      
-      if analysisPeakList:
-        mark.color = analysisPeakList.symbolColor
-      
+    Nmr.PeakList
+
+    .. describe:: Output
+
+    None
+    """
+
+    project = peakList.root
+    analysisProject = project.currentAnalysisProject
+
+    for mark in analysisProject.marks:
+        if hasattr(mark, "peak") and mark.peak and (mark.peak.peakList == peakList):
+            analysisPeakList = peakList.analysisPeakList
+
+            if analysisPeakList:
+                mark.color = analysisPeakList.symbolColor
+
 
 def setNonPeakMarkColor(project):
-  """
-  Set the colour of general marks (i.e. not positioned on peaks).
-  
-  .. describe:: Input
-  
-  Project, Word (Analysis.Color.name)
-  
-  .. describe:: Output
-  
-  None
-  """
+    """
+    Set the colour of general marks (i.e. not positioned on peaks).
 
-  global markCounter
+    .. describe:: Input
 
-  analysisProject = project.currentAnalysisProject
-  analysisProfile = project.currentAnalysisProfile
-    
-  if analysisProfile:
-    scheme = analysisProfile.marksColor
-  
-    if scheme:
-      colors = scheme.colors
-      n = len(colors)
-      
-      for i, mark in enumerate(analysisProject.marks):
-        if not hasattr(mark, 'peak') or not mark.peak:
-          mark.color = colors[i % n]
-          
-        markCounter = i
-  
-  
-def removeRulers(project, removeAll = False):
-  """
-  Remove rulers in a project. If removeAll = True then remove all rulers.
-  Otherwise remove only rulers above the user-specified limit maxRulers.
-  
-  .. describe:: Input
-  
-  Project, Boolean
-  
-  .. describe:: Output
-  
-  None
-  """
- 
-  analysisProject = project.currentAnalysisProject
+    Project, Word (Analysis.Color.name)
 
-  if (removeAll):
-    maxRulers = 0
-  else:
-    maxRulers = analysisProject.maxRulers
+    .. describe:: Output
 
-  rulers = analysisProject.sortedRulers()
- 
-  m = len(rulers) - maxRulers
-  for i in range(m):
-    rulers[i].delete()
- 
- 
-def createRuler(position, panelType, lineWidth=1, dashLength=4,
-                gapLength=2, color = None, remove=True):
-  """
-  Create an Analysis ruler
-  
-  .. describe:: Input
-  
-  Float (Analysis.Ruler.position), Analysis.PanelType,
-  Int, Int, Int, Word (Analysis.Color.name)
-  
-  .. describe:: Output
-  
-  Analysis.Ruler
-  """
- 
-  global rulerCounter
+    None
+    """
 
-  project = panelType.root
-  analysisProject = panelType.topObject
+    global markCounter
 
-  if not color:
+    analysisProject = project.currentAnalysisProject
     analysisProfile = project.currentAnalysisProfile
-    
-    if analysisProfile:
-      scheme = analysisProfile.rulersColor
-  
-      if scheme:
-        colors = scheme.colors
-        n = len(colors)
-        color = colors[rulerCounter % n]
-        rulerCounter += 1
-      else:
-        color = analysisProfile.fgColor
-    
-    else:
-      color = Color.blue.hex 
- 
-  ruler = analysisProject.newRuler(panelType=panelType, position=position,
-                                   lineWidth=lineWidth, dashLength=dashLength,
-                                   gapLength=gapLength, color=color)
- 
-  if remove:
-    removeRulers(project)
 
-  return ruler
+    if analysisProfile:
+        scheme = analysisProfile.marksColor
+
+        if scheme:
+            colors = scheme.colors
+            n = len(colors)
+
+            for i, mark in enumerate(analysisProject.marks):
+                if not hasattr(mark, "peak") or not mark.peak:
+                    mark.color = colors[i % n]
+
+                markCounter = i
+
+
+def removeRulers(project, removeAll=False):
+    """
+    Remove rulers in a project. If removeAll = True then remove all rulers.
+    Otherwise remove only rulers above the user-specified limit maxRulers.
+
+    .. describe:: Input
+
+    Project, Boolean
+
+    .. describe:: Output
+
+    None
+    """
+
+    analysisProject = project.currentAnalysisProject
+
+    if removeAll:
+        maxRulers = 0
+    else:
+        maxRulers = analysisProject.maxRulers
+
+    rulers = analysisProject.sortedRulers()
+
+    m = len(rulers) - maxRulers
+    for i in range(m):
+        rulers[i].delete()
+
+
+def createRuler(position, panelType, lineWidth=1, dashLength=4, gapLength=2, color=None, remove=True):
+    """
+    Create an Analysis ruler
+
+    .. describe:: Input
+
+    Float (Analysis.Ruler.position), Analysis.PanelType,
+    Int, Int, Int, Word (Analysis.Color.name)
+
+    .. describe:: Output
+
+    Analysis.Ruler
+    """
+
+    global rulerCounter
+
+    project = panelType.root
+    analysisProject = panelType.topObject
+
+    if not color:
+        analysisProfile = project.currentAnalysisProfile
+
+        if analysisProfile:
+            scheme = analysisProfile.rulersColor
+
+            if scheme:
+                colors = scheme.colors
+                n = len(colors)
+                color = colors[rulerCounter % n]
+                rulerCounter += 1
+            else:
+                color = analysisProfile.fgColor
+
+        else:
+            color = Color.blue.hex
+
+    ruler = analysisProject.newRuler(
+        panelType=panelType,
+        position=position,
+        lineWidth=lineWidth,
+        dashLength=dashLength,
+        gapLength=gapLength,
+        color=color,
+    )
+
+    if remove:
+        removeRulers(project)
+
+    return ruler
 
 
 def setRulerColor(project):
-  """
-  Set the colour of rulers.
-  
-  .. describe:: Input
-  
-  Project, Word (Analysis.Color.name)
-  
-  .. describe:: Output
-  
-  None
-  """
+    """
+    Set the colour of rulers.
 
-  global rulerCounter
+    .. describe:: Input
 
-  analysisProject = project.currentAnalysisProject
-  analysisProfile = project.currentAnalysisProfile
-    
-  if analysisProfile:
-    scheme = analysisProfile.marksColor
-  
-    if scheme:
-      colors = scheme.colors
-      n = len(colors)
-      
-      for i, ruler in enumerate(analysisProject.rulers):
-        ruler.color = colors[i % n]
-          
-        rulerCounter = i
+    Project, Word (Analysis.Color.name)
 
+    .. describe:: Output
+
+    None
+    """
+
+    global rulerCounter
+
+    analysisProject = project.currentAnalysisProject
+    analysisProfile = project.currentAnalysisProfile
+
+    if analysisProfile:
+        scheme = analysisProfile.marksColor
+
+        if scheme:
+            colors = scheme.colors
+            n = len(colors)
+
+            for i, ruler in enumerate(analysisProject.rulers):
+                ruler.color = colors[i % n]
+
+                rulerCounter = i

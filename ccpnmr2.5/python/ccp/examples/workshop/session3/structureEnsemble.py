@@ -1,75 +1,77 @@
 import random
 
-from ccp.examples.workshop.session2.makeMolSystem import makeSequence, makeMolecule
+from ccp.examples.workshop.session2.makeMolSystem import makeMolecule, makeSequence
+
 
 def main(root):
 
-  # make Molecule
-  sequence = 'WHATSTHISCCPNAPILIKE'
-  sequence = makeSequence(sequence)
-  molecule = makeMolecule(root, sequence, molName='CcpnMol')
-  
-  # create MolSystem
-  molSystem = root.newMolSystem(code='testMolSystem')
+    # make Molecule
+    sequence = "WHATSTHISCCPNAPILIKE"
+    sequence = makeSequence(sequence)
+    molecule = makeMolecule(root, sequence, molName="CcpnMol")
 
-  # create MolSystem.Chains
-  for code in ('A', 'B'):
-    molSystem.newChain(code=code, molecule=molecule)
+    # create MolSystem
+    molSystem = root.newMolSystem(code="testMolSystem")
 
-  # temporary bodge
-  if not root.currentChemElementStore:
-    root.currentChemElementStore = root.findFirstChemElementStore()
+    # create MolSystem.Chains
+    for code in ("A", "B"):
+        molSystem.newChain(code=code, molecule=molecule)
 
-  # print some information out
-  chain = molSystem.findFirstChain(code='A')
-  print('chain empiricalFormula:', chain.empiricalFormula)
-  print('chain formalCharge:', chain.formalCharge)
-  print('chain molecularMass:', chain.molecularMass)
-  print('molSystem molecularMass:', molSystem.molecularMass)
- 
-  print('sequence:', [residue.ccpCode for residue in chain.sortedResidues()])
+    # temporary bodge
+    if not root.currentChemElementStore:
+        root.currentChemElementStore = root.findFirstChemElementStore()
 
-  # create StructureEnsemble
-  structureEnsemble = root.newStructureEnsemble(ensembleId=23, molSystem=molSystem)
+    # print some information out
+    chain = molSystem.findFirstChain(code="A")
+    print("chain empiricalFormula:", chain.empiricalFormula)
+    print("chain formalCharge:", chain.formalCharge)
+    print("chain molecularMass:", chain.molecularMass)
+    print("molSystem molecularMass:", molSystem.molecularMass)
 
-  # create MolStructure.Chains
-  atoms = []
-  for code in ('A', 'B'):
-    chain = structureEnsemble.newChain(code=code)
-    molSysChain = chain.chain
+    print("sequence:", [residue.ccpCode for residue in chain.sortedResidues()])
 
-    # create MolStructure.Residues
-    for seqId in range(3, 7):
-      molSysResidue = molSysChain.findFirstResidue(seqId=seqId)
-      residue = chain.newResidue(seqId=seqId, seqCode=molSysResidue.seqCode)
+    # create StructureEnsemble
+    structureEnsemble = root.newStructureEnsemble(ensembleId=23, molSystem=molSystem)
 
-      # create MolStructure.Atoms
-      for molSysAtom in molSysResidue.atoms:
-        chemAtom = molSysAtom.chemAtom
-        if chemAtom.elementSymbol != 'H':
-          atom = residue.newAtom(name=molSysAtom.name)
-          atoms.append(atom)
+    # create MolStructure.Chains
+    atoms = []
+    for code in ("A", "B"):
+        chain = structureEnsemble.newChain(code=code)
+        molSysChain = chain.chain
 
-  # create Model
-  model = structureEnsemble.newModel()
-  
-  # create MolStructure coordinates
-  coordinates = [random.random() for dummy in range(len(atoms)*3)]
-  model.setSubmatrixData('coordinates', coordinates)
+        # create MolStructure.Residues
+        for seqId in range(3, 7):
+            molSysResidue = molSysChain.findFirstResidue(seqId=seqId)
+            residue = chain.newResidue(seqId=seqId, seqCode=molSysResidue.seqCode)
 
-  #root.saveModified()
+            # create MolStructure.Atoms
+            for molSysAtom in molSysResidue.atoms:
+                chemAtom = molSysAtom.chemAtom
+                if chemAtom.elementSymbol != "H":
+                    atom = residue.newAtom(name=molSysAtom.name)
+                    atoms.append(atom)
 
-if __name__ == '__main__':
+    # create Model
+    model = structureEnsemble.newModel()
 
-  import sys
+    # create MolStructure coordinates
+    coordinates = [random.random() for dummy in range(len(atoms) * 3)]
+    model.setSubmatrixData("coordinates", coordinates)
 
-  if len(sys.argv) == 1:
-    from memops.api.Implementation import MemopsRoot
-    root = MemopsRoot(name='testNmr')
-  elif len(sys.argv) == 2:
-    from memops.general.Io import loadProject
-    repositoryPath = sys.argv[1]
-    root = loadProject(path=repositoryPath)
+    # root.saveModified()
 
-  main(root)
 
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) == 1:
+        from memops.api.Implementation import MemopsRoot
+
+        root = MemopsRoot(name="testNmr")
+    elif len(sys.argv) == 2:
+        from memops.general.Io import loadProject
+
+        repositoryPath = sys.argv[1]
+        root = loadProject(path=repositoryPath)
+
+    main(root)
