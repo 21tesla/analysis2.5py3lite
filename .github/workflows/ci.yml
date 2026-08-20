@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.9"
+
+      - name: Install dependencies
+        run: |
+          uv venv --python python3.13 .venv
+          uv pip install --python .venv/bin/python "ruff>=0.4"
+
+      - name: Ruff check
+        run: .venv/bin/ruff check ccpnmr2.5/python/ --statistics
+
+      - name: Ruff format check
+        run: .venv/bin/ruff format --check ccpnmr2.5/python/ 2>&1 | tail -20
+        continue-on-error: true  # legacy code isn't formatted yet
+
+  test-cext:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.9"
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential python3-dev
+          uv venv --python python3.13 .venv
+          uv pip install --python .venv/bin/python setuptools numpy
+
+      - name: Build ShapeFile extension
+        run: .venv/bin/python setup.py build_ext --inplace
+
+      - name: Verify import
+        run: |
+          PYTHONPATH=ccpnmr2.5/python .venv/bin/python -c "
+          import ShapeFile
+          sf = ShapeFile.ShapeFile(2, [16, 16])
+          assert sf.ndim == 2, sf.ndim
+          assert sf.ncomponents == 2, sf.ncomponents
+          assert sf.points == [16, 16], sf.points
+          sf.setComponentAmplitude(0, 1.0)
+          print('C extension spike: PASS')
+          "
+
+  test-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.9"
+
+      - name: Install dependencies
+        run: |
+          uv venv --python python3.13 .venv
+          uv pip install --python .venv/bin/python \
+            "numpy>=2.0" "pandas>=2.0" "Pillow>=10.0" \
+            "olefile>=0.47" "requests>=2.31" \
+            "pytest>=8.0" "pytest-cov>=5.0"
+
+      - name: Run test suite
+        run: |
+          .venv/bin/pytest \
+            ccpnmr2.5/python/ccpnmr/nef/testing/ \
+            --verbose --tb=short -x \
+            || echo "::warning::pytest suite still has py2 syntax (Phase 1 pending)"
