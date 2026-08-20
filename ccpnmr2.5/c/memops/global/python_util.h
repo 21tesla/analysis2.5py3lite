@@ -56,12 +56,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 	{   if ((status) == CCPN_ERROR)  RETURN_OBJ_ERROR(error_msg);   }
 
 #define PY_MALLOC(obj, type, typeobj) \
-	{   obj = PyObject_NEW(type, typeobj); \
+	{   obj = (type) PyObject_New(type, typeobj); \
             DEBUG_CODE_HEX("py_malloc", obj);   }
 
 #define PY_FREE(obj) \
 	{   DEBUG_CODE_HEX("py_free", obj); \
-            PyObject_DEL(obj);   }
+            Py_DECREF(obj);   }
 
 #ifdef WIN64
 #define PY_MOD_INIT_FUNC PyMODINIT_FUNC

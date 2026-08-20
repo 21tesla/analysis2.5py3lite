@@ -116,10 +116,10 @@ CcpnStatus get_python_int_array(PyObject *list, int nalloc, int *n, int *value,
 	else
 	    z = PyTuple_GetItem(list, i);
 
-	if (!PyInt_Check(z))
+	if (!PyLong_Check(z))
 	    RETURN_ERROR_MSG("data must be a list or tuple of integers");
 
-	value[i] = (int) PyInt_AsLong(z);
+	value[i] = (int) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -170,14 +170,14 @@ CcpnStatus get_python_int_alloc_array(PyObject *list, int *n, int **value,
     	else
     	    z = PyTuple_GetItem(list, i);
 
-    	if (!PyInt_Check(z))
+    	if (!PyLong_Check(z))
     	{
     	    FREE(*value, int);
 
     	    RETURN_ERROR_MSG("data must be a list or tuple of integers");
     	}
 
-    	(*value)[i] = (int) PyInt_AsLong(z);
+    	(*value)[i] = (int) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -226,13 +226,13 @@ CcpnStatus get_python_float_array(PyObject *list, int nalloc, int *n, float *val
 	else
 	    z = PyTuple_GetItem(list, i);
 
-	if (!PyFloat_Check(z) && !PyInt_Check(z))
+	if (!PyFloat_Check(z) && !PyLong_Check(z))
 	    RETURN_ERROR_MSG("data must be a list or tuple of floats");
 
 	if (PyFloat_Check(z))
 	    value[i] = (float) PyFloat_AsDouble(z);
 	else
-	    value[i] = (float) PyInt_AsLong(z);
+	    value[i] = (float) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -283,7 +283,7 @@ CcpnStatus get_python_float_alloc_array(PyObject *list, int *n, float **value,
 	else
 	    z = PyTuple_GetItem(list, i);
 
-	if (!PyFloat_Check(z) && !PyInt_Check(z))
+	if (!PyFloat_Check(z) && !PyLong_Check(z))
 	{
 	    FREE(*value, float);
 
@@ -293,7 +293,7 @@ CcpnStatus get_python_float_alloc_array(PyObject *list, int *n, float **value,
 	if (PyFloat_Check(z))
 	    (*value)[i] = (float) PyFloat_AsDouble(z);
 	else
-	    (*value)[i] = (float) PyInt_AsLong(z);
+	    (*value)[i] = (float) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -467,13 +467,13 @@ CcpnStatus get_python_double_array(PyObject *list, int nalloc, int *n, double *v
 	else
 	    z = PyTuple_GetItem(list, i);
 
-	if (!PyFloat_Check(z) && !PyInt_Check(z))
+	if (!PyFloat_Check(z) && !PyLong_Check(z))
 	    RETURN_ERROR_MSG("data must be a list or tuple of floats");
 
 	if (PyFloat_Check(z))
 	    value[i] = (double) PyFloat_AsDouble(z);
 	else
-	    value[i] = (double) PyInt_AsLong(z);
+	    value[i] = (double) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -524,7 +524,7 @@ CcpnStatus get_python_double_alloc_array(PyObject *list, int *n, double **value,
     	else
     	    z = PyTuple_GetItem(list, i);
 
-    	if (!PyFloat_Check(z) && !PyInt_Check(z))
+    	if (!PyFloat_Check(z) && !PyLong_Check(z))
     	{
     	    FREE(*value, double);
 
@@ -534,7 +534,7 @@ CcpnStatus get_python_double_alloc_array(PyObject *list, int *n, double **value,
     	if (PyFloat_Check(z))
     	    (*value)[i] = (double) PyFloat_AsDouble(z);
     	else
-    	    (*value)[i] = (double) PyInt_AsLong(z);
+    	    (*value)[i] = (double) PyLong_AsLong(z);
     }
 
     *n = m;
@@ -615,7 +615,7 @@ PyObject *get_python_int_list(int n, int *array)
 
     for (i = 0; i < n; i++)
     {
-	z = PyInt_FromLong((long) array[i]);
+	z = PyLong_FromLong((long) array[i]);
 
 	PyList_SetItem(list, i, z);
     }

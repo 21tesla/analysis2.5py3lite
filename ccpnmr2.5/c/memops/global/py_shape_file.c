@@ -1,4 +1,3 @@
-
 /*
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -40,30 +39,18 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 */
 #include "py_shape_file.h"
 
-#include "py_mem_cache.h"
 #include "python_util.h"
 #include "utility.h"
 
-static PyObject *ErrorObject;   /* locally-raised exception */
-
-/*****************************************************************************
- * TYPE INFORMATION
- *****************************************************************************/
+/* Locally-raised exception type */
+static PyObject *ErrorObject;
 
 static PyTypeObject Shape_file_type;
 
 Bool is_py_shape_file(PyObject *obj)
 {
-/*  below does not work because different *.so files end up
-    with different addresses for Shape_file_type
-    return (obj->ob_type == &Shape_file_type);
-*/
     return valid_py_object(obj, &Shape_file_type);
 }
-
-/*****************************************************************************
- * MISCELLANEOUS METHODS
- *****************************************************************************/
 
 /*****************************************************************************
  * INSTANCE METHODS
@@ -83,8 +70,7 @@ static PyObject *setComponentAmplitude(PyObject *self, PyObject *args)
     if (set_amplitude_shape_component(shape_file, comp, amplitude, error_msg) == CCPN_ERROR)
         RETURN_OBJ_ERROR(error_msg);
 
-    Py_INCREF(Py_None);
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 static PyObject *setShapeData(PyObject *self, PyObject *args)
@@ -112,8 +98,7 @@ static PyObject *setShapeData(PyObject *self, PyObject *args)
     if (status == CCPN_ERROR)
         RETURN_OBJ_ERROR(error_msg);
 
-    Py_INCREF(Py_None);
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 static struct PyMethodDef py_handler_methods[] =
@@ -133,7 +118,7 @@ static PyObject *new_py_shape_file(int ncomponents, PyObject *points_obj)
     Shape_file shape_file;
     Py_Shape_file obj;
     Line error_msg;
- 
+
     sprintf(error_msg, "points: ");
     if (get_python_int_array(points_obj, MAX_NDIM, &ndim, points,
 				error_msg+strlen(error_msg)) == CCPN_ERROR)
@@ -144,7 +129,7 @@ static PyObject *new_py_shape_file(int ncomponents, PyObject *points_obj)
     if (!shape_file)
 	RETURN_OBJ_ERROR("allocating Shape_file object");
 
-    PY_MALLOC(obj, struct Py_Shape_file, &Shape_file_type);
+    obj = (Py_Shape_file) PyObject_New(struct Py_Shape_file, &Shape_file_type);
 
     if (!obj)
     {
@@ -163,86 +148,98 @@ static void delete_py_shape_file(PyObject *self)
     Py_Shape_file obj = (Py_Shape_file) self;
     Shape_file shape_file = obj->shape_file;
 
-/*
-    printf("in delete_py_shape_file\n");
-*/
-
     delete_shape_file(shape_file);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-/*
-static int print_py_shape_file(PyObject *self, FILE *fp, int flags)
-{
-    printf("in print_py_handler\n");
-
-    return 0;
-}
-*/
-
-static PyObject *getattr_py_shape_file(PyObject *self, char *name)
+/* Python 3 tp_getattro — receives a unicode object, not a char* */
+static PyObject *getattr_py_shape_file(PyObject *self, PyObject *attr_name)
 {
     Py_Shape_file obj = (Py_Shape_file) self;
     Shape_file shape_file = obj->shape_file;
 
-    if (equal_strings(name, "ndim") || equal_strings(name, "nshapes"))
-	return Py_BuildValue("i", shape_file->ndim);
-    else if (equal_strings(name, "ncomponents"))
-	return Py_BuildValue("i", shape_file->ncomponents);
-    else if (equal_strings(name, "points"))
-	return get_python_int_list(shape_file->ndim, shape_file->points);
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    if (!PyUnicode_Check(attr_name))
+    {
+        PyErr_Format(PyExc_TypeError, "attribute name must be string, not '%.200s'",
+                     Py_TYPE(attr_name)->tp_name);
+        return NULL;
+    }
+
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return NULL;
+
+    if (strcmp(name, "ndim") == 0 || strcmp(name, "nshapes") == 0)
+        return PyLong_FromLong((long) shape_file->ndim);
+    else if (strcmp(name, "ncomponents") == 0)
+        return PyLong_FromLong((long) shape_file->ncomponents);
+    else if (strcmp(name, "points") == 0)
+        return get_python_int_list(shape_file->ndim, shape_file->points);
+
+    /* Fall back to PyObject_GenericGetAttr which checks tp_methods */
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
  * TYPE DESCRIPTORS
  *****************************************************************************/
 
-/*  if implementing more...
-static PySequenceMethods Shape_file_sequence_methods =
+static PyObject *shape_file_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
 {
-    Shape_file_length,
-    Shape_file_concat,
-    Shape_file_repeat,
-    Shape_file_item,
-    Shape_file_slice,
-    Shape_file_ass_item,
-    Shape_file_ass_slice
-};
+    static char *kwlist[] = { "ncomponents", "points", NULL };
+    int ncomponents;
+    PyObject *points_obj;
 
-static PySequenceMethods Shape_file_sequence_methods =
-{
-    Shape_file_length,
-    0,
-    0,
-    Shape_file_item,
-    0,
-    Shape_file_ass_item,
-    0
-};
-*/
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iO", kwlist,
+                                     &ncomponents, &points_obj))
+    {
+        RETURN_OBJ_ERROR("must have arguments: ncomponents, points");
+    }
+
+    return new_py_shape_file(ncomponents, points_obj);
+}
 
 static PyTypeObject Shape_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "ShapeFile", /* name */
-    sizeof(struct Py_Shape_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_shape_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_shape_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Shape_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "ShapeFile",                          /* tp_name */
+    sizeof(struct Py_Shape_file),         /* tp_basicsize */
+    0,                                    /* tp_itemsize */
+    (destructor) delete_py_shape_file,    /* tp_dealloc */
+    0,                                    /* tp_vectorcall */
+    0,                                    /* tp_getattr */
+    0,                                    /* tp_setattr */
+    0,                                    /* tp_as_async */
+    0,                                    /* tp_repr */
+    0,                                    /* tp_as_number */
+    0,                                    /* tp_as_sequence */
+    0,                                    /* tp_as_mapping */
+    0,                                    /* tp_hash */
+    0,                                    /* tp_call */
+    0,                                    /* tp_str */
+    (getattrofunc) getattr_py_shape_file, /* tp_getattro */
+    0,                                    /* tp_setattro */
+    0,                                    /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                   /* tp_flags */
+    "ShapeFile — NMR line shape model",   /* tp_doc */
+    0,                                    /* tp_traverse */
+    0,                                    /* tp_clear */
+    0,                                    /* tp_richcompare */
+    0,                                    /* tp_weaklistoffset */
+    0,                                    /* tp_iter */
+    0,                                    /* tp_iternext */
+    py_handler_methods,                   /* tp_methods */
+    0,                                    /* tp_members */
+    0,                                    /* tp_getset */
+    0,                                    /* tp_base */
+    0,                                    /* tp_dict */
+    0,                                    /* tp_descr_get */
+    0,                                    /* tp_descr_set */
+    0,                                    /* tp_dictoffset */
+    0,                                    /* tp_init */
+    0,                                    /* tp_alloc */
+    shape_file_new,                       /* tp_new */
 };
 
 /*****************************************************************************
@@ -262,49 +259,52 @@ static PyObject *init_Py_Shape_file(PyObject *self, PyObject *args)
     return obj;
 }
 
-/******************************************************************************
-* METHOD REGISTRATION TABLE: NAME-STRING -> FUNCTION-POINTER
-*
-* List of functions defined in the module. A name->address method map, used
-* to build-up the module's dictionary in "Py_InitModule". Once imported, this
-* module acts just like it's coded in Python. The method functions handle
-* converting data from/to python objects, and linkage to other C functions.
-******************************************************************************/
-
-
 static struct PyMethodDef Shape_file_type_methods[] =
 {
     { "ShapeFile",	(PyCFunction) init_Py_Shape_file,	METH_VARARGS },
     { NULL,		NULL,			0 }
 };
 
-
-/******************************************************************************
-* INITIALIZATION FUNCTION (IMPORT-TIME)
-*
-* Initialization function for the module. Called on first "import ShapeFile" in 
-* a Python program. The function is usually called "initShape_file": this name's
-* added to the built-in module table in config.c statically (if added to file
-* Module/Setup), or called when the module's loaded dynamically as a shareable 
-* object-file found on PYTHONPATH. File and function names matter if dynamic.
-******************************************************************************/
-
-PY_MOD_INIT_FUNC initShapeFile(void)
+/*
+ * Python 3 module definition (replaces Py2 Py_InitModule)
+ */
+static struct PyModuleDef shape_file_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "ShapeFile",
+    "CCPNMR Line Shape File module (Python 3 compatible)",
+    -1,
+    Shape_file_type_methods
+};
 
-#ifdef WIN64
-    Shape_file_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("ShapeFile", Shape_file_type_methods);
+PyMODINIT_FUNC PyInit_ShapeFile(void)
+{
+    if (PyType_Ready(&Shape_file_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&shape_file_module_def);
+    if (!m)
+        return NULL;
+
+    /* Add the custom type to the module dict */
+    PyObject *d = PyModule_GetDict(m);
+    if (PyDict_SetItemString(d, "ShapeFile", (PyObject *) &Shape_file_type) < 0)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    /* Create exception object and add to module */
     ErrorObject = PyErr_NewException("ShapeFile.error", NULL, NULL);
-    Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module ShapeFile");
+    if (ErrorObject != NULL)
+    {
+        Py_INCREF(ErrorObject);
+        if (PyDict_SetItemString(d, "error", ErrorObject) < 0)
+        {
+            Py_DECREF(m);
+            return NULL;
+        }
+    }
+
+    return m;
 }
