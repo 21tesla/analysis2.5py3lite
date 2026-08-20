@@ -1,0 +1,2 @@
+rm -f *.pyd
+cp ..\\..\\..\\c\\other\\cambridge\\bayes\\BayesPeakSeparator.pyd BayesPeakSeparator.pyd

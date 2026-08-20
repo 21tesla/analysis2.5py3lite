@@ -1,0 +1,59 @@
+CCPN Data Model API 1.0 installation notes
+
+The CCPN Data Model API 1.0 release includes all source
+code required, including third-party code.
+
+The only third-party application required is Python 2.2.
+Users who want to use their own copies of this code can do so.
+The API will not work with Python < 2.2 but also works with
+Python 2.3 (we have not tried Python 2.4 yet).
+
+To install the code go into the ccpnmr directory (the top-level
+directory of the distribution) and run the installCode.py script:
+ 
+  python installCode.py api
+ 
+This assumes that your computer has a working version of Python.
+Any version >= 1.5 should work to run the script, but you need
+version >= 2.2 for the code itself to run.
+The script will ask whether you want to compile Python (2.2), and
+if not where your version of Python (>= 2.2) is located.
+The script will then create a "bin" directory.
+
+*********Start of Interlude***************************************
+ 
+Alternatively, if for some reason the script does not work, below is
+what you need to do to install the code (CCPNMR_TOP_DIR is the ccpnmr
+directory created by the unpacking of the tar file):
+
+(1) If you need our version of Python:
+      cd $CCPNMR_TOP_DIR/python2.2
+    Unpack tar file:
+      tar xvzf Python-2.2.3.tgz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd Python-2.2.3
+      ./configure --prefix=$CCPNMR_TOP_DIR/python2.2
+      make
+      make install
+ 
+*********End of Interlude*****************************************
+
+After successful installation of the code the following environment
+variables also need setting or updating (for example, in .cshrc):
+
+  CCPNMR_TOP_DIR must be set to the ccpnmr directory created by the
+    unpacking of the tar file
+  PYTHONPATH must include $CCPNMR_TOP_DIR/ccpnmr1.0/python
+  PATH must include $CCPNMR_TOP_DIR/bin
+
+For example, in .cshrc you could place:
+
+  setenv CCPNMR_TOP_DIR directory_where_you_unpacked_release/ccpnmr
+  setenv PATH ${CCPNMR_TOP_DIR}/bin:${PATH}
+  setenv PYTHONPATH .:${CCPNMR_TOP_DIR}/ccpnmr1.0/python
+
+Your PATH and PYTHONPATH might need to include other things:  to
+illustrate this the example of PATH above includes other directories
+previously defined to be in PATH (the above line will fail if PATH
+has not been previously defined, which it normally is).

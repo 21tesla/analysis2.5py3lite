@@ -1,0 +1,102 @@
+\setupoutput[pdftex]
+
+\setupcolors[state=start]
+
+\usemodule[units]
+
+\setuppagenumbering[location=footer]
+
+\setuppagenumbering[state=start]
+
+\setupwhitespace[big]
+
+\setuplayout[leftmargin=1cm, rightmargin=1cm]
+\setuplayout[leftedge=0cm, rightedge=0cm]
+\setuplayout[header=1cm, footer=1cm]
+\setuplayout[top=0cm, bottom=0cm]
+
+\setupheads[alternative=middle]
+
+\starttext
+\title{Peak Fitting in Analysis}
+
+\setupheads[alternative=normal]
+
+
+The Gaussian fitting function in N dimensions is
+
+$$G(x) = h \prod_{i=1}^N e^{-(x_i-c_i)^2/a_i^2}$$
+
+where $h$ is the height (intensity) and $c_i$ is the center and $a_i$ is the ``width''.
+
+The linewidth, $l_i$, is the full width at half max.
+We solve $e^{-x^2/a^2} = 1/2$ to find that $x = a \sqrt {ln2}$.  Thus the linewidth
+$l = 2a \sqrt {ln2}$ and so $a = l / (2 \sqrt {ln2})$.
+
+In terms of the linewidth we have
+
+$$G(x) = h \prod_{i=1}^N e^{-4 \ ln2 \ (x_i-c_i)^2/l_i^2}$$
+
+The Lorentzian fitting function in N dimensions is
+
+$$L(x) = h \prod_{i=1}^N {a_i^2 \over a_i^2 + (x_i-c_i)^2}$$
+
+To find the linewidth we solve ${a^2 \over a^2 + x^2} = 1/2$ to find that
+$x = a$.  Thus the linewidth $l = 2a$ and so $a = l/2$.
+
+In terms of the linewidth we have
+
+$$L(x) = h \prod_{i=1}^N {l_i^2 \over l_i^2 + 4(x_i-c_i)^2}$$
+
+Note that there are 1+2N parameters for the fitting, $(h, c_i, l_i)$.  For nonlinear fitting we need derivatives
+of the functions with respect to the parameters.  We have
+
+$$\eqalign{{\partial G \over \partial h} &= {G \over h} \cr
+  {\partial G \over \partial c_i} &= {8 \ ln2 \ (x_i - c_i) G \over l_i^2} \cr
+  {\partial G \over \partial l_i} &= {8 \ ln2 \ (x_i - c_i)^2 G \over l_i^3} \cr
+}$$
+
+and
+
+$$\eqalign{{\partial L \over \partial h} &= {L \over h} \cr
+  {\partial L \over \partial c_i} &= {8 (x_i - c_i) L \over l_i^2 + 4(x_i-c_i)^2} \cr
+  {\partial L \over \partial l_i} &= {2 L \over l_i} - {2 l_i L \over l_i^2 + 4(x_i-c_i)^2}
+    = {8 (x_i - c_i)^2 L \over l_i(l_i^2 + 4(x_i-c_i)^2)}\cr
+}$$
+
+The volume of the Gaussian function is
+
+$$\int G(x) = h \prod_{i=1}^N \sqrt \pi a_i = h \prod_{i=1}^N {\sqrt \pi l_i \over 2 \sqrt {ln2}}
+  = h \left ( {1 \over 2} \sqrt {\pi \over ln2} \right )^N \prod_{i=1}^N l_i$$
+
+The volume of the Lorentzian function is
+
+$$\int L(x) = h \prod_{i=1}^N \pi a_i = h \prod_{i=1}^N {\pi l_i \over 2}
+  = h \left ({\pi \over 2} \right )^N \prod_{i=1}^N l_i$$
+
+For a peak that is fitted with a Gaussian, there is a Lorentzian line shaped peak with the same
+volume.  Let $l'_i = s l_i$ be the equivalent Lorentzian linewidth.  Then
+
+$$h \left ( {1 \over 2} \sqrt {\pi \over ln2} \right )^N \prod_{i=1}^N l_i = h \left ({\pi \over 2} \right )^N \prod_{i=1}^N l'_i$$
+
+and so
+
+$${1 \over 2} \sqrt {\pi \over ln2} = s {\pi \over 2}$$
+
+and thus
+
+$$s = {1 \over \sqrt { \pi ln2 }} \approx 0.678$$
+
+Assuming we have a peak with an actual maximum, then the initial values can be determined somewhat
+sensibly.  So $h$ can be set to the value of the peak at the maximum position, and $c_i$ can be set
+to the maximum (or using a parabolic interpolation to a non-grid point), and $l_i$ can be set by
+seeing where the peak decreases to half its value or starts to turn up again (again, interpolation
+can be used).
+
+So for isolated peaks, this fitting should work fairly well.
+
+With overlapped peaks you have to do sums of the functions, which starts to give huge numbers of
+parameters for fitting, which is not ideal.  It's quite possible that the fitting in this case is
+very sensitive.
+
+\stoptext

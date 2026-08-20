@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit release="2.0.b3" originator="CCPN Python XmlIO" packageGuid="www.ccpn.ac.uk_Fogh_2006-08-16-14:25:08_00001" time="Thu Aug 27 17:05:59 2009">
+
+<NMRR.NmrReferenceStore _ID="_1" ccpCode="Mle" createdBy="user" guid="NmrReferenceTemp_user_2009-08-27-17-05-59-101_00001" molType="protein">
+  <NMRR.NmrReferenceStore.chemCompNmrRefs>
+    <NMRR.ChemCompNmrRef _ID="_2">
+      <NMRR.ChemCompNmrRef.sourceName>
+        <IMPL.Line>BMRB</IMPL.Line>
+      </NMRR.ChemCompNmrRef.sourceName>
+      <NMRR.ChemCompNmrRef.chemCompVarNmrRefs>
+        <NMRR.ChemCompVarNmrRef _ID="_3">
+        </NMRR.ChemCompVarNmrRef>
+      </NMRR.ChemCompNmrRef.chemCompVarNmrRefs>
+    </NMRR.ChemCompNmrRef>
+  </NMRR.NmrReferenceStore.chemCompNmrRefs>
+</NMRR.NmrReferenceStore>
+
+</_StorageUnit>
+<!--End of Memops Data-->

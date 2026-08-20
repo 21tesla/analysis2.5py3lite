@@ -1,0 +1,23 @@
+#
+# DANGLE: Dihedral ANgles from Global Likelihood Estimates 
+# Copyright (C) 2008 Nicole Cheung, Bill Broadhurst (University of Cambridge)
+#
+# for further information, please contact the authors:
+#
+# - Nicole Cheung   : msc51@cam.ac.uk
+# - Bill Broadhurst : r.w.broadhurst@bioc.cam.ac.uk
+#
+
+#
+# The following files must be in the parent directory of dangle.py
+#
+
+HOMOLOGY	homology.tab
+REF_SHIFTS	referenceRandomCoilShifts.tab
+SHIFT_CORR	randomCoilShiftCorrections.tab
+DATABASE        DB_TALOS_186_secStruct
+
+GEN_ANGLE_PROB	angle_pop_GEN.txt
+GLY_ANGLE_PROB	angle_pop_GLY.txt
+PRO_ANGLE_PROB	angle_pop_PRO.txt
+PRE_ANGLE_PROB	angle_pop_PRE.txt

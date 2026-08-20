@@ -1,0 +1,63 @@
+Structure Exercise: MolSystem, Coord
+
+(1) Load project (which has Molecule with name 'CcpnMol' in it).
+
+Create Molecule with name 'CcpnMol' and sequence 'WHATSTHISCCPNAPILIKE'.
+Use Molecule Exercise code to do this.
+
+(2) Create a MolSystem.
+  mandatory arguments: code
+
+Create two MolSystem.Chains.
+  mandatory arguments: code=['A', 'B'], molecule
+
+Note: this creates MolSystem.Residues, ChainFragments and Atoms automatically.
+
+Print out empirical formula, formal charge and molecular mass of either chain.
+Print out molecular mass of molSystem.
+Print out sequence (ccpCodes) of residues in either chain.
+
+(3) Create StructureEnsemble.
+  mandatory arguments: ensembleId, molSystem
+
+Create Model.
+  mandatory arguments: None
+
+Create two MolStructure.Chains.
+  mandatory arguments: code (same as MolSystem.Chain.code).
+
+Note: this does not create MolStructure.Residues and Atoms automatically
+
+Create MolStructure.Residues for residues in chain with seqId between 3 and 6 (inclusive).
+  mandatory arguments: seqId, seqCode (seqId same as MolSystem.Residue.seqId).
+
+Create MolStructure.Atoms for non-H atoms.
+  mandatory arguments: name (same as MolSystem.Atom.name)
+
+Create MolStructure.Coord for each atom.
+  mandatory arguments: model
+  other interesting arguments: x, y, z
+
+(4) Save project.
+
+(5) Use FormatConverter readCoordinates() to read PDB files.
+Need and a list of PDB files.
+Can optionally specify a MolecularSystem and/or a StructureEnsemble.
+Can optionally specify a NamingSystem.
+
+Use ccpnmr.format.converters.PdbFormat.
+Or try ccpnmr.format.converter.PseudoPdbFormat.
+
+Two steps:
+
+  Constructor for PdbFormat and PseudoPdbFormat:
+    mandatory arguments: project
+    optional arguments: verbose=1
+
+  Function pdbFormatObject.readCoordinates():
+    mandatory arguments: fileNames
+    optional arguments: minimalPrompts=1, linkAtoms=0
+    optional argument for PseudoPdbFormat: forceNamingSystemName='PDB_REMED'
+
+Print out number of chains, residues, atoms for created MolSystem.
+Print out number of models for created StructureEnsemble.

@@ -1,0 +1,1744 @@
+<html>
+<head>
+<title>Changes help</title>
+</head>
+<body bgcolor="#FFFFFF">
+<h2>List of changes in release</h2>
+<p>
+<h3>Changes from 2014 Mar 27 (2.4.0) to 2014 Oct 03 (2.4.1) release</h3>
+<ul>
+<li>
+Added optional MolSystem column in Assignment Panel suggested resonance
+table.
+</li>
+<li>
+Added way to show strips for resonances in a single residue, most useful
+for two orthogonal views in 3D (or higher) windows, along with a 2D
+window, in the Resonances browser. (Functionality originally implemented
+by Igor Barsukov back in Analysis v1.)
+</li>
+<li>
+New Structure --> Cyana menu (instead of having to run a macro).
+</li>
+</ul>
+<h3>Changes from 2013 Jun 12 (2.3.0) to 2014 Mar 27 (2.4.0) release</h3>
+<ul>
+<li>
+Fully integrated running of CYANA calculations with read-back of results, via macros
+in the module macros/MultiStructure.
+</li>
+<li>
+Ctrl + left mouse drag in spectrum window prints out basic region stats (sum, average,
+standard deviation) for the spectra in that region.
+</li>
+<li>
+Added executive summary for project (Project --> Summary).
+</li>
+<li>
+Add Peak Normalisation in Structure --> Make Distance Restraints dialog
+</li>
+</ul>
+<p>
+<h3>Changes from 2012 Feb 29 (2.2.2) to 2013 Jun 12 (2.3.0) release</h3>
+<ul>
+<li>
+Added CPMG fitting (but probably needs more work).
+</li>
+<li>
+Added C - A exp(-Bx) fitting.
+</li>
+<li>
+Added interface to D2D (http://www-vendruscolo.ch.cam.ac.uk/d2D/index.php).
+</li>
+<li>
+Added interface to CamCoil (http://www-vendruscolo.ch.cam.ac.uk/camcoil.php)
+</li>
+</ul>
+<p>
+<h3>Changes from 2010 Oct 04 (2.2.0) to 2012 Feb 29 (2.2.2) release</h3>
+<ul>
+<li>
+Added new type nomenclature for MAS solid state and 13C direct detection experiments, this also
+affects 'NOESY' experiment types which become 'through-space'.
+</li>
+<li>
+Allow the generation of many more synthetic peak lists with more options: Can now generate peak lists
+for HNcoCA, HNcoCACB and almost all MAS solid state experiment types. There is a new option to control
+the number of bonds for 'through-space' transfers (when not using a structure).
+</li>
+<li>
+When calculating distances for structures with multiple models 1/r^3 ensemble averaging is now used.
+</li>
+<li>
+Added a new experiment series type for CPMG pulsing frequency.
+</li>
+<li>
+Added double quantum experiment types with corresponding DQ window axes, multi-position DQ
+cross-hairs, and automatic extraction of component chemical shifts during assignment, e.g. as
+displayed in the Atom Browser.
+</li>
+<li>
+Allow the loading of structures that represent only sub-sequences of a current molecular system.
+</li>
+<li>
+Added trial module to draw T1, T2, Het NOE relaxation analysis graphs (note that this will be replaced
+with Mark Howard's module for version 3).
+</li>
+<li>
+Added Guy Montelione's and Janet Huang's RPF functionality (Recall, Precision, F-measure; as used in
+AutoStructure) to the structure menu. This is a new "PyRPF" implementation. The objective here is to
+compare through-space peak lists with sort distances in a structure to find 'missing' peaks and
+'unexplained' peaks. This allows for an overall estimation of a validation score and in this Python
+implementation provides a mechanism for the user to quickly zoom to points in the spectra where the
+peak list and structure are not consistent.
+</li>
+<li>
+Added CCPN user registration system.
+</li>
+<li>
+Added automatic bug reporting system.
+</li>
+<li>
+The Ramachandran plot has been adjusted so that the allowed/disallowed regions etc. better match with
+the original PROCHECK categories.
+</li>
+<li>
+Added MakeDecoupledPeakList macro, i.e. to get rid of all splittings and to show the underlying main
+resonance locations.
+</li>
+<li>
+Added lots and lots of new functionality based upon non-uniform isotopic labelling of molecules. The
+user can use a standard, pure labelling scheme or create 'labelled molecules' (recommended) by
+associating a scheme (or mixture of schemes, or segmental labelling, or a modified scheme) with a
+given set of experiments. Using the latter method will mean that labelling is automatically considered
+when doing assignments, making restraints, making synthetic peak lists etc.
+</li>
+<li>
+Added extra spinning sideband diagonals for MAS spectra when the spinning frequency is set for the
+experiment.
+</li>
+<li>
+Added ability to change relaxation fudge factor in 3J HHa coupling measurement.
+</li>
+<li>
+Added the interface to launch ARIA into the Structure menu.
+</li>
+<li>
+Distance restraints may now be generated for indirect through-space experiments like Ch_hC.NOESY; in
+which case the restrained atoms are not actually observed in the experiment.
+</li>
+<li>
+Structure import records the original coordinate file name in model details.
+</li>
+</ul>
+<p>
+<h3>Changes from 2010 Aug 12 (2.1.5) to 2010 Oct 04 (2.2.0) release</h3>
+<ul>
+<li>
+Improved 3J HHa coupling extraction system:
+Added ability to change relaxation correction factor.
+The GUI now plots the measured couplings on a Karplus curve.
+</li>
+<li>
+Added graphical interfaces to control external programs:
+* PALES, MARS & MODULE2; require separate installation)
+* MECCANO; we distribute the C code but the user must compile the code (and also install GSL, the GNU Scientific Library)
+</li>
+<li>
+Added back the show struct connections for unassigned dimensionss of through-space peaks
+</li>
+<li>
+Added deletion of measurements within measurement lists; except for shifts that
+are still assigned to peaks
+</li>
+<li>
+Lots of new functionality to handle 13C double quantum experiments:
+* Added the C[DQ(CC)] experiment type
+* Spectrum windows can be made with a 13C DQ axis type: totally distinct
+  from normal 13C axis
+* Window crosshairs and marks automatically display the related DQ
+  locations
+* Assingment augmented so that the DQ components can be assigned
+  independently
+* DQ assignments contribute to chemical shifts in the proper, per
+  component manner.
+</li>
+<li>
+Added Molecule:Isotope Labelling functionality:
+* The user can setup the labelled versions of molecules that appear in an
+  experimental sample
+* Each sample can potentially be a mixuture of multiple labelling patterns
+* A labelling patern is easily created from an existing isotopomer scheme
+* Mixed scheme 'chimeric' residue patterns may be created
+* Labelling patterns may be manually adjusted; per isotopomer and per atom
+  levels
+* All previous functionality that used isotopomer schemes can now also use
+  the new patterns
+* Labelling can (if setup) be deduced automatically by virtue if an
+  experiment being in a sample
+</li>
+Added GUI for doing ARIA structure calculations:
+* Can interface with a locally installed ARIA GUI
+* Can be run remotely on CCPN Grid
+* We can give out grid service passwords on request
+* CCPN Grid is non-commercial use only (unless CNS licensed)
+</li>
+<li>
+Added a prototype relaxaion analysis module:
+* Available at python/ccpnmr/analysis/macros/RelaxationAnalysis.py
+* Plots T1 vs T2 with S2 & Tau_m lines
+* plots T1/T2 vs sequence
+* Plots T1, T2, NOE vs sequence
+* No documentation yet
+* Model free estimation of S2 will be incorporated in due course
+</li>
+<li>
+Added the ability to make distance restraints from indirect through space
+experiments:
+* For example Ch_hC.NOESY where 13C is detected by transfer is between 1H
+* Using an indirect experiment like this allows bond length errors to be
+  added to distances
+* Some experiment types for solid state are currently missing
+</li>
+<li>
+The protein backbone sequence assignment tool can now use input spectra with any
+dimension ordering (in the past the HNcoCA HNCA etc had to match).
+</li>
+<li>
+Swapping prochiral resonances for prochiral methyls will now swap both linked H
+and C (should the swap make sense with regards to experiment dimension onebond
+relationships)
+</li>
+<li>
+The geometry of all popup windows is checked to make sure that at load time the
+always appear within the screen bounds.
+</li>
+<li>
+<h3>Changes from 2010 Feb 16 (2.1.3) to 2010 Aug 12 (2.1.5) release</h3>
+<ul>
+<li>
+Added tool-tips and in-program documentation
+</li>
+<li>
+Added Bayes peak separator functionality
+</li>
+<li>
+Simplified experiment type setting using classification sub-menus and common types
+</li>
+<li>
+Print window dialog extended so that you can specify which spectra and peaks
+are drawn, independently of what is shown on the screen, and you can now
+specify the tick font and spacing, and specify the scaling in terms of
+cms or inches per unit (or unit per cms or inches) instead of in terms
+of percentage.
+</li>
+<li>
+Added HADDOCK, for macromolecular docking on remote server, to main Analysis
+Structure menu
+</li>
+<li>
+Added functionality to extract diffusion coefficients from DOSY pesudo-2D data,
+including gradient strength NMR series and Aexp(-Bx^2) fitting
+</li>
+<li>
+Added check for seq assignment system if linked spin systems go through proline or
+fall off edge of sequence
+</li>
+<li>
+Added Find Reciprocal Peaks (return peaks) button to NOE Contributions system
+</li>
+<li>
+Added concentration units for Kd calculation
+</li>
+<li>
+Added creation of co-linearity restraints to H-bond generation
+</li>
+<li>
+Added FixProchiralSwaps macro: to separate prochirals with two distinct shifts if
+they get mixed up
+</li>
+<li>
+Added sequence page-wrapping, changable fonts and greyed-out unassigned residues
+for secondary structure chart
+</li>
+<li>
+Added Show Peaks and Show Restraint funtions for violations
+</li>
+<li>
+Added "Synthetic?" column for peak list table
+</li>
+<li>
+Added whole-ensemble RMSD
+</li>
+<li>
+Editing of experiment reference dimensions & transfers simplified: A<->B rather
+than A->B, B->A
+</li>
+<li>
+Stripping peaks now done in strip axis ppm order
+</li>
+<li>
+If you display strips in a window and it is closed then it will be opened
+</li>
+</ul>
+</h3>
+<P>
+<h3>Changes from 2009 Nov 11 (2.1.2) to 2010 Feb 16 (2.1.3) release</h3>
+<ul>
+<li>
+Area selection in windows now uses stippling instead of just a rectangle.
+</li>
+<li>
+Non-contour window popups that are open are now remembered, including their
+location, when the project is saved.
+</li>
+<li>
+Added Kd calculation, which includes "binding site" concentration field.
+</li>
+<li>
+Added isotope labelling scheme and intra-residue filter to synthetic peak list
+creation
+</li>
+<li>
+Added macro (python/ccpnmr/analysis/macros/) to set B factor slots from shift
+difference lists - a hack for display purposes
+</li>
+<li>
+Fix for Cys disulphide links messing with quality reports
+</li>
+<li>
+DANGLE now has slightly faster execution
+</li>
+<li>
+Added ability to introduce callbacks for opening/closing/saving projects.
+</li>
+</ul>
+<h3>Changes from 2009 Sep 16 (2.1.0) to 2009 Nov 11 (2.1.2) release</h3>
+<ul>
+<li>
+Added info message for resonance split.
+</li>
+<li>
+Added Selected Resonances table; accessed from various parts of Analysis.
+This gives a table of just a subset of resonances, e.g. for a peak or spin system
+</li>
+<li>
+Added Resonance Info table; accessed from various parts of Analysis. Gives a table
+of a resonances shifts and the peak dims to which it is assigned. Very useful for
+finding outliers
+</li>
+<li>
+Lots of significant Analysis GUI rearrangements; button renamings, menu renamings,
+menu shuffle, menu icons...
+</li>
+<li>
+Changed Spin system typing Monte-Carlo search to proper Metropolis-Hastings and
+nested sampling
+</li>
+<li>
+Added 1.2 multiplier and 20 number of levels to edit contours
+</li>
+<li>
+When making synthetic peaks from structure, you can now specify a minimum peak
+intensity and duplicate peaks are avoided
+</li>
+<li>
+Added ability to save shift differences as shift difference lists
+</li>
+<li>
+MARS automatic backbone assignment is integrated and ready, subject to approval
+by the author
+</li>
+<li>
+When generating distance restraints you can now filter possibilities by cutting
+off large distances according to a guide structure (e.g. model or earlier ARIA run).
+</li>
+<li>
+Added positive/negative contour toggle to top of spectrum window (in Contours option)
+</li>
+<li>
+We now allow specification of shift list  and molecular system when making synthetic
+peaks from shifts; before it used what was set else where for the selected experiment.
+</li>
+<li>
+In the chemical compound table the locally available entries are now coloured
+differently
+</li>
+<li>
+Change to peak annotations where {a}[b] [c] [d] can now become {a}[b] [c] {a}[d]
+where appropriate.
+</li>
+<li>
+Fix to remove spin system type cache, which was not updated. It is now quicker anyhow.
+</li>
+<li>
+When linking sequential spin systems there is now a choice of total peak score or
+average peak score to rank the matches; total is the default.
+</li>
+<li>
+Network anchoring reworked to make it work for solid state data
+</li>
+<li>
+Crosshair is now tracked in Reference Chemical Shift Popup simulataneously with
+spectrum windows.
+</li>
+<li>
+</ul>
+<H3>Changes from 2009 Apr 06 (2.0.7) to 2009 Sep 16 (2.1.0) release</H3>
+<UL>
+<li>Big re-write of the link seq spin systems functionality (Now renamed the
+   "Protein Sequence Assignment" section). The issue with overlapping spin
+   systems has been removed (although still requires the assignment to root
+   resonances to be correct). There are now two linking scores, one based on
+   accuracy alone, and the other scaling with the number of matched peaks.
+   Tolerances for matching/weighting can now be specified for each spectrum
+   independently (this is the same as the general assignment tolerance).
+   Also, you can now match 1H and 13C strips at the same time, i.e. with with
+   a HNCO/CA/CB system and a HN(co)HA/HB system of spectra together.
+</li>
+<li>Big overhaul of the amino acid type prediction routines. The system is now
+   _much_ less forgiving of bogus shifts in a spin system, but is much more
+   precise. The system now takes account of experiment types (e.g. something
+   in HNcoCACB can only be CA/CB) and "onebond" relationships, i.e H-C pairs
+   are typed together for more indicative scores.
+</li>
+<li>Added ability to assign, set type & set tentative assignments for a pin
+   system when selecting residues in the atom browser (rather than just
+   assigning atoms for resonances)
+</li>
+<li>Closed popups will no longer be updated until reopened. This leads to
+   general speed increases across the GUI.
+</li>
+<li>Add ability to change peak position units between ppm, point & Hz in peak
+   tables
+</li>
+<li>Added option to assign all NOE peaks in the whole peak list according to
+   the shift/distance filtered assignments displayed in the NOE Contributions
+   assignment system (formerly "Link NOES")
+</li>
+<li>Added ability to display peak connections and a table of peaks from atoms
+   selected in the structure viewer. Very useful for resolving prochirals.
+</li>
+<li>Added ability to delete a single assignment contribution in the NOE
+   Contributions (formerly "Link NOES") assignment table.
+</li>
+<li>Added a new, hopefully more intuitive, way of swapping reference expt
+   dimensions, e.g. when Analysis guesses wrongly which dimension is bound to
+   which. The new table shows pairs of dims and says what the relation ship
+   between them is, and allows you to swap where appropriate.
+</li>
+<li>Added option to import data from PDB and BMRB (NMR-STAR) files directly
+   from the Project menu. This is not just for shifts and coordinates, any
+   sample information etc. relating to the database deposition will be loaded
+   too.
+</li>
+<li>Added menu option for the ECI (via Structure menu). The Entry Completion
+   Interface allows you to collect information for a joint PDB/BMRB
+   structure/NMR database deposition. The resulting  "Entry" object can be
+   used to automatically fill most of the fields in the AutoDep web form,
+   i.e. you just upload your CCPN project.
+</li>
+<li>Added fractional intensity contribution and total "NOE sum" distance to
+   the NOE Contributions (formerly "Link NOES") assignment table.
+</li>
+<li>Add backbone non-H category to assignment completeness report
+</li>
+<li>Add colouring experiment series by colour scheme
+</li>
+<li>Added ability to quickly copy NOE tolerances and NOE bins from one source
+   spectrum to another
+</li>
+<li>Added ability to have no fit function when following chemical shift and
+   peak intensity series - useful when you need to see the peak groups that
+   fail to fit
+</li>
+<li>Added en masse setting of peak details. - Very useful to mark violated NOE
+   peaks.
+</li>
+<li>Added ability to shift a whole peak list by a given amount in each dim -
+   useful for TROSY etc.
+</li>
+<li>Added ability to update peak assignments from dist restraint lists, e.g.
+   after ARIA has generated unambiguous restraints,
+</li>
+<li>Added ability to use currently selected peak for in the NOE contribution
+   assignment system
+</li>
+<li>Added assignment groups to assignment panel (peakContribs). This allows
+   you to group mutually exclusive peak assignments e.g. you can say which
+   resonance goes with which other in an ambiguous situation, and thus avoid
+   linking wrong NOE pairs etc.
+</li>
+<li>Added chart for amino acid CA and CB chemical shift
+</li>
+<li>Added RefDB (Wishart) as a source of reference chemical shift information.
+   You can now switch between BMRB & RefDb in the graphs and charts. RefDB
+   information is now used in the residue type prediction.
+</li>
+<li>Added option to clear spin system residue type in type residue prediction
+   popup
+</li>
+<li>Improved spin system typing in the automated assignment routine so it now
+   makes use of i-1 spin system information (e.g. HNcoCACB).
+</li>
+<li>Added system for the setting of tentative residue assignments via
+   Assignment Panel. This status supersedes any type-only specification, but
+   is in turn superseded by a full atomic/residue assignment.
+</li>
+<li>Added a filter to the assignment quality reports to show only the alerts,
+   i.e. the peaks & resonances you need to focus your attention on.
+</li>
+<li>Added first draft of the popup to create and administer H-bond restraints.
+   More functionality will appear in future.
+</li>
+<li>Added Models tab and RMSD graph to Structures popup. - You can now see how
+   the models differ in RMSD and how RMSD varies along the sequence.
+</li>
+<li>Added NMR Calculation Setup option (via "Other" menu), this will be used
+   increasingly in the future and is a generalisation of the system used for
+   CING setup and ARIA setup (not yet released).
+</li>
+<li>Added ability to propagate contour levels from one spectrum to others (in
+   EditSpectrum)
+</li>
+<li>Added a Python wrapper for SHIFTX, with direct CCPN object I/O. This is
+   not available via the GUI (yet) but can be accessed from
+   .../python/ccpnmr/anysis/wrappers/Shiftx.py for the more pythonic of you.
+</li>
+<li>Added ability to specify residue ranges in the atom assignment status of
+   the quality reports
+</li>
+<li>Added potential to use a sequence alignment when calculating shift
+   differences
+</li>
+<li>Added structural display of chemical shift differences
+</li>
+<li>Added ability to calculate shift differences by direct shift list
+   comparison, rather than having to have the shifts on peaks.
+</li>
+<li>We now allow use or HNCO & HNcoCA root spectra when picking & assigning
+   other spectra from root resonance locations. - In such instances only the
+   amides are used as the root.
+</li>
+<li>Enable initialisation of root resonances for 13C-HSQC spectra.
+</li>
+<li>Improved copying of peak lists so that it works with a dimension mapping,
+   i.e. dim orders do  not have to be the same for matching, but there must
+   me a mappable equivalent in whatever
+</li>
+<li>Allow violation calculations for HBond restraints
+</li>
+<li>Lots of (hopefully invisible) changes because of changes to Analysis
+   section of data model
+</li>
+<li>Copying peak assignments may now give merged assignments if two sources
+   match a single target
+</li>
+<li>Disabled Residue Information option for Windows OS until we figure out why
+   it is broken for this OS. order.
+</li>
+<li>Restriction of restraint generation to non-synthetic peak lists
+</li>
+<li>Various popup & menu name changes. - Hopefully more informative.
+</li>
+<li>Simplified the copy molecule assignments functionality to use "operations"
+   rather than "source" and "destination" chains.
+</li>
+</UL>
+<P>
+<H3>Changes from 2009 Jan 27 (2.0.6) to 2009 Apr 06 (2.0.7) release</H3>
+<UL>
+<LI>Added structure validation option to Structure menu. Calls CING remotely via the
+iCing server in Nijmegen.
+<LI>Added trial version of the Entry Completion Interface for preparing BMRB/PDB
+depositions. We will give details how to avtivate upon request.
+<LI>Increased the number of types of spectra that you can create synthetic peak lists
+for. This includes HNCO, HNCA, HNCACB, HNHA, HN_H.TOCSY, HN_H.NOESY. The rule is
+that the there must be a direct transfer between the measured experimental
+dimensions. This excludes for example HNcoCA where transfers via the CO is not
+represented by an experimental dimension.
+<LI>Added "Propagate Merit" option to the peak tables. This allows easy en masse setting
+of a peak worthiness. Good for resurrecting disgruntled ARIA peaks.
+<LI>Added calculation and display of peak line widths via peak tables (but still doesn't
+deal with overlap too well).
+<LI>In Restraints & Violations, added funtion to split a restraint list in two according
+to whether restraints are violated or not violated.
+<LI>Added "Process All" option to Link NOEs, to assign a whole peak list. Use with
+caution.
+<LI>Improved file selector, with more space, file history, navigation buttons etc.
+<LI>Added new check to Quality Reports: Warn if only one prochiral of an atom pair is
+assigned to a peak dimension if the other prochiral is very close in chemical shift.
+<LI>Synthetic peaks are now down-weighted (0.01) in the chemical shift calculation.
+<LI>Added automatic tidy of unused dataLocations when spectra are deleted.
+<LI>Added button in Edit Structures to remove residue validation parameters. (e.g.
+RMSDs).
+<LI>Added ability to focus on selected residue in Edit Structures.
+<LI>Structures are no longer selected by default in the Restraints tab. (This could be
+very slow). Updating of the restraints table now made faster, including when
+calculating structural values is enables.
+<LI>Improvements to the Nexus automatic sequence assignment: It copes better with bad
+data, and the scores in the graph are now unlikely to give spuriously high scores.
+The scores are now based on both rate of convergence and goodness of sequential
+matches.
+<LI>Display or spin system strips now takes an optional shift list setting.
+<LI>Added isotope labelling hilighting to the Assignment Graph.
+<LI>Added setting of minimum isotope fraction in Edit Assignment popup (only used with a
+labelling scheme).
+<LI>Generating peaks from Restraints improved: Was missing some hetero atom assignments
+before.
+<LI>Can now generate restraints for carbon-carbon through-space transfer experiments.
+<LI>Isotope labelling filtering of assignment options now works for resonances that have
+a residue type and atom type but no sequence number.
+<LI>Added "frequency" and "pulsing frequency" to NMR series condition types.
+<LI>Added some functionality for 1D shapes.
+<LI>Make importing Bruker spectra easier by allowing selection of proc files several
+directories up.
+<LI>Various bug fixes dealing with sampled dimensions in spectra.
+</UL>
+<P>
+<H3>Changes from 2008 Oct 17 (2.0.5) to 2009 Jan 27 (2.0.6) release</H3>
+<UL>
+<LI>Make main menu names consistent with title of popups where possible.
+<LI>Windows menu now lists the windows in an order dependent on isotopes.
+<LI>Much wider use of Greek unicode characters in the user interface.
+<LI>Disabled the ability to click and pick peaks outside the contour regions.
+<LI>Added double click to activate strip.
+<LI>Spin system popup has been split into tabs.
+<LI>Carobhydrate stereochemistries are now listed as alpha or beta.
+<LI>When setting spectrum contour colours the colours are now listed
+by hue.
+<LI>Fix loading of large (>= 2GB) spectrum data files.
+</UL>
+<P>
+<H3>Changes from 2008 Oct 14 (2.0.4) to 2008 Oct 17 (2.0.5) release</H3>
+<UL>
+<LI>Just a bug fix: loading projects didn't work.
+</UL>
+<P>
+<H3>Changes from 2007 Jul 12 (1.0.15) to 2008 Oct 14 (2.0.4) release</H3>
+<UL>
+<LI>In LinkPeakLists, 3D windows are no longer mandatory for navigating in 2Ds.
+<LI>Added ability to load PDB files for missing residues.  Ability to work with structure ensembles throughout Analysis.
+<LI>Addeded ChemicalShifts table for PostScript generation, etc.
+<LI>Added DANGLE (dihedral angle and secondary structure prediction based on chemical shifts)
+<LI>Old default CCPN macros now removed and replaced by options in assignment menu.
+<LI>Added editing of isotope labelling schemes.  Added isotope labelling schemes to restraint generation, atom browser and predicting peaks from structures.
+<LI>Re-organisation of main menus.
+<LI>Unification of popups by using tabs.
+<LI>Added the ability to display RMSD and residue validation results on a structure.
+<LI>Added the ability to setup spectrometers and instruments, with which experiments were run.
+<LI>Added Nexus, an automatic backbone assignment routine.
+<LI>Linking sequential spin systems can now use 1H-correlation spectra.
+<LI>Added user profiles.
+<LI>Negative contour levels can be set separately from positive levels now.
+<LI>Added ability to update existing distance restraints in light of new peak assignments.
+<LI>Secondary chemical shifts now use sequence-dependent adjustments.
+<LI>In violation analysis added the proportion of ensemble violated, and colour coded accordingly.
+<LI>When importing PDB structures, the PDB chain codes and sequences are preserved where possible.
+<LI>Added Greek unicode characters to atom browser.
+<LI>Added ability to work with through space peak lists other than NOESY, eg. solid state experiments.
+<LI>Format Converter threading defaults to off when launched from Analysis.
+<LI>Added ability to customise residue codes via profiles.
+<LI>Added ability to load and describe reduced dimensionality / projection spectra.
+<LI>Clicking on the structure viewer highlights the names of the selected residue.
+<LI>Analysis code re-organised into subdirectories.
+<LI>Added icons for help, close and the new popup function, clone (which makes a new popup of the same sort).
+<LI>Added ability to quickly add a sequence without having to go through all the complicated setup.
+<LI>Added residue tab to Edit Structure popup.  This displays phi/psi angles, RMSDs, validation results, etc.
+<LI>When precisely placing peaks in pseudo-3Ds, they are displayed in all visible planes.
+<LI>Spin system typing much faster now.
+<LI>Big revamp of Ramachandran plot and NOE matrix plot.
+</UL>
+<P>
+<H3>Changes from 2007 Apr 10 (1.0.14) to 2007 Jul 02 (1.0.15) release</H3>
+<UL>
+<LI>Changed spectrum shortcut keys from numbers to F keys.
+<LI>Allow Bruker and NmrPipe data to be pseudo-ND.
+<LI>Extended font setting to ScrolledMatrix and Tkinter.Frame
+<LI>Matching shifts for assignment and making restraints is now sensitive to
+the appropriate molSystem.
+<LI>Peaks with figOfMerit == 0, are no longer used in chem shift calculation.
+<LI>Added export of rates intensities and params from CalcRatesPopup.
+<LI>Added optional SEGIDs to ARIA export.
+<LI>Added ability to make peaks in arbitrary NOE spectrum from distance constraint list.
+<LI>User can now specify initial chain and mol system codes.
+<LI>Disabled unlocking of molecules until further notice.
+<LI>Added "All Residues" and "Spin Systems" to atom assignment summary.
+<LI>Added more and optional delta (to random coil) shift opts in the secondary structure
+graph popup.
+</UL>
+<P>
+<H3>Changes from 2007 Jan 22 (1.0.13) to 2007 Apr 10 (1.0.14) release</H3>
+<UL>
+<LI>Added functionality for displaying 1D spectra (but lots still needs to be
+done).  In the Window --> New Window dialog these are obtained by selecting
+the y axis to be of type 'value'.
+<LI>There is now an option to have 2-char shortcuts.  This can be selected
+in the Other -> General Options dialog (the last checkbutton option).  The
+way 2-char shortcuts work is that if there is a 1-char shortcut that matches
+the first character typed then that will be run, otherwise it will run the
+2-char shortcut when the second character is typed (if there is a matching
+one).
+<LI>There is a new way to re-reference a spectrum by aligning a peak from
+that spectrum on top of a peak from anoter spectrum.  You first select the
+peak whose spectrum you want to re-reference and then select the peak which
+it should be aligned to in the fixed spectrum.  With these two peaks selected,
+and the mouse over the fixed peak, you then choose the right mouse menu
+Peak --> Re-reference to this peak option, which brings up a dialog which
+lets you change the referencing.
+<LI>With the Window --> Print Window dialog you can now specfiy exact regions
+to print (rather than what you see on the screen).  To do this select the
+"Use override region when printing" option.
+<LI>Added ability to ambiguate prochiral resonances.
+<LI>Addition of functionality for slow exchange and Lagmuir curve fitting.
+<LI>Data Analysis --> Rates Analysis now copes with 'num delays' series.
+<LI>Allow selection of a reference plane in a pseudo-3D, which won't be used in
+fitting.
+<LI>Added option to go to the previous group when calculating rates and following
+shifts.
+<LI>User can edit initial molecular system and chain codes.
+<LI>Added first version of popup to efficiently link NOE peaks to existing resonances
+given shift and structure information.
+<LI>Changes to allow some control of which windows a spectrum is mapped into upon load.
+<LI>Added clear connections button in structure viewer. Fixed refresh after dist method
+change.
+<LI>Added 'Scrollbars' and 'Crosshair traces' options to mouse menu.
+<LI>Added z1,z2 region scrolling with middle mouse wheel plus ctrl/shift/alt.
+</UL>
+<P>
+<H3>Changes from 2006 Nov 15 (1.0.12) release to 2007 Jan 22 (1.0.13) release</H3>
+<UL>
+<LI>Allow setting of peak font and whether or not peak pointer is drawn.  This
+is specified by spectrum and can be set in the Experiment --> Edit Spectra
+dialog.
+<LI>Allow 1D slice to be drawn on crosshair.  This is specified by window
+and by spectrum.  So a slice is drawn for a spectrum if and only if slices
+are allowed to be drawn for the window and for that spectrum.  Whether a
+slice can be drawn for a window is specified in the Window --> Edit Window
+dialog (int the fourth and fifth columns of the top table), and whether it
+can be drawn for a given spectrum in that window is specified in the
+Window --> Mapped Spectra dialog (in the next to last column of the top table).
+The Tk implementation uses xor'ing to draw the slice and the OpenGL one does
+not, so the appearance is different.
+<LI>Put in check and warning for duplicate experiment names.
+<LI>Disallow having 0 maxMarks and maxRulers.
+<LI>When cloning a spectrumWindow also copy the spectrumWindowView properties.
+<LI>In 1D slices when scaling up and down, scale relative to 0, not relative
+to center of canvas.
+<LI>Make standard message dialogs center on current popup rather than center
+of screen.
+<LI>Add timestamp mechanism so that Analysis does not have to initialise
+certain information if the data was last updated by Analysis rather than
+some other program.
+<LI>Added <MouseWheel> for Windows systems.
+<LI>The upgrade mechanism should now automatically recompile C code if that
+is required.
+</UL>
+<P>
+<H3>Changes from 2006 Aug 02 (1.0.11) release to 2006 Nov 15 (1.0.12) release</H3>
+<UL>
+<LI>Updated Analysis to deal with new and forthcoming changes to the data model.
+In particular all data model packages now have top objects.  There is also a new
+package for HADDOCK projects.
+<LI>Added the ability to create stored (precalculated) contour files.  This is
+useful if disk space or speed (because of memory) is an issue.  (Before now all
+contours were calculated on-the-fly.)  This is available from the Experiment
+-> Edit Spectra dialog, with the "Contour Files" button.
+<LI>Added the ability to move peak annotations (labels).  With a peak selected,
+you press 'q' and the annotation will move to the location pointed to by the
+mouse cursor.
+<LI>Added functions and menu options for auto peak label arranging ('w' is the
+keyboard shortcut), and resetting to the default.
+<LI>Added a pointer from the peak annotation (label) to the peak center if they
+are far enough apart.
+<LI>Added 1D window slice options to the window section of the right mouse menu.
+<LI>Added a confirmation upon peak list deletion.
+<LI>When viewing constraints, added annotation '*' for fixedResonances that
+represent more than normal atoms sets (e.g. whole residue in HADDOCK)
+<LI>Added attempt to resolve prochirals (doesn't deal with ensembles yet) for
+violation estimation
+<LI>Added better quick peak annotations where there are multiple chain codes.
+<LI>Added functions to create a transpose peak list from an existing one.
+This is accessible from the Crosspeaks -> Current Peak Lists dialog.
+<LI>Spectrum window strips can now be horizontal instead of vertical (the default).
+<LI>Added intra-residue filter option in the edit assignment popup.
+<LI>Added a system macro to remove all marks and rulers - takes the 'n' key shortcut.
+<LI>Added more options for displaying nucleotides in the atom browser, so that you
+can display base and sugar atoms on separate rows.
+<LI>Added option and popup to follow shift changes, e.g. during titrations or temperature
+series.
+<LI>Added option to deassign a given dimension number of the selected peaks, in the
+Crosspeaks -> Edit Peak List dialog.
+<LI>Added option to only use assigned peaks when calculating the reference NOE intensity.
+<LI>Added option to use NOE sum or min dist for calculating the structural value for
+distance constraints, and when displaying distances on the structure viewer.
+<LI>Added propagation of experiment type to selection in top table of the Experiment ->
+Experiment Types dialog.
+<LI>Added options to create synthetic peaklists.  These include synthetic NOEs from
+a structure, a peaklist using shifts from correlated resonances (e.g. make 2D 13C-HSQC
+from higher dimensionality assignments), and a function to make a transposed peaklist
+from an existing one.
+<LI>Rates analysis can now be done using pseudo-3D data files from Azara.
+Correspondingly the experiment series dialog has been upgraded so that it can deal
+with either separate experiments per sample or with pseudo-3D experiments (where one
+dimension is sampled).
+<LI>Change to give peak dimensions for sampled data an annotation.
+<LI>Added use of ButtonScrollbar to change orthogonal view of sampled (non-frequency)
+dimensions.
+<LI>Changed default display of strip midpoints and strip numbers to on.
+<LI>Changed Window -> New Window dialog so that you can choose which spectra will be
+displayed (and appear in the toolbar) before the window opens.
+<LI>In the structure viewer there are changes to enable display of distances between
+whole atom sets rather than giving connections between every possible atom pair.
+<LI>Code migration for *Basic modules. Mostly adding findFirstObjects(), sortedObjects()
+and new package heads (top objects).
+<LI>Displaying spin system strips now works with bound resonances even if they're not in
+the same spin system. (Esp. important for N-CO)
+<LI>Obtaining NOE distances from peak intensities is now done in a generalised manner
+using an r^-6 curve (although bins still exist).
+<LI>First version of Network anchoring module. 
+<LI>Windows should pan and zoom more smoothly with the mouse
+</UL>
+<H3>Changes from 2006 Apr 10 (1.0.10) release to 2006 Aug 02 (1.0.11) release</H3>
+<UL>
+<LI>Added browsAtomsMacro - Goes in for the 'b' key as a system macro.
+<LI>Allow ambiguous peakDim anotations e.g. "(4Ala/6Ala)CA([123]/[456])" if
+there are two contribs
+<LI>Added function to find constraints given selected peaks in ConstraintBrowser.
+<LI>Added option to remove resonances from peaks after deassigning resonance in ResonanceBrowser.
+<LI>Merge botton now does Merge/Split depending on selection, in ResonanceBrowser.
+<LI>Added in NOE dist function manipulation for constraint generation including network anchoring.
+<LI>Added storage of preferred NOE intensity type by spectrum.
+<LI>Aria1.* export uses constraint serial rather than peak serial.
+<LI>Testing shift matching distance constraints now lists peaks with poor merit
+<LI>Added getNoeDistance() in ConstraintBasic to do the d = k / r^6
+<LI>Added attempt to resolve prochirals (not ensembles yet) for violation
+estimation
+<LI>CalcAmbigDistConstraints now works with 4D and higher NOESYs. Bonded dims
+no longer passed-in - now deduced from experiment type.
+<LI>Fix for loading structures with imperfect residue mappings, e.g.
+smaller -> larger num residues.
+<LI>Added atom type check (from BMRB data) when assigning resonances.
+<LI>First version of Network anchoring module. Not for anonymous assignments
+at present.
+<LI>Added options and functions to find symmetry related peaks.
+<LI>First versions of assignment report and quality control apparatus.
+<LI>Added CSI v2 file reading.
+<LI>Prochiral distance measurements now non zero.
+<LI>Changed default display of strip midpoints and numbers to on.
+<LI>Added "2 to 4 residues" option in AssignmentGraph.
+<LI>Added option to read NmrView data files (courtesy of Gary Thompson of the
+University of Leeds) and Bruker data files.
+<LI>Changed orthogonal dimension j/k shortcuts so that they work on strip
+where cursor is rather than on active one.
+<LI>Using ctrl drag middle mouse button you can now zoom into a specified
+region.
+<LI>Put extra padding of half a point in orthogonal dimensions for peak
+viewing and selection.
+<LI>Fixed bug in rates analysis error estimates (some variables were not
+being initialised to 0).
+<LI>In Rates Analysis popup add option to use bootstrap method for calculation
+of the TC error estimate (the default) or to use the previous (pre 1.0.9
+Analysis) method.
+</UL>
+<P>
+<H3>Changes from 2006 Feb 03 (1.0.9) release to 2006 Apr 10 (1.0.10) release</H3>
+<UL>
+<LI>Experiment series now use sample conditions.  This change should be
+simple but note that sample conditions essentially belong to experiments
+and persist independently of experiment series.  The condition type has
+changed from "Time" to "delay time".
+<LI>Make top module long and thin by removing Quit and Help buttons.
+<LI>Added option to clone windows in Window -> Edit Window.
+<LI>Added option to allow contour levels to be separated additively rather
+<LI>Added option to run Python script on Analysis startup, by defining
+ANALYSIS_STARTUP environment variable similar to the normal Python
+PYTHONSTARTUP environment variable.
+<LI>Added memory logging under Project menu.  (Counts Python objects which
+have not been garbage collected.)
+<LI>Move Version from Project to new Help menu.  Add About and Help to
+Help menu.
+<LI>Allow peaks to be "snapped" to local extremum (if for some reason they
+have been moved away from this local extremum).  It uses the boxWidth of
+either the peak or the spectrum (the latter can be set in the dialog
+Crosspeaks -> Peak Find Parameters) to determine how far to search, and
+the peak is moved if and only if there is exactly one extremum in that box.
+This is available either as a keyboard shortcut (P by default) or under the
+right mouse menu Peak.
+<LI>Added new option to main menu under Molecule, called Copy Chain Assignments.
+You can use this popup to either transfer or duplicate residue assignments
+between similar chains.  This popup has the option to copy on a per residue
+basis.  Also, if duplicating assignments, the peak assignments can also be
+duplicated
+<LI>In the Assignment menu added Link Seq Spin Systems.  This popup enables
+you to setup search and query spectra for matching peak positions, e.g. as
+used to do sequential C backbone assignments.  In this case potential
+sequential spin systems are displayed as strips.  A selected spin system
+can be linked sequentially, and appropriate resonances, spin system
+groupings, etc., are automatically made.
+<LI>Analysis now prints warning to the command shell if it finds proton
+resonances which are bound to more than one other resonance, according
+to atomic assignments and peak assignments, given 1-bond transfers.
+<LI>Added a macro to AssignmentMacros to initialise HNCO or HNCOCA peak
+lists in the same manner as initialiseHSQC.
+<LI>The resonance browser now sets atom type for multiply selected
+resonances.
+<LI>The constraint browser now does a violation analysis for distance and
+dihedral constraints, given a structure.  Also, there is the ability to
+jump to the peak assignment table with a single click, assuming the
+constraint is only derived from one peak.
+<LI>Added the ability to merge constraint lists, and also split constraint
+lists, according to ambiguous or unambiguous (pro-chirals don't count as
+ambiguous).
+<LI>Added the ability to display dihedral constaints on the structures.
+<LI>Increased the number of window navigation options (under the right
+mouse menu Navigate), including 3D to 2D and similar.
+<LI>Added the ability to import constraints, violations and structures
+from an Aria2 run directory.
+<LI>The EditAssignment popup resets scrollbar positions when the peak is
+changed.  The new resonance button has been created which replaces the
+option in the right-hand tables.  Added molecule system filtering option.
+Correlated dimensions option replaces bound resonances and repeated
+spin system options.  This new option uses the reference experiment
+information.
+<LI>For the peak tables (selected and whole peak list) added a button
+to put marks through selected peaks.
+<LI>Expanded the resonance browser with various navigation and marking
+options, similar to Igor Barsukov's macro.
+<LI>The LinkPeakLists popup now remembers settings (when project is
+saved).  It also allows you to specify the maximum number of marks to
+use.
+<LI>The CopyPeakAssignments popup now uses a distance threshold that
+is weighted according to isotope.
+<LI>Generally, NOE distances do now use r to the -6 averaging.
+<LI>Can now move the active strip left and right using the buttons
+at the top in the strip bar of the graphics window.
+<LI>Added mouse wheel zooming of spectra, and scrolling of tables.
+<LI>You can now calculate shift differences for unassigned resonances.
+</UL>
+<P>
+<H3>Changes from 2005 Dec 22 (1.0.8) release to 2006 Feb 03 (1.0.9) release</H3>
+<UL>
+<LI>New popup added called "link peaklists" which can be used to connect
+a root spectrum (e.g. HSQC) to other related spectra.  You can pick the
+other spectra based on the root positions, assign the root resonances
+and also assign non-root resonances for the appropriate spectra.  This
+popup replaces the pickAssignSpecFromRoot and assign3DTocsyF2NewResonances
+macros, but allows the user to link window navigation to perform these
+operations on an individual spin system basis.  Documentation for this
+is missing for now.
+<LI>API and related molecule creation bugs fixed so that storage isModified
+attribute set correctly, so that saveModified() does indeed save modified
+data.
+<LI>Changed rate constant error estimate method (to a "bootstrap" method).
+<LI>The heteronuclear NOE list generation now includes an error estimate.
+<LI>For ambiguous prochirals such as Val gamma and Leu delta the a or b
+label is consistent between the C and the H.
+<LI>Notifiers have been changed so that Analysis doesn't do as much work
+if a popup is closed.
+<LI>The "find close peaks" option now allows selection of the spectra.
+<LI>Assigning spin system sequential connectivity into loops is not
+possible now.
+<LI>Structure loading is more robust and quicker.
+<LI>Can load structures which are subsets of the chain sequence.
+<LI>You can deassign peaks from the Edit PeakList popup now.
+<LI>Macro loading can now detect functions with a space between the name
+and the left parenthesis.
+<LI>For window navigation functions, notifiers have been added for changing
+windows so they are now refreshed correctly.
+<LI>Several fixes for the "match peak" option.  (This was ignoring certain
+peak lists in certain circumstances.)
+<LI>For the "match peaks" popup, rulers are now optional.  The root
+assignment is displayed and more window options are given.
+<LI>An "options" choice has been added to the marker right mouse menu.
+<LI>The copy peak assignments popup has an option to assign only singly
+matched targets.
+</UL>
+<P>
+<H3>Changes from 2005 Oct 27 (1.0.7) release to 2005 Dec 22 (1.0.8) release</H3>
+<UL>
+<LI>Lots of bug fixes.
+<LI>Modified installation script to better allow use of OSX Framework glut.
+<LI>Added a module UserSpectrum, so that users can create new spectra.  This
+also lets you write data to the (new) data file.
+<LI>Added a new module Data Analysis -> Shift Differences.  Allows
+comparisons of pairs of shifts between peaks in two peakLists.  Useful,
+for example, for working out changes in an HSQC.
+<LI>Hand-picked peaks (using ctrl-shift) no longer have their centers
+fitted (using parabolic interpolation).
+</UL>
+<P>
+<H3>Changes from 2005 Oct 11 (1.0.6) release to 2005 Oct 27 (1.0.7) release</H3>
+<UL>
+<LI>Assignment --> Secondary Struc Chart is now available to display
+sequential and medium-range NOE information, carbon shift differences
+and secondary structure.  This will be extended to include 3JHnHa, H/D
+exchange and CSI at a later date.
+<LI>In the graphics windows, the peaks toggle frame has a new option
+at the left, "Multi-list".  If this is on (the default) then more than
+one peak list can be active in the window, otherwise only one is.
+<LI>Exp transfers are automatically being set for experiments that have
+a reference experiment.
+<LI>Random coil chemical shift values are now in the reference data
+(not visible in the GUI, of interest to programmers).
+</UL>
+<P>
+<H3>Changes from 2005 Aug 12 (1.0.5) release to 2005 Oct 11 (1.0.6) release</H3>
+<UL>
+<LI>Make Python 2.4 the version which is shipped.
+<LI>There is now a converter for NMRPipe to Azara data formats.
+The reason we need this is because NMRPipe data is not blocked
+and that makes contouring very slow.  For now the script is in
+ccpnmr1.0/python/ccpnmr/analysis and is called NmrPipeData.py.
+To run it you type "python NmrPipeData.py" and follow the
+instructions.
+<LI>Make Tk the default graphics handler instead of OpenGL (but you
+can still choose OpenGL; this is set in Other -> General Options ->
+Graphics Handler).
+<LI>Allow (most of) right-mouse menu to be accessed via keyboard.  The
+key "u" pops up the menu (the "u" can be changed by the user via the
+Macros --> Edit Macros dialog).  The "escape" key pops down the menu.
+You can navigate inside the menu using the keyboard shortcuts shown
+in the menu items.
+<LI>Add some shortcuts: 'j' for scrolling left in z1 (the first orthogonal
+dimension); 'k' for scrolling right in z1; 'i' for increasing the
+number of contours for the active spectra in a window; 'o' for
+decreasing the number of contours; 'e' for moving the contour levels
+up for the active spectra in a window; 'r' for moving the contour
+levels down.
+<LI>New CcpNmr Software Update functionality under the Project --> Upgrade menu.
+Analysis now has a new system to provide file updates between major
+releases. Most bug fixed files will be posted on a server which can be
+queried for upgrades. The upgrades can be installed only if the user has
+write permission to the CcpNmr installation directories.
+<LI>New Edit Experiment Type Popup functionality under the Experiment --> Experiment Types menu.
+This allows the user to link experiments to reference experiments and
+thus specify the class of experiment in terms of magnetistion transfer,
+atom sites, measurements etc.
+If the user has an existing project with no reference experiments
+specified then the user will be prompted to set the ref experiment
+types. Otherwise the linking of reference experiment is only prompted at
+load time, but may be altered at any time via the Experiment menu.
+<LI>Peak Selection Popup and Edit Peak List Popup changes.
+Added [Make strips] - Makes strips in a window based on the positions of
+the peaks selected in the table.
+Added [Strip locations] this will make strips in vairous windows,
+including various orthogonal options, based upon peaks selected in the
+table. This is especially useful for making strips in a 3D window based
+upon peaks in a 2D spectrum: e.g. You can sort an HSQC by residue then
+plot sequential spin systems as strips in a 3D window to look at
+sequential connectivity.
+The volume method is now listed in one of the columns.
+<LI>Edit Peak List Popup changes.
+For the peak "Status" filtering pulldown, an "Intra Spin System" option
+has been added.
+<LI>Atom Browser changes.
+You can now select a shift list so that the assignment status, as
+indicated by the darkening of atom selections, only refers to one shift
+list. There is also the option to ignore shift list info which displays
+things the same as previous versions.
+<LI>Browse Constraints Popup changes.
+You can now specify a structure to which constraint distances are
+compared to.
+<LI>Generate Constraints Popup changes.
+There is now an option to choose between two different ways of getting a
+constraint distance from an NOE peak intensity. The first, as before
+divides the peak intensity by the peak list average and looks up a
+distance class in a table. The second option "Normalised" makes a couple
+of simple of corrections before doing the distance lookup. These are:
+<UL>
+<LI>For 15N HSQC-NOESY peaks the intra residue Hn-Ha peak is
+scaled to be of average peak list intensity - i.e within the bin for 2.8
+A, and all of the other peaks for the same amide are scaled by the
+same amount.
+<LI>For all NOEs, the peak intensity is scaled by the number of protons
+represented by each of the resonances - mostly important for methyls.
+</UL>
+The primary reason for this option is CLOUDS.
+There is also a [Calculate ADCs] option which is used to generate
+non-NOE/anti-distance constraints for 2D NOESYs. This is really only for
+the CLOUDS protocol.
+<LI>Confirm Sequential Spin Systems Popup changes.
+This popup has been created in anticipation of dealing with the spin
+system connectivity information obtained from automated backbone
+assignment programs.
+<LI>Edit Spin Systems Popup changes.
+The [Display Strips] option now works on multiple spin systems selected
+from the table.
+<LI>Scrolled Matrix changes.
+The ScrolledMatrix tables can now make graphs using columns of data that
+contain strings provided there are numerals at the beginning of the
+string entries. This is especially useful for graphing residue numbers
+which are in strings of the the form '11Ala','12Glu','13Phe' etc.
+<LI>Stand Alone Application Template.
+Located at $CCPN_HOME/python/memops/editor/ApplicationTemplate.py
+this code provides a basis for creating new appilcation programs.
+It is separate from the CcpNmr applications but has the ability of
+dealing with CCPN projects (load, save, backup etc)and provides a
+basis for a menu. Also, this project launches PopupTemplate.py.
+to start this type "python -i ApplicationTemplate.py".
+<LI>Popup Template - gui examples.
+Located at $CCPN_HOME/python/editor/PopupTemplate.py this popup is a
+demonstration of many of the graphical widgets available within CCPN
+to create new applications and macros. This code definitely needs more
+explanatory code, but for now should serve as an example of how to
+use the various GUI components.
+<LI>Increase default memory for C cache from 64 to 128 megabytes.
+</UL>
+<P>
+<H3>Changes from 2005 Jun 27 (1.0.4) release to 2005 Aug 12 (1.0.5) release</H3>
+<UL>
+<LI>Make sure that at least one plane drawn in orthogonal dimensions.
+<LI>There is a new mouse mode for selecting peaks in spectrum windows: Left
+Click + Drag - This selects peaks in a given region, but the selection is
+not additive, i.e. all other peaks are deselected. The original additive
+mode is still available with Left Click + <Shift> + Drag.
+<LI>For the copy peak assignments popup the follow peaks option now works for
+possible target peaks as well as the source peaks.
+<LI>Residue and chain columns have been added for the measurements browser.
+This means that for measurements such as T1 you can plot the value against
+residue number using the graphing options.
+<LI>The macro pickAssignSpecFrom2dRoot (which is loaded by default) has been
+superseded by pickAssignSpecFromRoot which is much more flexible in terms
+of dimensionality and isotopes. The only condition for picking and
+assigning a spectrum based on the positions of peaks in the root spectrum
+is that all of the root dimensions must match different dimensions in the
+target (in terms of isotope). Thus the root can be of the same or lesser
+dimensionality. For any target dimension which doesn't match the root the
+whole spectral width is used, i.e. you can use an HSQC to pick 'columns'
+of an HQSC-NOESY. The macro is located in the module
+python/ccpnmr/analysis/macros/AssignmentBasic.py
+<LI>The active peak list for a spectrum can now also be set in
+Crosspeaks::Current Peak Lists.
+<LI>There's a bug fix for the HeteroNOE calculation popup. Changing the
+intensity type between 'height' and 'volume' now updates the intensity
+ratios in the table.
+<LI>Deassigning and reassigning some spin system residues was causing
+annotation problems. For example, sometimes a Gly residue would end up with
+two 'Haa' resonances.  This is now fixed.
+<LI>In the resonance browser the option to delete orphans works differently:
+Only shifts are deleted for resonances not connected to any peaks (of the
+current shift list). If deleting a shift results in a resonance with no
+shifts at all then the user has the option to delete the resonance too.
+<LI>When fitting functions to peak intensities, e.g. for T1 rate analysis, a
+new error is now given. This error is the error in the time constant (or
+equivalent) of the fitted function. It is separate from the fit error
+which measures the goodness-of-fit of the function to the data. The time
+constant error takes into account both the error in the peak intensities
+(defaults to spectrum noise level) and the error in the time points (set
+via experiment series). It is calculated by randomly sampling function
+fits within the errors of the data points, and thus varies slightly upon
+recalculation. Note that Analysis does not yet have the option to manually
+set peak intensity errors, but this will appear in a future version.
+<LI>PeakList cloning was not working when the destination peakList did
+not have the same spectrum as the source peakList.  This has been fixed.
+<LI>If you delete the activePeakList for a spectrum then the activePeakList
+now defaults to the last peakList for the spectrum.
+<LI>Find/Goto Peak functions now works with the active strip.
+</UL>
+<P>
+<H3>Changes from 2005 May 24 (1.0.3) release to 2005 Jun 27 (1.0.4) release</H3>
+<UL>
+<LI>Fixed parabolic fit volume so does not just return infinity.
+<LI>Allow optional -m argument at program startup, which specifies
+graphics memory usage in megabytes (default 64).
+<LI>Spectra are now drawn in inverse order (as determined by the Order column
+in Experiment -> Edit Spectra), so the lowest order ones are drawn last and
+so appear on top.
+<LI>Make "box sum" the default peak volume method (as set in
+Crosspeaks -> Peak Find Parameters), instead of "parabolic fit".
+<LI>Change orthogonal scrolling so that clicking on arrows moves either a tenth
+of the bubble size (the previous rule) or the minimum plane size (over all the
+spectra mapped onto the window), whichever is greater.
+<LI>Fix C code bug which meant freeing of cache could cause crash.
+<LI>In ccp.api.Molecule.MolResidue seqId has been removed, it has been
+replaced by serial as the key and seqCode to hold what used to be the seqId.
+<LI>Moved various funtions from Util to WindowBasic and ExperimentBasic.
+<LI>More documentation which was missing last time has been included.
+<LI>For many popups: Make sure that only active windows being considered.
+<LI>Added parent for dialogs. Was sometimes not visible otherwise for some reason.
+<LI>Bug fix for calculating shift value standard deviations for spectra with
+non-unary weightings.
+<LI>In EditAssignment dialog added 'Bound resonances' and 'Double tolerances'
+options, and added [Merge F%d Resonances] and [Show All Peaks] buttons.
+<LI>In ExperimentBasic added 'rb' flag when opening data file in isDataBigEndian(),
+because otherwise does not work on Windows platforms.
+<LI>In SpinSystemTyping enabled selection of different shift lists.
+<LI>In StructureBasic small fix for when the number of residues in chains and
+structures don't match.
+<LI>Fixed sign error bug in peak finding with diagonal exclusion.
+</UL>
+<P>
+<H3>Changes from 2005 Mar 11 (1.0.2) release to 2005 May 24 (1.0.3) release</H3>
+Peak Find additions:
+<UL>
+<LI>Added two new volume fitting methods, in addition to the existing (poor)
+"parabolic fit".  This can be chosen in Crosspeaks -> Peak Find Parameters, under
+Other parameters.  The parabolic fit is still the default, for reasons of
+backwards compatibility.  The two new methods are "box sum", which just takes
+a sum of the values inside a box centered on the peak, and "truncated box
+sum" which does the same except that it leaves out the points inside the box
+which it deems like outside the box (using the idea that if the values start to
+go up again then that is where the peak ends).  The box width is as specified in
+the Crosspeaks -> Peak Find Parameters dialogue unless the peak itself has a box
+width specified (but there is no real way of doing the latter yet).
+<LI>Added a non-interactive peak finder, in Crosspeaks -> Region Peak Find.
+This lets you specify the region (in ppm) to search in, and also lets you exclude
+specified regions (e.g. the water line) inside that.
+<LI>Added diagonal exclusion to peak finding.  In Crosspeaks -> Peak Find Parameters
+there is a new table at the bottom which lets you specify a diagonal exclusion
+region (in ppm) by isotope type (note, not by spectrum dimension).
+</UL>
+Spin System typing:
+<UL>
+<LI>Added a new popup to predict the type spin systems for a given molecular
+  system chain. This code is still in its infancy but is functional. The
+  spin system typing finds the global best match of spin sytem to residue
+  type for a given chain. The procedure uses chemical shift information
+  only and works with 1H and/or 13C. Sequence connectivity information will
+  be included in the future. The Monte-Carlo search used can take a while
+  to complete, but its progress does accelerate. This system works fairly
+  well for 1H shifts if the spin system is fairly complete. Note that
+  spurious resonances in a spin system makes things go wrong, e.g. having a
+  water shift in an ALA spin system can make it look like a THR, so make
+  sure your spin systems are 'clean'.
+<LI>There is also a module to show residue type likelihoods for individual
+  spin systems. This is accessible from the right mouse menu, the spin
+  system editor and the spin system typing popup.
+</UL>
+Spectrum Window modifications:
+<UL>
+<LI>Added right mouse menu option to go to transpose positions in windows
+  with repeated axis types.
+<LI>Added two new zoom options, to zoom in on the selected peaks and to zoom
+  to include all of the peaks corresponding to the (1st) spin system of the
+  current peak.
+<LI>Added menu option to predict spin system types.
+<LI>The order of the spectrum buttons in the top toolbar can now be set by a
+  spectrum order parameter (Edit Spectrum popup).
+<LI>The orthogonal world regions (z depths) are now set according to the
+  width of the mapped spectra.
+<LI>Fixed adding strip with right-mouse menu problem, where x regions were
+  getting confused. Centering Z planes on peak now operates on the current
+  column/strip.
+</UL>
+Calculate Hetero NOE and Rates:
+<UL>
+<LI>In the first instance peak grouping now takes peaks that carry the same
+  assignment. The reference peaks are now protected from having their
+  assignments changed by grouping.
+<LI>Het NOE: Added button to show paired  peaks. Added options to set whether
+  new peaks are picked and if matched peak pairs are to be assigned.
+<LI>Rates: Added notification for deleted peaks in the peak rate groups.
+  Added "next group" funtion for convenienvce. Allow the deletion and
+  display of peaks that are graphed (e.g. ones with bogus intensities).
+</UL>
+Other changes:
+<UL>
+<LI>The message ticker has been removed for now (it was causing problems in
+some circumstances because Tcl/Tk is not thread safe).
+<LI>In Crosspeaks -> Copy Peak Assignments:
+  First version of a popup to transfer assignments between peaks in related
+  lists.
+<LI>There is a new system for atomSetMappings. These are now much quicker to
+  create and will be automatically recreated for old projects.
+<LI>Bug fixes and improvements for spin system connectivity. Connectivity is
+  now NOT automatically set for spin systems assigned independently to
+  neighbouring residues. It is intended that sequential connectivity  is
+  set based on evidence from HNCA/HNCOCA etc. To this end sequential
+  connectivity can now also be set via the right mouse menu in the spectrum
+  windows. Assigning one of a group of sequentially connected spin systems
+  will still cause the whole group to be appropriately assigned.
+<LI>In Assignment -> Resonances:
+  Added ability to edit shift values, but only if a shift is not associated
+  with any peaks in the specified shift list. Added another column for, and
+  the ability to view, peaks that are connected to a resonance in the
+  selected shift list only.
+<LI>Shift Match Distance Constraints:
+  Spectrum NOE working chemical shift ranges are now remembered.
+<LI>Constraints:
+  Added check for repeated resonances (usually diagonal peaks) when making
+  constraints from peak lists.
+<LI>In Assignment -> Assignment Panel:
+  Added the option to remove the atom or spin system assignment of a
+  peak-linked resonance.
+</UL>
+<P>
+<H3>Changes from 2004 Dec 15 (1.0.1) release to 2005 Mar 11 (1.0.2) release</H3>
+<UL>
+<LI>The Analysis code can now be compiled without OpenGL/glut.  And
+even if the code is compiled with OpenGL/glut, the user can choose
+Tk instead of OpenGL for the graphics windows at runtime, by selecting
+the menu Other -> General Options and setting the Graphics Handler to
+Tk (this will be the only choice if Analysis has not been compiled
+with OpenGL/glut).
+<LI>There is now a simpler way of changing the project details in the
+"save as" popup.  This should mean that normally the user does not
+have to worry about the details of URLs, Storages, etc.
+<LI>EditStructurePopup now displays the structure.
+<LI>ViewStructurePopup is new, this is the popup which displays
+structures, constraints and peak connections.  This is driven from
+several parts of Analysis, for example, you can display individual
+constraints from constraint lists, peak connections from peaks in
+the selected peaks (via right mouse menu) or in a peak list.  And
+you can also display potential assignment possibilities on the
+structure.  Thus many of the other popups now have a structure
+pulldown menu.
+<LI>You can print these structures to file (in PostScript, not quite in
+Pdf yet).
+<LI>The right mouse menu on the graphics windows has been tidied up.
+Most noticeably the assignment functions have been separated from the
+peak functions.
+<LI>In EditPeakListPopup if you have a structure selected and there
+are two H dimensions for the peaks a H-H distance column will appear.
+This is useful for plotting distances versus peak intensity.
+<LI>The top part of the graphics windows now have a scrollbar so
+that all the information can be viewed even if the window is narrow.
+(It also means that when you re-open a project the window stays
+narrow if it was saved to be narrow.)
+<LI>You can copy peak lists in two different ways now, in
+EditPeakListsPopup.  One way is to clone the peaks exactly.  The
+other is to reproduce the peaks, i.e. to re-pick them using the
+peak finding algorithm.
+<LI>You can now set fonts in Analysis under Other -> Fonts.
+<LI>ScrolledMatrix tables can have a font set individually (only
+temporary, not remembered if you quit the Project and then open
+again).
+<LI>Spin system sequential connectivity (i-1, i+1, etc.) has been
+added to EditSpinSystemPopup, and to the right mouse menu.  For
+example, in the right mouse menu you can say whether the spin
+systems that relate to the peak dimensions are i, i-1, i for an
+HNCOCA experiment.  In EditSpinSystemPopup you can add spin
+systems to sequentially connected chains in the Seq. Segment
+column.  Assigning one spin system to a residue in a connected
+series will propagate the assignments to the rest if compatible.
+<LI>In BrowseConstraintsPopup there is a button called Setup
+Resonances, which can be used to generate resonances that you
+can assign to from an imported constraint list which doesn't link
+to any known resonances.
+<LI>In the python/ccpnmr/analysis directory there is now a macros
+subdirectory.  This is a new home for Analysis macros.  To start
+off with this contains AssignmentMacros.py, TutorialMacros.py
+(which was used in the teaching course -- these macros will be
+fully documented on the website soon) and, courtesy of Magnus
+Helgstrand, CopyAssMacro.py which transfers assignments between
+separate peak lists.
+<LI>The documentation has not quite kept up with all these
+changes.
+</UL>
+<H3>Changes from 2004 Nov 23 (last 1.0 beta) release to 2004 Dec 15 (first 1.0) release</H3>
+<UL>
+<LI>Fixed bug when printing windows (to PostScript or PDF) which
+meant contours were often coming out in wrong location and with wrong
+aspect ratio.  Also added some code which means that strip plot
+windows will print out correctly in PostScript now (not in PDF
+because of clipping, which is still to be implemented).  Also PDF
+now does black and white (as opposed to colour) output.  (But
+possibly still some problems with PDF in landscape mode.)
+<LI>Can now make intra-molecule disulphide links when you make a
+molecule.
+<LI>ResidueInfoPopup now displays a 3D picture of the residue
+(with idealised coordinates), as does EditSmallMoleculePopup.
+<LI>The Assignment panel has an extra option to restrict resonance
+possibilities to those which are in repeated residues or spin
+systems, e.g. useful when assigning HSQCs.
+<LI>Bizarre system-specified colors for popups have been defaulted
+to grey.
+<LI>Merge resonances is fixed (shifts were not merged previously).
+<LI>The help buttons now have documentation.
+<LI>Copy peak lists now much quicker and just clones the list.
+<LI>Atom browser assignment status is now much more robust.
+HB*, etc., will only be assigned if stereospecific options are
+assigned.
+<LI>Deleting a color deletes similarly named color scheme.
+<LI>Fixed the DNA/RNA three letter codes for odd phosphorylation
+states.
+<LI>When you make a distance constraint list it does not automatically
+display the constraints any more since this might take a long time.
+Viewing of tables of constraints is much much (an order of magnitude)
+faster.
+<LI>When editing entries in a table the focus does not disappear when
+the cursor leaves that field (although the cursor must remain on the
+table).
+<LI>Unaliasing a peak now checks to see if the new position is inside
+the current spectrum bounds and if not the user may extend the bounds
+of the spectrum.
+<LI>Bugs in setting the sequence of chain fragments (in molecular
+systems) are fixed.
+<LI>Reference chemical shift distributions now have reversed ppm axis.
+<LI>Deleting a window axis does not delete entire window now.
+<LI>When generating distance constraints the user is warned of any
+peaks which do not have an intensity.
+<LI>Importing and matching structures to existing chains works better.
+<LI>Graphical windows now have a help button (in top right corner).
+</UL>
+<H3>Changes from 2004 Oct 20 release to 2004 Nov 23 release</H3>
+<UL>
+<LI>Lots of documentation has been added.  It is in the doc
+sub-directory of analysis.
+<LI>First release with strip plots in properly.  In right-mouse menu
+there is strip option to add and remove strips in a window and to move
+strips between windows.  Also there is a toggle at the top of the
+graphics windows to control the active strip (for orthogonal dimension
+scrolling) and to add and remove strips.  The active strip is the one
+for which "goto position" works.
+<LI>In right-mouse menu in peaks option there is a new match peak 
+groups function.  This operates on the currently selected peaks and
+will try to match other groups of peaks in a specified spectrum and
+dimension.  For example, you can use this to find candidates for the
+sequence neighbours of a residue from noesy peaks, etc.
+<LI>Scrolled graph, which for example is used to view BMRB chemical
+shift distributions, is undergoing a re-write.  Currently this means
+that the global coordinates are displayed for the cursor position,
+and a crosshair is drawn.
+<LI>In EditPeaksPopup and SelectedPeaksPopup the follow peaks option
+(which was a mode) has been changed to a button.
+<LI>There is now an option to extend contour tiling to cover
+unaliased peaks, i.e. the minAliasedFreq and maxAliasedFreq for a
+spectrum are adjusted automatically (on startup and when you
+create/move a peak) to be large enough to include all
+'real resonance'/unaliased peak positions.
+This option is set to ON by default, but you can switch it OFF in
+Main Menu::Other::General Options
+Also the minAliasedFreq and maxAliasedFreq for a spectrum may
+still be manually set via
+Main Menu::Experiment::Edit Spectra.[Referencing]
+</UL>
+<P>
+<H3>Changes from 2004 Oct 08 release to 2004 Oct 20 release</H3>
+<UL>
+<LI>Put horizontal and vertical separators back in.  These allow
+multiple views on a window and will hopefully be used for strip
+plots (so different than the current awkward system).
+<LI>Allow propagate peak assignments to be spread across peaks
+from different spectra.  Uses isotopes as the key.
+<LI>Shift match distance constraints has had bug fixes and the
+chemical shift ranges are now set for each dimension.
+<LI>Various window wobbling problems have been fixed.
+<LI>New right mouse menu option Peak -> Propagate peak's unaliasing
+which will give selected peaks the same unaliasing as the
+current peak (under the mouse).
+</UL>
+<P>
+<H3>Changes from 2004 Aug 26 release to 2004 Oct 08 release</H3>
+<UL>
+<LI>Rename xml files when saving project as extra backup.
+<LI>Add box in graphics windows showing fundamental region of
+spectra.
+<LI>In some ScrolledMatrix tables, for example, the Peak List
+Editor, you can now select multiple rows, using shift key for
+extending for ctrl key for toggling.
+<LI>In ScrolledMatrix tables, sorting has been changed for strings
+with numbers at the start, e.g. 1A comes before 10.
+<LI>You can now open multiple spectra at once.
+<LI>If verification dialogs skipped when opening spectra then the
+endianess of the data is guessed.
+<LI>Experiments have links to molecular systems, and this is
+automatically set when a peak within an experiment is assigned
+to a particular molecular system.
+<LI>The molecular system setup has been changed to display chain
+fragments and to make chains based upon molecule templates.  These
+templates are created and modified in a separate popup,
+Molecule -> Molecule Templates.  The latter lets you create templates
+by incorporating stretches of polymer and other small molecules.
+Provision to link these together will be added in future.
+This popup also displays derived information for the molecule, e.g.
+molecular mass and empirical formula.  For a molecule template
+without a chain you can change the amino acid type and protonation
+state of the residues.
+<LI>The atom browser has colouring according to the chemical
+element.  Options have been added to remove all assignments from
+a particular atom mapping (the resonances themselves still exist).
+There is an option to show the peaks involved in a particular
+assignment.
+<LI>The edit assignment popup (Assignment -> Assignment Panel)
+has an option to display resonance possibilities plus or minus
+N spectral widths away if you think the peak might be aliased.
+Assigning to such resonances is visible by colours and will
+automatically cause the peak dimension to be unaliased (with
+warning).  The option to create a new resonance has been coloured
+green.
+<LI>Rates analysis has been tested and fixed.
+<LI>Shift-matched distance constraints now has an option to test
+shift match before committing to generating the constraints.
+This test indicates which peaks fail to match for various reasons.
+<LI>In the graphics windows, the scrolling of the top widgets has
+been restricted to the part showing the spectra, peak lists, etc.
+"Goto position" replaces "goto orthogonal".  This now gives more
+options as you now need only one equivalent dimension in target
+window.
+<LI>There was a speed-up for loading projects associated with peak
+annotations.
+<LI>There is now a ticker message in the top-level popup giving
+some information.
+<LI>Prochiral methyls now have the non-stereospecific options
+available.  Backwards compatibility is an issue, atom set mappings
+will need to be remade, instructions can be given upon request.
+</UL>
+<P>
+<H3>Changes from 2004 Aug 13 release to 2004 Aug 26 release</H3>
+<UL>
+<LI>Clouds options now available under Other menu: so far
+'Relaxation Matrix Optimisation', 'Proton Molecular Dynamics' and
+'Filter Clouds'.
+<LI>In ScrolledMatrix (table) widgets can now use arrow keys and
+Home, End, PageUp and PageDown keys to navigate.
+<LI>In resonance browser can now view resonances with isotope code
+unknown.
+</UL>
+<P>
+<H3>Changes from 2004 Aug 10 release to 2004 Aug 13 release</H3>
+<UL>
+<LI>FormatConverter changed so that now does not change stdout,
+so should work properly embedded inside Analysis.
+<LI>Modified peak volume calculation (but still not great).
+<LI>Add Recalculate Intensities button in the EditPeakListPopup
+and SelectPeakPopup dialogs.
+</UL>
+<P>
+<H3>Changes from 2004 Jul 02 release to 2004 Aug 10 release</H3>
+<UL>
+<LI>Added 'depth' cueing for peaks, so that peaks get lighter the
+further they are from the cental plane.
+<LI>Aliased peaks are now drawn with dashed rather than solid
+lines.
+<LI>Added Version onto Project menu, so can find program version
+from graphical interface (it's also mentioned at start-up).
+<LI>Added Strip Group functionality (still basic).
+<LI>There is now provision for multiple shift lists.  When you
+open a spectrum, or edit an experiment, you can specify shift list.
+<LI>The ability to make covalent links has been removed for now.
+<LI>Rates analysis to measure T1, T2, etc., has been added.  This
+includes grouping of peaks in different spectra and various fitting
+functions (linear, log-linear, nonlinear).
+<LI>In Data analysis -> Measurements you can now recalculate shift
+values.
+<LI>The import of Felix data had a bug which swapped refpt and
+refppm and got the latter in the wrong units (Hz instead of ppm).
+<LI>In the right-mouse menu for Peak there is now 'Make intermediate
+peak' which puts a peak at the average of a group of peaks.
+<LI>In the right-mouse menu for Peak the option 'Find close peaks'
+now sorts by delta.
+<LI>Moved to NmrConstraints package (new in data model) so that
+constraints are now stored in separate XML file.
+<LI>Added getCurrentWindowPopup() to argServer (for macros).
+</UL>
+<P>
+<H3>Changes from 2004 Jun 23 release to 2004 Jul 02 release</H3>
+<UL>
+<LI>The location of the dialog popups is now remembered in between
+runs.  (Up to now only the graphics windows had their screen locations
+remembered.)
+<LI>In scrolled matrices (tables) any two numerical columns can be
+plotted one against the other.  This is accessible from the right
+mouse menu.
+<LI>Scrolled matrices (tables) can be output in PostScript.
+This is accessible from the right mouse menu.
+<LI>A macro submenu has been added to the right mouse menu.  Macros
+can be added to this submenu via the Macros -> Edit Macros dialog.
+Any macros that are run can make use of the cursor position, closest
+peak, etc, via new argServer functions:  getCurrentPeak(),
+getCurrentWindow(), getCurrentSpectra(), getCurrentPeakLists(),
+getCurrentPosition().
+<LI>If a macro fails to load the real Python error is now passed
+forward so that you can see exactly where anything may be wrong
+in the code. Also macros that are invalid/broken can now be removed
+easily from the project.
+<LI>Spectrum data dimension chemical shift weighting has been added
+which may be useful if you have a spectrum with broad/imprecise
+peaks that you don't want to infulence shift vaules, or if you're
+automatically assigning a NOESY and you don't want any guessed peaks
+to have an effect.  The weights can be set in Experiment -->
+Edit Spectra using the Tolerances dialog.
+<LI>Assigning directly to ambigous mappings is now functional
+(this necessarily involes the addition of an extra resonance to a
+peakDim).  If non-sterospecific pair of resonances exist and one
+is susequently assigned stereospecifically then the other in the
+pair becomes the other sterospecific option. E.g. for Hba, Hbb
+when Hba changes to Hb3, Hbb automatically becomes Hb2.  If you
+assign a resonance to atom type only then any existing or
+subsequent spin system assignment will cause the resonance to
+be fully assigned if the atom type is appropriate for the residue.
+For prochiral pairs the 'a' label is always the upfield resonance.
+This adjusts automatically according to the existance and position
+of the other resonance.
+</UL>
+<P>
+<H3>Changes from 2004 Jun 05 release to 2004 Jun 23 release</H3>
+<UL>
+<LI>Added popup to set the NOE->constraint distance mapping classes.
+Stored on a per spectrum basis.
+<LI>Added ability to calculate distance conatrants from the assigned
+peaks of an NOE peak list.
+<LI>Added popup to generate potentially ambiguous distance constraints
+for incompletely assigned NOE peaks by chemical shift matching.  With
+provision for peak aliasing, selection of particular molecules and
+chemical shift ranges.  Similar to AZARA connect.
+<LI>Spectrum windows: added, to the right-mouse menu, a function to
+center the orthogonal, z planes of a window on a given peak, so that
+it is in the middle of the depth selection.
+<LI>Added global option to display molecular system information on
+peak annotations and also resonance naming (gui only, not
+resonance.name).
+<LI>Added a funtion in MoleculeBasic to move a molecular chain between
+different molsystems. Note that this funtion is highly illegal because
+it uses mergeObjects(), which bypasses the API. Use at your own risk.
+However, the function may prove useful if the initial mol system set-up
+was wrong for an advanced project.
+<LI>Added functions to find/identify covalently bound resonances.
+<LI>Better handling of anonymous amino acid X - now used for all
+unresolvable three- and one-letter codes.
+<LI>Copy polymer function added to EditMolSystemsPopup - useful for
+homooligomers.
+<LI>Can now assign resonances to atom type only via atom browser.
+<LI>Constraint list browser now views/manipulates individual
+ambiguous items.  Also, just as a stop-gap, lists can be exported
+to ARIA .tbl files.
+<LI>Added new assignment macros, which are included by default in
+new projects: pickAssignSpecFrom2dRoot will pick peaks in 3d spectra
+according to a picked 2d root and assign these peaks to the same
+resonances and spin systems. assign3dTocsyF2NewResonances assigns
+new resonances to the F2 dimensions of 3d TOCSY peaks.
+<LI>Added provision for setting aromatic ring resonance equivalency
+globally at chain creation time, and on an individual residue basis
+via BrowseAtomsPopup.
+</UL>
+<P>
+<H3>Changes from 2004 May 25 release to 2004 Jun 05 release</H3>
+<UL>
+<LI>Fixed it so that quitting before having saved new project brings
+up same dialogue as "save as" (otherwise the API complained about
+directories not existing).
+<LI>Added some explicit OpenGL flushing (seems to be done implicitly
+by Mesa but not by some other OpenGL implementations).
+<LI>Rearranged initialisation of OpenGL so that Mac OSX version does
+not crash when drawing graphical windows.
+<LI>Added NOE Matrix display (under Assignment menu).
+</UL>
+<P>
+<H3>Changes from 2004 Mar 26 release to 2004 May 25 release</H3>
+<UL>
+<LI>Added merit score for peaks (entered by hand currently).
+<LI>Allow minimal annotation for peaks (to reduce screen clutter).
+<LI>Graphics windows now have toggling peak lists.
+</UL>
+<P>
+<H3>Changes from 2004 Feb 26 release to 2004 Mar 26 release</H3>
+<UL>
+<LI>Added message at start-up giving release information.
+<LI>Fixed bug which meant that the C initialisation for peak lists
+was not always happening.
+<LI>Removed mouse modes.  Now to find peaks in a region you need to
+hold shift and ctrl key down while dragging cursor.
+<LI>Removed general options from main dialog and put in its own
+dialog under Other --> General Options.
+<LI>Changed temporary license expiry date from 31 March 2004 to
+31 December 2004.
+<LI>Added ability to specify center of xy region by double clicking
+on coordinates label in top frame of graphical windows.
+<LI>In Data Analysis menu there is a Calculate Hetero NOE option
+which pops up a dialog which allows you to make a heteronuclear
+NOE list which then appears as a measurement list.
+<LI>In the right mouse click Peak submenu there is now ability to
+find close peaks.
+<LI>Added Experiment Series module under Experiment menu, which allows
+series of experiments to be set up for which some parameter varies.
+</UL>
+<P>
+<H3>Changes from 2004 Jan 30 release to 2004 Feb 26 release</H3>
+<UL>
+<LI>Added check on byte order when loading spectra.
+<LI>Incorporated spectrum menu into experiment menu and added various
+experiment dialogs: ability to edit and view experiments and experimental
+parameters, to view measurement lists and measurements.
+<LI>Experiments can change shift lists.
+<LI>On right mouse click the assign menu has become the peak menu, and
+within the peak menu have ability to clear peak assignments, add the
+assigned resonances to a particular spin system, and peaks can be
+unaliased.
+<LI>There is a new Residue Information popup on the molecules menu,
+which gives the sequential context of different residue types and
+their assignment status.
+<LI>In the Peak Draw Parameters popup (on the peaks menu) you can now
+change the annotation used when drawing peaks.
+</UL>
+<P>
+<H3>Changes from 2004 Jan 15 release to 2004 Jan 30 release</H3>
+<UL>
+<LI>Upgrade to Mesa 6.0 from Mesa 4.0.
+</UL>
+<P>
+<H3>Changes from 2003 Dec 05 release to 2004 Jan 15 release</H3>
+<UL>
+<LI>Added panning with up/down/left/right arrow keys.
+<LI>Added auto-backup facility.
+<LI>Fixed bug which caused PS/PDF output not to finish.
+<LI>Allowed 'params' as keyword in Azara par files (value just ignored).
+<LI>Added peak drawing size options (the default being uniform number of
+pixels).
+<LI>Propagate appropriate assignments across selected peaks.
+<LI>Some more options on right mouse menu (e.g. goto orthogonal plane).
+<LI>Peak and resonance annotations carry spin system information where
+appropriate.
+<LI>Reference chemical shifts now show multiple distributions per residue
+type.
+<LI>Fixed mutex locking bug which meant that window froze after awhile.
+<LI>Fixed scrollbar and tick sizing bug which meant that on start-up
+window had to be at least a certain size.
+</UL>
+<P>
+<H3>Changes from 2003 Nov 14 release to 2003 Dec 05 release</H3>
+<UL>
+<LI>Various bug fixes.
+</UL>
+<P>
+<H3>Changes from 2003 Oct 23 release to 2003 Nov 14 release</H3>
+<UL>
+<LI>Fixed bug which meant that window peak list symbols and
+annotation were not being turned on and off correctly.
+<LI>Improved speed of the loading up of projects (most noticeable for
+projects with lots of peaks).
+<LI>Added Structure to top-level menu.  Allows import of PDB files.
+Can view coordinates (as text).  Used to show distances in assignment
+procedure.
+<LI>Assignment procedures modified, e.g. you can now choose possibilities
+for all the dimensions at once.
+<LI>There is now reference chemical shift data (sourced from the BMRB)
+viewable under the Molecules menu.
+</UL>
+<P>
+<H3>Changes from 2003 Sep 26 release to 2003 Oct 23 release</H3>
+<UL>
+<LI>Fix minor bugs in EditPeakPopup.
+<LI>Fix aliasing bug in PeakBasic and WindowDraw (points start at 1,
+not 0).
+<LI>Switch middle mouse zoom behaviour so that up is now in and down out.
+<LI>Fix bug in PrintWindow which meant that contours were not coming
+out in the correct location in hardcopy output.
+</UL>
+<P>
+<H3>Changes from 2003 Sep 11 release to 2003 Sep 26 release</H3>
+<UL>
+<LI>Re-work atom browser dialog.
+<LI>Add General Editor option on Other menu, which allows a generic
+visual editing of API objects.
+</UL>
+<P>
+<H3>Changes from 2003 Sep 05 release to 2003 Sep 11 release</H3>
+<UL>
+<LI>When opening spectrum for which a new window is created, instead of
+creating orthogonal dimensions to be a tenth of the world region, make
+them one plane at the midpoint of the spectrum, and when a new window
+is created using NewWindowPopup make orthogonal dimensions a hundredth
+instead of a tenth of the world region.
+<LI>Add X11 flags into C makefiles (in case not on system path).
+<LI>Change OpenSpectrumPopup dialog so that no longer have "as left"
+experiment option.  Either type name in by hand or choose name from
+existing experiments.
+<LI>Fix UCSF reader to use correct bytes for determining nucleus. 
+<LI>Add diagonal in spectrum windows with equal x, y axis types.
+</UL>
+</p>
+
+</body>
+</html>

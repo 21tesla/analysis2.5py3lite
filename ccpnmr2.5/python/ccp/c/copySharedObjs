@@ -1,0 +1,5 @@
+rm -f *.pyd
+cp ..\\..\\..\\c\\ccp\\structure\\StructAtom.pyd StructAtom.pyd
+cp ..\\..\\..\\c\\ccp\\structure\\StructBond.pyd StructBond.pyd
+cp ..\\..\\..\\c\\ccp\\structure\\StructStructure.pyd StructStructure.pyd
+cp ..\\..\\..\\c\\ccp\\structure\\StructUtil.pyd StructUtil.pyd

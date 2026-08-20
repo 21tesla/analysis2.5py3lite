@@ -1,0 +1,12 @@
+- Add 'logout' link to 'auth/logout' in title bar when in convert/ section
+
+- Make 'auth/login' and 'auth/new' nice pages
+
+- Create main index page
+
+- Add persistent formatConverter object, per session. Do this via sessionMap
+
+- Can currently log in user 'test' and 'test2' (via 2 tabs), both are accessing same session.
+  If test logs out, test2 is also out. Need to make session specific!
+  Need to use different SESSION_KEY?
+  

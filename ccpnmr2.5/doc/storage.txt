@@ -1,0 +1,78 @@
+Storage handling
+
+The CCPN data model is split into packages that hold different kinds of data.
+The data for each package can be stored separately in one or more files (or
+other data sources). The Implementation package must always be loaded first. It
+contains only the Project object and bookkeeping information, including the
+URLs and paths that describe where all other data files are located. 
+
+There will eventually be two API versions. The current version allows data to
+be kept in a mixture of local and remote XML files, databases, etc., and loads
+and stores data one file at a time. The database version (not yet implemented
+Jan. 2004), will rely on having all data inside a single local database. Both
+versions will automatically load data as they are needed, i.e. when you access
+or create an object.
+
+The multi-file API version.
+
+At any given time you are working with only one project, and the data you are
+working on forms a tree of objects rooted in that project. The project is
+linked to a number of Storages, that each contains information about where to
+find the data corresponding to a given package. The Project itself actst as its
+own Storage. The location is described by information contained within the
+Storage, together with information contained within a Url object; URL objects
+can be shared between several Storages. For most packages there is only one
+file, and one storage object, to hold all the data. A few 'contentStored'
+packages (ChemComp, Coordinate, NmrReference) have their data distributed over
+several files - in the case of Coordinates there is one file for each
+structure. This makes it possible to keep track of large number of structures
+without having to load them all into memory at once.
+
+Except for the project you never need to load data explicitly. When you access
+an object, or create a new object, the API will check whether the relevant
+package is loaded, and will load it if it is not there. Loading is triggered
+either by following a link to an object or by creating a new object. Links
+between objects in different packages are only stored on one side of the link as
+long as the data file is on disk. When a data file is read the links will be set
+up from information kept in the file, and the operation will trigger loading of
+the package containing the object on the other side of the link, if it is not in
+memory already. The same can happen in the process of accessing a link at
+runtime, whether the link is derived or not. For ContentStored packages there is
+a HeadObject for each file that holds information allowing the program to find
+the file that contains e.g. ALA, as oposed to ARG.
+
+Seen from the Project there is no difference between reference data (such as
+ChemComps and Nuclei) and other kinds of data - all data are included within the
+Project. In practice this does not mean that you have to duplicate your
+reference data. Many projects belonging to different people can share a single
+set of reference data files simply by all reading their data from those files.
+Of course you had better not modify reference data if other people are also
+using them.
+
+The Storages holds some bookkeeping information about the data they point to.
+When a project is first created, a Storage is automatically created for each
+non-ContentStored package. The storage has a default file path, and is marked as
+'isLoaded==True' (which means all known data are in memory),
+'isStored==False' (which means that there is no version of the data on disk),
+'isModified==False' (which means that the data have not been modified so there is
+no need to store them. These three attributes are used by the implementation and
+can not be changed directly by the user. There is also an 'isModifiable'
+attribute that can be set by the user.As long as 'isModifiable==False' any
+attempt to modify the data in a package will cause an error.
+When you load an existing project, the Storages will have 'isLoaded==False'. As
+they get loaded into memory they will be changed to is 'isLoaded==True'. When
+the data belonging to a Storage are modified 'isModified' will be set to 'True'.
+'isStored' will remain unchanged until the data are saved. At this point it is
+set to True. 
+
+Each storage has loadand save functions that will trigger explicit loads and
+saves. The Project has two special save functions. saveModified will go over all
+Storages (including the Project itself) and save everything that has been
+modified. saveAll will save everything that is modifiable and loaded, whether it
+has been modified or not. Each Storage further has two functions to change the
+behaviour of the save functions. the 'touch' function will set a Storage to
+isModified, so it will be saved at the next saveModified command - if isLoaded
+or isModifiable is False, touvh will trigger an error. Finally the setToStored
+function will set isStored to True. This is for cases where you create a
+Stoerage that corersponds to an existing file and want the program to load it
+even though it has never been stored from teh Project.

@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit time="Wed Jul 20 11:40:36 2005" release="1.0.204" 
+ packageName="ccp.MolSystem" root="test" originator="CCPN Python XmlIO">
+ 
+<MolSystem _ID="_1" code="myMolecularSystemCode">
+  <name>My molecular system name</name>
+  <Chain _ID="_2">
+    <code>A</code>
+    <pdbOneLetterCode> </pdbOneLetterCode>
+    <molecule>
+      <key1 tag="name">myMoleculeName</key1>
+    </molecule>
+    <ChainFragment _ID="_3" serial="1" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_4"/>
+    </ChainFragment>
+    <ChainFragment _ID="_5" serial="2" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_6"/>
+    </ChainFragment>
+    <ChainFragment _ID="_7" serial="3" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_8"/>
+    </ChainFragment>
+    <ChainFragment _ID="_9" serial="4" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_10"/>
+    </ChainFragment>
+    <ChainFragment _ID="_11" serial="5" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_12"/>
+    </ChainFragment>
+    <ChainFragment _ID="_13" serial="6" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_14"/>
+    </ChainFragment>
+    <ChainFragment _ID="_15" serial="7" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_16"/>
+    </ChainFragment>
+    <ChainFragment _ID="_17" serial="8" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_18"/>
+    </ChainFragment>
+    <ChainFragment _ID="_19" serial="9" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_20"/>
+    </ChainFragment>
+    <Residue _ID="_10" seqId="1" seqCode="0" linking="start" chainFragment="_9">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:H3</descriptor>
+      <Atom _ID="_21" name="C">
+      </Atom>
+      <Atom _ID="_22" name="H2">
+      </Atom>
+      <Atom _ID="_23" name="H3">
+      </Atom>
+      <Atom _ID="_24" name="CA">
+      </Atom>
+      <Atom _ID="_25" name="H1">
+      </Atom>
+      <Atom _ID="_26" name="O">
+      </Atom>
+      <Atom _ID="_27" name="N">
+      </Atom>
+      <Atom _ID="_28" name="CB">
+      </Atom>
+      <Atom _ID="_29" name="HA">
+      </Atom>
+      <Atom _ID="_30" name="HB1">
+      </Atom>
+      <Atom _ID="_31" name="HB3">
+      </Atom>
+      <Atom _ID="_32" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_12" seqId="2" seqCode="1" linking="middle" chainFragment="_11">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_33" name="C">
+      </Atom>
+      <Atom _ID="_34" name="H">
+      </Atom>
+      <Atom _ID="_35" name="HA2">
+      </Atom>
+      <Atom _ID="_36" name="HA3">
+      </Atom>
+      <Atom _ID="_37" name="CA">
+      </Atom>
+      <Atom _ID="_38" name="O">
+      </Atom>
+      <Atom _ID="_39" name="N">
+      </Atom>
+    </Residue>
+    <Residue _ID="_18" seqId="3" seqCode="2" linking="middle" chainFragment="_17">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HH</descriptor>
+      <Atom _ID="_40" name="C">
+      </Atom>
+      <Atom _ID="_41" name="CD2">
+      </Atom>
+      <Atom _ID="_42" name="H">
+      </Atom>
+      <Atom _ID="_43" name="CA">
+      </Atom>
+      <Atom _ID="_44" name="CG">
+      </Atom>
+      <Atom _ID="_45" name="O">
+      </Atom>
+      <Atom _ID="_46" name="N">
+      </Atom>
+      <Atom _ID="_47" name="HH">
+      </Atom>
+      <Atom _ID="_48" name="CE2">
+      </Atom>
+      <Atom _ID="_49" name="CE1">
+      </Atom>
+      <Atom _ID="_50" name="HA">
+      </Atom>
+      <Atom _ID="_51" name="HE1">
+      </Atom>
+      <Atom _ID="_52" name="CD1">
+      </Atom>
+      <Atom _ID="_53" name="HD1">
+      </Atom>
+      <Atom _ID="_54" name="HE2">
+      </Atom>
+      <Atom _ID="_55" name="OH">
+      </Atom>
+      <Atom _ID="_56" name="CZ">
+      </Atom>
+      <Atom _ID="_57" name="HD2">
+      </Atom>
+      <Atom _ID="_58" name="CB">
+      </Atom>
+      <Atom _ID="_59" name="HB3">
+      </Atom>
+      <Atom _ID="_60" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_4" seqId="4" seqCode="3" linking="middle" chainFragment="_3">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>deprot:HE2</descriptor>
+      <Atom _ID="_61" name="C">
+      </Atom>
+      <Atom _ID="_62" name="H">
+      </Atom>
+      <Atom _ID="_63" name="CA">
+      </Atom>
+      <Atom _ID="_64" name="HG2">
+      </Atom>
+      <Atom _ID="_65" name="HG3">
+      </Atom>
+      <Atom _ID="_66" name="O">
+      </Atom>
+      <Atom _ID="_67" name="CD">
+      </Atom>
+      <Atom _ID="_68" name="N">
+      </Atom>
+      <Atom _ID="_69" name="CB">
+      </Atom>
+      <Atom _ID="_70" name="CG">
+      </Atom>
+      <Atom _ID="_71" name="HA">
+      </Atom>
+      <Atom _ID="_72" name="OE2">
+      </Atom>
+      <Atom _ID="_73" name="OE1">
+      </Atom>
+      <Atom _ID="_74" name="HB3">
+      </Atom>
+      <Atom _ID="_75" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_8" seqId="5" seqCode="4" linking="middle" chainFragment="_7">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_76" name="C">
+      </Atom>
+      <Atom _ID="_77" name="HD22">
+      </Atom>
+      <Atom _ID="_78" name="HD23">
+      </Atom>
+      <Atom _ID="_79" name="HD21">
+      </Atom>
+      <Atom _ID="_80" name="H">
+      </Atom>
+      <Atom _ID="_81" name="CA">
+      </Atom>
+      <Atom _ID="_82" name="CG">
+      </Atom>
+      <Atom _ID="_83" name="O">
+      </Atom>
+      <Atom _ID="_84" name="N">
+      </Atom>
+      <Atom _ID="_85" name="CD1">
+      </Atom>
+      <Atom _ID="_86" name="CD2">
+      </Atom>
+      <Atom _ID="_87" name="HD13">
+      </Atom>
+      <Atom _ID="_88" name="HD12">
+      </Atom>
+      <Atom _ID="_89" name="HD11">
+      </Atom>
+      <Atom _ID="_90" name="HA">
+      </Atom>
+      <Atom _ID="_91" name="HG">
+      </Atom>
+      <Atom _ID="_92" name="CB">
+      </Atom>
+      <Atom _ID="_93" name="HB3">
+      </Atom>
+      <Atom _ID="_94" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_20" seqId="6" seqCode="5" linking="middle" chainFragment="_19">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_95" name="C">
+      </Atom>
+      <Atom _ID="_96" name="H">
+      </Atom>
+      <Atom _ID="_97" name="HA2">
+      </Atom>
+      <Atom _ID="_98" name="HA3">
+      </Atom>
+      <Atom _ID="_99" name="CA">
+      </Atom>
+      <Atom _ID="_100" name="O">
+      </Atom>
+      <Atom _ID="_101" name="N">
+      </Atom>
+    </Residue>
+    <Residue _ID="_14" seqId="7" seqCode="6" linking="middle" chainFragment="_13">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HG</descriptor>
+      <Atom _ID="_102" name="C">
+      </Atom>
+      <Atom _ID="_103" name="OG">
+      </Atom>
+      <Atom _ID="_104" name="H">
+      </Atom>
+      <Atom _ID="_105" name="CA">
+      </Atom>
+      <Atom _ID="_106" name="O">
+      </Atom>
+      <Atom _ID="_107" name="N">
+      </Atom>
+      <Atom _ID="_108" name="CB">
+      </Atom>
+      <Atom _ID="_109" name="HA">
+      </Atom>
+      <Atom _ID="_110" name="HG">
+      </Atom>
+      <Atom _ID="_111" name="HB3">
+      </Atom>
+      <Atom _ID="_112" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_6" seqId="8" seqCode="7" linking="middle" chainFragment="_5">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HD1,HE2</descriptor>
+      <Atom _ID="_113" name="C">
+      </Atom>
+      <Atom _ID="_114" name="HE2">
+      </Atom>
+      <Atom _ID="_115" name="CE1">
+      </Atom>
+      <Atom _ID="_116" name="HD1">
+      </Atom>
+      <Atom _ID="_117" name="H">
+      </Atom>
+      <Atom _ID="_118" name="CA">
+      </Atom>
+      <Atom _ID="_119" name="CG">
+      </Atom>
+      <Atom _ID="_120" name="O">
+      </Atom>
+      <Atom _ID="_121" name="HE1">
+      </Atom>
+      <Atom _ID="_122" name="N">
+      </Atom>
+      <Atom _ID="_123" name="HD2">
+      </Atom>
+      <Atom _ID="_124" name="CD2">
+      </Atom>
+      <Atom _ID="_125" name="CB">
+      </Atom>
+      <Atom _ID="_126" name="ND1">
+      </Atom>
+      <Atom _ID="_127" name="HA">
+      </Atom>
+      <Atom _ID="_128" name="NE2">
+      </Atom>
+      <Atom _ID="_129" name="HB3">
+      </Atom>
+      <Atom _ID="_130" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_16" seqId="9" seqCode="8" linking="end" chainFragment="_15">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>deprot:H''</descriptor>
+      <Atom _ID="_131" name="C">
+      </Atom>
+      <Atom _ID="_132" name="O'">
+      </Atom>
+      <Atom _ID="_133" name="H">
+      </Atom>
+      <Atom _ID="_134" name="CA">
+      </Atom>
+      <Atom _ID="_135" name="N">
+      </Atom>
+      <Atom _ID="_136" name="CD1">
+      </Atom>
+      <Atom _ID="_137" name="CG1">
+      </Atom>
+      <Atom _ID="_138" name="HD12">
+      </Atom>
+      <Atom _ID="_139" name="HD11">
+      </Atom>
+      <Atom _ID="_140" name="CG2">
+      </Atom>
+      <Atom _ID="_141" name="HG23">
+      </Atom>
+      <Atom _ID="_142" name="HA">
+      </Atom>
+      <Atom _ID="_143" name="HB">
+      </Atom>
+      <Atom _ID="_144" name="HG12">
+      </Atom>
+      <Atom _ID="_145" name="HG13">
+      </Atom>
+      <Atom _ID="_146" name="HD13">
+      </Atom>
+      <Atom _ID="_147" name="CB">
+      </Atom>
+      <Atom _ID="_148" name="HG21">
+      </Atom>
+      <Atom _ID="_149" name="O''">
+      </Atom>
+      <Atom _ID="_150" name="HG22">
+      </Atom>
+    </Residue>
+  </Chain>
+  <Chain _ID="_151">
+    <code>B</code>
+    <pdbOneLetterCode> </pdbOneLetterCode>
+    <molecule>
+      <key1 tag="name">myMoleculeName</key1>
+    </molecule>
+    <ChainFragment _ID="_152" serial="1" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_153"/>
+    </ChainFragment>
+    <ChainFragment _ID="_154" serial="2" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_155"/>
+    </ChainFragment>
+    <ChainFragment _ID="_156" serial="3" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_157"/>
+    </ChainFragment>
+    <ChainFragment _ID="_158" serial="4" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_159"/>
+    </ChainFragment>
+    <ChainFragment _ID="_160" serial="5" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_161"/>
+    </ChainFragment>
+    <ChainFragment _ID="_162" serial="6" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_163"/>
+    </ChainFragment>
+    <ChainFragment _ID="_164" serial="7" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_165"/>
+    </ChainFragment>
+    <ChainFragment _ID="_166" serial="8" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_167"/>
+    </ChainFragment>
+    <ChainFragment _ID="_168" serial="9" isLinearPolymer="false" molType="protein">
+      <residues _IDREF="_169"/>
+    </ChainFragment>
+    <Residue _ID="_159" seqId="1" seqCode="0" linking="start" chainFragment="_158">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:H3</descriptor>
+      <Atom _ID="_170" name="C">
+      </Atom>
+      <Atom _ID="_171" name="H2">
+      </Atom>
+      <Atom _ID="_172" name="H3">
+      </Atom>
+      <Atom _ID="_173" name="CA">
+      </Atom>
+      <Atom _ID="_174" name="H1">
+      </Atom>
+      <Atom _ID="_175" name="O">
+      </Atom>
+      <Atom _ID="_176" name="N">
+      </Atom>
+      <Atom _ID="_177" name="CB">
+      </Atom>
+      <Atom _ID="_178" name="HA">
+      </Atom>
+      <Atom _ID="_179" name="HB1">
+      </Atom>
+      <Atom _ID="_180" name="HB3">
+      </Atom>
+      <Atom _ID="_181" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_161" seqId="2" seqCode="1" linking="middle" chainFragment="_160">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_182" name="C">
+      </Atom>
+      <Atom _ID="_183" name="H">
+      </Atom>
+      <Atom _ID="_184" name="HA2">
+      </Atom>
+      <Atom _ID="_185" name="HA3">
+      </Atom>
+      <Atom _ID="_186" name="CA">
+      </Atom>
+      <Atom _ID="_187" name="O">
+      </Atom>
+      <Atom _ID="_188" name="N">
+      </Atom>
+    </Residue>
+    <Residue _ID="_167" seqId="3" seqCode="2" linking="middle" chainFragment="_166">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HH</descriptor>
+      <Atom _ID="_189" name="C">
+      </Atom>
+      <Atom _ID="_190" name="CD2">
+      </Atom>
+      <Atom _ID="_191" name="H">
+      </Atom>
+      <Atom _ID="_192" name="CA">
+      </Atom>
+      <Atom _ID="_193" name="CG">
+      </Atom>
+      <Atom _ID="_194" name="O">
+      </Atom>
+      <Atom _ID="_195" name="N">
+      </Atom>
+      <Atom _ID="_196" name="HH">
+      </Atom>
+      <Atom _ID="_197" name="CE2">
+      </Atom>
+      <Atom _ID="_198" name="CE1">
+      </Atom>
+      <Atom _ID="_199" name="HA">
+      </Atom>
+      <Atom _ID="_200" name="HE1">
+      </Atom>
+      <Atom _ID="_201" name="CD1">
+      </Atom>
+      <Atom _ID="_202" name="HD1">
+      </Atom>
+      <Atom _ID="_203" name="HE2">
+      </Atom>
+      <Atom _ID="_204" name="OH">
+      </Atom>
+      <Atom _ID="_205" name="CZ">
+      </Atom>
+      <Atom _ID="_206" name="HD2">
+      </Atom>
+      <Atom _ID="_207" name="CB">
+      </Atom>
+      <Atom _ID="_208" name="HB3">
+      </Atom>
+      <Atom _ID="_209" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_153" seqId="4" seqCode="3" linking="middle" chainFragment="_152">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>deprot:HE2</descriptor>
+      <Atom _ID="_210" name="C">
+      </Atom>
+      <Atom _ID="_211" name="H">
+      </Atom>
+      <Atom _ID="_212" name="CA">
+      </Atom>
+      <Atom _ID="_213" name="HG2">
+      </Atom>
+      <Atom _ID="_214" name="HG3">
+      </Atom>
+      <Atom _ID="_215" name="O">
+      </Atom>
+      <Atom _ID="_216" name="CD">
+      </Atom>
+      <Atom _ID="_217" name="N">
+      </Atom>
+      <Atom _ID="_218" name="CB">
+      </Atom>
+      <Atom _ID="_219" name="CG">
+      </Atom>
+      <Atom _ID="_220" name="HA">
+      </Atom>
+      <Atom _ID="_221" name="OE2">
+      </Atom>
+      <Atom _ID="_222" name="OE1">
+      </Atom>
+      <Atom _ID="_223" name="HB3">
+      </Atom>
+      <Atom _ID="_224" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_157" seqId="5" seqCode="4" linking="middle" chainFragment="_156">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_225" name="C">
+      </Atom>
+      <Atom _ID="_226" name="HD22">
+      </Atom>
+      <Atom _ID="_227" name="HD23">
+      </Atom>
+      <Atom _ID="_228" name="HD21">
+      </Atom>
+      <Atom _ID="_229" name="H">
+      </Atom>
+      <Atom _ID="_230" name="CA">
+      </Atom>
+      <Atom _ID="_231" name="CG">
+      </Atom>
+      <Atom _ID="_232" name="O">
+      </Atom>
+      <Atom _ID="_233" name="N">
+      </Atom>
+      <Atom _ID="_234" name="CD1">
+      </Atom>
+      <Atom _ID="_235" name="CD2">
+      </Atom>
+      <Atom _ID="_236" name="HD13">
+      </Atom>
+      <Atom _ID="_237" name="HD12">
+      </Atom>
+      <Atom _ID="_238" name="HD11">
+      </Atom>
+      <Atom _ID="_239" name="HA">
+      </Atom>
+      <Atom _ID="_240" name="HG">
+      </Atom>
+      <Atom _ID="_241" name="CB">
+      </Atom>
+      <Atom _ID="_242" name="HB3">
+      </Atom>
+      <Atom _ID="_243" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_169" seqId="6" seqCode="5" linking="middle" chainFragment="_168">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>neutral</descriptor>
+      <Atom _ID="_244" name="C">
+      </Atom>
+      <Atom _ID="_245" name="H">
+      </Atom>
+      <Atom _ID="_246" name="HA2">
+      </Atom>
+      <Atom _ID="_247" name="HA3">
+      </Atom>
+      <Atom _ID="_248" name="CA">
+      </Atom>
+      <Atom _ID="_249" name="O">
+      </Atom>
+      <Atom _ID="_250" name="N">
+      </Atom>
+    </Residue>
+    <Residue _ID="_163" seqId="7" seqCode="6" linking="middle" chainFragment="_162">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HG</descriptor>
+      <Atom _ID="_251" name="C">
+      </Atom>
+      <Atom _ID="_252" name="OG">
+      </Atom>
+      <Atom _ID="_253" name="H">
+      </Atom>
+      <Atom _ID="_254" name="CA">
+      </Atom>
+      <Atom _ID="_255" name="O">
+      </Atom>
+      <Atom _ID="_256" name="N">
+      </Atom>
+      <Atom _ID="_257" name="CB">
+      </Atom>
+      <Atom _ID="_258" name="HA">
+      </Atom>
+      <Atom _ID="_259" name="HG">
+      </Atom>
+      <Atom _ID="_260" name="HB3">
+      </Atom>
+      <Atom _ID="_261" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_155" seqId="8" seqCode="7" linking="middle" chainFragment="_154">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>prot:HD1,HE2</descriptor>
+      <Atom _ID="_262" name="C">
+      </Atom>
+      <Atom _ID="_263" name="HE2">
+      </Atom>
+      <Atom _ID="_264" name="CE1">
+      </Atom>
+      <Atom _ID="_265" name="HD1">
+      </Atom>
+      <Atom _ID="_266" name="H">
+      </Atom>
+      <Atom _ID="_267" name="CA">
+      </Atom>
+      <Atom _ID="_268" name="CG">
+      </Atom>
+      <Atom _ID="_269" name="O">
+      </Atom>
+      <Atom _ID="_270" name="HE1">
+      </Atom>
+      <Atom _ID="_271" name="N">
+      </Atom>
+      <Atom _ID="_272" name="HD2">
+      </Atom>
+      <Atom _ID="_273" name="CD2">
+      </Atom>
+      <Atom _ID="_274" name="CB">
+      </Atom>
+      <Atom _ID="_275" name="ND1">
+      </Atom>
+      <Atom _ID="_276" name="HA">
+      </Atom>
+      <Atom _ID="_277" name="NE2">
+      </Atom>
+      <Atom _ID="_278" name="HB3">
+      </Atom>
+      <Atom _ID="_279" name="HB2">
+      </Atom>
+    </Residue>
+    <Residue _ID="_165" seqId="9" seqCode="8" linking="end" chainFragment="_164">
+      <seqInsertCode> </seqInsertCode>
+      <descriptor>deprot:H''</descriptor>
+      <Atom _ID="_280" name="C">
+      </Atom>
+      <Atom _ID="_281" name="O'">
+      </Atom>
+      <Atom _ID="_282" name="H">
+      </Atom>
+      <Atom _ID="_283" name="CA">
+      </Atom>
+      <Atom _ID="_284" name="N">
+      </Atom>
+      <Atom _ID="_285" name="CD1">
+      </Atom>
+      <Atom _ID="_286" name="CG1">
+      </Atom>
+      <Atom _ID="_287" name="HD12">
+      </Atom>
+      <Atom _ID="_288" name="HD11">
+      </Atom>
+      <Atom _ID="_289" name="CG2">
+      </Atom>
+      <Atom _ID="_290" name="HG23">
+      </Atom>
+      <Atom _ID="_291" name="HA">
+      </Atom>
+      <Atom _ID="_292" name="HB">
+      </Atom>
+      <Atom _ID="_293" name="HG12">
+      </Atom>
+      <Atom _ID="_294" name="HG13">
+      </Atom>
+      <Atom _ID="_295" name="HD13">
+      </Atom>
+      <Atom _ID="_296" name="CB">
+      </Atom>
+      <Atom _ID="_297" name="HG21">
+      </Atom>
+      <Atom _ID="_298" name="O''">
+      </Atom>
+      <Atom _ID="_299" name="HG22">
+      </Atom>
+    </Residue>
+  </Chain>
+</MolSystem>
+
+</_StorageUnit>
+<!--End of Memops Data-->

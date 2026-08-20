@@ -1,0 +1,349 @@
+CcpNmr Analysis 2.4 installation notes
+
+The CcpNmr Analysis 2.4 release includes all source code
+required, including third-party code.  Normally you should
+use a pre-compiled release, but if for some reason that
+does not work then this file describes how to do a manual
+installation, in particular compilation of Analysis and
+also third-party software (e.g. Python), but the latter is
+only required if your system does not already have a suitable
+version.
+
+The third-party applications required are Python >= 2.6 (Python
+2.6 recommended, and assumed below), Tcl/Tk >= 8.4 (Tcl/Tk 8.5
+recommended, and assumed below) and OpenGL including glut (e.g.
+Mesa 6.0, assumed below).  (As of Februrary 2005, OpenGL is
+optional.)  Users who want to use their own copies of this code
+can do so.  Analysis works with Python 2.6 or Python 2.7.
+
+It is also recommended that NumPy >= 1.2 (NumPy 1.4 assumed
+below) be installed, because some Analysis functionality uses it.
+And Tix >= 8.4 (8.4 assume below) is used in ARIA so if you want
+to use that then this also needs installing.
+
+In order to make things easy, please set the following environment
+variable before proceeding (for example, in .cshrc, or for bash
+in .bashrc):
+
+  CCPNMR_TOP_DIR should be set to the ccpnmr directory created by the
+    unpacking of the tar file
+
+For example, assuming you are using csh, tcsh or any of the other C
+shell variants, then in .cshrc you could place:
+
+  setenv CCPNMR_TOP_DIR directory_where_you_unpacked_release/ccpnmr
+
+If you use instead use bash then in .bashrc you could place:
+
+  export CCPNMR_TOP_DIR=directory_where_you_unpacked_release/ccpnmr
+
+In general, for all the setenv statements below, of the form
+
+  setenv XYZ $ABC:$DEF:...
+
+or any of the variants if you use bash then instead you should do
+
+  export XYZ=$ABC:$DEF:...
+
+For all the setenv statements below, of the form
+
+  setenv XYZ ...
+
+if XYZ already exists then instead you should do
+
+  setenv XYZ ...:$XYZ
+
+so that your existing settings are not lost.  Alternatively you can
+use the following if statement which covers both cases:
+
+  if ($?XYZ) then
+    setenv XYZ ...:$XYZ
+  else
+    setenv XYZ ...
+
+And in bash this latter form becomes the even more obscure:
+
+  if [ ! -z $XYZ ]
+  then
+    export XYZ=...:$XYZ
+  else
+    export XYZ=...
+
+(that "then" seems to need to be on a new line).
+
+To get compilation of Python to work with the distributed versions
+of Tcl/Tk you might need to set the following environment variables
+first (the Tix one only if you are installing that):
+
+  setenv LD_LIBRARY_PATH ${CCPNMR_TOP_DIR}/tcl8.5/lib:${CCPNMR_TOP_DIR}/tk8.5/lib:${CCPNMR_TOP_DIR}/tcl8.5/lib/Tix8.4.3
+  setenv TCL_LIBRARY {$CCPNMR_TOP_DIR}/tcl8.5/lib/tcl8.5
+  setenv TK_LIBRARY {$CCPNMR_TOP_DIR}/tk8.5/lib/tk8.5
+
+where CCPNMR_TOP_DIR is is the ccpnmr directory created by the
+unpacking of the tar file (as hopefully set following the
+instructions above).  If you are on OSX then it seems instead
+of LD_LIBRARY_PATH you should have DYLD_LIBRARY_PATH.
+
+And to get the compilation of Analysis to work with the distributed
+version of Mesa you might need to add:
+
+  ${CCPNMR_TOP_DIR}/mesa6.0/lib
+
+to your LD_LIBRARY_PATH.
+
+CCPN provides copies of the source code for third party software at:
+
+http://www2.ccpn.ac.uk/download/ccpnmr
+
+You should download those of the following which you need:
+
+tcltk8.5.tgz
+tix8.4.tgz
+python2.6.tgz
+numpy1.4.tgz
+mesa6.0.tgz
+
+Unpack these in the same place as you unpacked the relevant Analysis *.tar.gz file.
+They all unpack into ccpnmr/, into a sub-directory which contains the *.tgz file
+provided by the third party.  In other words, the above gzipped tar files contain
+gzipped tar files, so when running the installation script you need to answer "y" to
+the questions about unpacking this software.
+
+To install the code go into the ccpnmr directory (the top-level
+directory of the distribution) and run the installCode.py script:
+
+  python installCode.py analysis
+
+This assumes that your computer has a working version of Python.
+Any version >= 2.5 should work to run the script, but you need
+version >= 2.6 for the code itself to run.
+The script will ask whether you want to compile Tcl, Tk, Tix, Python,
+Numpy, Mesa and Analysis, in that order.  Tix is asked about only
+if you are using our version of Tcl/Tk.  If you have your own versions
+of the third-party code then you do not need to use ours.  (Tcl/Tk
+is often ready-installed on Linux systems, look for /usr/lib/tcl8.x
+and /usr/lib/tk8.x.)  If you are using your own versions the
+script will ask where these versions are located.
+
+As of February 2005 you do not have to compile Analysis with Mesa
+(OpenGL), you can just use Tk for the graphics.  This option makes
+it easier to get started with Analysis but if you have an OpenGL
+hardware accelerated graphics card ultimately to get best
+permformance you will want the OpenGL version of Analysis.
+
+After compilation the script will then create a "bin" directory.
+Finally, it will ask whether you want to test the Analysis program
+by starting it up.  This is recommended since it will check whether
+the installation has been successful.  It will take a few seconds
+because all of the Python code will have to be compiled.
+
+Note: the Analysis C compilation set up in the installation script
+will probably only work seamlessly on OSX and Linux platforms.
+There are some notes in ccpnmr2.5/c/environment_default.txt about
+other platforms, and you will have to read the detailed notes in
+the interlude below about compiling Analysis.
+
+*********Start of Interlude***************************************
+
+Alternatively, if for some reason the script does not work, below is
+what you need to do to install the code (CCPNMR_TOP_DIR is the ccpnmr
+directory created by the unpacking of the tar file):
+
+(1) If you need our version of Tcl:
+
+      cd $CCPNMR_TOP_DIR/tcl8.5
+    Unpack tar file:
+      tar xvzf tcl8.5.8.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd tcl8.5.8/unix
+      ./configure --prefix=$CCPNMR_TOP_DIR/tcl8.5
+      (on some platforms you might use more flags, e.g. --enable-64bit)
+      make
+      make install
+
+(2) If you need our version of Tk:
+
+      cd $CCPNMR_TOP_DIR/tk8.5
+    Unpack tar file:
+      tar xvzf tk8.5.8.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd tk8.5.8/unix
+      ./configure --prefix=$CCPNMR_TOP_DIR/tk8.5 --with-tcl=$CCPNMR_TOP_DIR/tcl8.5/lib
+      (or your own "with-tcl" argument if you are not using our Tcl)
+      (on some platforms you might use more flags, e.g. --enable-64bit)
+      make
+      make install
+
+(3) If you are compiling Tix:
+
+      cd $CCPNMR_TOP_DIR/tix8.4
+    Unpack tar file:
+      tar xvzf Tix8.4.3.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd Tix8.4.3
+      ./configure --prefix=$CCPNMR_TOP_DIR/tk8.5 --with-tcl=$CCPNMR_TOP_DIR/tcl8.5/lib --x-includes=/usr/X11R6/include --x-libraries=/usr/X11R6/lib
+      (or your own "with-tcl" argument if you are not using our Tcl)
+      (you might not need x-includes or x-libraries dependent on your platform)
+      (on some platforms you might use more flags, e.g. --enable-64bit)
+      make
+      make install
+
+(4) If you need our version of Python:
+
+      cd $CCPNMR_TOP_DIR/python2.6
+    Unpack tar file:
+      tar xvzf Python-2.6.5.tgz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Edit setup:
+      cd Python-2.6.5
+      copy Modules/Setup.dist to Modules/Setup
+      edit Modules/Setup:
+        below the line that says "# The _tkinter module." edit the lines as instructed
+    Compile code:
+      (In the Python-2.6.5 directory.)
+      ./configure --prefix=$CCPNMR_TOP_DIR/python2.6
+      make
+      make install
+
+(5) If you are compiling NumPy:
+
+      cd $CCPNMR_TOP_DIR/numpy1.4
+    Unpack tar file:
+      tar xvzf numpy-1.4.1.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd numpy-1.4.1
+      $CCPNMR_TOP_DIR/python2.6/bin/python setup.py build
+      $CCPNMR_TOP_DIR/python2.6/bin/python setup.py install
+      (or whichever python you are using)
+
+(6) If you need our version of Mesa:
+
+      cd $CCPNMR_TOP_DIR/mesa6.0
+    Unpack tar files:
+      tar xvzf MesaLib-6.0.tar.gz
+      tar xvzf MesaDemos-6.0.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd Mesa-6.0
+      make         (shows possible make choices: e.g. linux-x86 for Linux on PCs)
+      make <your choice of architecture>
+      cd ..
+      ln -s Mesa-6.0/include include
+      ln -s Mesa-6.0/lib lib
+
+(7) Compile the Analysis code:
+
+      cd $CCPNMR_TOP_DIR/ccpnmr2.5/c
+      cp environment_default.txt environment.txt
+      Edit environment.txt changing the variables as required
+      (specifically X11_DIR, TCL_DIR, TK_DIR, PYTHON_DIR, GL_DIR)
+      (but read all the comments carefully)
+      Ensure that correct Python is on your path
+      make
+      make links
+
+      If either the "make" or "make links" step fails then you can
+      do the compilation and set up the links one directory at a time:
+
+      To make:
+      cd $CCPNMR_TOP_DIR/ccpnmr2.5/c
+      cd memops/global; make; cd ../..
+      cd ccp/global; make; cd ../..
+      cd ccpnmr/global; make; cd ../..
+
+      To make links:
+      cd $CCPNMR_TOP_DIR/ccpnmr2.5/python
+      cd memops/c; source linkSharedObjs; cd ../..
+      cd ccp/c; source linkSharedObjs; cd ../..
+      cd ccpnmr/c; source linkSharedObjs; cd ../..
+
+(6) Create the bin directory:
+
+      cd $CCPNMR_TOP_DIR
+      mkdir bin
+      cd bin
+      create file "analysis" with the following lines in it:
+
+#!<your_shell>
+<the_python_executable> -i -O $CCPNMR_TOP_DIR/ccpnmr2.5/python/ccpnmr/analysis/AnalysisGui.py $*
+
+      create file "formatConverter" with the following lines in it:
+
+#!<your_shell>
+<the_python_executable> -O $CCPNMR_TOP_DIR/ccpnmr2.5/python/ccpnmr/format/gui/FormatConverter.py $*
+
+      create file "pipe2azara" with the following lines in it:
+
+#!<your_shell>
+<the_python_executable> -O $CCPNMR_TOP_DIR/ccpnmr2.5/python/ccpnmr/analysis/NmrPipeData.py $*
+
+      chmod 755 analysis formatConverter pipe2azara
+
+where <your_shell> is probably one of /usr/bin/csh, /usr/bin/tcsh or
+/usr/bin/bash
+
+and where <the_python_executable> is whatever python you are using.
+
+In addition, in each of those scripts, you can add the following environment variables
+before the line that executes the script, editing the information as appropriate
+(i.e. anything in between "< >").  For bash:
+
+export CCPNMR_TOP_DIR=<CCPNMR_TOP_DIR>/ccpnmr
+export PYTHONPATH=.:$CCPNMR_TOP_DIR/ccpnmr2.5/python
+export LD_LIBRARY_PATH=<TCL_DIR>/lib:<TK_DIR>/lib:<TIX_DIR>/lib:<GL_DIR>/lib
+export TCL_LIBRARY=<TCL_DIR>/lib/tcl<TCL_TK_VERSION>
+export TK_LIBRARY=<TK_DIR>/lib/tk<TCL_TK_VERSION>
+
+For tcsh and other csh-related shells:
+
+setenv CCPNMR_TOP_DIR <CCPNMR_TOP_DIR>/ccpnmr
+setenv PYTHONPATH .:$CCPNMR_TOP_DIR/ccpnmr2.5/python
+setenv LD_LIBRARY_PATH <TCL_DIR>/lib:<TK_DIR>/lib:<TIX_DIR>/lib:<GL_DIR>/lib
+setenv TCL_LIBRARY <TCL_DIR>/lib/tcl<TCL_TK_VERSION>
+setenv TK_LIBRARY <TK_DIR>/lib/tk<TCL_TK_VERSION>
+
+For 64 bit compilation you might need lib64 instead of lib for
+some of the libraries (probably whenever that variant exists).
+
+For 32 bit Irix you might need lib32 instead of lib for some
+of the libraries (probably whenever that variant exists).
+
+*********End of Interlude*****************************************
+
+After successful installation of the code the following environment
+variables also need setting or updating (for example, in .cshrc):
+
+  CCPNMR_TOP_DIR must be set to the ccpnmr directory created by the
+    unpacking of the tar file
+  PYTHONPATH must include $CCPNMR_TOP_DIR/ccpnmr2.5/python
+  PATH must include $CCPNMR_TOP_DIR/bin
+
+For example, in .cshrc you could place:
+
+  setenv CCPNMR_TOP_DIR directory_where_you_unpacked_release/ccpnmr
+  setenv PATH ${CCPNMR_TOP_DIR}/bin:${PATH}
+  setenv PYTHONPATH .:${CCPNMR_TOP_DIR}/ccpnmr2.5/python
+
+Your PATH and PYTHONPATH might need to include other things:  to
+illustrate this the example of PATH above includes other directories
+previously defined to be in PATH (the above line will fail if PATH
+has not been previously defined, which it normally is).  See the
+note near the top for how to do this more generally.
+
+You might also need to following (these do not seem to be required
+on all machines but they are on some):
+
+  setenv LD_LIBRARY_PATH ${CCPNMR_TOP_DIR}/tcl8.5/lib:${CCPNMR_TOP_DIR}/tk8.5/lib:${CCPNMR_TOP_DIR}/tcl8.5/lib/Tix8.4.3:${CCPNMR_TOP_DIR}/mesa6.0/lib
+  setenv TCL_LIBRARY ${CCPNMR_TOP_DIR}/tcl8.5/lib/tcl8.5
+  setenv TK_LIBRARY ${CCPNMR_TOP_DIR}/tk8.5/lib/tk8.5
+
+For 64 bit compilation you might need lib64 instead of lib.
+For 32 bit Irix you might need lib32 instead of lib.
+
+Alternatively, everything but the PATH can be set directly in the scripts
+files located in the bin directory, as illustrated at the bottom of the
+interlude.

@@ -1,0 +1,64 @@
+{
+  "protocol": {
+    "name": "CyanaWF",
+    "details": "Set up for Cyana workflow execution, using MultiStructure framework.",
+    "protocolParameters": [ 
+
+      {"name":"definedResidues","paramType":"Residues"},
+      {"name":"noesyPeakList","paramType":"PeakLists","hicard":-1},
+
+      {"name":"noStartStructures","paramType":"Integer","value":"50"},
+      {"name":"noEndStructures","paramType":"Integer","value":"10"},
+      {"name":"noSteps","paramType":"Integer","value":"5000","code":"steps"},
+      {"name":"calcMode","paramType":"String","value":"unassigned","code":"calcMode"},
+      {"name":"keepPartiallyAssigned","paramType":"Boolean","value":"False"},
+      {"name":"calibDistanceString","paramType":"String",
+       "code":"calibration_distance","value":"4.2,4.2,4.5"},
+      {"name":"defaultTolPoints", "paramType":"Float", "value":1.0},
+      {"name":"minTolPpm", "paramType":"Float", "value":0.02}
+    ],
+    "protocolInterfaces": [
+      {"name":"standard",
+       "tabs": [
+           {"name":"Select NOESY Peak lists", 
+            "interfaceParameters" : [
+             {"name":"noesyPeakList","row": 1, "col": 0}
+            ]
+           },
+           {"name":"defined residues", 
+            "interfaceParameters" : [
+             {"name":"definedResidues","row": 1, "col": 0}
+            ],
+            "interfaceLabels":[
+              {"label":"One continuous stretch of defined residues","row": 0, 
+               "col": 0}
+            ]
+           },
+           {"name":"CYANA parameters", 
+            "interfaceParameters" : [
+             {"name":"noStartStructures","row": 0, "col": 1},
+             {"name":"noEndStructures","row": 1, "col": 1},
+             {"name":"noSteps","row": 2, "col": 1},
+             {"name":"calcMode","row": 3, "col": 1},
+             {"name":"keepPartiallyAssigned","row": 4, "col": 1},
+             {"name":"calibDistanceString","row": 5, "col": 1},
+             {"name":"defaultTolPoints","row": 6, "col": 1, "value":1.0},
+             {"name":"minTolPpm","row": 7, "col": 1, "value":0.02}
+            ],
+            "interfaceLabels":[
+             {"label":"number of initial structures (20-100)","row": 0, "col": 0},
+             {"label":"number of final structures (max 50)","row": 1, "col": 0},
+             {"label":"number of torsion angle dynamics steps (1000-10000)","row": 2, "col": 0},
+             {"label":"Use peaks in calculation : 'none'/'assigned'/'unassigned'","row": 3, "col": 0},
+             {"label":"Keep partially assigned peaks (if 'unassigned') ?","row": 4, "col": 0},
+             {"label":"Average distance limits for automatic peak calibration(in Angstrom)","row": 5, "col": 0},
+             {"label":"Default shift tolerance (in points)","row": 6, "col": 0},
+             {"label":"Minimum shift tolerance (in ppm)","row": 7, "col": 0}
+            ]
+           }
+   
+       ]
+      }
+    ]
+  }
+}

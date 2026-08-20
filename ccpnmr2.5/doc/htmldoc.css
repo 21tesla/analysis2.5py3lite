@@ -1,0 +1,131 @@
+/* ************************************************************ 
+======================COPYRIGHT/LICENSE START==========================
+
+htmldoc.css: General documentation for CCPN data model and code generation framework
+
+Copyright (C) 2004  (CCPN Project)
+
+=======================================================================
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+ 
+A copy of this license can be found in ../license/LGPL.license
+ 
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+ 
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+
+======================COPYRIGHT/LICENSE END============================
+
+for further information, please contact :
+
+- CCPN website (http://www.ccpn.ac.uk/)
+
+- email: ccpn@bioc.cam.ac.uk
+
+=======================================================================
+===========================REFERENCE START=============================
+===========================REFERENCE END===============================
+
+*/
+/* BODY ******************************************************* */
+
+body { background: white; color: black; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif";
+       margin: 0em 0em 0em 0px; background-position: top left; background-attachment: fixed; background-repeat: no-repeat }
+
+
+/* ************************************************************ */
+/* BANNER ***************************************************** */
+
+div.topbanner a:visited
+  { background: transparent; color: #650070; text-decoration: none; font-weight: normal; font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.topbanner a:link
+  { background: #F0CC99;     color: #650070; text-decoration: none; font-weight: normal; font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.topbanner a:hover
+  { background: #650070;     color: white;   text-decoration: none; font-weight: normal; font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.topbanner .underover
+  { background: #F0CC99;     color: #980001; text-decoration: none; font-weight: bold;   font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.topbanner tr
+  { background: #F0CC99;     color: #A08866; text-decoration: none; font-weight: normal; font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.topbanner td           
+  { background: #F0CC99;     color: #A08866; text-decoration: none; font-weight: normal; font-size: 10pt; font-family: "Arial", "Helvetica", "sans-serif" }
+
+div.leftbanner a:visited   
+  { background: transparent; color: white;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner a:link      
+  { background: transparent; color: white;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner a:hover     
+  { background: #980001;     color: white;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner .underover  
+  { background: #980001;     color: white;   text-decoration: none; font-weight: bold;   font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner tr          
+  { background: #794E83;     color: white;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner td          
+  { background: #794E83;     color: white;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner td.space 
+  { background: white;       color: black;   text-decoration: none; font-weight: normal; font-size: 9pt; font-family: "Arial", "Helvetica", "sans-serif" }
+div.leftbanner td.ppdm
+  { background: #BA952E; }
+div.leftbanner td.nmr
+  { background: #980001; }
+
+
+/* ************************************************************ */
+/* LINKS ****************************************************** */
+
+a:visited { background: transparent; color: #650070; text-decoration: none; font-weight: normal; font-family: "Arial", "Helvetica", "sans-serif" }
+a:link    { background: transparent; color: #C80000; text-decoration: none; font-weight: normal; font-family: "Arial", "Helvetica", "sans-serif" }
+a:hover   { background: #650070;     color: white;   text-decoration: none; font-weight: normal; font-family: "Arial", "Helvetica", "sans-serif" }
+a.mainlogo:hover   { background: #F0CC99; text-decoration: none; font-weight: normal; font-family: "Arial", "Helvetica", "sans-serif" }
+
+
+/* ************************************************************ */
+/* TABLE ****************************************************** */
+
+table.elemtable { width: 100%; background: #FFFFFF; border-style: solid; border-width: 0 } 
+
+td         {                                    font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif" }
+         
+td.tblhead { background: #794E83; color: white; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif"; 
+             border-style: solid; border-width: 0 } 
+
+td.tblrow  { background: #EEEEEE;               font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif"; 
+             border-style: solid; border-width: 0 } 
+td.tblspecialrow  { background: #D0D0F8;               font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif"; 
+
+/*
+table.elemtable { width: 100%; background:rgb(200,200,200); border-style: solid; border-width: 0 } 
+
+td.tblhead { background:rgb(200,200,200); font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif"; 
+             border-style: solid; border-width: 0 } 
+
+td.tblrow  { background:rgb(240,240,240); font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif"; 
+             border-style: solid; border-width: 0 } 
+*/
+
+
+/* ************************************************************ */
+/* GENERAL **************************************************** */
+
+p  { color: black;   text-decoration: none; text-align: justify; font-weight: normal; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif" }
+ul { color: black;   text-decoration: none; text-align: justify; font-weight: normal; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif" }
+ol { color: black;   text-decoration: none; text-align: justify; font-weight: normal; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif" }
+li { color: black;   text-decoration: none; text-align: justify; font-weight: normal; font-size: 11pt; font-family: "Arial", "Helvetica", "sans-serif" }
+
+h1 { color: black;   text-decoration: none; text-align: left; font-weight: bold;   font-size: 24pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+h2 { color: black;   text-decoration: none; text-align: left; font-weight: bold;   font-size: 18pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+h3 { color: black;   text-decoration: none; text-align: left; font-weight: bold;   font-size: 14pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+h4 { color: black;   text-decoration: none; text-align: left; font-weight: bold;   font-size: 12pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+h5 { color: black;   text-decoration: none; text-align: none; font-weight: normal; font-size:  9pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+h6 { color: #794E83; text-decoration: none; text-align: none; font-weight: normal; font-size:  9pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }
+
+h2.purple { color: #794E83;   text-decoration: none; text-align: left; font-weight: bold;   font-size: 18pt; font-family: "Arial", "Helvetica", "sans-serif"; margin-bottom:0px; margin-top:0px; }

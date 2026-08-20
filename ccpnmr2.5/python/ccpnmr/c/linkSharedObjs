@@ -1,0 +1,25 @@
+#!/bin/sh
+
+\rm *.so
+ln -s ../../../c/ccpnmr/analysis/ContourFile.so ContourFile.so
+ln -s ../../../c/ccpnmr/analysis/ContourLevels.so ContourLevels.so
+ln -s ../../../c/ccpnmr/analysis/ContourStyle.so ContourStyle.so
+ln -s ../../../c/ccpnmr/analysis/PeakCluster.so PeakCluster.so
+ln -s ../../../c/ccpnmr/analysis/PeakList.so PeakList.so
+ln -s ../../../c/ccpnmr/analysis/SliceFile.so SliceFile.so
+ln -s ../../../c/ccpnmr/analysis/WinPeakList.so WinPeakList.so
+ln -s ../../../c/ccpnmr/clouds/AtomCoord.so .
+ln -s ../../../c/ccpnmr/clouds/AtomCoordList.so .
+ln -s ../../../c/ccpnmr/clouds/CloudUtil.so .
+ln -s ../../../c/ccpnmr/clouds/DistConstraint.so .
+ln -s ../../../c/ccpnmr/clouds/DistConstraintList.so .
+ln -s ../../../c/ccpnmr/clouds/DistForce.so .
+ln -s ../../../c/ccpnmr/clouds/Dynamics.so .
+ln -s ../../../c/ccpnmr/clouds/Midge.so .
+ln -s ../../../c/ccpnmr/clouds/Bacus.so .
+ln -s ../../../c/ccpnmr/dynamics/DyAtomCoord.so .
+ln -s ../../../c/ccpnmr/dynamics/DyAtomCoordList.so .
+ln -s ../../../c/ccpnmr/dynamics/DyDistConstraint.so .
+ln -s ../../../c/ccpnmr/dynamics/DyDistConstraintList.so .
+ln -s ../../../c/ccpnmr/dynamics/DyDistForce.so .
+ln -s ../../../c/ccpnmr/dynamics/DyDynamics.so .

@@ -1,0 +1,10 @@
+rm -f *.pyd
+cp ..\\..\\..\\c\\memops\\global\\BlockFile.pyd BlockFile.pyd
+cp ..\\..\\..\\c\\memops\\global\\FitMethod.pyd FitMethod.pyd
+cp ..\\..\\..\\c\\memops\\global\\GlHandler.pyd GlHandler.pyd
+cp ..\\..\\..\\c\\memops\\global\\MemCache.pyd MemCache.pyd
+cp ..\\..\\..\\c\\memops\\global\\PdfHandler.pyd PdfHandler.pyd
+cp ..\\..\\..\\c\\memops\\global\\PsHandler.pyd PsHandler.pyd
+cp ..\\..\\..\\c\\memops\\global\\StoreFile.pyd StoreFile.pyd
+cp ..\\..\\..\\c\\memops\\global\\StoreHandler.pyd StoreHandler.pyd
+cp ..\\..\\..\\c\\memops\\global\\TkHandler.pyd TkHandler.pyd

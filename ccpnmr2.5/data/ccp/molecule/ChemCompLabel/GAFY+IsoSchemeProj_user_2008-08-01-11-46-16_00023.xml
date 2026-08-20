@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit release="2.0.a0" originator="CCPN Python XmlIO" packageGuid="www.ccpn.ac.uk_Fogh_2006-08-16-14:25:09_00013" time="Fri Aug  1 11:46:28 2008">
+
+<CCLB.LabelingScheme _ID="_1" createdBy="ccpn_auto" details="G,A,S: 95% 13C,15N; F,Y: 95% 2,3-13C,15N" guid="IsoSchemeProj_user_2008-08-01-11-46-16_00023" isModifiable="true" lastUnlockedBy="ccpn_auto" longName="GAFY" name="GAFY">
+  <CCLB.LabelingScheme.chemCompLabels>
+    <CCLB.ChemCompLabel _ID="_2" ccpCode="Ala" molType="protein">
+      <CCLB.ChemCompLabel.isotopomers>
+        <CCLB.Isotopomer _ID="_3" serial="1" weight="1.0">
+          <CCLB.Isotopomer.atomLabels>
+            <CCLB.AtomLabel _ID="_4" isotopeCode="12C" name="C" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_5" isotopeCode="13C" name="C" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_6" isotopeCode="14C" name="C" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_7" isotopeCode="12C" name="CA" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_8" isotopeCode="13C" name="CA" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_9" isotopeCode="14C" name="CA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_10" isotopeCode="12C" name="CB" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_11" isotopeCode="13C" name="CB" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_12" isotopeCode="14C" name="CB" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_13" isotopeCode="1H" name="H" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_14" isotopeCode="2H" name="H" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_15" isotopeCode="3H" name="H" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_16" isotopeCode="1H" name="H''" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_17" isotopeCode="2H" name="H''" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_18" isotopeCode="3H" name="H''" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_19" isotopeCode="1H" name="H1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_20" isotopeCode="2H" name="H1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_21" isotopeCode="3H" name="H1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_22" isotopeCode="1H" name="H2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_23" isotopeCode="2H" name="H2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_24" isotopeCode="3H" name="H2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_25" isotopeCode="1H" name="H3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_26" isotopeCode="2H" name="H3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_27" isotopeCode="3H" name="H3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_28" isotopeCode="1H" name="HA" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_29" isotopeCode="2H" name="HA" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_30" isotopeCode="3H" name="HA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_31" isotopeCode="1H" name="HB1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_32" isotopeCode="2H" name="HB1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_33" isotopeCode="3H" name="HB1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_34" isotopeCode="1H" name="HB2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_35" isotopeCode="2H" name="HB2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_36" isotopeCode="3H" name="HB2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_37" isotopeCode="1H" name="HB3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_38" isotopeCode="2H" name="HB3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_39" isotopeCode="3H" name="HB3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_40" isotopeCode="14N" name="N" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_41" isotopeCode="15N" name="N" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_42" isotopeCode="16O" name="O" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_43" isotopeCode="17O" name="O" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_44" isotopeCode="18O" name="O" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_45" isotopeCode="16O" name="O'" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_46" isotopeCode="17O" name="O'" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_47" isotopeCode="18O" name="O'" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_48" isotopeCode="16O" name="O''" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_49" isotopeCode="17O" name="O''" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_50" isotopeCode="18O" name="O''" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+          </CCLB.Isotopomer.atomLabels>
+        </CCLB.Isotopomer>
+      </CCLB.ChemCompLabel.isotopomers>
+    </CCLB.ChemCompLabel>
+    <CCLB.ChemCompLabel _ID="_51" ccpCode="Gly" molType="protein">
+      <CCLB.ChemCompLabel.isotopomers>
+        <CCLB.Isotopomer _ID="_52" serial="1" weight="1.0">
+          <CCLB.Isotopomer.atomLabels>
+            <CCLB.AtomLabel _ID="_53" isotopeCode="12C" name="C" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_54" isotopeCode="13C" name="C" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_55" isotopeCode="14C" name="C" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_56" isotopeCode="12C" name="CA" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_57" isotopeCode="13C" name="CA" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_58" isotopeCode="14C" name="CA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_59" isotopeCode="1H" name="H" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_60" isotopeCode="2H" name="H" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_61" isotopeCode="3H" name="H" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_62" isotopeCode="1H" name="H''" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_63" isotopeCode="2H" name="H''" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_64" isotopeCode="3H" name="H''" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_65" isotopeCode="1H" name="H1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_66" isotopeCode="2H" name="H1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_67" isotopeCode="3H" name="H1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_68" isotopeCode="1H" name="H2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_69" isotopeCode="2H" name="H2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_70" isotopeCode="3H" name="H2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_71" isotopeCode="1H" name="H3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_72" isotopeCode="2H" name="H3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_73" isotopeCode="3H" name="H3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_74" isotopeCode="1H" name="HA2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_75" isotopeCode="2H" name="HA2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_76" isotopeCode="3H" name="HA2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_77" isotopeCode="1H" name="HA3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_78" isotopeCode="2H" name="HA3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_79" isotopeCode="3H" name="HA3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_80" isotopeCode="14N" name="N" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_81" isotopeCode="15N" name="N" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_82" isotopeCode="16O" name="O" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_83" isotopeCode="17O" name="O" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_84" isotopeCode="18O" name="O" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_85" isotopeCode="16O" name="O'" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_86" isotopeCode="17O" name="O'" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_87" isotopeCode="18O" name="O'" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_88" isotopeCode="16O" name="O''" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_89" isotopeCode="17O" name="O''" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_90" isotopeCode="18O" name="O''" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+          </CCLB.Isotopomer.atomLabels>
+        </CCLB.Isotopomer>
+      </CCLB.ChemCompLabel.isotopomers>
+    </CCLB.ChemCompLabel>
+    <CCLB.ChemCompLabel _ID="_91" ccpCode="Phe" molType="protein">
+      <CCLB.ChemCompLabel.isotopomers>
+        <CCLB.Isotopomer _ID="_92" serial="1" weight="1.0">
+          <CCLB.Isotopomer.atomLabels>
+            <CCLB.AtomLabel _ID="_93" isotopeCode="12C" name="C" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_94" isotopeCode="13C" name="C" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_95" isotopeCode="14C" name="C" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_96" isotopeCode="12C" name="CA" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_97" isotopeCode="13C" name="CA" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_98" isotopeCode="14C" name="CA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_99" isotopeCode="12C" name="CB" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_100" isotopeCode="13C" name="CB" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_101" isotopeCode="14C" name="CB" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_102" isotopeCode="12C" name="CD1" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_103" isotopeCode="13C" name="CD1" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_104" isotopeCode="14C" name="CD1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_105" isotopeCode="12C" name="CD2" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_106" isotopeCode="13C" name="CD2" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_107" isotopeCode="14C" name="CD2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_108" isotopeCode="12C" name="CE1" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_109" isotopeCode="13C" name="CE1" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_110" isotopeCode="14C" name="CE1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_111" isotopeCode="12C" name="CE2" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_112" isotopeCode="13C" name="CE2" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_113" isotopeCode="14C" name="CE2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_114" isotopeCode="12C" name="CG" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_115" isotopeCode="13C" name="CG" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_116" isotopeCode="14C" name="CG" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_117" isotopeCode="12C" name="CZ" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_118" isotopeCode="13C" name="CZ" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_119" isotopeCode="14C" name="CZ" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_120" isotopeCode="1H" name="H" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_121" isotopeCode="2H" name="H" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_122" isotopeCode="3H" name="H" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_123" isotopeCode="1H" name="H''" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_124" isotopeCode="2H" name="H''" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_125" isotopeCode="3H" name="H''" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_126" isotopeCode="1H" name="H1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_127" isotopeCode="2H" name="H1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_128" isotopeCode="3H" name="H1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_129" isotopeCode="1H" name="H2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_130" isotopeCode="2H" name="H2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_131" isotopeCode="3H" name="H2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_132" isotopeCode="1H" name="H3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_133" isotopeCode="2H" name="H3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_134" isotopeCode="3H" name="H3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_135" isotopeCode="1H" name="HA" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_136" isotopeCode="2H" name="HA" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_137" isotopeCode="3H" name="HA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_138" isotopeCode="1H" name="HB2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_139" isotopeCode="2H" name="HB2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_140" isotopeCode="3H" name="HB2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_141" isotopeCode="1H" name="HB3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_142" isotopeCode="2H" name="HB3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_143" isotopeCode="3H" name="HB3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_144" isotopeCode="1H" name="HD1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_145" isotopeCode="2H" name="HD1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_146" isotopeCode="3H" name="HD1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_147" isotopeCode="1H" name="HD2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_148" isotopeCode="2H" name="HD2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_149" isotopeCode="3H" name="HD2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_150" isotopeCode="1H" name="HE1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_151" isotopeCode="2H" name="HE1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_152" isotopeCode="3H" name="HE1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_153" isotopeCode="1H" name="HE2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_154" isotopeCode="2H" name="HE2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_155" isotopeCode="3H" name="HE2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_156" isotopeCode="1H" name="HZ" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_157" isotopeCode="2H" name="HZ" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_158" isotopeCode="3H" name="HZ" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_159" isotopeCode="14N" name="N" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_160" isotopeCode="15N" name="N" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_161" isotopeCode="16O" name="O" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_162" isotopeCode="17O" name="O" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_163" isotopeCode="18O" name="O" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_164" isotopeCode="16O" name="O'" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_165" isotopeCode="17O" name="O'" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_166" isotopeCode="18O" name="O'" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_167" isotopeCode="16O" name="O''" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_168" isotopeCode="17O" name="O''" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_169" isotopeCode="18O" name="O''" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+          </CCLB.Isotopomer.atomLabels>
+        </CCLB.Isotopomer>
+      </CCLB.ChemCompLabel.isotopomers>
+    </CCLB.ChemCompLabel>
+    <CCLB.ChemCompLabel _ID="_170" ccpCode="Ser" molType="protein">
+      <CCLB.ChemCompLabel.isotopomers>
+        <CCLB.Isotopomer _ID="_171" serial="1" weight="1.0">
+          <CCLB.Isotopomer.atomLabels>
+            <CCLB.AtomLabel _ID="_172" isotopeCode="12C" name="C" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_173" isotopeCode="13C" name="C" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_174" isotopeCode="14C" name="C" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_175" isotopeCode="12C" name="CA" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_176" isotopeCode="13C" name="CA" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_177" isotopeCode="14C" name="CA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_178" isotopeCode="12C" name="CB" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_179" isotopeCode="13C" name="CB" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_180" isotopeCode="14C" name="CB" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_181" isotopeCode="1H" name="H" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_182" isotopeCode="2H" name="H" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_183" isotopeCode="3H" name="H" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_184" isotopeCode="1H" name="H''" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_185" isotopeCode="2H" name="H''" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_186" isotopeCode="3H" name="H''" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_187" isotopeCode="1H" name="H1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_188" isotopeCode="2H" name="H1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_189" isotopeCode="3H" name="H1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_190" isotopeCode="1H" name="H2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_191" isotopeCode="2H" name="H2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_192" isotopeCode="3H" name="H2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_193" isotopeCode="1H" name="H3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_194" isotopeCode="2H" name="H3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_195" isotopeCode="3H" name="H3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_196" isotopeCode="1H" name="HA" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_197" isotopeCode="2H" name="HA" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_198" isotopeCode="3H" name="HA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_199" isotopeCode="1H" name="HB2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_200" isotopeCode="2H" name="HB2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_201" isotopeCode="3H" name="HB2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_202" isotopeCode="1H" name="HB3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_203" isotopeCode="2H" name="HB3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_204" isotopeCode="3H" name="HB3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_205" isotopeCode="1H" name="HG" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_206" isotopeCode="2H" name="HG" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_207" isotopeCode="3H" name="HG" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_208" isotopeCode="14N" name="N" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_209" isotopeCode="15N" name="N" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_210" isotopeCode="16O" name="O" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_211" isotopeCode="17O" name="O" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_212" isotopeCode="18O" name="O" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_213" isotopeCode="16O" name="O'" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_214" isotopeCode="17O" name="O'" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_215" isotopeCode="18O" name="O'" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_216" isotopeCode="16O" name="O''" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_217" isotopeCode="17O" name="O''" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_218" isotopeCode="18O" name="O''" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_219" isotopeCode="16O" name="OG" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_220" isotopeCode="17O" name="OG" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_221" isotopeCode="18O" name="OG" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+          </CCLB.Isotopomer.atomLabels>
+        </CCLB.Isotopomer>
+      </CCLB.ChemCompLabel.isotopomers>
+    </CCLB.ChemCompLabel>
+    <CCLB.ChemCompLabel _ID="_222" ccpCode="Tyr" molType="protein">
+      <CCLB.ChemCompLabel.isotopomers>
+        <CCLB.Isotopomer _ID="_223" serial="1" weight="1.0">
+          <CCLB.Isotopomer.atomLabels>
+            <CCLB.AtomLabel _ID="_224" isotopeCode="12C" name="C" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_225" isotopeCode="13C" name="C" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_226" isotopeCode="14C" name="C" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_227" isotopeCode="12C" name="CA" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_228" isotopeCode="13C" name="CA" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_229" isotopeCode="14C" name="CA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_230" isotopeCode="12C" name="CB" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_231" isotopeCode="13C" name="CB" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_232" isotopeCode="14C" name="CB" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_233" isotopeCode="12C" name="CD1" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_234" isotopeCode="13C" name="CD1" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_235" isotopeCode="14C" name="CD1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_236" isotopeCode="12C" name="CD2" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_237" isotopeCode="13C" name="CD2" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_238" isotopeCode="14C" name="CD2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_239" isotopeCode="12C" name="CE1" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_240" isotopeCode="13C" name="CE1" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_241" isotopeCode="14C" name="CE1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_242" isotopeCode="12C" name="CE2" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_243" isotopeCode="13C" name="CE2" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_244" isotopeCode="14C" name="CE2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_245" isotopeCode="12C" name="CG" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_246" isotopeCode="13C" name="CG" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_247" isotopeCode="14C" name="CG" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_248" isotopeCode="12C" name="CZ" subType="1" weight="98.930000000000007">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_249" isotopeCode="13C" name="CZ" subType="1" weight="1.0700000000000001">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_250" isotopeCode="14C" name="CZ" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_251" isotopeCode="1H" name="H" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_252" isotopeCode="2H" name="H" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_253" isotopeCode="3H" name="H" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_254" isotopeCode="1H" name="H''" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_255" isotopeCode="2H" name="H''" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_256" isotopeCode="3H" name="H''" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_257" isotopeCode="1H" name="H1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_258" isotopeCode="2H" name="H1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_259" isotopeCode="3H" name="H1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_260" isotopeCode="1H" name="H2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_261" isotopeCode="2H" name="H2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_262" isotopeCode="3H" name="H2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_263" isotopeCode="1H" name="H3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_264" isotopeCode="2H" name="H3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_265" isotopeCode="3H" name="H3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_266" isotopeCode="1H" name="HA" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_267" isotopeCode="2H" name="HA" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_268" isotopeCode="3H" name="HA" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_269" isotopeCode="1H" name="HB2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_270" isotopeCode="2H" name="HB2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_271" isotopeCode="3H" name="HB2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_272" isotopeCode="1H" name="HB3" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_273" isotopeCode="2H" name="HB3" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_274" isotopeCode="3H" name="HB3" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_275" isotopeCode="1H" name="HD1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_276" isotopeCode="2H" name="HD1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_277" isotopeCode="3H" name="HD1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_278" isotopeCode="1H" name="HD2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_279" isotopeCode="2H" name="HD2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_280" isotopeCode="3H" name="HD2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_281" isotopeCode="1H" name="HE1" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_282" isotopeCode="2H" name="HE1" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_283" isotopeCode="3H" name="HE1" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_284" isotopeCode="1H" name="HE2" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_285" isotopeCode="2H" name="HE2" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_286" isotopeCode="3H" name="HE2" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_287" isotopeCode="1H" name="HH" subType="1" weight="99.984999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_288" isotopeCode="2H" name="HH" subType="1" weight="0.014999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_289" isotopeCode="3H" name="HH" subType="1" weight="0.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_290" isotopeCode="14N" name="N" subType="1" weight="1.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_291" isotopeCode="15N" name="N" subType="1" weight="19.0">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_292" isotopeCode="16O" name="O" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_293" isotopeCode="17O" name="O" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_294" isotopeCode="18O" name="O" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_295" isotopeCode="16O" name="O'" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_296" isotopeCode="17O" name="O'" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_297" isotopeCode="18O" name="O'" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_298" isotopeCode="16O" name="O''" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_299" isotopeCode="17O" name="O''" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_300" isotopeCode="18O" name="O''" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_301" isotopeCode="16O" name="OH" subType="1" weight="99.757000000000005">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_302" isotopeCode="17O" name="OH" subType="1" weight="0.037999999999999999">
+            </CCLB.AtomLabel>
+            <CCLB.AtomLabel _ID="_303" isotopeCode="18O" name="OH" subType="1" weight="0.20499999999999996">
+            </CCLB.AtomLabel>
+          </CCLB.Isotopomer.atomLabels>
+        </CCLB.Isotopomer>
+      </CCLB.ChemCompLabel.isotopomers>
+    </CCLB.ChemCompLabel>
+  </CCLB.LabelingScheme.chemCompLabels>
+</CCLB.LabelingScheme>
+
+</_StorageUnit>
+<!--End of Memops Data-->

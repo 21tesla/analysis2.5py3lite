@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit time="Wed Jul 20 11:40:36 2005" release="1.0.204" 
+ packageName="ccp.Molecule" root="test" originator="CCPN Python XmlIO">
+ 
+<ChemCompHead _ID="_1" molType="protein" ccpCode="ALA">
+  <molResidues _IDREF="_2"/>
+  <contentStorage>
+    <key1 serial="26"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_3" molType="protein" ccpCode="GLY">
+  <molResidues _IDREF="_4"/>
+  <molResidues _IDREF="_5"/>
+  <contentStorage>
+    <key1 serial="27"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_6" molType="protein" ccpCode="TYR">
+  <molResidues _IDREF="_7"/>
+  <contentStorage>
+    <key1 serial="28"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_8" molType="protein" ccpCode="GLU">
+  <molResidues _IDREF="_9"/>
+  <contentStorage>
+    <key1 serial="29"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_10" molType="protein" ccpCode="LEU">
+  <molResidues _IDREF="_11"/>
+  <contentStorage>
+    <key1 serial="30"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_12" molType="protein" ccpCode="SER">
+  <molResidues _IDREF="_13"/>
+  <contentStorage>
+    <key1 serial="31"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_14" molType="protein" ccpCode="HIS">
+  <molResidues _IDREF="_15"/>
+  <contentStorage>
+    <key1 serial="32"/>
+  </contentStorage>
+</ChemCompHead>
+<ChemCompHead _ID="_16" molType="protein" ccpCode="ILE">
+  <molResidues _IDREF="_17"/>
+  <contentStorage>
+    <key1 serial="33"/>
+  </contentStorage>
+</ChemCompHead>
+<Molecule _ID="_18">
+  <name>myMoleculeName</name>
+  <MolResidue _ID="_2" serial="1" seqCode="0" linking="start" chemCompHead="_1">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>prot:H3</descriptor>
+    <MolResLinkEnd _ID="_19" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_4" serial="2" seqCode="1" linking="middle" chemCompHead="_3">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>neutral</descriptor>
+    <MolResLinkEnd _ID="_20" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_21" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_7" serial="3" seqCode="2" linking="middle" chemCompHead="_6">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>prot:HH</descriptor>
+    <MolResLinkEnd _ID="_22" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_23" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_9" serial="4" seqCode="3" linking="middle" chemCompHead="_8">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>deprot:HE2</descriptor>
+    <MolResLinkEnd _ID="_24" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_25" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_11" serial="5" seqCode="4" linking="middle" chemCompHead="_10">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>neutral</descriptor>
+    <MolResLinkEnd _ID="_26" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_27" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_5" serial="6" seqCode="5" linking="middle" chemCompHead="_3">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>neutral</descriptor>
+    <MolResLinkEnd _ID="_28" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_29" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_13" serial="7" seqCode="6" linking="middle" chemCompHead="_12">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>prot:HG</descriptor>
+    <MolResLinkEnd _ID="_30" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_31" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_15" serial="8" seqCode="7" linking="middle" chemCompHead="_14">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>prot:HD1,HE2</descriptor>
+    <MolResLinkEnd _ID="_32" linkCode="prev">
+    </MolResLinkEnd>
+    <MolResLinkEnd _ID="_33" linkCode="next">
+    </MolResLinkEnd>
+  </MolResidue>
+  <MolResidue _ID="_17" serial="9" seqCode="8" linking="end" chemCompHead="_16">
+    <seqInsertCode> </seqInsertCode>
+    <descriptor>deprot:H''</descriptor>
+    <MolResLinkEnd _ID="_34" linkCode="prev">
+    </MolResLinkEnd>
+  </MolResidue>
+</Molecule>
+
+</_StorageUnit>
+<!--End of Memops Data-->

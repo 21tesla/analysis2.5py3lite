@@ -1,0 +1,107 @@
+1. makeDnaMolecule.py
+
+Create a molecule of DNA with the sequence 'ATGGATCATTAG'.
+
+Hint: use the example of making a protein given in the notes in ex4.py .
+
+Molecules are top objects in the Molecule package.
+
+From this top object, molResidues can be made, but it is first necessary
+  to get the reference ChemComp information for each residue type.
+
+For each residue:
+
+i) Find the first ChemComp with the relevant one-letter DNA code and
+     make the 'molType' to be 'DNA'.
+
+ii) Then set the correct linking ('start' for the first residue,
+      'middle', or 'end' for the last residue).
+
+iii) Use this linking to find the first ChemCompVar with 'isDefaultVar'
+       set to 'True'.
+
+iv) Next, make a new MolResidue with the ChemComp, linking, residue
+      position and descriptor information (from the ChemCompVar).
+
+v) Finally, link the residues to each other - see hint below.
+
+Check that the molecule has been made into a correct, linear molecule
+  using molecule.isStdLinear .
+
+Also, navigate the molecule object for its name and the molResidue codes.
+
+Save this molecule in a new CCPN project to XML files.
+
+Hint: we have provided a sub-routine to do the linking of residues
+  to each other:
+
+  - from ccp.examples.workshop.session2.makeMolSystem import makeLinearLink
+
+  - makeLinearLink(molecule, molResidue, position, linking) .
+
+
+2. makeDnaMolSystem.py
+
+Load the project made in exercise 2.1.
+
+Create a new molSystem with a chain attached to the molecule from
+  the 'reference' molecule project.
+
+Print out the residue type, position and all the atoms found in
+  each residue.
+
+Check that the project is valid.
+
+Hint: Look at class methods for MemopsRoot objects.
+
+
+*NOTE*: Those attendees who are interested in carbohydrates may want to
+  do exercise 4 first
+
+
+3. loadSequence.py
+
+Use FormatConverter sub-routines to load a sequence located in
+  '../data/seq/fasta.seq'.
+
+Use an instance of the FastaFormat class located in
+  ccpnmr.format.converters.FastaFormat and then the readSequence()
+  method for that object.
+
+Print out the molSystem and molecule information and navigate
+  some of the residue information.
+
+Hint: create a Tk object from the Tkinter module when making the
+  FastaFormat instance and also create the FastaFormat object
+  with a newly made CCPN project.
+
+
+4. makeCarbMolecule.py
+
+Make a carbohydrate from two sugar residues - 'molType' is 'carbohydrate'.
+
+The two residues are in a local data directory: '../data'.
+
+You will need to add a new repository with the above url to the
+  packageLocator with the 'targetName' of 'ccp.molecule.ChemComp'.
+
+Note that you don't need to make ChemCompVars like with DNA or proteins.
+
+Also, the linking string is more complicated for the branched carbohydrates.
+
+The first residue is called 'dglc-hex-1-5:C1_OMe:C2_NAc' and has the
+  following attributes 'linking': 'link:O4' and 'descriptor': 'stereo_2:C1'.
+
+The second residue is called 'dglc-hex-1-5:C2_NAc' and has the
+  following attributes 'linking': 'link:C1_2' and 'descriptor': 'stereo_2:C1'.
+
+Hint: we have provided a sub-routine to do the linking of residues
+  to each other:
+
+  - from ccp.examples.workshop.session2.makeMolSystem import makeBranchedLink
+
+  - makeBranchedLink(molecule, molResidue, linkCode,
+                     boundMolResidue, boundLinkCode) .
+    where: 'linkCode': 'C1_2' and 'boundLinkCode': 'O4'
+
+Finally, navigate the molecule, molSystem, chain and linked atom objects.

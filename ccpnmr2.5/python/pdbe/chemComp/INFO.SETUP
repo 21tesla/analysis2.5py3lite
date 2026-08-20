@@ -1,0 +1,84 @@
+Organisation of data:
+
+- The set of chemComps that is provided with the default CCPN distribution is
+limited, and the actual archive of data is organised differently for API reasons
+(it will try to load everything if all files were in one directory).
+
+- There is an archive/ and a test/ directory in data/pdbe/chemComp/. The
+archive/ directory should directly reflect the CVS ccpn-chemcomp archive at
+CcpForge, the test/ directory can be local and is for writing out test versions
+of the chemComps.
+
+- Both these directories have ChemComp/ and ChemCompCoord/ directories.
+
+- In the ChemComp/ directory, there are subdirectories per molType, and for the
+'other' molType there are also subdirectories by the first character of the
+ccpCode (so 'A' for ADP).
+
+- In the ChemCompCoord/ directory, there are subdirectories per sourceName (so
+the origin of the coordinate system), then per molType. For the 'other' molType
+there are again subdirectories by the first character of the ccpCode.
+
+- The obsolete/ directory is organised as above, and contains old chemComp files
+that were replaced (only from archive/ directory!!)
+
+
+------------------------------------
+SEE SCRIPT:
+
+local/defaultChemCompHandling
+
+for examples on below code.
+------------------------------------
+
+Main functions:
+
+In msd/chemComp/Util.py:
+
+- initialiseChemCompScript:
+
+  Takes arguments to run script in test mode, ...
+
+- getCcpCodeList
+
+  Returns a list of tuples with the molType and a list of ccpCodes for that
+  molType.
+
+- getGuidFromXmlFileName
+
+  Gets the GUID from an XML filename. Important for re-using GUID when creating
+  new ChemComp.
+
+
+In msd/chemComp/Io.py:
+
+- findChemCompOrCoordFilePath
+  
+  Finds an existing XML file for the chemComp(Coord) object
+  
+- getNewChemCompOrCoordFilePath
+
+  Creates a new XML file name for the chemComp(Coord) object
+  
+- getChemCompFilePath
+
+  Gets the file path for an archive dir, molType, ccpCode (if already exists)
+  
+- getChemCompCoordFilePath
+
+  Gets the file path for an archive dir, sourceName, molType, ccpCode (if already exists)
+
+- findExistingChemCompInfo
+
+  Returns an existing GUID and whether the file exists for the relevant directory
+  (i.e. archive/ or test/)
+  
+- saveTemporaryChemCompOrCoord:
+
+  Saves the chemComp(Coord) to a temporary location. Returns the location of this
+  file and the location of an existing relevant file (if any).
+  
+- consolidateTemporaryChemCompOrCoord:
+
+  Consolidates the temporary XML file for the chemComp(Coord). Use with care, as
+  this will overwrite existing files!

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<!--
+======================COPYRIGHT/LICENSE START==========================
+
+quickguide.html: General documentation for CCPN data model and code generation framework
+
+Copyright (C) 2004  (CCPN Project)
+
+=======================================================================
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+ 
+A copy of this license can be found in ../license/LGPL.license
+ 
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+ 
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+
+======================COPYRIGHT/LICENSE END============================
+
+for further information, please contact :
+
+- CCPN website (http://www.ccpn.ac.uk/)
+
+- email: ccpn@bioc.cam.ac.uk
+
+=======================================================================
+===========================REFERENCE START=============================
+===========================REFERENCE END===============================
+
+-->
+<head>
+<title>CCPN Diagrams</title>
+<link rel="stylesheet" type="text/css" href="htmldoc.css" title="Style">
+<script language="JavaScript">
+function wopn(href){ window.open(href,'','width=880,height=500,top=300,left=300,resizable=0,toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1')}
+</script>   
+</head>
+
+<body>
+<table height=100 width=100% bgcolor="F0CC99" border=0>
+  <tr>
+	<td><a target="blank" href="http://www.ccpn.ac.uk"><img border=0 src="../../doc/graphics/CCPN_Logo_200_x.gif" alt="CCPN"/></a></td>
+	<td width="80%" valign="bottom">
+	</td>
+  </tr>
+</table>
+
+<table width="100%">
+  <tr>
+    <td>
+	<h3>Quick guide to CCP software development</h3>
+        <br>
+		<h4>What is the 'data model'?</h4>
+
+		<ol><p>The data model itself is an abstract description of all the data commonly used in NMR (with other areas like protein production being included).  For example, the data model describes an 'Experiment' object which is linked to 'ExpDim' object(s) that describe the different dimensions in an NMR experiment. This abstract description of the data model is represented and maintained graphically using the Universal Modelling Language (UML).</ol>
+
+		<h4>What are 'packages'?</h4>
+
+		<ol><p>The data model is split up in packages. Each of these packages describes a 'unit' of information that can be shared by other packages. For example, the description of a template molecule is done in the 'Molecule' package, the description of a molecular system with 'real' molecules is done in the 'MolSystem' package. The 'Nmr' package uses information from the 'MolSystem' package, which could be shared by an 'Xray' package if it was available. For this reason the data of each package is stored in separate locations. </ol>
+
+		<h4>What is the 'API'?</h4>
+
+		<ol><p>API stands for Application Programming Interface. With an API the objects described by the data model can be manipulated in computer memory. Basically this means that the data is organized in a way that is consistent with the 'data model'. The API therefore also handles consistency checking of the objects (e.g. an Nmr 'Experiment' object has to be linked to at least one 'ExpDim' (experiment dimension)). The API is currently only available in Python, but a Java version is in the making.</ol>
+
+		<h4>Which programs use this 'API'?</h4>
+
+		<ol><p>Currently only the ccpNmr applications interact directly with data inside the data model. These applications include 'FormatConverter' and 'Analysis', with 'Processing' available soon. The new ARIA software, validation software from the CMBI, and CLOUDS will work with the data model indirectly (and eventually directly). Our hope is that more applications will convert to using the data model API now that working applications are available that show its advantages.</ol>
+
+		<h4>How do I get my data into (and out of) the 'data model'?</h4>
+
+		<ol><p>The ccpNmr FormatConverter application allows you to import data from existing formats into the data model. Export functions are also available so it can be used as a format converter between existing formats. Currently Ansig, Dyana, Cns, Cyana, Fasta, NmrDraw, NmrStar, NmrView, Pdb, Pipp, Pronto, Sparky and XEasy are fully or partially supported.</ol>
+        
+		<h4>What is the advantage of having data inside the 'data model'?</h4>
+		<ul>
+		  <li><p>All programs that work with the data model 'understand' each other. For example, you can read data into the data model with the ccpNmr FormatConverter, start using ccpNmr Analysis straight away (providing it understands the spectrum raw data format), and transfer the information to ARIA for a structure calculation.</li>
+
+		  <li><p>Scripts that work on the data model can be used by every application that uses a data model API. For example, if a good automatic assignment script was written it could be run from any data model based application.</li>
+
+		  <li><p>Import/export to foreign formats comes for free (see above). This basically allows you to store all your data in one place throughout a project, while going back and forth between different programs while doing that. Final export to an nmrStar file ready for deposition will also be included.</li>
+		</ul>
+
+		<h4>What else is planned?</h4>
+		<ul>
+		  <li><p>Further data modelling of other 'bio' areas.</li>
+
+		  <li><p>Development of a LIMS system, which also includes information for sample preparation, protein production, ... </li>
+
+		  <li><p>New code for the data model to do things like automatic assignment, ...</li>
+ 
+		  <li><p>Full support for databases - so that you can store all information in a relational database while you work on it.</li>
+		</ul>
+    </td>
+  </tr>
+</table>
+  
+<div class="leftbanner">
+<table width=100% cellspacing=0 cellpading=0 border=0>
+  <tr><td bgcolor="#794E83" align=center><a target="blank" href="http://www.ccpn.ac.uk">www.ccpn.ac.uk</a></td></tr>
+</table>
+</div>
+<table width=100% cellspacing=0 cellpading=0 border=0>
+  <tr valign=top>
+    <td><h6>Work done by the <a href="mailto:ccpn-dev@bioc.cam.ac.uk">CCPN team</a>.</h6></td>
+	<td align=right><h6>
+<!-- Created: Thu Nov  7 10:56:59 GMT 2002 -->
+<!-- hhmts start -->
+Last modified: Tue May 25 18:59:48 CEST 2004
+<!-- hhmts end -->
+    </h6>
+	</td>
+  </tr>
+</table>
+<br/>
+
+</body>
+</html>

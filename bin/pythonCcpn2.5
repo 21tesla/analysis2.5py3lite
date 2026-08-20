@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" || exit && pwd)"
+source "${SCRIPTDIR}/paths.sh"
+
+if [[ ${UNAME} == *"Win"* || ${UNAME} == *"MING"* ]]; then
+  echo "Please use the scripts in the 'bat' directory"
+else
+  "${CONDA}"/bin/python -O $*
+fi

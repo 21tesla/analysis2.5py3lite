@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit release="2.0.b3" originator="CCPN Python XmlIO" packageGuid="www.ccpn.ac.uk_Fogh_2006-08-16-14:25:08_00001" time="Thu Aug 27 17:05:50 2009">
+
+<NMRR.NmrReferenceStore _ID="_1" ccpCode="Nle" createdBy="user" guid="NmrReferenceTemp_user_2009-08-27-17-05-50-853_00001" molType="protein">
+  <NMRR.NmrReferenceStore.chemCompNmrRefs>
+    <NMRR.ChemCompNmrRef _ID="_2">
+      <NMRR.ChemCompNmrRef.sourceName>
+        <IMPL.Line>BMRB</IMPL.Line>
+      </NMRR.ChemCompNmrRef.sourceName>
+      <NMRR.ChemCompNmrRef.chemAtomNmrRefs>
+        <NMRR.ChemAtomNmrRef _ID="_3" meanValue="0.85000000000000009" name="HE1" refPoint="0.0" refValue="0.69999999999999996" serial="1" stdDev="0.035276684147527868" valuePerPoint="0.050000000000000003">
+          <NMRR.ChemAtomNmrRef.distribution> 0.0 0.10526315789473684 0.26315789473684209 0.57894736842105265 0.052631578947368418 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+        <NMRR.ChemAtomNmrRef _ID="_5" meanValue="8.2741904761904745" name="H" refPoint="0.0" refValue="4.9000000000000004" serial="2" stdDev="0.83959464142213391" valuePerPoint="0.050000000000000003">
+          <NMRR.ChemAtomNmrRef.distribution> 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.047619047619047616 0.0 0.0 0.0 0.047619047619047616 0.0 0.0 0.0 0.0 0.0 0.047619047619047616 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.047619047619047616 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.14285714285714285 0.0 0.0 0.047619047619047616 0.0 0.047619047619047616 0.0 0.047619047619047616 0.0 0.095238095238095233 0.0 0.0 0.0 0.095238095238095233 0.047619047619047616 0.0 0.0 0.0 0.0 0.047619047619047616 0.0 0.047619047619047616 0.0 0.095238095238095233 0.0 0.0 0.047619047619047616 0.047619047619047616 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+        <NMRR.ChemAtomNmrRef _ID="_6" meanValue="51.103210526315792" name="CA" refPoint="0.0" refValue="44.0" serial="3" stdDev="1.6854682362591686" valuePerPoint="0.5">
+          <NMRR.ChemAtomNmrRef.distribution> 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.10526315789473684 0.0 0.052631578947368418 0.0 0.0 0.10526315789473684 0.10526315789473684 0.21052631578947367 0.15789473684210525 0.10526315789473684 0.0 0.10526315789473684 0.0 0.052631578947368418 0.0 0.0 0.0 0.0 0.0 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+        <NMRR.ChemAtomNmrRef _ID="_7" meanValue="0.89600000000000002" name="HD2" refPoint="0.0" refValue="0.90000000000000002" serial="4" stdDev="0.0084852813742385784" valuePerPoint="0.050000000000000003">
+          <NMRR.ChemAtomNmrRef.distribution> 1.0 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+        <NMRR.ChemAtomNmrRef _ID="_8" meanValue="4.5709523809523818" name="HA" refPoint="0.0" refValue="3.5" serial="5" stdDev="0.2718592422910201" valuePerPoint="0.050000000000000003">
+          <NMRR.ChemAtomNmrRef.distribution> 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.047619047619047616 0.095238095238095233 0.0 0.047619047619047616 0.095238095238095233 0.047619047619047616 0.095238095238095233 0.19047619047619047 0.047619047619047616 0.047619047619047616 0.0 0.0 0.047619047619047616 0.0 0.0 0.047619047619047616 0.095238095238095233 0.095238095238095233 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+        <NMRR.ChemAtomNmrRef _ID="_9" meanValue="1.611" name="HB2" refPoint="0.0" refValue="0.5" serial="6" stdDev="0.28425692603699221" valuePerPoint="0.050000000000000003">
+          <NMRR.ChemAtomNmrRef.distribution> 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0</NMRR.ChemAtomNmrRef.distribution>
+          <NMRR.ChemAtomNmrRef.chemCompVarNmrRefs> _4</NMRR.ChemAtomNmrRef.chemCompVarNmrRefs>
+        </NMRR.ChemAtomNmrRef>
+      </NMRR.ChemCompNmrRef.chemAtomNmrRefs>
+      <NMRR.ChemCompNmrRef.chemCompVarNmrRefs>
+        <NMRR.ChemCompVarNmrRef _ID="_4">
+          <NMRR.ChemCompVarNmrRef.chemAtomNmrRefs> _5 _9 _7 _6 _3 _8</NMRR.ChemCompVarNmrRef.chemAtomNmrRefs>
+        </NMRR.ChemCompVarNmrRef>
+      </NMRR.ChemCompNmrRef.chemCompVarNmrRefs>
+    </NMRR.ChemCompNmrRef>
+  </NMRR.NmrReferenceStore.chemCompNmrRefs>
+</NMRR.NmrReferenceStore>
+
+</_StorageUnit>
+<!--End of Memops Data-->

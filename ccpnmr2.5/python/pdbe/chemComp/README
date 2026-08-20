@@ -1,0 +1,24 @@
+Directory information:
+---------------------
+
+- carbo/
+
+    Carbohydrate specific scripts
+    
+- check/
+
+    Scripts for printing out and checking information
+    
+- database/
+
+    Is now part of internal PDBe SVN to allow weekly updates.
+    
+- export/
+
+    Scripts for handling export of chemComps, converting in other files,
+    creating licenses so are available, ...
+
+- modify/
+
+    Scripts to modify chemComp information (except naming systems)
+ 

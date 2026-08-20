@@ -1,0 +1,33 @@
+(1) Get hold of peakList from Nmr Experiment exercise.
+
+(2) Create a Peak in this PeakList.
+  mandatory arguments: None
+
+Note: peakDims automatically created.
+
+A Peak can have PeakContribs.  These describe a Peak as a sum of different
+contributions (e.g. overlapped peaks), or serve as a way of describing
+mutually exclusive sets of assignment possibilities.
+
+One subtle point is that PeakContrib has PeakDimContribs, but the latter
+are children of PeakDim rather than PeakContrib.
+
+Each PeakDimContrib has to be associated with a unique Resonance, and
+one or more PeakContribs.  Conversely, a Resonance can be associated
+with zero or more PeakDimContribs.
+
+(3) Create a PeakContrib for this Peak.
+  mandatory arguments: None
+
+(4) Create a Resonance for each dimension.
+  mandatory argument: isotopeCode
+
+Note that a PeakDim can have a DataDimRef, and if it does then that
+in turn has an ExpDimRef, and that provides a required compatibility
+for the isotopeCode.
+
+(4) Create a PeakDimContrib for each PeakDim in the Peak.
+  mandatory arguments: peakContribs, resonance
+
+(We only have one peakContrib at this point so use that one.)
+

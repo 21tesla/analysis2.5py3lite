@@ -1,0 +1,4 @@
+#!/bin/sh
+
+\rm *.so
+ln -s ../../../c/other/meccano/pysrc/Meccano.so Meccano.so

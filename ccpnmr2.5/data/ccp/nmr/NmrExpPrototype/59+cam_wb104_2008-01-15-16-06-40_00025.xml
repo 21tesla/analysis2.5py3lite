@@ -1,0 +1,1021 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit release="2.1.0" originator="CCPN Python XmlIO" packageGuid="www.ccpn.ac.uk_Fogh_2006-08-16-14:22:45_00019" time="Thu Oct  6 16:45:56 2011">
+
+<NMRX.NmrExpPrototype _ID="_1" createdBy="ccpnRef" guid="cam_wb104_2008-01-15-16-06-40_00025" lastUnlockedBy="editor" serial="59">
+  <NMRX.NmrExpPrototype.category>
+    <NMRX.ExpCategory>through-bond</NMRX.ExpCategory>
+  </NMRX.NmrExpPrototype.category>
+  <NMRX.NmrExpPrototype.keywords>
+    <NMRX.ExpKeyword>protein</NMRX.ExpKeyword>
+  </NMRX.NmrExpPrototype.keywords>
+  <NMRX.NmrExpPrototype.name>
+    <IMPL.Line>H{CA|Cca}CONH</IMPL.Line>
+  </NMRX.NmrExpPrototype.name>
+  <NMRX.NmrExpPrototype.synonym>
+    <IMPL.Line>HBCB/HACACONNH</IMPL.Line>
+  </NMRX.NmrExpPrototype.synonym>
+  <NMRX.NmrExpPrototype.atomSites>
+    <NMRX.AtomSite _ID="_2" isotopeCode="1H" name="H" serial="1">
+      <NMRX.AtomSite.expMeasurements> _3</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _4 _5</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+    <NMRX.AtomSite _ID="_6" isotopeCode="13C" name="C" serial="2">
+      <NMRX.AtomSite.expMeasurements> _7</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _8 _4 _5 _9</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+    <NMRX.AtomSite _ID="_10" isotopeCode="13C" maxShift="75.0" minShift="40.0" name="CA" serial="3">
+      <NMRX.AtomSite.expMeasurements> _11</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _12 _9</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+    <NMRX.AtomSite _ID="_13" isotopeCode="13C" maxShift="225.0" minShift="155.0" name="CO" serial="4">
+      <NMRX.AtomSite.expMeasurements> _14</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _15 _8 _12 _16</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+    <NMRX.AtomSite _ID="_17" isotopeCode="15N" name="N" serial="5">
+      <NMRX.AtomSite.expMeasurements> _18</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _19 _15 _16 _20</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+    <NMRX.AtomSite _ID="_21" isotopeCode="1H" name="H" serial="6">
+      <NMRX.AtomSite.expMeasurements> _22</NMRX.AtomSite.expMeasurements>
+      <NMRX.AtomSite.expTransfers> _19 _20</NMRX.AtomSite.expTransfers>
+    </NMRX.AtomSite>
+  </NMRX.NmrExpPrototype.atomSites>
+  <NMRX.NmrExpPrototype.expGraphs>
+    <NMRX.ExpGraph _ID="_23" peakSign="1" serial="1">
+      <NMRX.ExpGraph.expSteps>
+        <NMRX.ExpStep _ID="_24" serial="1" stepNumber="1">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_25" serial="2" stepNumber="2">
+          <NMRX.ExpStep.refExpDimRefs> _26 _27 _28 _29 _30 _31 _32 _33 _34 _35 _36 _37 _38 _39 _40 _41</NMRX.ExpStep.refExpDimRefs>
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_42" serial="3" stepNumber="3">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_43" serial="4" stepNumber="4">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_44" serial="5" stepNumber="5">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_45" serial="6" stepNumber="6">
+        </NMRX.ExpStep>
+      </NMRX.ExpGraph.expSteps>
+      <NMRX.ExpGraph.expTransfers>
+        <NMRX.ExpTransfer _ID="_5" serial="1" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _2 _6</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_9" serial="2" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _6 _10</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_12" serial="3" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _10 _13</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_16" serial="4" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _13 _17</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_20" serial="5" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _17 _21</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+      </NMRX.ExpGraph.expTransfers>
+    </NMRX.ExpGraph>
+    <NMRX.ExpGraph _ID="_46" peakSign="1" serial="2">
+      <NMRX.ExpGraph.expSteps>
+        <NMRX.ExpStep _ID="_47" serial="1" stepNumber="1">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_48" serial="2" stepNumber="2">
+          <NMRX.ExpStep.refExpDimRefs> _26 _27 _28 _29 _30 _31 _32 _33 _34 _35 _36 _37 _38 _39 _40 _41</NMRX.ExpStep.refExpDimRefs>
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_49" serial="3" stepNumber="3">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_50" serial="4" stepNumber="4">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_51" serial="5" stepNumber="5">
+        </NMRX.ExpStep>
+        <NMRX.ExpStep _ID="_52" serial="6" stepNumber="6">
+        </NMRX.ExpStep>
+      </NMRX.ExpGraph.expSteps>
+      <NMRX.ExpGraph.expTransfers>
+        <NMRX.ExpTransfer _ID="_4" serial="1" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _2 _6</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_8" serial="2" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _6 _13</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_15" serial="3" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _13 _17</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+        <NMRX.ExpTransfer _ID="_19" serial="4" transferType="onebond">
+          <NMRX.ExpTransfer.atomSites> _17 _21</NMRX.ExpTransfer.atomSites>
+        </NMRX.ExpTransfer>
+      </NMRX.ExpGraph.expTransfers>
+    </NMRX.ExpGraph>
+  </NMRX.NmrExpPrototype.expGraphs>
+  <NMRX.NmrExpPrototype.expMeasurements>
+    <NMRX.ExpMeasurement _ID="_3" serial="1">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _2</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _24 _47</NMRX.ExpMeasurement.expSteps>
+      <NMRX.ExpMeasurement.refExpDimRefs> _53 _54 _55 _56 _57 _58 _59 _60 _61 _62 _63 _64 _65 _66 _67 _68 _69 _70 _71</NMRX.ExpMeasurement.refExpDimRefs>
+    </NMRX.ExpMeasurement>
+    <NMRX.ExpMeasurement _ID="_7" serial="2">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _6</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _25 _48 _49</NMRX.ExpMeasurement.expSteps>
+      <NMRX.ExpMeasurement.refExpDimRefs> _39 _27 _26 _29 _30 _35 _32 _38 _41 _36 _34 _37 _28 _33 _40 _31</NMRX.ExpMeasurement.refExpDimRefs>
+    </NMRX.ExpMeasurement>
+    <NMRX.ExpMeasurement _ID="_11" serial="3">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _10</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _42</NMRX.ExpMeasurement.expSteps>
+    </NMRX.ExpMeasurement>
+    <NMRX.ExpMeasurement _ID="_14" serial="4">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _13</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _43 _50</NMRX.ExpMeasurement.expSteps>
+      <NMRX.ExpMeasurement.refExpDimRefs> _72 _73 _74 _75 _76 _77 _78 _79 _80 _81 _82 _83 _84</NMRX.ExpMeasurement.refExpDimRefs>
+    </NMRX.ExpMeasurement>
+    <NMRX.ExpMeasurement _ID="_18" serial="5">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _17</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _44 _51</NMRX.ExpMeasurement.expSteps>
+      <NMRX.ExpMeasurement.refExpDimRefs> _85 _86 _87 _88 _89 _90 _91 _92 _93 _94 _95 _96 _97 _98 _99</NMRX.ExpMeasurement.refExpDimRefs>
+    </NMRX.ExpMeasurement>
+    <NMRX.ExpMeasurement _ID="_22" serial="6">
+      <NMRX.ExpMeasurement.measurementType>
+        <NMRX.ExpMeasurementType>Shift</NMRX.ExpMeasurementType>
+      </NMRX.ExpMeasurement.measurementType>
+      <NMRX.ExpMeasurement.atomSites> _21</NMRX.ExpMeasurement.atomSites>
+      <NMRX.ExpMeasurement.expSteps> _45 _52</NMRX.ExpMeasurement.expSteps>
+      <NMRX.ExpMeasurement.refExpDimRefs> _100 _101 _102 _103 _104 _105 _106 _107 _108 _109 _110 _111 _112 _113 _114 _115 _116 _117 _118 _119 _120 _121</NMRX.ExpMeasurement.refExpDimRefs>
+    </NMRX.ExpMeasurement>
+  </NMRX.NmrExpPrototype.expMeasurements>
+  <NMRX.NmrExpPrototype.refExperiments>
+    <NMRX.RefExperiment _ID="_122" serial="1">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{CA|Cca}CONH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACACONNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_123" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_63" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_124" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_36" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_125" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_81" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_126" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_96" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_127" dim="5">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_100" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_128" serial="2">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{CA|Cca}coNH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACAcoNNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_129" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_56" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_130" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_30" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_131" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_92" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_132" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_104" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_133" serial="3">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{CA|Cca}COnH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACACOnNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_134" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_58" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_135" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_41" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_136" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_72" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_137" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_105" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_138" serial="4">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{CA|Cca}conH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACAconNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_139" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_61" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_140" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_38" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_141" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_108" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_142" serial="5">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{CA|Cca}coNH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hbCB/haCAcoNNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_143" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_40" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_144" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_85" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_145" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_111" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+      <NMRX.RefExperiment.systematicNames>
+        <NMRX.SystematicName _ID="_146">
+          <NMRX.SystematicName.name>
+            <IMPL.Line>3D CBCA(CO)NH</IMPL.Line>
+          </NMRX.SystematicName.name>
+          <NMRX.SystematicName.namingSystem>
+            <NMRX.NamingSystem>BMRB</NMRX.NamingSystem>
+          </NMRX.SystematicName.namingSystem>
+        </NMRX.SystematicName>
+      </NMRX.RefExperiment.systematicNames>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_147" serial="6">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{ca|cca}coNH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBcb/HAcacoNNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_148" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_62" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_149" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_88" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_150" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_114" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+      <NMRX.RefExperiment.systematicNames>
+        <NMRX.SystematicName _ID="_151">
+          <NMRX.SystematicName.name>
+            <IMPL.Line>3D HBHA(CO)NH</IMPL.Line>
+          </NMRX.SystematicName.name>
+          <NMRX.SystematicName.namingSystem>
+            <NMRX.NamingSystem>BMRB</NMRX.NamingSystem>
+          </NMRX.SystematicName.namingSystem>
+        </NMRX.SystematicName>
+      </NMRX.RefExperiment.systematicNames>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_152" serial="7">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{ca|cca}conH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBcb/HAcaconNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_153" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_54" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_154" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_117" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_155" serial="8">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{CA|Cca}conH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hbCB/haCAconNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_156" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_32" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_157" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_119" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_158" serial="11">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{ca|cca}coNH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hbcb/hacacoNNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_159" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_99" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_160" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_121" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_161" serial="13">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{ca|cca}COnH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hbcb/hacaCOnNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_162" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_73" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_163" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_113" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_164" serial="24">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>H{CA|Cca}CONH.2D.{H;C;CO;N}</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>projection HBCB/HACACONNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_165" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_60" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_33" serial="2">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_76" serial="3">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_90" serial="4">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_166" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_115" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_167" isReversed="true" serial="25">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HNCO{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNNCOCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_168" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_67" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_169" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_28" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_170" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_84" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_171" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_87" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_172" dim="5">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_106" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_173" isReversed="true" serial="26">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>hNCO{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hnNCOCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_174" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_70" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_175" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_37" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_176" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_79" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_177" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_86" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_178" isReversed="true" serial="27">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HnCO{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNnCOCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_179" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_71" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_180" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_27" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_181" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_74" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_182" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_112" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_183" isReversed="true" serial="28">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HNco{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNNcoCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_184" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_69" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_185" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_35" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_186" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_94" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_187" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_116" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_188" isReversed="true" serial="29">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HNCO{ca|cac}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNNCOcaHA/cbHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_189" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_55" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_190" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_75" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_191" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_97" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_192" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_120" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_193" isReversed="true" serial="30">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>hNco{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hnNcoCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_194" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_68" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_195" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_39" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_196" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_98" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_197" isReversed="true" serial="31">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>Hnco{CA|caC}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNncoCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_198" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_57" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_199" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_26" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_200" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_102" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_201" isReversed="true" serial="32">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>hNCO{ca|cac}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>hnNCOcaHA/cbHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_202" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_66" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_203" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_80" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_204" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_95" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_205" isReversed="true" serial="33">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HnCO{ca|cac}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNnCOcaHA/cbHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_206" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_53" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_207" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_78" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_208" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_107" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_209" isReversed="true" serial="34">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HNco{ca|cac}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNNcocaHA/cbHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_210" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_64" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_211" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_93" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_212" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_109" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_213" isReversed="true" serial="36">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>Hnco{ca|cac}H</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HNncocaHA/cbHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_214" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_65" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_215" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_118" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_216" isReversed="true" serial="37">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>HNCO{CA|caC}H.2D.{H;N;CO;C}</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>projection HNNCOCAHA/CBHB</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_217" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_59" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_218" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_34" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_77" serial="2">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_91" serial="3">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+            <NMRX.RefExpDimRef _ID="_110" serial="4">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_219" serial="38">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{CA|Cca}CONH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACACONNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_220" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_31" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_221" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_83" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_222" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_89" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_223" dim="4">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_101" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+    <NMRX.RefExperiment _ID="_224" serial="39">
+      <NMRX.RefExperiment.name>
+        <IMPL.Line>h{CA|Cca}COnH</IMPL.Line>
+      </NMRX.RefExperiment.name>
+      <NMRX.RefExperiment.synonym>
+        <IMPL.Line>HBCB/HACACONNH</IMPL.Line>
+      </NMRX.RefExperiment.synonym>
+      <NMRX.RefExperiment.refExpDims>
+        <NMRX.RefExpDim _ID="_225" dim="1">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_29" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+              <NMRX.RefExpDimRef.expSteps> _25 _48</NMRX.RefExpDimRef.expSteps>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_226" dim="2">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_82" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+        <NMRX.RefExpDim _ID="_227" dim="3">
+          <NMRX.RefExpDim.refExpDimRefs>
+            <NMRX.RefExpDimRef _ID="_103" serial="1">
+              <NMRX.RefExpDimRef.validScalingFactors> 1.0</NMRX.RefExpDimRef.validScalingFactors>
+            </NMRX.RefExpDimRef>
+          </NMRX.RefExpDim.refExpDimRefs>
+        </NMRX.RefExpDim>
+      </NMRX.RefExperiment.refExpDims>
+    </NMRX.RefExperiment>
+  </NMRX.NmrExpPrototype.refExperiments>
+</NMRX.NmrExpPrototype>
+
+</_StorageUnit>
+<!--End of Memops Data-->

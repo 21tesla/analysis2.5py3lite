@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" || exit && pwd)"
+source "${SCRIPTDIR}/paths.sh"
+
+ANALYSIS="${CCPNMR_TOP_DIR}/${VERSION_PATH}"/python/ccpnmr/update/UpdatePopup.py
+if [[ ${UNAME} == *"Win"* || ${UNAME} == *"MING"* ]]; then
+  echo "Please use the scripts in the 'bat' directory"
+else
+  "${CONDA}"/bin/python -i -O -W ignore "${ANALYSIS}" $*
+fi

@@ -1,0 +1,21 @@
+02/11/2005:
+
+Added XPLOR sysNames for ABA HB* and HG*
+
+03/11/2005:
+
+Split up ARG HH11 sysName for PDB into HH1 (deprot HH12) and 1HH1 (prot HH12)
+
+20/03/2006:
+
+Added MOLMOL names for H1,H2,H3 and O',O'' for protein
+
+30/04/2008:
+
+Changed some overlapping GUIDs
+Fixed atom set names with _ in them.
+
+07/10/2008:
+
+Fixed CIF code for DNA, T to DT
+Added XPLOR chemComp names

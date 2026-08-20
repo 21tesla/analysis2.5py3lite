@@ -1,0 +1,8 @@
+These images are derived from the Tango Desktop Project icon libarary.
+
+http://tango.freedesktop.org/
+
+The icons are licensed under the Creative Commons Attribution Share-Alike license.
+See the follwing for terms of reuse or distribution:
+
+http://creativecommons.org/licenses/by-sa/2.5/

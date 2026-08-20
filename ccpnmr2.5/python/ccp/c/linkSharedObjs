@@ -1,0 +1,7 @@
+#!/bin/sh
+
+\rm *.so
+ln -s ../../../c/ccp/structure/StructAtom.so StructAtom.so
+ln -s ../../../c/ccp/structure/StructBond.so StructBond.so
+ln -s ../../../c/ccp/structure/StructStructure.so StructStructure.so
+ln -s ../../../c/ccp/structure/StructUtil.so StructUtil.so

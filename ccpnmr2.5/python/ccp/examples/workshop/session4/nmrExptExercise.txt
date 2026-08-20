@@ -1,0 +1,44 @@
+Nmr Experiment Exercise: Experiment, DataSource, PeakList
+
+(1) Create or load a Project.
+
+(2) Create or find an NmrProject.
+  mandatory arguments: name
+
+(3) Create a 2D Experiment.
+  mandatory arguments: name, numDim
+  other interesting arguments: molSystems, refExperiment
+
+Note: expDims automatically created.
+
+Create ExpDimRef for each ExpDim.
+  mandatory arguments: sf=[800, 81]
+  other arguments to set: unit='ppm', isotopeCodes=[('1H',), ('15N',)]
+
+Optional: Link experiment to a 15N HSQC/HMQC reference experiment.
+
+(4) Create a 2D DataSource (spectrum).
+  mandatory arguments: name, numDim, dataType='processed'
+  other interesting arguments: dataStore
+
+Note: dataDims not automatically created.
+
+Create the FreqDataDims.
+  mandatory arguments: dim, isComplex=[False,False], numPoints=[2048,1024],
+                       numPointsOrig=[2048,1024], valuePerPoint=[3.93, 0.99],
+                       expDim
+                       (valuePerPoint = sw / numPoints)
+
+Create the DataDimRefs.
+  mandatory arguments: expDimRef
+  other arguments to set: refPoint=[1024, 512], refValue=[4.72, 117.4]
+
+Optional: Create a BlockedBinaryMatrix and link to dataSource.
+  mandatory arguments: path, dataUrl
+  other arguments to set: blockSizes, headerSize, isBigEndian, isComplex,
+                          nByte, numPoints, numberType
+
+(5) Create PeakList.
+  mandatory arguments: None
+
+(6) Save project.

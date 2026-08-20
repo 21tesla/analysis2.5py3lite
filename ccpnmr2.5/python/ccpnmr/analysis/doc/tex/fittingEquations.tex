@@ -1,0 +1,214 @@
+\setupoutput[pdftex]
+
+\setupcolors[state=start]
+
+\usemodule[units]
+
+\setuppagenumbering[location=footer]
+
+\setuppagenumbering[state=start]
+
+\setupwhitespace[big]
+
+\setuplayout[leftmargin=1cm, rightmargin=1cm]
+\setuplayout[leftedge=0cm, rightedge=0cm]
+\setuplayout[header=1cm, footer=1cm]
+\setuplayout[top=0cm, bottom=0cm]
+
+\setupheads[alternative=middle]
+
+\starttext
+\title{Fitting Equations in Analysis}
+
+\setupheads[alternative=normal]
+
+
+\subject{\bf {Protein-Ligand Fast Exchange Kd Equation}}
+
+This equation is for fitting Kd using shifts measured at varying concentrations of ligand (and
+sometimes also protein).
+
+We have the reaction $A + B \rightleftharpoons AB$.  We take $A$ to be the protein (or other molecule
+that binds) and $B$ to be the ligand.  We vary the amount of $B$ and normally we keep the amount of $A$
+fixed.
+
+Let $[A]$ be the concentration of $A$ in the unbound state, $[B]$ be the concentration
+of $B$ in the unbound state and $[AB]$ be the concentration of the protein-ligand complex.
+
+Let $a = [A] + [AB]$ be the total concentration of $A$.  Let $b = [B] + [AB]$ be the
+total concentration of $B$.
+
+The equilibrium dissociation constant is
+
+$$K_d = {[A][B] \over [AB]}$$
+
+We have
+
+$$\eqalign{[A] &= {K_d [AB] \over [B]} \cr
+  &= {K_d (a-[A]) \over [B]} \cr
+  &= {K_d (a-[A]) \over b-[AB]} \cr
+  &= {K_d (a-[A]) \over b-a+[A]} \cr}$$
+
+Multiply up to get
+
+$$[A] (b-a+[A]) = K_d (a-[A])$$
+
+and so
+
+$$[A]^2 + (b-a+K_d) [A] - aK_d = 0$$
+
+Or in other words
+
+$$\eqalign{[A] &= {-(b-a+K_d) + \sqrt{(b-a+K_d)^2 + 4aK_d} \over 2} \cr
+  &= {-(b-a+K_d) + \sqrt{(b+a+K_d)^2 - 4ab} \over 2} \cr}$$
+
+(We cannot have the other root because it would give a negative $[A]$, as can
+be seen from the first line above.)  Then
+
+$${a-[A] \over a} = {b+a+K_d - \sqrt{(b+a+K_d)^2 - 4ab} \over 2a}$$
+
+The percentage of bound $A$ is
+
+$$r_{bound} = {[AB] \over a} = {a-[A] \over a}$$
+
+and the percentage of unbound $A$ is
+
+$$r_{free} = 1 - r_{bound}$$
+
+Let $\delta_{bound}$ be the chemical shift of the bound $A$ and $\delta_{free}$ be
+the chemical shift of the unbound $A$.
+
+For fast exchange we have that the observed chemical shift is
+
+$$\eqalign{\delta_{obs} &= r_{bound} \delta_{bound} + r_{free} \delta_{free} \cr
+  &= r_{bound} \delta_{bound} + (1-r_{bound}) \delta_{free} \cr
+  &= \delta_{free} + (\delta_{bound}-\delta_{free}) r_{bound} \cr
+  &= \delta_{free} + (\delta_{bound}-\delta_{free}) \left ( {a-[A] \over a} \right ) \cr
+  &= \delta_{free} + (\delta_{bound}-\delta_{free}) \left ( {b+a+K_d - \sqrt{(b+a+K_d)^2 - 4ab} \over 2a} \right ) \cr }$$
+
+We normally know what $\delta_{free}$ is and so we introduce
+
+$$\Delta \delta_{obs} = \delta_{obs} - \delta_{free}$$
+
+and similarly
+
+$$\Delta \delta_\infty = \delta_{bound}-\delta_{free}$$
+
+in which case the equation becomes
+
+$$\Delta \delta_{obs} = \Delta \delta_\infty \left ( {b+a+K_d - \sqrt{(b+a+K_d)^2 - 4ab} \over 2a} \right )$$
+
+We know $a$ and $b$.  Sometimes we know $\delta_{bound}$ in which case the only thing left to fit is $K_d$.
+Sometimes we do not know $\delta_{bound}$ in which case we have to fit that as well (so equivalently
+$\Delta \delta_\infty$).
+
+Let
+
+$$\eqalign{A &= \Delta \delta_\infty / 2 \cr
+           B &= 1 + K_d/a \cr
+           x &= b/a \cr
+           y &= \Delta \delta_{obs} \cr}$$
+
+Then the above equation becomes
+
+$$y = A \left ( B+x - \sqrt{(B+x)^2 - 4x} \right )$$
+
+which is the equation used in Analysis.  We have shift measurements at various $b$.
+We fit both $A$ and $B$ and we also use a weighted sum over
+the (normally two) dimensions of the shift to make a single scalar.  This is
+not optimal.  The ratio $y/A$ is independent of dimension.  In other words,
+all dimensions should (or could) provide an estimate of $K_d$, and combining
+the shifts together loses information.
+
+Note that
+
+$$K_d = a(B-1)$$
+
+This fitting only makes sense if $b$ is kept constant throughout the experiments.  If $b$ also
+varies then we have that $y$ has two dependent variables (in effect, $a$ and $b$).  The Analysis
+code would need some changing to cope with that.
+
+A description of the fitting equation is on the web at
+
+$$http://structbio.vanderbilt.edu/chazin/wisdom/kdcalc.htm$$
+
+The correspondence with the formulae in that webpage is:
+
+$$\eqalign{Q_a &= \delta_{obs} \cr
+           Q_0 &= \delta_{free} \cr
+           Q_{max} &= \delta_{bound} \cr
+           [P_{tot}] &= a \cr
+           [A_{tot}] &= b \cr}$$
+
+\subject{\bf {Monomer-Dimer Fast Exchange Kd Equation}}
+
+We have the reaction $A + A \rightleftharpoons AA$.  Let 
+Let $[A]$ be the concentration of the monomer and $[AA]$
+the concentration of the dimer.  Let $a = [A] + 2[AA]$ be the total concentration of $A$.
+
+The equilibrium dissociation constant is
+
+$$K_d = {[A]^2 \over [AA]}$$
+
+Define the ratio
+
+$$r = {[AA] \over a}$$
+
+or in other words
+
+$$[AA] = ra$$
+
+Then we also have
+
+$$[A] = a - 2[AA] = (1-2r)a$$
+
+(Note that $0 \le r \le 1/2$.)  Therefore we have
+
+$$K_d = {(1 - 2r)^2 \over r} a$$
+
+or in other words
+
+$$4r^2 - 4r + 1 = (1 - 2r)^2 = {K_d \over a} r$$
+
+and so
+
+$$r^2 - \left ( 1+{K_d \over 4a} \right ) r + {1 \over 4} = 0$$
+
+And thus
+
+$$\eqalign{r &= {1 \over 2} \left ( 1+{K_d \over 4a} - \sqrt{\left (1 + {K_d \over 4a} \right )^2 - 1} \right ) \cr
+  &= {1 \over 8a} \left ( K_d + 4a - \sqrt{\left (K_d + 4a \right )^2 - 16a^2} \right ) \cr}$$
+
+The positive root cannot be taken because that would make $r > 1/2$.
+
+Let $\delta_A$ be the chemical shift of the monomer and $\delta_{AA}$ be
+the chemical shift of the dimer, and define $\Delta \delta_\infty = \delta_{AA} - \delta_A$.
+In general we do not know either $\delta_A$ or $\delta_{AA}$.
+
+For fast exchange we have that the observed chemical shift is
+
+$$\eqalign{\delta_{obs} &= {[A] \delta_A + 2[AA] \delta_{AA} \over a} \cr
+  &= (1-2r) \delta_A + 2r \delta_{AA} \cr
+  &= \delta_A + 2r (\delta_{AA} - \delta_A) \cr
+  &= \delta_A + 2r \Delta \delta_\infty \cr
+  &= \delta_A + {\Delta \delta_\infty \over 4a} \left ( K_d + 4a - \sqrt{\left (K_d + 4a \right )^2 - 16a^2} \right ) \cr}$$
+
+There is no point subtracting anything here since we do not know either $\delta_A$ or $\delta_{AA}$
+in general.
+
+Let
+
+$$\eqalign{A &= \Delta \delta_\infty \cr
+           B &= K_d \cr
+           C &= \delta_A \cr
+           x &= a \cr
+           y &= \delta_{obs} \cr}$$
+
+Then the above equation becomes
+
+$$\eqalign{y &= A \left ( B+4x - \sqrt{(B+4x)^2 - 16x^2} \right ) / 4x + C \cr
+             &= A \left ( 1 + B/4x - \sqrt{(1+B/4x)^2 - 1} \right ) + C \cr}$$
+
+which is the equation used in Analysis.
+
+\stoptext

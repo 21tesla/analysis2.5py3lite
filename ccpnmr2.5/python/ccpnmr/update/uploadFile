@@ -1,0 +1,33 @@
+#!/usr/local/bin/python
+
+import cgi
+import os
+import sys
+
+# for debugging
+import cgitb; cgitb.enable()
+
+htmlContent = 'Content-type: text/plain\r\n\r\n'
+
+def uploadFile():
+
+  form = cgi.FieldStorage()
+  file = form['file'].value
+  content = form['content'].value
+
+  try:
+    fp = open(file, 'w')
+    fp.write(content)
+    fp.close()
+    os.chmod(file, 0664)
+    msg = 'Ok'
+  except Exception, e:
+    msg = 'Exception: %s' % str(e)
+
+  sys.stdout.write(htmlContent)
+
+  sys.stdout.write('%s: %s\n' % (file, msg))
+
+if __name__ == '__main__':
+
+  uploadFile()

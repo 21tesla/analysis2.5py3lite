@@ -1,0 +1,190 @@
+
+/* Layout Stylesheet */
+
+
+body 
+	{
+	background-color: white;
+	color: #333333;
+	font-size: 13px;
+	font-family: Verdana, Geneva, Arial, sans-serif;
+	text-align: justify;
+	margin: 0
+	}
+
+.mainMenu 
+	{
+	height: 18px;
+	color: #333333;
+	font-size: 13px;
+	background-color: #dedbff;
+	text-align: left;
+	padding-left: 8px;
+	letter-spacing: 1px;
+	}
+
+.mainMenuItem 
+	{
+	font-size: 13px;
+	color: #333333;
+	white-space: nowrap;
+	}
+
+.pageTitle
+  {
+  padding-top: 20px;
+  padding-left: 20px;
+  font-size: 18px;
+  color: #333333;
+  font-style: normal;
+  font-weight: bold;
+  text-align: left;
+  }
+
+
+.parameterItem 
+  {
+  padding-bottom: 0px;
+  font-size: 18px;
+  color: #333333;
+  white-space: nowrap;
+  }
+
+img    
+    { 
+    border-color: #333333;
+    border-width: 0px;
+	}
+
+a 
+	{
+	color: #333333;
+	text-decoration: none
+	}
+
+a:hover 
+	{
+	color: #d25717;
+	text-decoration: none
+	}
+
+.footNote
+	{
+	font-style: normal;
+	font-size: 11px;
+	}
+
+.caption
+	{
+	font-weight: bold;
+	font-style: normal;
+	font-size: 12px;
+	color: #333333;
+	}
+
+.highlight
+	{
+	font-weight: bold;
+	font-style: normal;
+	font-size: 13px;
+	color: #333333;
+	}
+
+.highlightLarge
+	{
+	font-weight: bold;
+	font-style: normal;
+	font-size: 15px;
+	color: #333333;
+	}
+
+.menuItem 
+	{
+	font-size: 15px;
+	color: #333333;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+	border-top: 0 none;
+	border-right: 0 none;
+	border-bottom: 1px solid #999999;
+	border-left: 0 none;
+	font-weight: normal
+	}
+
+
+.menuItem a:link 
+	{
+	color: #333333;
+	text-decoration: none
+	font-size: 22px;
+	}
+
+.menuItem a:visited
+	{
+	color: #333333;
+	text-decoration: none
+	}
+
+.menuItem a:hover 
+	{
+	color: #d25717;
+	text-decoration: none
+	}
+
+.leftMenu 
+	{
+	vertical-align: top;
+	text-align: left;
+	}
+
+
+.contents
+	{
+	font-size: 13px;
+	padding-top: 20px;
+	padding-left: 20px;
+	}
+
+.contents a:link
+        {
+        font-weight: bold;
+        color: #333333;
+        text-decoration: underline 
+        }
+
+.contents a:visited
+        { 
+        font-weight: bold;
+        color: #333333;
+        text-decoration: underline 
+        }
+
+.contents a:hover 
+	{
+    font-weight: bold;
+	color: #d25717;
+	text-decoration: underline;
+	}
+
+.rightColumn 
+	{
+	line-height: 20px;
+	padding-left: 80px;
+	padding-top: 10px;
+	padding-right: 20px;
+	vertical-align: top;
+	text-align:center
+    }
+
+#footer 
+	{
+	color: white;
+    font-style: italic;
+	font-size: 8px;
+	line-height: 17px;
+	text-align: center;
+	letter-spacing: 6px;
+	height: 17px;
+	clear: left
+	}

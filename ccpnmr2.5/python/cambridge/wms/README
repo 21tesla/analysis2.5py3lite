@@ -1,0 +1,10 @@
+
+Source for WMS GUI. All the files are here except for the python web
+service stubs and the wsdl file form which they are generated. For
+these stubs, it is currently necessary to hand edit a wsdl file from
+the server (remove the schema import and put it in by hand) and then
+run wsdl2py with the -f option to generate the stubs.
+
+The aim is to modify ZSI to handle the import statement in the near
+future. At that point a lot of the code will change and remote methods
+will be called directly.

@@ -1,0 +1,966 @@
+<PulProgNameMap creator="CCPN" time="Thu Mar 19 13:02:56 2009">
+  <!-- Map for parsing Pulse program names and mapping to CCPN NmrExpPrototypes -->
+  <skipNamesEnding doc="Skip pulprog names ending with :">
+    <StringWithDoc name=".info" text=" " />
+    <StringWithDoc name="README" text=" " />
+    <StringWithDoc name=".incl" text=" " />
+  </skipNamesEnding>
+  <skipNamesStarting doc="Skip pulprog names starting with :">
+    <StringWithDoc name="sys" text=" " />
+    <StringWithDoc name="preemp" text=" " />
+    <StringWithDoc name="im" text=" " />
+    <StringWithDoc name="topshim" text=" " />
+    <StringWithDoc name="pulsecal" text=" " />
+    <StringWithDoc name="." text=" " />
+    <StringWithDoc name="zg_ctb" text=" " />
+  </skipNamesStarting>
+  <NameMap name="tocsy" synonyms="mlev dipsi dipsi2 flopsy16 ml at di" />
+  <NameMap name="roesy" synonyms="roesy ro" />
+  <NameMap name="noesy" synonyms="noesy no" />
+  <NameMap name="ecos" synonyms="ecos ec" />
+  <NameMap name="cosy" synonyms="cosy co" />
+  <NameMap name="HX" synonyms="hsqc hmqc hsmqc fhsqc i4 ii trosy tr tz" />
+  <prefixes doc="Pulprog name prefixes :">
+    <StringWithDoc name="c_" text="Carbon detected experiment" />
+    <StringWithDoc name="lc" text="LC-nmr version stopped-flow" />
+    <StringWithDoc name="rd_" text="RD (APSY) sequence. Reduced-dimensionality" />
+    <StringWithDoc name="pd_" text="Projecttion-decomposition (?). Reduced-dimensionality" />
+    <StringWithDoc name="b_" text="Best sequence (Brutscher)" />
+    <StringWithDoc name="tr" text="TROESY version" />
+    <StringWithDoc name="na_" text="nucleic acid experiment" />
+    <StringWithDoc name="nus_" text="non-uniform sampling" />
+  </prefixes>
+  <midnames doc="Pulprog mid-name components :">
+    <StringWithDoc name="trosy" text="TROSY" />
+    <StringWithDoc name="tocsy" text="relayed" />
+    <StringWithDoc name="mlev" text="MLEV relayed" />
+    <StringWithDoc name="dipsi" text="DIPSI relayed" />
+    <StringWithDoc name="dipsi2" text="DIPSI2 relayed" />
+    <StringWithDoc name="flopsy16" text="FLOPSY16 relayed" />
+    <StringWithDoc name="roesy" text="ROESY" />
+    <StringWithDoc name="noesy" text="through-space" />
+    <StringWithDoc name="hsqc" text="HSQC" />
+    <StringWithDoc name="hmqc" text="HMQC" />
+    <StringWithDoc name="hsmqc" text="HSMQC" />
+    <StringWithDoc name="ecos" text="E-COSY" />
+    <StringWithDoc name="cosy" text="COSY" />
+    <StringWithDoc name="rex" text="Relaxation rate exchange" />
+    <StringWithDoc name="noe" text="NOE" />
+    <StringWithDoc name="tr" text="TROSY *or* Trho" />
+    <StringWithDoc name="t2" text="T2 relaxation" />
+    <StringWithDoc name="t1" text="T1 relaxation" />
+  </midnames>
+  <endnames doc="Pulprog end-name components :">
+    <StringWithDoc name="19f" text="for F19" />
+    <StringWithDoc name="180" text="using a 180 degree pulse" />
+    <StringWithDoc name="135" text="using a 135 degree flip angle" />
+    <StringWithDoc name="zs" text="using a gradient/rf spoil pulse" />
+    <StringWithDoc name="zq" text="zero quantum coherence" />
+    <StringWithDoc name="zf" text="with z-filter" />
+    <StringWithDoc name="xy" text="with XY CPMG sequence" />
+    <StringWithDoc name="xf" text="x-filter experiments" />
+    <StringWithDoc name="x3" text="x-filter in F3" />
+    <StringWithDoc name="x2" text="x-filter in F2" />
+    <StringWithDoc name="x1" text="x-filter in F1" />
+    <StringWithDoc name="wt" text="with WET watersuppression" />
+    <StringWithDoc name="wg" text="watergate using a soft-hard-soft sequence" />
+    <StringWithDoc name="w5" text="watergate using W5 pulse" />
+    <StringWithDoc name="us" text="updating shapes" />
+    <StringWithDoc name="ul" text="using a frequency list" />
+    <StringWithDoc name="tz" text="zeroquantum (ZQ) TROSY" />
+    <StringWithDoc name="tr" text="using TROSY sequence" />
+    <StringWithDoc name="tp" text="phase sensitive using TPPI" />
+    <StringWithDoc name="tf" text="triple quantum filter" />
+    <StringWithDoc name="sy" text="symmetric sequence" />
+    <StringWithDoc name="st" text="phase sensitive using States-TPPI method" />
+    <StringWithDoc name="ss" text="spin-state selective experiment" />
+    <StringWithDoc name="sq" text="using single quantum" />
+    <StringWithDoc name="sp" text="using a shaped pulse" />
+    <StringWithDoc name="sm" text="simultaneous evolution of X and Y chemical shift" />
+    <StringWithDoc name="si" text="sensitivity improved" />
+    <StringWithDoc name="sh" text="phase sensitive using States et al. method" />
+    <StringWithDoc name="se" text="spin echo experiment" />
+    <StringWithDoc name="s3" text="S3E experiment" />
+    <StringWithDoc name="rv" text="with random variation" />
+    <StringWithDoc name="ru" text="using radiation damping compensation unit" />
+    <StringWithDoc name="rt" text="real time" />
+    <StringWithDoc name="rs" text="with radiation damping suppression using gradients" />
+    <StringWithDoc name="ro" text="with ROESY mixing sequence" />
+    <StringWithDoc name="rl" text="with relay transfer" />
+    <StringWithDoc name="rd" text="refocussed" />
+    <StringWithDoc name="rc" text="for determination of residual dipolar couplings (RDC)/ J couplings" />
+    <StringWithDoc name="r3" text="with 3 step relay transfer" />
+    <StringWithDoc name="r2" text="with 2 step relay transfer" />
+    <StringWithDoc name="qs" text="phase sensitive using qseq-mode" />
+    <StringWithDoc name="qn" text="for QNP-operation" />
+    <StringWithDoc name="qf" text="absolute value mode" />
+    <StringWithDoc name="ps" text="with presaturation using a shaped pulse" />
+    <StringWithDoc name="pr" text="with presaturation" />
+    <StringWithDoc name="pp" text="using purge pulses" />
+    <StringWithDoc name="pn" text="with presaturation using a 1D through-space sequence" />
+    <StringWithDoc name="pl" text="preparing a frequency list" />
+    <StringWithDoc name="ph" text="phase sensitive using States-TPPI, TPPI, States or QSEQ" />
+    <StringWithDoc name="pg" text="power-gated" />
+    <StringWithDoc name="pc" text="with presaturation and composite pulse" />
+    <StringWithDoc name="no" text="with through-space mixing sequence" />
+    <StringWithDoc name="nd" text="no decoupling" />
+    <StringWithDoc name="nc" text="N15 and C13 dependent information in different indirect dimensions" />
+    <StringWithDoc name="mq" text="using multiple quantum" />
+    <StringWithDoc name="ml" text="with MLEV mixing sequence" />
+    <StringWithDoc name="mf" text="multiple quantum filter" />
+    <StringWithDoc name="lr" text="for long-range couplings" />
+    <StringWithDoc name="lq" text="with Q-switching (low Q)" />
+    <StringWithDoc name="lp" text="with low-pass J-filter" />
+    <StringWithDoc name="l3" text="with three-fold low-pass J-filter" />
+    <StringWithDoc name="l2" text="with two-fold low-pass J-filter" />
+    <StringWithDoc name="jr" text="with jump-return pulse" />
+    <StringWithDoc name="jd" text="homonuclear J-decoupled" />
+    <StringWithDoc name="jc" text="for determination of J coupling constant" />
+    <StringWithDoc name="in" text="with INEPT transfer" />
+    <StringWithDoc name="im" text="with incremented mixing time" />
+    <StringWithDoc name="ii" text="using inverse (invi/HSQC) sequence" />
+    <StringWithDoc name="ig" text="inverse gated" />
+    <StringWithDoc name="id" text="IDIS - isotopically discriminated spectroscopy" />
+    <StringWithDoc name="ia" text="InPhase-AntiPhase (IPAP) experiment" />
+    <StringWithDoc name="i4" text="using inverse (inv4/HMQC) sequence" />
+    <StringWithDoc name="hs" text="with homospoil pulse" />
+    <StringWithDoc name="hf" text="H-1 observe with F-19 decoupling" />
+    <StringWithDoc name="hd" text="homodecoupling" />
+    <StringWithDoc name="hc" text="homodecoupling of a region using a cpd-sequence" />
+    <StringWithDoc name="hb" text="hydrogen bond experiment" />
+    <StringWithDoc name="gs" text="using shaped gradients" />
+    <StringWithDoc name="gr" text="using gradients" />
+    <StringWithDoc name="gp" text="using gradients with &quot;:gp&quot; syntax" />
+    <StringWithDoc name="ge" text="gradient echo experiment" />
+    <StringWithDoc name="gd" text="gated decoupling using cpd command" />
+    <StringWithDoc name="fw" text="forward directed type experiment" />
+    <StringWithDoc name="ft" text="using f1 -, f2 - and f3 - channel (for presaturation)" />
+    <StringWithDoc name="fr" text="with presaturation using a frequency list" />
+    <StringWithDoc name="fp" text="using a flip-back pulse" />
+    <StringWithDoc name="fl" text="for F-19 ecoupler" />
+    <StringWithDoc name="fh" text="F-19 observe with H-1 decoupling" />
+    <StringWithDoc name="fd" text="using f1 - and f3 - channel (for presaturation)" />
+    <StringWithDoc name="fb" text="using f2 - and f3 - channel" />
+    <StringWithDoc name="f4" text="using f4 - instead of f2 - channel" />
+    <StringWithDoc name="f3" text="using f3 - instead of f2 - channel" />
+    <StringWithDoc name="f2" text="using f2 - channel (for presaturation)" />
+    <StringWithDoc name="et" text="phase sensitive using Echo/Antiecho-TPPI method" />
+    <StringWithDoc name="es" text="excitation sculpting" />
+    <StringWithDoc name="ed" text="with multiplicity editing" />
+    <StringWithDoc name="ec" text="with E.COSY transfer" />
+    <StringWithDoc name="ea" text="phase sensitive using Echo/Antiecho method" />
+    <StringWithDoc name="dw" text="decoupling using cpd command only during wet sequence" />
+    <StringWithDoc name="dq" text="double quantum coherence" />
+    <StringWithDoc name="di" text="with DIPSI mixing sequence" />
+    <StringWithDoc name="dh" text="homonuclear decoupling in indirect dimension" />
+    <StringWithDoc name="df" text="double quantum filter" />
+    <StringWithDoc name="dc" text="decoupling using cpd command" />
+    <StringWithDoc name="cx" text="using CLEANEX_PM" />
+    <StringWithDoc name="cw" text="decoupling using cw command" />
+    <StringWithDoc name="ct" text="constant time" />
+    <StringWithDoc name="cp" text="with composite pulse" />
+    <StringWithDoc name="co" text="with COSY transfer" />
+    <StringWithDoc name="cn" text="C13 and N15 dependent information in different indirect dimensions" />
+    <StringWithDoc name="cc" text="cross correlation experiment" />
+    <StringWithDoc name="bp" text="using bipolar gradients" />
+    <StringWithDoc name="bi" text="with bird pulse for homonuclear J-decoupling" />
+    <StringWithDoc name="at" text="adiabatic relayed" />
+    <StringWithDoc name="ar" text="experiment for aromatic residues" />
+    <StringWithDoc name="ac" text="accordion type experiment" />
+    <StringWithDoc name="90" text="using a 90 degree flip angle" />
+    <StringWithDoc name="4d" text="4D experiment" />
+    <StringWithDoc name="45" text="using a 45 degree flip angle" />
+    <StringWithDoc name="3s" text="using 3 spoil gradients" />
+    <StringWithDoc name="3p" text="for E.COSY (3 spins, positive correlation)" />
+    <StringWithDoc name="3n" text="for E.COSY (3 spins, negative correlation)" />
+    <StringWithDoc name="3d" text="3D sequence" />
+    <StringWithDoc name="30" text="using a 30 degree flip angle" />
+    <StringWithDoc name="2s" text="using 2 spoil gradients" />
+    <StringWithDoc name="2h" text="using 2H lockswitch unit" />
+    <StringWithDoc name="2d" text="2D experiment" />
+    <StringWithDoc name="1s" text="using 1 spoil gradients" />
+    <StringWithDoc name="1d" text="1D version" />
+    <StringWithDoc name="19" text="using 3-9-19 pulse" />
+    <StringWithDoc name="11" text="using 1-1 pulse" />
+  </endnames>
+  <!-- Experiment-ExpPrototype mapping: -->
+  <ExpNameMap namesStartWith="na_h68c68n19c42">
+    <ExpPrototype name="H[cbase[N[Cbase]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqcnoesyhsqcnn" >
+    <ExpPrototype name="H[N]_H[N].through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqcnoesyhsqccc" >
+    <ExpPrototype name="H[C]_H[C].through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqcnoesyhsqcnc" >
+    <ExpPrototype name="H[N]_H[C].through-space" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqcnoesyhsqccn" >
+    <ExpPrototype name="H[N]_H[C].through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="na_h56c56c4n3h" >
+    <ExpPrototype name="hCaro_caroNH.relayed" isReversed="False" />
+    <ExpPrototype name="Hcaro_caroNH.relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="na_h5c5c4n3h" >
+    <ExpPrototype name="HcarocaroNH" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="lc2grdonflow" />
+  <ExpNameMap namesStartWith="hbcbcgcdcehe">
+    <ExpPrototype name="hbCBcgcdceHE"  isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="seqtrhncacb" >
+    <ExpPrototype name="seq.H[N[{CA|ca[Cali]}]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="seqtrcbcanh" >
+    <ExpPrototype name="seq.H{CA|Cca}NH" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="na_trhcchco" >
+    <ExpPrototype name="H[C_[C]].relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hbhacaconnh" >
+    <ExpPrototype name="H{CA|Cca}CONH" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hbcbcgcdhd">
+    <ExpPrototype name="hbCBcgcdHD"  isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="seqtrhnca" >
+    <ExpPrototype name="seq.H[N[CA]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="na_hnc6c5" >
+    <ExpPrototype name="H[n[cbase[Cbase]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hbhacannh" >
+    <ExpPrototype name="H{CA|Cca}NH" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcbcaco">
+    <ExpPrototype name="H{CA|Cca}CO" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcancoi" />
+  <ExpNameMap namesStartWith="stdnoesy" />
+  <ExpNameMap namesStartWith="selinept" hasnames="lr" />
+  <ExpNameMap namesStartWith="ineptrl1">
+    <ExpPrototype name="HCC" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ineptrl2">
+    <ExpPrototype name="HCC[h(0)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncocanh">
+    <ExpPrototype name="HNCOCANH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncocacb" >
+    <ExpPrototype name="H[N[CO[{CA|ca[C]}]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncocaca"/>
+  <ExpNameMap namesStartWith="hncaecos" />
+  <ExpNameMap namesStartWith="hncadqzq"/>
+  <ExpNameMap namesStartWith="hncacosy" />
+  <ExpNameMap namesStartWith="hcchcosy" />
+  <ExpNameMap namesStartWith="hccccosy" />
+  <ExpNameMap namesStartWith="hcbcacon">
+    <ExpPrototype name="H{CA|Cca}[CO[N]]HA" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hbhaconh">
+    <ExpPrototype name="H{CA|Cca}CONH" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="flopsy16" />
+  <ExpNameMap namesStartWith="cbcaconh">
+    <ExpPrototype name="H{CA|Cca}CONH" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hncoca2">
+    <ExpPrototype name="HNCOCA" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hncoca">
+    <ExpPrototype name="HNCO[CA]" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hncaco">
+    <ExpPrototype name="HNCACO" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcbcan">
+    <ExpPrototype name="H{CA|C}CA[N]" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcanco">
+    <ExpPrototype name="HCANCO" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hacaco">
+    <ExpPrototype name="HACACO" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="stdmlev" />
+  <ExpNameMap namesStartWith="stdhsqc" />
+  <ExpNameMap namesStartWith="stddiff" />
+  <ExpNameMap namesStartWith="seljres" />
+  <ExpNameMap namesStartWith="selhsqc" hasnames="lr"/>
+  <ExpNameMap namesStartWith="selhsqc" />
+  <ExpNameMap namesStartWith="selgpse" />
+  <ExpNameMap namesStartWith="noesycn" >
+    <ExpPrototype name="H[N]_H[C].through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesync" >
+    <ExpPrototype name="H[N]_H[C].through-space" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noediff" />
+  <ExpNameMap namesStartWith="hoesyfh" >
+    <ExpPrototype name="F_H.through-space" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncocac" />
+  <ExpNameMap namesStartWith="hnconoe" />
+  <ExpNameMap namesStartWith="hncorex" />
+  <ExpNameMap namesStartWith="hncannh">
+    <ExpPrototype name="HNCANH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncacbi" >
+    <ExpPrototype name="H[N_[{CA|ca[Cali]}]].onebond"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hccconh">
+    <ExpPrototype name="HC_caCONH.relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hathmbc">
+    <ExpPrototype name="H_[C[{h(2n)|h(2n+1)}]].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="crinept" />
+  <ExpNameMap namesStartWith="ccaconh">
+    <ExpPrototype name="{CA|Cca}CONH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cbcanco"/>
+  <ExpNameMap namesStartWith="cbcacon"/>
+  <ExpNameMap namesStartWith="c6noesy HX" >
+    <ExpPrototype name="H[C]_H.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcbca">
+    <ExpPrototype name="H{CA|C}CA" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcaco">
+    <ExpPrototype name="HACACO" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="troesy" >
+    <ExpPrototype name="H_H.through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="sfhmqc" />
+  <ExpNameMap namesStartWith="selina" />
+  <ExpNameMap namesStartWith="preemp" />
+  <ExpNameMap namesStartWith="noemul" />
+  <ExpNameMap namesStartWith="noedif" />
+  <ExpNameMap namesStartWith="music" />
+  <ExpNameMap namesStartWith="lc2wet" />
+  <ExpNameMap namesStartWith="ineptp" >
+    <ExpPrototype name="CH" isReversed="True" />
+    <ExpPrototype name="NH" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="inepin" >
+    <ExpPrototype name="HCC" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="indeco" hasnames="tocsy" >
+    <ExpPrototype name="H[C]_H.relayed" isReversed="False"/>
+    <ExpPrototype name="H[N]_H.relayed" isReversed="False"/>
+    <ExpPrototype name="H(1)[C]_H.relayed" isReversed="False"/>
+    <ExpPrototype name="H(1)[N]_H.relayed" isReversed="False"/>
+    <ExpPrototype name="{H(2n+1)|H(2)}[C]_H.relayed" isReversed="False"/>
+    <ExpPrototype name="{H(2n+1)|H(2)}[N]_H.relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="indeco" >
+    <ExpPrototype name="H[C]"/>
+    <ExpPrototype name="H[N]"/>
+    <ExpPrototype name="H(1)[C]"/>
+    <ExpPrototype name="H(1)[N]"/>
+    <ExpPrototype name="{H(2n+1)|H(2n)}[C]"/>
+    <ExpPrototype name="{H(2n+1)|H(2n)}[N]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="iinept" >
+    <ExpPrototype name="CH" isReversed="False" />
+    <ExpPrototype name="NH" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hxinep" >
+    <ExpPrototype name="CH" isReversed="True" />
+    <ExpPrototype name="NH" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hxdept" hasnames="tocsy">
+    <ExpPrototype name="H_HC.relayed" isReversed="False" />
+    <ExpPrototype name="H_HN.relayed" isReversed="False" />
+    <ExpPrototype name="H_H(1)C.relayed" isReversed="False" />
+    <ExpPrototype name="H_H(1)N.relayed" isReversed="False" />
+    <ExpPrototype name="H_{H(2n+1)|H(2)}C.relayed" isReversed="False" />
+    <ExpPrototype name="H_{H(2n+1)|H(2)}N.relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hxdept" >
+    <ExpPrototype name="CH" isReversed="True" />
+    <ExpPrototype name="NH" isReversed="True" />
+    <ExpPrototype name="CH(1)" isReversed="True" />
+    <ExpPrototype name="NH(1)" isReversed="True" />
+    <ExpPrototype name="{H(2n+1)|H(2)}C" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqctr" >
+    <ExpPrototype name="H[N[Trho(N)]]"/>
+    <ExpPrototype name="H[C[Trho(C)]]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hpcosy" />
+  <ExpNameMap namesStartWith="hncot1" >
+    <ExpPrototype name="H[N[T1(N)][CO]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncot2" >
+    <ExpPrototype name="H[N[T2(N)][CO]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncotr" >
+    <ExpPrototype name="H[N[Trho(N)][CO]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncoco" />
+  <ExpNameMap namesStartWith="hncoca">
+    <ExpPrototype name="H[N[CO[CA]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncaha">
+    <ExpPrototype name="HNCAHA" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncaco">
+    <ExpPrototype name="H[N[CA[CO]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncacb" hasnames="jc"/>
+  <ExpNameMap namesStartWith="hncacb" >
+    <ExpPrototype name="H[N[{CA|ca[Cali]}]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcncch tocsy">
+    <ExpPrototype name="hc_[N]_CH.Jcoupling.relayed" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcncch">
+    <ExpPrototype name="hc_[N]CH.Jcoupling" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcannh" />
+  <ExpNameMap namesStartWith="hcacon">
+    <ExpPrototype name="H[CA[CO[N]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hbhanh">
+    <ExpPrototype name="H{CA|Cca}NH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hacahb" >
+    <ExpPrototype name="HA{[CA]+[HB]}" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="eretic" />
+  <ExpNameMap namesStartWith="ecos3n" />
+  <ExpNameMap namesStartWith="ecos3c" />
+  <ExpNameMap namesStartWith="dipsi2" />
+  <ExpNameMap namesStartWith="croesy" >
+    <ExpPrototype name="H_H.through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="clmlev" >
+    <ExpPrototype name="H_H.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ccconh" >
+    <ExpPrototype name="C_cCONH.relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cbcanh">
+    <ExpPrototype name="H{CA|Cca}NH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cbcaco"/>
+  <ExpNameMap namesStartWith="cancoi" />
+  <ExpNameMap namesStartWith="c_hnco" >
+    <ExpPrototype name="HNCO" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hnca" >
+    <ExpPrototype name="HNCA" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcan">
+    <ExpPrototype name="HCA[N]" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_cosy">
+    <ExpPrototype name="CC" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="atocsy">
+    <ExpPrototype name="H_H.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="adeqnn" >
+    <ExpPrototype name="H_[c_[DQ(CC)]].Jmultibond,Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="adeqn1" >
+    <ExpPrototype name="H_[c[DQ(CC)]].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="adeq1n" >
+    <ExpPrototype name="H[c_[DQ(CC)]].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="adeq11" hasnames="rd">
+    <ExpPrototype name="H[C[C]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="adeq11" >
+    <ExpPrototype name="H[c[DQ(CC)]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="zgadc" />
+  <ExpNameMap namesStartWith="zg19f" />
+  <ExpNameMap namesStartWith="udeft" />
+  <ExpNameMap namesStartWith="tocsy noesy" >
+    <ExpPrototype name="H_H_H.through-space,relayed" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy roesy" >
+    <ExpPrototype name="H_H_H.through-space,relayed" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy HX" >
+    <ExpPrototype name="H[C]_H.relayed" isReversed="True"/>
+    <ExpPrototype name="H[N]_H.relayed" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy" hasnames="jc"/>
+  <ExpNameMap namesStartWith="tocsy" hasnames="xf">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H{[n(0)]+[c(0)]}.relayed"/>
+    <ExpPrototype name="H[c(0)]_H[c(0)].relayed"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy" hasnames="x1">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H.relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy" hasnames="x2">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H.relayed" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy" hasnames="x2">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H.relayed" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="tocsy" >
+    <ExpPrototype name="H_H.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="trosy" />
+  <ExpNameMap namesStartWith="shmbc" />
+  <ExpNameMap namesStartWith="selzg" />
+  <ExpNameMap namesStartWith="selro" />
+  <ExpNameMap namesStartWith="selno" />
+  <ExpNameMap namesStartWith="selco" hasnames="rl" />
+  <ExpNameMap namesStartWith="selco" />
+  <ExpNameMap namesStartWith="secsy" hasnames="lr" />
+  <ExpNameMap namesStartWith="secsy" />
+  <ExpNameMap namesStartWith="scosy" />
+  <ExpNameMap namesStartWith="roesy tocsy" >
+    <ExpPrototype name="H_H_H.through-space,relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="roesy HX" >
+    <ExpPrototype name="H[C]_H.through-space" isReversed="True"/>
+    <ExpPrototype name="H[N]_H.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="roesy" >
+    <ExpPrototype name="H_H.through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="quatd" >
+    <ExpPrototype name="C[h(0)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="pfids" />
+  <ExpNameMap namesStartWith="p3919" />
+  <ExpNameMap namesStartWith="p1331" />
+  <ExpNameMap namesStartWith="noesy tocsy" >
+    <ExpPrototype name="H_H_H.through-space,relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy noesy" >
+    <ExpPrototype name="H_H_H.through-space,through-space"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy HX" hasnames="x1">
+    <ExpPrototype name="H[C]_H{[c(0)]+[n(0)]}.through-space" isReversed="True"/>
+    <ExpPrototype name="H[N]_H{[c(0)]+[n(0)]}.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy HX" hasnames="ed sm">
+    <ExpPrototype name="H[{N|C}]_H[{n|c}].through-space" isReversed="True" />
+    <ExpPrototype name="H[{N|C}]_H{[n(0)]+[c(0)]}.through-space" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy HX" hasnames="sm">
+    <ExpPrototype name="H[{N|C}]_H.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy HX" >
+    <ExpPrototype name="H[C]_H.through-space" isReversed="True"/>
+    <ExpPrototype name="H[N]_H.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy" hasnames="rl">
+    <ExpPrototype name="H_HH.through-space" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy" hasnames="1d" />
+  <ExpNameMap namesStartWith="noesy" hasnames="xf">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H{[n(0)]+[c(0)]}.through-space"/>
+    <ExpPrototype name="H[n(0)]_H[n(0)].through-space"/>
+    <ExpPrototype name="H[c(0)]_H[c(0)].through-space"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy" hasnames="x1">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H.through-space" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy" hasnames="x2">
+    <ExpPrototype name="H{[n(0)]+[c(0)]}_H.through-space" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy" >
+    <ExpPrototype name="H_H.through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="inept" >
+    <ExpPrototype name="CH" isReversed="True" />
+    <ExpPrototype name="NH" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="idept" >
+    <ExpPrototype name="CH" isReversed="False" />
+    <ExpPrototype name="NH" isReversed="False" />
+    <ExpPrototype name="CH(1)" isReversed="False" />
+    <ExpPrototype name="NH(1)" isReversed="False" />
+    <ExpPrototype name="{H(2n+1)|H(2)}C" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hxxco" >
+    <ExpPrototype name="HcC[h(0)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hoesy" >
+    <ExpPrototype name="C_H.through-space" isReversed="True" />
+    <ExpPrototype name="N_H.through-space" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncoi" />
+    <ExpPrototype name="H[N_[ca[CO]]].onebond"/>
+  <ExpNameMap namesStartWith="hncoc" />
+  <ExpNameMap namesStartWith="hncch" />
+  <ExpNameMap namesStartWith="hncai" >
+    <ExpPrototype name="H[N_[CA]].onebond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncah">
+    <ExpPrototype name="H[N[CA[HA]]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmqcj" />
+  <ExpNameMap namesStartWith="hjres" >
+    <ExpPrototype name="H[{J(HH)|J(CH)}]" />
+    <ExpPrototype name="H[{J(HH)|J(NH)}]" />
+    <ExpPrototype name="H[{J(HH)|J(PH)}]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hhxco" >
+    <ExpPrototype name="HhC" isReversed="True"/>
+    <ExpPrototype name="HhN" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcnch">
+    <ExpPrototype name="HcsugarNcbaseH" isReversed="False" />
+    <ExpPrototype name="hCsugarNcbaseH" isReversed="False" />
+    <ExpPrototype name="HcNcH" isReversed="False" />
+    <ExpPrototype name="hCNcH" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hccnh" hasnames="tocsy">
+    <ExpPrototype name="Hc_NH.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcaco" hasnames="jc"/>
+  <ExpNameMap namesStartWith="hcaco">
+    <ExpPrototype name="H[CA[CO]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ghcch" />
+  <ExpNameMap namesStartWith="fhsqc" />
+  <ExpNameMap namesStartWith="ecosy" />
+  <ExpNameMap namesStartWith="dipsi" />
+  <ExpNameMap namesStartWith="deptq" >
+    <ExpPrototype name="C" />
+    <ExpPrototype name="N" />
+    <ExpPrototype name="{H(2n+1)|H(2n)}C" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="dazzg" />
+  <ExpNameMap namesStartWith="coloc" >
+    <ExpPrototype name="H_C.Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cccon" >
+    <ExpPrototype name="C_CCO[N].relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ccanh">
+    <ExpPrototype name="{CA|Cca}NH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="canco">
+    <ExpPrototype name="CA_NCO.onebond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="calib" />
+  <ExpNameMap namesStartWith="c_con" >
+    <ExpPrototype name="CO[N]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_can" >
+    <ExpPrototype name="CA[N]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="aring" />
+  <ExpNameMap namesStartWith="zgbs" />
+  <ExpNameMap namesStartWith="zg2d" />
+  <ExpNameMap namesStartWith="trtr" >
+    <ExpPrototype name="H[N[Trho(N)]]"/>
+    <ExpPrototype name="H[C[Trho(C)]]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="t1ir" >
+    <ExpPrototype name="H[T1(H)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="quat" >
+    <ExpPrototype name="C[h(0)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="pcch" hasnames="tocsy">
+    <ExpPrototype name="PC_H.relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="pcch" >
+    <ExpPrototype name="PCH" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="mlev" />
+  <ExpNameMap namesStartWith="jres">
+    <ExpPrototype name="H[J(HH)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="jmod" >
+    <ExpPrototype name="C[h(0)]" />
+    <ExpPrototype name="C[{h(2n+1)|h(2n)}]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="inad" />
+  <ExpNameMap namesStartWith="hxco" >
+    <ExpPrototype name="CH" isReversed="True"/>
+    <ExpPrototype name="NH" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hsqc" />
+  <ExpNameMap namesStartWith="hsmqc" />
+  <ExpNameMap namesStartWith="hnnh" hasnames="tocsy">
+    <ExpPrototype name="HN_NH.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnnh" >
+    <ExpPrototype name="HNNH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnhb ecos" />
+  <ExpNameMap namesStartWith="hnhb" >
+    <ExpPrototype name="H[N[HB]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnha">
+    <ExpPrototype name="H{[N]+[HA]}" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnco ecos" />
+  <ExpNameMap namesStartWith="hnco" hasnames="hb" >
+    <ExpPrototype name="H[N_[CO]].through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnco" hasnames="rc" />
+  <ExpNameMap namesStartWith="hnco" >
+    <ExpPrototype name="H[N[CO]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hncg" />
+  <ExpNameMap namesStartWith="hnca" hasnames="jc"/>
+  <ExpNameMap namesStartWith="hnca" hasnames="rc" />
+  <ExpNameMap namesStartWith="hnca">
+    <ExpPrototype name="H[N[CA]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmsc">
+    <ExpPrototype name="H_[N].Jmultibond" />
+    <ExpPrototype name="H_[C].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmqc" />
+  <ExpNameMap namesStartWith="hmbc" hasnames="jc" />
+  <ExpNameMap namesStartWith="hmbc" hasnames="ed">
+    <ExpPrototype name="H_[C[{h(2n)|h(2n+1)}]].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmbc" hasnames="l3">
+    <ExpPrototype name="H_[N].Jmultibond" />
+    <ExpPrototype name="H_[C].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmbc" hasnames="l2">
+    <ExpPrototype name="H_[N].Jmultibond" />
+    <ExpPrototype name="H_[C].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmbc" hasnames="lp">
+    <ExpPrototype name="H_[N].Jmultibond" />
+    <ExpPrototype name="H_[C].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hmbc" >
+    <ExpPrototype name="H_[N].Jcoupling" />
+    <ExpPrototype name="H_[C].Jcoupling" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hfco" >
+    <ExpPrototype name="FH" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcpq" />
+  <ExpNameMap namesStartWith="hcnh">
+    <ExpPrototype name="HN_CH.Jcoupling" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcch" hasnames="fw" />
+  <ExpNameMap namesStartWith="hcch" hasnames="lr" >
+    <ExpPrototype name="H[c_[C]].Jmultibond"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcch" hasnames="ecos" />
+  <ExpNameMap namesStartWith="hcch" hasnames="tocsy">
+    <ExpPrototype name="hC_CH.relayed" />
+    <ExpPrototype name="HC_cH.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcch" >
+    <ExpPrototype name="hCCH" />
+    <ExpPrototype name="HCcH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcan">
+    <ExpPrototype name="H[CA[N]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="h2bc" hasnames="ed">
+    <ExpPrototype name="H_[C[{h(2n)|h(2n+1)}]].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="h2bc" >
+    <ExpPrototype name="H_[N].Jmultibond" />
+    <ExpPrototype name="H_[C].Jmultibond" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ecos" />
+  <ExpNameMap namesStartWith="dste" />
+  <ExpNameMap namesStartWith="dept" hasnames="135">
+    <ExpPrototype name="{h(2n+1)|h(2)}C" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="dept" hasnames="90">
+    <ExpPrototype name="CH(1)" isReversed="True" />
+    <ExpPrototype name="NH(1)" isReversed="True" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="dept" >
+    <ExpPrototype name="CH" isReversed="True" />
+    <ExpPrototype name="NH" isReversed="True" />
+    <ExpPrototype name="CH(1)" isReversed="True" />
+    <ExpPrototype name="NH(1)" isReversed="True" />
+    <ExpPrototype name="{H(2n+1)|H(2)}C" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="decp" />
+  <ExpNameMap namesStartWith="cpmg" >
+    <ExpPrototype name="H[T2(H)]" />
+    <ExpPrototype name="H[Trho(H)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="rl">
+    <ExpPrototype name="HhH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="r2">
+    <ExpPrototype name="HhhH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="r3">
+    <ExpPrototype name="HhhhH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="tf">
+    <ExpPrototype name="HH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="mf">
+    <ExpPrototype name="HH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy" hasnames="df">
+    <ExpPrototype name="HH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="cosy">
+    <ExpPrototype name="HH" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="coca"  hasnames="mq">
+    <ExpPrototype name="CO[CA]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="coca" >
+    <ExpPrototype name="CACO" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="ccco" >
+    <ExpPrototype name="C_CCO.relayed" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="caco" hasnames="mq">
+    <ExpPrototype name="CA[CO]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="caco">
+    <ExpPrototype name="CACO" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_cc tocsy" >
+    <ExpPrototype name="C_C.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_cc noesy" >
+    <ExpPrototype name="C_C.through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="zg0" />
+  <ExpNameMap namesStartWith="wet" />
+  <ExpNameMap namesStartWith="ste" />
+  <ExpNameMap namesStartWith="sel tocsy" />
+  <ExpNameMap namesStartWith="p11" />
+  <ExpNameMap namesStartWith="mqs" />
+  <ExpNameMap namesStartWith="led" />
+  <ExpNameMap namesStartWith="lc2" />
+  <ExpNameMap namesStartWith="lc1" />
+  <ExpNameMap namesStartWith="hpc">
+    <ExpPrototype name="PH[C]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hnn cosy" >
+    <ExpPrototype name="H[n[N]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcp tocsy">
+    <ExpPrototype name="hc[P]_CH.relayed" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcp">
+    <ExpPrototype name="H[C[P]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hcn">
+    <ExpPrototype name="H[C[N]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="c_hcc tocsy" >
+    <ExpPrototype name="HC_C.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="dqs">
+    <ExpPrototype name="H[DQ(HH)]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="dec" />
+  <ExpNameMap namesStartWith="apt" >
+    <ExpPrototype name="C[{h(2n+1)|h(2n)}]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX noesy HX" >
+    <ExpPrototype name="H[N]_H[N].through-space" />
+    <ExpPrototype name="H[C]_H[C].through-space" />
+    <ExpPrototype name="H[N]_H[C].through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="noesy HX" hasnames="x3">
+    <ExpPrototype name="H[C]_H{[c(0)]+[n(0)]}.through-space" isReversed="False"/>
+    <ExpPrototype name="H[N]_H{[c(0)]+[n(0)]}.through-space" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="ss"/>
+  <ExpNameMap namesStartWith="HX" hasnames="roesy" >
+    <ExpPrototype name="H[N]_H.through-space" isReversed="False"/>
+    <ExpPrototype name="H[C]_H.through-space" isReversed="False" />
+    <ExpPrototype name="H[P]_H.through-space" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="noesy" >
+    <ExpPrototype name="H[N]_H.through-space" isReversed="False"/>
+    <ExpPrototype name="H[C]_H.through-space" isReversed="False" />
+    <ExpPrototype name="H[P]_H.through-space" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="jc"/>
+  <ExpNameMap namesStartWith="HX" hasnames="1d">
+    <ExpPrototype name="H[n]" />
+    <ExpPrototype name="H[c]" />
+    <ExpPrototype name="H[p]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="id">
+    <ExpPrototype name="H[N[co]]" />
+    <ExpPrototype name="H[N[co(0)]]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="cc"/>
+  <ExpNameMap namesStartWith="HX" hasnames="1d"/>
+  <ExpNameMap namesStartWith="HX" hasnames="tocsy ed" >
+    <ExpPrototype name="H[N]_H.relayed" isReversed="False" />
+    <ExpPrototype name="H[C]_H.relayed" isReversed="False" />
+    <ExpPrototype name="H(1)[N]_H.relayed" isReversed="False" />
+    <ExpPrototype name="H(1)[C]_H.relayed" isReversed="False" />
+    <ExpPrototype name="{H(2n+1)|H(2)}[N]_H.relayed" isReversed="False" />
+    <ExpPrototype name="{H(2n+1)|H(2)}[C]_H.relayed" isReversed="False" />
+    <ExpPrototype name="H[C]_{H(2n+1)|H(2)}[c].relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="tocsy" >
+    <ExpPrototype name="H[N]_H.relayed" isReversed="False" />
+    <ExpPrototype name="H[C]_H.relayed" isReversed="False" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX noe" />
+  <ExpNameMap namesStartWith="HX rex" />
+  <ExpNameMap namesStartWith="HX t1" >
+    <ExpPrototype name="H[N[T1(N)]]"/>
+    <ExpPrototype name="H[C[T1(C)]]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX t2" >
+    <ExpPrototype name="H[N[T2(N)]]"/>
+    <ExpPrototype name="H[C[T2(C)]]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="rl">
+    <ExpPrototype name="H[C]H" isReversed="False"/>
+    <ExpPrototype name="H[N]H" isReversed="False"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="lr">
+    <ExpPrototype name="H_[C].Jmultibond"/>
+    <ExpPrototype name="H_[N].Jmultibond"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="sm">
+    <ExpPrototype name="H[{N|C}]"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" hasnames="ed">
+    <ExpPrototype name="{H(2n+1)|H(2n)}[C]" />
+    <ExpPrototype name="{H(2n+1)|H(2n)}[N]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="HX" >
+    <ExpPrototype name="H[C]" />
+    <ExpPrototype name="H[N]" />
+    <ExpPrototype name="H[P]" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="xh cosy" >
+    <ExpPrototype name="CH" isReversed="True"/>
+    <ExpPrototype name="NH" isReversed="True"/>
+    <ExpPrototype name="PH" isReversed="True"/>
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="zg" />
+  <ExpNameMap namesStartWith="tr" />
+  <ExpNameMap namesStartWith="hp tocsy noesy">
+    <ExpPrototype name="P_H_H.relayed,through-space" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hp tocsy cosy">
+    <ExpPrototype name="P_H[C].relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hp tocsy">
+    <ExpPrototype name="P_H.relayed" />
+  </ExpNameMap>
+  <ExpNameMap namesStartWith="hp">
+    <ExpPrototype name="PH" />
+  </ExpNameMap>
+</PulProgNameMap>

@@ -1,0 +1,13 @@
+version = '2.5.2'
+build = ''
+timestamp = 'Wed Jun 17 09:00:00 2020'
+platform = 'darwin'
+bits = 64
+arch = 'x86_64'
+built_by = 'ejb66'
+category = 'user-compiled'
+platform = 'darwin'
+bits = 64
+arch = 'x86_64'
+built_by = 'ejb66'
+category = 'user-compiled'

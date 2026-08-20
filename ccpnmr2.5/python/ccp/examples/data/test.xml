@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<_StorageUnit time="Wed Jul 20 11:40:36 2005" release="1.0.204" 
+ packageName="memops.Implementation" root="" originator="CCPN Python XmlIO">
+ 
+<Project _ID="_1" isStored="true" isModifiable="true" name="test" package="memops.Implementation" format="xml" url="_2">
+  <path>test.xml</path>
+  <NormalStorage _ID="_3" serial="1" isStored="false" isModifiable="true" package="ccpnmr.NameMapping" format="xml" url="_4">
+    <path>ccpnmr/NameMapping.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_5" serial="2" isStored="false" isModifiable="true" package="ccpnmr.Analysis" format="xml" url="_4">
+    <path>ccpnmr/Analysis.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_6" serial="3" isStored="false" isModifiable="true" package="ccp.Taxonomy" format="xml" url="_4">
+    <path>ccp/Taxonomy.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_7" serial="4" isStored="false" isModifiable="true" package="ccp.Target" format="xml" url="_4">
+    <path>ccp/Target.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_8" serial="5" isStored="false" isModifiable="true" package="ccp.Sample" format="xml" url="_4">
+    <path>ccp/Sample.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_9" serial="6" isStored="false" isModifiable="true" package="ccp.RiskAssessment" format="xml" url="_4">
+    <path>ccp/RiskAssessment.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_10" serial="7" isStored="false" isModifiable="true" package="ccp.RefStereochemistry" format="xml" url="_4">
+    <path>ccp/RefStereochemistry.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_11" serial="8" isStored="false" isModifiable="true" package="ccp.RefSampleComponent" format="xml" url="_4">
+    <path>ccp/RefSampleComponent.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_12" serial="9" isStored="false" isModifiable="true" package="ccp.RefContainer" format="xml" url="_4">
+    <path>ccp/RefContainer.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_13" serial="10" isStored="false" isModifiable="true" package="ccp.Protocol" format="xml" url="_4">
+    <path>ccp/Protocol.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_14" serial="11" isStored="false" isModifiable="true" package="ccp.People" format="xml" url="_4">
+    <path>ccp/People.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_15" serial="12" isStored="false" isModifiable="true" package="ccp.NmrExpPrototype" format="xml" url="_4">
+    <path>ccp/NmrExpPrototype.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_16" serial="13" isStored="false" isModifiable="true" package="ccp.Nmr" format="xml" url="_4">
+    <path>ccp/Nmr.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_17" serial="14" isStored="true" isModifiable="true" package="ccp.Molecule" format="xml" url="_4">
+    <path>ccp/Molecule.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_18" serial="15" isStored="true" isModifiable="true" package="ccp.MolSystem" format="xml" url="_4">
+    <path>ccp/MolSystem.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_19" serial="16" isStored="false" isModifiable="true" package="ccp.Method" format="xml" url="_4">
+    <path>ccp/Method.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_20" serial="17" isStored="false" isModifiable="true" package="ccp.Location" format="xml" url="_4">
+    <path>ccp/Location.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_21" serial="18" isStored="false" isModifiable="true" package="ccp.Instrument" format="xml" url="_4">
+    <path>ccp/Instrument.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_22" serial="19" isStored="false" isModifiable="true" package="ccp.Experiment" format="xml" url="_4">
+    <path>ccp/Experiment.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_23" serial="20" isStored="false" isModifiable="true" package="ccp.ExpBlueprint" format="xml" url="_4">
+    <path>ccp/ExpBlueprint.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_24" serial="21" isStored="false" isModifiable="true" package="ccp.DbRef" format="xml" url="_4">
+    <path>ccp/DbRef.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_25" serial="22" isStored="false" isModifiable="true" package="ccp.Citation" format="xml" url="_4">
+    <path>ccp/Citation.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_26" serial="23" isStored="false" isModifiable="true" package="ccp.ChemElement" format="xml" url="_4">
+    <path>ccp/ChemElement.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_27" serial="24" isStored="false" isModifiable="true" package="ccp.BmrbEntry" format="xml" url="_4">
+    <path>ccp/BmrbEntry.xml</path>
+  </NormalStorage>
+  <NormalStorage _ID="_28" serial="25" isStored="false" isModifiable="true" package="ccp.Annotation" format="xml" url="_4">
+    <path>ccp/Annotation.xml</path>
+  </NormalStorage>
+  <ContentStorage _ID="_29" serial="26" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/ALA.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_31" serial="27" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/GLY.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_32" serial="28" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/TYR.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_33" serial="29" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/GLU.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_34" serial="30" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/LEU.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_35" serial="31" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/SER.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_36" serial="32" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/HIS.xml</path>
+  </ContentStorage>
+  <ContentStorage _ID="_37" serial="33" isStored="true" isModifiable="false" package="ccp.ChemComp" format="xml" url="_30">
+    <path>protein/ILE.xml</path>
+  </ContentStorage>
+  <Url _ID="_2" serial="1" protocol="file" name="project">
+    <path>/home/wim/workspace/ccpn/python/ccp/examples/data</path>
+    <storages _IDREF="_1"/>
+  </Url>
+  <Url _ID="_4" serial="2" protocol="file" name="data">
+    <path>/home/wim/workspace/ccpn/python/ccp/examples/data/test</path>
+    <storages _IDREF="_3"/>
+    <storages _IDREF="_5"/>
+    <storages _IDREF="_6"/>
+    <storages _IDREF="_7"/>
+    <storages _IDREF="_8"/>
+    <storages _IDREF="_9"/>
+    <storages _IDREF="_10"/>
+    <storages _IDREF="_11"/>
+    <storages _IDREF="_12"/>
+    <storages _IDREF="_13"/>
+    <storages _IDREF="_14"/>
+    <storages _IDREF="_15"/>
+    <storages _IDREF="_16"/>
+    <storages _IDREF="_17"/>
+    <storages _IDREF="_18"/>
+    <storages _IDREF="_19"/>
+    <storages _IDREF="_20"/>
+    <storages _IDREF="_21"/>
+    <storages _IDREF="_22"/>
+    <storages _IDREF="_23"/>
+    <storages _IDREF="_24"/>
+    <storages _IDREF="_25"/>
+    <storages _IDREF="_26"/>
+    <storages _IDREF="_27"/>
+    <storages _IDREF="_28"/>
+  </Url>
+  <Url _ID="_30" serial="3" protocol="file" name="chemCompData">
+    <path>/home/wim/workspace/ccpn/data/ccp/chemComp</path>
+    <storages _IDREF="_29"/>
+    <storages _IDREF="_31"/>
+    <storages _IDREF="_32"/>
+    <storages _IDREF="_33"/>
+    <storages _IDREF="_34"/>
+    <storages _IDREF="_35"/>
+    <storages _IDREF="_36"/>
+    <storages _IDREF="_37"/>
+  </Url>
+</Project>
+
+</_StorageUnit>
+<!--End of Memops Data-->

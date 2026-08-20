@@ -1,0 +1,77 @@
+1. makeTopObjects.py
+
+Create a new MemopsRoot (project) object.
+
+From this, create top objects for the NmrEntry, Nmr, Affiliation,
+  Citation, DbRef, Taxonomy and Classification packages using 
+  the new<Class> factory methods available to the MemopsRoot class.
+
+Print out the objects and their names for those that you create.
+
+Note the package locations for all the objects.
+
+Save the project to XML files on disk and have a quick look at some
+  of the files that are created - use the method saveModifed() .
+
+Try and run the script twice and see what happens.
+
+Hint: Check to see what the mandatory attributes are for these top objects.
+
+
+2. navigateObjects.py
+
+Load up the previously made project using loadProject(<projectDir>)
+  in 'memops.general.Io'.
+
+Look at the database top object you created using findFirst<Element>
+  with the parameter of the database name.
+
+Get a sorted list of the taxonomy top objects and also find all NmrProjects.
+
+Run the script in interactive mode using python -i <scriptname>.
+
+Have a look at the database object in more detail using the dir() function.
+
+Try to look at the output of some of the links and methods.
+
+For the database object, follow the standard links (all objects have these)
+  to look at the root, memopsRoot, parent and topObject objects.
+
+
+3. createSimpleObjects.py
+
+Create a new project object and top objects for the Affiliation and
+  Citation packages.
+
+From the Affiliation top object, create a new person with a first name
+  and surname.
+
+Also create a simple journal reference with a test title and journal
+  name from the Citation top object.
+
+Then link the person to the citation - use the addAuthor() method
+  of the JournalCitation class.
+
+Finally print the person's name and also the citation title starting
+  from the person object by finding the first citation for this person
+  with the relevant journal name.
+
+Hint: use findFirstAuthorCitation to follow the person to citation link
+  in this case.
+
+
+4. changeRepos.py
+
+Load up the project from exercise 1.1 .
+
+Find the 'userData' repository for this project and save the
+  project to a new location on the disk.
+
+Hint: specify the new location as the Url link object for this repository.
+
+Optional: create a new repository with Url path '../data'.
+
+Then add this repository to the PackageLocator object with
+  targetName = 'ccp.molecule.ChemComp'.
+
+There are some carbohydrate chemcomps in '../data/ccp/molecule/ChemComp'.

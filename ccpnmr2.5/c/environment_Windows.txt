@@ -1,0 +1,91 @@
+# PYTHON_DIR WILL INSERT HERE
+# CONDA_ENV WILL INSERT HERE
+
+# should work if suitably edited for Linux, Irix, Solaris, OSX, Windows
+
+# general rules:
+# *_LIB = required library or libraries (use -l or equivalen)
+# *_INCLUDE_FLAGS = where to find include files (use -I)
+# *_LIB_FLAGS = where to find libraries (use -L)
+
+# the C compiler and associated things
+
+# use below for Windows
+CC = cl
+LINK = $(CC) /LD
+MAKE = nmake
+CO_NAME = -c $**
+OUT_NAME = /Fe$@
+OBJ_SUFFIX = obj
+DYLIB_SUFFIX = pyd
+RM = DEL /f
+
+# compiler flags
+
+# Windows specific flag
+WIN_FLAG = /DWIN64 /DNDEBUG
+
+# use below for everything with malloc.h
+MALLOC_FLAG =
+# use below for everything without malloc.h (e.g. OSX)
+#MALLOC_FLAG = -DDO_NOT_HAVE_MALLOC
+
+# use below for everything with -fPIC option (e.g. gcc)
+#FPIC_FLAG = -fPIC
+# use below for everything without -fPIC option (e.g. Windows)
+FPIC_FLAG =
+
+# optimisation flag
+OPT_FLAG = /Ox
+
+CC_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG) $(MALLOC_FLAG) $(XOR_FLAG)
+LINK_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG)
+
+# copying command for C libraries into Python world
+COPY_LIBRARIES = copySharedObjs.bat
+
+# Clean .pyd files from python path
+# (used only for Windows)
+CLEAN_PYD = del *.pyd
+
+# use below if you want to ignore GL
+# use below if you want to compile GL
+IGNORE_GL_FLAG =
+# use below if you want to ignore GL
+#IGNORE_GL_FLAG = -DIGNORE_GL
+GL_FLAG = -DUSE_GL_TRUE
+
+GLUT_NEED_INIT = -DNEED_GLUT_INIT
+GLUT_NOT_IN_GL = -DGLUT_IN_OWN_DIR
+GLUT_FLAG = $(GLUT_NEED_INIT) $(GLUT_NOT_IN_GL)
+
+# math
+MATH_LIB =
+
+# rest of Python
+PYTHON_VERSION = 27
+
+# for Unix do not seem to need PYTHON_LIB
+# for Windows seem to need below (or similar)
+#PYTHON_LIB = -lpython$(PYTHON_VERSION)
+#PYTHON_LIB = $(PYTHON_DIR)\libs\python27.lib $(PYTHON_DIR)\Library\lib\tk86t.lib $(PYTHON_DIR)\Library\lib\tcl86t.lib $(PYTHON_DIR)\Library\lib\freeglut.lib Gdi32.lib User32.lib
+PYTHON_LIB = $(PYTHON_DIR)\libs\python27.lib $(PYTHON_DIR)\tcl\tk85.lib $(PYTHON_DIR)\tcl\tcl85.lib $(PYTHON_DIR)\Library\lib\freeglut.lib Gdi32.lib User32.lib
+
+#PYTHON_INCLUDE_FLAGS = /I$(PYTHON_DIR)\include /I$(PYTHON_DIR)\Lib\site-packages\numpy\core\include\numpy /I$(PYTHON_DIR)\Library\include /I$(PYTHON_DIR)\Library\include\GL
+PYTHON_INCLUDE_FLAGS = /I$(PYTHON_DIR)\include /I$(PYTHON_DIR)\Lib\site-packages\numpy\core\include\numpy /I$(PYTHON_DIR)\Library\include /I$(PYTHON_DIR)\Library\include\GL /I$(PYTHON_DIR)\Library\mingw-w64\include
+
+# for Unix do not seem to need PYTHON_LIB_FLAGS
+# PYTHON_LIB_FLAGS = -L$(PYTHON_DIR)\lib\python$(PYTHON_VERSION)\config-$(PYTHON_VERSION)m
+
+# for Windows seem to need below (or similar)
+#PYTHON_LIB_FLAGS = $(PYTHON_DIR)\Library\
+
+# shared library flags
+# use below for Linux or Irix
+#SHARED_FLAGS = -shared
+
+# use below for OSX
+#SHARED_FLAGS = -L$(PYTHON_DIR)/lib -bundle -bundle_loader $(PYTHON_DIR)/bin/python
+
+# use below for Solaris
+#SHARED_FLAGS = -G

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+\rm *.so
+ln -s ../../../c/memops/global/BlockFile.so BlockFile.so
+ln -s ../../../c/memops/global/FitMethod.so FitMethod.so
+ln -s ../../../c/memops/global/GlHandler.so GlHandler.so
+ln -s ../../../c/memops/global/MemCache.so MemCache.so
+ln -s ../../../c/memops/global/PdfHandler.so PdfHandler.so
+ln -s ../../../c/memops/global/PsHandler.so PsHandler.so
+ln -s ../../../c/memops/global/ShapeFile.so ShapeFile.so
+ln -s ../../../c/memops/global/StoreFile.so StoreFile.so
+ln -s ../../../c/memops/global/StoreHandler.so StoreHandler.so
+ln -s ../../../c/memops/global/TkHandler.so TkHandler.so

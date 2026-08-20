@@ -1,0 +1,129 @@
+Session 5
+
+1. Resonance to atom link
+
+An Nmr.Resonance describes the NMR signal arising from an atom (or
+group of atoms). In contrast to the 'classical' meaning of an NMR
+resonance, this CCPN object relates to a 'generic' signal that is not
+specific to a set of conditions or field strengths.  
+
+The Nmr.Resonance connects all NMR information together, so that, for
+example, you can define that this particular shift value and this peak
+assignment are both attributable to a particular Nmr.Resonance.  
+
+Nmr.Resonances can be 'assigned' by connecting them to MolSystem.Atoms
+via Nmr.ResonanceSet and Nmr.AtomSet objects (see
+http://www.ebi.ac.uk/msd-srv/docs/NMR/NMRtoolkit/linkResonances.html
+for a figure and some example linking schemas). This link describes
+the ambiguity of the assignment, so that it is clear whether
+Nmr.Resonances linked to prochiral atoms are stereospecifically
+assigned (or not). Finally, when changing an assignment for an
+Nmr.Resonance, all related NMR information is instantly linked to the
+correct Atoms (i.e. the assignment only has to be modified in one
+single place).  
+
+Exercise 1.1:
+
+  1. Create protein chain with residues WHATSTHISCCPNAPILIKE
+  
+  2. Connect Nmr.Resonance(s) in the correct way to the following
+       atom(s):
+  
+     - Ile 16 HB
+     - Trp 1  CZ3
+     - Ser 5  HB2 and HB3 stereo assigned
+     - Ser 9  HB2 and HB3 ambiguous
+    
+     Also print out the information contained in the Nmr.Resonance ->
+       MolSystem.Atom linkage.
+
+     Hint: in each case:
+
+     1. Find the correct residue and atom.
+     2. Make new resonance(s) with the right isotope types.
+     3. Make new atomSet(s) from the atom information.
+     4. Connect the right atomSets to the right resonances using
+          resonanceSet object(s).
+
+
+ Exercise 1.2:
+
+  1. Create protein chain with residues WHATSTHISCCPNAPILIKE
+  
+  2. Using similar methods as in exercise 1.1 and the help given below, 
+       connect Nmr.Resonance(s) in the correct way to the following
+       atom(s):
+  
+     - Ala 3  HB*
+     - Leu 17 HD1* and HD2* ambiguous
+    
+     Note that you have to create Nmr.AtomSet(s) linked to all three
+       MolSystem.Atoms in the methyl group. The best way to do this is to go
+       via the ChemComp reference information to get the ChemAtomSet(s)
+       describing the methyl group, then find the correct MolSystem level
+       atoms based on this data.
+
+     Also print out the information contained in the Nmr.Resonance ->
+       MolSystem.Atom linkage.
+
+
+2. Nmr measurements
+
+NMR measurements are all directly linked to one or more resonances.
+
+Exercise 2.1:
+
+  1. Create 10 new Nmr.Resonances (they don't have to be linked to
+       atoms!).
+  
+  2. Create an Nmr.ShiftList and create 10 Nmr.Shifts, each linked to
+       a different resonance.
+  
+  3. Print out the information for these Nmr.Shifts starting from the
+       list of resonances in the Nmr.NmrProject.
+  
+  4. Create an Nmr.JCouplingList and create 5 Nmr.JCouplings, each
+       linked to a different pair of resonances.
+     
+  5. Print out the information for these Nmr.JCouplings starting from
+       the Nmr.JCouplingList object.
+
+
+3. Nmr constraints
+
+NMR constraints are stored in the NmrConstraints package, not the Nmr
+package. However the system to assign constraints is the same as for
+measurement lists, except that the classes are called
+NmrConstraint.FixedResonance, FixedAtomSet and FixedResonanceSet.
+
+Exercise 3.1:
+
+  1. Create 20 new NmrConstraint.FixedResonances, half of them proton,
+       the other half carbon.
+  
+  2. Create a DistanceConstraintList.
+  
+  3. Create 5 DistanceConstraints, each with 2
+       DistanceConstraintItems. Try to use both targetValue/error and
+       lowerLimit/upperLimit to set the distance bounds using typical
+       NMR parameters.
+
+     Also you will need to create DistanceConstraintItem objects with
+       the correct resonances in them.
+     
+  4. Print out the distance and resonance information for these
+       DistanceConstraints.
+  
+  5. Create a DihedralConstraintList.
+  
+  6. Create 5 DihedralConstraints, each with 2
+       DihedralConstraintItems. The order of the connected resonances should
+       be proton-carbon-carbon-proton.
+
+     In this case, the resonances are in the main object, and the dihedral
+       angle information is given in DihedralConstraintItem objects.  Again
+       use typical NMR values of your choosing to populate the data in these
+       items.
+ 
+  7. Print out the angle and resonance information for these
+       DihedralConstraints.

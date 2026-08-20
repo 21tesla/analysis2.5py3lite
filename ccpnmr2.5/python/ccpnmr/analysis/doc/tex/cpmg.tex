@@ -1,0 +1,443 @@
+\setupoutput[pdftex]
+
+\setupcolors[state=start]
+
+\usemodule[units]
+
+\setuppagenumbering[location=footer]
+
+\setuppagenumbering[state=start]
+
+\setupwhitespace[big]
+
+\setuplayout[leftmargin=1cm, rightmargin=1cm]
+\setuplayout[leftedge=0cm, rightedge=0cm]
+\setuplayout[header=1cm, footer=1cm]
+\setuplayout[top=0cm, bottom=0cm]
+
+\setupheads[alternative=middle]
+
+\starttext
+\title{CPMG Equations}
+
+\setupheads[alternative=normal]
+
+
+\subject{\bf {Introduction}}
+
+The general case for two-site exchange is:
+
+$$R_2 = R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} cosh^{-1} \left ( D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) \right )$$
+
+Here
+
+$$\eqalign{D_\pm &= {1 \over 2} \left ( \pm 1 + {\Psi + 2 \Delta \omega^2 \over (\Psi^2 + \zeta^2)^{1/2}} \right ) \cr
+  \lambda_\pm &= {1 \over \sqrt 2} \left ( \pm \Psi + (\Psi^2 + \zeta^2)^{1/2} \right )^{1/2} \cr
+  \Psi &= k_{ex}^2 - \Delta \omega^2 \cr
+  \zeta &= 2 \Delta \omega (k_{AB} - k_{BA}) \cr
+  k_{ex} &= k_{AB} + k_{BA} \cr
+}$$
+
+We also sometimes use $\nu = {1 \over 2 \tau}$ instead of $\tau$.
+
+Experimentally one measures $R_2$ for various $\tau$ and one wants to find $R_{2max}$, $k_{AB}$, $k_{BA}$ and $\Delta \omega$
+which give the best fit.
+
+
+\subject{\bf {Case: $\tau \to 0$}}
+
+Consider $\tau \to 0$ (or equivalently $\nu \to \infty$).  
+
+For small $z$ we have that $cosh(z) \simeq 1 + {1 \over 2} z^2$ and $cos(z) \simeq 1 - {1 \over 2} z^2$.
+Thus we see that for small $\tau$ we have
+
+Then
+
+$$\eqalign{cosh(\tau \lambda_+) &\simeq 1 + {1 \over 2} \tau^2 \lambda_+^2 \cr
+  cos(\tau \lambda_-) &\simeq 1 - {1 \over 2} \tau^2 \lambda_-^2 \cr
+}$$
+
+Thus
+
+$$\eqalign{D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) &\simeq D_+ - D_- + {1 \over 2} \tau^2 (D_+ \lambda_+^2 + D_- \lambda_-^2) \cr
+  &= 1 + {1 \over 2} \tau^2 (D_+ \lambda_+^2 + D_- \lambda_-^2) \cr
+}$$
+
+For small $z$ we have that $cosh^{-1}(1 + {1 \over 2} z^2) \simeq z$.
+Therefore we see that for small $\tau$ we have
+
+$$R_2 \simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \left ( D_+ \lambda_+^2 + D_- \lambda_-^2 \right )^{1/2}$$
+
+
+\subject{\bf {Case: $\tau \to \infty$}}
+
+Consider $\tau \to \infty$ (or equivalently $\nu \to 0$).
+
+Then we can ignore the cosine term.  For large $z$ we have
+that $cosh(z) \simeq {1 \over 2} e^z$.  Thus we see that for large $\tau$ we have
+
+$$D_+ cosh(\tau \lambda_+) \simeq {1 \over 2} D_+ e^{\tau \lambda_+} = {1 \over 2} e^{\tau \lambda_+ + ln D_+}$$
+
+For large $z$ we have that $cosh^{-1}({1 \over 2} e^z) \simeq z$.  Therefore we see that for large $\tau$ we have
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} ( \tau \lambda_+ + ln D_+ ) \cr
+  &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \lambda_+ \cr
+}$$
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}, \Psi > 0$}}
+
+The assumption that $k_{AB} = k_{BA}$ makes the equations much simpler.  Immediately we have $\zeta = 0$.
+
+$\Psi > 0$ means that $k_{ex} > \Delta \omega$. With $\Psi > 0$ we also have
+
+$$\eqalign{D_+ &= 1 + {\Delta \omega^2 \over \Psi} = {k_{ex}^2 \over \Psi} \cr
+  D_- &= {\Delta \omega^2 \over \Psi} \cr
+  \lambda_+ &= \Psi^{1/2} \cr
+  \lambda_- &= 0 \cr
+}$$
+
+As $\tau \to 0$ we find that
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \left ( D_+ \lambda_+^2 + D_- \lambda_-^2 \right )^{1/2} \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} D_+^{1/2} \lambda_+ \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} { k_{ex} \over \Psi^{1/2}} \Psi^{1/2} \cr
+  &= R_{2max} \cr
+}$$
+
+Thus looking at the smallest $\tau$ (largest $\nu$) should determine a reasonable first estimate of $R_{2max}$.
+
+As $\tau \to \infty$ we have that
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \lambda_+ \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \Psi^{1/2} \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} (k_{ex}^2 - \Delta \omega^2)^{1/2} \cr
+}$$
+
+This doesn't help too much.
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}, k_{ex} \gg \Delta \omega$}}
+
+Fast exchange has $k_{ex} \gg \Delta \omega$, and this implies that $\Psi > 0$.  We write
+
+$$\Psi = k_{ex}^2 - \Delta \omega^2 = k_{ex}^2 (1 - \epsilon)$$
+
+where $\epsilon = {\Delta \omega^2 \over k_{ex}^2} \ll 1$ and so is small.
+
+Then to first order we have
+
+$$\Psi^{1/2} = k_{ex} (1 - \epsilon)^{1/2} \simeq k_{ex} (1 - {1 \over 2} \epsilon)$$
+
+and
+
+$${1 \over \Psi} = {1 \over k_{ex}^2} {1 \over (1 - \epsilon)} \simeq {1 \over k_{ex}^2} (1 + \epsilon)$$
+
+Then
+
+$$\eqalign{D_+ &= { k_{ex}^2 \over \Psi} \simeq 1 + \epsilon \cr
+  D_- &= {\Delta \omega^2 \over \Psi} \simeq \epsilon \cr
+  \lambda_+ &= \Psi^{1/2} \simeq k_{ex} (1 - {1 \over 2} \epsilon) \cr
+  \lambda_- &= 0 \cr
+}$$
+
+It turns out to be easier not to expand $\lambda_+$ in terms of $\epsilon$ immediately but only later.  Then
+
+$$\eqalign{D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) &\simeq (1 + \epsilon) cosh(\tau \lambda_+) - \epsilon \cr
+  &= cosh(\tau \lambda_+) + \epsilon \ (cosh(\tau \lambda_+) - 1) \cr
+  &= A + B \epsilon \cr
+}$$
+
+where
+
+$$\eqalign{A &= cosh(\tau \lambda_+) \cr
+  B &= cosh(\tau \lambda_+) - 1 \cr
+}$$
+
+We need to find $cosh^{-1}(A + B \epsilon) = C + D \epsilon$.
+Taking $cosh$ on both sides gives
+
+$$\eqalign{A + B \epsilon &= cosh(C + D \epsilon) \cr
+  &= cosh(C) cosh(D \epsilon) + sinh(C) sinh(D \epsilon) \cr
+  &\simeq cosh(C) + D \epsilon \ sinh(C) \cr
+}$$
+
+and thus we have $A = cosh(C)$ and $B = D \ sinh(C)$ and so as long as $A \ne 1$ (as here except in special case $\tau = 0)$ we have
+
+$$\eqalign{C &= cosh^{-1}(A) \cr
+  D &= {B \over \sqrt {A^2 - 1}} \cr
+}$$
+
+Here that gives
+
+$$\eqalign{C &= \tau \lambda_+ \cr
+  D &= {cosh(\tau \lambda_+) - 1 \over \sqrt {cosh^2(\tau \lambda_+) - 1}} \cr
+    &= \left ( {cosh(\tau \lambda_+) - 1 \over cosh(\tau \lambda_+) + 1} \right )^{1/2} \cr
+    &= tanh( {1 \over 2} \tau \lambda_+) \cr
+}$$
+
+(from a standard half-angle formula).  Therefore
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} \left ( \tau \lambda_+ + \epsilon \ tanh({1 \over 2} \tau \lambda_+) \right ) \cr
+  &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \left ( k_{ex} (1 - {1 \over 2} \epsilon) + {\epsilon \over \tau} \ tanh({1 \over 2} \tau k_{ex}) \right) \cr
+  &= R_{2max} + {\epsilon k_{ex} \over 4} \left ( 1 - {2 \over \tau k_{ex}} tanh({1 \over 2} \tau k_{ex}) \right ) \cr
+  &= R_{2max} + {\Delta \omega^2 \over 4k_{ex}} \left ( 1 - {2 \over \tau k_{ex}} tanh({1 \over 2} \tau k_{ex}) \right ) \cr
+  &= R_{2max} + {\Delta \omega^2 \over 4k_{ex}} \left ( 1 - {4 \nu \over k_{ex}} tanh({k_{ex} \over 4 \nu}) \right ) \cr
+}$$
+
+As before, in the limit as $\tau \to 0$ we have $R_2 \simeq R_{2max}$.  The limit $\tau \to \infty$ gives
+
+$$R_2 \simeq R_{2max} + {\Delta \omega^2 \over 4k_{ex}}$$
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}, \Psi < 0$}}
+
+The assumption that $k_{AB} = k_{BA}$ makes the equations much simpler.  Immediately we have $\zeta = 0$.  
+
+$\Psi < 0$ means that $k_{ex} < \Delta \omega$. With $\Psi < 0$ we also have
+
+$$\eqalign{D_+ &= {\Delta \omega^2 \over |\Psi|} \cr
+  D_- &= -1 + {\Delta \omega^2 \over |\Psi|} = {k_{ex}^2 \over |\Psi|} \cr
+  \lambda_+ &= 0 \cr
+  \lambda_- &= |\Psi|^{1/2} \cr
+}$$
+
+As $\tau \to 0$ we find that
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \left ( D_+ \lambda_+^2 + D_- \lambda_-^2 \right )^{1/2} \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} D_-^{1/2} \lambda_- \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} { k_{ex} \over |\Psi|^{1/2}} |\Psi|^{1/2} \cr
+  &= R_{2max} \cr
+}$$
+
+This is the same result as for $\Psi > 0$, so again we can use the smallest $\tau$ (largest $\nu$)
+to determine a reasonable first estimate of $R_{2max}$.
+
+As $\tau \to \infty$ we have that
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2} \lambda_+ \cr
+  &= R_{2max} + {1 \over 2} k_{ex} \cr
+}$$
+
+Combined with the $\tau \to 0$ estimate of $R_{2max}$ we see that we can use the largest $\tau$ (smallest $\nu$)
+to determine a reasonable first estimate of $k_{ex}$.
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}, k_{ex} \ll \Delta \omega$}}
+
+Slow exchange has $k_{ex} \ll \Delta \omega$, and this implies that $\Psi < 0$.  We write
+
+$$\Psi = k_{ex}^2 - \Delta \omega^2 = - \Delta \omega^2 (1 - \epsilon)$$
+
+where $\epsilon = {k_{ex}^2 \over \Delta \omega^2} \ll 1$ and so is small.
+
+Then to first order we have
+
+$$|\Psi|^{1/2} = \Delta \omega (1 - \epsilon)^{1/2} \simeq \Delta \omega (1 - {1 \over 2} \epsilon)$$
+
+and
+
+$${1 \over |\Psi|} = {1 \over \Delta \omega^2} {1 \over (1 - \epsilon)} \simeq {1 \over \Delta \omega^2} (1 + \epsilon)$$
+
+Then
+
+$$\eqalign{D_+ &= {\Delta \omega^2 \over |\Psi|} \simeq 1 + \epsilon \cr
+  D_- &= {k_{ex}^2 \over |\Psi|} \simeq \epsilon \cr
+  \lambda_+ &= 0 \cr
+  \lambda_- &= |\Psi|^{1/2} \simeq \Delta \omega (1 - {1 \over 2} \epsilon) \simeq \Delta \omega \cr
+}$$
+
+It turns out to be easier not to expand $\lambda_-$ in terms of $\epsilon$.  Then
+
+$$\eqalign{D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) &\simeq (1 + \epsilon) - \epsilon \ cos(\tau \lambda_-) \cr
+  &= 1 + \epsilon \ (1 - cos(\tau \lambda_-)) \cr
+}$$
+
+For $z$ small we have $cosh(z) \simeq 1 + {1 \over 2} z^2$ and so we see that for small $t$ we have $cosh^{-1}(1+t) \simeq (2t)^{1/2}$.
+Thus we have
+
+$$\eqalign{R_2 &\simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} \left ( 2 \epsilon (1 - cos(\tau \lambda_-)) \right )^{1/2} \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} \left ( 4 \epsilon \ sin^2({1 \over 2} \tau \lambda_-) \right )^{1/2} \cr
+  &= R_{2max} + {1 \over 2} k_{ex} - {\epsilon^{1/2} \over \tau} sin({1 \over 2} \tau \lambda_-) \cr
+  &\simeq R_{2max} + {1 \over 2} k_{ex} \left ( 1 - {2 \over \tau \Delta \omega} sin({1 \over 2} \tau \Delta \omega) \right ) \cr
+  &= R_{2max} + {1 \over 2} k_{ex} \left ( 1 - {4 \nu \over \Delta \omega} sin({\Delta \omega \over 4 \nu}) \right ) \cr
+}$$
+
+(using a standard half-angle formula).
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}, k_{ex} \approx \Delta \omega$}}
+
+The case when $k_{ex} \approx \Delta \omega$ is interesting because the general equation has singularities (which cancel) so
+making it numerically unsuitable.  This does not happen if $k_{AB} \ne k_{BA}$ so that $\zeta \ne 0$.
+
+First consider the case when $\Psi > 0$, so that $\epsilon = \Psi = k_{ex}^2 - \Delta \omega^2 > 0$ but is small.  Then
+
+$$\eqalign{D_+ &= 1 + {\Delta \omega^2 \over \Psi} = {k_{ex}^2 \over \epsilon} \cr
+  D_- &= {\Delta \omega^2 \over \epsilon} \cr
+  \lambda_+ &= \Psi^{1/2} = \epsilon^{1/2} \cr
+  \lambda_- &= 0 \cr
+}$$
+
+Thus
+
+$$\eqalign{D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) &= {k_{ex}^2 \over \epsilon} cosh(\tau \epsilon^{1/2}) - {\Delta \omega^2 \over \epsilon} \cr
+  &\simeq {1 \over \epsilon} (k_{ex}^2 (1 + {1 \over 2} \tau^2 \epsilon) - (k_{ex}^2 - \epsilon)) \cr
+  &= 1 + {1 \over 2} k_{ex}^2 \tau^2 \cr
+}$$
+
+Therefore
+
+$$R_2 \simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} cosh^{-1}(1 + {1 \over 2} k_{ex}^2 \tau^2)$$
+
+Next consider the case when $\Psi < 0$, so that $\epsilon = - \Psi = \Delta \omega^2 - k_{ex}^2 > 0$ but is small.  Then
+
+$$\eqalign{D_+ &= {\Delta \omega^2 \over |\Psi|} = {\Delta \omega^2 \over \epsilon} \cr
+  D_- &= -1 + {\Delta \omega^2 \over |\Psi|} = {k_{ex}^2 \over \epsilon} \cr
+  \lambda_+ &= 0 \cr
+  \lambda_- &= |\Psi|^{1/2} = \epsilon^{1/2} \cr
+}$$
+
+Thus
+
+$$\eqalign{D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-) &= {\Delta \omega^2 \over \epsilon} - {k_{ex}^2 \over \epsilon} cos(\tau \epsilon^{1/2}) \cr
+  &\simeq {1 \over \epsilon} ((k_{ex}^2 + \epsilon) - k_{ex}^2 (1 - {1 \over 2} \tau^2 \epsilon)) \cr
+  &= 1 + {1 \over 2} k_{ex}^2 \tau^2 \cr
+}$$
+
+And so again
+
+$$R_2 \simeq R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} cosh^{-1}(1 + {1 \over 2} k_{ex}^2 \tau^2)$$
+
+So if you can work around the singularity the result is continuous across $\Psi = 0$.
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}$, $\Psi > 0$, derivatives}}
+
+For the non-linear fitting routine we need the derivatives of $R_2$ with respect to the parameters $R_{2max}$, $k_{ex}$ and $\Delta \omega$.
+
+For this case remember that we have
+
+$$\eqalign{D_+ &= 1 + {\Delta \omega^2 \over \Psi} = {k_{ex}^2 \over \Psi} \cr
+  D_- &= {\Delta \omega^2 \over \Psi} \cr
+  \lambda_+ &= \Psi^{1/2} \cr
+  \lambda_- &= 0 \cr
+  \Psi &= k_{ex}^2 - \Delta \omega^2 \cr
+}$$
+
+Thus
+
+$$R_2 = R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} cosh^{-1} (D_+ cosh(\tau \lambda_+) - D_-)$$
+
+The trivial derivative is
+
+$${\partial R_2 \over \partial R_{2max}} = 1$$
+
+Note that
+
+$${d \over dx} cosh^{-1}(x) = {1 \over \sqrt{x^2 - 1}}$$
+
+Let
+
+$$v = D_+ cosh(\tau \lambda_+) - D_-$$
+
+Then
+
+$$\eqalign{{\partial R_2 \over \partial k_{ex}} &= {1 \over 2} - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial k_{ex}} \cr
+  {\partial v \over \partial k_{ex}} &= {\partial D_+ \over \partial k_{ex}} cosh(\tau \lambda_+) + D_+ \tau sinh(\tau \lambda_+) {\partial \lambda_+ \over \partial k_{ex}} - {\partial D_- \over \partial k_{ex}} \cr
+  {\partial D_+ \over \partial k_{ex}} &= {\partial D_- \over \partial k_{ex}} = - {2 k_{ex} \Delta \omega^2 \over \Psi^2 } \cr
+  {\partial \lambda_+ \over \partial k_{ex}} &= k_{ex} \Psi^{-1/2} \cr
+}$$
+
+And
+
+$$\eqalign{{\partial R_2 \over \partial \Delta \omega} &= - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial \Delta \omega} \cr
+  {\partial v \over \partial \Delta \omega} &= {\partial D_+ \over \partial \Delta \omega} cosh(\tau \lambda_+) + D_+ \tau sinh(\tau \lambda_+) {\partial \lambda_+ \over \partial \Delta \omega} - {\partial D_- \over \partial \Delta \omega} \cr
+  {\partial D_+ \over \partial \Delta \omega} &= {\partial D_- \over \partial \Delta \omega} = {2 k_{ex}^2 \Delta \omega \over \Psi^2 } \cr
+  {\partial \lambda_+ \over \partial \Delta \omega} &= - \Delta \omega \Psi^{-1/2} \cr
+}$$
+
+
+\subject{\bf {Case: $k_{AB} = k_{BA}$, $\Psi < 0$, derivatives}}
+
+For the non-linear fitting routine we need the derivatives of $R_2$ with respect to the parameters $R_{2max}$, $k_{ex}$ and $\Delta \omega$.
+
+For this case remember that we have
+
+$$\eqalign{D_+ &= {\Delta \omega^2 \over |\Psi|} \cr
+  D_- &= -1 + {\Delta \omega^2 \over |\Psi|} = {k_{ex}^2 \over |\Psi|} \cr
+  \lambda_+ &= 0 \cr
+  \lambda_- &= |\Psi|^{1/2} \cr
+  |\Psi| &= \Delta \omega^2 - k_{ex}^2 \cr
+}$$
+
+Thus
+
+$$R_2 = R_{2max} + {1 \over 2} k_{ex} - {1 \over 2 \tau} cosh^{-1} (D_+ - D_- cos(\tau \lambda_-))$$
+
+The trivial derivative is
+
+$${\partial R_2 \over \partial R_{2max}} = 1$$
+
+Let
+
+$$v = D_+ - D_- cos(\tau \lambda_-)$$
+
+Then
+
+$$\eqalign{{\partial R_2 \over \partial k_{ex}} &= {1 \over 2} - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial k_{ex}} \cr
+  {\partial v \over \partial k_{ex}} &= {\partial D_+ \over \partial k_{ex}} - {\partial D_- \over \partial k_{ex}}  cos(\tau \lambda_-) + D_- \tau sin(\tau \lambda_-) {\partial \lambda_- \over \partial k_{ex}} \cr
+  {\partial D_+ \over \partial k_{ex}} &= {\partial D_- \over \partial k_{ex}} = {2 k_{ex} \Delta \omega^2 \over \Psi^2 } \cr
+  {\partial \lambda_- \over \partial k_{ex}} &= - k_{ex} |\Psi|^{-1/2} \cr
+}$$
+
+And
+
+$$\eqalign{{\partial R_2 \over \partial \Delta \omega} &= - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial \Delta \omega} \cr
+  {\partial v \over \partial \Delta \omega} &= {\partial D_+ \over \partial \Delta \omega} - {\partial D_- \over \partial \Delta \omega}  cos(\tau \lambda_-) + D_- \tau sin(\tau \lambda_-) {\partial \lambda_- \over \partial \Delta \omega} \cr
+  {\partial D_+ \over \partial \Delta \omega} &= {\partial D_- \over \partial \Delta \omega} = - {2 k_{ex}^2 \Delta \omega \over \Psi^2 } \cr
+  {\partial \lambda_- \over \partial \Delta \omega} &= \Delta \omega |\Psi|^{-1/2} \cr
+}$$
+
+
+\subject{\bf {Case: $k_{AB} \ne k_{BA}$, derivatives}}
+
+For the non-linear fitting routine we need the derivatives of $R_2$ with respect to the parameters $R_{2max}$, $k_{AB}$, $k_{BA}$ and $\Delta \omega$.
+
+The trivial derivative is
+
+$${\partial R_2 \over \partial R_{2max}} = 1$$
+
+Let
+
+$$v = D_+ cosh(\tau \lambda_+) - D_- cos(\tau \lambda_-)$$
+
+Then
+
+$$\eqalign{{\partial R_2 \over \partial k_{AB}} &= {1 \over 2} - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial k_{AB}} \cr
+  {\partial v \over \partial k_{AB}}
+&= {\partial D_+ \over \partial k_{AB}} cosh(\tau \lambda_+) + D_+ \tau sinh(\tau \lambda_+) {\partial \lambda_+ \over \partial k_{AB}} - {\partial D_- \over \partial k_{AB}}  cos(\tau \lambda_-) + D_- \tau sin(\tau \lambda_-) {\partial \lambda_- \over \partial k_{AB}} \cr
+  {\partial D_\pm \over \partial k_{AB}} &= {k_{ex} \over (\Psi^2 + \zeta^2)^{1/2}} \ - \ {(\Psi + 2 \Delta \omega^2) (\Psi k_{ex} + \zeta \Delta \omega) \over (\Psi^2 + \zeta^2)^{3/2}} \cr
+  {\partial \lambda_\pm \over \partial k_{AB}} &= {1 \over 2 \lambda_\pm} \left ( \pm k_{ex} + {\Psi k_{ex} + \zeta \Delta \omega \over (\Psi^2 + \zeta^2)^{1/2}} \right ) \cr
+}$$
+
+And
+
+$$\eqalign{{\partial R_2 \over \partial k_{BA}} &= {1 \over 2} - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial k_{BA}} \cr
+  {\partial v \over \partial k_{BA}}
+&= {\partial D_+ \over \partial k_{BA}} cosh(\tau \lambda_+) + D_+ \tau sinh(\tau \lambda_+) {\partial \lambda_+ \over \partial k_{BA}} - {\partial D_- \over \partial k_{BA}}  cos(\tau \lambda_-) + D_- \tau sin(\tau \lambda_-) {\partial \lambda_- \over \partial k_{BA}} \cr
+  {\partial D_\pm \over \partial k_{BA}} &= {k_{ex} \over (\Psi^2 + \zeta^2)^{1/2}} \ - \ {(\Psi + 2 \Delta \omega^2) (\Psi k_{ex} - \zeta \Delta \omega) \over (\Psi^2 + \zeta^2)^{3/2}} \cr
+  {\partial \lambda_\pm \over \partial k_{BA}} &= {1 \over 2 \lambda_\pm} \left ( \pm k_{ex} + {\Psi k_{ex} - \zeta \Delta \omega \over (\Psi^2 + \zeta^2)^{1/2}} \right ) \cr
+}$$
+
+And
+
+$$\eqalign{{\partial R_2 \over \partial \Delta \omega} &= - {1 \over 2 \tau} {1 \over \sqrt{v^2 - 1}} {\partial v \over \partial \Delta \omega} \cr
+  {\partial v \over \partial \Delta \omega}
+&= {\partial D_+ \over \partial \Delta \omega} cosh(\tau \lambda_+) + D_+ \tau sinh(\tau \lambda_+) {\partial \lambda_+ \over \partial \Delta \omega} - {\partial D_- \over \partial \Delta \omega}  cos(\tau \lambda_-) + D_- \tau sin(\tau \lambda_-) {\partial \lambda_- \over \partial \Delta \omega} \cr
+  {\partial D_\pm \over \partial \Delta \omega} &= {\Delta \omega \over (\Psi^2 + \zeta^2)^{1/2}} \ - \ {(\Psi + 2 \Delta \omega^2) (-\Psi \Delta \omega + \zeta (k_{AB}-k_{BA})) \over (\Psi^2 + \zeta^2)^{3/2}} \cr
+  {\partial \lambda_\pm \over \partial \Delta \omega} &= {1 \over 2 \lambda_\pm} \left ( \mp \Delta \omega + {-\Psi \Delta \omega + \zeta (k_{AB}-k_{BA}) \over (\Psi^2 + \zeta^2)^{1/2}} \right ) \cr
+}$$
+
+
+\stoptext

@@ -1,0 +1,285 @@
+# PYTHON_DIR WILL INSERT HERE
+# CONDA_ENV WILL INSERT HERE
+
+# should work if suitably edited for Linux, Irix, Solaris, OSX, Windows
+
+# general rules:
+# *_LIB = required library or libraries (use -l or equivalen)
+# *_INCLUDE_FLAGS = where to find include files (use -I)
+# *_LIB_FLAGS = where to find libraries (use -L)
+
+# the C compiler and associated things
+
+# use below for everything except Windows
+CC = cc
+LINK = $(CC)
+MAKE = make
+CO_NAME = -c $<
+OUT_NAME = -o $@
+OBJ_SUFFIX = o
+DYLIB_SUFFIX = so
+RM = rm -f
+
+# use below for Windows
+#CC = cl
+#LINK = $(CC) /LD
+#MAKE = nmake
+#CO_NAME = -c $**
+#OUT_NAME = /Fe$@
+#OBJ_SUFFIX = obj
+#DYLIB_SUFFIX = pyd
+#RM = DEL /f
+
+# compiler flags
+
+# Windows specific flag
+# use below for everything except Windows
+WIN_FLAG =
+# use below for Windows
+#WIN_FLAG = /DWIN32 /MD
+
+# use below for everything with malloc.h
+MALLOC_FLAG =
+# use below for everything without malloc.h (e.g. OSX)
+#MALLOC_FLAG = -DDO_NOT_HAVE_MALLOC
+
+# use below for everything with -fPIC option (e.g. gcc)
+FPIC_FLAG = -fPIC
+# use below for everything without -fPIC option
+#FPIC_FLAG =
+
+# use below for everything where Tk xor behaves normally
+XOR_FLAG =
+# use below for everything (e.g. Solaris) where xor is equiv
+#XOR_FLAG = -DXOR_IS_EQUIV
+
+# optimisation flag
+# use below for everything except Windows
+OPT_FLAG = -O2
+# use below for Windows
+#OPT_FLAG = /Ox
+
+# Some functions utilise OpenMP for multi-cpu optimisation
+# use below if you have more than one cpu 
+# (these flags for GNU CC, Intel CC differs)
+OPENMP_FLAGS = -fopenmp
+OPENMP_LIB  = -lgomp
+# use below for Windows (note: after VS 2010 VCOMP.LIB is a paid upgrade,
+# but is available for free in VS 2008)
+#OPENMP_FLAGS = /OPENMP
+#OPENMP_LIB  = VCOMP.LIB
+
+CC_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG) $(MALLOC_FLAG) $(XOR_FLAG)
+LINK_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG)
+
+# linking command for C libraries into Python world
+# (used for everything except Windows)
+#LINK_LIBRARIES = sh linkSharedObjs
+
+# copying command for C libraries into Python world
+# (used only for Windows)
+COPY_LIBRARIES = copySharedObjs.bat
+
+# Clean .pyd and .so files from python path
+# (used only for Windows)
+#CLEAN_PYD = del *.pyd
+#CLEAN_SO = del *.so
+
+# Clean .pyd and .so files from python path
+# (used for everything except Windows)
+CLEAN_PYD = rm -f *.pyd
+CLEAN_SO = rm -f *.so
+
+# specify whether or not you want to compile GL
+# use below if you want to compile GL
+IGNORE_GL_FLAG = -DNDEBUG
+# use below if you want to ignore GL
+#IGNORE_GL_FLAG = -DIGNORE_GL
+
+# special GL flag, should have either USE_GL_TRUE or USE_GL_FALSE
+# (-D means this gets defined by the compiler so can be checked in source code)
+# (this relates to glXCreateContext() call in ccpnmr/global/gl_handler.c)
+# if have problems with USE_GL_TRUE then try GL_FALSE, or vice versa
+# use below for Linux?
+GL_FLAG = -DUSE_GL_FALSE
+# use below for everything else?
+#GL_FLAG = -DUSE_GL_TRUE
+
+# use below if your glut does not need to be explicitly initialised
+GLUT_NEED_INIT =
+# use below if your glut needs to be explicitly initialised
+# looks like need it for freeglut and for OSX glut
+#GLUT_NEED_INIT = -DNEED_GLUT_INIT
+
+# whether glut.h is GL/glut.h (normal case) or just glut.h (OSX)
+# use below if glut.h is in GL directory
+#GLUT_NOT_IN_GL =
+# use below if glut.h is not in GL directory (e.g. OSX)
+GLUT_NOT_IN_GL = -DGLUT_IN_OWN_DIR
+
+# special glut flag
+GLUT_FLAG = $(GLUT_NEED_INIT) $(GLUT_NOT_IN_GL)
+
+# shared library flags
+# use below for Linux or Irix
+SHARED_FLAGS = -shared
+# use below for OSX
+#SHARED_FLAGS = -L/sw/lib -bundle -bundle_loader /sw/bin/python
+# use below for Solaris
+#SHARED_FLAGS = -G
+
+# math
+MATH_LIB = -lm
+
+# X11
+# use below for everything but Irix
+X11_DIR = /usr/X11R6
+# use below for Irix
+#X11_DIR = /usr
+X11_LIB = -lX11 -lXext
+X11_INCLUDE_FLAGS = -I$(X11_DIR)/include
+# use below for everything but Irix
+X11_LIB_FLAGS = -L$(X11_DIR)/lib
+# use below for Irix
+#X11_LIB_FLAGS = -L$(X11_DIR)/lib32
+
+# Tk
+TK_DIR = /usr
+TK_LIB = -ltk8.5
+TK_INCLUDE_FLAGS = -I$(TK_DIR)/include
+TK_LIB_FLAGS = -L$(TK_DIR)/lib
+
+# Python
+PYTHON_DIR = /usr
+# for Unix do not seem to need PYTHON_LIB
+PYTHON_LIB = 
+# for Windows seem to need below (or similar)
+#PYTHON_LIB = -lPython25
+PYTHON_INCLUDE_FLAGS = -I$(PYTHON_DIR)/include/python2.5
+# for Unix do not seem to need PYTHON_LIB_FLAGS
+PYTHON_LIB_FLAGS = 
+# for Windows seem to need below (or similar)
+# PYTHON_LIB_FLAGS = -L$(PYTHON_DIR)/libs
+
+# GL
+# on Linux below is possible if not using provided Mesa
+GL_DIR = /usr
+# on OSX and some other Unixes below is possible if not using provided Mesa
+#GL_DIR = /usr/X11R6
+# use below if compiling GL, except on OSX if using framework glut
+GL_LIB = -lglut -lGLU -lGL
+# use below if compiling GL on OSX if using framework glut
+#GL_LIB = -framework GLUT -lGLU -lGL
+# use below if not compiling GL
+#GL_LIB =
+# use below if compiling GL, except on OSX if using framework glut
+GL_INCLUDE_FLAGS = -I$(GL_DIR)/include
+# use below if compiling GL on OSX if using framework glut
+#GL_INCLUDE_FLAGS = -I$(GL_DIR)/include -I/System/Library/Frameworks/GLUT.framework/Headers
+# use below if not compiling GL
+#GL_INCLUDE_FLAGS =
+# use below if compiling GL for everything but Irix and OSX (if using framework glut)
+GL_LIB_FLAGS = -L$(GL_DIR)/lib
+# use below for OSX if using framework glut
+#GL_LIB_FLAGS = -L$(GL_DIR)/lib -framework GLUT
+# use below for Irix
+#GL_LIB_FLAGS = -L$(GL_DIR)/lib32
+# use below if not compiling GL
+#GL_LIB_FLAGS =
+
+# below is needed for Meccano
+# GSL (Gnu Scientific Library)
+#GSL_DIR = /Users/wb104/gsl
+#GSL_INCLUDE_FLAGS = -I$(GSL_DIR)/include
+#GSL_LIB_FLAGS = -L$(GSL_DIR)/lib
+#GSL_LIB = -lgsl -lgslcblas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PYTHON_DIR = <pythonDir, edit or inserted from compileCCode>
+
+# should work if suitably edited for Linux, Irix, Solaris, OSX, Windows
+
+# general rules:
+# *_LIB = required library or libraries (use -l or equivalen)
+# *_INCLUDE_FLAGS = where to find include files (use -I)
+# *_LIB_FLAGS = where to find libraries (use -L)
+
+# the C compiler and associated things
+CC = cc -m64
+LINK = $(CC)
+MAKE = make
+CO_NAME = -c $<
+OUT_NAME = -o $@
+OBJ_SUFFIX = o
+DYLIB_SUFFIX = so
+RM = rm -f
+
+# compiler flags
+
+# Windows specific flag
+# WIN_FLAG =
+
+# use below for everything with malloc.h
+#MALLOC_FLAG =
+# use below for everything without malloc.h (e.g. OSX)
+MALLOC_FLAG = -DDO_NOT_HAVE_MALLOC
+
+# use below for everything with -fPIC option (e.g. gcc)
+FPIC_FLAG = -fPIC
+# use below for everything without -fPIC option (e.g. Windows)
+#FPIC_FLAG =
+
+# disable warning messages flag
+NOWARNING_FLAG = -w
+
+# optimisation flag
+OPT_FLAG = -O
+
+CC_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG) $(MALLOC_FLAG) $(NOWARNING_FLAG)
+LINK_FLAGS = $(WIN_FLAG) $(OPT_FLAG) $(FPIC_FLAG)
+
+# linking command for C libraries into Python world
+LINK_LIBRARIES = sh linkSharedObjs
+
+# copying command for C libraries into Python world
+COPY_LIBRARIES = sh copySharedObjs
+
+# math
+MATH_LIB = -lm
+
+# rest of Python
+PYTHON_VERSION = 3.5
+
+# for Unix do not seem to need PYTHON_LIB
+# for Windows seem to need below (or similar)
+PYTHON_LIB = -lpython$(PYTHON_VERSION)m
+
+PYTHON_INCLUDE_FLAGS = -I$(PYTHON_DIR)/include/python$(PYTHON_VERSION)m -I$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)/site-packages/numpy/core/include/numpy
+
+# for Unix do not seem to need PYTHON_LIB_FLAGS
+PYTHON_LIB_FLAGS = -L$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)/config-$(PYTHON_VERSION)m
+
+# for Windows seem to need below (or similar)
+#PYTHON_LIB_FLAGS = -L$(PYTHON_DIR)/libs
+
+# shared library flags
+# use below for Linux or Irix
+#SHARED_FLAGS = -shared
+
+# use below for OSX
+SHARED_FLAGS = -L$(PYTHON_DIR)/lib -bundle -bundle_loader $(PYTHON_DIR)/bin/python
+
+# use below for Solaris
+#SHARED_FLAGS = -G

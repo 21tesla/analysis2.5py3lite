@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<!--
+======================COPYRIGHT/LICENSE START==========================
+
+api-description.html: General documentation for CCPN data model and code generation framework
+
+Copyright (C) 2004  (CCPN Project)
+
+=======================================================================
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+ 
+A copy of this license can be found in ../license/LGPL.license
+ 
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+ 
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+
+======================COPYRIGHT/LICENSE END============================
+
+for further information, please contact :
+
+- CCPN website (http://www.ccpn.ac.uk/)
+
+- email: ccpn@bioc.cam.ac.uk
+
+=======================================================================
+===========================REFERENCE START=============================
+===========================REFERENCE END===============================
+
+-->
+<head>
+<title>CCPN Diagrams</title>
+<link rel="stylesheet" type="text/css" href="htmldoc.css" title="Style">
+<script language="JavaScript">
+function wopn(href){ window.open(href,'','width=880,height=500,top=300,left=300,resizable=0,toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1')}
+</script>   
+</head>
+
+<body>
+<table height=100 width=100% bgcolor="F0CC99" border=0>
+  <tr>
+	<td><a target="blank" href="http://www.ccpn.ac.uk"><img border=0 src="../../doc/graphics/CCPN_Logo_200_x.gif" alt="CCPN"/></a></td>
+	<td width="80%" valign="bottom">
+	</td>
+  </tr>
+</table>
+
+<table width="100%">
+  <tr>
+    <td>
+	<h3>Overview of Python API</h3><br>
+	<h4>Introduction</h4>
+	<ol><p>All data are stored in a series of objects. The objects have attributes (strings, floats, booleans, dates, etc.) and links (other objects from the model). Attributes have data types (we have implemented the typing in typeless Python), links have the class of the object(s) at the other end, both have cardinality (maximum and minimum number present for validity), and an isChangeable flag. Singlevalued attributes and links (0..1 optional, or 1..1 mandatory), are implemented as simple attributes, whereas multivalued attributes and links (n..m where n <= m and m > 1) are implemented as lists internally and exported as tuples.</p></ol>
+	<h4>Classes</h4>
+	<ol><p>Classes have create functions (python __init__) and delete functions. The create functions take parameters corresponding to attributes and links of the objects, create objects and sets up the attributes and links. Delete does not delete the object as such (that is impossible in Python), but cuts all links to the object from other objects in the model. It also deletes any other object that becomes invalid when the first is deleted, giving a cascading delete.</p></ol>
+
+	<h4>Information hiding</h4>
+	<ol><p>The internal representation of attributes and links is private, and all access is through functions. This is crucial, as the various functions check the validity of the input. It should be impossible to create invalid data, unless you go out of your way to bypass the API. The Python obj.attr syntax works normally, but we have set up the classes (with 'properties') so that attribute access actually executes the appropriate get or set function. This is a nice feature but not a requirement for other languages, which (unlike Python) might not be allow it. We also allow attributes not defined in the model to be added to individual objects, another feature which will probably be restricted to Python.</p>
+        <p>The functions available are of the types 'get', 'set', 'add', 'remove', 'findFirst', 'findAll', and 'new' described in more detail below. Functions are not defined where they are not relevant - there is e.g. no 'set' command for parent-child links, as these are set at object creation time and cannot be modified. Certain 'set' functions can only be called by the implementation, either for object creation or when loading data from files.</p></ol>
+
+	<h4>Attributes</h4>
+	<ol><p>A singlevalued attribute, say 'task', has functions getTask and setTask. If the attribute has not been set, getTask returns None. Attributes can not be deleted, but can be unset by setting them to None.</p>
+	<p>A multivalued attribute, say 'keywords', has functions getKeywords, setKeywords, addKeyword, removeKeyword, and pickKeyword (note the use of singular and plural). setKeyword takes a sequence (list or tuple) of keywords as input and (re)sets the keywords list. Again, you can clear the keywords by setting them to 'empty list'. getKeywords returns a copy of the internal list (in actual fact a tuple) so that the internal list is not available for modification. addKeyword appends a new keyword to the end to the list, removeKeyword(value) removes the first occurence of 'value' from the list, and pickKeyword (index) returns the keyword at position 'index' of the list. Note that the order of values in multivalued attribute is defne by the order in which the individual values have been added.</p></ol>
+
+    <h4>Links</h4>
+    <ol><p>What is said above for attributes also goes for links, but links have additional complications. With a few exceptions, links are two-way. Imagine a link between Sample and Holder, where a Holder can have any number of Samples, and a Sample may optionally have one Holder. Here mySample.setHolder(myHolder) and myHolder.addSample(mySample) will have exactly the same effect - the API checks and sets both ends of the link. mySample.setHolder(None) and myHolder.removeSample(mySample) will also have the same effect, and deleting myHolder will cause all links to it to be reset to None.</p>
+    <p>Multivalued links have two additional functions, e.g. findFirstSample and findAllSamples (note singular and plural). Both take a series of keyword=value arguments and use them to filter the objects in the link. For example myHolder.findAllSamples(name='test', pH=7.0) would return a list (or rather tuple) of all samples in myHolder.samples that had the name 'test' and pH set to 7.0.</p></ol>
+
+    <h4>Parents, keys, and factory functions</h4>
+    <ol><p>Every non-abstract class in the model must have a link to another class that serves as the 'parent'. These links are marked with a filled diamond at one end in the class diagrams. The parent-child links form a tree, rooted in Implementation.Project (which has no parent). The parent must be given at object creation time, and remains the same for the lifetime of an object. Every non-abstract class must also have a (set of) attributes and links that serve as a key. The keys must be unique for all objects of the same type that are children of the same parent. The combination of parent links and keys serve to give each object a unique identifier.</p
+    <p>Every class that has child links will have a set of factory functions that serve to create the child objects. The factory functions to create e.g. a new Sample is named newSample(). The parameters for factory functions is the same as the one for creators, except that the first parameter, the parent object, is omitted. </p></ol>
+    
+
+    <h4>Validity checking</h4>
+    <ol><p>The Api checks on setting that the type of attributes and the class of links is correct, and that the cardinality is not violated. Objects are validity checked after creation, and mandatory attributes and links must be passed to the object creation function, unless the model has defined a default value. Objects and links may be 'unchangeable', which means they can be set only at objects creation time and cannot be modifed later, and this, too, is checked by the API. The model defines its own data types, which for instance covers enumeration, and these checks are also done.</p>
+    <p>Links have special problems. When you set or modify a link the API checks that both objects are valid. If you reset a link, i.e. you do obj1.setALink(obj3) when obj1.aLink was already set to obj2, the API checks that all three objects remain valid (including obj2, that will change becaue it loses the link to obj1) and throws an error if the operation can not be done in a valid manner.</p>
+    <p>Finally, there is a facility for adding ad-hoc constraints, that will also be checked by the API during runtime.</p></ol>
+
+    <h4>Other aspects</h4>
+    <ol><p>The API does some additional things. There is the notifier system that allows you to set a specified function to be called e.g. every time a Sample is created or that a Holder.name is modified. There is the system for keeping track of which files (or databases) the date are stored in, loading them automatically when they are needed, and marking them as modified (and therefore in need of saving). And there is the series of 'parent-child' links between objects and the definition of a key for each object to allow unique identification of objects, and the way it is used in saving references to objects in different files. There is also a system of 'derived' attributes and links that behave as normal attributes and links, but are effectively convenience functions that calculate useful results not stored explicitly in the data model. As seen from the outside, derived attributes and links behave exactly like normal ones (they may even be settable in some cases), and so allow values to be either stored or calculated on the fly without it making any difference to client code. Finally, every object has a link to ApplicationData objects. These contain an aplication name, a keyword, and a value, and are intended to allow individual applications to store data that are not defined in the model. ApplicationData should not be modified (or indeed accessed) by any application other than the one that wrote them. They will not be be deleted by other applications either (as long as the object that owns them remains alive).</p></ol>
+
+    <h4>Minimum requirements for other language APIs</h4>
+    <ol><p>Ultimately all APIs should support the full functionality provided it can be done in practice. Not all the aspects here are equally necessary for a minimum API, however. You would definitely need create and delete, set and get, add and remove, whereas findFirst, findAll, and pick could be postponed. The correct management of links is crucial, and the validity checking (except possibly for ad-hoc constraints) is important too. There would have to be a system for file storage and inter-file links, but one could maybe do with a more primitive one to start with. Notifiers and derived links could maybe wait.</p></ol>
+    </td>
+  </tr>
+</table>
+  
+<div class="leftbanner">
+<table width=100% cellspacing=0 cellpading=0 border=0>
+  <tr><td bgcolor="#794E83" align=center><a target="blank" href="http://www.ccpn.ac.uk">www.ccpn.ac.uk</a></td></tr>
+</table>
+</div>
+<table width=100% cellspacing=0 cellpading=0 border=0>
+  <tr valign=top>
+    <td><h6>Work done by the <a href="mailto:ccpn-dev@bioc.cam.ac.uk">CCPN team</a>.</h6></td>
+	<td align=right><h6>
+<!-- Created: Thu Nov  7 10:56:59 GMT 2002 -->
+<!-- hhmts start -->
+Last modified: Tue May 25 18:57:32 CEST 2004
+<!-- hhmts end -->
+    </h6>
+	</td>
+  </tr>
+</table>
+<br/>
+
+</body>
+</html>

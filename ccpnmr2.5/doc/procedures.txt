@@ -1,0 +1,305 @@
+Procedures for standard tasks within the CCPN/MEMOPS framework.
+Some may be useful only for project members or modellers.
+
+=========================================================================
+
+  Setting up ObjectDomain for future code generation :
+
+- Install ObjectDomain as the vendor tells you.
+
+- Check out the CCPN repository from Sourceforge.
+
+- Change your .cshrc (or equivalent) so that your PYTHONPATH environment
+variable contains the top python directory in the CCPN repository -
+e.g. /home/rhf22/CCPN/cvsroot/python
+
+Find the odUserSetup.py file in the ObjectDomain python/scripts directory
+(e.g. /usr/local/src/ObjectDomain/python/scripts/odUserSetup.py) and code to
+add the top CCPN python directory to the internal Pythonpath. E.g. the
+following two lines:
+import sys
+sys.path.append('/home/rhf22/CCPN/cvsroot/python')
+
+=========================================================================
+
+  Setting up CCPN project in eclipse:
+
+=================
+  
+0 - Install eclipse
+
+download wtp-all-in-one: http://www.eclipse.org/downloads/
+    > tar -zxvf downloads/wtp-all-in-one-0.7.1-linux-gtk.tar.gz 
+
+Plugins installation
+    - pydev http://pydev.sourceforge.net/
+    - quantumdb http://quantum.sourceforge.net/
+
+=================
+
+1 - Open & use eclipse
+
+- Setup CCPN cvs repository
+Window > Open Perspective > Others...
+Select CVS Repository Exploring
+Click ok
+
+In the main Eclipse window, the left panel is now "CVS Repositories"
+Right-click in here and select New > Repository Location...
+
+Enter the repository URL http://www.pims-lims.org/svn/pims/ 
+Enter anonymous as userid and no password or
+Enter username and password if you have a developer access to the repository
+Click Finish
+
+Add CVS repository
+    extssh
+    pajanne
+    cvs.sourceforge.net
+    /cvsroot/ccpn/
+
+- Checkout ccpn code
+The repository tree should now appear in the left panel.
+Expand "...@cvs.sourceforge.net:/cvsroot/ccpn/", expand "HEAD", and right click on "ccpn", and select Check Out As...
+in the popup window, select "... using the New Project Wizard" and click Finish
+Select under "Simple", "Project"
+Specify a project name ("ccpn")
+Click Finish
+
+Now under ${eclipseWorkspace}/ccpn/ you have all the code.
+
+- Open the CCPN project
+Window > Open Perspective > Others...
+Select Resource
+Click ok
+
+Your local ccpn project tree should now appear in the left panel.
+
+Configure python path
+    ccpn > right click: Properties
+    PyDev - PYTHONPATH > Add Source Folder: /ccpn/python 
+
+=========================================================================
+
+=========================================================================
+
+  Python code generation :
+
+=================
+
+0 - Introduction:
+
+The Data Model is kept and edited in ObjectDomain. The entire contents, which
+includes the actual model contents and the diagrams displaying them, are found
+in cvsroot/model/memops/od/Model.odm. Because of a problem with ObjectDomain it
+has only recently become possible to save the individual packages separately,
+and this ahs not been introduced ni the procedures yet. Accordingly changes to
+Model.odm must still be coordinated between developers. There is an alternative
+representation of the data model (minus the diagrams) as a series  of Python
+files (generically referred to as 'Model.py', in reality there is a file for
+each package, e.g. cvsroot/python/ccp/model/Nmr.py). ObjectDomain is used only
+for generating diagrams and the 'Model.py' files; the 'Model.py' representation
+is used for all code generation etc. The 'Model.py' files are generated
+automatically from the Model.odm and may not be edited by hand before being
+checked in.
+
+In general both Model.odm and the individual Model.py files are checked in.
+There may be packages in early draft stages that are present in Model.odm but
+are not checked in as Model.py. If you want to get hold of these you have to
+generate the Model.py files from the Model.odm; otherwise you can simply work
+off the Model.py files
+
+=================
+
+1 - Generating Model.py from ObjectDomain
+
+- Open ObjectDomain
+- (re)Open the right Model
+- In the Console window, type :
+    from memops.scripts import ObjectDomain
+- which loads the CCPN scripts for getting data out of ObjectDomain
+    mm = ObjectDomain.modelFromOd()
+  which generates an in-memory version of the CCPN model.
+- If there are any errors in the model you will get an error message at this
+  stage. These should be fixed. Otherwise the last line will say something
+  like
+    Checks valid: ['ccp', 'ccpnmr', 'gphl', 'memops']"
+  Now type :
+    from memops.scripts_v2.model import PyModelGen
+  which loads the script for writing the model to disk, and then :
+    PyModelGen.writeModel(mm)
+  which writes the model to disk.
+  You can now quit ObjectDomain.
+  
+  Some people want to write out only part of the model, avoiding certain
+  packages. If you want to avoid e.g. the ccpnmr and ccp.NmrReference packages,
+  you can give an extra parameter to the writeModel command, thus:
+    PyModelGen.writeModel(mm, excludePackageNames=('ccpnmr','ccp.NmrReference'))
+  
+  Note that some of the packages you exclude may be included anyway, if they are
+  imported from something that is not excluded. ALso there is a risk of ending
+  up with an inconsistent result. Use with care.
+
+  In summary, in the Python command console:
+>>> from memops.scripts import ObjectDomain
+>>> mm = ObjectDomain.modelFromOd()
+>>> from memops.scripts_v2.model import PyModelGen
+>>> PyModelGen.writeModel(mm, excludePackageNames = ['ccp.Crystallography', 'gphl'])
+
+=================
+
+2 - Generating APIs, XML I/O code, XML schemas, documentation etc.
+
+- All the generation is done through sourcing various make*.py files in
+  cvsroot/python/memops/scripts_v2 (as well as some older ones in
+  cvsroot/python/memops/scripts). 
+  The simplest procedure is to source the file
+   cvsroot/python/memops/scripts_v2/makePython.py
+  e.g. go to cvsroot/python and type
+    python memops/scripts/makePython.py
+  
+  This command will generate all files relevant for Python (Python API,
+  documentation, XML I/O and XML schemas) for all packages. There are ways of
+  generating only some things or excluding some packages, but these are very
+  rarely used; it is easier simply to do it this way every time. It also tries
+  to import all .py files in cvsroot/python and subdirectories, as a check that
+  no new errors have been introduced.
+
+  The command may produce various WARNINGs, mostly benign:
+    
+    'WARNING attribute/role/class XXX has no documentation'
+  means that parts of the model have not had their documentation set and 
+  remind the modeller that this should get done.
+    
+    'WARNING: File XXX_Diag.gif does not exist'
+  means that one of the diagrams that would be used for documentation has not
+  been created. Generally because the relevant package is still in draft or
+  for other good reasons.
+    
+    'WARNING, Import failed xxx.yyy.zzz'
+  may be serious or not. It means that an error occurred when tseting the import
+  of file
+    cvsroot/python/xxx/yyy/zzz.py
+  The script tries to import all .py files under the cvsroot/python and checks
+  for errors.
+  The most common reason is that you are missing some files that are imported
+  somewhere, e.g. because you have not compiled (or lack) the C files used by
+  CcpNmr Analysis. You can try (from cvsroot/python) typing 
+  'python xxx/yyy/zzz.py' and look at the error message. If you get errors
+  from files in api or xml directories you will likely have a problem.
+  Otherwise the problem is most likely from a file that you may not need
+  anyway. The script has a list of 'ignore' files that are known to raise errors
+  but that should be ignored.
+
+=========================================================================
+
+=========================================================================
+
+  Generating diagrams from ObjectDomain
+
+=========================================================================
+
+=========================================================================
+
+  Updating Analysis and other applications locally, after cvs update
+
+=========================================================================
+
+=========================================================================
+
+  Making a Python release
+
+=========================================================================
+
+=========================================================================
+
+  Java code generation :
+
+=================
+  
+0. Pre-Installation
+   - postgresql
+   - ant
+
+=================
+
+1. Generating APIs, XML I/O code, XML schemas, SQL schemas, documentation etc.
+
+   There is only one script that you need to run to generate the Java API is:
+   > ant -f ccpn/java/shared/memops/scripts/build.xml
+=========================================================================
+
+=========================================================================
+
+  Making a Java release
+  
+=========================================================================
+
+=========================================================================
+
+  Updating CCPN web site
+
+=================
+
+1 - after new release
+
+=================
+
+2 - after model change
+  
+=========================================================================
+
+=========================================================================
+
+  Data model changes and related steps
+
+=================
+
+1 - Changing the model
+
+- Technically, you simply change relevant package of the UML model, test it and
+  check it in.
+  More precisely, you should export the model to Model.py files (see above),
+  and run at least a full Python code generation to see if anything crashes.
+  It is recommended to run some kind of test of the API in use, to check for
+  introduced errors. Which depends on what you are working on. When java
+  generation scripts are more mature, you should run these and compile teh
+  resulting code (or get someone to do it for you). 
+
+- Organisationally, you must make sure to check with anyone whose work might be
+  affected. The who and how of this will be formalised later. It is strongly
+  recommended not to make changes without discussing them with at least one
+  knowledgable party - it is hard for one person to think of everything.
+
+=================
+
+2 - Version numbers, backwards compatibility etc.
+
+- Any time the data model changes, you should in principle increment the version
+  number and make sure the backwards compatibility code is upgraded.
+ 
+- The current data model version is kept in python.memops.general.Constants.py
+  in the module attribute currentModelVersion. This is edited by hand.
+  Incrementing the version number will not break any code, so do not be afraid.
+
+- There is a backwards compatibility system for the Python-XML implementation.
+  There is nothing available for Java or database implementations yet. While
+  this lasts, changes can be ignored if they simply add new attributes, classes,
+  etc., or if the model includes derived, modifiable attributes that can take
+  care of the compatibility. 
+
+- The backwards compatibility code is kept in
+    python.memops.format.xml.Compatibility.py
+  The system is documented in the header comments of that file. Until a more
+  general system is in place and documented, any changes to this file *MUST* be
+  coordinated with Rasmus Fogh.
+  
+- For packages in the draft stage tbackwards compatibility code is not
+  necessary, as there is no code or data that relies on the model. Packages that
+  are only used inside the project by a few people can be changed without too
+  much hassle after you check with these people. This will likely change once
+  the java and database backwards compatibility systems become available.
+
+=========================================================================
+
+=========================================================================

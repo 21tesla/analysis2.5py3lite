@@ -1,0 +1,102 @@
+CcpNmr FormatConverter 2.1 installation notes
+
+For general release notes see README file.
+
+The third-party applications required are Python >= 2.4 (Python
+2.6 recommended, and assumed below), Tcl/Tk >= 8.4 (Tcl/Tk 8.5
+recommended, and assumed below).
+Users who want to use their own copies of this code can do so.
+FormatConverter will not work with Python < 2.4 but also works
+with Python 2.5 and Python 2.6.  People who use Python 2.4
+also need to install ElementTree (used for XML I/O).
+
+To install the code go into the ccpnmr directory (the top-level
+directory of the distribution) and run the installCode.py script:
+ 
+  python installCode.py format
+ 
+This assumes that your computer has a working version of Python.
+Any version >= 2.2 should work to run the script, but you need
+version >= 2.4 for the code itself to run.
+The script will then ask you what you want compiled, and for
+anything not compiled where the relevant directory of the existing
+code is.  It will then create a "bin" directory.  Finally, it will
+ask whether you want to test the FormatConverter program by
+starting it up.  This is recommended since it will check whether
+the installation has been successful.  It will take a few seconds
+because all of the Python code will have to be compiled.
+
+*********Start of Interlude***************************************
+ 
+Alternatively, if for some reason the script does not work, below is
+what you need to do to install the code (CCPNMR_TOP_DIR is the ccpnmr
+directory created by the unpacking of the tar file):
+ 
+(1) If you need our version of Tcl:
+      cd $CCPNMR_TOP_DIR/tcl8.5
+    Unpack tar file:
+      tar xvzf tcl8.5.8.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd tcl8.5.8/unix
+      ./configure --prefix=$CCPNMR_TOP_DIR/tcl8.5
+      make
+      make install
+ 
+(2) If you need our version of Tk:
+      cd $CCPNMR_TOP_DIR/tk8.5
+    Unpack tar file:
+      tar xvzf tk8.5.8.tar.gz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Compile code:
+      cd tk8.5.8/unix
+      ./configure --prefix=$CCPNMR_TOP_DIR/tk8.5 --with-tcl=$CCPNMR_TOP_DIR/tcl8.5/lib
+      (or your own "with-tcl" argument if you are not using our Tcl)
+      make
+      make install
+ 
+(3) If you need our version of Python:
+      cd $CCPNMR_TOP_DIR/python2.6
+    Unpack tar file:
+      tar xvzf Python-2.6.5.tgz
+      (or "gunzip" followed by "tar xvf" if your tar does not understand "z")
+    Edit setup:
+      cd Python-2.6.5
+      copy Modules/Setup.dist to Modules/Setup
+      edit Modules/Setup:
+        below the line that says "# The _tkinter module." edit the lines as instructed
+    Compile code:
+      (In the Python-2.6.5 directory.)
+      ./configure --prefix=$CCPNMR_TOP_DIR/python2.6
+      make
+      make install
+ 
+*********End of Interlude*****************************************
+
+After successful installation of the code the following environment
+variables also need setting or updating (for example, in .cshrc):
+
+  CCPNMR_TOP_DIR must be set to the top level directory of the release
+  PYTHONPATH must include $CCPNMR_TOP_DIR/ccpnmr2.1/python
+  PATH must include $CCPNMR_TOP_DIR/bin
+
+For example, in .cshrc you could place:
+
+  setenv CCPNMR_TOP_DIR directory_where_you_unpacked_release/ccpnmr
+  setenv PATH ${CCPNMR_TOP_DIR}/bin:{$PATH}
+  setenv PYTHONPATH .:${CCPNMR_TOP_DIR}/ccpnmr2.1/python
+
+Your PATH and PYTHONPATH might need to include other things:  to
+illustrate this the example of PATH above includes other directories
+previously defined to be in PATH.
+
+On Windows2000:
+
+  Go to Settings / System / Advanced / Environment Variables...
+
+  Create a new (or edit existing) 'User variable':
+
+    Variable: CCPNMR_TOP_DIR
+    Value:    directory_where_you_unpacked_release/ccpnmr
+	
+	...and so on

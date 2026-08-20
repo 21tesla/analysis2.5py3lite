@@ -1,0 +1,18 @@
+CherryPy:
+
+http://www.cherrypy.org/wiki/CherryPyDownload
+
+
+setuptools:
+
+http://peak.telecommunity.com/DevCenter/EasyInstall#installation-instructions
+
+
+Mako:
+
+http://www.makotemplates.org/download.html
+
+
+beaker:
+
+auto-installed by Mako

@@ -1,0 +1,10 @@
+- need exact stereochem on all centers as well. Write code to do this?
+
+- INCLUDE magnetisation states?!?
+
+- stereo codes are 'stereo_1:' and 'stereo_2:', with _n corresponding to the
+  atom subType! If have multiple sites, would end up with something like:
+   stereo_1:C1,C4;stereo_2:C6, or something.
+   
+   
+  

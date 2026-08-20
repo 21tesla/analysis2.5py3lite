@@ -1,0 +1,593 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
+	<META NAME="AUTHOR" CONTENT="Rasmus Fogh">
+	<META NAME="CREATED" CONTENT="20050214;12174800">
+	<META NAME="CHANGEDBY" CONTENT="Rasmus Fogh">
+	<META NAME="CHANGED" CONTENT="20050215;15370700">
+	<STYLE>
+	<!--
+		@page { size: 8.5in 11in; margin-left: 1.25in; margin-right: 1.25in; margin-top: 1in; margin-bottom: 1in }
+		TD P { margin-bottom: 0.08in }
+		H1 { margin-bottom: 0.08in }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "MS Mincho"; font-size: 16pt }
+		H1.ctl { font-family: "Tahoma"; font-size: 16pt }
+		P { margin-bottom: 0.08in }
+		H2 { margin-bottom: 0.08in }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "MS Mincho"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		H4 { margin-bottom: 0.08in }
+		H4.western { font-family: "Arial", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-family: "MS Mincho"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-size: 11pt; font-style: italic }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 CLASS="western" ALIGN=CENTER>Modeling with Memops</H1>
+<H2 CLASS="western">Contents:</H2>
+<TABLE WIDTH=100% CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P><A HREF="#Getting the CCPN code:|outline">Getting the CCPN
+			code:</A><BR><BR><A HREF="#Installing ObjectDomain :|outline">Installing
+			ObjectDomain:</A><BR><BR><A HREF="#Set-up:|outline">Set-up:</A><BR><BR><A HREF="#Using ObjectDomain:|outline">Using
+			ObjectDomain:</A><BR><BR><A HREF="#Test Modeling:|outline">Test
+			Modeling:</A><BR>&nbsp;&nbsp;&nbsp;&nbsp;Classes<BR>&nbsp;&nbsp;&nbsp;&nbsp;Attributes<BR>&nbsp;&nbsp;&nbsp;&nbsp;Links<BR>&nbsp;&nbsp;&nbsp;&nbsp;Multiplicity<BR>&nbsp;&nbsp;&nbsp;&nbsp;Changeable<BR>&nbsp;&nbsp;&nbsp;&nbsp;Names<BR>&nbsp;&nbsp;&nbsp;&nbsp;Keys<BR>&nbsp;&nbsp;&nbsp;&nbsp;Inheritance</P>
+		</TD>
+		<TD>
+			<P><A HREF="#Advanced Modeling:|outline">Advanced
+			Modeling:</A><BR>&nbsp;&nbsp;&nbsp;&nbsp;Getting
+			started<BR>&nbsp;&nbsp;&nbsp;&nbsp;DataTypes<BR>&nbsp;&nbsp;&nbsp;&nbsp;Package
+			import and interpackage links<BR>&nbsp;&nbsp;&nbsp;&nbsp;ContentStored
+			packages<BR>&nbsp;&nbsp;&nbsp;&nbsp;Constraints<BR>&nbsp;&nbsp;&nbsp;&nbsp;Operations<BR>&nbsp;&nbsp;&nbsp;&nbsp;Special
+			Constructor and Destructor code<BR>&nbsp;&nbsp;&nbsp;&nbsp;Derived
+			attributes and links<BR>&nbsp;&nbsp;&nbsp;&nbsp;Automatic
+			attributes and links<BR>&nbsp;&nbsp;&nbsp;&nbsp;Special
+			attributes<BR>&nbsp;&nbsp;&nbsp;&nbsp;One-way links<BR>&nbsp;&nbsp;&nbsp;&nbsp;Links
+			that are their own inverse<BR><BR><A HREF="#Code Generation:|outline">Code
+			Generation:</A><BR>&nbsp;&nbsp;&nbsp;&nbsp;Saving the model to
+			disk<BR>&nbsp;&nbsp;&nbsp;&nbsp;Generating code</P>
+		</TD>
+	</TR>
+</TABLE>
+<H2 CLASS="western"><A NAME="Getting the CCPN code:|outline"></A>Getting
+the CCPN code:</H2>
+<P STYLE="margin-bottom: 0in">For those who want to do modeling, the
+CCPN repository including the Memops generation machinery, is on
+SourceForge at http://sourceforge.net/projects/ccpn/. Download it in
+the normal way. I shall refer to the topmost directory as 'cvsroot';
+it should contain directories doc/, python/, model/, etc.</P>
+<P STYLE="margin-bottom: 0in">If you do not want to model, but only
+to use the generated APIs, we recommend you download from
+http://www.ccpn.ac.uk/downloads/downloads.html - the installation
+script there will make it easier for you.</P>
+<H2 CLASS="western"><A NAME="Installing ObjectDomain :|outline"></A>Installing
+ObjectDomain :</H2>
+<P STYLE="margin-bottom: 0in">You can get hold of ObjectDomain
+through http://www.objectdomain.com. There is a 30-say test version,
+but this does not allow you to save if you have more than 30 classes
+in your model, which is barely enough for testing. For any serious
+work you need a paid-for version. 
+</P>
+<H2 CLASS="western"><A NAME="Set-up:|outline"></A>Set-up:</H2>
+<P STYLE="margin-bottom: 0in">You need Python 2.2 or higher to run
+the CCPN programs. 
+</P>
+<P STYLE="margin-bottom: 0in">For set-up you need to have
+cvsroot/python in your PYTHONPATH. In the tcsh shell I have :<BR>setenv
+PYTHONPATH
+/home/rhf22/CCPN/LIB/ccpnmr/python2.2/Python-2.2.3:/home/rhf22/CCPN/cvsroot/python</P>
+<P STYLE="margin-bottom: 0in">When you have installed ObjectDomain,
+go into the ObjectDomain directories, and edit the file
+toplevel/python/scripts/odUserSetup.py, <BR>adding the following two
+lines:</P>
+<P STYLE="margin-bottom: 0in">import
+sys<BR>sys.path.append('/home/rhf22/CCPN/cvsroot/python')</P>
+<P STYLE="margin-bottom: 0in">using the full path to cvsroot/python.</P>
+<H2 CLASS="western"><A NAME="Using ObjectDomain:|outline"></A>Using
+ObjectDomain:</H2>
+<P STYLE="margin-bottom: 0in">The screen is divided in five areas: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">The diagram view (top right),
+	where most of the editing gets done.</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">The Python shell, (bottom right),
+	for running scriptsand anything you want a Python shell for.</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">The contents tree (top left), to
+	select where you want to go.</P>
+	<LI><P STYLE="margin-bottom: 0in">The current contents, (middle
+	left), showing the contents of what is curently selected in the
+	contents tree. Things with two ends, such as links, inheritance,
+	etc. will be shown as contained in one (and only one) of the classes
+	they connect.</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">The world view (bottom left) to
+	move and zoom the diagram view.</P>
+</UL>
+<P STYLE="margin-bottom: 0in">Controls and places to look for things
+are generally intuitive.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Double clicking an object in the
+	diagram view, contents tree, or world view will open the edit object
+	popup, where you set most attributes of objects. To edit the
+	appearance in the diagram of an object, use right mouse in the
+	diagram view, and select 'Edit View'. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Double clicking a diagram in the
+	content tree or current content will open it.</P>
+	<LI><P STYLE="margin-bottom: 0in">Some actions, like creating a new
+	class diagram, can best be done from the contents tree, e,.g. right
+	mouse-&gt;create-&gt;Class Diagram on the containing package.</P>
+	<LI><P STYLE="margin-bottom: 0in">Moving an existing class into a
+	diagram is done by dragging it from the contents tree.</P>
+</UL>
+<P STYLE="margin-bottom: 0in">Deleting an object from a diagram view
+will only remove the image - when you remove the last image you will
+be asked whether to remove the object from the model. Deleting an
+object form the contents tree will delete it permanently.</P>
+<P STYLE="margin-bottom: 0in">Standard modeling actions are done from
+the menu bar below the diagram view. The one you will need most are
+'New Class' (second from left), 'Create Link' (unadorned line with
+two right angles), 'Make Inheritance' (fully drawn broadheaded arrow
+pointing up), and 'Make Parent/Child Link' ('Create Link' with filled
+black diamond). The only other one you will ever need is 'Create
+Dependency' (dotted arrow pointing up and right). 
+</P>
+<P STYLE="margin-bottom: 0in">When using the 'edit object' popup,
+text that is typed is not stored unless you click on something else
+in the popup before you close. A bit of experimenting will get you
+used to this.</P>
+<P STYLE="margin-bottom: 0in">A specific problem is that the normal
+way of removing a superclass from inside the 'edit object' popup does
+not work. You can do it by using right mouse 'delete' in the current
+contents area, or by selecting and deleting the inheritance arrow on
+the diagram view.</P>
+<H2 CLASS="western"><A NAME="Test Modeling:|outline"></A>Test
+Modeling:</H2>
+<P STYLE="margin-bottom: 0in">For a quick test with the trial version
+of ObjectDomain, go into ObjectDomain and open
+cvsroot/model/od/memops/Test.odm. Save it as something else before
+making changes. 
+</P>
+<P STYLE="margin-bottom: 0in">Now open 'Logical' in the contents
+tree, and go into the _Test-details diagram in the testing.Test
+package. This is where you should do your modeling. You will also
+have the memops.Implementation package available but you should make
+no chages there.</P>
+<P STYLE="margin-bottom: 0in">The description here is simplified.
+More details are given in 'Advanced Modeling' below. Note that the
+generation scripts (see below) will check that your model is valid,
+and given mostly sensible error messages to tell you what is wrong.</P>
+<P STYLE="margin-bottom: 0in">When you get to generating code from
+your model, you should note that Java generation does not work with
+the minimum test model. Also, you need to remove all files
+cvsroot/python/*/model/*.py, as the model files you download from
+SurceForge are ntoe compartible with the minimum test model.</P>
+<H4 CLASS="western">Classes:</H4>
+<P STYLE="margin-bottom: 0in">The first thing you will need is to
+create a class. A valid class needs a number of things done.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">All classes must have a superclass
+	(set in superclass tab inside popup). The superclass should be
+	Implementation.NormalStored by default, or another class that
+	inherits from it. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">All non-abstract classes must have
+	a parent link. The parent must be either another class within the
+	same package or Project. Make a link with a filled diamond on the
+	parent. The link must be 'Aggregation:Composite, Multiplicity:1,
+	Changeable:frozen' on the parent side, and 'Multiplicity:*' on the
+	child side.</P>
+	<LI><P STYLE="margin-bottom: 0in">All Attributes, links, and
+	operations in a class share the same namespace and so must have
+	different names. This includes inherited attributes etc.</P>
+</UL>
+<H4 CLASS="western">Attributes: 
+</H4>
+<P STYLE="margin-bottom: 0in">These are added in the popup of the
+class. All attributes must have a name and a Data Type. DataTypes are
+set by clicking the three dots button to the right of TypeRef.
+'Normal' classes can not be used as Data Types for Attributes. At the
+test level you should stick to the data types defined in the model.</P>
+<H4 CLASS="western">Links: 
+</H4>
+<P STYLE="margin-bottom: 0in">Links are made by connecting two
+classes on the diagram. The two ends of a link are edited separately
+(set 'Assoc Ends' tab after double clicking on a link). Names need
+not be set, as they are set from the names of the connected classes
+by default. It is sometimes confusing which end of a link means what.
+An example should clarify this. If we look at the link between
+Implementation.Url and Implementation.AbstractStorage, the end
+connected to Url has the number 1. This means that each
+AbstractAStorage has exactly one Url. The other end, marked '*' and
+'storages' means that each Url can have any number of storages, and
+that the name used for the link is 'storages', not
+'abstractStorages'.</P>
+<H4 CLASS="western">Multiplicity:</H4>
+<P STYLE="margin-bottom: 0in">This denotes the maximum and minumum
+number of values allowed for an attribute or link. If the
+multiplicity is not set, it defaults to '0..1' (optional). A single
+number (e.g. 1 or 5) means exactly that many (1..1 or 5..5). '*'
+means 'as many as you like'. The most common multiplicities are
+'0..1', '1', and '*', but you could have any continous range (e.g.
+'3..17').</P>
+<H4 CLASS="western">Changeable:</H4>
+<P STYLE="margin-bottom: 0in">If Changeable is set to Frozen, this
+means the attribute or link must be set when the object is created
+and cannot be modified later.</P>
+<H4 CLASS="western">Names:</H4>
+<P STYLE="margin-bottom: 0in">Names of functions etc. use singular or
+plural as appropriate. For attributes or links that may have more
+than one value, the name given should be plural. To give the
+singulsar form, the attibute or link should have a Tagged Value, with
+the tag being 'baseName' and the value being the singular form of the
+name. For links this is only necessary if you give an explicitl name,
+as the names are otherwise derived from the class name. You need not
+bother about these tagged values if you stick to single values for
+attributes and avoid explicit names for links.</P>
+<H4 CLASS="western">Keys:</H4>
+<P STYLE="margin-bottom: 0in">Each non-abstract class must have one
+or more attributes or links specified as keys. These must uniquely
+identify the object among other objects of the same type with the
+same parent. The key is specified by adding the tagged value
+'mainkey' to the class. The value of the tagged value is a
+comma-separated list of the names of the attributes and links that
+make up the key. All elements of the key must be frozen and have
+multiplicity n..n (e.g. 1..1, 2..2). If you have no good candidate
+for the key, you should use the serial number. This must be an
+attribute called 'serial', DataType 'int', multiplicity '1',
+changeable 'frozen. It must furthermore have a tagged Value
+'isAutomatic':'True'.</P>
+<H4 CLASS="western">Inheritance:</H4>
+<P STYLE="margin-bottom: 0in">The contents of a class is copied down
+to the subclass, so they share a namespace. You can only have name
+overlap (overwriting) in special cases. The key and parent link are
+also inherited and cannot be overwritten. 
+</P>
+<H2 CLASS="western"><A NAME="Advanced Modeling:|outline"></A>Advanced
+Modeling:</H2>
+<P STYLE="margin-bottom: 0in">When you are modeling for real you need
+to consider a few extra things. This is still an abbreviated version,
+though. See the header of MetaModel.py for details, or use the
+existing model as an example.</P>
+<H4 CLASS="western">Getting started:</H4>
+<P STYLE="margin-bottom: 0in">You should use the full model,
+Model.odm for real work, as Test.odm was a minimum version designed
+to fit under the 30 class limit of the ObjectDomain test version. 
+</P>
+<P STYLE="margin-bottom: 0in">You could delete some of the existing
+packages, but we recomemnd that you simply work in a new one - if you
+ever want to link your work to the existing stuff you will have to
+anyway. 
+</P>
+<P STYLE="margin-bottom: 0in">You either make a new package in
+Logical (similar to 'testing' in Test.odm), or decide to work inside
+'ccp' (other packages are erserved for the implementation or for
+other groups). You now make a new package for your work inside the
+package you have selected. The package must have a Tagged Value
+'shortName':'XXXX&rdquo;, where XXXX is an upper case name of no more
+than four characters that is not already in use. This name serves as
+a package identifier when making e.g. database names.</P>
+<P STYLE="margin-bottom: 0in">Now you create a class diagram inside
+your package (right mouse-&gt;create-&gt;class diagram). You rename
+the clas diagram '_&lt;myPackage&gt;-details' , to fit with the
+diagram naming convention. You can have several diagrams, but they
+should all start with underscore and end with -details. When your
+work is stable, you can then make overview diagrams without the
+'-details' as has been done for the rest of the model. It will be
+easier to put a copy of Project in your diagram, so you can make
+parent links to Project. You can get the small version of the class
+by using the options under right-mouse-&gt;Presentation Options</P>
+<H4 CLASS="western">DataTypes:</H4>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">To create a dataType, create a
+	class, then set Stereotype to DataType (class popup, class tab, left
+	side).<BR>DataTypes do not obey the same rules as Classes.</P>
+	<LI><P STYLE="margin-bottom: 0in">All Data Types must be subclasses
+	of another DataType, inheriting eventuallly from one of the basic
+	types (currently Int, Long, Float, Double, Boolean, String). You can
+	use DateTime even though it is not implemented yet. It will be at
+	some point, but meanwhile it is a subclass of String. At present
+	Long and Double are not used, and are implemented like Int and
+	Float, respectively, This may change.</P>
+	<LI><P STYLE="margin-bottom: 0in">DataTypes can be further specified
+	by tagged values. In addition to Constraints (see below) you can set
+	the length (string types only). This is the maximum allowed length
+	of the string. Also you can set enumeration and isOpen, the latter
+	requires the former. This serves to make enumerated data types. The
+	enumeration tagged value is a comma-separeated tuple of strings
+	(with quotation marks) that gives the allowed values. Note that an
+	enumerated set of integers would be given as e.g. ('1','3','5'), the
+	fact that they are integers follows from the fact that the datatype
+	would inherit from Int. If isOpen is True the enumeration is Open.
+	This means that you can use values not in the enumeration, so that
+	it is more like a recommended series of values.</P>
+</UL>
+<H4 CLASS="western">Package import and interpackage links:</H4>
+<P STYLE="margin-bottom: 0in">If you make a link between classes in
+two diferent packages, you must tell which package imports from
+which. The only exception is Implementation, which is imported by
+default. The direction of import matters - basically if A imports B
+this means that package A knows about package B, and that importing A
+will trigger the import of B, whether we are talking about API code
+or data. B, on the other hand, knows nothing about A. Clearly new
+packages should import old packages, not the other way around. To set
+an import, look at the three diagrams in ccp: _Citation, _LIMS, and
+_Structural. Put your package on a diagram next to the package it
+should imoprt. Draw a dependency arrow (dotted arrow pointing top
+right on menu) from importing to imported package. Double-click the
+arrow and set stereotype to 'import'. As a graphics convention right
+click the arrow, do <BR>Presentation Options-&gt;Stereotype Label:
+Off, and do Diagram-&gt;Refresh Diagrams from the top menu. 
+</P>
+<H4 CLASS="western">ContentStored packages:</H4>
+<P STYLE="margin-bottom: 0in">Most packages are stored as a single
+XML file, but some are stored in several files, like ChemComp and
+Coordinates. These are more complicated. A ContentStored packge must
+have a HeadObject. This must be a class that is a subclass of
+Implementation.ContentStored, and that is a child of Project. The
+HeadObject is not part of the ContentStored package. All Classes in
+the ContentStored package must be children of either the HeadObject
+or an other class in the ContentStored package. It does not matter
+for the data loading whether the class with the HeadObject imports
+the ContentStored package or the other way around; it will make a
+difference for the loading of code.</P>
+<H4 CLASS="western">Constraints:</H4>
+<P STYLE="margin-bottom: 0in">You can constrain your data beyond what
+e.g. types and multiplicities can do. This is done by entering code
+snippets that are slotted into the generated API code in an
+appropriate context. Depending on the situation, the variables 'self'
+and 'value' will be defined in context and can be used. Constraints
+must either be single lines of code that evaluate to a truth value,
+or multiple lines of code that set the parameter isValid to a truth
+value. There are three kinds of Constraints</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Constraints on Data Types: These
+	can depend only on the 'value' parameter</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Constraints on Attributes and
+	Links. These can depend both on 'value' and 'self'. As they are
+	evaluated during object creation, you can not, however, count on
+	other values in the object being set. The only value that can be
+	relied on is the link to the parent, that is always set first. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Constraints on a class. These are
+	evaluated only at the end of object creation or when checkValid is
+	called explicitly, and so can rely on the object being in a legal
+	state.</P>
+</UL>
+<P STYLE="margin-bottom: 0in">Constraints on datatypes, attributes
+and links are evaluated before any operation that modifies the
+appropriate value, and are thus guaranteed to hold. Constraints on
+classes are evaluated only at the end of object creation and file
+loading, or when the checkValid function is called explicitly.
+Therefore these constraints may be temporarily broken.</P>
+<P STYLE="margin-bottom: 0in">See the header comment to MetaModel for
+the precise rules on how to enter Constraints.</P>
+<H4 CLASS="western">Operations:</H4>
+<P STYLE="margin-bottom: 0in">Most operations are generated
+automatically. After all, the code needed to set or get a text
+attribute with a given name can be deduced from the model
+description. But, if you want, you can enter custom versions of
+autogenerated functions or your own new operations in the model. 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Operations are entered in the
+	class that carries them (operation tab).</P>
+	<LI><P STYLE="margin-bottom: 0in">To overwrite an autogenerated
+	operation just put in one with the same name.</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">If the operation has no side
+	effects (e.g. get, findFirst, findAll), set 'Query' to True.</P>
+</UL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">All operations must have an opType
+	tagged value. Operations that correspond to autogenerated ones can
+	have the opTypes 'get', 'set', 'add', 'remove', 'findFirst',
+	'findAll'. Other operations must have opType 'other'. You cannot
+	overwrite creation, deletion, or factory functions, but you can add
+	extra code to them.</P>
+	<LI><P STYLE="margin-bottom: 0in">Operation parameters must be set
+	correctly. A single return parameter must be called 'result', and
+	must be of the type (class or datatype) of the value returned. The
+	return type is the same whether a single value or a list is
+	returned. When overwriting autogenerated functions this is taken
+	care of automatically; 'other' functions returning lists or values
+	not defined in the model are not possible. A single input parameter
+	must be called 'value' - the rules for typing are the same for input
+	and return parameters.</P>
+	<LI><P STYLE="margin-bottom: 0in">Operations must have two tagged
+	values 'pythonCode' and 'javaCode' that hold the code to be
+	executed. 
+	</P>
+	<P STYLE="margin-bottom: 0in">See the header comment to MetaModel.py
+	for the detailed rules for operations.</P>
+</UL>
+<H4 CLASS="western">Special Constructor and Destructor code:</H4>
+<P STYLE="margin-bottom: 0in">It is possible to enter code that is
+added to constructors and destructors.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">For constructors
+	'hasSpecialConstructor':True signals that there is this kind of
+	code. pythonConstructorCode and javaConstructorCode tags contain the
+	actual code. Special constructor code is executed after construction
+	is finished (so the object is otherwise valid) but before validation
+	checking. This code is not executed when isReading is set to True. A
+	typical use of this facility would be to automatically create extra
+	required objects when several objects must be created together.</P>
+	<LI><P STYLE="margin-bottom: 0in">For destructor code the relevant
+	tags are hasSpecialDestructor, pythonDestructorCode and
+	javaDestructorCode. This code is executed at the beginning of the
+	delete functions before any deletion has taken place. A typical use
+	would be code that preveneted deletion of objects as long as certain
+	links are set.</P>
+</UL>
+<H4 CLASS="western">Derived attributes and links:</H4>
+<P STYLE="margin-bottom: 0in">It is possible to enter attributes and
+link elements that are never stored but calculated on the fly.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">They are entered in the normal
+	way, but attributes are given the tagged value 'isDerived':True. For
+	links the tagged value 'isDerived':True is given to the
+	*association*, not to either of the Association Ends. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">For a derived element there must
+	be an Operation that explicitly overrides the 'get' function for the
+	element. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Normally the derived element is
+	set to 'frozen'. If this is not done there must be an Operation that
+	explicitly overrides the 'set' function for the element. This
+	requires, obviously, that the setter function so modifies the
+	underlying stored parameters that you would afterwards get the value
+	you had just set. An example might be e.g. a point position that
+	could be given as either x,y or r,theta. Here one of the coordinate
+	sets (say, Cartesian) could be stored, while the attributes for the
+	other one (Polar) could be derived but settable.</P>
+	<LI><P STYLE="margin-bottom: 0in">If a derivation does not return a
+	value the behaviour depends on the multiplicity. For a mandatory
+	element you get an error - for an optional one you return None (or
+	an empty tuple).</P>
+</UL>
+<H4 CLASS="western">Automatic attributes and links:</H4>
+<P STYLE="margin-bottom: 0in">The tagged value 'isAutomatic':True
+signifies an attribute that is stored in the normal way, but that
+cannot be set because it is set automatically (and discreetly) by the
+API, by specialConstructorCode etc.. The main example is the 'serial'
+attribute</P>
+<H4 CLASS="western">Special attributes:</H4>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">serial: serves to provide a key
+	for classes that otherwise do not have one. It is described above
+	how to define serials. Serials are set automatically when a new
+	object is created, and a new value should not be passed in. A new
+	serial will be larger than the serial of any similar child of the
+	same parent. Serials of deleted objects are not reused, except in
+	rare cases if you delete the object with the highest serial, save
+	the file and quit. Documentation for serials is entered
+	automatically.</P>
+	<LI><P STYLE="margin-bottom: 0in">details: documentation is entered
+	automatically. The details attribute should be of type Text or
+	String. By convention it is used for free text comments, notes, etc.</P>
+</UL>
+<H4 CLASS="western">One-way links:</H4>
+<P STYLE="margin-bottom: 0in">The 'navigable' checkbox in the edit
+popup for links (Assoc ends) determines if a link is navigable in a
+given direction. In the Model description there will be a MetaRole
+only if the link is navigable. In one-way links the object on the
+other end does not know there is a link to it. There is no way to
+follow the link in the inverse direction, and if the linked-to object
+is deleted the link is left dangling. Unless derived, one-way links
+should be used only for links to reference data that do not
+change(e.g. chemical element descriptions) or where the nature of the
+data gives some guarantee that the linked-to object will not be
+deleted. 
+</P>
+<H4 CLASS="western">Links that are their own inverse:</H4>
+<P STYLE="margin-bottom: 0in">It is possible in special circumstances
+to make a link from a class to itself where there is only one role.
+Examples would be covalently-bound-to (for atoms) of married-to (for
+people) where the link and the inverse link are the same. See
+MetaModel.py for details.</P>
+<H2 CLASS="western"><A NAME="Code Generation:|outline"></A>Code
+Generation:</H2>
+<H4 CLASS="western">Saving the model to disk:</H4>
+<P STYLE="margin-bottom: 0in">When you think the model is ready, you
+should save it to disk. Note that the procedure does not remove
+previous model files, so if you remove or rename packages you must
+remove the old model files and all related autogenerated code by
+hand. You go into the Python Shell in ObjectDomain and type the
+following:</P>
+<P STYLE="margin-bottom: 0in">from memops.scripts import
+ObjectDomain<BR>from memops.scripts import PyModelIO<BR>mm =
+ObjectDomain.modelFromOd()<BR>PyModelIO.writePythonCode(mm)</P>
+<P STYLE="margin-bottom: 0in">The first two lines need only be done
+the first time. Once you get to the fourth line things are OK and you
+can quit ObjectDomain and go on to the next step.</P>
+<P STYLE="margin-bottom: 0in">The third line is where the model
+Python objects are generated and the validity checking is done. <BR>If
+an error happens at this stage, you have made a mistake in entering
+the model and should go and fix it. This always happens a few times.
+The validity checking is very thorough. If you get a 'style warning'
+you have not followed the normal guidelines for model object names.
+We recommend that you fix these too.</P>
+<H4 CLASS="western">Generating code:</H4>
+<P STYLE="margin-bottom: 0in">The python/memops/scripts/makePython.py
+file is a make script that will generate all python-related files. Go
+to whatever directory you like, and type</P>
+<P STYLE="margin-bottom: 0in">python &lt;path-to-file&gt;/makePython.py</P>
+<P STYLE="margin-bottom: 0in">If you get any errors, there is
+presumably an error in your model, which you should try to fix, but
+this should happen only rarely.</P>
+<P STYLE="margin-bottom: 0in">You will get a lot of warning messages:</P>
+<P STYLE="margin-bottom: 0in">WARNING, &lt;modelelement&gt; &lt;full
+name&gt; has no documentation<BR>is given for every model element
+with no documentation. This is to nag you to document your model</P>
+<P STYLE="margin-bottom: 0in">WARNING: File
+'/home/rhf22/CCPN/cvsroot/model/doc//html/diagram/ccp_Crystallography__Crystallography_Diag.gif'
+does not exist<BR>tells you either that you do not have all the
+diagrams with the correct name (pairs named _XXX and _XXX-details)
+for the diagram-xml generator, or that you have not yet written the
+diagrams from ObjectDomain to the correct location. Ignore it - you
+only need these things done when you want to use the machinery for
+making releases.</P>
+<P STYLE="margin-bottom: 0in">The last thing the script does is to
+import all python files in cvsroot/python and its subdirectories, in
+order to check for errors (note that you should avoid files that
+actually do things when imported, because of this). For each import
+error, you will get a message like e.g.</P>
+<P STYLE="margin-bottom: 0in">WARNING, Import failed for
+ccpnmr.analysis.AnalysisPopup</P>
+<P STYLE="margin-bottom: 0in">You should check what is actually wrong
+by typing 
+</P>
+<P STYLE="margin-bottom: 0in">python ccpnmr/analysis/AnalysisPopup.py</P>
+<P STYLE="margin-bottom: 0in">This will show you the actual error
+message. If there is an error in any file that has to do with your
+model, you most likely have an error in one of the code snippets you
+added (constraints or methods). This should be fixed. If the errors
+only concern code that you do not recognise there may be no cause for
+alarm. You can have errors at this stage for a number of reasons: A
+file may depend on a c-coded module that you have not compiled.;
+There may be checked-in scripts that only work in a particular
+environment, like personalised make scripts for the developers or
+like the scripts that create the original ChemComp reference data; A
+modified file may not work pending the check-in of another modified
+file (this is a live repository, it changes all the time); There may
+be an error in someone elses code. If you find any errors that do not
+have an obvious explanation please let us know.</P>
+<P STYLE="margin-bottom: 0in">If you are using the minimum test model
+(Test.odm), remember you need to remove all the python/*/model/*.py
+files before you start generating the model. Also, you will get a lot
+of warnings. A lot of the existing code in the repository will not
+work with the minimum model, and it would be dangerous to change the
+code just to adapt to a quick0-test code. In this situation you
+should ignore:</P>
+<P STYLE="margin-bottom: 0in">Any warnings about files in ccp.gui,
+ccp.format, ccpnmr.format, memops.editor, ccp.util.Molecule,
+memops.scripts.JavaApiGen, memops.scripts.JavaXmlGen,
+memops.scripts.SqlSchemaGen, memops.scripts.makeModel as well as
+WARNING directory /home/rhf22/CCPN/testroot/python/ccp/model lacks
+file '__init__.py' or the same warning for ccpnmr/model.</P>
+
+<H4 CLASS="western">Data Model Versions:</H4>
+<P STYLE="margin-bottom: 0in">There is a version number for the entire data model. 
+It is defined in the variable memops.general.Constants.currentModelVersion. 
+This version is updated by hand. It should be updated before every new release if the
+model has changed, and every time the data backwards compatibility code is changed.
+In internal development it may be left unchanged even though the model changes.</P>
+</BODY>
+</HTML>

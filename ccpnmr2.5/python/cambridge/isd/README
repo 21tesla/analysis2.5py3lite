@@ -1,0 +1,153 @@
+==========================================================
+
+mention paths and extendnmr istallation notes
+and also about working path (what we store there)
+
+===========================================================
+To run ISD from Extend-NMR graphical user interface (GUI)
+===========================================================
+
+* Open CCPN project:
+
+  Extend-NMR GUI > Project > Open
+
+* Now ISD tab of the GUI will contain default settings for 
+  running ISD simulation.
+
+* Usual steps needed to set up ISD simulation:
+
+  1. Settings for the current ISD simulation will be saved in 
+     the selected CCPN project under selected ISD storage key
+     (define different storage keys for different 
+      simulation settings):
+
+     ISD > General > CCPN ISD Storage Key
+
+     It is allowed to save several ISD project settings inside 
+     CCPN project under different ISD storage keys. 
+
+     ISD simulation settings can be saved or deleted with buttons
+     "Save ISD settings" or "Delete ISD settings".
+
+     You can select saved ISD settings from dropdown menu in the 
+     top left corner of the ISD tab. 
+
+  2. Check ISD working path that is where the ISD project 
+     file and the results will be saved:
+
+     ISD > General > ISD Working Path 
+
+  3. Check the CCPN molecule settings (if there is only one molecule
+     in the CCPN project, it will be selected by default):
+
+     ISD > General > CCPN NMR Project ID
+     ISD > General > CCPN Molecular System Name 
+     ISD > Molecules & Structures > CCPN Molecule Key
+
+  4. Select experimental data to be used in the simulation
+     (e.g. distance):
+     
+     ISD > Experimental Data > Add Distance
+
+     Select the field with the added data, and commit changes.
+
+  5. Select the hosts on which simulation should be run:
+
+     ISD > Replica Exchange MC > Host List
+
+     Example: boar 10, localhost
+              will use 10 CPUs on boar and 1 CPU on localhost
+  
+     The default method of communicating between
+     different hosts is 'shared'. For more information, 
+     please read notes below and the ISD manual.          
+
+* Go through all the tables in ISD GUI and check the settings.
+
+  NOTE: fields highlighted in red require attention
+
+* Now you can start simulation by pressing "Run ISD!" button,
+  stop it at any point with "Stop ISD!", monitor progress
+  using "Info", "Show", "Energies", "Rates".
+
+  To analyse the results of simulation use "Report" button.
+ 
+  To create ISD project on disk (in ISD working path) use
+  "Create" button.
+
+  Once the project is created, it can be run from command
+  line :
+
+  % cd isd/working/path
+  % $EXTEND_NMR_TOPDIR/bin/isd x.py
+
+  To find help on command line options use (for more 
+  information please read ISD manual):
+
+  % $EXTEND_NMR_TOPDIR/bin/isd --help
+  
+
+===========================================================
+Prerequisites for running ISD simulation
+===========================================================
+
+* Password free ssh access to the hosts on which ISD 
+  will be running
+
+* Python shipped with Extend-NMR on each of the hosts
+  (it has all needed libraries such as numpy, PyRO, etc)
+
+===========================================================
+Communication settings
+===========================================================
+
+* Selecting communication method between hosts:
+
+  ISD > Replica Exchange MC > Communication Method
+
+  - select 'shared' if you use hosts that can specify folder 
+    (shared temporary path used by ISD) to which all the hosts have
+    read and write access
+
+    E.g: select 'shared' if you run simulation on single 
+         machine that has many CPUs
+
+  - select 'pyro' if the machines cannot have shared
+    temporary path
+
+* When using 'shared' communication method, check following:
+
+  ISD > Replica Exchange MC > Communication Method
+  ISD > General > Temporary Path
+  ISD > General > Shared Temporary Path?  <------ must be set to True
+  ISD > Replica Exchange MC > Host List
+
+* When using 'pyro' communication method, check following:
+
+  1) Check general communication settings
+
+  ISD > Replica Exchange MC > Communication Method
+  ISD > General > Temporary Path
+  ISD > General > Shared Temporary Path?  <------ can be set to False
+  ISD > Replica Exchange MC > Host List  
+
+  2) Make sure that PyRO nameserver is running: 
+
+     To start PyRO nameserver run: 
+     % $EXTEND_NMR_TOPDIR/bin/pyro-ns
+
+     After the simulation is complete stop nameserver:
+     % $EXTEND_NMR_TOPDIR/bin/pyro-nsc shutdown
+ 
+  3) Make sure that the name of the machine running nameserver 
+     is set up correctly:
+
+     ISD > Replica Exchange MC > PyRO Name Server
+
+  4) Make sure that every host listed has access to Python
+     provided by Extend-NMR. The path to the Python 
+     executable on the remote host is specified here:
+
+     ISD > Replica Exchange MC > Python Binary
+
+
