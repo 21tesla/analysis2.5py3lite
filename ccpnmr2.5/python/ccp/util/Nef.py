@@ -67,8 +67,7 @@ def testAssignmentMap(assignmentMap):
       dd[ass] = ll
 
   for ass,ll in sorted(dd.items()):
-    if len(ll) > 1:
-      print ('### DUPLICATE RESONANCE %s %s' % (ass, ll))
+    if len(ll) > 1: print(('### DUPLICATE RESONANCE %s %s' % (ass, ll)))
 
 def getOnebondResonance(resonance, isotopeCode=None):
   """

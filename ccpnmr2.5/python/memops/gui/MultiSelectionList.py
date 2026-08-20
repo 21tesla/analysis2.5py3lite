@@ -75,9 +75,9 @@ class MultiSelectionListSkeleton:
     
     self.setUrlFile(urlFile)
     
-    self.startBasePopup(parent,title,modal,True)
-    
-  def startBasePopup(self,parent,title,modal,True):
+    self.startBasePopup(parent,title,modal,alwaysOnTop)
+
+  def startBasePopup(self,parent,title,modal,alwaysOnTop):
   
     pass
      

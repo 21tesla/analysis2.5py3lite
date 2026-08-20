@@ -204,7 +204,7 @@ class EditExperimentPopup(BasePopup):
   information can be automatically be filled in.  
 
   The full CCPN type for an experiment uses a special nomenclature that is
-  described in the CCPN `experiment nomenclature paper`_ (slightly out of date
+  described in the CCPN str(experiment nomenclature paper)_ (slightly out of date
   now). In essence the user can distinguish between different magnetisation
   transfer pathways, some of which may have the same common name (synonym). For
   example a 15N HSQC-TOCSY could have either the HSQC step or the TOCSY step
@@ -243,7 +243,7 @@ class EditExperimentPopup(BasePopup):
   Dim to to change the transfer pathways so that dimension 3 (carbon) is listed
   as 'onebond' to dimension 2 (hydrogen) (the other rows in the table will
   adjust automatically). The Numbering of dimensions in this table is the same
-  as that presented when assigning a peak, i.e. in the `Assignment Panel`_. It
+  as that presented when assigning a peak, i.e. in the str(Assignment Panel)_. It
   helps to know that dimension '1' is usually (but not always) the acquisition
   dimension.
 
@@ -267,7 +267,7 @@ class EditExperimentPopup(BasePopup):
   information may be used for solid-state spectra at some point. However, any
   experimental details entered into the CCPN project will be present when
   submissions to the BioMagResBank database are made; initially using the
-  `CcpNmr ECI`_.
+  str(CcpNmr ECI)_.
 
   The "Shift References" table is use to enter chemical shift reference
   information into the CCPN project. This may them be linked to experiments via
@@ -303,10 +303,10 @@ class EditExperimentPopup(BasePopup):
   Fogh RH, Vranken WF, Boucher W, Stevens TJ, Laue ED.
   J Biomol NMR. 2006 Nov;36(3):147-55* (link_)
 
-  .. _`experiment nomenclature paper`:  http://www.ncbi.nlm.nih.gov/pubmed/17031528
+  .. _str(experiment nomenclature paper):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
   .. _str(link):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
-  .. _`Assignment Panel`: EditAssignmentPopup.html
-  .. _`CcpNmr ECI`: EntryCompletionPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
+  .. _str(CcpNmr ECI): EntryCompletionPopup.html
   """
 
   def __init__(self, parent, isModal=False, *args, **kw):

@@ -2297,7 +2297,7 @@ if __name__ == "__main__":
 
           for tagName in Sf.tables[tableName].tags.keys():
 
-            print("  ", tagName #,Sf.tables[tableName].tags[tagName])
+            print("  ", tagName) #,Sf.tables[tableName].tags[tagName]
             
             for error in Sf.tables[tableName].tagErrors[tagName]:
               if error:

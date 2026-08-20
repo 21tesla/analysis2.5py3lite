@@ -194,7 +194,7 @@ class CalcDistConstraintsPopup(BasePopup):
   A-C, A-D, B-C and B-D, and a restraint would be satisfied by any of these
   pairs being within distance bounds. However, if the user knows that only
   certain pairings are possible on an ambiguously assigned peak then the
-  assignments may be grouped via the `Assignment Panel`_. Referring to the
+  assignments may be grouped via the str(Assignment Panel)_. Referring to the
   previous example if resonance A & C are in group 1 and B & D are in group 2
   then the generated restraint will only have two items; A-C and B-D.
 
@@ -315,7 +315,7 @@ class CalcDistConstraintsPopup(BasePopup):
   "fixed" assignments that were present in the old restraint set, not the new
   ones.
 
-  .. _`Assignment Panel`: EditAssignmentPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
   .. _Experiments: EditExperimentPopup.html
   
   """
@@ -1005,7 +1005,7 @@ class CalcDistConstraintsPopup(BasePopup):
     if self.spectrum:
       for isotope in getSpectrumIsotopes(self.spectrum):
         if isotope not in isotopes:
-      isotopes.append(isotope)
+          isotopes.append(isotope)
     
     return isotopes
 

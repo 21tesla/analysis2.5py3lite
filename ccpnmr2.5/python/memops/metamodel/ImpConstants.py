@@ -59,7 +59,7 @@ validNameChars = uppercase + lowercase + string.digits + underscore
 
 # Putting this in a single string is incompatible with Emacs python mode 
 # (wish they would fix it)
-xmlDisallowedChars = "&'<>" + '"'
+xmlDisallowedChars = "&'!=" + '"'
 
 
 # tags for 'code' dictionaries, 

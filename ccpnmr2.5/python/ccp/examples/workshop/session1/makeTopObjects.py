@@ -63,15 +63,15 @@ if __name__ == '__main__':
   print('''
 Project: [%s]; \nEntryStore: [%s]; \nNmrProject: [%s]\nAffiliation: [%s]; 
 Citation: [%s]; \nDatabase: [%s]; \nTaxonomy: [%s]; \nClassification: [%s].
-''' % (project, entryStore, nmrProject, affStore, citStore, database, taxonomy, classification)
+''' % (project, entryStore, nmrProject, affStore, citStore, database, taxonomy, classification))
 
   # Print the object names.
 
-  print ''')
-Project: [%s]; \nEntryStore: [%s]; \nNmrProject: [%s]; \nAffiliation: [%s]; 
+  print('''
+Project: [%s]; \nEntryStore: [%s]; \nNmrProject: [%s]; \nAffiliation: [%s];
 Citation: [%s]; \nDatabase: [%s]; \nTaxonomy: [%s]; \nClassification: [%s].
 ''' % (project.name, entryStore.name, nmrProject.name, affStore.name,
-       citStore.name, database.name, taxonomy.name, classification.namingSystem)
+       citStore.name, database.name, taxonomy.name, classification.namingSystem))
 
   # Save the project.
 

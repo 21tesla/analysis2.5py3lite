@@ -23,7 +23,7 @@ try:
     from cing.Scripts.FC.utils import swapCheck
     from memops.general.Io import loadProject
     from memops.general.Io import saveProject
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try

@@ -147,7 +147,7 @@ class BrowseResonancesPopup(BasePopup):
   assignments to spectrum peaks. The two "Show Peaks" buttons display tables  of
   the spectrum peaks that are currently linked to the selected resonances,
   optionally considering only spectra that use the selected shift list. The last
-  [Info] button opens the `Resonance Info`_ table for the last selected
+  [Info] button opens the str(Resonance Info)_ table for the last selected
   resonance to display the positions of all the peak dimensions to which it is
   assigned and all its chemical shift values, from multiple shift lists.
 
@@ -168,7 +168,7 @@ class BrowseResonancesPopup(BasePopup):
   particular resonance, consider using the filtering selections at the top or
   click the "?" in the table headings to filter directly on table content.
 
-  .. _`Resonance Info`: ResonanceInfoPopup.html
+  .. _str(Resonance Info): ResonanceInfoPopup.html
   
   """
 

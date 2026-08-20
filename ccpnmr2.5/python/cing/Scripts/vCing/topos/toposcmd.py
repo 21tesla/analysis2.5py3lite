@@ -238,7 +238,7 @@ def main():
             ["realm=","pool=","token=","timeout=","url="])
     except getopt.GetoptError as err:
         # print help information and exit:
-        print(str(err) # will print something like "option -a not recognized")
+        print(str(err))  # will print something like "option -a not recognized"
         usage()
         sys.exit(2)
 

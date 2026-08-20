@@ -92,10 +92,10 @@ class BrowseConstraintsPopup(BasePopup):
   themselves. Structural restraints may be imported into CCPN via the 
   FormatConverter_ or they may be created with various various dedicated
   components available in CCPN software. For example distance restraints may be
-  made via the `Make Distance Restraints`_ (using through space experiments like
-  NOESY) and `Make H Bond Restraints`_ options. Dihedral angle restraints can be
+  made via the str(Make Distance Restraints)_ (using through space experiments like
+  NOESY) and str(Make H Bond Restraints)_ options. Dihedral angle restraints can be
   made from chemical shift information using DANGLE_ and from scalar couplings
-  using the `3J H-Ha Coupling`_ option.
+  using the str(3J H-Ha Coupling)_ option.
 
   **Restraint Sets**  
 
@@ -269,10 +269,10 @@ class BrowseConstraintsPopup(BasePopup):
   (minimising energy).
 
   .. _FormatConverter: FormatConverter.html
-  .. _`Make Distance Restraints`: CalcDistConstraintsPopup.html
-  .. _`Make H Bond Restraints`: MakeHbondRestraintsPopup.html
+  .. _str(Make Distance Restraints): CalcDistConstraintsPopup.html
+  .. _str(Make H Bond Restraints): MakeHbondRestraintsPopup.html
   .. _DANGLE: DangleGui.html
-  .. _`3J H-Ha Coupling`: CalcHnHaCouplingPopup.html
+  .. _str(3J H-Ha Coupling): CalcHnHaCouplingPopup.html
     
   """
 
@@ -2282,7 +2282,7 @@ class BrowseConstraintsPopup(BasePopup):
       structures = [(s.molSystem.code, s.ensembleId, s) for s in structures]
       structures.sort()
   
-    return [s[02] for s in structures]
+    return [s[2] for s in structures]
     
   def makeResonanceGuiName(self, resonance):
   

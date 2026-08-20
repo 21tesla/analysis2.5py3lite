@@ -127,7 +127,7 @@ class BrowseAtomsPopup(BasePopup):
   [Show ...] buttons allow the user to get a separate table of either the
   spectrum peaks or resonance phenomena that have been associated with the atoms
   or resonances that have been selected in the table above. Specifically the
-  `Selected Peaks`_ and `Selected Resonances`_ popups are opened. This is useful
+  str(Selected Peaks)_ and str(Selected Resonances)_ popups are opened. This is useful
   to navigate from the molecule based information display into the spectrum
   display and to understand the links throughout the project. The [Remove Atom
   Assignments] button does as the name suggests and disconnects any resonances
@@ -196,8 +196,8 @@ class BrowseAtomsPopup(BasePopup):
   in the specific spectrum being assigned at the time. For example if an HNCA
   experiment is assigned then only the H, N & CA atom options cane be displayed.
 
-  .. _`Selected Peaks`: SelectedPeaksPopup.html
-  .. _`Selected Resonances`: BrowseResonancesPopup.html
+  .. _str(Selected Peaks): SelectedPeaksPopup.html
+  .. _str(Selected Resonances): BrowseResonancesPopup.html
 
   """
 
@@ -1083,7 +1083,7 @@ class BrowseAtomsPopup(BasePopup):
           if not hasattr(atomSetMapping, 'subSets'):
             atomSetMapping.subSets = []
             for otherMapping in atomSetMappings:
-          if len(otherMapping.atomSetSerials) == 1:
+              if len(otherMapping.atomSetSerials) == 1:
                 if list(otherMapping.atomSetSerials)[0] in atomSetMapping.atomSetSerials:
                   atomSetMapping.subSets.append(otherMapping)
           

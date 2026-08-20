@@ -94,7 +94,7 @@ class CalcRatesPopup(BasePopup):
   that this system is specifically designed for the extraction of parameters derived
   from spectrum peak intensities where the position of related peaks across a series
   *do not move significantly*. For following peak movements and chemical shift
-  changes the `Follow Shift Changes`_ tool may be used.
+  changes the str(Follow Shift Changes)_ tool may be used.
 
   The layout of the popup window is split into two tabs to reduce clutter. The
   first tab allows the user to setup and adjust all of the options used to
@@ -112,7 +112,7 @@ class CalcRatesPopup(BasePopup):
   experiments, but naturally peak locations should match. Also, the user chooses
   an NMR series that has been setup elsewhere with the relevant experiments or
   planes and their corresponding time parameters. The [Edit NMR Series] button
-  will open the `NMR Series` popup window to create and adjust such series. The
+  will open the str(NMR Series) popup window to create and adjust such series. The
   "Fitting Function" option is adjusted to say what kind of curve should be
   fitted to the peak intensity data (often this is a two-parameter exponential).
   The "Rate Type" and "Coherence Type" options are only used if results are
@@ -175,7 +175,7 @@ class CalcRatesPopup(BasePopup):
   peak groups. It is commonplace to look through all the intensity curves for
   each of the peak groups by using [Show Fit Graph]; here the user can check how
   well the curve-fit worked and whether any adjustments (e.g. in peak picking)
-  need to be made or groups removed. See the `Fit Graph`_ documentation for
+  need to be made or groups removed. See the str(Fit Graph)_ documentation for
   details about how the resultant popup window operates. The "Y" value of the
   curves naturally come from the selected type of peak intensity and the "X"
   values come from those that were entered for the experimental points/planes in
@@ -205,7 +205,7 @@ class CalcRatesPopup(BasePopup):
 
   Any peak picking done by the system uses the same spectrum peak finding
   parameters as is normally used in Analysis. Such parameters may be adjusted
-  via the `Peak Finding`_ popup.
+  via the str(Peak Finding)_ popup.
 
   If there are problems with grouping peaks together the user may assign all
   peaks that ought to go in the same group to the same resonances, thus
@@ -228,10 +228,10 @@ class CalcRatesPopup(BasePopup):
   the following types: "delay time", "time","num delays", "mixing time" and 
   "pulsing frequency".
 
-  .. _`Follow Shift Changes`: FollowShiftChangesPopup.html
-  .. _`NMR Series`: EditExperimentSeriesPopup.html
-  .. _`Peak Finding`: EditPeakFindParamsPopup.html
-  .. _`Fit Graph`: EditFitGraphPopup.html
+  .. _str(Follow Shift Changes): FollowShiftChangesPopup.html
+  .. _str(NMR Series): EditExperimentSeriesPopup.html
+  .. _str(Peak Finding): EditPeakFindParamsPopup.html
+  .. _str(Fit Graph): EditFitGraphPopup.html
   
   """
 

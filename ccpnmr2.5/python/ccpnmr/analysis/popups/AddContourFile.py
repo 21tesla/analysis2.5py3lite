@@ -66,10 +66,10 @@ class AddContourFilePopup(BasePopup):
   data so the same contour files can be used across multiple projects,
   and that is the reason this dialog might be used.
 
-  See also: `Spectrum Contour Files`_, `Creating Contour Files`_.
+  See also: str(Spectrum Contour Files)_, str(Creating Contour Files)_.
 
-  .. _`Spectrum Contour Files`: EditContourFilesPopup.html
-  .. _`Creating Contour Files`: CreateContourFilePopup.html
+  .. _str(Spectrum Contour Files): EditContourFilesPopup.html
+  .. _str(Creating Contour Files): CreateContourFilePopup.html
 """
 
   def __init__(self, parent, *args, **kw):

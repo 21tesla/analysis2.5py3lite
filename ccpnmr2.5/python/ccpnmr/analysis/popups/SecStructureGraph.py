@@ -190,7 +190,7 @@ class SecStructureGraphPopup(BasePopup):
   recorded scalar couplings between the amide and alpha hydrogens of a residue.
   These are indicative of the phi backbone angle, according to the Karplus
   relationship. These coupling values may be extracted and analysed in more
-  detail using the Data Analysis : `3J H-Ha Coupling`_ system.
+  detail using the Data Analysis : str(3J H-Ha Coupling)_ system.
 
   The "Chart" tab shows a graphical representation of the secondary structure
   evidence data. This is the same data that is shown in the first table, it is
@@ -250,7 +250,7 @@ class SecStructureGraphPopup(BasePopup):
   Biochemistry. 1992 Feb 18;31(6):1647-51.*
   
   .. _DANGLE: DanglePopup.html
-  .. _`3J H-Ha Coupling`: CalcHnHaCouplingPopup.html
+  .. _str(3J H-Ha Coupling): CalcHnHaCouplingPopup.html
   """
 
   def __init__(self, parent, *args, **kw):

@@ -187,7 +187,7 @@ class Molgrap(NTdict):
         script_file.write('$csh_script_dir/molmol_image.csh $pdb_file $tmp_dir $id $csh_script_dir $backcolor $executableMm $mac_dir \n')
         script_file.write('exit $status\n')
         script_file.close()
-        os.chmod(script_file_name, 0755)
+        os.chmod(script_file_name, 0o755)
         program = ExecuteProgram(script_file_name, rootPath = self.projectDirTmp, redirectOutputToFile = log_file_name)
         if program(""):
             nTerror("Failed shell command: " + script_file_name)
@@ -218,7 +218,7 @@ class Molgrap(NTdict):
         script_file.write('$csh_script_dir/render_convert.csh $pov_file_name $tmp_dir $id $results_dir $executablePov $executableConv \n')
         script_file.write('exit $status\n')
         script_file.close()
-        os.chmod(script_file_name, 0755)
+        os.chmod(script_file_name, 0o755)
 
 
         program = ExecuteProgram(script_file_name, rootPath = self.projectDirTmp, redirectOutputToFile = log_file_name)

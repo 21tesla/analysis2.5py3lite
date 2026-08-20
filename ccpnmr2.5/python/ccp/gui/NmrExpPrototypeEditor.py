@@ -2555,7 +2555,7 @@ class RefExperimentFrame(Frame):
         ll[5] = ', '.join(refExpDimRef.coupledIsotopeCodes)
         ll[6] = refExpDimRef.constantTime
         ll[7] = ', '.join([
-         `(x.expGraph.serial,x.stepNumber)`
+         str((x.expGraph.serial,x.stepNumber))
           for x in refExpDimRef.expSteps
          ])
      

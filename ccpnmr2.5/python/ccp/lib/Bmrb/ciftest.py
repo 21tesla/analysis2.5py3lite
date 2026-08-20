@@ -32,8 +32,8 @@ class Test( ContentHandler, ErrorHandler ) :
         print("End loop in line", line)
         return False
     def data( self, tag, tagline, val, valline, delim, inloop ) :
-        if inloop : print "Loop",
-        else : print "Free",
+        if inloop: print("Loop",)
+        else: print("Free")
         print("tag/value:", tag, ":", quote( val ), "(", tagline, ":", valline, ") d", delim)
         return False
     def error( self, line, msg ) :

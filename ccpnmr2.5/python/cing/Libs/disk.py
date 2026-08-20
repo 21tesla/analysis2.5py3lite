@@ -135,7 +135,7 @@ def incfilename(filename):
 
 # MAKE DIRECTORY CHAIN
 # ====================
-def makedirs(path,permissions=0755):
+def makedirs(path,permissions=0o755):
     if (not os.path.exists(path)):
         os.makedirs(path,permissions)
     # THE PERMISSIONS ARE NOT ALWAYS SET CORRECTLY, DO IT AGAIN

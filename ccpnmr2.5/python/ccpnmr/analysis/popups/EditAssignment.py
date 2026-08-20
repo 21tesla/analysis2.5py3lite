@@ -1343,13 +1343,13 @@ class EditAssignmentPopup(BasePopup):
         elements.append( re.match('\d+([A-Z]\D*)', isotope).group(1) )
       
       if object.mappingType == 'ambiguous':
- 	if not hasattr(object, 'subSets'):
-      raise "Don't know what the ambiguous atomSetMapping represents: need to set atomSetMapping.subSets"
- 	for subSet in object.subSets:
+        if not hasattr(object, 'subSets'):
+          raise "Don't know what the ambiguous atomSetMapping represents: need to set atomSetMapping.subSets"
+        for subSet in object.subSets:
           if subSet.mappingType != 'nonstereo':
             atomSetMappings.append(subSet)
-      else:
-        atomSetMappings.append(object)
+        else:
+          atomSetMappings.append(object)
       
       for atomSetMapping in atomSetMappings:
       

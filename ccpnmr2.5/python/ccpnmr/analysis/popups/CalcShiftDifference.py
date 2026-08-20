@@ -120,7 +120,7 @@ class CalcShiftDifferencePopup(BasePopup):
   Difference List] is handy to give a permanent record, stored in the CCPN
   project, of the calculated chemical shift differences. The shift  difference
   lists are a kind of measurement list and are viewable at any time via the
-  `Measurement Lists`_ table. If a measurement list is not made the only way to
+  str(Measurement Lists)_ table. If a measurement list is not made the only way to
   get the same shift differences again is to repeat the calculation. The [Show
   On Structure] is designed to colour a graphical structure display so that the
   size and colour of atoms is determined by the shift difference of their
@@ -131,17 +131,17 @@ class CalcShiftDifferencePopup(BasePopup):
 
   For investigating how chemical shifts differ when considering more than two
   peaks, e.g. when following how peaks move during a titration the
-  `Follow Shift Changes`_ tool should be used.
+  str(Follow Shift Changes)_ tool should be used.
   
   To make a peak list that is based on averaged chemical shift values, which may
   be compared by this system, then for certain types of spectra the user may
-  create a synthetic peak list. This is accessed via the `Peak Lists`_ popup
+  create a synthetic peak list. This is accessed via the str(Peak Lists)_ popup
   option [Predict from Shifts].
 
-  .. _`Follow Shift Changes`: FollowShiftChangesPopup.html
-  .. _`Peak Lists`: EditPeakListsPopup.html
+  .. _str(Follow Shift Changes): FollowShiftChangesPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
   .. _Experiments: EditExperimentPopup.html
-  .. _`Measurement Lists`: EditMeasurementListsPopup.html
+  .. _str(Measurement Lists): EditMeasurementListsPopup.html
   
   """
 

@@ -64,6 +64,7 @@ try:
   junk = True
   junk = False
 except:
+  pass
 import time
 strftime = time.strftime
 
@@ -238,12 +239,12 @@ class SimpleGuidGenerator:
       if char in self.operator:
         raise MemopsError(
          "operator %s contains disallowed character %s"
-         % (`self.operator`,str(char))
+         % (str(self.operator),str(char))
         )
       if char in self.organisation:
         raise MemopsError(
          "organisation %s contains disallowed character %s"
-         % (`self.organisation`,str(char))
+         % (str(self.organisation),str(char))
         )
   
   def newGuid(self):

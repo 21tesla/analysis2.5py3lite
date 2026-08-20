@@ -17,7 +17,7 @@ try:
     from cing.PluginCode.Ccpn import getRestraintBoundList
     from cing.PluginCode.Ccpn import modResDescriptorForTerminii
     from cing.PluginCode.Ccpn import patchCcpnResDescriptor
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try

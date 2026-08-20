@@ -64,6 +64,7 @@ try:
   junk = True
   junk = False
 except:
+  pass
 def formatFloat(x, places = 3):
   """autoformat float to specified number of significant figures
   currently does not do scientific formatting at all

@@ -73,8 +73,8 @@ class EntryCompletionPopup(BasePopup):
   submissions to the PDB and BMRB. This can be done securely on your desktop
   computer over the duration of your NMR project.
 
-  For more documentation see the `ECI section of the PDBe pages at the EBI web
-  site <http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html>`_.
+  For more documentation see the str(ECI section of the PDBe pages at the EBI web
+  site <http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html>)_.
   """
 
   def __init__(self, parent, project, *args, **kw):

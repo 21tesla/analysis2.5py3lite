@@ -121,8 +121,8 @@ class EditExperimentSeriesPopup(BasePopup):
   the lower table. When loading stacked-plane experiments these values may come
   though automatically, if they are present in the spectrum header or parameter
   file. Given a completed NMR series specification the user may then extract the
-  relevant data from the series using one of the analysis tools like `Follow
-  Intensity Changes`_ or `Follow Shift Changes`_.
+  relevant data from the series using one of the analysis tools like str(Follow
+  Intensity Changes)_ or str(Follow Shift Changes)_.
 
   **Caveats & Tips**
 
@@ -133,8 +133,8 @@ class EditExperimentSeriesPopup(BasePopup):
   The "Set/Unset Ref Plane" function is only used in certain kinds of series
   such as those that use trains of CPMG pulses. 
 
-  .. _`Follow Intensity Changes`: CalcRatesPopup.html
-  .. _`Follow Shift Changes`: FollowShiftChangesPopup.html
+  .. _str(Follow Intensity Changes): CalcRatesPopup.html
+  .. _str(Follow Shift Changes): FollowShiftChangesPopup.html
 
   """
 

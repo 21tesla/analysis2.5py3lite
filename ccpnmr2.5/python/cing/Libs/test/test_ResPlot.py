@@ -17,14 +17,14 @@ import unittest
 # Import using optional plugins.
 try:
     from cing.PluginCode.Whatif import runWhatif
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( WHATIF_STR, getCallerFileName() ))
     raise SkipTest(WHATIF_STR)
 # end try
 try:
     from cing.PluginCode.dssp import runDssp #@UnusedImport Added trigger import error . 
 #    Needed for when whatif is but dssp isn't installed. 
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( DSSP_STR, getCallerFileName() ))
     raise SkipTest(DSSP_STR)
 # end try

@@ -7,8 +7,8 @@ def get_isd_name():
 
 def print_distance_restraint(r):
 
-  print('  number=%d, distance=%s, upper=%.2f, lower=%.2f' % \)
-        (r.number, str(r.distance), r.upper, r.lower)
+  print('  number=%d, distance=%s, upper=%.2f, lower=%.2f' % \
+        (r.number, str(r.distance), r.upper, r.lower))
 
   for a, b in r.contributions:
     print(' ',a, b)
@@ -357,7 +357,7 @@ class CCPNReader:
                         
     def check_constraint_item(self, item, n_resonances=2):
 
-        if len(item.resonances) <> n_resonances:
+        if len(item.resonances) != n_resonances:
             raise ValueError('should be exactly %d resonances' % n_resonances)
 
     def get_atom_list(self, resonance):
@@ -465,7 +465,7 @@ class CCPNReader:
     
     def get_quad_contributions(self, constraint):
 
-        if len(constraint.resonances) <> 4:
+        if len(constraint.resonances) != 4:
 
             print('4 resonances expected for DihedralConstraint, %d found' % len(constraint.resonances))
             return None, []
@@ -587,7 +587,7 @@ class CCPNReader:
             res1 = atoms[1].residue.seqCode-self.first_residue_number
             res2 = atoms[2].residue.seqCode-self.first_residue_number
 
-            if res1 <> res2:
+            if res1 != res2:
               print('Unable to define residue number unambiguously. Residue number for atoms 1 and 2: %d, %s.' % (res1, res2))
               continue
 
@@ -1050,7 +1050,7 @@ class CCPNReader:
 
       for x in app_data:
 
-        if type(x.value) <> str:
+        if type(x.value) != str:
           continue
 
         try:
@@ -1154,7 +1154,7 @@ class CCPNReader:
 
             mol_system = MolSystem(self.project, code=mol_system_name)
 
-        elif len(mol_systems) <> 1:
+        elif len(mol_systems) != 1:
             raise KeyError('More than one CCPN MolSystem with name %s found.' % \)
                   mol_system_name
 

@@ -266,14 +266,14 @@ class MarvinFormat(DataFormat):
       renamedAssign = self.convertAtomNameByType(assign[self.rawPeakDimIndex])
       if renamedAssign ==  None:
           msg = "Error: couldn't convert assignment %s (%s) to iupac nomenclature!\n stopping..."
-          msg = msg % (`self.rawPeakDimIndex`,`assign[self.rawPeakDimIndex]`)
+          msg = msg % (str(self.rawPeakDimIndex),str(assign[self.rawPeakDimIndex]))
           raise self.FormatConverterError(msg)
 
       #print 'renamed assign: ', renamedAssign
       heavySwappedAssign = self.convertLightToHeavy(renamedAssign)
       if heavySwappedAssign == None:
           msg = "Error: couldn't convert assignment %s (%s) to it's  heavy parent!\n stopping..."
-          msg = msg % (`self.rawPeakDimIndex`,`assign[self.rawPeakDimIndex]`)
+          msg = msg % (str(self.rawPeakDimIndex),str(assign[self.rawPeakDimIndex]))
           raise self.FormatConverterError(msg)
 
       self.resNames.append(heavySwappedAssign)
@@ -448,7 +448,7 @@ class MarvinFormat(DataFormat):
 
       if len(targetResonances) > 1:
           selectName = '.'.join((chainCode,str(seqCode),atomName),)
-          resonanceIds = [`resonance.serial` for resonance in targetResonances]
+          resonanceIds = [str(resonance.serial) for resonance in targetResonances]
           print('Warning: found more than one resonance for peak (%s) %s' % (selectName,self.rawPeak.num))
           print('         resonances are: ', ','.join(resonanceIds))
 
@@ -567,7 +567,7 @@ class MarvinFormat(DataFormat):
                        must be a pair of values: of the form  'application,keyword\n
                        got: '%s'"""
               msg = textwrap.dedent(msg)
-              raise self.FormatConverterError(msg % `self.appDataKey`)
+              raise self.FormatConverterError(msg % str(self.appDataKey))
           if len(appDataApplicationKeyPair) == 1:
               result=(appDataApplicationKeyPair,'peakNum')
           else:

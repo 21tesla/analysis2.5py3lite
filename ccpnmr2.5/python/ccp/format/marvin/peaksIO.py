@@ -165,7 +165,7 @@ class Record(object,DictMixin):
         return float(self.values)
 
     def as_string(self):
-        return `self.values`
+        return str(self.values)
 
     def is_container(self):
         return len(self.children)
@@ -319,14 +319,14 @@ def Dump_assignment(Assignment_handler):
         self.ostream=ostream
 
     def handle_assignment(record):
-        print(>> self.ostream, peak_id,from_proton_shift,from_heavy_shift,to_proton_shift,)
+        print(peak_id,from_proton_shift,from_heavy_shift,to_proton_shift, file=self.ostream)
 
         assignment= assignment.values
         (from_assignment,to_assignment) = self.values_to_assignments(assignment)
 
-        print(>> self.ostream, from_assignment.shift_id,from_assignment.residue_id,from_assignment.residue_type,from_assignment.atom_name,)
-        print(>> self.ostream, to_assignment.shift_id,to_assignment.residue_id,to_assignment.residue_type,to_assignment.atom_name,)
-        print(>> self.ostream, merit)
+        print(from_assignment.shift_id,from_assignment.residue_id,from_assignment.residue_type,from_assignment.atom_name, file=self.ostream)
+        print(to_assignment.shift_id,to_assignment.residue_id,to_assignment.residue_type,to_assignment.atom_name, file=self.ostream)
+        print(merit, file=self.ostream)
 
 
 
@@ -413,10 +413,10 @@ class Print_assignments(Assignment_handler):
 
         if not self.returnValue:
 
-          print(>> self.ostream, peak_id,from_proton_shift,from_heavy_shift,to_proton_shift,)
-          print(>> self.ostream, from_assignment.shift_id,from_assignment.residue_id,from_assignment.residue_type,from_assignment.atom_name,)
-          print(>> self.ostream, to_assignment.shift_id,to_assignment.residue_id,to_assignment.residue_type,to_assignment.atom_name,)
-          print(>> self.ostream, probability)
+          print(peak_id,from_proton_shift,from_heavy_shift,to_proton_shift, file=self.ostream)
+          print(from_assignment.shift_id,from_assignment.residue_id,from_assignment.residue_type,from_assignment.atom_name, file=self.ostream)
+          print(to_assignment.shift_id,to_assignment.residue_id,to_assignment.residue_type,to_assignment.atom_name, file=self.ostream)
+          print(probability, file=self.ostream)
 
         else:
           #print from_assignment.residue_id,to_assignment.residue_id

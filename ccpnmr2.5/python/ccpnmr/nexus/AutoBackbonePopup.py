@@ -1025,20 +1025,20 @@ class AutoBackbonePopup(BasePopup):
       if pSpinSystem and pResidue and (pSpinSystem.residue is not pResidue):
         assignSpinSystemResidue(pSpinSystem, pResidue)
 
-     	for ss in pResidue.resonanceGroups:
+         for ss in pResidue.resonanceGroups:
       if ss is not pSpinSystem:
         self.mergeResonances(pSpinSystem, ss)
-     	    mergeSpinSystems(pSpinSystem, ss)
+             mergeSpinSystems(pSpinSystem, ss)
 
       pSpinSystem = None
       if nResidue:
-     	for ss in nResidue.resonanceGroups:
-     	  pSpinSystem = findConnectedSpinSystem(ss)
-     	  break
+         for ss in nResidue.resonanceGroups:
+           pSpinSystem = findConnectedSpinSystem(ss)
+           break
 
       if pSpinSystem:
-     	self.mergeResonances(pSpinSystem, spinSystem)
-     	mergeSpinSystems(pSpinSystem, spinSystem)
+         self.mergeResonances(pSpinSystem, spinSystem)
+         mergeSpinSystems(pSpinSystem, spinSystem)
 
     self.notifiers(self.registerNotify)  
     self.updatePredictionsAfter()

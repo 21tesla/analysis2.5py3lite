@@ -981,10 +981,10 @@ class CopyAssignmentsPopup(BasePopup):
         else:
           j = None
 
-    dimMapping[dataDim1.dim-1] = j 
+    dimMapping[dataDim1.dim-1] = j
 
-      """
-      # TBD: this only works if have one SampledDataDim and is a bit of a hack
+    """
+    # TBD: this only works if have one SampledDataDim and is a bit of a hack
       if sourceSpectrum.numDim < targetSpectrum.numDim:
         sampledDataDim = targetSpectrum.findFirstDataDim(className='SampledDataDim')
         if sampledDataDim:

@@ -238,10 +238,10 @@ class File (Lister):
                     return None
                 match_save_begin = pattern_save_begin.search( text, pos )
                 if not match_save_begin:
-                    print("ERROR: Code error (no second match on sf begin)";)
+                    print("ERROR: Code error (no second match on sf begin)")
                     return None
                 if match_save_begin.start() != pos:
-                    print("ERROR: Code error (wrong second match on sf begin)";)
+                    print("ERROR: Code error (wrong second match on sf begin)")
                     return None
                 self.datanodes.append( SaveFrame(  tagtables    = [], # Need resetting
                                             verbosity    = self.verbosity ) )
@@ -259,10 +259,10 @@ class File (Lister):
                     return None
                 match_save_end = pattern_save_end.search( text, pos )
                 if not match_save_end:
-                    print("ERROR: Code error (no second match on sf end)";)
+                    print("ERROR: Code error (no second match on sf end)")
                     return None
                 if match_save_end.start() != pos:
-                    print("ERROR: Code error (wrong second match on sf end)";)
+                    print("ERROR: Code error (wrong second match on sf end)")
                     return None
                 sf_open     = None
                 next_sf_end = None

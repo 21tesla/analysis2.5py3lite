@@ -17,7 +17,7 @@ import unittest
 try:
     from cing.PluginCode.yasaraPlugin import yasaraShell #@UnusedImport needed to throw a ImportWarning so that the test is handled.
     import yasara #@UnresolvedImport
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( YASARA_STR, getCallerFileName() ))
     raise SkipTest(YASARA_STR)
 # end try

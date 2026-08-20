@@ -305,9 +305,9 @@ class XMLReader(BaseReader):
 
         failed = 0
 
-        if len(handler.elements) <> 1:
+        if len(handler.elements) != 1:
             failed = 1
-        elif handler.elements[0] <> document:
+        elif handler.elements[0] != document:
             failed = 1
 
         if failed:

@@ -105,7 +105,7 @@ class CalcHnHaCouplingPopup(BasePopup):
   HNHA spectrum, for both the HA cross peaks and the homonuclear diagonal amide
   peaks. For a peak within the selected list to be considered it must be
   assigned to resonances in its amide dimensions *and a spin system*, for
-  example using the `Pick & Assign From Roots`_ tool. This spin system
+  example using the str(Pick & Assign From Roots)_ tool. This spin system
   assignment is the means to achieve the pairing of a diagonal amide peak with a
   corresponding HA peak; if two peaks for the same residue are not in the same
   spin system then the analysis will not be made. The peaks do not have to be
@@ -168,7 +168,7 @@ class CalcHnHaCouplingPopup(BasePopup):
   15N-enriched proteins". J. Am. Chem. Soc. 115 (17): 7772-7777*
   
   .. _Experiments: EditExperimentPopup.html
-  .. _`Pick & Assign From Roots`: LinkPeakListsPopup.html
+  .. _str(Pick & Assign From Roots): LinkPeakListsPopup.html
   
   """
 

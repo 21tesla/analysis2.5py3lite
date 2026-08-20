@@ -125,12 +125,10 @@ def shiftx(structure, atomType=None):
             if seqCode not in shiftData:
               shiftData[seqCode] = shiftDict = {}
         else:
-          shiftDict = shiftData[seqCode]  
-   
-            for i, atomName in enumerate(atomNames):
-              if atomName not in shiftDict:
-                shiftDict[atomName] = []
-          
+          shiftDict = shiftData[seqCode]
+        for i, atomName in enumerate(atomNames):
+          if atomName not in shiftDict:
+            shiftDict[atomName] = []
           shiftDict[atomName].append(float(data[i+2]))
   
 

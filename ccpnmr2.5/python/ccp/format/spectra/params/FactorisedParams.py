@@ -301,8 +301,7 @@ class FactorisedParams(ExternalParams):
               # are in the principal region.
               peak.newPeakIntensity(intensityType='height', value=height,
                                     method=heightMethod)
-      if compFound != ncomp:
-        print ("WARNING, % components expected, % found" % (ncomp, compFound))
+      if compFound != ncomp: print(("WARNING, % components expected, % found" % (ncomp, compFound)))
         
 
 def unpackListElement(elem):

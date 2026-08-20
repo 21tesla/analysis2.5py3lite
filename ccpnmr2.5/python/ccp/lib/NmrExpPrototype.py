@@ -312,8 +312,7 @@ def testExpPrototypes():
           code = codeMap[redr]
           codes.append(code)
           axisCodeSet.add(code)
-      if len(codes) != len(set(codes)):
-        print ("Duplicate code in %s: %s" % (refExperiment.name, codes))
+      if len(codes) != len(set(codes)): print(("Duplicate code in %s: %s" % (refExperiment.name, codes)))
 
       print ("TEST %s %s" % (refExperiment.name, codes))
 
@@ -329,8 +328,7 @@ def testExpPrototypes():
   print ("All axisCodes: %s" % list(sorted(axisCodeSet)))
 
   for key, val in sorted(useNames.items()):
-    if len(val) > 1:
-      print ("Duplicate name: %s %s" % (key, val))
+    if len(val) > 1: print(("Duplicate name: %s %s" % (key, val)))
 
   for tt in sorted(synonyms):
     print ("SYNONYM: %s %s" % tt)

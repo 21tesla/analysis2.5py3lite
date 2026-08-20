@@ -252,8 +252,8 @@ class FollowShiftChangesPopup(BasePopup):
   the position of one or more peaks in a group  of related spectra changes according
   to some experimental condition. Many kinds of experimental condition may be
   varied, but series with changing in concentration (e.g. ligand), temperature
-  or pH are commonplace. This system is closely related to the `Follow Intensity
-  Changes`_ tool, but here the peak grouping and function fitting is for peak
+  or pH are commonplace. This system is closely related to the str(Follow Intensity
+  Changes)_ tool, but here the peak grouping and function fitting is for peak
   locations that do move, rather than stay in the same place and change
   intensity.
 
@@ -285,7 +285,7 @@ class FollowShiftChangesPopup(BasePopup):
   be a 15N HSQC peak list, in which case the analysis operates on peak groups
   that correspond to amides of individual residues. 
 
-  The user chooses an NMR series that has been setup in the `NMR Series`_ popup,
+  The user chooses an NMR series that has been setup in the str(NMR Series)_ popup,
   accessible using the [Edit NMR Series] button. For the analysis to proceed
   properly the selected NMR series will need to contain all of the experiments
   that form part of the titration/analysis and the values of the condition being
@@ -353,7 +353,7 @@ class FollowShiftChangesPopup(BasePopup):
   It is commonplace to look through all the intensity curves for each of the
   peak groups by using [Show Fit Graph]; here the user can check how well the
   curve-fit worked and whether any adjustments (e.g. in peak picking) need to be
-  made or groups removed. See the `Fit Graph`_ documentation for details about
+  made or groups removed. See the str(Fit Graph)_ documentation for details about
   how the resultant popup window operates. The "Y" value of the curves come
   from the (isotope weighted) chemical shift distance for each peak of the group
   *along the trajectory from its start point* and the "X" values come from those
@@ -404,9 +404,9 @@ class FollowShiftChangesPopup(BasePopup):
   analysis, e.g. for side chain NH2 peaks or for resonance which don't move
   significantly enough for analysis.
   
-  .. _`Follow Intensity Changes`: CalcRatesPopup.html
-  .. _`NMR Series`: EditExperimentSeriesPopup.html
-  .. _`Fit Graph`: EditFitGraphPopup.html
+  .. _str(Follow Intensity Changes): CalcRatesPopup.html
+  .. _str(NMR Series): EditExperimentSeriesPopup.html
+  .. _str(Fit Graph): EditFitGraphPopup.html
   """
 
   def __init__(self, parent, *args, **kw):

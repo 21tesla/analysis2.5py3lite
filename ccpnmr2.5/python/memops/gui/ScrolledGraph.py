@@ -450,26 +450,26 @@ class ScrolledGraph(Frame):
 
         e = e or 0.0
 
- 	if x is not None:
- 	  if x < minX:
- 	    minX = x
- 	  if x > maxX:
- 	    maxX = x
-          
+        if x is not None:
+          if x < minX:
+            minX = x
+          if x > maxX:
+            maxX = x
+
           if j+1 < N:
             x2 = dataSets[i][j+1][0]
-            
+
             if x2 is not None:
               dX = dataSets[i][j+1][0] - x
- 
+
               if (minDx is None) or (dX<minDx):
                 minDx = dX
 
- 	if y is not None:
- 	  if y-e < minY:
- 	    minY = y-e
- 	  if y+e > maxY:
- 	    maxY = y+e
+        if y is not None:
+          if y-e < minY:
+            minY = y-e
+          if y+e > maxY:
+            maxY = y+e
 
           if j+1 < N:
             y2 = dataSets[i][j+1][1]

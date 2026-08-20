@@ -186,11 +186,11 @@ class ViewRamachandranFrame(ScrolledCanvas):
       
       if self.showCoords:
         coordStr = '[ %3.3f, %3.3f ]' % (phi,psi)
-    coordXtxt = x0+(0.9*(x1-x0))
+        coordXtxt = x0+(0.9*(x1-x0))
         coordYtxt = y0+y1
       else:
         coordStr = ''
-    coordXtxt = 0
+        coordXtxt = 0
         coordYtxt = 0
 
       if crosshair:

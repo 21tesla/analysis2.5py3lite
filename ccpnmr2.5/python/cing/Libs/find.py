@@ -2,7 +2,7 @@
 Taken from O'Reilly book
 
 Execute like (counting CING's code base lines; 110k+)
-wc `python $CINGROOT/python/cing/Libs/find.py '*.py' $CINGROOT`
+wc str(python $CINGROOT/python/cing/Libs/find.py '*.py' $CINGROOT)
 """
 
 from cing.Libs.NTutils import findvisitor

@@ -15,7 +15,7 @@ import unittest
 try:
     from cing.PluginCode.Ccpn import Ccpn #@UnusedImport needed to throw a ImportWarning so that the test is handled properly.
     from cing.Scripts.FC.utils import getBmrbCsCountsFromFile
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( CCPN_STR, getCallerFileName() ))
     raise SkipTest(CCPN_STR)
 # end try

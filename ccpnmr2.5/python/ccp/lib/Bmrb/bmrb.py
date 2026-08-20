@@ -188,38 +188,38 @@ class __entryParser__(ContentHandler, ErrorHandler):
         self.curloop = None
 
     def comment(self, line, text):
-        if verbose: print "Comment '%s' on line: %d" % (text, line)
+        if verbose: print("Comment '%s' on line: %d" % (text, line))
         pass
 
     def startData(self, line, name):
-        if verbose: print "Data '%s' started on line: %d" % (name, line)
+        if verbose: print("Data '%s' started on line: %d" % (name, line))
         self.ent.bmrb_id = name
 
     def endData(self, line, name):
-        if verbose: print "Data '%s' ended on line: %d" % (name, line)
+        if verbose: print("Data '%s' ended on line: %d" % (name, line))
         pass
 
     def startSaveFrame(self, line, name):
-        if verbose: print "Saveframe '%s' started on line: %d" % (name, line)
+        if verbose: print("Saveframe '%s' started on line: %d" % (name, line))
         self.curframe = saveframe.fromScratch(saveframe_name=name)
         self.ent.addSaveframe(self.curframe)
 
     def endSaveFrame(self, line, name):
-        if verbose: print "Saveframe '%s' ended on line: %d" % (name, line)
+        if verbose: print("Saveframe '%s' ended on line: %d" % (name, line))
         self.curframe = None
 
     def startLoop(self, line):
-        if verbose: print "Loop started on line: %d" % (line)
+        if verbose: print("Loop started on line: %d" % (line))
         self.curloop = loop.fromScratch()
         self.curframe.addLoop(self.curloop)
 
     def endLoop(self, line):
-        if verbose: print "Loop ended on line: %d" % (line)
+        if verbose: print("Loop ended on line: %d" % (line))
         self.curloop = None
 
     def data(self, tag, tagline, val, valline, delim, inloop):
 
-        if verbose: print "Tag / value: %s : %s ( %d : %d ) d %s" % (tag, val, tagline, valline, delim)
+        if verbose: print("Tag / value: %s : %s ( %d : %d ) d %s" % (tag, val, tagline, valline, delim))
 
         if delim == 13:
                 val = "$"+str(val)

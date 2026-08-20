@@ -165,7 +165,7 @@ class EditWindowPopup(BasePopup):
   The second tab controls how spectra and peak lists are displayed within the
   spectrum window selected at the top. It should be noted that spectrum contour levels and
   colours are set elsewhere, via the main Spectra_ popup. Likewise, the peak
-  list symbols and colours are changed in the `Peak Lists`_ popup. These
+  list symbols and colours are changed in the str(Peak Lists)_ popup. These
   peaklist and spectrum settings are set on a project-wide basis, and thus are
   not set for an individual display window. 
 
@@ -211,7 +211,7 @@ class EditWindowPopup(BasePopup):
 
   .. _Axes: EditAxisPanelPopup.html
   .. _Spectra: EditSpectrumPopup.html
-  .. _`Peak Lists`: EditPeakListsPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
   """
 
   def __init__(self, parent, *args, **kw):

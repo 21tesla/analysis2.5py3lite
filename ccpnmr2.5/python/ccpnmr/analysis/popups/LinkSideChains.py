@@ -1880,7 +1880,7 @@ class LinkSideChainsPopup(BasePopup):
           linkScoreMatrix[i][k] = linkScore
 
       
-      print(I, J # Check size of problem)
+      print(I, J)  # Check size of problem
 
       # # # # # # # # # FIND AND SCORE WHOLE SIDE CHAIN ROUTES # # # # # # # # # #
             

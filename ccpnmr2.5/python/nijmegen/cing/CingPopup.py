@@ -20,8 +20,8 @@ class CingPopup(BasePopup):
   will be performed under the CING platform. These include: PROCHECK, ShiftX,
   DSSP, WHAT_CHECK, Wattos etc.
 
-  For more information detailed information see the `CING home page
-  <https://nmr.le.ac.uk/icing/>`_.
+  For more information detailed information see the str(CING home page
+  <https://nmr.le.ac.uk/icing/>)_.
   
   **Use**
 

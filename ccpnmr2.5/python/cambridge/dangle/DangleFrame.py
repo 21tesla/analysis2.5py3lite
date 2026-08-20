@@ -862,7 +862,7 @@ class DangleFrame(Frame):
     self.updatePhiPsi(dRes.residue)
         
 
-  def fillGlePlot(self, plot, gleMatrix, title=None):	
+  def fillGlePlot(self, plot, gleMatrix, title=None):    
     
     scaleCol = plot.scaleColorQuick
     
@@ -875,20 +875,20 @@ class DangleFrame(Frame):
     matrix   = plot.matrix
     
     for j in range(36):
-      for i in range(36):			       
-    	v = gleMatrix[j*36+i]			       
-    	#if (v < 0.005):				       
-    	#  color = plot.nullColor		       
-    	#else:					       
-    	color = self.getPlotColor(v)		       
-    	item = matrix[i][j]
-        		       
-    	if plot.binWidth < 7:			       
-    	  itemconf(item, fill=color, outline=color) 	       
-    	elif plot.binWidth < 12:		       
-    	  itemconf(item, fill=color, outline=scaleCol(color,0.9))  
-    	else:					       
-    	  itemconf(item, fill=color, outline=scaleCol(color,0.8))  
+      for i in range(36):                   
+        v = gleMatrix[j*36+i]                   
+        #if (v < 0.005):                       
+        #  color = plot.nullColor               
+        #else:                           
+        color = self.getPlotColor(v)               
+        item = matrix[i][j]
+                       
+        if plot.binWidth < 7:                   
+          itemconf(item, fill=color, outline=color)            
+        elif plot.binWidth < 12:               
+          itemconf(item, fill=color, outline=scaleCol(color,0.9))  
+        else:                           
+          itemconf(item, fill=color, outline=scaleCol(color,0.8))  
     
     if title:
       itemconf(plot.title, text=title)

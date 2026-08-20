@@ -381,12 +381,12 @@ class DataUpgrader:
     if nObjs == 1:
       print(("""\nFinished mapping reference objects
   %s:)
-  %s had unmappable keys""" % (topObjString, delayObjects[0]))
+  %s had unmappable keys""" % (topObjString, delayObjects[0])))
     elif nObjs:
       ll = list(set(x.qualifiedName for x in delayObjects))
       print(("""\nFinished mapping reference objects
   %s:)
-  %s objects of classes %s had unmappable keys""" % (topObjString, nObjs, ll))
+  %s objects of classes %s had unmappable keys""" % (topObjString, nObjs, ll)))
   
   
   def transferData(self):

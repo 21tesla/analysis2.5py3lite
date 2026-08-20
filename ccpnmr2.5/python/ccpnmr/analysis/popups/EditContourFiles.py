@@ -72,11 +72,11 @@ class EditContourFilesPopup(BasePopup):
   display contours rather than having them calculated on the fly.  This can be
   changed in the main str(Spectra)_ dialog in the Display Options tab.
 
-  See also: `Creating Contour Files`_, `Add Existing Contour Files`_.
+  See also: str(Creating Contour Files)_, str(Add Existing Contour Files)_.
 
   .. _str(Spectra): EditSpectrumPopup.html
-  .. _`Creating Contour Files`: CreateContourFilePopup.html
-  .. _`Add Existing Contour Files`: AddContourFilePopup.html
+  .. _str(Creating Contour Files): CreateContourFilePopup.html
+  .. _str(Add Existing Contour Files): AddContourFilePopup.html
 """
 
   def __init__(self, parent, *args, **kw):

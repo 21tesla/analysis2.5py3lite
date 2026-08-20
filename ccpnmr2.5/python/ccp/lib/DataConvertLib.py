@@ -487,9 +487,9 @@ def getStdResNameMap(chemComps=None):
           tags.add(cifCode)
       if ccpCode.upper() != cifCode:
         tags.add(ccpCode.upper())
-      code1L = tt[0]
-      if code1L and code1L not in tmpResult:
-        tags.add(code1L)
+      code1 = tt[0]
+      if code1 and code1 not in tmpResult:
+        tags.add(code1)
 
       # put values in result
       for tag in tags:

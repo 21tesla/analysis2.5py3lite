@@ -85,7 +85,7 @@ class EditPeakDrawParamsPopup(BasePopup):
   that you can identify "A25LsyH,N" separately to "B25LysH,N" or even
   "MS2:A25LysH,N". The details toggle allows the user to contribute to peak
   annotations; such details are set in the relevant column of the peak tables
-  (e.g. `Selected Peaks`_)or the "Peak::Set details" option of the right-click
+  (e.g. str(Selected Peaks)_)or the "Peak::Set details" option of the right-click
   window menu. The last "Minimal Annotations" option is special because it gives
   a quick replacement for spectrum annotations that overrides all other settings,
   for example "25LysH,N" becomes "25K", which is useful to reduce clutter when
@@ -123,15 +123,15 @@ class EditPeakDrawParamsPopup(BasePopup):
 
   **Caveats & Tips**
 
-  When assigning peaks via the `Assignment Panel`_ the resonance annotation will
+  When assigning peaks via the str(Assignment Panel)_ the resonance annotation will
   always display spin system information, given that this grouping is critical
   to assignment, but the chain and atom assignment will reflect the peak
   display, and thus these details may be missing if unset in this Draw
   Parameters popup.
 
 
-  .. _`Assignment Panel`: EditAssignmentPopup.html
-  .. _`Selected Peaks`: SelectedPeaksPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
+  .. _str(Selected Peaks): SelectedPeaksPopup.html
   """
   def __init__(self, parent, *args, **kw):
  
@@ -202,7 +202,7 @@ class EditPeakDrawParamsPopup(BasePopup):
                                         tipText=tipText)
     detailAnnoLabel = Label(frame1, text='Details', grid=(5,1))
 
-    tipText = 'Whether to ignore above settings, and use a short peak annotation using only residue numbers and one-letter codes, e.g. "21L"'
+    tipText = 'Whether to ignore above settings, and use a short peak annotation using only residue numbers and one-letter codes, e.g. "21"'
     self.simpleAnnoSelect = CheckButton(frame1, callback=self.setSimpleAnnotations,
                                         grid=(6,0), tipText=tipText,
                                         selected=analysisProject.doMinimalAnnotations)

@@ -134,7 +134,7 @@ class WindowPopup(BasePopup):
   the window. Hence, it is common for the user to toggle certain spectra off
   first if they should not be affected. These contour settings are fairly
   simple, but more detailed control of contours is given by the [More..]
-  button which opens the main `Spectrum Contour Levels`_ popup.
+  button which opens the main str(Spectrum Contour Levels)_ popup.
 
   *Peaks*
   
@@ -151,7 +151,7 @@ class WindowPopup(BasePopup):
   of these will be active; the active peak list is the one that the user can
   select in the spectrum and the one newly picked signal maxima are placed in.
   To change the active peak list for a spectrum and how peak lists are shown
-  (symbol type and colour) the user should edit the main `Peak Lists`_ table.
+  (symbol type and colour) the user should edit the main str(Peak Lists)_ table.
 
   *Strips*
   
@@ -174,14 +174,14 @@ class WindowPopup(BasePopup):
   divisions and serves to split the axis which is not affected by the strips.
   For example a window with vertical strips can have horizontal separators
   which split the Y-axis into separate regions to display separate PPM ranges
-  (e.g. CA, CB, C'). Separators may be added via the right mouse `Window
-  Menu`_. 
+  (e.g. CA, CB, C'). Separators may be added via the right mouse str(Window
+  Menu)_. 
 
   *Coordinate Location*
   
   The last button in the top toolbar displays the current location of the mouse
-  cursor for the window. Clicking on the button  opens the `Center
-  coordinates`_ panel which  allows the user to specify a particular location
+  cursor for the window. Clicking on the button  opens the str(Center
+  coordinates)_ panel which  allows the user to specify a particular location
   for the center of the window view and also allows the cursor location to be
   displayed in Hz units, rather than PPM.
 
@@ -192,7 +192,7 @@ class WindowPopup(BasePopup):
   indicating the display region (usually in PPM). The display region may be
   changed by using the scrollbars or the various mouse controls listed below.
   Note that the scrollbars may be removed to save space using the right mouse
-  `Window Menu`_.  The box at the bottom right corner where the tick axes meet
+  str(Window Menu)_.  The box at the bottom right corner where the tick axes meet
   shows the position of the current view, according to zoom level and
   position, relative to the maximum possible extent of the window axes. 
 
@@ -237,9 +237,9 @@ class WindowPopup(BasePopup):
   Spectrum peaks may be picked in three basic ways in Analysis: by specifying
   an exact peak location with the mouse, by dragging a rectangular peak-find
   region with the mouse to find extrema, and by using the "Region Peak Find"
-  functionality of the `Peak Finding`_ section to find extrema in a large
+  functionality of the str(Peak Finding)_ section to find extrema in a large
   spectrum region. In all cases newly picked peaks are placed in the active
-  peak list for a given spectrum (set in the `Peak Lists` popup). The mouse
+  peak list for a given spectrum (set in the str(Peak Lists) popup). The mouse
   and keyboard controls used to pick peaks are listed below, noting that the
   <Control> key and left mouse button are specialised for this purpose:
 
@@ -256,7 +256,7 @@ class WindowPopup(BasePopup):
   specific spectra then a spectrum can be toggled off in the top panel, or the
   active peak list for the spectrum can be toggled off (leaving any contours
   visible). For the region search peaks will be located according to the "Find
-  Parameters" set in the `Peak Finding`_ popup; by default extrema are only
+  Parameters" set in the str(Peak Finding)_ popup; by default extrema are only
   found above the same threshold that contours are displayed for.
 
   Note that if a spectrum is tiled so that its contours are visible outside the
@@ -292,9 +292,9 @@ class WindowPopup(BasePopup):
 
   :Re-center Selected Peaks: <P>
 
-  :Assign Peak Under Mouse: <a> (opens `Assignment Panel`)
+  :Assign Peak Under Mouse: <a> (opens str(Assignment Panel))
   
-  :Show Selected Peaks Table: <s> (opens `Selected Peaks`)
+  :Show Selected Peaks Table: <s> (opens str(Selected Peaks))
   
   :Delete Selected Peaks: <Delete>
 
@@ -302,7 +302,7 @@ class WindowPopup(BasePopup):
   
   Note that the keyboard shortcuts listed are the default settings
   and could actually be different. All keyboard shortcuts are listed
-  (and can be changed) in the "Macros" section of the `User Options`_
+  (and can be changed) in the "Macros" section of the str(User Options)_
   popup.
   
   *Marker Lines & Rulers*
@@ -315,7 +315,7 @@ class WindowPopup(BasePopup):
   used to remove all marks and rulers. 
   
   For a detailed description of marker lines and rulers and their various
-  options see the `Marks and Rulers`_ documentation.
+  options see the str(Marks and Rulers)_ documentation.
 
   *1D Traces*
   
@@ -331,7 +331,7 @@ class WindowPopup(BasePopup):
   The right mouse button, when pressed over the graphical display area, will
   open up a menu that allow the user to perform various operations. These
   functions are sub-divided into  the main categories listed below. For more
-  detailed descriptions see the `Window Menu`_ section.
+  detailed descriptions see the str(Window Menu)_ section.
 
   *Assign*
 
@@ -344,8 +344,8 @@ class WindowPopup(BasePopup):
   
   These options relate to general operations performed on peaks, including
   deletion, setting aliasing, setting details and arranging labels. Many of
-  these functions have keyboard shortcuts (see "Macros" section of the `User
-  Options`_).
+  these functions have keyboard shortcuts (see "Macros" section of the str(User
+  Options)_).
 
   *Locate Peaks*
   
@@ -385,20 +385,20 @@ class WindowPopup(BasePopup):
   *Macros*
  
   This menu contains lists any Python macro scripts that have been added to
-  Analysis (see `User Options`_) to operate in the context of a spectrum
+  Analysis (see str(User Options)_) to operate in the context of a spectrum
   window.
 
-  .. _`Center coordinates`: GetCenterCoordsPopup.html
+  .. _str(Center coordinates): GetCenterCoordsPopup.html
   .. _str(Windows): EditWindowPopup.html
   .. _str(Spectra): EditSpectrumPopup.html
-  .. _`Spectrum Contour Levels`: EditContourLevelsPopup.html
-  .. _`Peak Lists`: EditPeakListsPopup.html
-  .. _`Window Menu`: ../menu/WindowMenus.html
-  .. _`Peak Finding`: EditPeakFindParamsPopup.html
-  .. _`User Options`: EditProfilesPopup.html
-  .. _`Marks and Rulers`: EditMarksPopup.html
-  .. _`Assignment Panel`: EditAssignmentPopup.html
-  .. _`Selected Peaks`: EditAssignmentPopup.html
+  .. _str(Spectrum Contour Levels): EditContourLevelsPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
+  .. _str(Window Menu): ../menu/WindowMenus.html
+  .. _str(Peak Finding): EditPeakFindParamsPopup.html
+  .. _str(User Options): EditProfilesPopup.html
+  .. _str(Marks and Rulers): EditMarksPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
+  .. _str(Selected Peaks): EditAssignmentPopup.html
   """
   
   UNIT_PPM = 'ppm'

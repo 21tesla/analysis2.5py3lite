@@ -251,7 +251,7 @@ class EditMoleculesPopup(BasePopup):
   been made to a chain then the best course of action is to make a new molecule
   template, with the correct sequence, a new molecular system, i.e. building
   chains using the new template, and copy the assignments from the old molecular
-  system to the new one via `Copy Assignments`_; selecting "Between Molecule
+  system to the new one via str(Copy Assignments)_; selecting "Between Molecule
   Chains".
 
   **Template Molecules Tab** 
@@ -381,8 +381,8 @@ class EditMoleculesPopup(BasePopup):
 
   In order to delete a chain that carries assignments, the chain must be cleared
   of assignments first. The assignments could be moved to a different chain via
-  the `Copy Assignments`_ system or removed completely. Completely removing a
-  chain's assignments can be done via the `Spin Systems`_ or Resonances_ tables
+  the str(Copy Assignments)_ system or removed completely. Completely removing a
+  chain's assignments can be done via the str(Spin Systems)_ or Resonances_ tables
   by selecting the rows that relate to the relevant chain (sorting rows by
   residue may help) and then deassigning the spin systems or resonances.
 
@@ -394,8 +394,8 @@ class EditMoleculesPopup(BasePopup):
   in the future. However, the template numbering system is separate from the
   chain numbering system.
 
-  .. _`Copy Assignments`: CopyAssignmentsPopup.html
-  .. _`Spin Systems`: EditSpinSystemPopup.html
+  .. _str(Copy Assignments): CopyAssignmentsPopup.html
+  .. _str(Spin Systems): EditSpinSystemPopup.html
   .. _Resonances: BrowseResonancesPopup.html
   
   """ 

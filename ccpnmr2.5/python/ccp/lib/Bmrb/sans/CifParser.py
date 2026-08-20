@@ -31,7 +31,7 @@ class parser :
             sys.exit( 1 )
         while True :
             tok = self._lex.yylex()
-            if self._verbose : print tok, self._lex.getText()
+            if self._verbose: print(tok, self._lex.getText())
             if tok == STARLexer.ERROR :
                 self._eh.fatalError( self._lex.getLine(), self._lex.getText() )
                 return
@@ -73,7 +73,7 @@ class parser :
         needvalue = False
         while True :
             tok = self._lex.yylex()
-            if self._verbose : print "B:", tok, self._lex.getText()
+            if self._verbose: print("B:", tok, self._lex.getText())
             if tok == STARLexer.ERROR :
                 print("+ error", self._lex.getText())
                 self._eh.fatalError( self._lex.getLine(), self._lex.getText() )
@@ -168,7 +168,7 @@ class parser :
         parsingvalues = False
         while True :
             tok = self._lex.yylex()
-            if self._verbose : print "L:", tok, self._lex.getText()
+            if self._verbose: print("L:", tok, self._lex.getText())
             if tok == STARLexer.ERROR :
                 self._eh.fatalError( self._lex.getLine(), self._lex.getText() )
                 return True

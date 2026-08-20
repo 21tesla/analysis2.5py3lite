@@ -96,7 +96,7 @@ class ViewAssignmentPopup(BasePopup):
   position in  amino acids, or the "three prime" position in nucleic acids.
   Accordingly, each atom site represents a carbon or nitrogen atom *and* any
   bound hydrogens. Representing atom sites rather than individual atoms provides
-  an alternative to the `Atom Browser`_ with less clutter but still with
+  an alternative to the str(Atom Browser)_ with less clutter but still with
   sufficient information to give a clear indication of assignment status, and 
   in this particular case, of assignment connectivity between atom sites
 
@@ -146,7 +146,7 @@ class ViewAssignmentPopup(BasePopup):
   a multicolour scheme the colour used is one from about two thirds of the way
   through the scheme.
 
-  .. _`Atom Browser`: BrowseAtomsPopup.html
+  .. _str(Atom Browser): BrowseAtomsPopup.html
 
   """
   
@@ -1241,7 +1241,7 @@ class ViewAssignmentPopup(BasePopup):
     for i in range(len(ccpCodes)):
       if ccpCodesDict.get(ccpCodes[i]):
         self.residueSelector.setButtonState(i, True)
-    self.residuesDict[ccpCodes[i]] = True
+        self.residuesDict[ccpCodes[i]] = True
       else:
         self.residueSelector.setButtonState(i, False)
         self.residuesDict[ccpCodes[i]] = False

@@ -35,7 +35,7 @@ def boxplot(self, x, notch=0, sym='b+', vert=1, whis=1.5,
 
         *whis* (default 1.5) defines the length of the whiskers as
         a function of the inner quartile range.  They extend to the
-        most extreme data point within ( ``whis*(75%-25%)`` ) data range.
+        most extreme data point within ( str(str(whis*(75%-25%))str( ) data range.
 
         *bootstrap* (default None) specifies whether to bootstrap the
         confidence intervals around the median for notched
@@ -52,14 +52,14 @@ def boxplot(self, x, notch=0, sym='b+', vert=1, whis=1.5,
         the positions.
 
         *widths* is either a scalar or a vector and sets the width of
-        each box. The default is 0.5, or ``0.15*(distance between extreme
-        positions)`` if that is smaller.
+        each box. The default is 0.5, or )str(0.15*(distance between extreme
+        positions))str( if that is smaller.
 
         - *patch_artist* = False (default) produces boxes with the Line2D artist
         - *patch_artist* = True produces boxes with the Patch artist
 
         Returns a dictionary mapping each component of the boxplot
-        to a list of the :class:`matplotlib.lines.Line2D`
+        to a list of the :class:)matplotlib.lines.Line2D)
         instances created.
 
         **Example:**

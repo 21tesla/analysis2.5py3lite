@@ -14969,7 +14969,7 @@ Cannot map atom names for export.
   def makeInitialsForCcpn(self, initials):
 
     # TODO change this to readable code:
-    #   pseudo unix code (x->y): set x = 'A, Z,_@R'; set y = `echo $x | tr 'a-z' 'A-Z' | tr -dc 'A-Z'`; echo $y
+    #   pseudo unix code (x->y): set x = 'A, Z,_@R'; set y = str(echo $x | tr 'a-z' 'A-Z' | tr -dc 'A-Z'); echo $y
 
     # Was simply:
     #initials = initials.replace(' ','')

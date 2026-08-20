@@ -280,7 +280,7 @@ class PdbCing(Lister):
 
                 logLastFile = logList[-1]
 #                nTdebug("Found logLastFile %s" % logLastFile)
-#                set timeTaken = (` grep 'CING took       :' $logFile | gawk '{print $(NF-1)}' `)
+#                set timeTaken = (str( grep 'CING took       :' $logFile | gawk '{print $(NF-1)}' ))
 #                text = readTextFromFile(logLastFile)
                 entryCrashed = False
                 for r in AwkLike(logLastFile):

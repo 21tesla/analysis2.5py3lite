@@ -120,7 +120,7 @@ if __name__ == '__main__':
   
   dhcl = nmrConstraintStore.newDihedralConstraintList(name = 'test', details = 'Fake list')
   
-  print(dhcl.serial  # Note that this is 2 because distance list has serial 1!)
+  print(dhcl.serial)  # Note that this is 2 because distance list has serial 1!
   
   #
   # For dihedral constraints, the resonances are linked on the constraint level.

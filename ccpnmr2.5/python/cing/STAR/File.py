@@ -255,8 +255,8 @@ class File (Lister):
                 print('Parsed tagtable up to pos: [%s]' % pos)
 
         if self.verbosity > 2:
-            print('DEBUG Parsed: [%s] datanodes (top level count only)' % \)
-                  len(self.datanodes)
+            print('DEBUG Parsed: [%s] datanodes (top level count only)' %
+                  len(self.datanodes))
 
         if self.check_integrity(recursive = 0):
             print("ERROR: integrity not ok")

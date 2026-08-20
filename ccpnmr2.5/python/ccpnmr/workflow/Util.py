@@ -95,8 +95,7 @@ class WorkFlow:
         tmpCcpnProject = None
       
       if tmpCcpnProject:
-        if not overwrite:
-          print ("  Warning: using existing project!")
+        if not overwrite: print(("  Warning: using existing project!"))
           self.ccpnProject = tmpCcpnProject
         else:
           print ("  Warning: overwriting existing project!")

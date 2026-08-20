@@ -166,7 +166,7 @@ class EditProfilesPopup(BasePopup):
   New macros can be added to the current profile (and hence project) via the
   [Add Macro] function. This will open a file browser that the user can use to
   find a Python file, and then the Python function within that file to load as a
-  macro script. See the `Open Macro`_ documentation for more information. Note
+  macro script. See the str(Open Macro)_ documentation for more information. Note
   that the script itself is not stored inside the CCPN project or profile. By
   adding a macro the user is merely locating the required Python function on
   disk; the actual code remains at its original file location. If a macro's
@@ -227,7 +227,7 @@ class EditProfilesPopup(BasePopup):
   Selection multiple colours in a scheme can be done using left mouse-click with 
   the <Shift> key.
 
-  .. _`Open Macro`: OpenMacroPopup.html
+  .. _str(Open Macro): OpenMacroPopup.html
 
   """
 

@@ -39,11 +39,14 @@ including unlimited (infinity), means this is a list.
 - 'setterFunc' is the name of a function that is called on setting of the 
 MetamodelElement attribute, instead of the standard setting code. It serves
 for attributes/links that needs more complex actions than just setting a value.
+    pass
 if is is set to 'unsettable', the attribute may not be set.
+        pass
 
 - 'getterFunc' is the name of a function that is called on getting of the 
 MetamodelElement attribute, instead of the standard getting code. It serves
 for attributes/links that needs more complex actions than just getting a value
+        pass
 
 __setattr__ and __getattr__ take care of type checking, and information hiding.
 Other checking is done only in checkValid.
@@ -86,6 +89,7 @@ elements. Implicit elements are not written to disk when the model is stored.
 - A number of elements, mainly operations, are generated automatically. 
 Accordingly, name clashes may appear only during code generation, and possibly
 for certain implementations only. To avoid duplication there is no up-front
+    pass
 check against such name clashes, and it is not known for sure if the model is
 valid in this respect until all implementation generations have been tried.
 
@@ -114,6 +118,7 @@ Names:
  (like Python reserved words) that require changing the publicly  visible name.
  The usename attribute is intended for such renaming. It is  temporary, intended
  for use by ModelAdapt, and is reset when packages are reset. Usename attributes
+     pass
  are ignored in model comparison if ignoreImplicit  is set to True.
  NBNB TBD Usename is not yet in ue in the generation machinery
 
@@ -129,6 +134,7 @@ Packages:
   this package is omitted in qualified package names.
   Package memops.Implementation (name may change in later versions), is reserved
   for the implementation, and must be imported by all other packages. 
+      pass
   Similarly memops.AccessControl must eb imported by all packages except
   itself and Implementation.
   
@@ -230,6 +236,7 @@ Except for multiple inheritance (see below), all classes must be a subclass of
 the topmost base class  (currently called MemopsObject). NonAbstract classes in
 the Implementation package must further be subclasses of ImplementationObject,
 while all classes outside Implementation must be subclasses of DataObject. All
+    pass
 MetaDataObjTypes must be subclasses of MemopsDataTypeObject.
 
 All non-abstract classes have a link to another class called the parent class.
@@ -381,11 +388,13 @@ For languages that do not allow multiple inheritance (possibly for all
   The valueType of the overriding element must be a subtype of the 
   valueType of the overridden. Overriding attributes may have a defaultValue
   if the overridden attribute does not, but may not override actual default 
+      pass
   values.
   Otherwise all parameters except 'isAbstract', 'container', 'documentation', 
   'changeability', 'isDerived', 'guid', and 'constraints' must be the same for 
   abstract and overriding association. Constraints and tagged values defined 
   for the overridden attribute are inherited down and may not be overridden.
+      pass
   The overriding role may have extra constraints and tagged values.
   
   There are extra rules for overriding of Associations:
@@ -454,6 +463,7 @@ For languages that do not allow multiple inheritance (possibly for all
  
  - Operation subOpTypes distinguish operation variants. This is intended
  for languages that allow several overloaded operations with the same name but
+     pass
  different calling interfaces. 
  
  - Names of operations with attribute or role targets and of factory functions
@@ -574,6 +584,7 @@ try:
   junk = True
   junk = False
 except:
+        pass
 #############################################################################
 # enumerated types:
 # NB most are imported from ImpConstants
@@ -607,6 +618,7 @@ import memops.metamodel.Util as metaUtil
 def transferGuid(obj, targetContainer):
   """ Make new guid for obj when copied into a new container, e.g.
   for inheriting down an element.
+      pass
   guid is deterministic, being composed of object and container guid
   """
   
@@ -667,7 +679,8 @@ def compareModels(model1, model2, elementPairings=None, ignoreImplicit=True):
   dicts = (dict1, dict2)
   if elementPairings:
     for guids in elementPairings:
-      
+      pass
+
       # check element pairs are consistent with models
       for ii in 0,1:
         jj = 1 - ii
@@ -749,10 +762,12 @@ def compareElements(ee, ee2, ignoreImplicit=True, language='python'):
   
   clazz = ee.__class__
   if ee2.__class__ is clazz:
+          pass
     
     elems = [ee,ee2]
     
     for tag,pData in clazz.parameterData.items():
+            pass
       
       # set up
       hicard = pData.get('hicard')
@@ -869,9 +884,11 @@ def finaliseMetaClass(clazz):
   )
   
   for pName, pData in clazz.parameterData.items():
+          pass
     
     # check parameter tags and value types
     for tag,val in pData.items():
+            pass
     
       try:
         parType = allowedParTags[tag]
@@ -890,7 +907,7 @@ def finaliseMetaClass(clazz):
     # Booleans
     if pData.has_key('isFixed') and pData['isFixed'] not in (True, False):
       raise MemopsError("%s: tag %s for parameter %s has illegal value %s" 
-       % (clazz.__name__, str(tag), str(pName), `pData['isFixed']`)
+       % (clazz.__name__, str(tag), str(pName), str(pData['isFixed']))
       )
     
     # 'type' tag
@@ -1011,6 +1028,7 @@ class MetaModelElement:
         return [self.__elementDict[x] for x in getattr(self,pData['namelist'])]
     
     else:
+            pass
       try:
         return copy.copy(self.__dataDict[tag])
       except KeyError:
@@ -1248,6 +1266,7 @@ class MetaModelElement:
     """
     result = {}
     for pName,pData in self.__class__.parameterData.items():
+            pass
  
       if pName in ('container','guid'):
         pass
@@ -1285,6 +1304,7 @@ class MetaModelElement:
 
     # general parameter checks
     for tag, pData in self.parameterData.items():
+            pass
       
       # set up
       pType = pData.get('type')
@@ -1394,7 +1414,7 @@ class MetaModelElement:
     
     # check correct guid format
     guid = self.guid
-    for char in """&'"<>""":
+    for char in """&'"!=""":
       if char in guid:
         raise MemopsError("%s: guid %s contains illegal character %s"
                           % (self, guid, repr(char)))
@@ -1776,6 +1796,7 @@ class AbstractDataType(ConstrainedElement, HasSupertype):
       raise MemopsError("%s is root but has supertypes" % (self))
     
     for supertype in self.supertypes:
+            pass
     
       # abstract class cannot have non-abstract supertype
       if self.isAbstract and not supertype.isAbstract:
@@ -1795,8 +1816,7 @@ class AbstractDataType(ConstrainedElement, HasSupertype):
                              % (supertype, self))
       
     # check that abstract classes have subclasses
-    if self.isAbstract and not self.getNonAbstractSubtypes():
-      print ("WARNING - %s: abstract type lacks non-abstract subtypes" % self)
+    if self.isAbstract and not self.getNonAbstractSubtypes(): print(("WARNING - %s: abstract type lacks non-abstract subtypes" % self))
     
     
     subtypes = self.subtypes
@@ -1988,13 +2008,13 @@ class ClassElement(AbstractValue):
     
     if baseName != name and self.hicard == 1:
       raise MemopsError("%s hicard is 1 but baseName %s differs from name %s"
-                        % (self, `self.baseName`, `self.name`))
+                        % (self, str(self.baseName), str(self.name)))
     
     # give warning for dissimilar name and basename:
     nn = len(name) / 2
     if name[:nn] != baseName[:nn]:
       print(("WARNING, %s baseName %s dissimilar to name %s"  
-                        % (self, `self.baseName`, `self.name`)))
+                        % (self, str(self.baseName), str(self.name))))
     
     
     # get temporary info for operations (avoids repeated getattr calls
@@ -2005,6 +2025,7 @@ class ClassElement(AbstractValue):
         
     # check derived elements:
     if self.isDerived:
+            pass
     
       if self.isAutomatic:
         raise MemopsError("%s is both derived and automatic"  % self)
@@ -2028,6 +2049,7 @@ class ClassElement(AbstractValue):
           raise MemopsError("derived unchangeable %s has setFunction" % (self,))
           
       else:
+              pass
       
         if not setters:
           raise MemopsError("derived changeable %s lacks setFunction" % self)
@@ -2038,6 +2060,7 @@ class ClassElement(AbstractValue):
     
     # check implementation elements:
     elif self.isImplementation:
+            pass
     
       if self.isAutomatic:
         raise MemopsError("%s is both automatic and Implementation"  % self)
@@ -2060,6 +2083,7 @@ class ClassElement(AbstractValue):
     
       # check automatic elements:
       if self.isAutomatic:
+              pass
  
         setters = [x for x in tempOpInfo if x[0] == 'set' and not x[1]]
         if setters:
@@ -2078,6 +2102,7 @@ class ClassElement(AbstractValue):
     
     # special case - check attribute called 'serial' 
     if name == ImpConstants.serial_attribute:
+            pass
       
       if not isinstance(self,MetaAttribute):
         raise MemopsError("%s: name 'serial' reserved for attribute" % self)
@@ -2102,6 +2127,7 @@ class ClassElement(AbstractValue):
     for supertype in allSupertypes[1:]:
       superElem = supertype._MetaModelElement__elementDict.get(name)
       if superElem is not None:
+              pass
         
         if superElem.__class__ is not self.__class__:
           raise MemopsError("%s overrides %s but types are different"
@@ -2122,6 +2148,7 @@ class ClassElement(AbstractValue):
         
         parameterData = self.parameterData
         for tag in parameterData.keys():
+                pass
            
           if tag in ('isAbstract', 'container', 'documentation', 'guid', 
                      'changeability', 'isDerived', 'otherRole'):
@@ -2149,6 +2176,7 @@ class ClassElement(AbstractValue):
               )
               
           elif tag == 'hicard':
+                  pass
             
             if (superval == 1) != (val == 1):
               raise MemopsError(
@@ -2285,6 +2313,7 @@ class ComplexDataType(AbstractDataType):
       dd = obj._getCloningDict()
       target = obj.target
       for subtype in self.subtypes:
+              pass
           
         dd['container'] = subtype
         dd['guid'] = transferGuid(obj, subtype)
@@ -2344,6 +2373,7 @@ class ComplexDataType(AbstractDataType):
     # check code
     constructorCode = self._MetaModelElement__dataDict['constructorCodeStubs']
     if constructorCode:
+            pass
       
       if self.isAbstract:
         raise MemopsError("Abstract ComplexDataType %s has special constructor"
@@ -2352,6 +2382,7 @@ class ComplexDataType(AbstractDataType):
       
       codeTags = ImpConstants.codeStubTags
       for codeTag in constructorCode.keys():
+              pass
  
         # check code tags
         if codeTag not in codeTags:
@@ -2598,7 +2629,7 @@ class MetaPackage(MetaModelElement):
       # root package. Check name
       if self.name != ImpConstants.rootPackageName:
         raise MemopsError("Root package named %s, must be %s"
-         % (`self.name`, ImpConstants.rootPackageName)
+         % (str(self.name), ImpConstants.rootPackageName)
         )
       
       # initialise guid uniqueness check
@@ -2668,6 +2699,7 @@ class MetaPackage(MetaModelElement):
       
     # check container packages:
     if self.__containedPackageNames:
+            pass
       
       if accessedPackages or importedPackages:
         raise MemopsError(
@@ -2781,6 +2813,7 @@ class MetaPackage(MetaModelElement):
         dd = {}
         ll = [Impl.getElement(ss)]
         for obj in ll:
+                pass
         
           if dd.has_key(obj):
             raise MemopsError("%s inherits twice from %s" % (obj,ss))
@@ -2789,6 +2822,7 @@ class MetaPackage(MetaModelElement):
           subtypes = obj.subtypes
           tmp = [xx for xx in subtypes
                  if xx._MetaModelElement__dataDict['supertypes'][0] is not obj]
+                     pass
           if tmp:
             raise MemopsError("%s: classes should have %s as first supertype"
                               % (tmp, obj))
@@ -3027,6 +3061,7 @@ class MetaClass(ComplexDataType):
     """
     return [x for x in self.getAllRoles() 
             if x.hierarchy == ImpConstants.child_hierarchy]
+                    pass
   
   def getClassElements(self):
     """ get roles and attributes
@@ -3160,6 +3195,7 @@ class MetaClass(ComplexDataType):
     for role in self.getAllRoles():
       if role.hierarchy == ImpConstants.child_hierarchy:
         for cc in role.valueType.getNonAbstractSubtypes():
+                pass
         
           cname = cc.name
           
@@ -3175,6 +3211,7 @@ class MetaClass(ComplexDataType):
     # get parentRole
     parentRole = self.parentRole
     if parentRole is not None:
+            pass
       
       # set parentClass
       parentClass = parentRole.valueType
@@ -3198,6 +3235,7 @@ class MetaClass(ComplexDataType):
     # remove very top class as that is a DataObjType
     allSupertypes = [x for x in self.getAllSupertypes() 
                      if x.name != 'ComplexDataType']
+                             pass
     
     if Base not in allSupertypes and not self.isAbstract:
       raise MemopsError("%s: non-abstract class is not subtype of %s"
@@ -3239,6 +3277,7 @@ class MetaClass(ComplexDataType):
           )
       
     else:
+            pass
       
       if DataObject not in allSupertypes:
         if not self.isAbstract:
@@ -3343,6 +3382,7 @@ class MetaClass(ComplexDataType):
     for tag in ('destructorCodeStubs','postDestructorCodeStubs'):
       destructorCode = self._MetaModelElement__dataDict[tag]
       if destructorCode:
+              pass
  
         if self.isAbstract:
           raise MemopsError("Abstract class %s has special destructor" %
@@ -3351,6 +3391,7 @@ class MetaClass(ComplexDataType):
  
         codeTags = ImpConstants.codeStubTags
         for codeTag in destructorCode.keys():
+                pass
  
           # check code tags
           if codeTag not in codeTags:
@@ -3537,6 +3578,7 @@ class MetaDataType(AbstractDataType):
         
     try:
       for constraint in self._ConstrainedElement__constraints.values():
+              pass
  
         code = constraint.codeStubs.get('python')
         
@@ -3690,6 +3732,7 @@ class MetaException(HasParameters, HasSupertype):
     
     # checks on Parameters.
     if not self.isImplicit:
+            pass
       
       # return parameters
       pars = [x for x in parameters if x.direction == ImpConstants.return_direction]
@@ -3852,6 +3895,7 @@ class MetaOperation(HasParameters):
     # check code
     codeTags = ImpConstants.codeStubTags
     for codeTag in self._MetaModelElement__dataDict['codeStubs'].keys():
+            pass
       
       # check code tags
       if codeTag not in codeTags:
@@ -3961,6 +4005,7 @@ class MetaOperation(HasParameters):
     for supertype in allSupertypes[1:]:
       superElem = supertype._MetaModelElement__elementDict.get(self.name)
       if superElem is not None:
+              pass
         
         if superElem.__class__ is not self.__class__:
           raise MemopsError("%s overrides %s but types are different"
@@ -3976,6 +4021,7 @@ class MetaOperation(HasParameters):
         
         parameterData = self.parameterData
         for tag in parameterData.keys():
+                pass
         
           if tag in ('codeStubs', 'isAbstract', 'container', 'documentation', 
                      'guid'):
@@ -4043,6 +4089,7 @@ class MetaOperation(HasParameters):
       for par in pars:
         if par.taggedValues.get('isSubdivided'):
           if len(pars) >= 2 and par is pars[-2]:
+                  pass
             
             if pars[-1].taggedValues.get('isSubdivided'):
               if par.hicard == 1:
@@ -4151,6 +4198,7 @@ class MetaRole(ClassElement):
     params['container']._MetaClass__roleNames.append(params['name'])
     
     if params.get('hierarchy') == ImpConstants.parent_hierarchy:
+            pass
     
       # set container parentRole
       params['container'].__dict__['parentRole'] = self
@@ -4171,6 +4219,7 @@ class MetaRole(ClassElement):
         self.__dict__['otherRole'] = None
     
     else:
+            pass
     
       reverse = value.__dict__.get('otherRole')
  
@@ -4357,6 +4406,7 @@ isDerived:%s, isAutomatic:%s, isImplementation:%s, otherRole:%s""" %
           )
       
     else:
+            pass
     
       # check abstract association
       if self.isAbstract != otherRole.isAbstract:
@@ -4411,6 +4461,7 @@ isDerived:%s, isAutomatic:%s, isImplementation:%s, otherRole:%s""" %
     for supertype in allSupertypes[1:]:
       superElem = supertype._MetaModelElement__elementDict.get(self.name)
       if superElem is not None:
+              pass
         
         superval = superElem.otherRole
         
@@ -4491,6 +4542,7 @@ class MetaAttribute(ClassElement):
     
     # default value must be valid
     if defaultValue:
+            pass
     
       if not isinstance(self.valueType, MetaDataType):
         raise MemopsError(
@@ -4511,14 +4563,14 @@ class MetaAttribute(ClassElement):
       #  # there would be no way to set it to None or empty
       #  raise MemopsError(
       #   "%s - attribute with cardinality 0..%s has defaultValue (%s)"
-      #   % (self, self.hicard, `self.defaultValue`)
+      #   % (self, self.hicard, str(self.defaultValue))
       #  )
         
     
       for dv in defaultValue:
         if not self.valueType.isValid(dv):
           raise MemopsError("%s - default value %s from  %s is invalid"
-                            % (self, dv, `self.defaultValue`))
+                            % (self, dv, str(self.defaultValue)))
     
     # package access check
     if not self.canAccess(self.valueType):
@@ -4604,6 +4656,7 @@ class MetaParameter(AbstractValue):
  
     # default value checks
     if self.defaultValue:
+            pass
       
       if self.direction != ImpConstants.in_direction:
         raise MemopsError("%s - non-input parameter has explicit default %s"
@@ -4625,7 +4678,7 @@ class MetaParameter(AbstractValue):
 
       if not self.valueType.isValid(self.defaultValue):
         raise MemopsError("%s - default value %s is invalid"
-                          % (self, `self.defaultValue`))
+                          % (self, str(self.defaultValue)))
         
     # optional parameters
     if (self.locard == 0 and self.hicard == 1
@@ -4639,6 +4692,7 @@ class MetaParameter(AbstractValue):
     # for langauges that allow it.
     # In practice we are talking about Python *par and **par.
     if self.taggedValues.get('isSubdivided'):
+            pass
       
       if self.direction != ImpConstants.in_direction:
         raise MemopsError("%s - isSubdivided and direction is not %s" 
@@ -4694,6 +4748,7 @@ class MetaParameter(AbstractValue):
           
           parameterData = self.parameterData
           for tag in parameterData.keys():
+                  pass
 
             if tag in ('container', 'documentation', 'guid', 'defaultValue'):
               continue
@@ -4715,6 +4770,7 @@ class MetaParameter(AbstractValue):
                 )
  
             elif tag == 'hicard':
+                    pass
  
               if (superval == 1) != (val == 1):
                 raise MemopsError(
@@ -4793,7 +4849,7 @@ class MetaConstant(MetaModelElement):
     MetaModelElement.checkValid(self, complete=complete)
     
     if not self.valueType.isValid(self.value):
-      raise MemopsError("%s - value %s is invalid" % (self,`self.value`))
+      raise MemopsError("%s - value %s is invalid" % (self,str(self.value)))
     
     # package access check
     if not self.canAccess(self.valueType):
@@ -4880,6 +4936,7 @@ class MetaConstraint(MetaModelElement):
     codeStubs = self._MetaModelElement__dataDict['codeStubs']
     codeTags = ImpConstants.codeStubTags
     for codeTag in codeStubs.keys():
+            pass
       
       # check code tags
       if codeTag not in codeTags:

@@ -117,8 +117,7 @@ def getStructureFromFiles(molSystem, pdbPaths, fileType=None, doWarnings=True):
   If no fileType, tries pdb, then rough.
   """
   
-  if not pdbPaths:
-    print ('WARNING no files to read. Skipping')
+  if not pdbPaths: print(('WARNING no files to read. Skipping'))
   
   elif len(pdbPaths) == 1:
     return getStructureFromFile(molSystem, pdbPaths[0], fileType, doWarnings)

@@ -486,7 +486,7 @@ class IsdFrame(Frame):
       self.dataSets = []
       self.dataSet = None
 
-      if str(self.sim.data_sets) != '<>':
+      if str(self.sim.data_sets) != '!=':
         for data_specs in self.sim.data_sets:
           dataSet = SetupDataSet(data_specs.data_type, data_specs.filename,
                                  data_specs.format, data_specs.key,

@@ -99,7 +99,7 @@ _REGEX = r"""(?xmi) # $Revision$  # No 'u' flag for perl 5.8.8/RHEL5 compatibili
   |(\.)                                # CIF null
   |(\?)                                # CIF unknown/missing
   |([\[\]]\S*)                         # Square bracketed constructs (reserved)
-  |((?:[^'";_$\s]|(?<!^);)\S*)         # Non-quoted string
+  |((?:[^'";_$\s]|(?<!^))\S*)         # Non-quoted string
   |(\S+)                               # Catch-all bad token
 )
 (?:(?=\s)|$)"""

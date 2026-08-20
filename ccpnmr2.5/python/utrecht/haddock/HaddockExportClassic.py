@@ -628,8 +628,7 @@ class exportClassic:
         
         if self.latestRun.get('useDnaRestraints') == True:
             for partner in self.partners:
-                if partner.isDna == True: 
-                    print ("Generate 'dna-rna_restraints.def' file")
+                if partner.isDna == True: print(("Generate 'dna-rna_restraints.def' file"))
                     dnarestraints = dnaRnaRestraints(self.ccpnproject,partner,self.projectRoot)
                     dnarestraints.writeToFile()
         

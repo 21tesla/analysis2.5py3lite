@@ -18,7 +18,7 @@ import unittest
 # Import using optional plugins.
 try:
     from cing.PluginCode.molgrap import Molgrap #@UnusedImport Keep to indicate dep and proper handeling.
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( MOLGRAP_STR, getCallerFileName() ))
     raise SkipTest(MOLGRAP_STR)
 # end try

@@ -83,8 +83,8 @@ class ViewStructurePopup(BasePopup):
 
   Much of the NMR-derived information that is presented in the graphical display
   will be controlled via separate popups, for example the [Show On Structure]
-  button of the `Assignment Panel`_ or [Show Selected On Structure] in the
-  `Restraints and Violations`_ popup. Nonetheless, some data can be added to the
+  button of the str(Assignment Panel)_ or [Show Selected On Structure] in the
+  str(Restraints and Violations)_ popup. Nonetheless, some data can be added to the
   display via the viewer directly; ensemble RMSDs and other validation parameters
   can be superimposed as coloured spheres of various sizes.
 
@@ -112,8 +112,8 @@ class ViewStructurePopup(BasePopup):
   the current model view.
 
   .. _Structures: EditStructuresPopup.html
-  .. _`Assignment Panel`: EditAssignmentPopup.html
-  .. _`Restraints and Violations`: BrowseConstraintsPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
+  .. _str(Restraints and Violations): BrowseConstraintsPopup.html
 
   """
 

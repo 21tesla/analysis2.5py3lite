@@ -484,11 +484,10 @@ def getAtomsTorsion(atoms):
   
   residue = list(atoms)[0].residue
   for i in (1,2,3):
-    if not areAtomsBound(atoms[i-1],atoms[i]):
-      print ('ERROR, Get atom torsion failed: Atoms %s and %s are not bound' % (atoms[i-1],atoms[i]))
+    if not areAtomsBound(atoms[i-1],atoms[i]): print(('ERROR, Get atom torsion failed: Atoms %s and %s are not bound' % (atoms[i-1],atoms[i])))
       #showWarning('Failure',
       #            'Get atom torsion failed: Atoms %s and %s are not bound' % (atoms[i-1],atoms[i]))
-      return
+    return
     
     residue1 = atoms[i].residue
     if residue1 is not residue:

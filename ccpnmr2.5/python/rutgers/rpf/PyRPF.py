@@ -165,14 +165,14 @@ class PyRpfPopup(BasePopup):
   
   The table of unexplained peaks is a regular Analysis table giving details of
   all the peaks and allowing the user to find and edit the peaks. This kind
-  of table is documented for the `Peak Lists`_ section.
+  of table is documented for the str(Peak Lists)_ section.
   
   **Missing Peaks**
   
   This is a table of synthetic peaks (in a separate list to the input one) that
   represent the locations of potentially missing short-distance peaks. It is a
   regular Analysis table giving details of all the locations and allowing the
-  user to find the peaks. This kind of table is documented for the `Peak Lists`_
+  user to find the peaks. This kind of table is documented for the str(Peak Lists)_
   section.
 
   **Graph**
@@ -189,7 +189,7 @@ class PyRpfPopup(BasePopup):
   and F-measure scores (RPF scores): structure quality assessment measures based
   on information retrieval statistics. J Am Chem Soc 127, 1665-74 (2005)*
   
-  .. _`Peak Lists`: EditPeakListsPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
   
   """
 

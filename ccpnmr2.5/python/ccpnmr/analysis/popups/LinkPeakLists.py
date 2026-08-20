@@ -100,7 +100,7 @@ class LinkPeakListsPopup(BasePopup):
   peaks carry full assignments or not, all that is important is that there are
   some peaks to specify locations and some form of assignment to copy. The
   easiest way to setup initial assignments on a root spectrum, after picking
-  some peaks, is to use the `Initialise Root Resonances`_ option.
+  some peaks, is to use the str(Initialise Root Resonances)_ option.
 
   In normal operation the user chooses a peak list to act as the the source of
   the root assignments and positions, and maybe a spectrum window to view those
@@ -174,7 +174,7 @@ class LinkPeakListsPopup(BasePopup):
   the chemical shift weighting of the root spectrum can allow assignments to be
   made if they were previously out of bounds.
 
-  .. _`Initialise Root Resonances`: InitRootAssignmentsPopup.html
+  .. _str(Initialise Root Resonances): InitRootAssignmentsPopup.html
   
   """
 
@@ -530,9 +530,9 @@ class LinkPeakListsPopup(BasePopup):
         for spectrum in experiment.dataSources:
           if len(spectrum.dataDims) != 2:
             if experiment.refExperiment:
-          if experiment.refExperiment.name not in ('H[N[CO]]','H[N[co[CA]]]'):
-            continue
-        else:
+              if experiment.refExperiment.name not in ('H[N[CO]]','H[N[co[CA]]]'):
+                continue
+            else:
               continue
         
           for peakList in spectrum.peakLists:

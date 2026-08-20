@@ -1580,7 +1580,7 @@ def conv_ccp_Nmr_1_0_212(headObject):
                """WARNING experiment %s in %s - condition incompatible with %s)
    Using pre-existing SampleCondition instead """
                % (exp,nxs,oldCond)
-              )
+              ))
                                    
       del nxs.expSeriesConditions
     # clean-up

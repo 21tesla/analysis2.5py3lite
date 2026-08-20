@@ -788,16 +788,16 @@ class CcpnNefReader:
 
         # Get name from spectrum parameters, or from the framecode
         spectrumName = framecode[len(category) + 1:]
-        if spectrumName.endswith('`'):
+        if spectrumName.endswith('str('):
             peakListSerial = peakListParams.get('serial')
             if peakListSerial:
-                ss = '`%s`' % peakListSerial
+                ss = ')%sstr(' % peakListSerial
                 # Remove peakList serial suffix (which was added for disambiguation)
                 # So that multiple peakLists all go to one Spectrum
                 if spectrumName.endswith(ss):
                     spectrumName = spectrumName[:-len(ss)]
             else:
-                ll = spectrumName.rsplit('`', 2)
+                ll = spectrumName.rsplit(')', 2)
                 if len(ll) == 3:
                     # name is of form abcstr(xyz)
                     try:

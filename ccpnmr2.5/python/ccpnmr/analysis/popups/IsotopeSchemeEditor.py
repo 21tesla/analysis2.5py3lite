@@ -97,8 +97,8 @@ class IsotopeSchemeEditor(BasePopup):
   useful in several places withing Analysis, including giving more intelligent
   assignment options and in the generation of distance restraints by matching
   peak positions to chemical shifts. Although the schemes may be used directly
-  they are typically used as reference information for configuring the `Isotope
-  Labelling`_ system; where isotope labelling patterns are tied to particular
+  they are typically used as reference information for configuring the str(Isotope
+  Labelling)_ system; where isotope labelling patterns are tied to particular
   molecules and experiments.
 
   Because all of the different isotope labelled versions (isotopomers) of each
@@ -225,7 +225,7 @@ class IsotopeSchemeEditor(BasePopup):
 
   Also an options menu appears when the right mouse button is clicked.
 
-  .. _`Isotope Labelling`: EditMolLabellingPopup.html
+  .. _str(Isotope Labelling): EditMolLabellingPopup.html
  
   """
 

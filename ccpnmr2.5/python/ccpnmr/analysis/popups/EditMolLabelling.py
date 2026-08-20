@@ -117,7 +117,7 @@ class EditMolLabellingPopup(BasePopup):
   allows a greater level of control and allows the isotopic labelling
   to be automatically set according to context. The standard labelling schemes,
   which are also used as references for molecule specific patterns, may be
-  created and edited via the `Reference Isotope Schemes`_ popup.
+  created and edited via the str(Reference Isotope Schemes)_ popup.
   
   A given molecule can be represented by several different samples, each with
   distinct isotope patterns. Each sample is associated with the NMR experiments
@@ -224,7 +224,7 @@ class EditMolLabellingPopup(BasePopup):
   the adjacent [Set Residue Composition From Scheme:]. The residue will now be listed in
   the table as using the "uni_15N", and not "NatAbun" like all the others.
   
-  .. _`Reference Isotope Schemes`: IsotopeSchemeEditor.html
+  .. _str(Reference Isotope Schemes): IsotopeSchemeEditor.html
 
   """
 

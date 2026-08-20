@@ -15,7 +15,7 @@ import unittest
 # Import using optional plugins.
 try:
     from cing.PluginCode.procheck import Procheck #@UnusedImport Keep to indicate dep and proper handeling.
-except ImportWarning, extraInfo: # Disable after done debugging; can't use nTdebug yet.
+except ImportWarning as extraInfo: # Disable after done debugging; can't use nTdebug yet.
     print("Got ImportWarning %-10s Skipping unit check %s." % ( PROCHECK_STR, getCallerFileName() ))
     raise SkipTest(PROCHECK_STR)
 # end try

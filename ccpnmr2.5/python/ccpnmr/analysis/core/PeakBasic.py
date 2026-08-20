@@ -3847,7 +3847,7 @@ def structurePredictNoePeakList(structure, spectrum, distThreshold=5.0, progress
         
         if labelling:
           for atomI in atomSetI.atoms:
-        elemI = atomI.chemAtom.elementSymbol
+            elemI = atomI.chemAtom.elementSymbol
             isotopeI = DEFAULT_ISOTOPES[elemI]
         for atomJ in atomSetJ.atoms:
               elemJ = atomJ.chemAtom.elementSymbol

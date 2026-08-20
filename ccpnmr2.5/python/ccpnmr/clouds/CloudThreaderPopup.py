@@ -445,9 +445,9 @@ def searchPosterior(project, residues, spinSystems, clouds, known=None, nSteps=1
       r = random()
      
       if delta and delta < r:
-    success = 1
-         
-    if success: 
+        success = 1
+
+    if success:
       p0 = p
       print(p0)
       assignment0 = assignment

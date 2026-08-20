@@ -880,11 +880,10 @@ class OpenSpectrumPopup(BasePopup):
       # Check referencing and possibly reset.
       if self.verifySelect.getSelected():
         incorrect, text = isReferencingIncorrect(spectrum, fixErrors=True)
-        if incorrect:
-          print """\nWARNING: Referencing was reset
+        if incorrect: print("""\nWARNING: Referencing was reset)
          The following problem(s) were found and fixed:
-%s\n""" % text
-      
+%s\n""" % text)
+
       else:
         incorrect, text = isReferencingIncorrect(spectrum)
         if (incorrect

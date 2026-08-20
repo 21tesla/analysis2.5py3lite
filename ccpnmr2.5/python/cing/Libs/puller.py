@@ -41,7 +41,7 @@ def pull_data(from_db, to_db, tables):
 
 def print_usage():
     myName = sys.argv[0]
-    print """
+    print("""
 Usage: %s -f source_server -t destination_server table [table ...]
     -f, -t = driver://user[:password]@host[:port]/database
 
@@ -50,7 +50,7 @@ Example: %s -f oracle://someuser:PaSsWd@db1/TSH1 \\
 
 Example: %s -f oracle://someuser:PaSsWd@db1/TSH1 \\
     -t mysql://root@db2:3307/reporting table_one table_two
-    """ % (myName, myName, myName)
+    """ % (myName, myName, myName))
 
 def quick_mapper(table):
     base = declarative_base()    

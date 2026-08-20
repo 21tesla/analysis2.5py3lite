@@ -112,9 +112,9 @@ class DangleGui(BasePopup):
   DANGLE also provides an indication of the degeneracy in the relationship
   between shift measurements and conformation at each site.
 
-  For more documentation see the `DANGLE web site`_ at SourceForge.
+  For more documentation see the str(DANGLE web site)_ at SourceForge.
   
-  .. _`DANGLE web site`: http://dangle.sourceforge.net/
+  .. _str(DANGLE web site): http://dangle.sourceforge.net/
 
   **Reference**
   

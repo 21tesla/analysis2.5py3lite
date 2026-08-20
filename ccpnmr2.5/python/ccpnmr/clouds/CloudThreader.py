@@ -397,9 +397,9 @@ def getResidueLikelihood(residue1, spinSystem1, assignment, clouds, interDistrib
         else:
           q = floor
 
- 	p2 += log(q)
- 	N2 += 1
-                    
+      p2 += log(q)
+      N2 += 1
+
     if N2 and p2 > -9.9:
       p2 /= float(N2)
       N2 = 1

@@ -272,7 +272,7 @@ def mergeResonances(project, verbose=False):
 
   resonanceMap = {}
   for n, crosspeak in enumerate(project.crosspeaks):
-    if (n%100 == 0): print 'HERE222', n
+    if (n%100 == 0): print('HERE222', n)
     for dim in range(crosspeak.ndim):
       resid = crosspeak.resid[dim]
       atname = crosspeak.atname[dim]

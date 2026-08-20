@@ -107,7 +107,7 @@ class EditSpinSystemPopup(BasePopup):
   * The "Seq. Links" tab is used to display how spin systems have been
     connected as sequential neighbours. Such links are independent of a
     full residue assignment, and usually derive from the peak matching
-    performed by tools like the `Protein Sequence Assignment`_ option.
+    performed by tools like the str(Protein Sequence Assignment)_ option.
     Often spin systems are connected as sequential neighbours before
     they are fitted into a protein chain to give the final residue assignment.
 
@@ -141,7 +141,7 @@ class EditSpinSystemPopup(BasePopup):
   be assigned to the relevant residue if one of the contained resonances
   is assigned elsewhere to a specific atom in a residue; typically
   residue assignments are make when resonances are assigned to atoms
-  via the `Assignment Panel`_.
+  via the str(Assignment Panel)_.
 
   The "Show" functions are used to show tables of the spectrum peaks and
   resonances that connect to selected spin systems, and from these the user
@@ -160,8 +160,8 @@ class EditSpinSystemPopup(BasePopup):
   "?" in the headings of a column to filter the table rows according to a
   user-specified value.
   
-  .. _`Protein Sequence Assignment`: LinkSeqSpinSystemsPopup.html
-  .. _`Assignment Panel`: EditAssignmentPopup.html
+  .. _str(Protein Sequence Assignment): LinkSeqSpinSystemsPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
   
   """
 

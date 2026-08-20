@@ -134,7 +134,7 @@ class MergeNrgBmrbShifts(DataHandler, NmrStarHandler):
                     break
                 self.bmrbCodes.append(sysArgValue)
         if not self.bmrbCodes:
-            raise self.DataHandlerError, "Need to pass in at least one BMRB code with -bmrbCodes flag for this script to work!"
+            raise self.DataHandlerError("Need to pass in at least one BMRB code with -bmrbCodes flag for this script to work!")
 
 
 if __name__ == "__main__":

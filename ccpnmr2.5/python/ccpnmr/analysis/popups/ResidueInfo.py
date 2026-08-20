@@ -58,7 +58,7 @@ class ResidueInfoPopup(BasePopup):
   **Residue Assignment Information**
   
   This popup is designed to give an alternative view of residue assignment
-  status to the `Atom Browser`_. The idea is that the user selects a particular
+  status to the str(Atom Browser)_. The idea is that the user selects a particular
   molecular chain from the upper-left pulldown menu and then a *type* of residue
   from that chain in the adjacent pulldown. The left hand table then shows all
   the residues of that type within the selected chain's sequence.
@@ -107,7 +107,7 @@ class ResidueInfoPopup(BasePopup):
 
   * Translate: Middle button click & drag + Control key
 
-  _`Atom Browser`: BrowseAtomsPopup.html
+  _str(Atom Browser): BrowseAtomsPopup.html
   
   """
 

@@ -176,7 +176,7 @@ class EditPeakListsPopup(BasePopup):
   values by adding or subtracting a whole number of spectrum widths to their
   position. This is used when a peak lies outside the normal recorded bounds of
   the spectrum but nonetheless still appears within it because as an aliased
-  signal;  [Assign] opens the `Assignment Panel`_ to control which resonances
+  signal;  [Assign] opens the str(Assignment Panel)_ to control which resonances
   have been linked to the dimensions of the peak; to indicate what caused the
   peak. Such assignments may be to the resonances of specific atoms or
   resonances that are currently anonymous;  [Deassign] clears all of the
@@ -271,8 +271,8 @@ class EditPeakListsPopup(BasePopup):
 
   .. _Spectra: EditSpectrumPopup.html
   .. _Experiments: EditExperimentPopup.html
-  .. _`Edit Peak`: EditPeakPopup.html
-  .. _`Assignment Panel`: EditAssignmentPopup.html
+  .. _str(Edit Peak): EditPeakPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
 
   """
   def __init__(self, parent, *args, **kw):
@@ -1384,7 +1384,7 @@ class EditPeakListsPopup(BasePopup):
         if spec.dataType != 'processed':
           continue
       
-  	for peakList in spec.sortedPeakLists():
+      for peakList in spec.sortedPeakLists():
           peakLists.append(peakList)
           
     for i, peakList in enumerate(peakLists):
@@ -1517,7 +1517,7 @@ class SelectedPeaksPopup(BasePopup):
   values by adding or subtracting a whole number of spectrum widths to their
   position. This is used when a peak lies outside the normal recorded bounds of
   the spectrum but nonetheless still appears within it because as an aliased
-  signal;  [Assign] opens the `Assignment Panel`_ to control which resonances
+  signal;  [Assign] opens the str(Assignment Panel)_ to control which resonances
   have been linked to the dimensions of the peak; to indicate what caused the
   peak. Such assignments may be to the resonances of specific atoms or resonances
   that are currently anonymous;  [Deassign] clears all of the resonance
@@ -1537,8 +1537,8 @@ class SelectedPeaksPopup(BasePopup):
   The [Set Details] function can be handy for marking peaks that cause violations
   in a structure calculation and thus need further attention.
 
-  .. _`Edit Peak`: EditPeakPopup.html
-  .. _`Assignment Panel`: EditAssignmentPopup.html
+  .. _str(Edit Peak): EditPeakPopup.html
+  .. _str(Assignment Panel): EditAssignmentPopup.html
 
   """
 

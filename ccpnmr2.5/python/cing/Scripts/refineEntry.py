@@ -13,7 +13,7 @@ Execute like:
 
 #set x = 2kq3
 set x = 1brv
-set ch23 = ( `echo $x | cut -c2-3` )
+set ch23 = ( str(echo $x | cut -c2-3) )
 mkdir -p $D/NMR_REDO/data/$ch23/$x
 cd !$
 $C/python/cing/Scripts/refineEntry.py $x 9 file://$D/NRG-CING/data $D/NMR_REDO . . BY_CH23_BY_ENTRY CING 0 auto 0 0 0 >& $x"_ref".log &

@@ -759,7 +759,7 @@ def buildSdMeanRefDict(project, sourceName='RefDB'):
       
       for bond in chemAtom.chemBonds:
         for chemAtom2 in bond.chemAtoms:
-      if chemAtom2 is not chemAtom:
+          if chemAtom2 is not chemAtom:
         if element == 'H':
           boundName = chemAtom2.name
           break

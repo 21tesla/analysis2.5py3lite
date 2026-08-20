@@ -64,10 +64,10 @@ class EditFitGraphPopup(BasePopup):
   This popup is used to display the fit of a curve, of the displayed equation
   type, to data that has been extracted for a group of spectrum peaks from an
   NMR series. Precisely which kind of data is being fitted depends on the parent
-  tool that this popup window was launched from. For example, for the `Follow
-  Intensity Changes`_ tool the displayed graph is of a time or frequency value
-  on the "X" axis (e.g. T1) verses peak intensity. For the `Follow Shift
-  Changes`_ system the plot is for the parameters of the experiment titration on
+  tool that this popup window was launched from. For example, for the str(Follow
+  Intensity Changes)_ tool the displayed graph is of a time or frequency value
+  on the "X" axis (e.g. T1) verses peak intensity. For the str(Follow Shift
+  Changes)_ system the plot is for the parameters of the experiment titration on
   the "X" axis (e.g concentration) verses chemical shift distance.
 
   The upper graph shows the peak data that was used; the blue points, and the
@@ -84,14 +84,14 @@ class EditFitGraphPopup(BasePopup):
   analysis tool that launched this popup. Any outliers may be removed using
   [Remove Point] (only with good reason) or the peaks themselves may be
   corrected if something has gone awry. Given that the display is launched from
-  the selection of a specific group of peaks from a popup like `Follow Shift
-  Changes`_  or `Follow Intensity Changes`_ and there are usually several peak
+  the selection of a specific group of peaks from a popup like str(Follow Shift
+  Changes)_  or str(Follow Intensity Changes)_ and there are usually several peak
   groups that need to be analysed, the [Previous Set] and [Next Set] buttons can
   be used to quickly jump to the next peak group and see the next curve in the
   analysis results.
 
-  .. _`Follow Intensity Changes`: CalcRatesPopup.html
-  .. _`Follow Shift Changes`: FollowShiftChangesPopup.html
+  .. _str(Follow Intensity Changes): CalcRatesPopup.html
+  .. _str(Follow Shift Changes): FollowShiftChangesPopup.html
 
   """
   def __init__(self, parent, dataFitting, getXYfunction, updateFunction,

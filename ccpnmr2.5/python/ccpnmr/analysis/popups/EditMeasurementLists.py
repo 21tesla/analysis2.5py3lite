@@ -83,7 +83,7 @@ class EditMeasurementListsPopup(BasePopup):
   measurements within a single list. With the exception of blank
   lists for chemical shifts, measurement lists are not made using this popup,
   instead they are made at the point where an analysis is performed, e.g. T1
-  lists are made with data from the `Follow Intensity Changes`_
+  lists are made with data from the str(Follow Intensity Changes)_
   tool. 
 
   The second tab, containing the "Measurements" table displays the details of
@@ -104,10 +104,10 @@ class EditMeasurementListsPopup(BasePopup):
 
   Measurements other than chemical shift, like T1 and T2 relaxation times will only
   appear within this system if a measurement list entity is formally made. Simply
-  measuring values from spectra, for example using the `Follow Intensity Changes`_
+  measuring values from spectra, for example using the str(Follow Intensity Changes)_
   tool
 
-  .. _`Follow Intensity Changes`: CalcRatesPopup.html
+  .. _str(Follow Intensity Changes): CalcRatesPopup.html
   .. _str(Experiments): EditExperimentPopup.html
   
   """

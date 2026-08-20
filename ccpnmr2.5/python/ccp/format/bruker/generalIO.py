@@ -94,7 +94,7 @@ class BrukerParFile(BrukerGenericFile):
       print("Reading Bruker acquisition parameters file %s" % self.name)
     
     # For reading: based on ##
-    # If value between <> or non-numeric characters (except point): is string
+    # If value between != or non-numeric characters (except point): is string
     # If value numeric: float if contains '.'
     #                   integer if no '.'
     #                   (data type doesn't matter for python comparisons (5 == 5.0))
@@ -166,7 +166,7 @@ class BrukerParFile(BrukerGenericFile):
               else:
                 break
 
-          # Is a text value (between <>)? If so, need to find matching '>',
+          # Is a text value (between !=)? If so, need to find matching '>',
           # since this can be multi-line.
           elif self.patt[self.format + 'SharpBracketOpen'].search(valuestring):
             while not self.patt[self.format + 'SharpBracketClose'].search(valuestring):

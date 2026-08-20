@@ -55,16 +55,16 @@ class ViewPeakGroupsPopup(BasePopup):
 
   This popup is used to allow the user to see information about different
   categories of  peak. At present this system is only used by the [Test Shift
-  Match] function  of the `Make Distance Restraints`_ popup.
+  Match] function  of the str(Make Distance Restraints)_ popup.
 
   Textual data about the different groups of peaks is presented in the upper
   panel. The lower buttons allow the user to open tables which lists the peaks
-  in each of the categories. Specifically these open the `Selected Peaks`_
+  in each of the categories. Specifically these open the str(Selected Peaks)_
   table, and from here the user can perform many more functions, including peak
   assignment, deletion and locating peaks in spectrum windows.
 
-  .. _`Make Distance Restraints`: CalcDistConstraintsPopup.html
-  .. _`Selected Peaks`: SelectedPeaksPopup.html
+  .. _str(Make Distance Restraints): CalcDistConstraintsPopup.html
+  .. _str(Selected Peaks): SelectedPeaksPopup.html
 
   """ 
 

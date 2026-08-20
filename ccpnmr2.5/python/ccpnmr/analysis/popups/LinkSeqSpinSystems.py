@@ -102,7 +102,7 @@ class LinkSeqSpinSystemsPopup(BasePopup):
   which are really sequentially linked. Likewise, the tool will show where a
   sequential stretch of assignments best fits with a molecular sequence, but its
   is the users' decision to commit the final choice. A fully automated tool is
-  available using the `Automated Seq. Assignment`_ option, although this is best
+  available using the str(Automated Seq. Assignment)_ option, although this is best
   suited to relatively complete and clean data sets.
 
   This system works with pairs of spectra where one spectrum has peaks that are
@@ -121,7 +121,7 @@ class LinkSeqSpinSystemsPopup(BasePopup):
   For any of the spectra to be used by this system they must be peak picked and 
   corresponding positions must be linked to the relevant spin system and
   resonance assignments, albeit in an anonymous way. This setup is readily
-  achieved by the `Pick & Assign From Roots`_ option. The peaks of different
+  achieved by the str(Pick & Assign From Roots)_ option. The peaks of different
   spectra that relate to the  same amide are only known to be from the same
   amide because of assignment. Several different kinds of spectra may be used,
   including those that detect 13C resonances (like HNCO, HNcaCO, HNcoCA, HNCA
@@ -205,8 +205,8 @@ class LinkSeqSpinSystemsPopup(BasePopup):
   The ability to use spectra that match in a 15N dimension, e.g. HNcaN, HNcoCAN
   will be added in due course.
 
-  .. _`Automated Seq. Assignment`: AutoBackbonePopup.html
-  .. _`Pick & Assign From Roots`: LinkPeakListsPopup.html
+  .. _str(Automated Seq. Assignment): AutoBackbonePopup.html
+  .. _str(Pick & Assign From Roots): LinkPeakListsPopup.html
   
   """
 

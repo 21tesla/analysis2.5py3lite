@@ -80,13 +80,13 @@ class CreateContourFilePopup(BasePopup):
   directory but the file name can be specified by the user.
 
   The contour levels used are the ones that are current for the spectrum,
-  as set in the `Contour Levels dialog`_.
+  as set in the str(Contour Levels dialog)_.
 
-  See also: `Spectrum Contour Files`_, `Add Existing Contour Files`_.
+  See also: str(Spectrum Contour Files)_, str(Add Existing Contour Files)_.
 
-  .. _`Contour Levels dialog`: EditContourLevelsPopup.html
-  .. _`Spectrum Contour Files`: EditContourFilesPopup.html
-  .. _`Add Existing Contour Files`: AddContourFilePopup.html
+  .. _str(Contour Levels dialog): EditContourLevelsPopup.html
+  .. _str(Spectrum Contour Files): EditContourFilesPopup.html
+  .. _str(Add Existing Contour Files): AddContourFilePopup.html
 """
 
   def __init__(self, parent, *args, **kw):

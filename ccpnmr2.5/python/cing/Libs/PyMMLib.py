@@ -1533,7 +1533,7 @@ class PDBFile(list):
                 fil_size_bytes = fil.tell()
                 fil.seek(0, 0)
             except:
-                # this is a adverage file size ;)
+                # this is a adverage file size )
                 fil_size_bytes = 1304189
         else:
             fil_size_bytes = 1304189

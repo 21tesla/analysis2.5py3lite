@@ -231,7 +231,7 @@ def getResidueProbability(ppms, ccpCode, elements, atomTypes=None, ppmsBound=Non
     
     if boundData:
           meanB, sdB, pMissingB, boundB = boundData      
-      dB = ppmB-meanB
+          dB = ppmB-meanB
           eB = dB/sdB   
           pB = exp(-0.5*eB*eB)/(sdB*ROOT_TWO_PI)
       

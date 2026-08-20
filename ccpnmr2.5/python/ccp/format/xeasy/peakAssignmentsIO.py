@@ -299,11 +299,11 @@ class XEasyPeakAssignment:
         
         elif binCode > 0:
 
-          binCode = - (2147483648L - binCode) - 2147483648L
+          binCode = - (2147483648 - binCode) - 2147483648
           
-        if binCode <= -(2L ** exponent):
+        if binCode <= -(2 ** exponent):
           
-          binCode = binCode + 2L ** exponent
+          binCode = binCode + 2 ** exponent
           totalExponent = 32 * i + exponent
           row = totalExponent % 10
           col = totalExponent / 10
@@ -379,7 +379,7 @@ class XEasyPeakAssignment:
     # Get the binary code (based on calculation method Jens Linge - see higher)
     #
     
-    binCodes = [-1L, -1L, -1L, -1L]
+    binCodes = [-1, -1, -1, -1]
     
     for row in range(0, len(self.assignments[assiRow])):
       for col in range(0, len(self.assignments[assiCol])):
@@ -401,10 +401,10 @@ class XEasyPeakAssignment:
           # Deal with overflow
           #
           
-          if binCodes[binCodeEl] - 2L ** exponent > -2147483469L:
-            binCodes[binCodeEl] = binCodes[binCodeEl] - 2L ** exponent
+          if binCodes[binCodeEl] - 2 ** exponent > -2147483469:
+            binCodes[binCodeEl] = binCodes[binCodeEl] - 2 ** exponent
           else:
-            binCodes[binCodeEl] = binCodes[binCodeEl] + 2L ** exponent
+            binCodes[binCodeEl] = binCodes[binCodeEl] + 2 ** exponent
       
     return binCodes
   

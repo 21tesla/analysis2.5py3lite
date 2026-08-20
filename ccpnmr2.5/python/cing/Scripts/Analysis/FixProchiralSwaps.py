@@ -15,7 +15,7 @@ def fixProchiralSwapsMacro(argServer):
 #    swaps = fixProchirals(project, sdt)
     nSwaps = fixProchiralSwaps(project, sdt) # JFD found this in Analysis version 2.1.3 on 2010-05-25
     n += 1
-    print('Iteration %d swaps: %d' % (n, nSwaps) # JFD found count swaps is returned.)
+    print('Iteration %d swaps: %d' % (n, nSwaps))  # JFD found count swaps is returned.
 
 def fixProchiralSwaps(project, sdt=0.04):
   # Threshold shift SD for action

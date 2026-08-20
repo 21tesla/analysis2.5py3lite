@@ -73,9 +73,9 @@ class OpenMacroPopup(BasePopup):
   will add it to the CCPN project, stored in a user-specific way
   inside the current Analysis profile. Once loaded into the
   project the new macro will appear in the main macro table
-  (the "Macros" tab of `User Options`_)
+  (the "Macros" tab of str(User Options)_)
   
-  .. _`User Options`: EditProfilesPopup.html
+  .. _str(User Options): EditProfilesPopup.html
     
   """
 

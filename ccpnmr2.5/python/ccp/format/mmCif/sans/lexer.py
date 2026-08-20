@@ -64,9 +64,9 @@ class STARLexer:
         return self._text
     
     def pushBack( self, text ) :
-        if self._verbose : print "** push back |" + text + "|, buffer=|" + self._buffer + "|"
+        if self._verbose: print("** push back |" + text + "|, buffer=|" + self._buffer + "|")
         self._buffer = text + " " + self._buffer
-        if self._verbose : print "** buffer = |" + self._buffer + "|"
+        if self._verbose: print("** buffer = |" + self._buffer + "|")
     
     def yylex( self ) :
         if self._in == None :
@@ -74,18 +74,18 @@ class STARLexer:
             sys.exit( 1 )
         self._text = ""
 
-        if self._verbose : print "1) buffer: |" + self._buffer + "| len:", len( self._buffer )    
+        if self._verbose: print("1) buffer: |" + self._buffer + "| len:", len( self._buffer ))
         if self._buffer.isspace() : self._buffer = ""
 
         while len( self._buffer ) < 1 :
             line = self._in.readline()
-            if self._verbose : print "line:", line
+            if self._verbose: print("line:", line)
             if len( line ) == 0 : return self.FILEEND
             self._lineno = self._lineno + 1
             self._buffer = line.strip()
             if self._buffer.isspace() : self._buffer = ""
 
-        if self._verbose : print "2) buffer: |" + self._buffer + "| len:", len( self._buffer )    
+        if self._verbose: print("2) buffer: |" + self._buffer + "| len:", len( self._buffer ))
         
         while len( self._buffer ) > 0 :
             if self._yystate == self.YYINITIAL :
@@ -113,7 +113,7 @@ class STARLexer:
 # saveframe
                 m = self._re_savestart.search( self._buffer )
                 if m :
-                    if self._verbose : print "-- savestart", m.group( 1 )
+                    if self._verbose: print("-- savestart", m.group( 1 ))
                     self._text = m.group( 1 )
                     self._buffer = self._buffer[len( m.group( 0 ) ):]
                     self._buffer = self._buffer.strip()
@@ -195,18 +195,18 @@ class STARLexer:
 
             elif self._yystate == self.YYSEMI :
                 self._text = self._text + self._buffer
-                if self._verbose : print "in YYSEMI, buffer:", self._buffer
+                if self._verbose: print("in YYSEMI, buffer:", self._buffer)
 # grrr. a post-condition loop would be nice. and a check for eof, too.
                 while True :
                     line = self._in.readline()
-                    if self._verbose : print "in YYSEMI, line:", line
+                    if self._verbose: print("in YYSEMI, line:", line)
                     if len( line ) == 0 : return self.FILEEND
                     self._lineno = self._lineno + 1
                     self._buffer = line              # .strip() keep original formatting
                     m = self._re_osemi.search( self._buffer )
                     if m : 
                         self._buffer = self._buffer[2:]
-                        if self._verbose : print "in YYSEMI, buffer:", self._buffer, "return to YYINITIAL"
+                        if self._verbose: print("in YYSEMI, buffer:", self._buffer, "return to YYINITIAL")
                         self._yystate = self.YYINITIAL
                         return self.DVNSEMICOLON
                     else :

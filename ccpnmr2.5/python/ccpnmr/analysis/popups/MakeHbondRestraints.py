@@ -2186,18 +2186,18 @@ def getHelicalHbondSegments(molSystem, minHbonds=2):
       helixBonds.sort()
       for helixBond in helixBonds:
         if segments:
-      lastSeg = segments[-1]
-      delta1, posO1, posH1, atomO1, atomH1 = lastSeg
+          lastSeg = segments[-1]
+          delta1, posO1, posH1, atomO1, atomH1 = lastSeg
           delta2, posO2, posH2, atomO2, atomH2 = helixBond
-  
+
           if delta1 != delta2:
-        segments.append(helixBond)
-      
-      elif posO2 != posO1+1:
-        segments.append(helixBond)
-      
-      else:
-        lastSeg[2] = posH2
+            segments.append(helixBond)
+
+          elif posO2 != posO1+1:
+            segments.append(helixBond)
+
+          else:
+            lastSeg[2] = posH2
         lastSeg[4] = atomH2
         
     else:

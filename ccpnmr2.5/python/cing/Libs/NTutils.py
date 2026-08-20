@@ -4309,8 +4309,9 @@ class OptionParser (optparse.OptionParser):
 #end class
 
 
-def findvisitor((matches, pattern), thisdir, nameshere):    
+def findvisitor(t, thisdir, nameshere):
     "Taken from O'Reilly book"
+    matches, pattern = t
     for name in nameshere:
         if fnmatch(name, pattern):
             fullpath = os.path.join(thisdir, name)

@@ -1648,7 +1648,7 @@ class ScrolledWindow(Frame):
     try:
       row = self.yslices.index(slice)
     except:
-      raise ValueError('slice not in row list' # should never be here)
+      raise ValueError('slice not in row list')  # should never be here
 
     return row
 
@@ -1657,7 +1657,7 @@ class ScrolledWindow(Frame):
     try:
       col = self.xslices.index(slice)
     except:
-      raise ValueError('slice not in col list' # should never be here)
+      raise ValueError('slice not in col list')  # should never be here
 
     return col
 

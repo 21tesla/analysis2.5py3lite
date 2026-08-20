@@ -2056,7 +2056,7 @@ def parseBrukerSummary(fileName, **kw):
       txt = ll[2]
       
       matches = tagcolon.split(txt)
-      if len(matches) <>1:
+      if len(matches) !=1:
         # mathes. contains tag:value pairs
         
         result[keyword] = dd = {}

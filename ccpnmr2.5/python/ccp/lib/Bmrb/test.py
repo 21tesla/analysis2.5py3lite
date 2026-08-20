@@ -28,8 +28,8 @@ class Test( sans.ContentHandler, sans.ErrorHandler ) :
         print("End loop in line", line)
         return False
     def data( self, tag, tagline, val, valline, delim, inloop ) :
-        if inloop : print "Loop",
-        else : print "Free",
+        if inloop: print("Loop",)
+        else: print("Free")
         print("tag/value:", tag, ":", sans.quote( val ), "(", tagline, ":", valline, ") d", delim)
         return False
     def fatalError( self, line, msg ) :

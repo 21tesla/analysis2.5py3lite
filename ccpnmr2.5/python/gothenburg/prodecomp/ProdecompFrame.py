@@ -354,6 +354,7 @@ class ProdecompFrame(Frame):
 
     #
     if isinstance(self.parent, BasePopup):
+            pass
 
       bottomButtons = createDismissHelpButtonList(self.tabbedFrame.sideFrame,
                                                   texts=texts, commands=commands,
@@ -445,6 +446,7 @@ class ProdecompFrame(Frame):
     iType   = self.iTypePulldown.getText()
 
     if self.peakList:
+            pass
 
       intervals = ccpnPeaksToInterval(self.peakList, iHalfRange=iWidth/2.0,
                                       shiftScale=sScale, peakShapeModel=pModel,
@@ -469,6 +471,7 @@ class ProdecompFrame(Frame):
       nmrProject = self.project.currentNmrProject
 
       for experiment in nmrProject.experiments:
+              pass
 
         eName = experiment.name
 
@@ -577,6 +580,7 @@ class ProdecompFrame(Frame):
     intervals = []
 
     for i, decomposition in enumerate(self.decompositions):
+            pass
 
       color = [None,] * 5
       if decomposition[3]:
@@ -647,6 +651,7 @@ class ProdecompFrame(Frame):
     dataSources = [spec for spec in self.spectra if spec.isProdecompActive]
 
     if dataSources and self.shapeNames:
+            pass
 
       self.numPoints = [None, None]
       self.numPointsOrig = [None, None]
@@ -699,6 +704,7 @@ class ProdecompFrame(Frame):
         if hasattr(dataDim, 'numPointsOrig'):
           origsizes.add(dataDim.numPointsOrig)
         for dataDimRef in dataDim.sortedDataDimRefs():
+                pass
 
           shapeName = dataDimRef.expDimRef.displayName
           ll = dataDimRefDict.get(shapeName)
@@ -709,12 +715,11 @@ class ProdecompFrame(Frame):
       if len(origsizes) == 1:
         self.numPointsOrig[1] = origsizes.pop()
 
-      if None in self.numPointsOrig:
-        print ('WARNING, selected spectra were not the same original shape')
-      if None in self.numPoints:
-        print ('WARNING, selected spectra were not the same shape')
+      if None in self.numPointsOrig: print(('WARNING, selected spectra were not the same original shape'))
+      if None in self.numPoints: print(('WARNING, selected spectra were not the same shape'))
       else:
         for tag in tags:
+                pass
 
           # set textMatrix
           if textMatrix:
@@ -903,6 +908,7 @@ class ProdecompFrame(Frame):
 
     ff = Projection.formatScalingFactor
     for i, spec in enumerate(spectra):
+            pass
 
       dataDims = spec.sortedDataDims()
 
@@ -954,6 +960,7 @@ class ProdecompFrame(Frame):
           if sname:
             acqNames.add(sname)
           else:
+                  pass
             try:
               acqName = expDimRef.isotopeCodes[0]
             except IndexError:
@@ -1174,6 +1181,7 @@ class ProdecompFrame(Frame):
     dataDimRef = self.dataDimRefDict[self.acqName][0]
     xPpmPoints = [dataDimRef.pointToValue(x) 
                   for x in range(intervalA,intervalB+1)]
+                          pass
     #xPpmPoints =  getPpmRange(sw,tfo, range(intervalA,intervalB+1),
     #                          numPointsDir )
 
@@ -1196,6 +1204,7 @@ class ProdecompFrame(Frame):
 
     pointsRange = range(numPointsShape)
     for k, label in enumerate(shapeNames):
+            pass
 
       isotope, sw, tfo = self.shapeParams[label]
       dataDimRef = self.dataDimRefDict[label][0]
@@ -1316,6 +1325,7 @@ class ProdecompFrame(Frame):
     dataDimRef = self.dataDimRefDict[self.acqName][0]
     ppmxfd = [dataDimRef.pointToValue(x) 
               for x in range(intervalA,intervalB+1)]
+                      pass
     #ppmxfd =  getPpmRange(sw,tfo,
     #                     range(intervalA,intervalB+1),
     #                     numPointsDir )
@@ -1384,6 +1394,7 @@ class ProdecompFrame(Frame):
 
     pointsRange = range(numPointsShape)
     for k, label in enumerate(shapeNames):
+            pass
 
       isotope, sw, tfo = self.shapeParams[label] #@UnusedVariable
       dataDimRef = self.dataDimRefDict[label][0]
@@ -1391,6 +1402,7 @@ class ProdecompFrame(Frame):
       if sw is None:
         ppmxf = pointsRange
       else:
+              pass
         
         ppmxf = [dataDimRef.pointToValue(x) for x in pointsRange]
         #ppmxf =  getPpmRange(sw, tfo, pointsRange, numPointsShape)
@@ -1476,6 +1488,7 @@ class ProdecompFrame(Frame):
     allComp = sum(x[2] for x in intervals)
 
     if intervals and allComp:
+            pass
 
 
       dataSources = [spec for spec in inpDataSources if spec.isProdecompActive]
@@ -1554,6 +1567,7 @@ class ProdecompFrame(Frame):
 
       # create ProjSet element and contents
       for jj, experiment in enumerate(experiments):
+              pass
 
         specs = [x for x in dataSources if x.experiment is experiment]
 
@@ -1620,6 +1634,7 @@ class ProdecompFrame(Frame):
       #Write out components
       cIndex = -1 # set component index to start at zero
       for index, interval in enumerate(intervals):
+              pass
 
         intervalA, intervalB, nComp, intervalId = interval #@UnusedVariable
         output = self.prodecompOutput[intervalId]
@@ -1716,6 +1731,7 @@ def getRefExperiment(experiments, acqName, shapeNames):
     for xp in experiments:
       for xpDim in xp.sortedExpDims():
         for xpDimRef in xpDim.sortedExpDimRefs():
+                pass
 
           refExpDimRef = xpDimRef.refExpDimRef
           if refExpDimRef is None:
@@ -1745,6 +1761,7 @@ def getRefExperiment(experiments, acqName, shapeNames):
   return result
 
 if __name__ == "__main__":
+        pass
 
   import sys
   import Tkinter

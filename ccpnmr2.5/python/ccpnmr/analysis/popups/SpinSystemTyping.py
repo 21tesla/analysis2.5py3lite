@@ -408,7 +408,7 @@ class SpinSystemTypeScoresPopup(BasePopup):
       for molSystem in self.project.sortedMolSystems():
         for chain in molSystem.sortedChains():
           if chain.molecule.molType in ('protein',None):
-        text = '%s:%s' % (molSystem.code, chain.code)
+            text = '%s:%s' % (molSystem.code, chain.code)
             chains.append( [text, chain] )
     
     return chains
@@ -697,10 +697,10 @@ class SpinSystemTypingPopup(BasePopup):
   single spin system in isolation, or for a whole chain; by shuffling the
   residue to spin system mapping to give the optimum arrangement. Prediction for
   individual spin systems, as accessed by [Show Individual Classification], is
-  covered in the `Spin System Type Scores`_ popup and will not be discussed
+  covered in the str(Spin System Type Scores)_ popup and will not be discussed
   here.
 
-  .. _`Spin System Type Scores`: ../popups/SpinSystemTypeScoresPopup.html
+  .. _str(Spin System Type Scores): ../popups/SpinSystemTypeScoresPopup.html
   
   **Finding the Optimal Arrangement of Residue Types**
   

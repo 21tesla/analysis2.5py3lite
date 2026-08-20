@@ -388,14 +388,12 @@ def makeCcpnProject(entryName):
             else:
               print('Reading restraint file', dataType, formatName, rfile)
               fcw.readFile(dataType, formatName, rpath)
-              if fcw.conversionSuccess:
-                print ("Successful restraint file read:\n%s" % fcw.conversionInfo)
+              if fcw.conversionSuccess: print(("Successful restraint file read:\n%s" % fcw.conversionInfo))
                 restraintLists.append(fcw.ccpnObjectOrList)
               else:
                 print ("Failed restraint file read:\n%s" % fcw.conversionInfo)
 
-          if restraintLists:
-            print ("Found restraint lists: %s" % len(restraintLists))
+          if restraintLists: print(("Found restraint lists: %s" % len(restraintLists)))
             casdRun.newConstraintStoreData(constraintLists=restraintLists, name='Restraintlists')
 
         
@@ -456,8 +454,7 @@ def extractResults(infoDict):
   if ll2:
     print(('### WARNING, %s non-pdb structure data: %s' %
            (dataId, ll2)))
-  if not ll or len(ll2) == len(ll):
-    print ('### WARNING, %s NO pdb structure data' % dataId)
+  if not ll or len(ll2) == len(ll): print(('### WARNING, %s NO pdb structure data' % dataId))
     
   # Make always-applicable PDB fixes
   #for (eachDir, junk, files) in os.walk(loadDir):

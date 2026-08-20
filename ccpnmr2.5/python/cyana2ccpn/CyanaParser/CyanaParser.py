@@ -602,7 +602,7 @@ class CyanaParser(dict):
 
 
 
-    	for line in  AwkLike( originalProtFile, commentString='#' ):
+        for line in  AwkLike( originalProtFile, commentString='#' ):
             if line.NF == 5:
                 # Xeasy/Cyana atom index
                 index     = line.int( 1 )
@@ -627,12 +627,12 @@ class CyanaParser(dict):
                         error = True
                         continue
                 if shift != 999.000:
-                			reson = Resonance( atom, shift, error )
-                			if reson in self.resonances:
+                            reson = Resonance( atom, shift, error )
+                            if reson in self.resonances:
 
-                				atom.resonance = reson
-                				chemicalShift = ChemicalShiftRestraint( atom=atom, value=shift, error=error )
-                				self.chemicalShiftRestraints.append( chemicalShift )
+                                atom.resonance = reson
+                                chemicalShift = ChemicalShiftRestraint( atom=atom, value=shift, error=error )
+                                self.chemicalShiftRestraints.append( chemicalShift )
 
 
         self.finalProtFile = finalProtFile
@@ -886,9 +886,9 @@ problem resides in the multiple assignments that alters format
                 ambiguous = False
 
                 if line.NF <= dimension+6:
-                	# Ambiguous assignment for this peak
+                    # Ambiguous assignment for this peak
                                     ambiguous = True
-# 									print line
+#                                     print line
                                     for i in range(dimension):
                                             aIndex = line.int(i+1)
                                             if aIndex == 0:
@@ -961,19 +961,19 @@ problem resides in the multiple assignments that alters format
                                 #endif
 
                 if not error:
-                	if not ambiguous:
-                	  peak = Peak( dimension=dimension,
+                    if not ambiguous:
+                      peak = Peak( dimension=dimension,
                                  positions=peakpos,
                                  height=height, heightError=heightError,
                                  resonances = resonances,
                                 )
-                	  # store original peak id
-                	  peak.xeasyIndex = peakId
-                	  peaks.append( peak )
-                	else:
-                	  peak = peaks()
-                	  for r in resonances:
-                  		peak.resonances.append(r)
+                      # store original peak id
+                      peak.xeasyIndex = peakId
+                      peaks.append( peak )
+                    else:
+                      peak = peaks()
+                      for r in resonances:
+                          peak.resonances.append(r)
                 #end if
             #end if
         #end for

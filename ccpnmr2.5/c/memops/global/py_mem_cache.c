@@ -1,4 +1,3 @@
-
 /*
 ======================COPYRIGHT/LICENSE START==========================
 
@@ -42,26 +41,15 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 #include "python_util.h"
 
-static PyObject *ErrorObject;   /* locally-raised exception */
-
-/*****************************************************************************
- * TYPE INFORMATION
- *****************************************************************************/
+/* Locally-raised exception type */
+static PyObject *ErrorObject;
 
 static PyTypeObject Mem_cache_type;
 
 Bool is_py_mem_cache(PyObject *obj)
 {
-/*  below does not work because different *.so files end up
-    with different addresses for Mem_cache_type
-    return (obj->ob_type == &Mem_cache_type);
-*/
     return valid_py_object(obj, &Mem_cache_type);
 }
-
-/*****************************************************************************
- * MISCELLANEOUS METHODS
- *****************************************************************************/
 
 /*****************************************************************************
  * INSTANCE METHODS
@@ -77,10 +65,9 @@ static PyObject *resize(PyObject *self, PyObject *args)
         RETURN_OBJ_ERROR("need one argument: max_size");
 
     if (resize_mem_cache(mem_cache, max_size) == CCPN_ERROR)
-	RETURN_OBJ_ERROR("resizing Mem_cache");
+        RETURN_OBJ_ERROR("resizing Mem_cache");
 
-    Py_INCREF(Py_None);
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 static PyObject *clear(PyObject *self, PyObject *args)
@@ -90,15 +77,14 @@ static PyObject *clear(PyObject *self, PyObject *args)
 
     clear_mem_cache(mem_cache);
 
-    Py_INCREF(Py_None);
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 static struct PyMethodDef py_handler_methods[] =
 {
-    { "resize",		resize,			METH_VARARGS },
-    { "clear",		clear,			METH_VARARGS },
-    { NULL,		NULL,			0 }
+    { "resize",		resize,		METH_VARARGS },
+    { "clear",		clear,		METH_VARARGS },
+    { NULL,		NULL,		0 }
 };
 
 /*****************************************************************************
@@ -113,19 +99,17 @@ static PyObject *new_py_mem_cache(int max_size)
     mem_cache = new_mem_cache(max_size, NULL, NULL);
 
     if (!mem_cache)
-	 RETURN_OBJ_ERROR("allocating Mem_cache object");
+        RETURN_OBJ_ERROR("allocating Mem_cache object");
 
-    PY_MALLOC(obj, struct Py_Mem_cache, &Mem_cache_type);
+    obj = (Py_Mem_cache) PyObject_New(struct Py_Mem_cache, &Mem_cache_type);
 
     if (!obj)
     {
-	delete_mem_cache(mem_cache);
-
-	RETURN_OBJ_ERROR("allocating Py_Mem_cache object");
+        delete_mem_cache(mem_cache);
+        RETURN_OBJ_ERROR("allocating Py_Mem_cache object");
     }
 
     obj->mem_cache = mem_cache;
-
     return (PyObject *) obj;
 }
 
@@ -134,147 +118,120 @@ static void delete_py_mem_cache(PyObject *self)
     Py_Mem_cache obj = (Py_Mem_cache) self;
     Mem_cache mem_cache = obj->mem_cache;
 
-/*
-    printf("in delete_py_mem_cache\n");
-*/
-
     delete_mem_cache(mem_cache);
-
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-/*
-static int print_py_mem_cache(PyObject *self, FILE *fp, int flags)
+/* Python 3 tp_getattro — receives a unicode object */
+static PyObject *getattr_py_mem_cache(PyObject *self, PyObject *attr_name)
 {
-    printf("in print_py_handler\n");
-
-    return 0;
-}
-*/
-
-static PyObject *getattr_py_mem_cache(PyObject *self, char *name)
-{
-/*
-    Mem_cache *obj = (Mem_cache *) self;
-    Random_access *a = obj->py_handler;
-
-    if (equal_strings(name, "par_file"))
-	return Py_BuildValue("s", a->par_file);
-    else if (equal_strings(name, "access_method"))
-	return Py_BuildValue("s", access_method_name(a->access_method));
-    else if (equal_strings(name, "data_format"))
-	return get_Mem_cache_format(a);
-    else
-*/
-	return Py_FindMethod(py_handler_methods, self, name);
+    /* Fall back to PyObject_GenericGetAttr which handles tp_methods */
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
  * TYPE DESCRIPTORS
  *****************************************************************************/
 
-/*  if implementing more...
-static PySequenceMethods Mem_cache_sequence_methods =
+static PyObject *mem_cache_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
 {
-    Mem_cache_length,
-    Mem_cache_concat,
-    Mem_cache_repeat,
-    Mem_cache_item,
-    Mem_cache_slice,
-    Mem_cache_ass_item,
-    Mem_cache_ass_slice
-};
-
-static PySequenceMethods Mem_cache_sequence_methods =
-{
-    Mem_cache_length,
-    0,
-    0,
-    Mem_cache_item,
-    0,
-    Mem_cache_ass_item,
-    0
-};
-*/
-
-static PyTypeObject Mem_cache_type =
-{
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "MemCache", /* name */
-    sizeof(struct Py_Mem_cache), /* basicsize */
-    0, /* itemsize */
-    delete_py_mem_cache, /* destructor */
-    0, /* printfunc */
-    getattr_py_mem_cache, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Mem_cache_sequence_methods*/ /* PySequenceMethods */
-};
-
-/*****************************************************************************
- * MODULE LOGIC
- *****************************************************************************/
-
-static PyObject *init_Py_Mem_cache(PyObject *self, PyObject *args)
-{
+    static char *kwlist[] = { "max_size", NULL };
     int max_size;
 
-    if (!PyArg_ParseTuple(args, "i", &max_size))
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i", kwlist, &max_size))
         RETURN_OBJ_ERROR("must have one argument: max_size");
 
     return new_py_mem_cache(max_size);
 }
 
-/******************************************************************************
-* METHOD REGISTRATION TABLE: NAME-STRING -> FUNCTION-POINTER
-*
-* List of functions defined in the module. A name->address method map, used
-* to build-up the module's dictionary in "Py_InitModule". Once imported, this
-* module acts just like it's coded in Python. The method functions handle
-* converting data from/to python objects, and linkage to other C functions.
-******************************************************************************/
+static PyTypeObject Mem_cache_type =
+{
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "MemCache",                              /* tp_name */
+    sizeof(struct Py_Mem_cache),             /* tp_basicsize */
+    0,                                       /* tp_itemsize */
+    (destructor) delete_py_mem_cache,        /* tp_dealloc */
+    0,                                       /* tp_vectorcall */
+    0,                                       /* tp_getattr */
+    0,                                       /* tp_setattr */
+    0,                                       /* tp_as_async */
+    0,                                       /* tp_repr */
+    0,                                       /* tp_as_number */
+    0,                                       /* tp_as_sequence */
+    0,                                       /* tp_as_mapping */
+    0,                                       /* tp_hash */
+    0,                                       /* tp_call */
+    0,                                       /* tp_str */
+    (getattrofunc) getattr_py_mem_cache,     /* tp_getattro */
+    0,                                       /* tp_setattro */
+    0,                                       /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                      /* tp_flags */
+    "MemCache — MOPS shared-memory model",   /* tp_doc */
+    0,                                       /* tp_traverse */
+    0,                                       /* tp_clear */
+    0,                                       /* tp_richcompare */
+    0,                                       /* tp_weaklistoffset */
+    0,                                       /* tp_iter */
+    0,                                       /* tp_iternext */
+    py_handler_methods,                      /* tp_methods */
+    0,                                       /* tp_members */
+    0,                                       /* tp_getset */
+    0,                                       /* tp_base */
+    0,                                       /* tp_dict */
+    0,                                       /* tp_descr_get */
+    0,                                       /* tp_descr_set */
+    0,                                       /* tp_dictoffset */
+    0,                                       /* tp_init */
+    0,                                       /* tp_alloc */
+    mem_cache_new,                           /* tp_new */
+};
 
+/*****************************************************************************
+ * MODULE LOGIC (Python 3 API)
+ *****************************************************************************/
 
 static struct PyMethodDef Mem_cache_type_methods[] =
 {
-    { "MemCache",	(PyCFunction) init_Py_Mem_cache,	METH_VARARGS },
+    { "MemCache",	(PyCFunction) mem_cache_new,	METH_VARARGS | METH_KEYWORDS },
     { NULL,		NULL,			0 }
 };
 
-
-/******************************************************************************
-* INITIALIZATION FUNCTION (IMPORT-TIME)
-*
-* Initialization function for the module. Called on first "import MemCache" in 
-* a Python program. The function is usually called "initMem_cache": this name's
-* added to the built-in module table in config.c statically (if added to file
-* Module/Setup), or called when the module's loaded dynamically as a shareable 
-* object-file found on PYTHONPATH. File and function names matter if dynamic.
-******************************************************************************/
-
-PY_MOD_INIT_FUNC initMemCache(void)
+static struct PyModuleDef mem_cache_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "MemCache",
+    "CCPNMR MOPS shared-memory model (Python 3 compatible)",
+    -1,
+    Mem_cache_type_methods
+};
 
-#ifdef WIN64
-    Mem_cache_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("MemCache", Mem_cache_type_methods);
+PyMODINIT_FUNC PyInit_MemCache(void)
+{
+    if (PyType_Ready(&Mem_cache_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&mem_cache_module_def);
+    if (!m)
+        return NULL;
+
+    PyObject *d = PyModule_GetDict(m);
+    if (PyDict_SetItemString(d, "MemCache", (PyObject *) &Mem_cache_type) < 0)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    /* Create exception object and add to module */
     ErrorObject = PyErr_NewException("MemCache.error", NULL, NULL);
-    Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module MemCache");
+    if (ErrorObject != NULL)
+    {
+        Py_INCREF(ErrorObject);
+        if (PyDict_SetItemString(d, "error", ErrorObject) < 0)
+        {
+            Py_DECREF(m);
+            return NULL;
+        }
+    }
+
+    return m;
 }

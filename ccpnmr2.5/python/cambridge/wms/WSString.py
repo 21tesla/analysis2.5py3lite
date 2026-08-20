@@ -149,7 +149,7 @@ class WSString:
 
                     elif isinstance(hashmap[set[i]],int):
                         strg += 'valIsInteger'
-                        strg += `hashmap[set[i]]`
+                        strg += str(hashmap[set[i]])
 
                     elif isinstance(hashmap[set[i]],float):
                         strg += 'valIsFloat'

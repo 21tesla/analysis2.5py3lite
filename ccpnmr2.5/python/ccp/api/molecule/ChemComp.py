@@ -12988,16 +12988,14 @@ constraints are placed on ChemCompVar and LinkEnd.
             break
           linkCodes = text.split(',')
           for ss in ('next', 'prev'):
-            if ss in linkCodes:
-              print ("Malformed descriptor %s: 'link:' section contains %s" % (value, ss))
+            if ss in linkCodes: print(("Malformed descriptor %s: 'link:' section contains %s" % (value, ss)))
               isValid = False
               break
           
           atNames = []
           chemComp = self.chemComp
           for lc in linkCodes:
-            if chemComp.findFirstLinkEnd(linkCode=lc) is None:
-              print ("Malformed descriptor %s: 'link:'  %s is not a known linkCode" % (value, lc))
+            if chemComp.findFirstLinkEnd(linkCode=lc) is None: print(("Malformed descriptor %s: 'link:'  %s is not a known linkCode" % (value, lc)))
               isValid = False
               break
     
@@ -13085,8 +13083,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       if value.startswith('link:'):
         chemComp = self.chemComp
         for lc in value[5:].split(','):
-          if chemComp.findFirstLinkEnd(linkCode=lc) is None:
-            print ("Malformed linking %s: 'link:'  %s is not a known linkCode" % (value,lc))
+          if chemComp.findFirstLinkEnd(linkCode=lc) is None: print(("Malformed linking %s: 'link:'  %s is not a known linkCode" % (value,lc)))
             isValid = False
             break
         
@@ -14851,16 +14848,14 @@ constraints are placed on ChemCompVar and LinkEnd.
                   break
                 linkCodes = text.split(',')
                 for ss in ('next', 'prev'):
-                  if ss in linkCodes:
-                    print ("Malformed descriptor %s: 'link:' section contains %s" % (value, ss))
+                  if ss in linkCodes: print(("Malformed descriptor %s: 'link:' section contains %s" % (value, ss)))
                     isValid = False
                     break
                 
                 atNames = []
                 chemComp = self.chemComp
                 for lc in linkCodes:
-                  if chemComp.findFirstLinkEnd(linkCode=lc) is None:
-                    print ("Malformed descriptor %s: 'link:'  %s is not a known linkCode" % (value, lc))
+                  if chemComp.findFirstLinkEnd(linkCode=lc) is None: print(("Malformed descriptor %s: 'link:'  %s is not a known linkCode" % (value, lc)))
                     isValid = False
                     break
           
@@ -15286,8 +15281,7 @@ constraints are placed on ChemCompVar and LinkEnd.
             if value.startswith('link:'):
               chemComp = self.chemComp
               for lc in value[5:].split(','):
-                if chemComp.findFirstLinkEnd(linkCode=lc) is None:
-                  print ("Malformed linking %s: 'link:'  %s is not a known linkCode" % (value,lc))
+                if chemComp.findFirstLinkEnd(linkCode=lc) is None: print(("Malformed linking %s: 'link:'  %s is not a known linkCode" % (value,lc)))
                   isValid = False
                   break
               

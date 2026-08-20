@@ -544,7 +544,7 @@ def execfile_(filename, globals_=None, locals_=None):
     if locals_ is None:
         locals_ = globals_
     text = file(filename, 'r').read()
-    exec text in globals_, locals_
+    exec(text, globals_, locals_)
 # end def
 
 def nTflatten(obj):

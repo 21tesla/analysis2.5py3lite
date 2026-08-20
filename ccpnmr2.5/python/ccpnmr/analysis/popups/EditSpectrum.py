@@ -157,13 +157,13 @@ class EditSpectrumPopup(BasePopup):
   This table is used to control how spectra are visualised within the spectrum
   window displays of Analysis. Specifically, the user can: change the colours
   of the displayed contours and 1D slice traces; get access to the contour
-  level settings, via the `Spectrum Contour Levels`_ tool; access the `Spectrum
-  Contour Files`_ setup; set keyboard toggles; and administer other graphical
+  level settings, via the str(Spectrum Contour Levels)_ tool; access the str(Spectrum
+  Contour Files)_ setup; set keyboard toggles; and administer other graphical
   elements like bounding box lines, peak fonts and peak pointer lines. It
   should be noted that the colours for peak text and peak symbols are set for
   individual peak lists, so that different peak lists within the same spectrum
   may be distinguished. Accordingly these parameters are set via the main 
-  `Peak Lists`_ option.
+  str(Peak Lists)_ option.
 
   The "Rank" value of a spectrum dictates the order in which spectra are drawn
   on screen and presented in the toggle options at the top of spectrum windows.
@@ -338,9 +338,9 @@ class EditSpectrumPopup(BasePopup):
   within Analysis spectrum displays. 
 
   .. _Experiments: EditExperimentPopup.html
-  .. _`Spectrum Contour Levels`: EditContourLevelsPopup.html
-  .. _`Spectrum Contour Files`: EditContourFilesPopup.html
-  .. _`Peak Lists`: EditPeakListsPopup.html
+  .. _str(Spectrum Contour Levels): EditContourLevelsPopup.html
+  .. _str(Spectrum Contour Files): EditContourFilesPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
   """
 
   def __init__(self, parent, spectrum=None, modal=False, useReducedDim=False, 

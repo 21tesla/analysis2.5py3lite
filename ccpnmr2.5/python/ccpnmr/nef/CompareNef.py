@@ -383,7 +383,7 @@ def _filterName(inName):
     # ejb - need to remove the rogue str(n) at the beginning of the name if it exists
     #       as it is passed into the namespace and gets added iteratively every save
     #       next three lines remove all occurrences of str(n) from name
-    regex = '\`\d*`+?'
+    regex = '\str(\d*)+?'
     return re.sub(regex, '', inName)  # substitute with ''
 
 

@@ -286,10 +286,10 @@ class TagTable (Lister):
         for tag_id in range( values_length ):
             if len( self.tagvalues[ tag_id ] ) != column_length_first:
                 print("ERROR: length column[%s](%s) is not the same as" % (
-                            self.tagnames[ tag_id],)
+                            self.tagnames[ tag_id],
                             len( self.tagvalues[ tag_id ] ) )
                 print("ERROR: length column[%s](%s)" % (
-                            self.tagnames[ 0],)
+                            self.tagnames[ 0],
                             column_length_first )
                 return 1
 

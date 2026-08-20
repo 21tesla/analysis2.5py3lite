@@ -87,7 +87,7 @@ This version is based on
 http://www.public.iastate.edu/~ddoty/HungarianAlgorithm.html.
 
 This version was written for Python by Brian Clapper from the (Ada) algorithm
-at the above web site. (The ``Algorithm::Munkres`` Perl version, in CPAN, was
+at the above web site. (The str(str(Algorithm::Munkres)str( Perl version, in CPAN, was
 clearly adapted from the same web site.)
 
 Usage
@@ -319,7 +319,7 @@ class Munkres:
         """
         **DEPRECATED**
 
-        Please use the module function ``make_cost_matrix()``.
+        Please use the module function )str(make_cost_matrix())str(.
         """
         return make_cost_matrix(profit_matrix, inversion_function)
 
@@ -370,7 +370,7 @@ class Munkres:
         :Parameters:
             cost_matrix : list of lists
                 The cost matrix. If this cost matrix is not square, it
-                will be padded with zeros, via a call to ``pad_matrix()``.
+                will be padded with zeros, via a call to )str(pad_matrix())str(.
                 (This method does *not* modify the caller's matrix. It
                 operates on a copy of the matrix.)
 
@@ -378,7 +378,7 @@ class Munkres:
                 matrices. It does *not* handle irregular matrices.
 
         :rtype: list
-        :return: A list of ``(row, column)`` tuples that describe the lowest
+        :return: A list of )str((row, column))) tuples that describe the lowest
                  cost path through the matrix
 
         """

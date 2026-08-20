@@ -93,8 +93,8 @@ class CalcHeteroNoePopup(BasePopup):
   and various options that will be used in the peak-finding and NOE calculation.
   The "Peaks" table allows the peaks from each of the three peak list selections
   to be displayed when one of the "Show" buttons is clicked. The [Separate Peak
-  Table] function allows these peaks to be displayed in the main, separate `Peak
-  Lists`_ table, which has many more peak manipulation options. The options
+  Table] function allows these peaks to be displayed in the main, separate str(Peak
+  Lists)_ table, which has many more peak manipulation options. The options
   below the table may be used to locate selected peaks within the spectrum
   window displays.
 
@@ -110,7 +110,7 @@ class CalcHeteroNoePopup(BasePopup):
   rightmost, column of the table. To store these values as a NOE measurement
   list; so that the data can be saved in the CCPN project without need for
   recalculation, the [Create Hetero NOE List] function can be used. The results
-  are then available to view at any time via the `Measurement Lists`_ table.
+  are then available to view at any time via the str(Measurement Lists)_ table.
 
   **Caveats & Tips**
 
@@ -121,8 +121,8 @@ class CalcHeteroNoePopup(BasePopup):
   The "Closeness score" can be used to find peak positions where the compared
   NOE peaks are unexpectedly far from one another.
 
-  .. _`Peak Lists`: EditPeakListsPopup.html
-  .. _`Measurement Lists`: EditMeasurementListsPopup.html
+  .. _str(Peak Lists): EditPeakListsPopup.html
+  .. _str(Measurement Lists): EditMeasurementListsPopup.html
   
   """
 
