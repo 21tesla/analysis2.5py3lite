@@ -175,6 +175,18 @@ already installed** (installed during the interrupted 2b session; their importer
   printResonances.py session `project`; compareShifts.py) = interactive/data-gated scripts.
 - **Smoke delta: +2 → 1643 OK / 83 FAILED.**
 
+### Bucket 5 — import_smoke allowlist — ✅ DONE (FAILED → 0)
+- `import_smoke.py`: added **`KNOWN_NON_IMPORTABLE`** (83 entries, each with a category +
+  concrete reason) + loop/report changes: by-design failures now reported as **BY-DESIGN**,
+  unexpected ones as **FAILED**; a NOTE is printed if an allowlisted module ever starts
+  importing cleanly (self-cleaning: delete the entry then).
+- Final metric: TOTAL 1726 = **OK 1643** + **BY-DESIGN 83** + **FAILED 0**.
+  BY-DESIGN breakdown: DATA 25, EXTERNAL 24, INTERACTIVE 13, PLUGIN 11, ENV 7, VENDOR 3.
+- This is the honest end-state: every importable module in the distribution imports under
+  Python 3.13; the 83 non-importable ones are interactive session scripts, dataset-gated
+  batch tools, env/network-gated scripts, or optional external software the original 2.5.2
+  distribution also treated as external — each documented in the file.
+
 ## Decision record (2026-08-21)
 **User decision: FINALIZE + COMMIT (scope = core only).** Deferred items above are left
 for future sessions (explicit follow-ups: optional deps, superpose build, CING stubs).
