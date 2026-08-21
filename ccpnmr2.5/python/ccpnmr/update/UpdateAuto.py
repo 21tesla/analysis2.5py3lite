@@ -56,10 +56,14 @@ def updateAuto(serverLocation=UPDATE_SERVER_LOCATION, serverDirectory=UPDATE_DIR
             print("No updates")
 
 
-if __name__ == "__main__":
+def main(argv=None):
     import os
 
     updateAuto()
 
     # NOTE:ED - seems to need this to clean up in Windows10
     os._exit(0)
+
+
+if __name__ == "__main__":
+    main()

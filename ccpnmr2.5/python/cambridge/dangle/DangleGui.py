@@ -618,14 +618,13 @@ class DangleGraphPopup(BasePopup):
 
 
 
-if (__name__ == '__main__'):
-
-  argv = sys.argv[:]
-  n    = len(argv)
-
-  if n > 1:
-    filename = argv[1]
-  else:
-    filename = None
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[1:]
+  filename = argv[0] if argv else None
 
   launchDangle(filename)
+
+
+if (__name__ == '__main__'):
+  main()

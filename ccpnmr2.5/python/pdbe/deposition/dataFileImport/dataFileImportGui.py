@@ -248,6 +248,9 @@ def launchDataFileImport():
 
   root.mainloop()
 
-if __name__ == '__main__':
-
+def main(argv=None):
   launchDataFileImport()
+
+
+if __name__ == '__main__':
+  main()

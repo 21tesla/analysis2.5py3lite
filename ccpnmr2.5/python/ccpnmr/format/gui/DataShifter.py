@@ -2468,10 +2468,13 @@ class DataShifter(BasePopup):
         return True
 
 
-if __name__ == "__main__":
+def main(argv=None):
     import os
 
-    projDirs = sys.argv[1:]
+    if argv is None:
+        argv = sys.argv[1:]
+
+    projDirs = argv
 
     addKeywds = {}
     if projDirs:
@@ -2489,3 +2492,7 @@ if __name__ == "__main__":
 
     guiRoot.mainloop()
     os._exit(0)
+
+
+if __name__ == "__main__":
+    main()

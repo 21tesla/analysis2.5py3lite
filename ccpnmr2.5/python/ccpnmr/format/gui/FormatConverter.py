@@ -934,8 +934,11 @@ class FormatConverter(BasePopup):
         popup = self.multiDialog.ExperimentCreate(self, self.project, numDim=numDim)
 
 
-if __name__ == "__main__":
-    inputArgs = sys.argv[1:]
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+
+    inputArgs = argv
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -977,3 +980,7 @@ if __name__ == "__main__":
         top.initProject()
 
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

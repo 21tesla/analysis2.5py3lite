@@ -743,13 +743,13 @@ def launchApplication(projectDir=None):
     root.mainloop()
 
 
-if __name__ == "__main__":
-    argv = sys.argv[:]
-    n = len(argv)
-
-    if n > 1:
-        projectDir = argv[1]
-    else:
-        projectDir = None
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    projectDir = argv[0] if argv else None
 
     launchApplication(projectDir)
+
+
+if __name__ == "__main__":
+    main()
