@@ -141,6 +141,22 @@ already installed** (installed during the interrupted 2b session; their importer
 - All 6 importers OK (queeny, core.validate + 3 converters [indirect via validate], test_vector).
 - **Smoke delta: +6 → 1640 OK / 86 FAILED.**
 
+### Bucket 3 — grenoble Meccano C ext — ✅ DONE
+- `py_meccano.c`: py2 `initMeccano`/`Py_InitModule` → py3 `PyModuleDef` + `PyInit_Meccano`
+  (pattern from Phase 2a exts); the `PyTypeObject` was dead code (module used as
+  `Meccano.runFwd(...)`).
+- **GSL** (not on system; base anaconda refused install): dedicated env
+  `conda create -n ccpnmr-gsl -c conda-forge gsl` (base env untouched).
+  setup.py: `CCP_GSL_PREFIX` overridable (default anaconda/envs/ccpnmr-gsl).
+- setup.py: Meccano FAM entry (py_meccano.c + 12 C sources incl `meccano2_stat_ramaDB_fwd.c`
+  [holds NewParams/RunMeccanoFromParams; `_main.c` excluded — separate main()]) +
+  `mk()` gained `link=` passthrough (rpath into GSL env) + FAM loop `*spec` unpack.
+- Build: `CCP_EXT=Meccano setup.py build_ext --inplace` → copy flat .so onto
+  `python/grenoble/c/` package target. ldd: GSL/OpenBLAS resolved via rpath, nothing missing.
+- **Functional**: `from grenoble.c import Meccano`; `runFwd` callable; bad-args path raises
+  `Meccano.error` with C error message (marshalling proven); `MeccanoPopup` imports.
+- **Smoke delta: +1 → 1641 OK / 85 FAILED.**
+
 ## Decision record (2026-08-21)
 **User decision: FINALIZE + COMMIT (scope = core only).** Deferred items above are left
 for future sessions (explicit follow-ups: optional deps, superpose build, CING stubs).

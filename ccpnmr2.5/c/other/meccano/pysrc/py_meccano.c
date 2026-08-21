@@ -316,23 +316,35 @@ static struct PyMethodDef Meccano_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initMeccano()
+/* Python 3.x: module definition + PyInit entry point (replaces py2
+ * Py_InitModule/initMeccano). Pattern matches the other migrated CCPN exts. */
+static struct PyModuleDef meccano_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "Meccano",
+    NULL,
+    -1,
+    Meccano_type_methods
+};
 
-#ifdef WIN64
-    Meccano_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("Meccano", Meccano_type_methods);
+PyMODINIT_FUNC PyInit_Meccano(void)
+{
+    PyObject *m;
+
+    m = PyModule_Create(&meccano_module_def);
+    if (!m)
+        return NULL;
 
     /* create exception object and add to module */
     ErrorObject = PyErr_NewException("Meccano.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
     PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module Meccano");
+
+    return m;
 }
 

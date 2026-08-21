@@ -28,11 +28,17 @@ DYN   = "ccpnmr2.5/c/ccpnmr/dynamics"
 ANA   = "ccpnmr2.5/c/ccpnmr/analysis"
 STR   = "ccpnmr2.5/c/ccp/structure"
 BAYES = "ccpnmr2.5/c/other/cambridge/bayes"
+MEC   = "ccpnmr2.5/c/other/meccano"
+
+# GSL (GNU Scientific Library) prefix for the Meccano ext.  Installed as an
+# isolated conda env (does NOT touch the anaconda base env):
+#   conda create -n ccpnmr-gsl -c conda-forge gsl
+GSL   = os.environ.get("CCP_GSL_PREFIX", "/home/logan/software/anaconda3/envs/ccpnmr-gsl")
 
 CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
 
 
-def mk(name, sources, include, libs=(), libdirs=(), define=()):
+def mk(name, sources, include, libs=(), libdirs=(), define=(), link=()):
     """Build an Extension with explicit source paths + include/link settings."""
     return Extension(
         name,
@@ -42,6 +48,7 @@ def mk(name, sources, include, libs=(), libdirs=(), define=()):
         libraries=list(libs),
         library_dirs=list(libdirs),
         extra_compile_args=CFLAGS,
+        extra_link_args=list(link),
     )
 
 
@@ -128,6 +135,18 @@ FAM = {
                         f"{BAYES}/app.c", f"{BAYES}/distribution.c", f"{BAYES}/random.c",
                         f"{BAYES}/hilbert.c", f"{BAYES}/bayesys3.c"]
                         + GU + GBLK, [BAYES, G], ["m"]),
+
+    # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
+    "Meccano":         ([f"{MEC}/pysrc/py_meccano.c",
+                        f"{MEC}/meccano2_stat_ramaDB_fwd/meccano2_stat_ramaDB_fwd.c",
+                        f"{MEC}/src/myRDC.c", f"{MEC}/src/myGEOMETRY.c",
+                        f"{MEC}/src/mySTRUCT.c", f"{MEC}/src/myDAT.c",
+                        f"{MEC}/src/myRAMACHANDRAN.c", f"{MEC}/src/myHBSC.c",
+                        f"{MEC}/src/myJUNC.c", f"{MEC}/src/myMINIMISATION.c",
+                        f"{MEC}/src/myPPGEO.c", f"{MEC}/src/gradient.c"]
+                        + GU, [f"{MEC}/inc", G, f"{GSL}/include"],
+                        ["gsl", "gslcblas", "m"], [f"{GSL}/lib"], (),
+                        [f"-Wl,-rpath,{GSL}/lib"]),
 }
 
 # ---------------------------------------------------------------------------
@@ -160,7 +179,8 @@ BACKBONE = [
 
 # ---------------------------------------------------------------------------
 all_exts = list(BACKBONE)
-all_exts += [mk(name, srcs, inc, libs) for name, (srcs, inc, libs) in FAM.items()]
+# FAM specs are (srcs, inc, libs) or extended (srcs, inc, libs, libdirs, define, link)
+all_exts += [mk(name, *spec) for name, spec in FAM.items()]
 
 # Build filter (CCP_EXT=Name1,Name2) ----------------------------------------
 _filter = os.environ.get("CCP_EXT", "").strip()
