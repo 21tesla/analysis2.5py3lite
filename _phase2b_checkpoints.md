@@ -130,9 +130,16 @@ already installed** (installed during the interrupted 2b session; their importer
 - **Smoke delta: 0 (bucket is classification; importers that COULD be lifted are already
   OK from the 2b session work).**
 
-### Bucket 2 — Cython `superpose` ext build — IN PROGRESS
-(6 importers: queeny.py, core/validate.py, convertChi1Chi22Db.py, convertD1D2_2Db2.py,
-convertPhiPsi2Db.py, test/test_vector.py). cython 3.2.9 available.
+### Bucket 2 — Cython `superpose` ext build — ✅ DONE
+- Ported `superpose.pyx` 3× `DEF X = v` → `cdef [double] X = v` (DEF removed in Cython 3).
+- Modernized `compile.py` (py2 `distutils`/`Cython.Distutils` removed in 3.12):
+  `cythonize([Extension(...)], language_level=3)`; same usage `python compile.py build_ext --inplace`
+  (clean rebuild from scratch VERIFIED).
+- `.gitignore`: ignore generated `superpose.c` (source of truth is the .pyx).
+- **Functional smoke**: NTcVector props/getitem/length/add, `Rm6dist`, and
+  `superposeVectors` shift-recovery test (translation (5,7,2) recovered, RMSD→0.0).
+- All 6 importers OK (queeny, core.validate + 3 converters [indirect via validate], test_vector).
+- **Smoke delta: +6 → 1640 OK / 86 FAILED.**
 
 ## Decision record (2026-08-21)
 **User decision: FINALIZE + COMMIT (scope = core only).** Deferred items above are left

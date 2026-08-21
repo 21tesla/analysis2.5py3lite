@@ -326,7 +326,7 @@ def isNTcVector(x):
 
 
 
-DEF BARLENGTH = 60
+cdef int BARLENGTH = 60
 
 cdef class NTcMatrix:
 
@@ -518,8 +518,8 @@ def calculateRMSD( vectorList1, vectorList2 ):
 #end def
 
 
-DEF MTX_SUPTOLERANCE = 0.00000001
-DEF MTX_SUPMAXITS  = 100000
+cdef double MTX_SUPTOLERANCE = 0.00000001
+cdef int MTX_SUPMAXITS  = 100000
 
 def superposeVectors( sourceVectors, otherVectors ):
     # Calculate rot/translate matrix to superpose the sourceVectors onto otherVectors

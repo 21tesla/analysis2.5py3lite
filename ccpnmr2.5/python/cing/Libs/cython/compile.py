@@ -1,15 +1,11 @@
 # usage: python compile.py build_ext --inplace
 # TODO automate this from CING setup script.
-from Cython.Distutils.build_ext import build_ext  #@UnresolvedImport
-from distutils.core import setup
-
-#from Cython.Distutils.extension import Extension # absent in fink install of cython-py25_0.9.6.10b-1_darwin-i386.deb
-from distutils.extension import Extension  # absent in fink install of cython-py25_0.9.6.10b-1_darwin-i386.deb
+# Modernized for Python 3.13 (py2-era `distutils` / `Cython.Distutils` were removed);
+# requires Cython >= 3 and setuptools.
+from Cython.Build import cythonize
+from setuptools import Extension, setup
 
 setup(
   name = 'Superpose',
-  ext_modules=[
-    Extension("superpose",       ["superpose.pyx"])
-    ],
-  cmdclass = {'build_ext': build_ext}
+  ext_modules=cythonize([Extension("superpose", ["superpose.pyx"])], language_level=3)
 )

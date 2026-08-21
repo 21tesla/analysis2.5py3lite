@@ -17,6 +17,9 @@ dist/
 *.so
 !ccpnmr2.5/c/**/*.so
 
+# Cython-generated C (source of truth: ccpnmr2.5/python/cing/Libs/cython/superpose.pyx)
+ccpnmr2.5/python/cing/Libs/cython/superpose.c
+
 # IDE
 .idea/
 .vscode/
