@@ -110,6 +110,30 @@ Molgrap (1) — all `cing/PluginCode/*.py`; by-design raise ImportWarning.
 3. Stub missing CING API (Project.molecule, ProjectTree.openCompleteTree,
    Coplanar) — would lift ~5 modules but fabricates API surface.
 
+## Phase 2c — full-attribute build (user directive 2026-08-22: work through each
+## bucket so the build retains the software's current attributes; checkpoint after
+## EACH bucket)
+
+### Bucket 1 — optional third-party deps — ✅ DONE (docs only, no code change)
+Verified venv state: **cherrypy 18.10.0, decorator 5.3.1, pycurl 7.47.0, cython 3.2.9
+already installed** (installed during the interrupted 2b session; their importers
+`webFc.py`/`TestNefIo.py`/`toposcmd.py`/`PoolDownloader.py` all import OK now).
+- **pymol: classified EXTERNAL (deliberate, matches original attrs).**
+  - Original distribution did NOT bundle pymol (absent from `environment_Linux.yml`;
+    scripts say "Requires the pymol python code etc to be properly installed").
+  - `pyMolWorks.py` runs `pymol.finish_launching()` at MODULE level (PyMOL C++ engine
+    start) — installing pymol 2.x in this headless env would hang/hard-fail the smoke
+    run instead of failing fast; 1.x-era API era mismatch.
+- **py2-only / internal sub-repos (NOT pip-installable, keep as-is)**: pymc (PyMC2),
+  sans, yasara, ccpncore, `Refine`, `protocol`, `UtilsAnalysis`, `pdbe.analysis`,
+  `pdbe2`, `memops.scripts`.
+- **Smoke delta: 0 (bucket is classification; importers that COULD be lifted are already
+  OK from the 2b session work).**
+
+### Bucket 2 — Cython `superpose` ext build — IN PROGRESS
+(6 importers: queeny.py, core/validate.py, convertChi1Chi22Db.py, convertD1D2_2Db2.py,
+convertPhiPsi2Db.py, test/test_vector.py). cython 3.2.9 available.
+
 ## Decision record (2026-08-21)
 **User decision: FINALIZE + COMMIT (scope = core only).** Deferred items above are left
 for future sessions (explicit follow-ups: optional deps, superpose build, CING stubs).
