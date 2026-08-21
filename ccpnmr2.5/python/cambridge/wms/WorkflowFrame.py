@@ -285,6 +285,6 @@ if __name__ == "__main__":
   else:
     ccpnProject = None
 
-  popup = WorkflowFramePopup(root, ccpnProject=ccpnProject)
+  popup = WorkflowPopup(root, ccpnProject=ccpnProject)
 
   root.mainloop()

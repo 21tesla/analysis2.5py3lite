@@ -179,7 +179,7 @@ class ProntoPeakFile(ProntoGenericFile):
 
         # fout.write("label dataset sw sf" + self.newline)
 
-        fout.close()
+        # fout.close()
 
 
 class ProntoPeak:

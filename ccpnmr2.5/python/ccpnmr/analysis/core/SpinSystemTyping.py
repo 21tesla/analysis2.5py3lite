@@ -340,14 +340,14 @@ def searchPosterior(
                 correct = ""
 
                 for j in range(len(known)):
-                    if known[j] == current[j]:
+                    if known[j] == cc[j]:
                         correct += known[j]
                     else:
                         correct += "-"
 
                 print(i, p0)
                 print(scores)
-                print(current)
+                print(cc)
                 print(correct)
                 print(known)
 

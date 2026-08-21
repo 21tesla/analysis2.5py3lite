@@ -102,7 +102,7 @@ def make_isd_atom(ccp_atom):
 
   return isd_atom
 
-def make_isd_residue(ccp_residue, connectivity):
+def make_isd_residue(ccp_residue, connectivity, index):
   """Descrn: Make an ISD Residue given a CCPN Residue object
      Inputs: ccp.molecule.MolSystem.Residue
      Output: ISD residue
@@ -119,7 +119,7 @@ def make_isd_residue(ccp_residue, connectivity):
   if residue_number is not None:
       residue.name += str(residue_number)
   else:
-      residue.name += str(i)
+      residue.name += str(index)
 
   ## create atoms
 
@@ -160,7 +160,7 @@ def create_isd_polymer(ccp_chain):
 
   connectivity = load_connectivity()
 
-  isd_residues = [make_isd_residue(x, connectivity.getResidue(x.ccpCode)) for x in ccp_chain.sortedResidues()]
+  isd_residues = [make_isd_residue(x, connectivity.getResidue(x.ccpCode), i) for i, x in enumerate(ccp_chain.sortedResidues())]
 
   ## link residues
 
@@ -678,7 +678,7 @@ class CCPNReader:
 
             r_isd.number = constraint.serial
             r_isd.contributions = tuple(contribs)
-            r_isd.coupling = self.get_volume(constraint, restraint_number)
+            r_isd.coupling = self.get_volume(constraint, constraint.serial)
 
             restraints.append(r_isd)
 
@@ -766,7 +766,7 @@ class CCPNReader:
                 r_isd.distance = 0.5*abs(constraint.upperLimit+constraint.lowerLimit)
 
                 if not self.debug:
-                  print('HBond restraint %d:'% ccpn_restraint_number)
+                  print('HBond restraint %d:'% constraint.serial)
 
                 print('No distance found. Using (upper_bound+lower_bound)/2 as estimate.')
 
@@ -807,7 +807,7 @@ class CCPNReader:
 
               for key, restaints in d.items():
                 R = data.RestraintList()
-                R.restraints = restraints
+                R.restraints = restaints
                 d[key] = R
 
             else:

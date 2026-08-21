@@ -71,6 +71,17 @@ UNICODE_PHI = "\u03a6"
 UNICODE_PSI = "\u03a8"
 
 
+def find_mean_sd(pairs):
+    """Mean and (population) std-dev of the first and second elements of each pair."""
+
+    def mean_sd(vals):
+        mean = sum(vals) / len(vals)
+        sd = math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals))
+        return mean, sd
+
+    return mean_sd([p[0] for p in pairs]) + mean_sd([p[1] for p in pairs])
+
+
 class ViewRamachandranFrame(ScrolledCanvas):
     def __init__(
         self,

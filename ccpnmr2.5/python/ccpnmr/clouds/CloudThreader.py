@@ -542,7 +542,7 @@ def getInitialAssignment(residues, spinSystems, preserveAssign, graph=None, prog
     typeScores = {}
     for ss in spinSystems:
         print("  ", ss)
-        scores = getSpinSystemChainProbabilities(ss, chain, dshiftList)
+        scores = getSpinSystemChainProbabilities(ss, chain, shiftList)
 
         typeScores[ss] = {}
         for ccpCode in scores.keys():
@@ -830,7 +830,9 @@ def getDistDistributions(
 def makeStructureDictFromXml(path, fileName):
 
     print("Reading %s" % fileName)
-    project = XmlIO.loadProject(fileName, showWarning=showWarning)
+    from memops.general.Io import loadProject
+
+    project = loadProject(fileName, showWarning=showWarning)
 
     molSystem = project.findFirstMolSystem()
     structure = molSystem.findFirstStructureEnsemble()

@@ -262,6 +262,8 @@ integration in NMR structure calculation. Bioinformatics 23:381-382"""
     canvas.grid(row=0,column=0)
     canvas.create_image(10,10, anchor='nw', image=self.msdLogo)
 
+    from ccpnmr.eci.EntryCompletionFrame import EntryCompletionFrame
+
     eciFrame = EntryCompletionFrame(frame, basePopup=self)
     eciFrame.grid(row=1, column=0, sticky='nsew')
 
@@ -279,6 +281,8 @@ integration in NMR structure calculation. Bioinformatics 23:381-382"""
     canvas = Tkinter.Canvas(frame, width=753, height=92)
     canvas.grid(row=0,column=0)
     canvas.create_image(0,0, anchor='nw', image=self.haddockLogo)
+
+    from utrecht.haddock.HaddockFrame import HaddockFrame
 
     haddockFrame = HaddockFrame(frame, self.project)
     haddockFrame.grid(row=1, column=0, sticky='nsew')

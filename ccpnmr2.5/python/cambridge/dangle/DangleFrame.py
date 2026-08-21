@@ -612,7 +612,7 @@ class DangleFrame(Frame):
 
 
       path = os.path.join(self.dangleDir, 'Res_%d.pgm' % resNum)
-      gleMatrix = self.readGLE(path)
+      gleMatrix = self.readGLE(path, resNum)
       residue = chain.findFirstResidue(seqId=int(resNum))
 
       dangleResidue = self.dangleChain.findFirstDangleResidue(residue=residue)
@@ -638,7 +638,7 @@ class DangleFrame(Frame):
     progressBar.destroy()
 
 
-  def readGLE(self, gleFile):
+  def readGLE(self, gleFile, resNum=None):
 
     if not os.path.isfile(gleFile):
       msg = 'No scorogram Res_%d.pgm\nin directory %s.' % (resNum, self.dangleDir)

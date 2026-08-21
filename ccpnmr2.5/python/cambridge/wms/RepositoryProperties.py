@@ -124,7 +124,7 @@ class RepositoryPropertiesFrame(Frame):
     # need to test the connection and store the set of connections
     # locally (in rep?)
 
-    self.basePopup.parent.repList.newRepository(name, connect, user)
+    self.basePopup.parent.repList.newRepository(name, connect, username)
     self.basePopup.destroy()
 
 

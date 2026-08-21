@@ -19,7 +19,7 @@ class Task:
 
         # need to look at the cardinality here
 
-        self.input = input
-        self.output= output
+        self.input = None
+        self.output = None
 
 

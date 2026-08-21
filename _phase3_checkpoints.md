@@ -8,11 +8,13 @@
 - Ruff baseline: **26,609 findings** (E,F,W,I,UP; auto-gen api/xml dirs excluded).
 - Scope (user, 2026-08-21): (1) safe ruff fixes ONLY — no bulk style pass;
   (2) F821 undefined-name audit → fix genuine bugs. All other buckets DEFERRED (see below).
-- **Current progress (2026-08-21, this session):** Bucket 1 ✔ committed `65f475e`.
-  Bucket 2 **part 1 ✔ committed this session** — 43 genuine py2→py3 runtime bugs fixed
-  (42 from prior session + DangleFrame import-cycle fix), gates **1643/0/83, 0 compile, pytest 15/14/10**.
-  Remaining F821 to audit in **part 2**: ~342 findings (~171 in CING standalone scripts = by-design,
-  ~171 in core to triage file-by-file). See Bucket 2 section for the resume map.
+- **Current progress (2026-08-21):** Bucket 1 ✔ `65f475e`; Bucket 2 part 1 ✔ `bf290e6` (43 genuine fixes);
+  Bucket 2 part 2a ✔ `8af5e45` (17 files); Bucket 2 part 2b ✔ this session (16 files:
+  missing imports/in-scope-name fixes/two lazy imports for cycle-risk — each name target verified
+  against its source, gates **1643/0/83, 0 compile, pytest 15/14/10**).
+  F821 residue now **285**: ~170 in the by-design CING standalone-script cluster (plot3 ×148,
+  axesRoutines ×21, mouseBuffer ×1), ~115 across ~44 files still to triage file-by-file.
+  See Bucket 2 part-2 section for the resume map.
 
 ## Bucket 1 — safe ruff fixes — ✔ DONE (2026-08-21, commit in close-out)
 - Applied via explicit rule select (never bare `--fix`):
@@ -34,7 +36,7 @@
   Molecule.py 8 names + findAtomSetResonances, StructureBasic.py 9 names, peaksIO.py
   `Mapping as DictMixin` all present in paren blocks).
 
-## Bucket 2 — F821 undefined-name audit (baseline 420) — status: **PART 1 COMMITTED (43 fixed); PART 2 TO DO (~342 remaining)**
+## Bucket 2 — F821 undefined-name audit (baseline 420) — status: **PARTS 1+2a+2b COMMITTED (43+17+16=76 fixed); ~285 RESIDUE (≈170 by-design CING, ≈115 to triage)**
 Classification buckets: GENUINE (fixed) / FALSE-POSITIVE (dynamic metamodel, star re-exports,
 C-ext attrs, exec-injected) / NOT-WORTHWHILE (file is by-design).
 
@@ -69,17 +71,67 @@ Categories (42 from prior session's uncommitted diff + 1 fixed by me):
   **Fix:** move the import to a function-local inside `testMacro` (lazy) — breaks the cycle, keeps the dependency
   direction (popup→frame). **Rule: when an F821 import fix risks a module-level cycle, use a function-local import.**
 
-### Part 2 — REMAINING ~342 findings (resume map; audit file-by-file in MAIN session, no subagents)
+### Part 2 — RESIDUE MAP (285 findings after part-2b; audit file-by-file in MAIN session, no subagents)
 Run: `.venv/bin/ruff check ccpnmr2.5/python/ --select F821 --output-format concise`
-- **NOT-WORTHWHILE cluster (≈171, by-design / out-of-import-surface):** CING standalone pipeline/demo scripts —
+**part-2a committed `8af5e45` (2026-08-21):** 17 files — incl. the two previously-confirmed GENUINE
+candidates: `ccpnmr/format/converters/AmberFormat.py` (py2 `sys.exc_type`/`sys.exc_value` → `sys.exc_info()`;
+added missing `sys`/`traceback` imports) and `ccpnmr/clouds/FilterClouds.py` (`math.sqrt` → `sqrt` —
+module already has `from math import sqrt`). Full list in commit message.
+**part-2b committed this session (2026-08-21):** 16 files, 31 findings — each name verified against
+source before commit (in-scope variable / class existence / callback semantics):
+- `cambridge/bayes/kmeans.py` — `vstack` → `numpy.vstack` (`import numpy` present; `__main__` block).
+- `cambridge/dangle/DangleFrame.py` — `readGLE(path)` → `readGLE(path, resNum)` + signature `(gleFile, resNum=None)`
+  (resNum was read in the missing-file error message → guaranteed NameError).
+- `cambridge/isd/CCPNReader.py` (4) — `make_isd_residue(..., index)` + caller `enumerate(...)`;
+  `get_volume(constraint, restraint_number)`/`% ccpn_restraint_number` → `constraint.serial` (both match the
+  identical sibling call patterns in the same class); `R.restraints = restraints` → `restaints` (loop var).
+- `cambridge/wms/ExtendNmrFrame.py` (2) — top-level imports were commented out (cycle-risk) → added
+  function-local imports at use sites: `ccpnmr.eci.EntryCompletionFrame.EntryCompletionFrame` (class exists, line 988),
+  `utrecht.haddock.HaddockFrame.HaddockFrame` (class exists, line 134).
+- `cambridge/wms/RepositoryProperties.py` — undefined `user` (py2-only builtin) → `username` (defined line 121).
+- `cambridge/wms/Task.py` — undefined `input`/`output` → `None` placeholders (attribute slots filled later via metamodel).
+- `cambridge/wms/WorkflowFrame.py` — `WorkflowFramePopup` → `WorkflowPopup` (actual class, line 29; `__main__` block).
+- `ccp/format/ansig/AnsigSpectrum.py` — bare `readParFile(parFile)` → `spectrum.readParFile(parFile)` (method exists, line 46).
+- `ccp/format/pronto/peaksIO.py` — `fout.close()` in `write()` where `fout` never existed (whole method is commented-out
+  dead code) → commented the orphan line to match.
+- `ccp/gui/ViewChemCompVarFrame.py` — `Geometry.vectorsSubtract/Add` → bare `vectorsSubtract/Add`
+  (module imports them from `memops.universal.Geometry`, line 62; `Geometry` itself never imported).
+- `ccp/gui/ViewRamachandranFrame.py` — undefined `find_mean_sd` → added module-level helper
+  (mean + population-SD of (phi, psi) pair columns; `import math` present line 61; call sites lines 776/789).
+- `ccpnmr/analysis/core/SpinSystemTyping.py` — `current` → `cc` (defined line 295 `cc = getNewClassifications(cc0, num)`).
+- `ccpnmr/clouds/CloudHomologueAssign.py` — `chain.residues` → `chainH.residues` (fn param is `chainH`);
+  `getAtomSetCoords(atomSet, ...)` → `atom.atomSet` (loop var). **Adjacent pre-existing bug OBSERVED, NOT in-scope (F821 only):**
+  `amideCoords.append(coords[0], residue)` — list.append with 2 args = guaranteed TypeError; needs `append((coords[0], residue))`.
+- `ccpnmr/clouds/CloudThreader.py` (2) — `dshiftList` → `shiftList` (defined line 537);
+  `XmlIO.loadProject` → function-local `from memops.general.Io import loadProject` (memops I/O API;
+  `showWarning=showWarning` is CORRECT — `loadProject` docstring: showWarning is a callback fn (title,message));
+  2 F821 remain in this file (separate names).
+- `ccpnmr/clouds/PseudoResonances.py` — `mergePseudoSpinSysts(ss1, ss2)` → `self.mergePseudoSpinSysts(ss1, ss2)`
+  (only caller, line 74) + signature `name` → `name=None`.
+- `ccpnmr/format/converters/DataFormat.py` (5, 1 remains) — `structure.__class__` → `type(self.chemCompVar)` (invalid-object type);
+  `peak.sortedPeakDims()` → `self.peakList.sortedPeaks()[0].sortedPeakDims()[0].dataDimRef` (mirrors the else-branch);
+  `coordChain`/`coordResidue` ×4 → `chain`/`residue` (loop vars in scope); `% (title, status, year)` → `(title, className, year)`
+  (loop var is `tcitation`; `className` is the in-scope param).
+- **NOT-WORTHWHILE cluster (≈170, by-design / out-of-import-surface):** CING standalone pipeline/demo scripts —
   `cing/Scripts/CASD/plot3.py` (148: `plt`/`np`/`results`/`NTvalue`/`rmsdToTarget`/`dataPath`),
   `cing/Scripts/interactive/axesRoutinesModified.py` (21: `np`/`mlab`/`datetime`/`mpath`/`mpatches`/`iq`),
   `cing/Scripts/Analysis/mouseBuffer.py` (1: `top`), `cing/PluginCode/test/parametersTest.py` (1: `refineParameters`).
   These import fine in smoke (undefined names are latent in function bodies); not core library modules.
   **Decision: document as by-design, no fix** (consistent with the 83 BY-DESIGN allowlist philosophy).
-- **GENUINE candidates (confirmed, to fix in part 2):** `ccpnmr/format/converters/AmberFormat.py`
-  (uses py2-only `sys.exc_type`/`sys.exc_value` + unimported `traceback`,`sys` in a bare `except:` — real crash),
-  `ccpnmr/clouds/FilterClouds.py` (`math` unimported — likely real).
+- **Per-file residue map (285 total; counts after 2b, excluding the 170 CING by-design):**
+  `cyana2ccpn/CyanaParser/CyanaParser.py` 12, `ccp/format/marvin/peaksIO.py` 11,
+  `utrecht/haddock/HaddockExportParam_new.py` 7 (backup file), `ccp/format/pistachio/chemShiftsIO.py` 7,
+  `ccpnmr/format/webServer/webFc.py` 5 (FCGI-injected), `pdbe/nmrStar/IO/NmrStarHandler.py` 4,
+  `memops/format/xml/Compatibility.py` 4, `ccpnmr/format/gui/AcqProcParsEditPopup.py` 4,
+  `ccpnmr/clouds/CloudThreaderPopup.py` 4, `pdbe/adatah/Pdb.py` 3, `memops/universal/Geometry.py` 3,
+  `gottingen/PalesFrame.py` 3, `ccpnmr/integrator/plugins/Rosetta/write.py` 3,
+  `ccpnmr/integrator/core/Io.py` 3, `ccpnmr/clouds/NoeMatrix.py` 3, `ccp/lib/StructureIo.py` 3,
+  `pdbe/software/Util.py` 2, `pdbe/deposition/dataFileImport/formatConverterWrapper.py` 2,
+  `pdbe/adatah/Io.py` 2, `memops/general/Util.py` 2, `grenoble/BlackledgeModule/BlackledgeModuleFrame.py` 2,
+  `cing/Libs/helper.py` 2, `ccpnmr/clouds/CloudThreader.py` 2,
+  and 22 files × 1 (incl. `ccpnmr/format/converters/DataFormat.py`, `ccpnmr/analysis/core/StructureBasic.py`,
+  `memops/metamodel/ModelTraverse_py_2_1.py`, `ccp/lib/DataConvertLib.py`, `ccpnmr/workflow/Fc.py`,
+  `cambridge/wms/ProtocolFrame.py`).
 - **LIKELY FALSE-POSITIVE (document, don't touch):** metamodel dynamic attrs, web-server globals
   (`webServer/webFc.py`: `formatConvert`/`regenerateThisPage`/`createThisPageFirstTime` = FCGI-injected),
   `self` in generator/lambda bodies (`peaksIO.py`, `StructureIo.py`), `except (ValueError, v)`-style unpacks

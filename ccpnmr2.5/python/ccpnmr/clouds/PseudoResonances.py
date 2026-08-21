@@ -71,7 +71,7 @@ class PseudoMolSystem:
         if ss2:
             if ss1:
                 if ss1 is not ss2:
-                    mergePseudoSpinSysts(ss1, ss2)
+                    self.mergePseudoSpinSysts(ss1, ss2)
             else:
                 res1.setPseudoSpinSyst(ss2)
 
@@ -80,7 +80,7 @@ class PseudoMolSystem:
         res2.delete()
         return res1
 
-    def mergePseudoSpinSysts(self, ss1, ss2, name):
+    def mergePseudoSpinSysts(self, ss1, ss2, name=None):
 
         if (ss1.parent is not self) or (ss2.parent is not self):
             print("PseudoSpinSyst not in PseudoMolSystem")

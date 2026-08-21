@@ -229,7 +229,7 @@ def readSpectraFile(project, directoryDict, verbose=False):
             spectrum.parFile = parFile
             if os.path.exists(parFile):
                 try:
-                    readParFile(parFile)
+                    spectrum.readParFile(parFile)
                 except OSError as e:
                     raise AnsigParseException(str(e))
 

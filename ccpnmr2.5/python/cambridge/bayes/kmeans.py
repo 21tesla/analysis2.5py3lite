@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
   testDataB1 = numpy.random.normal(0.0, 2.0, (100,2))
   testDataB2 = numpy.random.normal(7.0, 2.0, (100,2))
-  testDataB = vstack([testDataB1, testDataB2]) # Two clumps
+  testDataB = numpy.vstack([testDataB1, testDataB2]) # Two clumps
 
   means, clusters = kMeans(testDataB, 2)
 

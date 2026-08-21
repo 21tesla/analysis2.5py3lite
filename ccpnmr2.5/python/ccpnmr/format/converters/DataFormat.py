@@ -2206,7 +2206,7 @@ class DataFormat(TopShared):
             if not isinstance(self.chemCompVar, ChemComp.ChemCompVar):
                 self.messageReporter.showError(
                     "Error",
-                    "Need valid chemCompVar object to write chemComp file (instead of a %s)." % structure.__class__,
+                    "Need valid chemCompVar object to write chemComp file (instead of a %s)." % type(self.chemCompVar),
                     parent=self.guiParent,
                 )
 
@@ -9912,7 +9912,7 @@ class DataFormat(TopShared):
         if self.dataDimRefs == None:
             # 1D's special case!
             if self.peakList.dataSource.numDim == 1:
-                tempDataDimRefs = [peak.sortedPeakDims()[0].dataDimRef]
+                tempDataDimRefs = [self.peakList.sortedPeaks()[0].sortedPeakDims()[0].dataDimRef]
 
             else:
                 peak = self.peakList.sortedPeaks()[0]
@@ -14807,26 +14807,26 @@ Cannot map atom names for export.
                 # get original data
                 if origFormat is not None:
                     # chain
-                    origChainCode = coordChain.findFirstApplicationData(
+                    origChainCode = chain.findFirstApplicationData(
                         application=origFormat, keyword="originalChainCode"
                     )
                     if origChainCode:
                         data["origChainCode"][ii] = origChainCode.value
 
                     # residue
-                    origSeqCode = coordResidue.findFirstApplicationData(
+                    origSeqCode = residue.findFirstApplicationData(
                         application=origFormat, keyword="originalSeqCode"
                     )
                     if origSeqCode:
                         data["origSeqCode"][ii] = origSeqCode.value
 
-                    origSeqInsertCode = coordResidue.findFirstApplicationData(
+                    origSeqInsertCode = residue.findFirstApplicationData(
                         application=origFormat, keyword="originalSeqInsertCode"
                     )
                     if origSeqInsertCode:
                         data["origSeqInsertCode"][ii] = origSeqInsertCode.value
 
-                    origResLabel = coordResidue.findFirstApplicationData(
+                    origResLabel = residue.findFirstApplicationData(
                         application=origFormat, keyword="originalLabel"
                     )
                     if origResLabel:
@@ -16081,7 +16081,7 @@ Cannot map atom names for export.
                 if len(citationsFound) > 1:
                     print(
                         "  Warning: match (but no full match) found for citation %s %s %s - picking first match."
-                        % (title, status, year)
+                        % (title, className, year)
                     )
                 citation = citationsFound[0]
 

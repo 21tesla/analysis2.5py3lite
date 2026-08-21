@@ -341,8 +341,8 @@ class ViewChemCompVarFrame(ViewStructureFrame):
 
             for chemAtom in atoms:
                 coords = chemAtom.drawCoords
-                coords = Geometry.vectorsSubtract(meanPosition, coords)
-                coords = Geometry.vectorsAdd(self.center, coords)
+                coords = vectorsSubtract(meanPosition, coords)
+                coords = vectorsAdd(self.center, coords)
                 # chemAtom.drawCoords = coords
 
             if c % 3 == 0:
