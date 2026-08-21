@@ -138,13 +138,13 @@ static CcpnStatus get_int(PyObject *w, Bool have_list, int n, int *value, CcpnSt
     else
         z = PyTuple_GetItem(w, n);
 
-    if (!PyInt_Check(z))
+    if (!PyLong_Check(z))
     {
         sprintf(error_msg, "item %d must be an int", n);
         return CCPN_ERROR;
     }
 
-    *value = (int) PyInt_AsLong(z);
+    *value = (int) PyLong_AsLong(z);
 
     return CCPN_OK;
 }
@@ -158,7 +158,7 @@ static CcpnStatus get_float(PyObject *w, Bool have_list, int n, float *value, Cc
     else
         z = PyTuple_GetItem(w, n);
 
-    if (!PyFloat_Check(z) && !PyInt_Check(z))
+    if (!PyFloat_Check(z) && !PyLong_Check(z))
     {
         sprintf(error_msg, "item %d must be an int or float", n);
         return CCPN_ERROR;
@@ -167,7 +167,7 @@ static CcpnStatus get_float(PyObject *w, Bool have_list, int n, float *value, Cc
     if (PyFloat_Check(z))
         *value = (float) PyFloat_AsDouble(z);
     else
-        *value = (float) PyInt_AsLong(z);
+        *value = (float) PyLong_AsLong(z);
 
     return CCPN_OK;
 }
@@ -729,7 +729,7 @@ static PyObject *new_py_peak_list(int ndim, int *npoints)
     if (!peak_list)
         RETURN_OBJ_ERROR("allocating Peak_list object");
 
-    PY_MALLOC(obj, struct Py_Peak_list, &Peak_list_type);
+    obj = (Py_Peak_list) PyObject_New(struct Py_Peak_list, &Peak_list_type);
 
     if (!obj)
     {
@@ -754,7 +754,7 @@ static void delete_py_peak_list(PyObject *self)
 
     delete_peak_list(peak_list);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -766,21 +766,9 @@ static int print_py_peak_list(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_peak_list(PyObject *self, char *name)
+static PyObject *getattr_py_peak_list(PyObject *self, PyObject *attr_name)
 {
-    /*
-        Peak_list *obj = (Peak_list *) self;
-        Random_access *a = obj->py_handler;
-
-        if (equal_strings(name, "par_file"))
-    	return Py_BuildValue("s", a->par_file);
-        else if (equal_strings(name, "access_method"))
-    	return Py_BuildValue("s", access_method_name(a->access_method));
-        else if (equal_strings(name, "data_format"))
-    	return get_Peak_list_format(a);
-        else
-    */
-    return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -813,23 +801,44 @@ static PySequenceMethods Peak_list_sequence_methods =
 
 static PyTypeObject Peak_list_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "PeakList", /* name */
-    sizeof(struct Py_Peak_list), /* basicsize */
-    0, /* itemsize */
-    delete_py_peak_list, /* destructor */
-    0, /* printfunc */
-    getattr_py_peak_list, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Peak_list_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "PeakList",                                 /* tp_name */
+    sizeof(struct Py_Peak_list),                 /* tp_basicsize */
+    0,                                           /* tp_itemsize */
+    (destructor) delete_py_peak_list,            /* tp_dealloc */
+    0,                                           /* tp_vectorcall */
+    0,                                           /* tp_getattr */
+    0,                                           /* tp_setattr */
+    0,                                           /* tp_as_async */
+    0,                                           /* tp_repr */
+    0,                                           /* tp_as_number */
+    0,                                           /* tp_as_sequence */
+    0,                                           /* tp_as_mapping */
+    0,                                           /* tp_hash */
+    0,                                           /* tp_call */
+    0,                                           /* tp_str */
+    (getattrofunc) getattr_py_peak_list,         /* tp_getattro */
+    0,                                           /* tp_setattro */
+    0,                                           /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                          /* tp_flags */
+    "PeakList -- list of NMR peaks",             /* tp_doc */
+    0,                                           /* tp_traverse */
+    0,                                           /* tp_clear */
+    0,                                           /* tp_richcompare */
+    0,                                           /* tp_weaklistoffset */
+    0,                                           /* tp_iter */
+    0,                                           /* tp_iternext */
+    py_handler_methods,                          /* tp_methods */
+    0,                                           /* tp_members */
+    0,                                           /* tp_getset */
+    0,                                           /* tp_base */
+    0,                                           /* tp_dict */
+    0,                                           /* tp_descr_get */
+    0,                                           /* tp_descr_set */
+    0,                                           /* tp_dictoffset */
+    0,                                           /* tp_init */
+    0,                                           /* tp_alloc */
+    0,                                           /* tp_new */
 };
 
 /*****************************************************************************
@@ -1080,22 +1089,44 @@ static struct PyMethodDef Peak_list_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initPeakList(void)
+static struct PyModuleDef peak_list_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "PeakList",
+    "CCPNMR PeakList module (Python 3 compatible)",
+    -1,
+    Peak_list_type_methods
+};
 
-#ifdef WIN64
-    Peak_list_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("PeakList", Peak_list_type_methods);
+PyMODINIT_FUNC PyInit_PeakList(void)
+{
+    if (PyType_Ready(&Peak_list_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    /* Peak_list objects hold internal Peak objects; make that type ready too */
+    if (ready_peak_type() < 0)
+    {
+        Py_FatalError("PeakList: cannot initialize Peak type");
+        return NULL;
+    }
+
+    PyObject *m = PyModule_Create(&peak_list_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("PeakList.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module PeakList");
+    return m;
 }

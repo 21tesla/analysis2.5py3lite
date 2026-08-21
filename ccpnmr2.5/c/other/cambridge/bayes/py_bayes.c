@@ -72,22 +72,44 @@ Bool is_py_bayes(PyObject *obj)
 
 static PyTypeObject BayesPeakSeparator_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "BayesPeakSeparator", /* name */
-    sizeof(struct Py_BayesPeakSeparator), /* basicsize */
-    0, /* itemsize */
-    0, /* destructor */
-    0, /* printfunc */
-    0, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "BayesPeakSeparator",                     /* tp_name */
+    sizeof(struct Py_BayesPeakSeparator),     /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    0,                                        /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    0,                                        /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    0,                                        /* tp_getattro */
+    0,                                        /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "BayesPeakSeparator -- CCPNMR Bayes peak separator", /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    0,                                        /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    0,                                        /* tp_new */
 };
 
 /*****************************************************************************
@@ -288,22 +310,34 @@ static struct PyMethodDef BayesPeakSeparator_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initBayesPeakSeparator( void )
+static struct PyModuleDef bayes_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "BayesPeakSeparator",
+    "CCPNMR BayesPeakSeparator module (Python 3 compatible)",
+    -1,
+    BayesPeakSeparator_type_methods
+};
 
-#ifdef WIN64
-    BayesPeakSeparator_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("BayesPeakSeparator", BayesPeakSeparator_type_methods);
+PyMODINIT_FUNC PyInit_BayesPeakSeparator(void)
+{
+    PyObject *m = PyModule_Create(&bayes_module_def);
+    if (!m)
+        return NULL;
 
-    /* add symbolic constants to the module */
-    d = PyModule_GetDict(m);
-    ErrorObject = Py_BuildValue("s", "BayesPeakSeparator.error");
-    PyDict_SetItemString(d, "error", ErrorObject);
+    ErrorObject = PyErr_NewException("BayesPeakSeparator.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
+    Py_INCREF(ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module BayesPeakSeparator");
+    return m;
 }

@@ -95,7 +95,7 @@ static PyObject *new_py_contour_levels(PyObject *levels_obj)
     if (!contour_levels)
         RETURN_OBJ_ERROR("allocating Contour_levels object");
 
-    PY_MALLOC(obj, struct Py_Contour_levels, &Contour_levels_type);
+    obj = (Py_Contour_levels) PyObject_New(struct Py_Contour_levels, &Contour_levels_type);
 
     if (!obj)
     {
@@ -120,7 +120,7 @@ static void delete_py_contour_levels(PyObject *self)
 
     delete_contour_levels(contour_levels);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -132,7 +132,7 @@ static int print_py_contour_levels(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_contour_levels(PyObject *self, char *name)
+static PyObject *getattr_py_contour_levels(PyObject *self, PyObject *attr_name)
 {
     /*
         Contour_levels *obj = (Contour_levels *) self;
@@ -146,7 +146,7 @@ static PyObject *getattr_py_contour_levels(PyObject *self, char *name)
     	return get_Contour_levels_format(a);
         else
     */
-    return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -179,23 +179,44 @@ static PySequenceMethods Contour_levels_sequence_methods =
 
 static PyTypeObject Contour_levels_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "ContourLevels", /* name */
-    sizeof(struct Py_Contour_levels), /* basicsize */
-    0, /* itemsize */
-    delete_py_contour_levels, /* destructor */
-    0, /* printfunc */
-    getattr_py_contour_levels, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Contour_levels_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "ContourLevels",                          /* tp_name */
+    sizeof(struct Py_Contour_levels),         /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    (destructor) delete_py_contour_levels,    /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    0,                                        /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    (getattrofunc) getattr_py_contour_levels, /* tp_getattro */
+    0,                                        /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "ContourLevels -- contour levels",        /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    py_handler_methods,                       /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    0,                                        /* tp_new */
 };
 
 /*****************************************************************************
@@ -241,22 +262,37 @@ static struct PyMethodDef Contour_levels_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initContourLevels(void)
+static struct PyModuleDef contour_levels_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "ContourLevels",
+    "CCPNMR ContourLevels module (Python 3 compatible)",
+    -1,
+    Contour_levels_type_methods
+};
 
-#ifdef WIN64
-    Contour_levels_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("ContourLevels", Contour_levels_type_methods);
+PyMODINIT_FUNC PyInit_ContourLevels(void)
+{
+    if (PyType_Ready(&Contour_levels_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&contour_levels_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("ContourLevels.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module ContourLevels");
+    return m;
 }

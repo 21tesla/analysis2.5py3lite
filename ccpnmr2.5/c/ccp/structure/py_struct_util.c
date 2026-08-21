@@ -305,19 +305,34 @@ static struct PyMethodDef Structure_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initStructUtil(void)
+static struct PyModuleDef struct_util_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "StructUtil",
+    "CCPNMR StructUtil module (Python 3 compatible)",
+    -1,
+    Structure_type_methods
+};
 
-    /* create the module and add the functions */
-    m = Py_InitModule("StructUtil", Structure_type_methods);
+PyMODINIT_FUNC PyInit_StructUtil(void)
+{
+    PyObject *m = PyModule_Create(&struct_util_module_def);
+    if (!m)
+        return NULL;
 
-    /* create exception object and add to module */
     ErrorObject = PyErr_NewException("StructUtil.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module StructUtil");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

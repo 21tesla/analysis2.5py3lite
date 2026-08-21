@@ -1,61 +1,176 @@
-"""Build script for CCPNMR C extensions (Python 3.13)."""
+"""Build script for CCPNMR C extensions (Python 3.13).
+
+Two families of C extension modules live in this tree:
+
+  1. The memops/MOPS "data backbone" (8 exts) — already migrated in Phase 1b.
+     Imported flat/top-level (e.g. ``import ShapeFile``) and built into
+     ``ccpnmr2.5/python/``.
+
+  2. The per-package analysis exts (clouds / dynamics / analysis / ccp-structure /
+     cambridge) — imported as *package submodules* (``ccpnmr.c.PeakList``,
+     ``ccp.c.StructAtom``, ``cambridge.c.BayesPeakSeparator``).  Each one is
+     exposed through a symlink ``<pkg>/c/<Name>.so -> c/<...>/<Name>.so``.
+     We therefore build a flat ``<Name>`` extension and copy the resulting
+     shared object onto that symlink target (overwriting the stale Py2 build).
+
+Build filter:
+    CCP_EXT=ShapeFile,PeekList python setup.py build_ext --inplace
+    (comma-separated module names; defaults to building everything defined
+    below).  This lets you build a single extension for incremental work.
+"""
 import os
 from setuptools import setup, Extension
 
-CC = "ccpnmr2.5/c/memops/global"
+# Source directories -----------------------------------------------------------------
+G     = "ccpnmr2.5/c/memops/global"          # shared helpers + the backbone exts
+CLOUD = "ccpnmr2.5/c/ccpnmr/clouds"
+DYN   = "ccpnmr2.5/c/ccpnmr/dynamics"
+ANA   = "ccpnmr2.5/c/ccpnmr/analysis"
+STR   = "ccpnmr2.5/c/ccp/structure"
+BAYES = "ccpnmr2.5/c/other/cambridge/bayes"
 
-def ext(name, sources, extra_sources=None):
-    srcs = [os.path.join(CC, s) for s in sources]
-    if extra_sources:
-        srcs += [os.path.join(CC, s) for s in extra_sources]
+CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
+
+
+def mk(name, sources, include, libs=(), libdirs=(), define=()):
+    """Build an Extension with explicit source paths + include/link settings."""
     return Extension(
         name,
-        sources=srcs,
-        include_dirs=[CC],
-        extra_compile_args=["-Wall", "-Wno-unused-function", "-Wno-unused-variable"],
+        sources=sources,
+        include_dirs=include,
+        define_macros=list(define),
+        libraries=list(libs),
+        library_dirs=list(libdirs),
+        extra_compile_args=CFLAGS,
     )
 
-ext_modules = [
-    ext("ShapeFile",
-        ["py_shape_file.c", "shape_file.c", "python_util.c", "utility.c"]),
 
-    ext("MemCache",
-        ["py_mem_cache.c", "mem_cache.c",
-         "hash_list.c", "hash_table.c", "int_array.c",
-         "list.c", "mutex.c",
-         "python_util.c", "utility.c"]),
+# Reusable source groups (memops/global helpers that are already Py3-ported) -----
+GU   = [f"{G}/utility.c", f"{G}/python_util.c"]                 # util + py_util
+GMEM = [f"{G}/hash_list.c", f"{G}/hash_table.c", f"{G}/mem_cache.c",
+        f"{G}/mutex.c", f"{G}/py_mem_cache.c"]                   # +GU below
+GBLK = GMEM + [f"{G}/block_file.c", f"{G}/shape_file.c", f"{G}/int_array.c",
+               f"{G}/py_block_file.c", f"{G}/py_shape_file.c"]   # block-file I/O
 
-    ext("BlockFile",
-        ["py_block_file.c", "block_file.c",
-         "py_mem_cache.c", "py_shape_file.c",
-         "hash_list.c", "hash_table.c", "int_array.c",
-         "list.c", "mutex.c", "mem_cache.c", "shape_file.c",
-         "python_util.c", "utility.c"]),
+# ------------------------------------------------------------------ family defs
+# name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
+FAM = {
+    # --- clouds (import:  ccpnmr.c.<Name>) ----------------------------------
+    "CloudUtil":       ([f"{CLOUD}/py_cloud_util.c"], [CLOUD, G], ["m"]),
+    "AtomCoord":       ([f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c"] + GU,
+                        [CLOUD, G], []),
+    "AtomCoordList":   ([f"{CLOUD}/py_atom_coord_list.c", f"{CLOUD}/atom_coord_list.c",
+                         f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c"] + GU,
+                        [CLOUD, G], []),
+    "DistConstraint":  ([f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c"] + GU,
+                        [CLOUD, G], []),
+    "DistConstraintList": ([f"{CLOUD}/py_dist_constraint_list.c",
+                            f"{CLOUD}/dist_constraint_list.c",
+                            f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c"] + GU,
+                        [CLOUD, G], []),
+    "DistForce":       ([f"{CLOUD}/py_dist_force.c", f"{CLOUD}/dist_force.c"] + GU,
+                        [CLOUD, G], []),
+    "Dynamics":        ([f"{CLOUD}/py_dynamics.c", f"{CLOUD}/dynamics.c",
+                         f"{CLOUD}/py_atom_coord_list.c", f"{CLOUD}/atom_coord_list.c",
+                         f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c",
+                         f"{CLOUD}/py_dist_constraint_list.c", f"{CLOUD}/dist_constraint_list.c",
+                         f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c",
+                         f"{CLOUD}/py_dist_force.c", f"{CLOUD}/dist_force.c"]
+                        + GU + [f"{G}/random.c"], [CLOUD, G], ["m"]),
+    "Midge":           ([f"{CLOUD}/py_midge.c", f"{CLOUD}/midge.c"]
+                        + GU + [f"{G}/diag_dbl.c"], [CLOUD, G], ["m"]),
+    "Bacus":           ([f"{CLOUD}/py_bacus.c", f"{CLOUD}/bacus.c"] + GU,
+                        [CLOUD, G], ["m"]),
 
-    ext("FitMethod",
-        ["py_fit.c", "fit.c", "fit1d.c", "nonlinear_model.c",
-         "cpmg.c", "line_fit.c", "random.c", "gauss_jordan.c",
-         "gamma.c",
-         "python_util.c", "utility.c"]),
+    # --- dynamics (import:  ccpnmr.c.<Name>) --------------------------------
+    "DyAtomCoord":     ([f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c"] + GU,
+                        [DYN, G], []),
+    "DyAtomCoordList": ([f"{DYN}/py_atom_coord_list.c", f"{DYN}/atom_coord_list.c",
+                         f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c"] + GU,
+                        [DYN, G], []),
+    "DyDistConstraint": ([f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c"] + GU,
+                        [DYN, G], []),
+    "DyDistConstraintList": ([f"{DYN}/py_dist_constraint_list.c",
+                            f"{DYN}/dist_constraint_list.c",
+                            f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c"] + GU,
+                        [DYN, G], []),
+    "DyDistForce":     ([f"{DYN}/py_dist_force.c", f"{DYN}/dist_force.c"] + GU,
+                        [DYN, G], []),
+    "DyDynamics":      ([f"{DYN}/py_dynamics.c", f"{DYN}/dynamics.c",
+                         f"{DYN}/py_atom_coord_list.c", f"{DYN}/atom_coord_list.c",
+                         f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c",
+                         f"{DYN}/py_dist_constraint_list.c", f"{DYN}/dist_constraint_list.c",
+                         f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c",
+                         f"{DYN}/py_dist_force.c", f"{DYN}/dist_force.c"]
+                        + GU + [f"{G}/random.c"], [DYN, G], ["m"]),
 
-    ext("StoreFile",
-        ["py_store_file.c", "store_file.c", "python_util.c", "utility.c"]),
+    # --- analysis, Tier-1 (import:  ccpnmr.c.<Name>) ------------------------
+    "ContourLevels":   ([f"{ANA}/py_contour_levels.c", f"{ANA}/contour_levels.c"] + GU,
+                        [ANA, G], []),
+    "ContourStyle":    ([f"{ANA}/py_contour_style.c", f"{ANA}/contour_style.c"] + GU,
+                        [ANA, G], []),
+    "PeakList":        ([f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
+                         f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
+                        + GU + GBLK + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"],
+                        [ANA, G], ["m"]),
 
-    ext("StoreHandler",
-        ["py_store_handler.c", "store_handler.c", "python_util.c", "utility.c"]),
+    # --- ccp structure, Tier-1 (import:  ccp.c.<Name>) ----------------------
+    "StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
+                        + [f"{G}/color.c"] + GU, [STR, G], []),
+    "StructBond":      ([f"{STR}/py_bond.c", f"{STR}/py_atom.c", f"{STR}/atom.c",
+                         f"{STR}/bond.c"] + [f"{G}/color.c"] + GU, [STR, G], []),
+    "StructUtil":      ([f"{STR}/py_struct_util.c", f"{STR}/struct_util.c"]
+                        + [f"{G}/geometry.c", f"{G}/eigenvalue.c", f"{G}/linalg.c"] + GU,
+                        [STR, G], ["m"]),
 
-    ext("PdfHandler",
-        ["py_pdf_handler.c", "pdf_handler.c", "clipping.c",
-         "python_util.c", "utility.c"]),
+    # --- cambridge bayes (import:  cambridge.c.BayesPeakSeparator) ----------
+    "BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
+                        f"{BAYES}/app.c", f"{BAYES}/distribution.c", f"{BAYES}/random.c",
+                        f"{BAYES}/hilbert.c", f"{BAYES}/bayesys3.c"]
+                        + GU + GBLK, [BAYES, G], ["m"]),
+}
 
-    ext("PsHandler",
-        ["py_ps_handler.c", "ps_handler.c", "clipping.c",
-         "python_util.c", "utility.c"]),
+# ---------------------------------------------------------------------------
+# The 8 backbone extensions (Phase 1b) — kept as-is, imported top-level.
+def ext(name, sources, extra_sources=None):
+    srcs = [os.path.join(G, s) for s in sources]
+    if extra_sources:
+        srcs += [os.path.join(G, s) for s in extra_sources]
+    return Extension(
+        name, sources=srcs, include_dirs=[G], extra_compile_args=CFLAGS)
+
+
+BACKBONE = [
+    ext("ShapeFile", ["py_shape_file.c", "shape_file.c", "python_util.c", "utility.c"]),
+    ext("MemCache", ["py_mem_cache.c", "mem_cache.c", "hash_list.c", "hash_table.c",
+                     "int_array.c", "list.c", "mutex.c", "python_util.c", "utility.c"]),
+    ext("BlockFile", ["py_block_file.c", "block_file.c", "py_mem_cache.c", "py_shape_file.c",
+                      "hash_list.c", "hash_table.c", "int_array.c", "list.c", "mutex.c",
+                      "mem_cache.c", "shape_file.c", "python_util.c", "utility.c"]),
+    ext("FitMethod", ["py_fit.c", "fit.c", "fit1d.c", "nonlinear_model.c", "cpmg.c",
+                      "line_fit.c", "random.c", "gauss_jordan.c", "gamma.c",
+                      "python_util.c", "utility.c"]),
+    ext("StoreFile", ["py_store_file.c", "store_file.c", "python_util.c", "utility.c"]),
+    ext("StoreHandler", ["py_store_handler.c", "store_handler.c", "python_util.c", "utility.c"]),
+    ext("PdfHandler", ["py_pdf_handler.c", "pdf_handler.c", "clipping.c",
+                       "python_util.c", "utility.c"]),
+    ext("PsHandler", ["py_ps_handler.c", "ps_handler.c", "clipping.c",
+                      "python_util.c", "utility.c"]),
 ]
+
+# ---------------------------------------------------------------------------
+all_exts = list(BACKBONE)
+all_exts += [mk(name, srcs, inc, libs) for name, (srcs, inc, libs) in FAM.items()]
+
+# Build filter (CCP_EXT=Name1,Name2) ----------------------------------------
+_filter = os.environ.get("CCP_EXT", "").strip()
+if _filter:
+    keep = {n.strip() for n in _filter.split(",") if n.strip()}
+    all_exts = [e for e in all_exts if e.name in keep]
 
 setup(
     name="ccpnmr-ext",
     version="2.5.2",
-    ext_modules=ext_modules,
+    ext_modules=all_exts,
     zip_safe=False,
 )

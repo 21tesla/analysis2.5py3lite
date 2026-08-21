@@ -39,6 +39,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 */
 #include "py_peak.h"
 
+#include <string.h>
+
 #include "py_block_file.h"
 #include "python_util.h"
 
@@ -483,11 +485,7 @@ PyObject *new_py_peak(Peak peak)
     if (!peak)
         RETURN_CHECK_OBJ_ERROR("allocating Peak object");
 
-#ifdef WIN64
-    Peak_type.ob_type = &PyType_Type;
-#endif
-
-    PY_MALLOC(obj, struct Py_Peak, &Peak_type);
+    obj = (Py_Peak) PyObject_New(struct Py_Peak, &Peak_type);
 
     if (!obj)
     {
@@ -515,33 +513,12 @@ void delete_py_peak(PyObject *self)
         delete_peak(peak);
     */
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-/*
-static int print_py_peak(PyObject *self, FILE *fp, int flags)
+static PyObject *getattr_py_peak(PyObject *self, PyObject *attr_name)
 {
-    printf("in print_py_handler\n");
-
-    return 0;
-}
-*/
-
-static PyObject *getattr_py_peak(PyObject *self, char *name)
-{
-    /*
-        Peak *obj = (Peak *) self;
-        Random_access *a = obj->py_handler;
-
-        if (equal_strings(name, "par_file"))
-    	return Py_BuildValue("s", a->par_file);
-        else if (equal_strings(name, "access_method"))
-    	return Py_BuildValue("s", access_method_name(a->access_method));
-        else if (equal_strings(name, "data_format"))
-    	return get_Peak_format(a);
-        else
-    */
-    return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -574,22 +551,54 @@ static PySequenceMethods Peak_sequence_methods =
 
 static PyTypeObject Peak_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "Peak", /* name */
-    sizeof(struct Py_Peak), /* basicsize */
-    0, /* itemsize */
-    delete_py_peak, /* destructor */
-    0, /* printfunc */
-    getattr_py_peak, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Peak_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "Peak",                                     /* tp_name */
+    sizeof(struct Py_Peak),                     /* tp_basicsize */
+    0,                                          /* tp_itemsize */
+    (destructor) delete_py_peak,                /* tp_dealloc */
+    0,                                          /* tp_vectorcall */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    0,                                          /* tp_as_async */
+    0,                                          /* tp_repr */
+    0,                                          /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    0,                                          /* tp_call */
+    0,                                          /* tp_str */
+    (getattrofunc) getattr_py_peak,             /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                         /* tp_flags */
+    "Peak -- NMR peak object",                  /* tp_doc */
+    0,                                          /* tp_traverse */
+    0,                                          /* tp_clear */
+    0,                                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    0,                                          /* tp_iter */
+    0,                                          /* tp_iternext */
+    py_handler_methods,                         /* tp_methods */
+    0,                                          /* tp_members */
+    0,                                          /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    0,                                          /* tp_new */
 };
+
+/*
+ * Public initializer — called by PyInit_PeakList (in py_peak_list.c)
+ * to make the internal Peak type usable before any new_py_peak() call.
+ */
+int ready_peak_type(void)
+{
+    if (PyType_Ready(&Peak_type) < 0)
+        return -1;
+    return 0;
+}
 

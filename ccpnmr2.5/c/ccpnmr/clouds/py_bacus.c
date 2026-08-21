@@ -92,19 +92,34 @@ static struct PyMethodDef bacus_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initBacus(void)
+static struct PyModuleDef bacus_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "Bacus",
+    "CCPNMR Bacus module (Python 3 compatible)",
+    -1,
+    bacus_type_methods
+};
 
-    /* create the module and add the functions */
-    m = Py_InitModule("Bacus", bacus_type_methods);
+PyMODINIT_FUNC PyInit_Bacus(void)
+{
+    PyObject *m = PyModule_Create(&bacus_module_def);
+    if (!m)
+        return NULL;
 
-    /* create exception object and add to module */
     ErrorObject = PyErr_NewException("Bacus.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module bacus");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

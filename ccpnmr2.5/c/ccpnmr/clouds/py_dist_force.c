@@ -90,7 +90,7 @@ static Py_Dist_force new_py_dist_force(float force_const, float exponent,
     if (!dist_force)
 	 RETURN_OBJ_ERROR("allocating Dist_force object");
 
-    PY_MALLOC(obj, struct Py_Dist_force, &Dist_force_type);
+    obj = (Py_Dist_force) PyObject_New(struct Py_Dist_force, &Dist_force_type);
 
     if (!obj)
     {
@@ -115,7 +115,7 @@ static void delete_py_dist_force(PyObject *self)
 
     delete_dist_force(dist_force);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -127,26 +127,32 @@ static int print_py_dist_force(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_dist_force(PyObject *self, char *name)
+static PyObject *getattr_py_dist_force(PyObject *self, PyObject *attr_name)
 {
     Py_Dist_force obj = (Py_Dist_force) self;
     Dist_force dist_force = obj->dist_force;
 
-    if (equal_strings(name, "force_const"))
-	return Py_BuildValue("f", dist_force->force_const);
-    else if (equal_strings(name, "exponent"))
-	return Py_BuildValue("f", dist_force->exponent);
-    else if (equal_strings(name, "soft_exponent"))
-	return Py_BuildValue("f", dist_force->soft_exponent);
-    else if (equal_strings(name, "r_switch"))
-	return Py_BuildValue("f", dist_force->r_switch);
-    else if (equal_strings(name, "asymptote"))
-	return Py_BuildValue("f", dist_force->asymptote);
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    if (PyUnicode_Check(attr_name))
+    {
+        const char *name = PyUnicode_AsUTF8(attr_name);
+        if (name)
+        {
+            if (strcmp(name, "force_const") == 0)
+                return Py_BuildValue("f", dist_force->force_const);
+            else if (strcmp(name, "exponent") == 0)
+                return Py_BuildValue("f", dist_force->exponent);
+            else if (strcmp(name, "soft_exponent") == 0)
+                return Py_BuildValue("f", dist_force->soft_exponent);
+            else if (strcmp(name, "r_switch") == 0)
+                return Py_BuildValue("f", dist_force->r_switch);
+            else if (strcmp(name, "asymptote") == 0)
+                return Py_BuildValue("f", dist_force->asymptote);
+        }
+    }
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_dist_force(PyObject *self, char *name, PyObject *value)
+static int setattr_py_dist_force(PyObject *self, PyObject *attr_name, PyObject *value)
 {
     Py_Dist_force obj = (Py_Dist_force) self;
     Dist_force dist_force = obj->dist_force;
@@ -155,18 +161,27 @@ static int setattr_py_dist_force(PyObject *self, char *name, PyObject *value)
     if (PyErr_Occurred())
 	RETURN_INT_ERROR("must have float value");
 
-    if (equal_strings(name, "force_const"))
-	dist_force->force_const = v;
-    else if (equal_strings(name, "exponent"))
-	dist_force->exponent = v;
-    else if (equal_strings(name, "soft_exponent"))
-	dist_force->soft_exponent = v;
-    else if (equal_strings(name, "r_switch"))
-	dist_force->r_switch = v;
-    else if (equal_strings(name, "asymptote"))
-	dist_force->asymptote = v;
+    if (!PyUnicode_Check(attr_name))
+    {
+        PyErr_SetString(ErrorObject, "attribute name must be a string");
+        return -1;
+    }
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return -1;
+
+    if (strcmp(name, "force_const") == 0)
+        dist_force->force_const = v;
+    else if (strcmp(name, "exponent") == 0)
+        dist_force->exponent = v;
+    else if (strcmp(name, "soft_exponent") == 0)
+        dist_force->soft_exponent = v;
+    else if (strcmp(name, "r_switch") == 0)
+        dist_force->r_switch = v;
+    else if (strcmp(name, "asymptote") == 0)
+        dist_force->asymptote = v;
     else
-	RETURN_INT_ERROR("unknown attribute name");
+        RETURN_INT_ERROR("unknown attribute name");
 
     return 0;
 }
@@ -201,23 +216,44 @@ static PySequenceMethods Dist_force_sequence_methods =
 
 static PyTypeObject Dist_force_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "DistForce", /* name */
-    sizeof(struct Py_Dist_force), /* basicsize */
-    0, /* itemsize */
-    delete_py_dist_force, /* destructor */
-    0, /* printfunc */
-    getattr_py_dist_force, /* getattr */
-    setattr_py_dist_force, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Dist_force_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "DistForce",                        /* tp_name */
+    sizeof(struct Py_Dist_force),       /* tp_basicsize */
+    0,                                  /* tp_itemsize */
+    (destructor) delete_py_dist_force,  /* tp_dealloc */
+    0,                                  /* tp_vectorcall */
+    0,                                  /* tp_getattr */
+    0,                                  /* tp_setattr */
+    0,                                  /* tp_as_async */
+    0,                                  /* tp_repr */
+    0,                                  /* tp_as_number */
+    0,                                  /* tp_as_sequence */
+    0,                                  /* tp_as_mapping */
+    0,                                  /* tp_hash */
+    0,                                  /* tp_call */
+    0,                                  /* tp_str */
+    (getattrofunc) getattr_py_dist_force,  /* tp_getattro */
+    (setattrofunc) setattr_py_dist_force,  /* tp_setattro */
+    0,                                  /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                 /* tp_flags */
+    "DistForce -- force curve parameters", /* tp_doc */
+    0,                                  /* tp_traverse */
+    0,                                  /* tp_clear */
+    0,                                  /* tp_richcompare */
+    0,                                  /* tp_weaklistoffset */
+    0,                                  /* tp_iter */
+    0,                                  /* tp_iternext */
+    py_handler_methods,                 /* tp_methods */
+    0,                                  /* tp_members */
+    0,                                  /* tp_getset */
+    0,                                  /* tp_base */
+    0,                                  /* tp_dict */
+    0,                                  /* tp_descr_get */
+    0,                                  /* tp_descr_set */
+    0,                                  /* tp_dictoffset */
+    0,                                  /* tp_init */
+    0,                                  /* tp_alloc */
+    0,                                  /* tp_new */
 };
 
 /*****************************************************************************
@@ -263,22 +299,37 @@ static struct PyMethodDef Dist_force_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initDistForce(void)
+static struct PyModuleDef DistForce_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "DistForce",
+    "CCPNMR DistForce module (Python 3 compatible)",
+    -1,
+    Dist_force_type_methods
+};
 
-#ifdef WIN64
-    Dist_force_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("DistForce", Dist_force_type_methods);
+PyMODINIT_FUNC PyInit_DistForce(void)
+{
+    if (PyType_Ready(&Dist_force_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&DistForce_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("DistForce.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module DistForce");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

@@ -147,7 +147,7 @@ static Py_Midge new_py_midge(int n, int *nhs, int *types)
     if (!midge)
 	 RETURN_OBJ_ERROR("allocating Midge object");
 
-    PY_MALLOC(py_midge, struct Py_Midge, &Midge_type);
+    py_midge = (Py_Midge) PyObject_New(struct Py_Midge, &Midge_type);
 
     if (!py_midge)
     {
@@ -172,33 +172,25 @@ static void delete_py_midge(PyObject *self)
 
     delete_midge(midge);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-static int print_py_midge(PyObject *self, FILE *fp, int flags)
+static PyObject *repr_py_midge(PyObject *self)
 {
     Py_Midge py_midge = (Py_Midge) self;
     Midge midge = py_midge->midge;
 
-    fprintf(fp, "<Midge object %d>", (int) midge);
-
-    return 0;
+    char buf[48];
+    snprintf(buf, sizeof buf, "<Midge object %p>", (void *) midge);
+    return PyUnicode_FromString(buf);
 }
 
-static PyObject *getattr_py_midge(PyObject *self, char *name)
+static PyObject *getattr_py_midge(PyObject *self, PyObject *attr_name)
 {
-    Py_Midge py_midge = (Py_Midge) self;
-/*
-    Midge midge = py_midge->midge;
-
-    if (equal_strings(name, "rp_force_const"))
-	return Py_BuildValue("f", midge->rp_force_const);
-    else
-*/
-	return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_midge(PyObject *self, char *name, PyObject *value)
+static int setattr_py_midge(PyObject *self, PyObject *attr_name, PyObject *value)
 {
     return 0;
 }
@@ -233,23 +225,44 @@ static PySequenceMethods Midge_sequence_methods =
 
 static PyTypeObject Midge_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "Midge", /* name */
-    sizeof(struct Py_Midge), /* basicsize */
-    0, /* itemsize */
-    delete_py_midge, /* destructor */
-    print_py_midge, /* printfunc */
-    getattr_py_midge, /* getattr */
-    setattr_py_midge, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Midge_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "Midge",                                  /* tp_name */
+    sizeof(struct Py_Midge),                  /* tp_basicsize */
+    0,                                        /* tp_itemsize */
+    (destructor) delete_py_midge,             /* tp_dealloc */
+    0,                                        /* tp_vectorcall */
+    0,                                        /* tp_getattr */
+    0,                                        /* tp_setattr */
+    0,                                        /* tp_as_async */
+    (reprfunc) repr_py_midge,                 /* tp_repr */
+    0,                                        /* tp_as_number */
+    0,                                        /* tp_as_sequence */
+    0,                                        /* tp_as_mapping */
+    0,                                        /* tp_hash */
+    0,                                        /* tp_call */
+    0,                                        /* tp_str */
+    (getattrofunc) getattr_py_midge,          /* tp_getattro */
+    (setattrofunc) setattr_py_midge,          /* tp_setattro */
+    0,                                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                       /* tp_flags */
+    "Midge -- NOE relaxation simulation",     /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    py_handler_methods,                       /* tp_methods */
+    0,                                        /* tp_members */
+    0,                                        /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    0,                                        /* tp_init */
+    0,                                        /* tp_alloc */
+    0,                                        /* tp_new */
 };
 
 /*****************************************************************************
@@ -311,22 +324,37 @@ static struct PyMethodDef Midge_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initMidge(void)
+static struct PyModuleDef midge_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "Midge",
+    "CCPNMR Midge module (Python 3 compatible)",
+    -1,
+    Midge_type_methods
+};
 
-#ifdef WIN64
-    Midge_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("Midge", Midge_type_methods);
+PyMODINIT_FUNC PyInit_Midge(void)
+{
+    if (PyType_Ready(&Midge_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&midge_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("Midge.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module Midge");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

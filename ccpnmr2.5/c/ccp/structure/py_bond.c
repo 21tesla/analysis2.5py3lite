@@ -202,7 +202,7 @@ static PyObject *new_py_bond(PyObject *atom1_obj, PyObject *atom2_obj,
     if (!bond)
 	RETURN_OBJ_ERROR("allocating Bond object");
 
-    PY_MALLOC(obj, struct Py_Bond, &Bond_type);
+    obj = (Py_Bond) PyObject_New(struct Py_Bond, &Bond_type);
 
     if (!obj)
     {
@@ -234,7 +234,7 @@ static void delete_py_bond(PyObject *self)
     Py_DECREF(obj->atom1_obj);
     Py_DECREF(obj->atom2_obj);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -246,7 +246,7 @@ static int print_py_bond(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_bond(PyObject *self, char *name)
+static PyObject *getattr_py_bond(PyObject *self, PyObject *attr_name)
 {
 /*
     Bond *obj = (Bond *) self;
@@ -260,7 +260,7 @@ static PyObject *getattr_py_bond(PyObject *self, char *name)
 	return get_Bond_format(a);
     else
 */
-	return Py_FindMethod(py_handler_methods, self, name);
+	return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -293,23 +293,44 @@ static PySequenceMethods Bond_sequence_methods =
 
 static PyTypeObject Bond_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "StructBond", /* name */
-    sizeof(struct Py_Bond), /* basicsize */
-    0, /* itemsize */
-    delete_py_bond, /* destructor */
-    0, /* printfunc */
-    getattr_py_bond, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Bond_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "StructBond",                        /* tp_name */
+    sizeof(struct Py_Bond),              /* tp_basicsize */
+    0,                                   /* tp_itemsize */
+    (destructor) delete_py_bond,         /* tp_dealloc */
+    0,                                   /* tp_vectorcall */
+    0,                                   /* tp_getattr */
+    0,                                   /* tp_setattr */
+    0,                                   /* tp_as_async */
+    0,                                   /* tp_repr (print commented out) */
+    0,                                   /* tp_as_number */
+    0,                                   /* tp_as_sequence */
+    0,                                   /* tp_as_mapping */
+    0,                                   /* tp_hash */
+    0,                                   /* tp_call */
+    0,                                   /* tp_str */
+    (getattrofunc) getattr_py_bond,      /* tp_getattro */
+    0,                                   /* tp_setattro */
+    0,                                   /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                  /* tp_flags */
+    "StructBond -- CCPNMR structure Bond", /* tp_doc */
+    0,                                   /* tp_traverse */
+    0,                                   /* tp_clear */
+    0,                                   /* tp_richcompare */
+    0,                                   /* tp_weaklistoffset */
+    0,                                   /* tp_iter */
+    0,                                   /* tp_iternext */
+    py_handler_methods,                  /* tp_methods */
+    0,                                   /* tp_members */
+    0,                                   /* tp_getset */
+    0,                                   /* tp_base */
+    0,                                   /* tp_dict */
+    0,                                   /* tp_descr_get */
+    0,                                   /* tp_descr_set */
+    0,                                   /* tp_dictoffset */
+    0,                                   /* tp_init */
+    0,                                   /* tp_alloc */
+    0,                                   /* tp_new */
 };
 
 /*****************************************************************************
@@ -360,22 +381,37 @@ static struct PyMethodDef Bond_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initStructBond(void)
+static struct PyModuleDef Bond_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "StructBond",
+    "CCPNMR StructBond module (Python 3 compatible)",
+    -1,
+    Bond_type_methods
+};
 
-#ifdef WIN64
-    Bond_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("StructBond", Bond_type_methods);
+PyMODINIT_FUNC PyInit_StructBond(void)
+{
+    if (PyType_Ready(&Bond_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&Bond_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("StructBond.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module StructBond");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

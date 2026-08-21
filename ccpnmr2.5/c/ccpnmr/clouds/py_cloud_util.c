@@ -273,19 +273,37 @@ static struct PyMethodDef Cloud_util_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initCloudUtil(void)
+/* Python 3 module definition (replaces Py2 Py_InitModule) */
+static struct PyModuleDef cloud_util_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "CloudUtil",
+    "CCPNMR CloudUtil module (Python 3 compatible)",
+    -1,
+    Cloud_util_type_methods
+};
 
-    /* create the module and add the functions */
-    m = Py_InitModule("CloudUtil", Cloud_util_type_methods);
+PyMODINIT_FUNC PyInit_CloudUtil(void)
+{
+    PyObject *m = PyModule_Create(&cloud_util_module_def);
+    if (!m)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *d = PyModule_GetDict(m);
+
     ErrorObject = PyErr_NewException("CloudUtil.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module CloudUtil");
+    if (PyDict_SetItemString(d, "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

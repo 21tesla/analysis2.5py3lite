@@ -89,7 +89,7 @@ Py_Dist_constraint new_py_dist_constraint(int atom0, int atom1,
     if (!dist_constraint)
 	 RETURN_OBJ_ERROR("allocating Dist_constraint object");
 
-    PY_MALLOC(py_dist_constraint, struct Py_Dist_constraint, &Dist_constraint_type);
+    py_dist_constraint = (Py_Dist_constraint) PyObject_New(struct Py_Dist_constraint, &Dist_constraint_type);
 
     if (!py_dist_constraint)
     {
@@ -114,80 +114,96 @@ static void delete_py_dist_constraint(PyObject *self)
 
     delete_dist_constraint(dist_constraint);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-static int print_py_dist_constraint(PyObject *self, FILE *fp, int flags)
+static PyObject *repr_py_dist_constraint(PyObject *self)
 {
     Py_Dist_constraint py_dist_constraint = (Py_Dist_constraint) self;
     Dist_constraint dist_constraint = py_dist_constraint->dist_constraint;
+    char buf[128];
 
-    fprintf(fp, "<atom0=%d, atom1=%d, dist_lower=%3.2e, dist_upper=%3.2e>",
+    snprintf(buf, sizeof buf, "<atom0=%d, atom1=%d, dist_lower=%3.2e, dist_upper=%3.2e>",
                 dist_constraint->atom0, dist_constraint->atom1,
                 dist_constraint->dist_lower, dist_constraint->dist_upper);
 
-    return 0;
+    return PyUnicode_FromString(buf);
 }
 
-static PyObject *getattr_py_dist_constraint(PyObject *self, char *name)
+static PyObject *getattr_py_dist_constraint(PyObject *self, PyObject *attr_name)
 {
     Py_Dist_constraint py_dist_constraint = (Py_Dist_constraint) self;
     Dist_constraint dist_constraint = py_dist_constraint->dist_constraint;
 
-    if (equal_strings(name, "atom0"))
-	return Py_BuildValue("i", dist_constraint->atom0);
-    else if (equal_strings(name, "atom1"))
-	return Py_BuildValue("i", dist_constraint->atom1);
-    else if (equal_strings(name, "dist_lower"))
-	return Py_BuildValue("f", dist_constraint->dist_lower);
-    else if (equal_strings(name, "dist_upper"))
-	return Py_BuildValue("f", dist_constraint->dist_upper);
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    if (PyUnicode_Check(attr_name))
+    {
+        const char *name = PyUnicode_AsUTF8(attr_name);
+        if (name)
+        {
+            if (strcmp(name, "atom0") == 0)
+                return Py_BuildValue("i", dist_constraint->atom0);
+            else if (strcmp(name, "atom1") == 0)
+                return Py_BuildValue("i", dist_constraint->atom1);
+            else if (strcmp(name, "dist_lower") == 0)
+                return Py_BuildValue("f", dist_constraint->dist_lower);
+            else if (strcmp(name, "dist_upper") == 0)
+                return Py_BuildValue("f", dist_constraint->dist_upper);
+        }
+    }
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_dist_constraint(PyObject *self, char *name, PyObject *value)
+static int setattr_py_dist_constraint(PyObject *self, PyObject *attr_name, PyObject *value)
 {
     Py_Dist_constraint py_dist_constraint = (Py_Dist_constraint) self;
     Dist_constraint dist_constraint = py_dist_constraint->dist_constraint;
     int vi;
     float vf;
 
-    if (equal_strings(name, "atom0"))
+    if (!PyUnicode_Check(attr_name))
     {
-	vi = (int) PyInt_AsLong(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have int value");
-
-	dist_constraint->atom0 = vi;
+        PyErr_SetString(ErrorObject, "attribute name must be a string");
+        return -1;
     }
-    else if (equal_strings(name, "atom1"))
-    {
-	vi = (int) PyInt_AsLong(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have int value");
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return -1;
 
-	dist_constraint->atom1 = vi;
+    if (strcmp(name, "atom0") == 0)
+    {
+        vi = (int) PyLong_AsLong(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have int value");
+
+        dist_constraint->atom0 = vi;
     }
-    else if (equal_strings(name, "dist_lower"))
+    else if (strcmp(name, "atom1") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vi = (int) PyLong_AsLong(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have int value");
 
-	dist_constraint->dist_lower = vf;
+        dist_constraint->atom1 = vi;
     }
-    else if (equal_strings(name, "dist_upper"))
+    else if (strcmp(name, "dist_lower") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dist_constraint->dist_upper = vf;
+        dist_constraint->dist_lower = vf;
+    }
+    else if (strcmp(name, "dist_upper") == 0)
+    {
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
+
+        dist_constraint->dist_upper = vf;
     }
     else
     {
-	RETURN_INT_ERROR("unknown attribute name");
+        RETURN_INT_ERROR("unknown attribute name");
     }
 
     return 0;
@@ -223,23 +239,44 @@ static PySequenceMethods Dist_constraint_sequence_methods =
 
 static PyTypeObject Dist_constraint_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "DistConstraint", /* name */
-    sizeof(struct Py_Dist_constraint), /* basicsize */
-    0, /* itemsize */
-    delete_py_dist_constraint, /* destructor */
-    0, /* printfunc */
-    getattr_py_dist_constraint, /* getattr */
-    setattr_py_dist_constraint, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Dist_constraint_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "DistConstraint",                       /* tp_name */
+    sizeof(struct Py_Dist_constraint),      /* tp_basicsize */
+    0,                                      /* tp_itemsize */
+    (destructor) delete_py_dist_constraint, /* tp_dealloc */
+    0,                                      /* tp_vectorcall */
+    0,                                      /* tp_getattr */
+    0,                                      /* tp_setattr */
+    0,                                      /* tp_as_async */
+    (reprfunc) repr_py_dist_constraint,     /* tp_repr */
+    0,                                      /* tp_as_number */
+    0,                                      /* tp_as_sequence */
+    0,                                      /* tp_as_mapping */
+    0,                                      /* tp_hash */
+    0,                                      /* tp_call */
+    0,                                      /* tp_str */
+    (getattrofunc) getattr_py_dist_constraint, /* tp_getattro */
+    (setattrofunc) setattr_py_dist_constraint, /* tp_setattro */
+    0,                                      /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                     /* tp_flags */
+    "DistConstraint -- NOE distance constraint", /* tp_doc */
+    0,                                      /* tp_traverse */
+    0,                                      /* tp_clear */
+    0,                                      /* tp_richcompare */
+    0,                                      /* tp_weaklistoffset */
+    0,                                      /* tp_iter */
+    0,                                      /* tp_iternext */
+    py_handler_methods,                     /* tp_methods */
+    0,                                      /* tp_members */
+    0,                                      /* tp_getset */
+    0,                                      /* tp_base */
+    0,                                      /* tp_dict */
+    0,                                      /* tp_descr_get */
+    0,                                      /* tp_descr_set */
+    0,                                      /* tp_dictoffset */
+    0,                                      /* tp_init */
+    0,                                      /* tp_alloc */
+    0,                                      /* tp_new */
 };
 
 /*****************************************************************************
@@ -285,22 +322,37 @@ static struct PyMethodDef Dist_constraint_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initDistConstraint(void)
+static struct PyModuleDef DistConstraint_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "DistConstraint",
+    "CCPNMR DistConstraint module (Python 3 compatible)",
+    -1,
+    Dist_constraint_type_methods
+};
 
-#ifdef WIN64
-    Dist_constraint_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("DistConstraint", Dist_constraint_type_methods);
+PyMODINIT_FUNC PyInit_DistConstraint(void)
+{
+    if (PyType_Ready(&Dist_constraint_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&DistConstraint_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("DistConstraint.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module DistConstraint");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

@@ -149,7 +149,7 @@ static Py_Dynamics new_py_dynamics(float rp_force_const, float beta,
     if (!dynamics)
 	 RETURN_OBJ_ERROR("allocating Dynamics object");
 
-    PY_MALLOC(py_dynamics, struct Py_Dynamics, &Dynamics_type);
+    py_dynamics = (Py_Dynamics) PyObject_New(struct Py_Dynamics, &Dynamics_type);
 
     if (!py_dynamics)
     {
@@ -174,130 +174,146 @@ static void delete_py_dynamics(PyObject *self)
 
     delete_dynamics(dynamics);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-static int print_py_dynamics(PyObject *self, FILE *fp, int flags)
+static PyObject *repr_py_dynamics(PyObject *self)
 {
     Py_Dynamics py_dynamics = (Py_Dynamics) self;
     Dynamics dynamics = py_dynamics->dynamics;
+    char buf[256];
 
-    fprintf(fp, "<rp_force_const=%3.2e, beta=%3.2e, rmin=%3.2e, drzap=%3.2e, tref=%3.2e, tau=%3.2e, elapsed_time=%3.2e, nsteps=%d, nprint=%d>",
+    snprintf(buf, sizeof buf, "<rp_force_const=%3.2e, beta=%3.2e, rmin=%3.2e, drzap=%3.2e, tref=%3.2e, tau=%3.2e, elapsed_time=%3.2e, nsteps=%d, nprint=%d>",
 		dynamics->rp_force_const, dynamics->beta, dynamics->rmin,
 		dynamics->drzap, dynamics->tref, dynamics->tau,
 		dynamics->elapsed_time, dynamics->nsteps, dynamics->nprint);
 
-    return 0;
+    return PyUnicode_FromString(buf);
 }
 
-static PyObject *getattr_py_dynamics(PyObject *self, char *name)
+static PyObject *getattr_py_dynamics(PyObject *self, PyObject *attr_name)
 {
     Py_Dynamics py_dynamics = (Py_Dynamics) self;
     Dynamics dynamics = py_dynamics->dynamics;
 
-    if (equal_strings(name, "rp_force_const"))
-	return Py_BuildValue("f", dynamics->rp_force_const);
-    else if (equal_strings(name, "beta"))
-	return Py_BuildValue("f", dynamics->beta);
-    else if (equal_strings(name, "rmin"))
-	return Py_BuildValue("f", dynamics->rmin);
-    else if (equal_strings(name, "drzap"))
-	return Py_BuildValue("f", dynamics->drzap);
-    else if (equal_strings(name, "tref"))
-	return Py_BuildValue("f", dynamics->tref);
-    else if (equal_strings(name, "tau"))
-	return Py_BuildValue("f", dynamics->tau);
-    else if (equal_strings(name, "elapsed_time"))
-	return Py_BuildValue("f", dynamics->elapsed_time);
-    else if (equal_strings(name, "nsteps"))
-	return Py_BuildValue("i", dynamics->nsteps);
-    else if (equal_strings(name, "nprint"))
-	return Py_BuildValue("i", dynamics->nprint);
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    if (PyUnicode_Check(attr_name))
+    {
+        const char *name = PyUnicode_AsUTF8(attr_name);
+        if (name)
+        {
+            if (strcmp(name, "rp_force_const") == 0)
+                return Py_BuildValue("f", dynamics->rp_force_const);
+            else if (strcmp(name, "beta") == 0)
+                return Py_BuildValue("f", dynamics->beta);
+            else if (strcmp(name, "rmin") == 0)
+                return Py_BuildValue("f", dynamics->rmin);
+            else if (strcmp(name, "drzap") == 0)
+                return Py_BuildValue("f", dynamics->drzap);
+            else if (strcmp(name, "tref") == 0)
+                return Py_BuildValue("f", dynamics->tref);
+            else if (strcmp(name, "tau") == 0)
+                return Py_BuildValue("f", dynamics->tau);
+            else if (strcmp(name, "elapsed_time") == 0)
+                return Py_BuildValue("f", dynamics->elapsed_time);
+            else if (strcmp(name, "nsteps") == 0)
+                return Py_BuildValue("i", dynamics->nsteps);
+            else if (strcmp(name, "nprint") == 0)
+                return Py_BuildValue("i", dynamics->nprint);
+        }
+    }
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_dynamics(PyObject *self, char *name, PyObject *value)
+static int setattr_py_dynamics(PyObject *self, PyObject *attr_name, PyObject *value)
 {
     Py_Dynamics py_dynamics = (Py_Dynamics) self;
     Dynamics dynamics = py_dynamics->dynamics;
     int vi;
     float vf;
 
-    if (equal_strings(name, "rp_force_const"))
+    if (!PyUnicode_Check(attr_name))
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
-
-	dynamics->rp_force_const = vf;
+        PyErr_SetString(ErrorObject, "attribute name must be a string");
+        return -1;
     }
-    else if (equal_strings(name, "beta"))
-    {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return -1;
 
-	dynamics->beta = vf;
+    if (strcmp(name, "rp_force_const") == 0)
+    {
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
+
+        dynamics->rp_force_const = vf;
     }
-    else if (equal_strings(name, "rmin"))
+    else if (strcmp(name, "beta") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->rmin = vf;
+        dynamics->beta = vf;
     }
-    else if (equal_strings(name, "drzap"))
+    else if (strcmp(name, "rmin") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->drzap = vf;
+        dynamics->rmin = vf;
     }
-    else if (equal_strings(name, "tref"))
+    else if (strcmp(name, "drzap") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->tref = vf;
+        dynamics->drzap = vf;
     }
-    else if (equal_strings(name, "tau"))
+    else if (strcmp(name, "tref") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->tau = vf;
+        dynamics->tref = vf;
     }
-    else if (equal_strings(name, "elapsed_time"))
+    else if (strcmp(name, "tau") == 0)
     {
-	vf = (float) PyFloat_AsDouble(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have float value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->elapsed_time = vf;
+        dynamics->tau = vf;
     }
-    else if (equal_strings(name, "nsteps"))
+    else if (strcmp(name, "elapsed_time") == 0)
     {
-	vi = (int) PyInt_AsLong(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have int value");
+        vf = (float) PyFloat_AsDouble(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have float value");
 
-	dynamics->nsteps = vi;
+        dynamics->elapsed_time = vf;
     }
-    else if (equal_strings(name, "nprint"))
+    else if (strcmp(name, "nsteps") == 0)
     {
-	vi = (int) PyInt_AsLong(value);
-	if (PyErr_Occurred())
-	    RETURN_INT_ERROR("must have int value");
+        vi = (int) PyLong_AsLong(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have int value");
 
-	dynamics->nprint = vi;
+        dynamics->nsteps = vi;
+    }
+    else if (strcmp(name, "nprint") == 0)
+    {
+        vi = (int) PyLong_AsLong(value);
+        if (PyErr_Occurred())
+            RETURN_INT_ERROR("must have int value");
+
+        dynamics->nprint = vi;
     }
     else
-	RETURN_INT_ERROR("unknown attribute name");
+        RETURN_INT_ERROR("unknown attribute name");
 
     return 0;
 }
@@ -332,23 +348,44 @@ static PySequenceMethods Dynamics_sequence_methods =
 
 static PyTypeObject Dynamics_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "Dynamics", /* name */
-    sizeof(struct Py_Dynamics), /* basicsize */
-    0, /* itemsize */
-    delete_py_dynamics, /* destructor */
-    print_py_dynamics, /* printfunc */
-    getattr_py_dynamics, /* getattr */
-    setattr_py_dynamics, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Dynamics_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "Dynamics",                      /* tp_name */
+    sizeof(struct Py_Dynamics),      /* tp_basicsize */
+    0,                               /* tp_itemsize */
+    (destructor) delete_py_dynamics, /* tp_dealloc */
+    0,                               /* tp_vectorcall */
+    0,                               /* tp_getattr */
+    0,                               /* tp_setattr */
+    0,                               /* tp_as_async */
+    (reprfunc) repr_py_dynamics,     /* tp_repr */
+    0,                               /* tp_as_number */
+    0,                               /* tp_as_sequence */
+    0,                               /* tp_as_mapping */
+    0,                               /* tp_hash */
+    0,                               /* tp_call */
+    0,                               /* tp_str */
+    (getattrofunc) getattr_py_dynamics,  /* tp_getattro */
+    (setattrofunc) setattr_py_dynamics,  /* tp_setattro */
+    0,                               /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,              /* tp_flags */
+    "Dynamics -- NOE relaxation dynamics", /* tp_doc */
+    0,                               /* tp_traverse */
+    0,                               /* tp_clear */
+    0,                               /* tp_richcompare */
+    0,                               /* tp_weaklistoffset */
+    0,                               /* tp_iter */
+    0,                               /* tp_iternext */
+    py_handler_methods,              /* tp_methods */
+    0,                               /* tp_members */
+    0,                               /* tp_getset */
+    0,                               /* tp_base */
+    0,                               /* tp_dict */
+    0,                               /* tp_descr_get */
+    0,                               /* tp_descr_set */
+    0,                               /* tp_dictoffset */
+    0,                               /* tp_init */
+    0,                               /* tp_alloc */
+    0,                               /* tp_new */
 };
 
 /*****************************************************************************
@@ -399,22 +436,37 @@ static struct PyMethodDef Dynamics_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initDynamics(void)
+static struct PyModuleDef Dynamics_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "Dynamics",
+    "CCPNMR Dynamics module (Python 3 compatible)",
+    -1,
+    Dynamics_type_methods
+};
 
-#ifdef WIN64
-    Dynamics_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("Dynamics", Dynamics_type_methods);
+PyMODINIT_FUNC PyInit_Dynamics(void)
+{
+    if (PyType_Ready(&Dynamics_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&Dynamics_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("Dynamics.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module Dynamics");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

@@ -95,7 +95,7 @@ Py_Atom_coord new_py_atom_coord(float mass, float x, float y, float z, int isFix
     if (!atom_coord)
 	 RETURN_OBJ_ERROR("allocating Atom_coord object");
 
-    PY_MALLOC(py_atom_coord, struct Py_Atom_coord, &Atom_coord_type);
+    py_atom_coord = (Py_Atom_coord) PyObject_New(struct Py_Atom_coord, &Atom_coord_type);
 
     if (!py_atom_coord)
     {
@@ -120,40 +120,48 @@ static void delete_py_atom_coord(PyObject *self)
 
     delete_atom_coord(atom_coord);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
-static int print_py_atom_coord(PyObject *self, FILE *fp, int flags)
+static PyObject *repr_py_atom_coord(PyObject *self)
 {
     Py_Atom_coord py_atom_coord = (Py_Atom_coord) self;
     Atom_coord atom_coord = py_atom_coord->atom_coord;
  
-    fprintf(fp, "<mass=%3.2e, x=%3.2e, y=%3.2e, z=%3.2e fixed=%d>", atom_coord->mass,
+    char buf[128];
+
+    snprintf(buf, sizeof buf, "<mass=%3.2e, x=%3.2e, y=%3.2e, z=%3.2e fixed=%d>", atom_coord->mass,
 			atom_coord->x, atom_coord->y, atom_coord->z, atom_coord->isFixed);
 
-    return 0;
+    return PyUnicode_FromString(buf);
 }
 
-static PyObject *getattr_py_atom_coord(PyObject *self, char *name)
+static PyObject *getattr_py_atom_coord(PyObject *self, PyObject *attr_name)
 {
     Py_Atom_coord py_atom_coord = (Py_Atom_coord) self;
     Atom_coord atom_coord = py_atom_coord->atom_coord;
 
-    if (equal_strings(name, "mass"))
-	return Py_BuildValue("f", atom_coord->mass);
-    else if (equal_strings(name, "x"))
-	return Py_BuildValue("f", atom_coord->x);
-    else if (equal_strings(name, "y"))
-	return Py_BuildValue("f", atom_coord->y);
-    else if (equal_strings(name, "z"))
-	return Py_BuildValue("f", atom_coord->z);
-    else if (equal_strings(name, "isFixed"))
-	return Py_BuildValue("i", atom_coord->isFixed);
-    else
-	return Py_FindMethod(py_handler_methods, self, name);
+    if (PyUnicode_Check(attr_name))
+    {
+        const char *name = PyUnicode_AsUTF8(attr_name);
+        if (name)
+        {
+            if (strcmp(name, "mass") == 0)
+                return Py_BuildValue("f", atom_coord->mass);
+            else if (strcmp(name, "x") == 0)
+                return Py_BuildValue("f", atom_coord->x);
+            else if (strcmp(name, "y") == 0)
+                return Py_BuildValue("f", atom_coord->y);
+            else if (strcmp(name, "z") == 0)
+                return Py_BuildValue("f", atom_coord->z);
+            else if (strcmp(name, "isFixed") == 0)
+                return Py_BuildValue("i", atom_coord->isFixed);
+        }
+    }
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_atom_coord(PyObject *self, char *name, PyObject *value)
+static int setattr_py_atom_coord(PyObject *self, PyObject *attr_name, PyObject *value)
 {
     Py_Atom_coord py_atom_coord = (Py_Atom_coord) self;
     Atom_coord atom_coord = py_atom_coord->atom_coord;
@@ -162,18 +170,27 @@ static int setattr_py_atom_coord(PyObject *self, char *name, PyObject *value)
     if (PyErr_Occurred())
 	RETURN_INT_ERROR("must have float value");
 
-    if (equal_strings(name, "mass"))
-	atom_coord->mass = v;
-    else if (equal_strings(name, "x"))
-	atom_coord->x = v;
-    else if (equal_strings(name, "y"))
-	atom_coord->y = v;
-    else if (equal_strings(name, "z"))
-	atom_coord->z = v;
-    else if (equal_strings(name, "isFixed"))
-	atom_coord->isFixed = v;
+    if (!PyUnicode_Check(attr_name))
+    {
+        PyErr_SetString(ErrorObject, "attribute name must be a string");
+        return -1;
+    }
+    const char *name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return -1;
+
+    if (strcmp(name, "mass") == 0)
+        atom_coord->mass = v;
+    else if (strcmp(name, "x") == 0)
+        atom_coord->x = v;
+    else if (strcmp(name, "y") == 0)
+        atom_coord->y = v;
+    else if (strcmp(name, "z") == 0)
+        atom_coord->z = v;
+    else if (strcmp(name, "isFixed") == 0)
+        atom_coord->isFixed = v;
     else
-	RETURN_INT_ERROR("unknown attribute name");
+        RETURN_INT_ERROR("unknown attribute name");
 
     return 0;
 }
@@ -208,23 +225,44 @@ static PySequenceMethods Atom_coord_sequence_methods =
 
 static PyTypeObject Atom_coord_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "AtomCoord", /* name */
-    sizeof(struct Py_Atom_coord), /* basicsize */
-    0, /* itemsize */
-    delete_py_atom_coord, /* destructor */
-    print_py_atom_coord, /* printfunc */
-    getattr_py_atom_coord, /* getattr */
-    setattr_py_atom_coord, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Atom_coord_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "AtomCoord",                         /* tp_name */
+    sizeof(struct Py_Atom_coord),        /* tp_basicsize */
+    0,                                   /* tp_itemsize */
+    (destructor) delete_py_atom_coord,   /* tp_dealloc */
+    0,                                   /* tp_vectorcall */
+    0,                                   /* tp_getattr */
+    0,                                   /* tp_setattr */
+    0,                                   /* tp_as_async */
+    (reprfunc) repr_py_atom_coord,       /* tp_repr */
+    0,                                   /* tp_as_number */
+    0,                                   /* tp_as_sequence */
+    0,                                   /* tp_as_mapping */
+    0,                                   /* tp_hash */
+    0,                                   /* tp_call */
+    0,                                   /* tp_str */
+    (getattrofunc) getattr_py_atom_coord,    /* tp_getattro */
+    (setattrofunc) setattr_py_atom_coord,    /* tp_setattro */
+    0,                                   /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                  /* tp_flags */
+    "AtomCoord -- cartesian atom coordinate", /* tp_doc */
+    0,                                   /* tp_traverse */
+    0,                                   /* tp_clear */
+    0,                                   /* tp_richcompare */
+    0,                                   /* tp_weaklistoffset */
+    0,                                   /* tp_iter */
+    0,                                   /* tp_iternext */
+    py_handler_methods,                  /* tp_methods */
+    0,                                   /* tp_members */
+    0,                                   /* tp_getset */
+    0,                                   /* tp_base */
+    0,                                   /* tp_dict */
+    0,                                   /* tp_descr_get */
+    0,                                   /* tp_descr_set */
+    0,                                   /* tp_dictoffset */
+    0,                                   /* tp_init */
+    0,                                   /* tp_alloc */
+    0,                                   /* tp_new */
 };
 
 /*****************************************************************************
@@ -269,22 +307,37 @@ static struct PyMethodDef Atom_coord_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initDyAtomCoord(void)
+static struct PyModuleDef DyAtomCoord_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "DyAtomCoord",
+    "CCPNMR DyAtomCoord module (Python 3 compatible)",
+    -1,
+    Atom_coord_type_methods
+};
 
-#ifdef WIN64
-    Atom_coord_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("DyAtomCoord", Atom_coord_type_methods);
+PyMODINIT_FUNC PyInit_DyAtomCoord(void)
+{
+    if (PyType_Ready(&Atom_coord_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&DyAtomCoord_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("DyAtomCoord.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module DyAtomCoord");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

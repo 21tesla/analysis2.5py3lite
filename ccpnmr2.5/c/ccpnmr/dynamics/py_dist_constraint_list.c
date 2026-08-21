@@ -212,7 +212,7 @@ static Py_Dist_constraint_list new_py_dist_constraint_list(void)
 {
     Py_Dist_constraint_list py_dist_constraint_list;
 
-    PY_MALLOC(py_dist_constraint_list, struct Py_Dist_constraint_list, &Dist_constraint_list_type);
+    py_dist_constraint_list = (Py_Dist_constraint_list) PyObject_New(struct Py_Dist_constraint_list, &Dist_constraint_list_type);
 
     if (!py_dist_constraint_list)
 	RETURN_OBJ_ERROR("allocating Py_Dist_constraint_list object");
@@ -238,7 +238,7 @@ static void delete_py_dist_constraint_list(PyObject *self)
 
     FREE(py_dist_constraint_list->py_dist_constraints, Py_Dist_constraint);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -274,7 +274,7 @@ static PyObject *Dist_constraint_list_item(PyObject *self, int i)
     return (PyObject *) py_dist_constraint;
 }
 
-static PyObject *getattr_py_dist_constraint_list(PyObject *self, char *name)
+static PyObject *getattr_py_dist_constraint_list(PyObject *self, PyObject *attr_name)
 {
 /*
     Py_Dist_constraint_list obj = (Py_Dist_constraint_list) self;
@@ -290,10 +290,10 @@ static PyObject *getattr_py_dist_constraint_list(PyObject *self, char *name)
 	return Py_BuildValue("f", dist_constraint_list->z);
     else
 */
-	return Py_FindMethod(py_handler_methods, self, name);
+	return PyObject_GenericGetAttr(self, attr_name);
 }
 
-static int setattr_py_dist_constraint_list(PyObject *self, char *name, PyObject *value)
+static int setattr_py_dist_constraint_list(PyObject *self, PyObject *attr_name, PyObject *value)
 {
 /*
     Py_Dist_constraint_list obj = (Py_Dist_constraint_list) self;
@@ -350,23 +350,44 @@ static PySequenceMethods Dist_constraint_list_sequence_methods =
 
 static PyTypeObject Dist_constraint_list_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "DistConstraintList", /* name */
-    sizeof(struct Py_Dist_constraint_list), /* basicsize */
-    0, /* itemsize */
-    delete_py_dist_constraint_list, /* destructor */
-    0, /* printfunc */
-    getattr_py_dist_constraint_list, /* getattr */
-    setattr_py_dist_constraint_list, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    &Dist_constraint_list_sequence_methods /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "DistConstraintList",                         /* tp_name */
+    sizeof(struct Py_Dist_constraint_list),       /* tp_basicsize */
+    0,                                            /* tp_itemsize */
+    (destructor) delete_py_dist_constraint_list,  /* tp_dealloc */
+    0,                                            /* tp_vectorcall */
+    0,                                            /* tp_getattr */
+    0,                                            /* tp_setattr */
+    0,                                            /* tp_as_async */
+    0,                                            /* tp_repr */
+    0,                                            /* tp_as_number */
+    0,                                            /* tp_as_sequence */
+    0,                                            /* tp_as_mapping */
+    0,                                            /* tp_hash */
+    0,                                            /* tp_call */
+    0,                                            /* tp_str */
+    (getattrofunc) getattr_py_dist_constraint_list,  /* tp_getattro */
+    (setattrofunc) setattr_py_dist_constraint_list,  /* tp_setattro */
+    0,                                            /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                           /* tp_flags */
+    "DistConstraintList -- list of dist constraints", /* tp_doc */
+    0,                                            /* tp_traverse */
+    0,                                            /* tp_clear */
+    0,                                            /* tp_richcompare */
+    0,                                            /* tp_weaklistoffset */
+    0,                                            /* tp_iter */
+    0,                                            /* tp_iternext */
+    py_handler_methods,                           /* tp_methods */
+    0,                                            /* tp_members */
+    0,                                            /* tp_getset */
+    0,                                            /* tp_base */
+    0,                                            /* tp_dict */
+    0,                                            /* tp_descr_get */
+    0,                                            /* tp_descr_set */
+    0,                                            /* tp_dictoffset */
+    0,                                            /* tp_init */
+    0,                                            /* tp_alloc */
+    0,                                            /* tp_new */
 };
 
 /*****************************************************************************
@@ -412,22 +433,37 @@ static struct PyMethodDef Dist_constraint_list_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initDyDistConstraintList(void)
+static struct PyModuleDef DyDistConstraintList_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "DyDistConstraintList",
+    "CCPNMR DyDistConstraintList module (Python 3 compatible)",
+    -1,
+    Dist_constraint_list_type_methods
+};
 
-#ifdef WIN64
-    Dist_constraint_list_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("DyDistConstraintList", Dist_constraint_list_type_methods);
+PyMODINIT_FUNC PyInit_DyDistConstraintList(void)
+{
+    if (PyType_Ready(&Dist_constraint_list_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&DyDistConstraintList_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("DyDistConstraintList.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module DyDistConstraintList");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

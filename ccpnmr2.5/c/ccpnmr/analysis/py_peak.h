@@ -60,4 +60,6 @@ extern PyObject *new_py_peak(Peak peak);
 
 extern void delete_py_peak(PyObject *self);
 
+extern int ready_peak_type(void);
+
 #endif /* _incl_py_peak */
