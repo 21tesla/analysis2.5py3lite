@@ -1,18 +1,20 @@
 # Phase 2b Checkpoints — fix remaining import-time failures
 # (resume-safe map; update at every session boundary)
 
-## Status (2026-08-21, FINAL — ready to commit)
-- Baseline (Phase 2a commit `e22a93f`): import_smoke **1561 OK / 165 FAILED, 81 groups**.
-- Final (Phase 2b): import_smoke **1634 OK / 92 FAILED** (+73 modules importable).
-- Whole-tree compile: **0 syntax errors** (`python -m compileall -q ccpnmr2.5/python/`).
-- Pytest (testpaths `tests/` + `nef/testing/`): **15 pass / 14 skip / 10 fail** — all 10
-  failures are the known missing `/home/logan/software/testdata/` data (unchanged baseline).
-- **124 phase .py files modified** + checkpoint/recipe/helper files (see staging list below).
-- `.qwen/settings.json` + `database.txt` + `dbTable-new` + `dbTable.new` + `fooprof` =
-  UNRELATED user files, EXCLUDED from staging (per workflow rule).
-- Ruff: 152k pre-existing style findings in touched auto-generated API files — pre-existing,
-  ruff `--fix` is Phase 3 scope, NOT a 2b gate.
-- COMMIT STATE: pending single phase-boundary commit (message in "Decision record").
+## Status (2026-08-22, Phase 2b+2c COMPLETE)
+- **FINAL METRIC: TOTAL 1726 = 1643 OK + 83 BY-DESIGN (documented) + 0 FAILED (unexpected).**
+- Phase 2b (commit `69b1c07`): 1561 → 1634 (+73 importers).
+- Phase 2c buckets 1-5 (commits `6641a9e`,`4bb553a`,`e48091e`,`09eb231`,`5f60235`):
+  deps classification, superpose Cython (+6), Meccano C ext (+1), CING shims (+2),
+  allowlist (83 by-design documented). Smoke now: `MPLBACKEND=Agg .venv/bin/python import_smoke.py`.
+- Verified (2026-08-22): 0 syntax errors whole-tree; pytest 15 pass/14 skip/10 fail
+  (all 10 = missing `/home/logan/software/testdata/` data, unchanged baseline);
+  BayesPeakSeparator FAM rebuild + Meccano build both clean via updated setup.py.
+- Excluded from all commits (user files): `.qwen/settings.json`, `database.txt`,
+  `dbTable-new`, `dbTable.new`, `fooprof`.
+- Ruff: 152k pre-existing style findings in auto-generated API files — Phase 3 scope,
+  not a 2b/2c gate.
+- COMMIT STATE: Phase 2b committed (`69b1c07`); Phase 2c buckets each committed (see Status).
 
 ## Authoritative verification (run before committing)
 ```bash
