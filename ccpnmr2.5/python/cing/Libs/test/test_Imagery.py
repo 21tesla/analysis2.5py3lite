@@ -3,9 +3,10 @@ Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_Imagery.py
 """
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.parameters import cingPaths
@@ -24,7 +25,7 @@ class AllChecks(TestCase):
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_Imagery' )
     if os.path.exists(cingDirTmpTest):
         rmdir(cingDirTmpTest)
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testConvert2Web(self):

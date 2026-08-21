@@ -11,7 +11,7 @@ from cing.NRG.PDBEntryLists import getPdbEntries, writeEntryListToFile
 
 cing.verbosity = cing.verbosityDebug
 cingDirTmpTest = os.path.join( cingDirTmp, 'getRCSB_PDB' )
-mkdirs( cingDirTmpTest )
+os.makedirs( cingDirTmpTest , exist_ok=True)
 os.chdir(cingDirTmpTest)
 
 testing = False

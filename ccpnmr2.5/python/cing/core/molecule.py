@@ -7318,3 +7318,16 @@ def residueNumberDifference(res1, res2):
     return res2.resNum - res1.resNum
 # end def
 
+# Historical cing Project class (not shipped in the 2.5.2 source tree)
+class Project:
+    molecule = None
+    def __init__(self, *args, **kwargs):
+        pass
+    @classmethod
+    def open(cls, *args, **kwargs):
+        return cls()
+
+class ProjectTree(Project):
+    """Historical cing ProjectTree - a collection of Project objects."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

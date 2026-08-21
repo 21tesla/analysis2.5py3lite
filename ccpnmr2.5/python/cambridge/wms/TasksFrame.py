@@ -2,8 +2,8 @@ import tkinter as Tkinter
 import time
 
 # required for WS layer
-from SharedBeanService_services import *
-from WSString import *
+from .SharedBeanService_services import *
+from .WSString import *
 
 # added jmci; do we need this??
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs

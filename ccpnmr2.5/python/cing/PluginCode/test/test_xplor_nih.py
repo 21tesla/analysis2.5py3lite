@@ -6,6 +6,7 @@ For testing execution of cing inside of Xplor-NIH python interpreter with the da
 This is not yet achieved and the test is useless at this point.
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp
@@ -17,7 +18,7 @@ class AllChecks(TestCase):
 
     def test_xplor_nih(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

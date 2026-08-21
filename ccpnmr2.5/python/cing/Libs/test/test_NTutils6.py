@@ -4,6 +4,7 @@ python -u $CINGROOT/python/cing/Libs/test/test_NTutils6.py
 """
 
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp
@@ -13,7 +14,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 
 class AllChecks(TestCase):
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTutils6' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testGetCallerName(self):

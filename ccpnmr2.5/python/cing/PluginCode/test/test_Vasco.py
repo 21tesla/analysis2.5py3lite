@@ -3,10 +3,11 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/PluginCode/test/test_Vasco.py
 """
 import unittest
+import os
 from shutil import rmtree
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project
@@ -73,7 +74,7 @@ class AllChecks(TestCase):
 
 #        cingDirTmp = '/Users/jd/workspace/nrgcing/Vasco'
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

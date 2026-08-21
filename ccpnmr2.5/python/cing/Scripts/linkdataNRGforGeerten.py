@@ -9,7 +9,10 @@ This script will open the file with input data and gives a file back with the in
 Some of the imports aren't necessary. I just copied them from some scripts from Jurgen Doreleijers.
 I kept them all here in case that I'll need it some another time.
 """
-from pylab import *  #@UnusedWildImport # imports plt too now.
+try:
+    from matplotlib.pyplot import *
+except Exception:
+    pass
 from scipy import *  #@UnusedWildImport
 from sqlalchemy.sql.expression import (
     func,

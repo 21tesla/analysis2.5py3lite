@@ -86,7 +86,7 @@ from     os.path             import join, isdir
 from     os                     import makedirs
 from    HaddockBasic        import getPdbString, getAirSegments, getFlexibleResidues, makeBackup
 from     HaddockDnaRnaRest     import dnaRnaRestraints
-from     HaddockLocal        import *
+from .HaddockLocal import *
 
 class exportClassic:
     

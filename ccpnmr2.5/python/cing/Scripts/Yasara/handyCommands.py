@@ -7,6 +7,7 @@ Created on Mar 30, 2010
 from glob import glob
 
 import yasara  #@UnusedImport @UnresolvedImport
+import os
 from yasaramodule import *  #@UnusedWildImport
 
 from cing import cingDirTmp
@@ -39,7 +40,7 @@ for fn in fileList[0:10]:
     yasara.AddHydObj(obj)
     outputDir = '/Users/jd/CASP-NMR-CING/data/05/%s/Author' % entryCode
     if not os.path.exists(outputDir):
-        mkdirs(outputDir)
+        os.makedirs(outputDir, exist_ok=True)
     newPdbFileName = os.path.join( outputDir, entryCode+".pdb")
     yasara.SavePDB(obj,newPdbFileName,format='IUPAC', transform='No')
     yasara.Clear()

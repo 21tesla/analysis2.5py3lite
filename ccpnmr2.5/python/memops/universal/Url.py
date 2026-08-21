@@ -113,13 +113,11 @@ def uploadFiles(url, fileFields, fields=None, boundary=None):
     import os
     import urllib.request
 
-    import mimetools
-
     if not fields:
         fields = ()
 
     if not boundary:
-        boundary = "-----" + mimetools.choose_boundary() + "-----"
+        boundary = "-----" + uuid.uuid4().hex + "-----"
 
     CRLF = "\r\n"
     xx = []

@@ -1,6 +1,7 @@
 #import matplotlib # to pop-up a xwindow with command 'show()'
 #matplotlib.use('GTKAgg') # enable this line and above.
 import unittest
+import os
 from unittest import TestCase
 
 from numpy import *  #@UnusedWildImport
@@ -14,7 +15,7 @@ from cing.Libs.numpyInterpolation import *  #@UnusedWildImport
 class AllChecks(TestCase):
 
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NumpyInterpolation' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
 

@@ -1,8 +1,8 @@
 
 # required for WS layer
 import tkinter as Tkinter
-from SharedBeanService_services import *
-from WSString import *
+from .SharedBeanService_services import *
+from .WSString import *
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup

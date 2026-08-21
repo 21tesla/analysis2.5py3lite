@@ -84,7 +84,7 @@ Citing:          If you are using this software for academic purposes, we
 
 import re
 
-from HaddockLocal import *
+from .HaddockLocal import *
 
 
 class runCnsImporter:

@@ -3,10 +3,12 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_Molgrap.py
 """
 import shutil
+import os
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp, cingPythonCingDir
 from cing.core.classes import Project
@@ -29,7 +31,7 @@ class AllChecks(TestCase):
     if os.path.exists( cingDirTmpTest ):
         rmdir( cingDirTmpTest )
     # end if
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testMolgrapRunFromPdbFile(self):

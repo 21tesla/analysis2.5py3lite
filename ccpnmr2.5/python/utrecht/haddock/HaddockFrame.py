@@ -89,7 +89,7 @@ from HaddockDaniPopup import HaddockDaniPopup
 from HaddockExportClassic import exportClassic
 from HaddockExportParam import exportParam
 from HaddockImportRunCns import runCnsImporter
-from HaddockLocal import *
+from .HaddockLocal import *
 from HaddockRdcPopup import HaddockRdcPopup
 from HaddockServerUpload import HaddockServerUpload
 

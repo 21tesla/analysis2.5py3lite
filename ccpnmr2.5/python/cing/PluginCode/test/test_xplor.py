@@ -5,10 +5,11 @@ python $CINGROOT/python/cing/PluginCode/test/test_xplor.py
 For testing execution of cing inside of Xplor-NIH python interpreter with the data living outside of it.
 """
 import unittest
+import os
 from shutil import copyfile, rmtree
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project
@@ -37,7 +38,7 @@ class AllChecks(TestCase):
         modelCount = 1
         entryList  = "1brv     2fws                      ".split()
         cingDirTmpTest = os.path.join(cingDirTmp, getCallerName())
-        mkdirs(cingDirTmpTest)
+        os.makedirs(cingDirTmpTest, exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg=
             "Failed to change to test directory for files: " + cingDirTmpTest)
         for i, entryId in enumerate(entryList):
@@ -67,7 +68,7 @@ class AllChecks(TestCase):
         nTdebug("Now in %s" % getCallerName())
         entryList  = "1brv_023     1dum                      ".split()
         cingDirTmpTest = os.path.join(cingDirTmp, getCallerName())
-        mkdirs(cingDirTmpTest)
+        os.makedirs(cingDirTmpTest, exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg=
             "Failed to change to test directory for files: " + cingDirTmpTest)
         for i, entryId in enumerate(entryList):

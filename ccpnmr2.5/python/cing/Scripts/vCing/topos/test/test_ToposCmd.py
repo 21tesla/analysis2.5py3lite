@@ -3,6 +3,7 @@ Created on Oct 20, 2010
 '''
 
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -20,7 +21,7 @@ class AllChecks(TestCase):
     def _testAll(self): ###  TODO: fails in current setup.
         # important to switch to temp space before starting to generate files for the project.
         cingDirTmpTest = os.path.join( cingDirTmp, 'test_ToposCmd' )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         os.chdir(cingDirTmpTest)
 #        exitCode, token, tokenLock = vcMaster.nextTokenWithLock(lockTimeOut)
 #        if exitCode:

@@ -53,7 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 # from ccp.format.nmrStar.projectIO import MoleculeDbLink
-from constants import bmrbCodeToCcpCode
+from .constants import bmrbCodeToCcpCode
 
 from ccp.format.nmrStar.generalIO import NmrStarFile, NmrStarGenericFile
 from memops.universal.Util import returnInt

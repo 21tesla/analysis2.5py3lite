@@ -14,7 +14,7 @@ sys.path.insert(0, ROOT)
 # Third-party modules that are NOT installed in this venv -> "missing dep", not a code bug.
 MISSING_DEPS = {'scipy', 'tkinter', 'Tkinter'}  # Tkinter kept: we WANT to flag capital-Tkinter as a code smell? No -> see below.
 # matplotlib is genuinely optional/heavy; missing = dep, not code bug.
-OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile'}
+OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', 'nose'}
 
 # Modules we can't expect to import cleanly in a headless/no-GUI env (GUI entry points, etc.)
 # We still try them, but treat ImportError on tkinter as an environment note.

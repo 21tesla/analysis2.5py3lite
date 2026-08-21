@@ -1,5 +1,7 @@
 import tkinter as Tkinter
+import os
 import tarfile
+import os
 from shutil import copytree, rmtree
 
 from cing import header
@@ -80,10 +82,9 @@ def annotateEntry(entryCodeNew, *extraArgList):
     outputNijmegenDir = os.path.join(entryDir, 'Nijmegen')
 
     if not os.path.exists(inputAuthorDir):
-        mkdirs(inputAuthorDir)
+        os.makedirs(inputAuthorDir, exist_ok=True)
     if not os.path.exists(outputNijmegenDir):
-        mkdirs(outputNijmegenDir)
-
+        os.makedirs(outputNijmegenDir, exist_ok=True)
     os.chdir(outputNijmegenDir)
     presetDict = {}
     presets = getDeepByKeysOrDefault(presetDict, {}, entryCodeNew)

@@ -5,9 +5,10 @@ python $CINGROOT/python/cing/PluginCode/test/test_Yasara.py
 Disabled because shell is hard to test; see $CINGROOT/python/cing/Scripts/test/test_RotateLeucines.py
 """
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTmp
 from cing.core.classes import Project
@@ -29,7 +30,7 @@ class AllChecks(TestCase):
         'Test is incomplete; do NOT use.'
         entryId = "testYasara"
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         project = Project( entryId )

@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_DBMS.py
 """
 import unittest
+import os
 from glob import glob
 from shutil import copyfile
 from unittest import TestCase
@@ -16,7 +17,7 @@ from cing.NRG.PDBEntryLists import matchBmrbPdbDataDir
 class AllChecks(TestCase):
 
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_DBMS' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testDBMSread(self):

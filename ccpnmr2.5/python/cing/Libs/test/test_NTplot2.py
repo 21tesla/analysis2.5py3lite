@@ -1,4 +1,5 @@
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -133,7 +134,7 @@ class NTplot2Checks(TestCase):
 
     # important to switch to temp space before starting to generate files for the project.
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTplot2' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testPlotHistoDihedral(self):

@@ -3,6 +3,7 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_vCingMaster.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -14,7 +15,7 @@ class AllChecks(TestCase):
 
     def _test_vCingMaster(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

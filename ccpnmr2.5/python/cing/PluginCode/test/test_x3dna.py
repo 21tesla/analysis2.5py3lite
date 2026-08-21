@@ -5,10 +5,12 @@ python $CINGROOT/python/cing/PluginCode/test/test_x3dna.py
 Open the ???.r3d files in pymol or so; they're nice.
 """
 import shutil
+import os
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp, osType
 from cing.core.classes import Project
@@ -44,7 +46,7 @@ class AllChecks(TestCase):
         useNrgArchive = False
         showValues = True
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

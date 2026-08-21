@@ -3,10 +3,11 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_matplotlib2D.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from matplotlib.pylab import *  #@UnusedWildImport
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 from numpy import *  #@UnusedWildImport
 
 from cing import cingDirTestsData, cingDirTmp
@@ -30,7 +31,7 @@ class AllChecks(TestCase):
 
         # important to switch to temp space before starting to generate files for the project.
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
@@ -106,7 +107,7 @@ class AllChecks(TestCase):
         '''
         cing.verbosity = verbosityDebug
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 #        entryId = "1brv_cs_pk_2mdl"

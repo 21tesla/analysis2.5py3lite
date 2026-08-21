@@ -8,7 +8,7 @@ import cing
 from cing import cingRoot, issueListUrl
 from cing.core.classes2 import *  #@UnusedWildImport
 from cing.core.constants import *  #@UnusedWildImport
-from cing.core.molecule import Atom, nTdihedralOpt
+from cing.core.molecule import Atom, nTdihedralOpt, Project, ProjectTree
 from cing.Libs.Geometry import violationAngle
 from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqNih import TALOSPLUS_LIST_STR

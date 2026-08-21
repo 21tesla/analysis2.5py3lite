@@ -247,7 +247,7 @@ import urllib
 import urllib.request
 from io import StringIO
 
-import mimetools
+import uuid
 
 
 class Callable:
@@ -293,7 +293,7 @@ class MultipartPostHandler(urllib.request.BaseHandler):
 
     def multipart_encode(vars, files, boundary = None, buf = None):
         if boundary is None:
-            boundary = mimetools.choose_boundary()
+            boundary = uuid.uuid4().hex
         if buf is None:
             buf = StringIO()
         for(key, value) in vars:

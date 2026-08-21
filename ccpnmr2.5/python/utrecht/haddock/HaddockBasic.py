@@ -88,7 +88,7 @@ Citing:          If you are using this software for academic purposes, we
 
 import os
 
-from HaddockLocal import daniProtocolStore, rdcProtocolStore
+from .HaddockLocal import daniProtocolStore, rdcProtocolStore
 
 #from ccp.util.Molecule                   import makeChain, addMolResidues, makeMolecule, nextChainCode
 #from memops.gui.MessageReporter          import showOkCancel,showWarning,showYesNo

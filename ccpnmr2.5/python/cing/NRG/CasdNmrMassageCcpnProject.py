@@ -11,7 +11,9 @@ if the input project is in cwd.
 Most functionality is hard-coded here so be careful reading the actual code.
 """
 import json
+import os
 import tarfile
+import os
 from glob import glob1
 
 from cing.core.constants import *  #@UnusedWildImport
@@ -103,8 +105,7 @@ def createLayOutArchive():
         for city in cityList:
             entryCodeNew = entryCode + city
             entryDir = os.path.join(ch23, entryCodeNew)
-            mkdirs(entryDir)
-
+            os.makedirs(entryDir, exist_ok=True)
 def copyFromCasdNmr2CcpnArchive():
     #inputDir = '/Users/jd/CASD-NMR-CING/casdNmrDbDivided'
     programHoH = convertToProgram(participationTable)
@@ -131,9 +132,9 @@ def copyFromCasdNmr2CcpnArchive():
             outputNijmegenDir = os.path.join(outputEntryDir, 'Nijmegen')
 
             if not os.path.exists(inputAuthorDir):
-                mkdirs(inputAuthorDir)
+                os.makedirs(inputAuthorDir, exist_ok=True)
             if not os.path.exists(outputNijmegenDir):
-                mkdirs(outputNijmegenDir)
+                os.makedirs(outputNijmegenDir, exist_ok=True)
             # prevent junk
             patternList = "*.pdb *.upl *.aco *.tbl".split()
             fnList = globMultiplePatterns(inputEntryDir, patternList)
@@ -158,7 +159,7 @@ def redoLayOutArchiveWim():
 #        nTmessage("Tarring from %s to %s" % (entryCodeNew,tarPath))
         nTmessage("Creating %s" % tarPath)
         if not os.path.exists(entryDir):
-            mkdirs(entryDir)
+            os.makedirs(entryDir, exist_ok=True)
         if not os.path.exists(entryCodeNew):
             os.rename(entryCode, entryCodeNew)
         myTar = tarfile.open(tarPath, mode='w:gz') # overwrites

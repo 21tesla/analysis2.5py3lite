@@ -11,6 +11,7 @@ if the input project is in cwd.
 Most functionality is hard-coded here so be careful reading the actual code.
 """
 import tkinter as Tkinter
+import os
 from glob import glob
 
 from ccpnmr.format.converters.PseudoPdbFormat import PseudoPdbFormat
@@ -100,10 +101,9 @@ def replaceCoordinates():
                 continue
 
             if not os.path.exists(inputAuthorDir):
-                mkdirs(inputAuthorDir)
+                os.makedirs(inputAuthorDir, exist_ok=True)
             if not os.path.exists(outputNijmegenDir):
-                mkdirs(outputNijmegenDir)
-
+                os.makedirs(outputNijmegenDir, exist_ok=True)
             os.chdir(outputNijmegenDir)
             if False:
                 # By reading the ccpn tgz into cing it is also untarred/tested.

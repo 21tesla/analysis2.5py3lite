@@ -7,6 +7,7 @@ Created on May 30, 2011
 @author: jd
 '''
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp
@@ -17,7 +18,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 class AllChecks(TestCase):
     'Test case'
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NoeCompleteness' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
 #    def _test_NoeCompletenessLib(self):

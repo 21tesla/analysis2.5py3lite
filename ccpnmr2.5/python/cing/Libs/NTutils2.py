@@ -410,7 +410,7 @@ def getCallerFileName():
 
 def getRandomKey(size=6):
     """Get a random alphanumeric string of a given size"""
-    alphaNumericList = [chr(x) for x in range(48, 58) + range(65, 91) + range(97, 123)]
+    alphaNumericList = [chr(x) for x in list(range(48, 58)) + list(range(65, 91)) + list(range(97, 123))]
     #random.shuffle(alphaNumericList)
 
     n = len(alphaNumericList) - 1

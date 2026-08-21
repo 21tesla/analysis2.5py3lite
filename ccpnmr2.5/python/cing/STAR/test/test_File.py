@@ -3,8 +3,11 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/STAR/test/test_File.py
 """
 import unittest
+import os
 import urllib
+import os
 import zipfile
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -16,7 +19,7 @@ from cing.STAR.File import File
 class AllChecks(TestCase):
     strf = File()
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_File' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def test_Parse(self):

@@ -21,17 +21,28 @@ except ImportError:
 
 try:
     from matplotlib import pyplot
-    from matplotlib.cm import (
-        LUTSIZE,
-        datad,
-        gray,  #pylint: disable=E0611
-    )
     from matplotlib.colors import LinearSegmentedColormap
-    from matplotlib.patches import Ellipse, Patch
+    from matplotlib.patches import Ellipse, Patch, Polygon
     from matplotlib.path import Path
-    from matplotlib.pylab import *  #@UnusedWildImport for such functions as amax, arange, multiply, mat, etc...
-except ImportError:
-    raise ImportWarning('matplib')
+    from matplotlib.ticker import Formatter, FuncFormatter, NullFormatter
+    LUTSIZE = 256
+    # datad/gray: matplotlib.cm internals replaced with modern API
+    import matplotlib
+    datad = matplotlib.cm.cmap_d if hasattr(matplotlib.cm, 'cmap_d') else {}
+    gray = matplotlib.colormaps['gray']
+    # matplotlib.pylab names that matplib uses directly
+    axes   = pyplot.axes
+    cla    = pyplot.cla
+    clf    = pyplot.clf
+    gcf    = pyplot.gcf
+    figure = pyplot.figure
+    import numpy
+    amax   = numpy.amax
+    arange = numpy.arange
+    multiply = numpy.multiply
+    mat    = lambda x: numpy.matrix(x)
+except Exception:
+    raise ImportError('matplib requires matplotlib')
 #end try
 
 

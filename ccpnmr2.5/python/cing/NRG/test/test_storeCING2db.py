@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_storeCING2db.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from sqlalchemy.sql.expression import select
@@ -18,7 +19,7 @@ class AllChecks(TestCase):
 
     def _test_storeCING2db(self): #DEFAULT disabled because it's a specific test for services not commonly used.
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

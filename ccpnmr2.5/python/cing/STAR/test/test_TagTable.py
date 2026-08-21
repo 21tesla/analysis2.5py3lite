@@ -1,4 +1,5 @@
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -9,7 +10,7 @@ from cing.STAR.TagTable import TagTable
 class AllChecks(TestCase):
 
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_TagTable' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
 

@@ -6,7 +6,7 @@ python $CINGROOT/python/cing/PluginCode/test/test_ccpn_2.py
 import unittest
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing.Libs.disk import isRootDirectory
 from cing.Libs.NTutils import *  #@UnusedWildImport

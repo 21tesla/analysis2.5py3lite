@@ -3,8 +3,8 @@ import os
 
 # added jmci; do we need this??
 # required for WS layer
-from SharedBeanService_services import *
-from WSString import *
+from .SharedBeanService_services import *
+from .WSString import *
 
 from cambridge.wms.FilterFrame import FilterFrame
 

@@ -28,8 +28,8 @@
 import os
 
 # required for WS layer
-from SharedBeanService_services import *
-from WSString import *
+from .SharedBeanService_services import *
+from .WSString import *
 
 from memops.general.Io import loadProject
 

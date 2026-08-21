@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_NTplot.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -16,7 +17,7 @@ class AllChecks(TestCase):
 
     # important to switch to temp space before starting to generate files for the project.
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTplot' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testPlotVaria(self):

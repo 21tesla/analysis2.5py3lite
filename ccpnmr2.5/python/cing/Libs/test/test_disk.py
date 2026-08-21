@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest import TestCase
 
@@ -9,7 +10,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 class AllChecks(TestCase):
     # important to switch to temp space before starting to generate files for the project.
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_disk' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testDisk(self):

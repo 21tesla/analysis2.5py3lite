@@ -3,6 +3,7 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/STAR/test/test_Utils.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -12,7 +13,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 class AllChecks(TestCase, Lister):
 
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_Utils' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
 

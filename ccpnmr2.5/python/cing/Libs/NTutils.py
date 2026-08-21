@@ -2336,7 +2336,7 @@ class NTtree(NTdict):
         return self
     # end def
 
-    def next(self):
+    def __next__(self):
         'With error checking get the next child thru _iter.'
         if self._iter >= len(self._children):
             raise StopIteration
@@ -3834,7 +3834,7 @@ class NTprogressIndicator: # pylint: disable=R0903
         return self
     #end def
 
-    def next(self):
+    def __next__(self):
         'Prints the progress for the next item if anything.'
         if self._iter >= self._len:
             nTmessage("")

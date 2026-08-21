@@ -146,7 +146,7 @@ def mainReplaceCoordinatesEntry(entryId, *extraArgList):
     if isRemoteOutputDir:
         os.chdir(cingDirTmp)
     else:
-        mkdirs(outputDir)
+        os.makedirs(outputDir, exist_ok=True)
         os.chdir(outputDir)
 
     project = Project(entryId)

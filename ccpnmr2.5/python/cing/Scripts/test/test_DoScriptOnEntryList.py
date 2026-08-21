@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/Scripts/test/test_DoScriptOnEntryList.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirScripts, cingDirTmp
@@ -21,7 +22,7 @@ class AllChecks(TestCase):
     def test_DoScriptOnEntryList(self):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         entryListFileName = "entry_list_todo.csv"
@@ -46,7 +47,7 @@ class AllChecks(TestCase):
 
     def test_DoFunctionOnEntryList(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         entryListFileName = 'entryListFileName.csv'

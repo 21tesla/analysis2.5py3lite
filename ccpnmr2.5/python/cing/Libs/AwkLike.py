@@ -38,7 +38,7 @@ class _AwkLike(list):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         pass
 
     def _parseLine(self, line):
@@ -213,7 +213,7 @@ class AwkLike(_AwkLike):
         return self
     #end def
 
-    def next(self):
+    def __next__(self):
         """Get the next element"""
         if self.f is None:
             raise StopIteration
@@ -278,7 +278,7 @@ class AwkLikeS( _AwkLike ):
         return self
     #end def
 
-    def next(self):
+    def __next__(self):
         if self._lineCounter < 0:
             raise StopIteration
         if self._lineCounter >= self.MAX_NR:

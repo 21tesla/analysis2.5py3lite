@@ -6,8 +6,11 @@ Because of the name of this file it will not be executed when doing:
 cing --test
 """
 import profile
+import os
 import pstats
+import os
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp
@@ -35,7 +38,7 @@ class AllChecks(TestCase):
             pdbFilePath = os.path.join( pdbDirectory, pdbFileName)
 
             cingDirTmpTest = os.path.join( cingDirTmp, 'test2_pdb' )
-            mkdirs( cingDirTmpTest )
+            os.makedirs( cingDirTmpTest , exist_ok=True)
             os.chdir(cingDirTmpTest)
             # does it matter to import it just now?
             project = Project( entryId )

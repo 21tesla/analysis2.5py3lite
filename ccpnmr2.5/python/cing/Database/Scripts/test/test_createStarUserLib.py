@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/Database/Scripts/test/test_createStarUserLib.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -13,7 +14,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 class AllChecks(TestCase):
 
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_createStarUserLib' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def _test_createSimpleFastProject(self):

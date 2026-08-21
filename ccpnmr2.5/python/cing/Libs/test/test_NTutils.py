@@ -28,7 +28,7 @@ class AllChecks(TestCase):
 
     def test_NTutils(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         namepattern, startdir = "test*.py", cingPythonDir # CVS is only for developers

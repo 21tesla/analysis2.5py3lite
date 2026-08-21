@@ -36,8 +36,8 @@
 import time
 from threading import Thread
 
-from SharedBeanService_services import *
-from WSString import *
+from .SharedBeanService_services import *
+from .WSString import *
 
 from cambridge.wms.TestTask1Manager import TestTask1Manager
 

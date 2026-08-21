@@ -5,7 +5,9 @@ python -u $CINGROOT/python/cing/NRG/doAnnotateNrgCing.py $x $y
 '''
 
 import tkinter as Tkinter
+import os
 import tarfile
+import os
 from shutil import rmtree
 
 from cing import header
@@ -105,7 +107,7 @@ def annotateEntry(entry_code, bmrb_id, *extraArgList):
     entryDir = os.path.join(dataDividedXDir, entry_code)
     outputNijmegenDir = os.path.join(entryDir, 'Nijmegen')
     if not os.path.exists(outputNijmegenDir):
-        mkdirs(outputNijmegenDir)
+        os.makedirs(outputNijmegenDir, exist_ok=True)
     os.chdir(outputNijmegenDir)
 
     presets = getDeepByKeysOrDefault(presetDict, {}, bmrb_code)

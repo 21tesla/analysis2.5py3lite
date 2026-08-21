@@ -3,7 +3,9 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test2_ccpn.py
 """
 import shutil
+import os
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp
@@ -37,7 +39,7 @@ class AllChecks(TestCase):
             doWattos = False
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

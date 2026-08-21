@@ -6,7 +6,7 @@ import os
 import random
 import time
 
-import mimetools
+import uuid
 
 try:
   import urllib.request
@@ -38,7 +38,7 @@ RESPONSE_SUCCESS = 'Success'
 RESPONSE_RESULT = 'Result'
 RESPONSE_DONE = 'done'
 
-ALPHANUMERIC = [chr(x) for x in range(48,58)+range(65,91)+range(97,123)]
+ALPHANUMERIC = [chr(x) for x in list(range(48,58))+list(range(65,91))+list(range(97,123))]
 random.shuffle(ALPHANUMERIC)
 
 def testProjectPakageMacro(argServer):
@@ -276,7 +276,7 @@ def _packageProject(memopsRoot):
 # Initial code from http://www.voidspace.org.uk/python/cgi.shtml#upload                                                #
 #########################################################################################
 
-###BOUNDARY = mimetools.choose_boundary()
+###BOUNDARY = uuid.uuid4().hex
 
 def encodeForm(fields, files=None, lineSep='\r\n',
                boundary=None):
@@ -284,7 +284,7 @@ def encodeForm(fields, files=None, lineSep='\r\n',
     """Function to encode form fields and files so that they can be sent to a URL"""
 
     if not boundary:
-      boundary = boundary = '-----'+mimetools.choose_boundary()+'-----'
+      boundary = boundary = '-----'+uuid.uuid4().hex+'-----'
 
     if not files:
         files = []

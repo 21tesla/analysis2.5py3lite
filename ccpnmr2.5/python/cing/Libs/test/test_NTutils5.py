@@ -4,6 +4,7 @@ python -u $CINGROOT/python/cing/Libs/test/test_NTutils5.py
 """
 
 import unittest
+import os
 from unittest import TestCase
 
 from numpy import *  #@UnusedWildImport
@@ -16,7 +17,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 
 class AllChecks(TestCase):
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTutils5' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def testGetKeyWithLargestCount(self):

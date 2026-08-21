@@ -25,7 +25,18 @@
 import os
 import sys
 
-import commands
+try:
+    import commands
+except ModuleNotFoundError:
+    import subprocess as _sub
+    class commands:
+        @staticmethod
+        def getstatusoutput(cmd):
+            p = _sub.run(cmd, shell=True, capture_output=True)
+            return p.returncode, p.stdout.decode()
+        @staticmethod
+        def getoutput(cmd):
+            return _sub.run(cmd, shell=True, capture_output=True).stdout.decode()
 
 modules = os.path.join(os.environ['ISD_ROOT'], 'src', 'py')
 

@@ -3,10 +3,12 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_NmrStar.py
 """
 import shutil
+import os
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project
@@ -36,7 +38,7 @@ class AllChecks(TestCase):
 
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

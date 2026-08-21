@@ -3,6 +3,7 @@
 # In order to test killing capabilities try (replacing 9999 by pid):
 # kill -2 9999 (twice)
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp, header
@@ -35,7 +36,7 @@ class AllChecks(TestCase):
     def _test_Forkoff(self):
         # important to switch to temp space before starting to generate files for the project.
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         ## Test takes 5 seconds to run.

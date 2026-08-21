@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_NrgCingRdb.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -16,7 +17,7 @@ class AllChecks(TestCase):
 
     def _test_NrgCingRdb(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         host = 'localhost'
@@ -47,7 +48,7 @@ class AllChecks(TestCase):
 
     def _test_writeCsvNRG(self):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
         myLoL = [ [0,1,2], [3,4,5] ]

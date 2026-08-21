@@ -4,7 +4,10 @@ Created on Jun 24, 2011
 @author: jd
 '''
 
-import nose
+try:
+    import nose
+except ModuleNotFoundError:
+    nose = None
 
 if nose.run():
     print("Nose ran fine")

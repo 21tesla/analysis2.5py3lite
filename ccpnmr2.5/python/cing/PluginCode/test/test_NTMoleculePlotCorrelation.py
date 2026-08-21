@@ -3,11 +3,14 @@ Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_NTMoleculePlotCorrelation.py
 """
 import os  #@Reimport
+import os
 import shutil
+import os
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project
@@ -29,7 +32,7 @@ class AllChecks(TestCase):
 
     # important to switch to temp space before starting to generate files for the project.
     cingDirTmpTest = os.path.join( cingDirTmp, 'test_NTMoleculePlotCorrelation' )
-    mkdirs( cingDirTmpTest )
+    os.makedirs( cingDirTmpTest , exist_ok=True)
     os.chdir(cingDirTmpTest)
 
     def test_NTMoleculePlotCorrelation(self):

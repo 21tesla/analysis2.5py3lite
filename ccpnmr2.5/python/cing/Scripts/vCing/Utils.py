@@ -4,7 +4,18 @@ Execute like: $CINGROOT/python/cing/Scripts/vCing/Utils.py
 or execute from vCing.py
 '''
 
-import commands
+try:
+    import commands
+except ModuleNotFoundError:
+    import subprocess as _sub
+    class commands:
+        @staticmethod
+        def getstatusoutput(cmd):
+            p = _sub.run(cmd, shell=True, capture_output=True)
+            return p.returncode, p.stdout.decode()
+        @staticmethod
+        def getoutput(cmd):
+            return _sub.run(cmd, shell=True, capture_output=True).stdout.decode()
 
 from cing.Libs.disk import *  #@UnusedWildImport
 
@@ -19,7 +30,7 @@ def prepareMaster(master_target_dir, doClean=False):
 #            jd:dodos/vCingSlave/ ls -l
 #            lrwxr-xr-x  1 jd  admin  18 Apr 15 21:39 vCingXXXXX@ -> /Volumes/tetra/vCingXXXXX
         print("Creating path that probably should be created manually because it might be an indirect one: %s" % master_target_dir)
-        mkdirs(master_target_dir)
+        os.makedirs(master_target_dir, exist_ok=True)
     if not os.path.exists(master_target_dir):
         print("ERROR: Failed to create: " + master_target_dir)
         return True
@@ -30,7 +41,7 @@ def prepareMaster(master_target_dir, doClean=False):
             rmdir(d)
         else:
             print("DEBUG: Creating if needed %s" % d)
-        mkdirs(d)
+        os.makedirs(d, exist_ok=True)
     # end for
     os.chdir(cwd)
 # end def

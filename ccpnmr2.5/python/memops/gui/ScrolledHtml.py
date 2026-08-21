@@ -54,16 +54,14 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import tkinter as Tkinter
 import base64
 import string
+from html.parser import HTMLParser
+from urllib import parse as urlparse
+import urllib.request
 
-import formatter
-import htmllib
-
-try:
-    import urllib
-except:
-    print("Warning: ScrolledHtml will only be able to open local files")
-
-import urlparse
+# py2 formatter.NullWriter — provide a trivial base class for the MRO
+class _NullWriter:
+    """Placeholder for the removed py2 formatter.NullWriter."""
+    pass
 
 from memops.gui.MessageReporter import showError
 from memops.gui.ScrolledText import ScrolledText
@@ -74,7 +72,7 @@ font_sizes = {"h1": 24, "h2": 20, "h3": 16}
 default_size = 12
 
 
-class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
+class ScrolledHtml(_NullWriter, HTMLParser, ScrolledText):
     def __init__(
         self,
         parent,
@@ -98,9 +96,9 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
         self.path = ""
         self.dir = ""
 
-        formatter.NullWriter.__init__(self)
-        self.formatter = formatter.AbstractFormatter(self)
-        htmllib.HTMLParser.__init__(self, self.formatter)
+        _NullWriter.__init__(self)
+        self.formatter = None
+        HTMLParser.__init__(self)
         ScrolledText.__init__(self, parent, *args, **kw)
         self.text_area.config(font=(font_family, default_size))
 
@@ -161,7 +159,7 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
                         u = open(path)
                     else:
                         nonFragmentUrl = urlparse.urlunsplit((protocol, location, path, query, ""))
-                        u = urllib.urlopen(nonFragmentUrl)
+                        u = urllib.request.urlopen(nonFragmentUrl)
                     t = u.read()
                     u.close()
                     self.feed(t)
@@ -245,7 +243,7 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
                 return
         else:
             try:
-                u = urllib.urlopen(url)
+                u = urllib.request.urlopen(url)
                 data = u.read()
                 u.close()
                 data = base64.encodestring(data)
@@ -279,8 +277,6 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
     def anchor_bgn(self, href, name, type):
 
         # print 'anchor_bgn1 "%s" "%s" "%s"' % (href, name, type)
-
-        htmllib.HTMLParser.anchor_bgn(self, href, name, type)
 
         if name:
             self.fragmentIndices[name] = self.index(Tkinter.CURRENT)
@@ -321,7 +317,7 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
                 src = self.dir + "/" + src
             self.loadImage(src, width, height)
         except:
-            htmllib.HTMLParser.handle_image(self, src, alt, *args)
+            pass  # py3 html.parser has no handle_image equivalent
 
         if self.link_tag is not None:
             end = self.index(Tkinter.CURRENT)
@@ -329,14 +325,8 @@ class ScrolledHtml(formatter.NullWriter, htmllib.HTMLParser, ScrolledText):
             # self.stripSpaceTagAdd(self.link_tag, start, end)
             self.tag_add(self.link_tag, start, end)
 
-        # TBD: below is here because seem to have bug which means
-        # that image does not break new paragraph settings
-        # which means that <P> after image was being ignored
-        # if there was a <P> just before the image
-        self.formatter.parskip = 0
-        self.formatter.hard_break = 0
-        self.formatter.para_end = 0
-        self.formatter.nospace = 0
+        # py3 html.parser has no formatter integration
+        pass
 
     ##### implementation for writer #####
 

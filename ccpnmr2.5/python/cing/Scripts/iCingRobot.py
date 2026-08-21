@@ -4,7 +4,7 @@
 
 import urllib.request
 
-import mimetools
+import uuid
 
 from cing import cingDirTestsData
 from cing.Libs.NTutils import *  #@UnusedWildImport
@@ -127,7 +127,7 @@ def _processResponse(text):
 # Initial code from http://www.voidspace.org.uk/python/cgi.shtml#upload                                                #
 #########################################################################################
 
-BOUNDARY = mimetools.choose_boundary()
+BOUNDARY = uuid.uuid4().hex
 
 def encodeForm(fields, files=None, lineSep='\r\n',
                boundary='-----'+BOUNDARY+'-----'):

@@ -24,9 +24,11 @@ __version__ = "0.1"
 import time
 from threading import Thread
 
-from SharedBeanService_services import *
-from Test1 import Test1
-from WSString import *
+from .SharedBeanService_services import *
+from .Test1 import Test1
+# FIXME: relative import
+import Test1
+from .WSString import *
 
 # TODO
 

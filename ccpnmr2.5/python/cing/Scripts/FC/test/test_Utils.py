@@ -7,7 +7,7 @@ import unittest
 from unittest import TestCase
 
 from matplotlib import mlab
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData  #@UnusedImport
 from cing.Libs.NTutils import *  #@UnusedWildImport

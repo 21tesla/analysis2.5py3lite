@@ -3,6 +3,7 @@ Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_html.py
 """
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -22,7 +23,7 @@ class AllChecks(TestCase):
 
     def setupSimplestProject(self):
         cingDirTmpTest = os.path.join( cingDirTmp, 'test_html' )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         os.chdir(cingDirTmpTest)
         entryId = 'test'
         project = Project(entryId)

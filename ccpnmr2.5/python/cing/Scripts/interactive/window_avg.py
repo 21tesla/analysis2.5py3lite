@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 #@PydevCodeAnalysisIgnore # pylint: disable-all
 import numpy
-import pylab
+try:
+    import matplotlib.pyplot as pylab
+except Exception:
+    pass
 from numpy import *  #@UnusedWildImport
 
 import cing

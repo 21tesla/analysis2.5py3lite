@@ -7,7 +7,11 @@ python -u $CINGROOT/python/cing/NRG/nrgCingRdb.py
 """
 
 import numpy
-from pylab import *  #@UnusedWildImport # imports plt too now.
+import os
+try:
+    from matplotlib.pyplot import *
+except Exception:
+    pass
 from scipy import *  #@UnusedWildImport
 from scipy import optimize
 from sqlalchemy.schema import Table  #@UnusedImport
@@ -1452,7 +1456,7 @@ e.pdb_id = s1.pdb_id;
 
     def getAndPlotColorVsColor(self, doPlot = True):
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         if os.chdir(cingDirTmpTest):
             nTerror("Failed to change to test directory for files: " + cingDirTmpTest)
         # end if
@@ -1681,8 +1685,7 @@ e.pdb_id = s1.pdb_id;
             m.getPerEntryRog()
         # end if
         # overwrite any present that might be generated from different method.
-        mkdirs( cingDirTmpTest )
-
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         if os.chdir(cingDirTmpTest):
             nTerror("Failed to change to test directory for files: " + cingDirTmpTest)
         # end if
@@ -1789,7 +1792,7 @@ e.pdb_id = s1.pdb_id;
         # end for
         fn = os.path.join(outputDir,'%s_%s_%s.eps' % (resType,dihedralName1,dihedralName2))
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         os.chdir(cingDirTmpTest)
         inputArchiveDir = os.path.join(cingDirTestsData, "ccpn")
         ccpnFile = os.path.join(inputArchiveDir, entryId + ".tgz")

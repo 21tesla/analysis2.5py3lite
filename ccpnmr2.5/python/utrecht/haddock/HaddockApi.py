@@ -85,7 +85,7 @@ from utrecht.haddock.HaddockBasic import addDaniParam, addRdcParam, getStructure
 from HaddockExportClassic import exportClassic
 from HaddockExportParam import exportParam
 from HaddockImportRunCns import runCnsImporter
-from HaddockLocal import *
+from .HaddockLocal import *
 from HaddockServerUpload import ServerUpload
 
 

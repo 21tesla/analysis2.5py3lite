@@ -30,11 +30,24 @@ Sum                4971048.908
 """
 
 import shutil
+import os
 import string
+import os
 from glob import glob
 from shutil import *  #@UnusedWildImport
 
-import commands
+try:
+    import commands
+except ModuleNotFoundError:
+    import subprocess as _sub
+    class commands:
+        @staticmethod
+        def getstatusoutput(cmd):
+            p = _sub.run(cmd, shell=True, capture_output=True)
+            return p.returncode, p.stdout.decode()
+        @staticmethod
+        def getoutput(cmd):
+            return _sub.run(cmd, shell=True, capture_output=True).stdout.decode()
 
 from cing import *  #@UnusedWildImport # pylint: disable=W0622
 from cing.Libs import disk
@@ -1594,7 +1607,7 @@ class NrgCing(Lister):
             rmdir(htmlDir)
         # end if
         nTmessage("Creating HTML directory for %s." % self.results_base)
-        mkdirs(htmlDir)
+        os.makedirs(htmlDir, exist_ok=True)
 #        srcHtmlPath = os.path.join(cingRoot, cingPaths.html)
         data_dir = os.path.join (self.base_dir, "data" )
         base_data_dir = os.path.join (data_dir, self.results_base )
@@ -1823,10 +1836,10 @@ class NrgCing(Lister):
             log_file = "%s.log" % entry_code
 
             if not os.path.exists(c_entry_dir):
-                mkdirs(dir_C)
+                os.makedirs(dir_C, exist_ok=True)
             # end if
             if not os.path.exists(c_sub_entry_dir):
-                mkdirs(c_sub_entry_dir)
+                os.makedirs(c_sub_entry_dir, exist_ok=True)
             # end if
             os.chdir(c_sub_entry_dir)
             if os.path.exists(entry_code):
@@ -1949,10 +1962,10 @@ class NrgCing(Lister):
             s_entry_dir = os.path.join(s_sub_entry_dir, entry_code)
 
             if not os.path.exists(s_entry_dir):
-                mkdirs(dir_S)
+                os.makedirs(dir_S, exist_ok=True)
             # end if
             if not os.path.exists(s_sub_entry_dir):
-                mkdirs(s_sub_entry_dir)
+                os.makedirs(s_sub_entry_dir, exist_ok=True)
             # end if
             os.chdir(s_sub_entry_dir)
             if os.path.exists(entry_code):
@@ -2103,10 +2116,10 @@ class NrgCing(Lister):
             f_entry_dir = os.path.join(f_sub_entry_dir, entry_code)
 
             if not os.path.exists(f_entry_dir):
-                mkdirs(dir_F)
+                os.makedirs(dir_F, exist_ok=True)
             # end if
             if not os.path.exists(f_sub_entry_dir):
-                mkdirs(f_sub_entry_dir)
+                os.makedirs(f_sub_entry_dir, exist_ok=True)
             # end if
             os.chdir(f_sub_entry_dir)
             if os.path.exists(entry_code):

@@ -11,8 +11,10 @@ will be imported.
 Run as in test_RotateLeucines.py
 '''
 import shutil
+import os
 
 import yasara  #@UnresolvedImport
+import os
 from yasaramodule import *  #@UnusedWildImport
 
 from cing import cingDirTestsData, cingDirTmp
@@ -170,7 +172,7 @@ def runRotateLeucines(runDir, inputArchiveDir, entryId, cv=CV_THRESHOLD_SELECTIO
     If useAll is set then all leucines will be rotated.
     '''
     nTmessage("Starting %s" % getCallerName())
-    mkdirs(runDir)
+    os.makedirs(runDir, exist_ok=True)
     os.chdir(runDir)
     cingFile = os.path.join(inputArchiveDir, entryId + ".cing.tgz")
     if not os.path.exists(cingFile):

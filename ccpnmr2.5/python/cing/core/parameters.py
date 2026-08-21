@@ -1,5 +1,6 @@
 import platform
 
+import cing
 from cing import osType
 from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.PluginCode.required.reqCcpn import CCPN_STR

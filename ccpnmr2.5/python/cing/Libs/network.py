@@ -4,8 +4,19 @@ import mimetypes
 import socket
 import urllib.request
 
-import commands
-import mimetools
+try:
+    import commands
+except ModuleNotFoundError:
+    import subprocess as _sub
+    class commands:
+        @staticmethod
+        def getstatusoutput(cmd):
+            p = _sub.run(cmd, shell=True, capture_output=True)
+            return p.returncode, p.stdout.decode()
+        @staticmethod
+        def getoutput(cmd):
+            return _sub.run(cmd, shell=True, capture_output=True).stdout.decode()
+import uuid
 
 from cing.Libs.helper import isInternetConnected
 from cing.Libs.NTutils import *  #@UnusedWildImport
@@ -14,7 +25,7 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 # Initial code from http://www.voidspace.org.uk/python/cgi.shtml#upload                                                #
 #########################################################################################
 
-BOUNDARY = mimetools.choose_boundary()
+BOUNDARY = uuid.uuid4().hex
 
 def encodeForm(fields, files=None, lineSep='\r\n',
                boundary='-----' + BOUNDARY + '-----'):

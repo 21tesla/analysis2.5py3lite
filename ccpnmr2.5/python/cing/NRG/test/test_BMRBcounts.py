@@ -3,9 +3,10 @@ Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_BMRBcounts.py
 """
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirData, cingDirTestsData, cingDirTmp
 from cing.core.classes import Project
@@ -27,7 +28,7 @@ class AllChecks(TestCase):
     def _test_BMRBcounts(self):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 
@@ -51,7 +52,7 @@ class AllChecks(TestCase):
     def test_BMRBcounts2(self):
 
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

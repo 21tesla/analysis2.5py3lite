@@ -3,9 +3,10 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_RotateLeucines.py
 """
 import unittest
+import os
 from unittest import TestCase
 
-from nose.plugins.skip import SkipTest
+from unittest import SkipTest
 
 from cing import cingDirTestsData  #@UnusedImport
 from cing.Libs.NTutils import *  #@UnusedWildImport
@@ -27,7 +28,7 @@ class AllChecks(TestCase):
         Yasara yet. 
         '''
         cingDirTmpTest = os.path.join( cingDirTmp, getCallerName() )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         self.assertFalse(os.chdir(cingDirTmpTest), msg =
             "Failed to change to test directory for files: " + cingDirTmpTest)
 

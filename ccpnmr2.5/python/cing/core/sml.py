@@ -1,3 +1,5 @@
+import io
+
 from cing.core.classes import *  #@UnusedWildImport
 from cing.core.constants import *  #@UnusedWildImport
 from cing.core.database import *  #@UnusedWildImport
@@ -20,27 +22,33 @@ SMLversion       = 0.25
 SMLsaveFormat  = 'INTERNAL_0'
 SMLfileVersion = None
 
-class SmlFile(file):
+class SmlFile(io.IOBase):
     def __init__(self, *args, **kwds):
-        file.__init__(self, *args, **kwds)
+        super().__init__()
+        self._fp = open(*args, **kwds)
         # pylint: disable=C0103
         self.NR = 0
     #end def
 
     def readline(self):
         # Skip empty lines and lines the start with #
-        line = file.readline(self)
+        line = self._fp.readline()
         self.NR += 1
-        while line and (len(line)<=1 or line.lstrip().startswith('#')):
-            line = file.readline(self)
+        while line and (len(line) <= 1 or line.lstrip().startswith('#')):
+            line = self._fp.readline()
             self.NR += 1
         return line
     #end def
 
     def readlines(self):
-        lines = file.readlines(self)
+        lines = self._fp.readlines()
         self.NR += len(lines)
         return lines
+    #end def
+
+    def close(self):
+        super().close()
+        self._fp.close()
     #end def
 #end def
 

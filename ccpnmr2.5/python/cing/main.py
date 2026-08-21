@@ -128,14 +128,26 @@ format(peaks)
     formatall( project.molecule.A.VAL171.C )
 """
 import tkinter as Tkinter
+import os
 #==============================================================================
 import unittest
+import os
 import webbrowser
+import os
 
-import commands
-from nose.plugins.skip import (
-    SkipTest,  # Dependency on nose can be removed in python 2.7 or later when UnitTest has similar functionality.
-)
+try:
+    import commands
+except ModuleNotFoundError:
+    import subprocess as _sub
+    class commands:
+        @staticmethod
+        def getstatusoutput(cmd):
+            p = _sub.run(cmd, shell=True, capture_output=True)
+            return p.returncode, p.stdout.decode()
+        @staticmethod
+        def getoutput(cmd):
+            return _sub.run(cmd, shell=True, capture_output=True).stdout.decode()
+from unittest import SkipTest
 
 from cing import cingDirTmp, cingPythonCingDir, cingPythonDir, cingVersion, header, starttime
 from cing.core.classes import Project
@@ -353,7 +365,7 @@ def doPylintOverall(pylintFileName='pylint.txt'):
 #    pylintFileName = os.path.join( pylintDir, 'pylint.log')
     if os.path.exists( pylintDir ):
         rmdir( pylintDir )
-    mkdirs( pylintDir )
+    os.makedirs( pylintDir , exist_ok=True)
     if os.path.exists( pylintFileName ):
         os.unlink(pylintFileName)
     excludedModuleList = [

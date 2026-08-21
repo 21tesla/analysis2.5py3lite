@@ -57,6 +57,8 @@ import sys
 
 from cambridge.wms.DataExchFrame import DataExchFrame
 from cambridge.wms.ExtendNmrFrame import ExtendNmrFrame
+# FIXME: relative import
+import ExtendNmrFrame
 from cambridge.wms.LoginFrame import LoginPopup
 from cambridge.wms.ProjectFrame import ProjectFrame
 from cambridge.wms.ProtocolFrame import ProtocolFrame

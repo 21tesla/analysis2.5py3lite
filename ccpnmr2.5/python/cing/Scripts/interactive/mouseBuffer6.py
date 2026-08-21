@@ -1,5 +1,8 @@
 # python -u $CINGROOT/python/cing/Scripts/interactive/mouseBuffer6.py
-from pylab import *  #@UnusedWildImport # imports plt too now.
+try:
+    from matplotlib.pyplot import *
+except Exception:
+    pass
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

@@ -8,6 +8,7 @@ topos https://topos.grid.sara.nl/4.1
 '''
 
 import unittest
+import os
 from unittest import TestCase
 
 from cing import cingDirTmp
@@ -27,7 +28,7 @@ class AllChecks(TestCase):
     def _testvCingMaster(self):
         # important to switch to temp space before starting to generate files for the project.
         cingDirTmpTest = os.path.join( cingDirTmp, 'test_vCing' )
-        mkdirs( cingDirTmpTest )
+        os.makedirs( cingDirTmpTest , exist_ok=True)
         os.chdir(cingDirTmpTest)
 
         exitCode, token, tokenLock = vc.nextTokenWithLock(lockTimeOut)

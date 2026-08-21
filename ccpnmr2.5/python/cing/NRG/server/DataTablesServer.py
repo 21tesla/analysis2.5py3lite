@@ -12,7 +12,14 @@ import sys
 import time
 from traceback import format_exc
 
-import cgi
+try:
+    import cgi
+except ModuleNotFoundError:
+    class FieldStorage(dict):
+        def __init__(self, *a, **k):
+            super().__init__()
+    class cgi:
+        FieldStorage = FieldStorage
 import psycopg2
 from psycopg2.extras import DictCursor
 
