@@ -1974,3 +1974,23 @@ def getFractionAbove(valueList, threshold):
             n += 1.
     return n / len(valueList)
 
+
+# Compatibility shims: the historical cing Coplanar / CoplanarList entities
+# (used by cing/PluginCode/x3dna.py) are not generated in this distribution.
+# x3dna uses them as: CoplanarList(name), .append(Coplanar), len(), and
+# Coplanar(name) holding a mapping — hence the minimal dict/list implementations.
+class Coplanar(dict):
+    """Historical cing Coplanar entity (name + mapping of entity -> values)."""
+
+    def __init__(self, name=None, **kwds):
+        super().__init__(**kwds)
+        self.name = name
+
+
+class CoplanarList(list):
+    """Historical cing CoplanarList (a named list of Coplanar entities)."""
+
+    def __init__(self, name=None, *coplanars):
+        super().__init__(coplanars)
+        self.name = name
+

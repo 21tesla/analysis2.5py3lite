@@ -1528,3 +1528,13 @@ class NmrCalcRunFrame(Frame):
             self.changeMolSystem(molSystem)
 
         self.molSystemPulldown.setup(names, molSystems, index)
+
+
+# Compatibility shim: CING plugins (cing/Scripts/Analysis/CingFrame.py) subclass
+# the NMR-simulation run frame, which is not part of this distribution.
+# NmrCalcRunFrame above is its shipped sibling with a compatible interface
+# (init(parent, project, store, ...) / update(store)), so derive from it.
+class NmrSimRunFrame(NmrCalcRunFrame):
+    """Historical NmrSimRunFrame (see shim comment above)."""
+
+    pass

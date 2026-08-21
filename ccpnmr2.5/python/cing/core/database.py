@@ -194,6 +194,19 @@ class MolDef( NTtree ):
         return NTdb
     #end def
 
+    def importNameDefs( self, tableFile ):
+        """
+        Import residue and atom name defs from tableFile into this MolDef.
+        Historical cing API (used by cing/Database/Scripts/INITIAL_SCRIPTS/
+        mkresidueDefs.py). The 2.5.2 tree only ships the importNameDefs free
+        function below, which parses into a fresh MolDef; this method delegates
+        to it and re-parents the resulting ResidueDef children.
+        """
+        src = importNameDefs( tableFile, 'imported' )
+        for resDef in list( src.residues ):
+            self.residues.append( resDef )
+    #end def
+
     def _saveToSML( self, convention=INTERNAL ):
         """
             Save the MolDef instance to CING ResidueDef SML files; optionally convert to convention

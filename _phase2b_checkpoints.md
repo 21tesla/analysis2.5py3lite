@@ -157,6 +157,24 @@ already installed** (installed during the interrupted 2b session; their importer
   `Meccano.error` with C error message (marshalling proven); `MeccanoPopup` imports.
 - **Smoke delta: +1 → 1641 OK / 85 FAILED.**
 
+### Bucket 4 — missing CING API shims — ✅ DONE (2 lifted, rest reclassified)
+- **`NmrSimRunFrame`** (CingFrame.py): shim `class NmrSimRunFrame(NmrCalcRunFrame)` appended to
+  `ccpnmr/analysis/popups/EditCalculation.py` — NmrCalcRunFrame is the shipped sibling with
+  compatible `__init__(parent, project, store,...)` + `update(store)`. CingFrame imports OK.
+- **`Coplanar`/`CoplanarList`** (x3dna.py): minimal dict/list classes appended to
+  `cing/core/classes.py` (usage: name + mapping / named list). x3dna now passes the API import
+  and stops at its DESIGNED platform gate: `if osType != OS_TYPE_MAC: raise ImportWarning('x3dna')`
+  (macOS-only plugin, shipped as Mac binaries) → bucket-5 class.
+- **`MolDef.importNameDefs(tableFile)`**: method added in `cing/core/database.py`; delegates to
+  the module's shipped free `importNameDefs()` (returns a fresh MolDef) and re-parents residues.
+  mkresidueDefs.py imports OK.
+- **DELIBERATELY NOT shimmed** (reclassified → bucket 5): `ProjectTree.openCompleteTree/entries/
+  path/format` (casd2.py, casp.py, nmr_redo_compareProjects.py) — need the FULL historical
+  ProjectTree API + project data, never shipped here; partial shim would still fail, so no fake
+  API surface added. `NoneType.molecule/allResidues` (mouseBuffer6.py `p = None` sentinel;
+  printResonances.py session `project`; compareShifts.py) = interactive/data-gated scripts.
+- **Smoke delta: +2 → 1643 OK / 83 FAILED.**
+
 ## Decision record (2026-08-21)
 **User decision: FINALIZE + COMMIT (scope = core only).** Deferred items above are left
 for future sessions (explicit follow-ups: optional deps, superpose build, CING stubs).
