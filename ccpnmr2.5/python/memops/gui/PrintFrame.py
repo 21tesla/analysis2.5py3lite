@@ -51,9 +51,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import os
 import time
+import tkinter as Tkinter
 
 import memops.universal.Output as Output
 import memops.universal.Pdf as Pdf

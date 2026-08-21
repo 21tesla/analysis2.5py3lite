@@ -1,7 +1,6 @@
-import tkinter as Tkinter
 import os
 import tarfile
-import os
+import tkinter as Tkinter
 from shutil import copytree, rmtree
 
 from cing import header

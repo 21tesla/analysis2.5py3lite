@@ -10,11 +10,10 @@ will be imported.
 
 Run as in test_RotateLeucines.py
 '''
-import shutil
 import os
+import shutil
 
 import yasara  #@UnresolvedImport
-import os
 from yasaramodule import *  #@UnusedWildImport
 
 from cing import cingDirTestsData, cingDirTmp

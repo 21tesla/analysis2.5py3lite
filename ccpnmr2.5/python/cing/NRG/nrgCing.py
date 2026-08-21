@@ -29,10 +29,9 @@ Maximum            18593.635
 Sum                4971048.908
 """
 
+import os
 import shutil
-import os
 import string
-import os
 from glob import glob
 from shutil import *  #@UnusedWildImport
 

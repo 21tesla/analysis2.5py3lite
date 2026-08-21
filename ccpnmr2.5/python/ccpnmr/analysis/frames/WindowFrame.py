@@ -39,10 +39,10 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import tkinter as Tkinter
 import math
 import sys
 import time
+import tkinter as Tkinter
 
 from ccpnmr.analysis.core.ExperimentBasic import calculateNoiseInBox, getPrimaryDataDimRef, getRegionStats
 from memops.general import Implementation

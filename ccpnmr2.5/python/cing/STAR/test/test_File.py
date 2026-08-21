@@ -2,12 +2,10 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/STAR/test/test_File.py
 """
+import os
 import unittest
-import os
 import urllib
-import os
 import zipfile
-import os
 from unittest import TestCase
 
 from cing import cingDirTmp

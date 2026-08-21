@@ -1,5 +1,5 @@
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat
 from ccpnmr.format.general.Util import createExperiment, getRefExpFromOldExpType

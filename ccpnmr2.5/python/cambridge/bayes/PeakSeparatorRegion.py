@@ -13,11 +13,11 @@ maxHeight,
 
 """
 
-from .PeakSeparatorPeakList import getPeakListParams
-
 from ccp.api.general.DataLocation import NumericMatrix
 from ccpnmr.analysis.core.UnitConverter import ppm2pnt
 from memops.gui.MessageReporter import showError, showWarning
+
+from .PeakSeparatorPeakList import getPeakListParams
 
 
 def getRegionParams(params, argServer=None, HEIGHT_MULTIPLIER=2.5):

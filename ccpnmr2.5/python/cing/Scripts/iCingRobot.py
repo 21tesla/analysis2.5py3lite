@@ -3,7 +3,6 @@
 # There is a unit test at: cing.Scripts.test.testiCingRobot
 
 import urllib.request
-
 import uuid
 
 from cing import cingDirTestsData

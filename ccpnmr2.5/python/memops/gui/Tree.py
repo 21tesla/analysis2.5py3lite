@@ -829,9 +829,8 @@ if __name__ == "__main__":
     # File browse
 
     import mimetypes
-    from os import R_OK, access
-
     import tkinter as Tkinter
+    from os import R_OK, access
 
     root = Tkinter.Tk()
     root.grid_columnconfigure(0, weight=1)

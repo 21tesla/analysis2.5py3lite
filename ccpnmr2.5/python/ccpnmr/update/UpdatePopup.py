@@ -39,8 +39,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 from ccpnmr.update.UpdateAgent import UPDATE_DATABASE_FILE, UPDATE_DIRECTORY, UPDATE_SERVER_LOCATION, UpdateAgent
 from memops.gui.BasePopup import BasePopup

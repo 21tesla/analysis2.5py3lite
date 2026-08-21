@@ -1,10 +1,5 @@
-import tkinter as Tkinter
 import os
-
-# added jmci; do we need this??
-# required for WS layer
-from .SharedBeanService_services import *
-from .WSString import *
+import tkinter as Tkinter
 
 from cambridge.wms.FilterFrame import FilterFrame
 
@@ -16,6 +11,11 @@ from memops.gui.Label import Label
 from memops.gui.PulldownList import PulldownList
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.gui.Text import Text
+
+# added jmci; do we need this??
+# required for WS layer
+from .SharedBeanService_services import *
+from .WSString import *
 
 # # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #

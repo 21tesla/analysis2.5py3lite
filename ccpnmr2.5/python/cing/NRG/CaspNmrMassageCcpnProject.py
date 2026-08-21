@@ -10,8 +10,8 @@ if the input project is in cwd.
 
 Most functionality is hard-coded here so be careful reading the actual code.
 """
-import tarfile
 import os
+import tarfile
 from glob import glob1
 
 from cing.core.constants import *  #@UnusedWildImport

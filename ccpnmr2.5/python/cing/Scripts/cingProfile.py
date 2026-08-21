@@ -6,7 +6,6 @@ import profile
 import pstats
 
 import cing  # py3: `from cing.X import Y` no longer binds the top-level name
-
 from cing.Libs.NTutils import *  #@UnusedWildImport
 
 

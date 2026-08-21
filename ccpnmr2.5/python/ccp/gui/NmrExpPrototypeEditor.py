@@ -60,8 +60,8 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
-import tkinter as Tkinter
 import re
+import tkinter as Tkinter
 
 from ccp.api.nmr import NmrExpPrototype
 from ccp.util import NmrExpPrototype as NmrExpPrototypeUtil

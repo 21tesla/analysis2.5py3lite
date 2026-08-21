@@ -51,8 +51,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 import tkinter as Tkinter
-# old code so probably of dubious coding style at best
 
+# old code so probably of dubious coding style at best
 # TBD check if list is really long and then go sideways
 #
 #  root = Tkinter.Tk()
@@ -61,8 +61,6 @@ import tkinter as Tkinter
 #  popup = Popup(parent)
 #  (w,h) = popup.maxsize()
 #  popup.geometry('%dx%d+0+0' % (w,h-50))
-
-
 from memops.gui.Canvas import Canvas
 from memops.gui.Color import scaleColor
 from memops.gui.Frame import Frame

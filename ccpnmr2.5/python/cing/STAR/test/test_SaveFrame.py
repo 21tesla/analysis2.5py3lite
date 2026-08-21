@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/STAR/test/test_SaveFrame.py
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTmp

@@ -13,7 +13,6 @@ Most functionality is hard-coded here so be careful reading the actual code.
 import json
 import os
 import tarfile
-import os
 from glob import glob1
 
 from cing.core.constants import *  #@UnusedWildImport

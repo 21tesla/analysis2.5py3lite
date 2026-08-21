@@ -5,8 +5,8 @@ python $CINGROOT/python/cing/PluginCode/test/test_xplor_nih.py
 For testing execution of cing inside of Xplor-NIH python interpreter with the data living outside of it.
 This is not yet achieved and the test is useless at this point.
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp

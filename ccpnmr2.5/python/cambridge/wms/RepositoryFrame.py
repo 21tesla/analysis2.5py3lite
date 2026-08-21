@@ -1,10 +1,6 @@
-import tkinter as Tkinter
 import re
 import time
-
-# required for WS layer
-from .SharedBeanService_services import *
-from .WSString import *
+import tkinter as Tkinter
 
 from cambridge.wms.FilterFrame import FilterFrame
 
@@ -19,6 +15,10 @@ from memops.gui.PulldownList import PulldownList
 from memops.gui.RadioButtons import RadioButtons
 from memops.gui.ScrolledListbox import ScrolledListbox
 from memops.gui.Tree import Tree
+
+# required for WS layer
+from .SharedBeanService_services import *
+from .WSString import *
 
 # # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #

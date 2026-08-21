@@ -3,12 +3,11 @@ Original from Wim Vranken.
 Used for eNMR workshop Frankfurt data sets.
 """
 
-import tkinter as Tkinter
 import shutil
+import tkinter as Tkinter
 from glob import glob
 
 import cing
-
 from ccpnmr.format.converters.PseudoPdbFormat import PseudoPdbFormat
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

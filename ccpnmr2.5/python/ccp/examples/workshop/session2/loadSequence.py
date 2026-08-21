@@ -15,8 +15,8 @@
 #     a newly made CCPN project.
 #
 
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 # Get Tkinter for popups.
 import memops.api.Implementation as Implementation

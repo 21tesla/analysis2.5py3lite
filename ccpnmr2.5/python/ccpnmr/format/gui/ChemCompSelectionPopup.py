@@ -53,6 +53,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 from ccp.gui.ChemCompFrame import ChemCompFrame
 from ccpnmr.format.general.Io import getHelpUrlDir
 from ccpnmr.format.gui.BasePopup import TemporaryBasePopup

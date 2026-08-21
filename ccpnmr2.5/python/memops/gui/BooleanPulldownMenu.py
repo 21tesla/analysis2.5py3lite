@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 from memops.gui.PulldownMenu import PulldownMenu
 
 
@@ -95,7 +96,6 @@ class BooleanPulldownMenu(PulldownMenu):
 
 if __name__ == "__main__":
     import sys
-
     import tkinter as Tkinter
 
     from memops.gui.Button import Button

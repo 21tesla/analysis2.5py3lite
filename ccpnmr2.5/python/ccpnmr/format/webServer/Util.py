@@ -4,10 +4,9 @@
 # Modified from http://tools.cherrypy.org/wiki/AuthenticationAndAccessRestrictions
 #
 
+import dbm as anydbm  # py2 anydbm removed in py3; dbm.open has the same call surface used here
 import glob
 import os
-
-import dbm as anydbm  # py2 anydbm removed in py3; dbm.open has the same call surface used here
 
 # TODO this should go in Constants.py
 passwordFile = "data/users.db"

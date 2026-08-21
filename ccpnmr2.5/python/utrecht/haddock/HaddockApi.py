@@ -81,6 +81,7 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 import os
+
 from .HaddockBasic import addDaniParam, addRdcParam, getStructureFromFile
 from .HaddockExportClassic import exportClassic
 from .HaddockExportParam import exportParam

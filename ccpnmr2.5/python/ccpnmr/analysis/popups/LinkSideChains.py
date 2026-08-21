@@ -39,6 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 import tkinter as Tkinter
+
 # * * * * * * * * * * * * * * TBD * * * * * * * * * * * * * * *
 #
 # Type spin system as we go?
@@ -50,7 +51,6 @@ import tkinter as Tkinter
 # Prochirals options and finding existing peaks and redundant shifts
 # Don't add peaks if no intensity
 # No strips at all when one atomSite missing
-
 from math import exp
 
 from numpy import linalg, matrix, multiply

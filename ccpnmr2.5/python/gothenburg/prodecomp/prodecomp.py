@@ -52,6 +52,7 @@ import time
 from numpy import (
     array,
     asmatrix,
+    bool_,
     concatenate,
     diag,
     dot,
@@ -67,11 +68,11 @@ from numpy import (
     r_,
     random,
     roll,
-    bool_,
     squeeze,
     where,
     zeros,
 )
+
 sometrue = bool_
 
 # "sum" is a python built-in

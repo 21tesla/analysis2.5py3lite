@@ -5,6 +5,7 @@ except Exception:
     pass
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
+
 # NB: interactive demo (time.sleep(1000) mid-module); fails fast on the
 # py2-only 'date2num' leak on purpose so the import smoke test does not hang.
 

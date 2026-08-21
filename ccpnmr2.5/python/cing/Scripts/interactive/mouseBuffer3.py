@@ -5,10 +5,11 @@ try:
 except Exception:
     pass
 
-import cing
-from cing.Libs.NTutils import *  #@UnusedWildImport
 from numpy import ones  # no longer re-exported by modern pyplot
 from numpy.random import rand
+
+import cing
+from cing.Libs.NTutils import *  #@UnusedWildImport
 
 cing.verbosity = 9
 

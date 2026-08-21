@@ -2,12 +2,11 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_matplotlib2D.py
 """
-import unittest
 import os
-from unittest import TestCase
+import unittest
+from unittest import SkipTest, TestCase
 
 from matplotlib.pylab import *  #@UnusedWildImport
-from unittest import SkipTest
 from numpy import *  #@UnusedWildImport
 
 from cing import cingDirTestsData, cingDirTmp

@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Database/Scripts/test/test_createStarUserLib.py
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 import cing

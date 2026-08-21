@@ -39,12 +39,11 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import pickle
 import os
+import pickle
 import shutil
 import sys
 import time
-
 
 from ccp.api.nmr import Nmr
 from ccp.general.Io import getDataSourceFileName

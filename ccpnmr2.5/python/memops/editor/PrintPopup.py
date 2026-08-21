@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 from memops.editor.BasePopup import BasePopup
 from memops.gui.MessageReporter import showError
 from memops.gui.PrintFrame import PrintFrame

@@ -81,14 +81,14 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
-import tkinter as Tkinter
 import sys
-
-from .HaddockFrame import HaddockFrame
+import tkinter as Tkinter
 
 from memops.editor.BasePopup import BasePopup
 from memops.gui.FileSelectPopup import FileSelectPopup
 from memops.gui.Util import createDismissHelpButtonList
+
+from .HaddockFrame import HaddockFrame
 
 """
 Description: Graphical user interface around the Utrecht HADDOCK molecular docking 

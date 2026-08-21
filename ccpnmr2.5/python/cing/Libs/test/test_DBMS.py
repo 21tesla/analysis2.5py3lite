@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_DBMS.py
 """
-import unittest
 import os
+import unittest
 from glob import glob
 from shutil import copyfile
 from unittest import TestCase

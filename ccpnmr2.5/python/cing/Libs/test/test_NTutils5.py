@@ -3,8 +3,8 @@ Unit test execute as:
 python -u $CINGROOT/python/cing/Libs/test/test_NTutils5.py
 """
 
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from numpy import *  #@UnusedWildImport

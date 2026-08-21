@@ -56,9 +56,9 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import string
 import time
+import tkinter as Tkinter
 
 from ccp.api.molecule import ChemComp
 from ccp.general.Util import getDescriptorDict

@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_storeCING2db.py
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from sqlalchemy.sql.expression import select

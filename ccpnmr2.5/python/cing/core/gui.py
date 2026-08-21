@@ -1,7 +1,7 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
-import tkinter as Tkinter
 import os
 import sys
+import tkinter as Tkinter
 
 import cing
 from cing.Libs.NTutils import nTerror, nTmessage, nTpath, sprintf

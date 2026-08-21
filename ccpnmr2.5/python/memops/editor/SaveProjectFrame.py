@@ -51,8 +51,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 from memops.format.xml.Util import doesRepositoryContainProject, getPossibleProjectFiles
 from memops.general import Implementation, Io

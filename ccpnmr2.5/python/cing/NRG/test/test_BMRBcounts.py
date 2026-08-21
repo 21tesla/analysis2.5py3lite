@@ -2,11 +2,9 @@
 Unit test execute as:
 python $CINGROOT/python/cing/NRG/test/test_BMRBcounts.py
 """
-import unittest
 import os
-from unittest import TestCase
-
-from unittest import SkipTest
+import unittest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirData, cingDirTestsData, cingDirTmp
 from cing.core.classes import Project

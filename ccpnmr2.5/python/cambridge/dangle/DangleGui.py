@@ -56,9 +56,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END================================
 """
 
-import tkinter as Tkinter
 import os
 import sys
+import tkinter as Tkinter
 
 from cambridge.dangle.DangleFrame import DangleFrame
 from ccpnmr.analysis.popups.BasePopup import BasePopup

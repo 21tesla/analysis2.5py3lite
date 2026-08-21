@@ -6,8 +6,10 @@ cd $D/NRG-CING
 python -u $CINGROOT/python/cing/NRG/nrgCingRdb.py 
 """
 
-import numpy
 import os
+
+import numpy
+
 try:
     from matplotlib.pyplot import *
 except Exception:

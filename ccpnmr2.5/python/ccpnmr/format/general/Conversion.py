@@ -52,9 +52,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import sys
 import time
+import tkinter as Tkinter
 import traceback
 
 from ccp.general.Util import setCurrentStore

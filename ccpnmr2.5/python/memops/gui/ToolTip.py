@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 FONT = "Helvetica 9"
 
 

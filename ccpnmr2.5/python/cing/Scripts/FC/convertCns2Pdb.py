@@ -12,14 +12,13 @@ Level: intermediate
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
-import tkinter as Tkinter
 #
 # These are standard Python libraries
 #
-
 import os
 import re
 import shutil
+import tkinter as Tkinter
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat
 

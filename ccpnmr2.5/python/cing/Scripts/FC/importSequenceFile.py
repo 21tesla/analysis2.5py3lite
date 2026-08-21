@@ -12,16 +12,15 @@ Level: basic
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
-import tkinter as Tkinter
 #
 # Get the Implementation package to create a project
 #
-
 #
 # These are standard Python libraries
 #
 import os
 import shutil
+import tkinter as Tkinter
 
 #
 # Function to reset the paths for saving the project

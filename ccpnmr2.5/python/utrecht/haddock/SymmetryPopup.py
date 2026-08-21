@@ -80,8 +80,6 @@ Citing:          If you are using this software for academic purposes, we
               Proteins: Struc. Funct. & Bioinformatic 69, 726-733.    
 =========================================================================
 """
-from utrecht.haddock.HaddockBasic import setPartnerChains
-
 from memops.editor.BasePopup import BasePopup
 from memops.editor.Util import createDismissHelpButtonList
 from memops.gui.CheckButton import CheckButton
@@ -92,6 +90,7 @@ from memops.gui.MessageReporter import showWarning
 from memops.gui.MultiWidget import MultiWidget
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.ScrolledMatrix import ScrolledMatrix
+from utrecht.haddock.HaddockBasic import setPartnerChains
 
 
 class EditSymmetryPopup(BasePopup):

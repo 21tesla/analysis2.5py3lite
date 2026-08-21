@@ -1,6 +1,6 @@
-from .IsdFrame import IsdFrame
-
 from memops.editor.BasePopup import BasePopup
+
+from .IsdFrame import IsdFrame
 
 
 #

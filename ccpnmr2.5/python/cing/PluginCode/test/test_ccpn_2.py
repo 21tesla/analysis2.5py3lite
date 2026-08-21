@@ -4,9 +4,7 @@ python $CINGROOT/python/cing/PluginCode/test/test_ccpn_2.py
 """
 
 import unittest
-from unittest import TestCase
-
-from unittest import SkipTest
+from unittest import SkipTest, TestCase
 
 from cing.Libs.disk import isRootDirectory
 from cing.Libs.NTutils import *  #@UnusedWildImport

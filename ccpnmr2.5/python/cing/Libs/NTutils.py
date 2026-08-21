@@ -5,6 +5,7 @@ Nijmegen Tools utilities
 
 import array
 import datetime
+import io
 import math
 import optparse
 import os
@@ -12,12 +13,12 @@ import pydoc
 import re
 import sys
 import time
-import io
 from copy import deepcopy
 from fnmatch import fnmatch
 from gzip import GzipFile
 from os import makedirs
 from os.path import dirname, exists, expanduser, normpath
+
 find = str.find
 from subprocess import PIPE, Popen
 from xml.dom import Node, minidom

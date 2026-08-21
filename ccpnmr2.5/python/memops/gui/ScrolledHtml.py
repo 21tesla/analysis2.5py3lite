@@ -51,12 +51,13 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import base64
 import string
+import tkinter as Tkinter
+import urllib.request
 from html.parser import HTMLParser
 from urllib import parse as urlparse
-import urllib.request
+
 
 # py2 formatter.NullWriter — provide a trivial base class for the MRO
 class _NullWriter:

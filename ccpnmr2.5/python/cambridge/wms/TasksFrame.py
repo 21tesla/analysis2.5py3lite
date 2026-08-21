@@ -1,9 +1,5 @@
-import tkinter as Tkinter
 import time
-
-# required for WS layer
-from .SharedBeanService_services import *
-from .WSString import *
+import tkinter as Tkinter
 
 # added jmci; do we need this??
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
@@ -18,6 +14,10 @@ from memops.gui.ScrolledMatrix import ScrolledMatrix
 #from memops.gui.ScrolledFrame import ScrolledFrame
 from memops.gui.TabbedFrame import TabbedFrame
 from memops.gui.Text import Text
+
+# required for WS layer
+from .SharedBeanService_services import *
+from .WSString import *
 
 #from cambridge.wms.FilterFrame import FilterFrame
 

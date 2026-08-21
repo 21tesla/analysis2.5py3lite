@@ -1,6 +1,6 @@
-import tkinter as Tkinter
 import glob
 import os
+import tkinter as Tkinter
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat
 from ccpnmr.format.converters.PdbFormat import PdbFormat

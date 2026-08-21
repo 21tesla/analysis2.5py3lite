@@ -40,10 +40,10 @@ class TagTable (Lister):
 
     def rowCount(self):
         return len(self.tagvalues)
-    
+
     def colCount(self):
         return len(self.tagnames)
-    
+
     def star_text ( self,
                     flavor                  = 'NMR-STAR'
                    ):
@@ -473,7 +473,7 @@ class TagTable (Lister):
             self.tagvalues.append( [] )
 
         ## Get rid of initial white space if any, shouldn't be needed
-        match_white_space = re.compile('\s+').search( text, pos, pos_end )
+        match_white_space = re.compile(r'\s+').search( text, pos, pos_end )
         if match_white_space:
             if match_white_space.start() == 0: # Match has to start at the beginning
                 pos = match_white_space.end()

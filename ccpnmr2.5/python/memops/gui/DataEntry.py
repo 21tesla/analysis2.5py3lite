@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 import memops.gui.QueryDialogBox as QueryDialogBox
 from memops.gui.FileSelectPopup import FileSelectPopup
 

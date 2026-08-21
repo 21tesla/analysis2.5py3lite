@@ -51,8 +51,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import math
+import tkinter as Tkinter
 
 import memops.gui.Color as Color
 from memops.gui.Canvas import Canvas

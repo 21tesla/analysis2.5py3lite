@@ -11,16 +11,15 @@ Level: intermediate
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
-import tkinter as Tkinter
 #
 # Get the top level data model package
 #
-
 #
 # General python stuff
 #
 import os
 import shutil
+import tkinter as Tkinter
 
 #
 # Get Tkinter for popups

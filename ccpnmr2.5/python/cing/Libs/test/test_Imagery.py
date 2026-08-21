@@ -2,11 +2,9 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Libs/test/test_Imagery.py
 """
-import unittest
 import os
-from unittest import TestCase
-
-from unittest import SkipTest
+import unittest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.parameters import cingPaths

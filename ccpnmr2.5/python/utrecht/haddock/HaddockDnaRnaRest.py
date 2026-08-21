@@ -82,6 +82,7 @@ Citing:          If you are using this software for academic purposes, we
 """
 
 from os.path import join
+
 from utrecht.haddock.HaddockBasic import evalWcPairing
 
 

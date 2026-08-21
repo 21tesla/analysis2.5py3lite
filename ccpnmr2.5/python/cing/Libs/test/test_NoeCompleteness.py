@@ -6,8 +6,8 @@ Created on May 30, 2011
 
 @author: jd
 '''
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp

@@ -2,16 +2,22 @@
 """
 
 
-import os, sys, json, re
-import tarfile, zipfile, bz2, gzip, shutil, tempfile
+import bz2
+import gzip
+import json
+import os
+import re
+import shutil
+import sys
+import tarfile
+import tempfile
 import traceback
-
-from nijmegen.CASD import Constants as casdConstants
-from nijmegen.CASD import Util as casdUtil
-from memops.general import Io as genIo
+import zipfile
 
 from ccp.lib import StructureIo
-
+from memops.general import Io as genIo
+from nijmegen.CASD import Constants as casdConstants
+from nijmegen.CASD import Util as casdUtil
 from pdbe.deposition.dataFileImport.formatConverterWrapper import FormatConverterWrapper
 
 #casdNmrDir = casdConstants.casdNmrDir
@@ -22,38 +28,40 @@ allDataDir = casdConstants.allDataDir
 #casdInputDir = casdConstants.casdInputDir
 #resultPatchesDir = os.path.join(casdResultsDir, 'patches')
 
-import codecs, locale
-sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.__stdout__) 
+import codecs
+import locale
+
+sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.__stdout__)
 
 def restraintOverview(entryNames, extractDir=None):
     """ Make overview  of restraint data available, and check data type
     """
-   
+
     result = {}
-   
+
     if not extractDir:
       extractDir = tempfile.mkdtemp(dir=casdConstants.topTmpDir)
-    
+
     for entryName in entryNames:
       result[entryName] = info = {}
-      inputDir = os.path.join(allDataDir, entryName[1:3], entryName, 
+      inputDir = os.path.join(allDataDir, entryName[1:3], entryName,
                         entryName+'.input', 'restraints')
       ll = os.listdir(inputDir)
       if len(ll) == 1:
         source = os.path.join(inputDir, ll[0])
-      
+
         # restraints, check them
         targetDir = os.path.join(extractDir, entryName[1:3], entryName)
         if not os.path.exists(targetDir):
           casdUtil.extractCompressedFile(source, targetDir, entryName)
-        checkDir = casdUtil.getLowestSubDir(targetDir, 
+        checkDir = casdUtil.getLowestSubDir(targetDir,
                                             followDirs=('cns_format',))
-        
+
         convertType = checkRestraintTypes(checkDir, entryName)
-      
+
       elif ll:
         print(entryName, 'ERROR, multifiles', ll)
-      
+
       else:
         print(entryName, 'NONE')
 
@@ -67,10 +75,10 @@ def checkRestraintTypes(restraintDir, entryName=None):
    '.str':'NMR-STAR',
    '.tbl':'CNS',
   }
-  
-  
+
+
   counter = {}
-  
+
   for fname in os.listdir(restraintDir):
     ff,fext = os.path.splitext(fname)
     ftype = extentionTypes.get(fext, '???')
@@ -79,28 +87,28 @@ def checkRestraintTypes(restraintDir, entryName=None):
       ll.append(fname)
     else:
       counter[ftype] = [fname]
-  
+
   ll =  [(9999, entryName or os.path.basename(restraintDir), str(len(counter)))]
   for tag, val in sorted(counter.items()):
     ll.append((len(val), tag, val))
-  
+
   ss = ''
   for tt in reversed(sorted(ll)):
     ss += "%s %s; " % (tt[1], tt[2])
-  
+
   print(ss)
 
 
 def makeOverview(resultData, fieldOrder):
   """ make list-of-lists of results data, sorted.
   """
-  
-  
+
+
   result = []
   for info in resultData:
-    
+
     entryName = casdUtil.getEntryName(info)
-    
+
     # get normal data
     row = []
     result.append(row)
@@ -109,13 +117,13 @@ def makeOverview(resultData, fieldOrder):
         row.append(entryName)
       else:
         row.append(info.get(tag))
-    
+
     # Get data-is-present code string
     ll = []
     pp = os.path.join(allDataDir, entryName[1:3], entryName, entryName)
     if not os.path.exists(pp+'.tgz'):
       ll.append('Ccpn_NO')
-    
+
     inputDir = pp + '.input'
     if not os.listdir(os.path.join(inputDir, 'restraints')):
       ll.append('Restraints_NO')
@@ -124,7 +132,7 @@ def makeOverview(resultData, fieldOrder):
     if os.listdir(os.path.join(inputDir, 'superseded')):
       ll.append('UseOrigData_NO')
     row.append(' '.join(ll))
-    
+
   #
   result.sort()
   return  result
@@ -132,11 +140,11 @@ def makeOverview(resultData, fieldOrder):
 def makeOverview2(calcData, fieldOrder):
   """ make list-of-lists of results data, sorted.
   """
-  
-  
+
+
   result = []
   for entryName, info in calcData.items():
-    
+
     # get normal data
     row = []
     result.append(row)
@@ -145,13 +153,13 @@ def makeOverview2(calcData, fieldOrder):
         row.append(entryName)
       else:
         row.append(info.get(tag))
-    
+
     # Get data-is-present code string
     ll = []
     pp = os.path.join(allDataDir, entryName[1:3], entryName, entryName)
     if not os.path.exists(pp+'.tgz'):
       ll.append('Ccpn_NO')
-    
+
     inputDir = pp + '.input'
     if not os.listdir(os.path.join(inputDir, 'restraints')):
       ll.append('Restraints_NO')
@@ -160,7 +168,7 @@ def makeOverview2(calcData, fieldOrder):
     if os.listdir(os.path.join(inputDir, 'superseded')):
       ll.append('UseOrigData_NO')
     row.append(' '.join(ll))
-    
+
   #
   result.sort()
   return  result
@@ -179,24 +187,24 @@ def countCategories(resultData, tags):
 def forAllEntries(calcData, func, entries=()):
   """Select data dict and execute func
   """
-  
+
   if entries:
     dicts = [calcData.get(x) for x in entries if x in calcData]
   else:
     dicts = [x for x in calcData.values() if not x.get('isOriginal')]
-  
+
   print('Executing %s %s times' % (func.__name__, len(dicts)))
   for dd in dicts:
     func(dd)
-  
+
 
 def makeCalcData(inputData, resultData):
   """make calcData data structure from merging inputData and resultData
   """
   origNames = {}
   calcData = {}
-  
-  # get data from input 
+
+  # get data from input
   for dd in inputData:
     if not dd.get("Invalid"):
       dd2 ={'isOriginal':True}
@@ -209,27 +217,27 @@ def makeCalcData(inputData, resultData):
       entryName = casdUtil.getEntryName(dd2, isOriginal=True)
       calcData[entryName] = dd2
       origNames[dd['Target']]= entryName
-  
+
   # get data from entries
   for dd in resultData:
     if not dd.get("Invalid"):
       origName = origNames.get(dd['Target'])
       if origName:
         dd2 = {}
-        
+
         dd2['EntryID'] = dd.get('EntryID')
-        for tag in ('Target', 'Group', 'Program Type', 
+        for tag in ('Target', 'Group', 'Program Type',
                      "RDCdata", "Peaklist", "Truncated", 'Submitted on'):
           val = dd.get(tag)
           if val:
             val = str(val)
           dd2[tag] = val
-          
+
         origDd = calcData[origName]
         for tag in ('LACS CA/CB Offset', 'Oligomeric state', 'PDBcode',
                     'Defined Residues', ):
           dd2[tag] = origDd[tag]
-          
+
         entryName = casdUtil.getEntryName(dd2)
         calcData[entryName] = dd2
   #
@@ -238,18 +246,18 @@ def makeCalcData(inputData, resultData):
 def makeCcpnProject(entryName):
   """ Execute conversion to CCPN project
   """
-  
+
   logFileHandle = None
-  
+
   try:
-  
+
     #entryName = casdUtil.getEntryName(info)
     orgName = entryName.split('_')[0] + '_Org'
-    
+
     print('Starting', entryName)
-    
+
     logFileHandle = casdUtil.createLogFile(entryName, 'extractEntry')
-  
+
     # get CCPN project from Org data
     #orgName = casdUtil.getEntryName(info, isOriginal=True)
     path = os.path.join(allDataDir, orgName[1:3], orgName)
@@ -262,27 +270,27 @@ def makeCcpnProject(entryName):
     if not os.path.exists(ppath):
       raise Exception("NO extracted CCPN project in %s" % path)
     ccpnProject = genIo.loadProject(ppath, suppressGeneralDataDir=True)
-    
-    
+
+
     # neutralize any other pending CASD-NMR projects
     casdRun = casdUtil.prepareNmrCalcRun(ccpnProject, 'CING')
     for run in casdRun.nmrCalcStore.findAllRuns(status='pending'):
       if run is not casdRun:
         run.status = 'provisional'
- 
+
     #
     dataDir = os.path.join(allDataDir, entryName[1:3], entryName)
     tmpdir = tempfile.mkdtemp(dir=casdConstants.topTmpDir)
     try:
- 
+
       # Extract structure data
       tmpstruc = os.path.join(tmpdir, 'structures')
       src = casdUtil.getInputFile(entryName, 'structures')
       casdUtil.extractCompressedFile(src, tmpstruc, entryName, okExts=('pdb',))
       tmpstruc = casdUtil.getLowestSubDir(tmpstruc, followDirs=('cns_format',))
       structureFiles = os.listdir(tmpstruc)
- 
- 
+
+
       # Extract restraint data
       tmprestr = os.path.join(tmpdir, 'restraints')
       src = casdUtil.getInputFile(entryName, 'restraints', ignoreErrors=True)
@@ -293,45 +301,45 @@ def makeCcpnProject(entryName):
       else:
         restraintFiles = ()
         print('WARNING, %s no restraints found at %s' % (entryName, src))
- 
+
       # read in data
-      
+
       # FormatConverter version
       fcw = FormatConverterWrapper(ccpnProject=ccpnProject)
       # dataIo version
       #fcw = None
-      
+
       if structureFiles:
         # NBNB uses Rasmus in-development trunk structure reading.
         # WOrks well. Temporarily disabled
         # read in structures
         pdbFiles = [x for x in structureFiles
                     if any(x.endswith(y) for y in casdConstants.pdbEndings)]
- 
+
         floatFiles = [x for x in structureFiles if x.endswith('.float')]
- 
+
         if floatFiles:
           # Use only pdb files with names that match float files
           stems = set(x[:-6] for x in floatFiles)
           pdbFiles = [x for x in pdbFiles if x[:-4] in stems]
- 
+
         pdbPaths = [os.path.join(tmpstruc,x) for x in pdbFiles]
-        
+
         if True:
         #if fcw is None:
           #Always use dataIo version
           # dataIo version
           ensemble = StructureIo.getStructureFromFiles(
                                  ccpnProject.findFirstMolSystem(), pdbPaths)
-                                             
+
           if ensemble is None:
             print('### Skipping %s, no structures loaded' % entryName)
-            
+
           else:
             print('### num files, ensemble', len(pdbPaths), ensemble.ensembleId)
-            casdRun.newStructureEnsembleData(name=entryName, 
+            casdRun.newStructureEnsembleData(name=entryName,
                                              structureEnsemble=ensemble)
-        
+
         else:
           # FormatConverter version
           #fileInfo = fcw.determineFileInfo(pdbPaths[0])
@@ -342,34 +350,34 @@ def makeCcpnProject(entryName):
           pdbPath = pdbPaths[0]
           print('Reading structure file', dataType, formatName, pdbPath)
           fcw.readFile(dataType, formatName, pdbPath)
-            
-          
+
+
           # NBNB TODO 1) How to set up trying true PDB before pseudoPdb?
           #           2) How to read several files into an ensemble?
           #           3) How to get hold of the new ensemble for putting in NmrCalc
-        
+
       else:
         print('### Skipping %s, no structure file' % entryName)
-        
-    
+
+
       # Make NmrCalc object for shift list
-      # NBNB consider later: if we are reading in assigned peaks, 
+      # NBNB consider later: if we are reading in assigned peaks,
       # shifts may change. NBNB
       shiftLists = casdRun.nmrCalcStore.nmrProject.findAllMeasurementLists(className='ShiftList')
       if len(shiftLists) == 1:
-        casdRun.newMeasurementListData(name='Shiftlist', 
+        casdRun.newMeasurementListData(name='Shiftlist',
                                        measurementList=shiftLists.pop())
       else:
         print('WARNING. %s shift lists found, should be s' % len(shiftLists))
-    
-      # Restraints reading 
+
+      # Restraints reading
       if restraintFiles:
         if fcw is None:
           # NBNB TBD dataIo restraint reading to go here
           #for rfile in restraintFiles:
           #  fileInfo = casdUtil.getFileInfo(tmprestr, rfile)
           pass
-        
+
         else:
           # FormatConverter version
           restraintLists = []
@@ -380,25 +388,25 @@ def makeCcpnProject(entryName):
             formatName = fileInfo.get('formatName')
             if dataType is None or formatName is None:
               print('Skipping unidentified restraint file', dataType, formatName,  rfile)
-            
+
             elif dataType not in ('distanceConstraints', 'dihedralConstraints',
                                   'rdcConstraints',):
               print('Skipping wrong type of restraint file', dataType, formatName,  rfile)
-              
+
             else:
               print('Reading restraint file', dataType, formatName, rfile)
               fcw.readFile(dataType, formatName, rpath)
               if fcw.conversionSuccess:
-                print(("Successful restraint file read:\n%s" % fcw.conversionInfo))
+                print("Successful restraint file read:\n%s" % fcw.conversionInfo)
                 restraintLists.append(fcw.ccpnObjectOrList)
               else:
                 print ("Failed restraint file read:\n%s" % fcw.conversionInfo)
 
           if restraintLists:
-            print(("Found restraint lists: %s" % len(restraintLists)))
+            print("Found restraint lists: %s" % len(restraintLists))
             casdRun.newConstraintStoreData(constraintLists=restraintLists, name='Restraintlists')
 
-        
+
         # linkResonances
         print('### linking resonances')
         linkingInfo = fcw.linkAllResonancesToAtoms()
@@ -406,25 +414,25 @@ def makeCcpnProject(entryName):
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
         pass
-    
+
     # rename and package project
     ccpnOutputDir = os.path.join(dataDir, entryName)
-    genIo.saveProject(ccpnProject, newPath=ccpnOutputDir, 
+    genIo.saveProject(ccpnProject, newPath=ccpnOutputDir,
               newProjectName=entryName, checkValid=True, removeExisting=True)
     genIo.packageProject(ccpnProject, ccpnOutputDir)
     shutil.rmtree(ccpnOutputDir)
     ccpnOutputPath = ccpnOutputDir + '.tgz'
     print('SUCCESS, %s saved to %s' % (entryName, ccpnOutputPath))
-    
+
     return ccpnOutputPath
-  
+
   except:
     print('ERROR for %s' % (entryName))
     traceback.print_exc(file=sys.stdout)
-  
+
   finally:
     if logFileHandle is not None:
-      logFileHandle.close() 
+      logFileHandle.close()
       sys.stdout = sys.__stdout__
 
 '''
@@ -681,17 +689,17 @@ def oldToNewData(info):
 
 
 if __name__ == '__main__':
-  
+
   inputFile = os.path.join(allDataDir, 'inputData.json')
   inputData = json.load(open(inputFile))
-  
+
   resultFile = os.path.join(allDataDir, 'resultData.json')
   resultData = json.load(open(resultFile))
-  
+
   calcDataFile = os.path.join(allDataDir, 'calcData.json')
   calcData = makeCalcData(inputData, resultData)
   json.dump(calcData, open(calcDataFile, 'w'), sort_keys=True, indent=4)
-  
+
   '''
   #expandResultData(resultData)
   #json.dump(resultData, open(resultFile, 'w'), sort_keys=True, indent=4)
@@ -705,16 +713,16 @@ if __name__ == '__main__':
   #  print val, tag
   # extract results to CCPN projects
   #entries = []
-  #doAdd = False    
+  #doAdd = False
   #for dd in resultData:
   #  indx = dd['EntryID']
   #  if doAdd:
   #    entries.append(indx)
   #  elif indx == 291:
   #    doAdd = True
-  
+
   #restraintOverview(sorted(calcData.keys()), '/home/rhf22/tmpdata/tmp2T11BX')
-  
+
   #entryList = ['2ltm_Piscataway_279']
   #entryList = ['2m5o_Paris_303']
   #entryList = ['2m5o_Piscataway_301']
@@ -723,30 +731,30 @@ if __name__ == '__main__':
 
   for entryName in entryList:
     makeCcpnProject(entryName)
-  
+
   #for entryName in ('2lah_Cheshire_321','2lah_Cheshire_322','2lah_Cheshire_323',
   #                  '2lci_Cheshire_324','2ltm_Cheshire_325','2ltm_Cheshire_326',
   #                  '2ltl_Cheshire_327','2ltl_Cheshire_328','2m2e_Cheshire_329',
   #):
   #for entryName in [x for x in calcData if '2m5o_' in x and not 'Org' in x]:
   #   makeCcpnProject(entryName)
-  
+
   # Make result overview file
-  fieldOrder = ('Group', 'Program Type', 'EntryName', 'Peaklist', 'RDCdata', 
+  fieldOrder = ('Group', 'Program Type', 'EntryName', 'Peaklist', 'RDCdata',
                 'Truncated', "Submitted on", 'Target')
   #overview = makeOverview2(calcData, fieldOrder)
-  #overview = makeOverview((x for x in resultData 
+  #overview = makeOverview((x for x in resultData
   #                         if x['EntryID'] > 120 and not x.get('Invalid')),
   #                        fieldOrder)
   #print fieldOrder
   #for ll in overview:
   #  print '\t'.join(unicode(x) for x in ll)
-  
+
   # counting classes:
   #for cat,count in sorted(countCategories(resultData, ('Program Type',)).items()):
   #  print count, ':'.join(unicode(x) for x in cat)
-  
-  
+
+
   # Directory analysis:
   #count = 0
   #for info in resultData:
@@ -756,8 +764,8 @@ if __name__ == '__main__':
   #    pp = os.path.join(allDataDir, entryName[1:3], entryName)
   #    ll = os.listdir(pp)
   #    ll2 = os.listdir(os.path.join(pp, 'log_extractEntry'))
-  #    if (len(ll) != 3 or not (entryName + '.input' in ll and 
-  #                             entryName + '.tgz' in ll and 
+  #    if (len(ll) != 3 or not (entryName + '.input' in ll and
+  #                             entryName + '.tgz' in ll and
   #                             'log_extractEntry' in ll)
   #        or not ll2):
   #      print 'WARNING, incorrect files:', entryName, ll

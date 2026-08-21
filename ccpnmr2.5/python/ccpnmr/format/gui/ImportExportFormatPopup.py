@@ -55,7 +55,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import os
 import string
 import threading
-
 import tkinter as Tkinter
 
 from ccpnmr.format.general.Constants import IoSetupList, allFormatsDict

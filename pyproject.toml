@@ -113,6 +113,8 @@ select = [
 ignore = [
     "E501",   # line too long (legacy codebase, too noisy)
     "E741",   # ambiguous variable name (l, O, I) — common in NMR
+    "F401",   # unused import — PROVEN UNSAFE to auto-fix here: removal breaks 95
+              # cross-module re-export importers (Phase 3, 2026-08-21; _phase3_checkpoints.md)
     "F403",   # star imports (262 files, fix in Phase 2)
     "F405",   # star import may overwrite name
     "UP007",  # use X | Y instead of Union (prefer typing.Optional for now)

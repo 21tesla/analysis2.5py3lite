@@ -39,9 +39,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import tkinter as Tkinter
 import os
 import sys
+import tkinter as Tkinter
 from subprocess import PIPE, Popen
 
 from ccpnmr.analysis.Version import version

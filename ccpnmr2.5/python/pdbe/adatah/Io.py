@@ -245,9 +245,8 @@ Code below from http://peerit.blogspot.com/2007/07/multipartposthandler-doesnt-w
 import mimetypes
 import urllib
 import urllib.request
-from io import StringIO
-
 import uuid
+from io import StringIO
 
 
 class Callable:

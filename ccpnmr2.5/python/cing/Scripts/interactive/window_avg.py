@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #@PydevCodeAnalysisIgnore # pylint: disable-all
 import numpy
+
 try:
     import matplotlib.pyplot as pylab
 except Exception:

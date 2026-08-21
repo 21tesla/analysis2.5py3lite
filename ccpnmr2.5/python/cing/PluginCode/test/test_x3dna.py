@@ -4,13 +4,10 @@ python $CINGROOT/python/cing/PluginCode/test/test_x3dna.py
 
 Open the ???.r3d files in pymol or so; they're nice.
 """
+import os
 import shutil
-import os
 import unittest
-import os
-from unittest import TestCase
-
-from unittest import SkipTest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp, osType
 from cing.core.classes import Project

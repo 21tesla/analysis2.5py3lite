@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 import tkinter as Tkinter
+
 # ObjectsTable is for displaying a selection of attributes
 # of an array of objects, allowing the user to update their values
 # It requires a list of attributes, how these are labelled on the
@@ -58,7 +59,6 @@ import tkinter as Tkinter
 # classes for each attribute (widgetClasses, keyed on attribute).
 # The widget classes must allow creation with only parent widget
 # as an argument, and also must have set and get functions.
-
 from memops.gui.ButtonList import ButtonList
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label

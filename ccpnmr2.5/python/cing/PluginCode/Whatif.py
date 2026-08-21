@@ -5,6 +5,7 @@ First version: gv June 3, 2007
 
 from glob import glob
 from shutil import copy
+
 upper = str.upper
 
 from cing import issueListUrl

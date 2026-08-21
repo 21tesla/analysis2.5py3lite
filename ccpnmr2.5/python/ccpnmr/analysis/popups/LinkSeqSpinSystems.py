@@ -40,6 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import pickle
+
 from ccpnmr.analysis.core.AssignmentBasic import (
     assignSpinSystemResidue,
     clearSeqSpinSystemLinks,

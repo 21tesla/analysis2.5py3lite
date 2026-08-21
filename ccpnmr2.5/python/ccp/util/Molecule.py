@@ -56,7 +56,7 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
-from ccp.api.molecule import MolSystem, Molecule
+from ccp.api.molecule import Molecule, MolSystem
 from ccp.api.nmr import Nmr
 
 # from ccp.util.Assignment import deleteResonanceSet
@@ -68,12 +68,19 @@ except ImportError:
     from memops.universal.MessageReporter import showWarning
 
 # Moved to more appropriate location.
-from ccp.util.Assignment import findAtomSetResonances
-from ccp.lib.MoleculeModify import makeMolecule, addMolResidues, makeLinearSequence
 # The following should not be needed:
 # from ccp.lib.MoleculeModify import _getLinearChemCompData as getLinearChemCompData
-from ccp.lib.MoleculeModify import setMolResidueCcpCode, setMolResidueChemCompVar
-from ccp.lib.MoleculeModify import nextChainCode, makeChain, renumberChainSeqCodes
+from ccp.lib.MoleculeModify import (
+    addMolResidues,
+    makeChain,
+    makeLinearSequence,
+    makeMolecule,
+    nextChainCode,
+    renumberChainSeqCodes,
+    setMolResidueCcpCode,
+    setMolResidueChemCompVar,
+)
+from ccp.util.Assignment import findAtomSetResonances
 
 
 # Used in Analysis v2 (only), but hardly worth copying over:

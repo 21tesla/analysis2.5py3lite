@@ -40,6 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import pickle
+
 from ccpnmr.analysis.core.AssignmentAdvanced import assignSpecNonRootResonances, pickAssignSpecFromRoot
 from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs, getPrimaryDataDimRef, getSeqAssignRefExperiments
 from ccpnmr.analysis.core.MarkBasic import createPeakMark

@@ -2,11 +2,11 @@
 # General class to make a CCPN project from archive files #
 ###########################################################
 
-import tkinter as Tkinter
 import os
 import shutil
 import sys
 import time
+import tkinter as Tkinter
 import traceback
 
 from ccpnmr.format.process.matchResonToMolSys import matchResonToMolSys

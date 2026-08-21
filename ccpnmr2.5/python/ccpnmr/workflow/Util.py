@@ -15,10 +15,10 @@ ALSO have list of components that can be tested in each software?
 
 """
 
-import tkinter as Tkinter
 import os
 import shutil
 import time
+import tkinter as Tkinter
 from subprocess import PIPE, Popen
 
 from ccp.general.Util import setCurrentStore

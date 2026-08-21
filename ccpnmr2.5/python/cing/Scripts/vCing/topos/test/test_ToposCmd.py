@@ -2,8 +2,8 @@
 Created on Oct 20, 2010
 '''
 
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTmp

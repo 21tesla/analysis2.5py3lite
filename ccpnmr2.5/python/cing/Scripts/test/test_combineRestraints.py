@@ -2,11 +2,9 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_combineRestraints.py
 """
-import unittest
 import os
-from unittest import TestCase
-
-from unittest import SkipTest
+import unittest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData  #@UnusedImport
 from cing.Libs.forkoff import do_cmd

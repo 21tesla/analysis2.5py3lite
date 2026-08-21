@@ -5,8 +5,8 @@
 # ExtendNMRFrame.
 
 
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 # added jmci; do we need this??
 # HADDOCK
@@ -361,7 +361,6 @@ integration in NMR structure calculation. Bioinformatics 23:381-382"""
 if __name__ == "__main__":
 
   import sys
-
   import tkinter as Tkinter
 
   root = Tkinter.Tk()

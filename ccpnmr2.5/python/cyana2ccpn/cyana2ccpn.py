@@ -22,8 +22,8 @@ Imports structure(s) into the CCPN project using a CCPN routine
 
 import json
 import os
-import cyana2ccpn.CyanaParser.CyanaParser as cp
 
+import cyana2ccpn.CyanaParser.CyanaParser as cp
 from ccp.lib.StructureIo import getStructureFromFile
 from ccpnmr.analysis.core.AssignmentBasic import assignAtomsToRes, assignResToDim
 from ccpnmr.analysis.core.ConstraintBasic import getFixedResonance, makeStructureGeneration

@@ -1,6 +1,6 @@
-import tkinter as Tkinter
 import os
 import sys
+import tkinter as Tkinter
 
 from ccpnmr.eci.ReadPdb import ReadPdb
 from ccpnmr.format.converters.CnsFormat import CnsFormat

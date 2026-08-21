@@ -81,14 +81,14 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 import http.client
-
 import urllib.parse as urlparse  # py2 'urlparse' removed in py3
-from .HaddockExportParam import exportParam
 
 from memops.editor.BasePopup import BasePopup
 from memops.editor.Util import createDismissHelpButtonList
 from memops.gui.LabeledEntry import LabeledEntry
 from memops.gui.MessageReporter import showWarning
+
+from .HaddockExportParam import exportParam
 
 
 class HaddockServerUpload(BasePopup):

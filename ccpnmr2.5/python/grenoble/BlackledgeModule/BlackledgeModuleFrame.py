@@ -1,9 +1,9 @@
 
-import tkinter as Tkinter
 import glob
 import os
 import subprocess
 import tempfile
+import tkinter as Tkinter
 
 from ccp.lib.StructureIo import getStructureFromFile, makePdbFromStructure
 from ccp.util.NmrCalc import setRunTextParameter

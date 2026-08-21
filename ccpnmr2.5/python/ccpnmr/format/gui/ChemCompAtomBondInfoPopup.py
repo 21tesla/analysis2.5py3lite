@@ -52,8 +52,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import string
+import tkinter as Tkinter
 
 from ccp.general.Constants import standardBackboneAtoms
 from ccpnmr.format.general.Io import getHelpUrlDir

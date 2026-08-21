@@ -1,12 +1,11 @@
 """
 See doc in convertXplor2Ccpn.py
 """
-import tkinter as Tkinter
 import shutil
+import tkinter as Tkinter
 from glob import glob
 
 import cing
-
 from ccpnmr.format.converters.CyanaFormat import CyanaFormat
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

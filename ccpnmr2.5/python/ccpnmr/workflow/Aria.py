@@ -85,10 +85,9 @@ class AriaWorkFlow(WorkFlow):
 
 
 # TODO: change all url handling to this code! Much nicer... so posturl stuff can be changed?
+import http.cookiejar as cookielib  # py2 cookielib moved to http.cookiejar
 import urllib
 import urllib.request
-
-import http.cookiejar as cookielib  # py2 cookielib moved to http.cookiejar
 
 from pdbe.adatah.Io import MultipartPostHandler
 

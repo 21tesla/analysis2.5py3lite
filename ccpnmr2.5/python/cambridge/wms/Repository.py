@@ -27,11 +27,11 @@
 
 import os
 
+from memops.general.Io import loadProject
+
 # required for WS layer
 from .SharedBeanService_services import *
 from .WSString import *
-
-from memops.general.Io import loadProject
 
 
 class Repository:

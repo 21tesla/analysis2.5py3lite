@@ -2,8 +2,8 @@
 # python -u $CINGROOT/python/cing/Libs/test/test_Forkoff.py
 # In order to test killing capabilities try (replacing 9999 by pid):
 # kill -2 9999 (twice)
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTmp, header

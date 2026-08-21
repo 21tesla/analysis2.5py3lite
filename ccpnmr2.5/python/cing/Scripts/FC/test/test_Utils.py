@@ -4,10 +4,9 @@ Created on Dec 21, 2010
 @author: jd
 '''
 import unittest
-from unittest import TestCase
+from unittest import SkipTest, TestCase
 
 from matplotlib import mlab
-from unittest import SkipTest
 
 from cing import cingDirTestsData  #@UnusedImport
 from cing.Libs.NTutils import *  #@UnusedWildImport

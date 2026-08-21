@@ -1,5 +1,5 @@
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
 
 from ccpnmr.format.converters.NmrViewFormat import NmrViewFormat
 from ccpnmr.format.general.Util import createExperiment, createPpmFreqDataSource, getRefExpFromOldExpType

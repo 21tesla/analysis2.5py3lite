@@ -59,6 +59,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 #
 import os
 
+from memops.universal.Io import getTopDirectory
+
 from .distanceConstraintsIO import (
     NmrStarDistanceConstraint,
     NmrStarDistanceConstraintFile,
@@ -66,8 +68,6 @@ from .distanceConstraintsIO import (
     NmrStarDistanceConstraintMember,
     NmrStarFile,
 )
-
-from memops.universal.Io import getTopDirectory
 
 #####################
 # Class definitions #

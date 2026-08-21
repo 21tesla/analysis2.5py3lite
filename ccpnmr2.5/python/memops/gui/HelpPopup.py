@@ -52,7 +52,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
-from memops.gui.MessageReporter import showError, showInfo
 
 import memops.gui.BasePopup as BasePopup
 import memops.gui.Util
@@ -61,6 +60,7 @@ from memops.gui.ButtonList import ButtonList
 from memops.gui.Entry import Entry
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
+from memops.gui.MessageReporter import showError, showInfo
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.ScrolledHtml import ScrolledHtml
 from memops.gui.ToggleArrow import ToggleArrow

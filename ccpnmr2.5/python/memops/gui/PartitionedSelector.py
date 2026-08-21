@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 from memops.gui.Canvas import Canvas
 from memops.gui.Color import invertColor, scaleColor
 from memops.gui.Frame import Frame
@@ -388,9 +389,9 @@ class PartitionedSelector(Frame):
 
 if __name__ == "__main__":
     import os
+    import tkinter as tk
 
     import OpenGL.Tk as GLTK
-    import tkinter as tk
 
     b = GLTK.Opengl(height=100, width=100)
     root = b.master

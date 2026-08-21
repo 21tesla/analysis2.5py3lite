@@ -51,9 +51,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import glob
 import os
+import tkinter as Tkinter
 from datetime import datetime
 
 from memops.gui.ButtonList import ButtonList

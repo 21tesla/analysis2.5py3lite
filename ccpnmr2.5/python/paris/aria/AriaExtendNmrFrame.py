@@ -54,9 +54,9 @@ integration in NMR structure calculation. Bioinformatics 23:381-382
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import os
 import sys
+import tkinter as Tkinter
 
 from ccp.util.NmrCalc import getRunTextParameter
 from ccpnmr.analysis.popups.BasePopup import BasePopup

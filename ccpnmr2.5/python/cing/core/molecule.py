@@ -3,8 +3,9 @@
 from operator import attrgetter
 
 import numpy
-from numpy import convolve, matrix as mat, multiply, ones
+from numpy import convolve, multiply, ones
 from numpy import linalg as LA
+from numpy import matrix as mat
 
 from cing import issueListUrl
 from cing.core import database
@@ -551,7 +552,7 @@ class Molecule( NTtree, ResidueList ):
 
     def getNextAvailableChainId(self ):
         for chainId in Chain.DEFAULT_ChainNamesByAlphabet:
-            if not( chainId in self):
+            if chainId not in self:
                 return chainId
         issueId = 130
         msg = "CING exhausted the available %d chain identifiers; see issue %d here:\n" % (

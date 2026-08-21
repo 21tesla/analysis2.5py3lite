@@ -2,10 +2,9 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test2_ccpn.py
 """
+import os
 import shutil
-import os
 import unittest
-import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp

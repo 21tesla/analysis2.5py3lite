@@ -46,8 +46,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-import tkinter as Tkinter
 import re
+import tkinter as Tkinter
 
 from memops.general import Implementation
 from memops.universal.Io import importModule

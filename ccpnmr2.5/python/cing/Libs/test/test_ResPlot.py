@@ -4,12 +4,8 @@ python $CINGROOT/python/cing/Libs/test/test_ResPlot.py
 """
 
 import os  #@Reimport
-import os
 import unittest
-import os
-from unittest import TestCase
-
-from unittest import SkipTest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project

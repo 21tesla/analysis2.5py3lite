@@ -88,7 +88,7 @@ Citing:          If you are using this software for academic purposes, we
 
 import os
 
-from .HaddockLocal import daniProtocolStore, rdcProtocolStore
+from ccp.lib.StructureIo import getStructureFromFile
 
 #from ccp.util.Molecule                   import makeChain, addMolResidues, makeMolecule, nextChainCode
 #from memops.gui.MessageReporter          import showOkCancel,showWarning,showYesNo
@@ -98,7 +98,8 @@ from .HaddockLocal import daniProtocolStore, rdcProtocolStore
 #from ccpnmr.analysis.core.MoleculeBasic  import findMatchingChain, getLinkedResidue
 #from ccpnmr.analysis.core.StructureBasic import getBestNamingSystem, findMatchingMolSystemAtom
 from ccpnmr.format.converters.CnsFormat import CnsFormat
-from ccp.lib.StructureIo import getStructureFromFile
+
+from .HaddockLocal import daniProtocolStore, rdcProtocolStore
 
 
 def addRdcParam(run,termId):

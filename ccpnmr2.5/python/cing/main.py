@@ -127,13 +127,12 @@ format(peaks)
     formatall( project.molecule.A.residues[0].procheck ) # Adjust for your mols
     formatall( project.molecule.A.VAL171.C )
 """
-import tkinter as Tkinter
 import os
+import tkinter as Tkinter
+
 #==============================================================================
 import unittest
-import os
 import webbrowser
-import os
 
 try:
     import commands

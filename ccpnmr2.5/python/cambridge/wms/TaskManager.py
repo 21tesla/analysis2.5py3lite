@@ -36,10 +36,10 @@
 import time
 from threading import Thread
 
+from cambridge.wms.TestTask1Manager import TestTask1Manager
+
 from .SharedBeanService_services import *
 from .WSString import *
-
-from cambridge.wms.TestTask1Manager import TestTask1Manager
 
 """
 

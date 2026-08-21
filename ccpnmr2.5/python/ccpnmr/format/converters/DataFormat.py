@@ -52,11 +52,11 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter as Tkinter
 import operator
 import os
 import string
 import sys
+import tkinter as Tkinter
 import traceback
 
 #
@@ -77,6 +77,7 @@ from ccp.format.general.Constants import (
 from ccp.format.general.formatIO import GenericAtom, GenericChemComp
 from ccp.general.ChemCompOverview import chemCompStdDict
 from ccp.general.Constants import (
+    code1LetterToCcpCodeDict,
     linkBonds,
     linkCodes,
     linkEndDict,
@@ -126,7 +127,6 @@ from ccpnmr.format.general.Constants import (
     tagSep,
 )
 from ccpnmr.format.general.TopShared import TopShared
-from ccp.general.Constants import code1LetterToCcpCodeDict
 
 #
 # Import user interaction code. Note that a lot of this code will not

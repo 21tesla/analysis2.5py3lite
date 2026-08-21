@@ -1,7 +1,7 @@
 #import matplotlib # to pop-up a xwindow with command 'show()'
 #matplotlib.use('GTKAgg') # enable this line and above.
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from numpy import *  #@UnusedWildImport

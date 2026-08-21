@@ -61,6 +61,7 @@ from os import stat
 
 # from sets import Set
 from os.path import isfile, splitext
+
 atof = float
 atoi = int
 

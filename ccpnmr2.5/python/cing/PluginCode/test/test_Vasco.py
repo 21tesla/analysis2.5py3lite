@@ -2,12 +2,10 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/PluginCode/test/test_Vasco.py
 """
-import unittest
 import os
+import unittest
 from shutil import rmtree
-from unittest import TestCase
-
-from unittest import SkipTest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project

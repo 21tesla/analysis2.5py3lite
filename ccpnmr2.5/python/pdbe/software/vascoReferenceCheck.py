@@ -1,9 +1,9 @@
 # TODO: Necessary or can get from stats?
 #from pdbe.analysis.shifts.reref import make_selection, make_sel3
 
-import tkinter as Tkinter
 import os
 import random
+import tkinter as Tkinter
 
 from ccpnmr.format.general.Conversion import FormatConversion
 

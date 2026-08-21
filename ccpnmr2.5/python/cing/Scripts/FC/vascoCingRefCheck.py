@@ -3,8 +3,8 @@
 # Execute in a directory with both a CCPN and a CING project directory named 1brv and 1brv.cing respectively.
 # $CINGROOT/python/cing/Scripts/FC/vascoCingRefCheck.py 1brv
 
-import tkinter as Tkinter
 import glob
+import tkinter as Tkinter
 
 from matplotlib import mlab
 

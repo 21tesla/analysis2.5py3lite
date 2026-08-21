@@ -12,16 +12,15 @@ Level: basic
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
-import tkinter as Tkinter
 #
 # Get the Implementation package to create a project
 #
-
 #
 # Standard Python stuff
 #
 import os
 import shutil
+import tkinter as Tkinter
 
 #
 # Get Tkinter for popups

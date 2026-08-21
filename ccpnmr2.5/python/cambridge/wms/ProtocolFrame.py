@@ -8,6 +8,7 @@
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 import tkinter as Tkinter
+
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
@@ -296,7 +297,6 @@ class FilterFrame(LabelFrame):
 if __name__ == "__main__":
 
   import sys
-
   import tkinter as Tkinter
 
   root = Tkinter.Tk()

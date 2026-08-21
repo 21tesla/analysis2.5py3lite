@@ -82,14 +82,16 @@ Citing:          If you are using this software for academic purposes, we
 """
 
 import sys
-from     os.path             import join, isdir
-from     os                     import makedirs
-from    .HaddockBasic        import getPdbString, getAirSegments, getFlexibleResidues, makeBackup
-from     .HaddockDnaRnaRest     import dnaRnaRestraints
+from os import makedirs
+from os.path import isdir, join
+
+from .HaddockBasic import getAirSegments, getFlexibleResidues, getPdbString, makeBackup
+from .HaddockDnaRnaRest import dnaRnaRestraints
 from .HaddockLocal import *
 
+
 class exportClassic:
-    
+
     """Description: Exports current project and run as a 'classical' HADDOCK style project. This means
                        a root directory bearing the projects name containing all PDB structure files that
                     need to be docked, a new.html file, restraint files, a ensemble.list file if multiple 
@@ -97,45 +99,45 @@ class exportClassic:
        Input:        Haddock project instance, CCPN project instance.
        Output:        The various files as described above.                
     """
-    
+
     def __init__(self,hProject=None,latestRun=None,ccpnProject=None):
-        
+
         self.haddockproject = hProject
         self.latestRun = latestRun
         self.ccpnproject = ccpnProject
-        
+
         self.workingDir = self.haddockproject.workingDir
         self.partners = self.haddockproject.sortedHaddockPartners()
         self.fileNames = {}
-        
+
         if len(self.partners):
             self.__setupDirectoryStructure()
             self.__writeNewHtmlFile()
             self.__writeRunCnsFile()
             print("** Export complete **")
         else:
-            print("-->ERROR: Export classic project. No partners defined")    
-    
+            print("-->ERROR: Export classic project. No partners defined")
+
     def __setupDirectoryStructure(self):
-        
+
         """Make a project root directory. If project is allready defined it will not be overwritten."""
-        
+
         print("** Export 'Classic' Haddock project. Name %s, run %i **\n" % (self.haddockproject.name,self.latestRun.serial))
-        
+
         self.projectRoot = join(self.workingDir,self.haddockproject.name)
         if isdir(self.projectRoot):
             print("Project %s allready has a root HADDOCK root directory within the set working directory" % self.haddockproject.name)
         else:
             print("Make project root directory %s within the set working directory" % self.haddockproject.name)
             makedirs(self.projectRoot)
-    
+
     def __writeNewHtmlFile(self):
-        
+
         """Make a new.html file based upon a HADDOCK project object"""
-        
+
         print("Generate 'new.html' file")
         makeBackup(join(self.projectRoot,'new.html'))
-        
+
         file = open(join(self.projectRoot,'new.html'),'w')
         file.write('<html>\n')
         file.write('<head>\n')
@@ -145,27 +147,27 @@ class exportClassic:
         file.write('<h2>Parameters for the start:</h2> \n')
         file.write('<BR>\n')
         file.write('<h4><!-- HADDOCK -->\n')
-        
+
         ambigfile = False; allowedConstraintStores = ['UNAMBIG','AMBIG','DIHEDRAL','HBOND','RDC','DANI']
         danicount = 1; rdccount = 1
         for constraint in [ i for i in self.latestRun.sortedHaddockEnergyTerms() if i.code in allowedConstraintStores ]:
             if constraint.code == 'AMBIG': ambigfile = True
-            if constraint.fileName: 
+            if constraint.fileName:
                 if constraint.code == 'DANI':
                     file.write('%s%d_TBL=%s<BR>\n' % (constraint.code,danicount,constraint.fileName))
                     danicount += 1
                 elif constraint.code == 'RDC':
                     file.write('%s%d_TBL=%s<BR>\n' % (constraint.code,rdccount,constraint.fileName))
                     rdccount += 1
-                else: file.write('%s_TBL=%s<BR>\n' % (constraint.code,constraint.fileName))        
-                    
+                else: file.write('%s_TBL=%s<BR>\n' % (constraint.code,constraint.fileName))
+
         if ambigfile == False:
             self.__writeAmbigCnsTable()
-            file.write('AMBIG_TBL=%s<BR>\n' % join(self.projectRoot,'ambig.tbl'))            
-        
+            file.write('AMBIG_TBL=%s<BR>\n' % join(self.projectRoot,'ambig.tbl'))
+
         file.write('HADDOCK_DIR=%s<BR>\n' % self.latestRun.haddockDir)
         file.write('N_COMP=%i<BR>\n' % len(self.partners))
-        
+
         i = 1
         for partner in self.partners:
             pdbensemblelist = self.__writePdbFiles(partner)
@@ -174,24 +176,24 @@ class exportClassic:
                 filelist = self.__writePdbFileList(partner,pdbensemblelist)
                 file.write('PDB_LIST%d=%s<BR>\n' % (i, filelist))
             i += 1
-        
+
         file.write('PROJECT_DIR=%s<BR>\n' % self.projectRoot)
-        
+
         i = 1
         for partner in self.partners:
             file.write('PROT_SEGID_%d=%s<BR>\n' % (i, partner.code))
             i += 1
-        
+
         file.write('RUN_NUMBER=%d<BR>\n' % (self.latestRun.serial))
         file.write('submit_save=Save updated parameters<BR>\n')
         file.write('</h4><!-- HADDOCK -->\n')
         file.write('</body>\n')
         file.write('</html> \n')
-        
+
         file.close()
-    
+
     def __writePdbFiles(self,partner):
-        
+
         """Write PDB files into a given directory (using generic file names) given a list of MolStructrue objects.
            If multiple ensembles, each is exported as a seperate PDB file. The PDB name constitutes the MolSystem
            name, the selected chains in the given Haddock Partner and the ensemble number. If no ensembles the ensemble
@@ -201,15 +203,15 @@ class exportClassic:
         molSystem = partner.molSystem
         modelId   = int(partner.structureEnsemble.getDetails())
         chains       = [hc.chain.pdbOneLetterCode.strip() for hc in partner.chains]
-        
+
         if len("".join(chains)): chainstring = "".join(chains)
         else: chainstring = partner.code
-        
+
         ensembles = self.ccpnproject.sortedStructureEnsembles()
         if molSystem: ensembles = [e for e in ensembles if e.molSystem is molSystem]
         models = []
         for e in ensembles: models += [model for model in e.sortedModels()]
-            
+
         for model in models[0:modelId]:
             fileName = join(self.projectRoot,'%s-%s_%d.pdb' % (molSystem.code,chainstring,model.serial))
             if partner not in self.fileNames: self.fileNames[partner] = ('%s-%s_%d' % (molSystem.code,chainstring,model.serial))
@@ -218,25 +220,25 @@ class exportClassic:
             fileObj.write(getPdbString(model,[ch.chain for ch in partner.sortedChains()],chainRename=partner.code,blankchain=True))
             fileObj.close()
             pdbmodellist.append(fileName)
-        
+
         return pdbmodellist
-    
+
     def __writePdbFileList(self,partner,pdbensemblelist):
-        
+
         """Write a file containing PDB file names for the ensembles of a HADDOCK run. """
 
         listFileName = join(self.projectRoot,'PdbEnsemble%s.list' % (partner.code))
         print("Generate ensemble file list %s" % listFileName)
         makeBackup(listFileName)
-        
+
         file = open(listFileName, 'w')
         for pdb in pdbensemblelist: file.write('"%s"\n' % pdb)
         file.close()
-        
+
         return listFileName
-    
+
     def __writeAmbigCnsTable(self):
-        
+
         """Write a CNS style .tbl file containing the residue-residue ambiguous interaction
            restraints. The 'getAirSegments' function retrieves the active and passive
            residues from the haddockpartners. 'upperDistanceLimit' set the ambiguous
@@ -248,7 +250,7 @@ class exportClassic:
         for partner in self.haddockproject.sortedHaddockPartners(): airs[partner] = getAirSegments(partner)
         print("Export ambiguous interaction restraints as CNS style 'ambig.tbl' file")
         makeBackup(join(self.projectRoot,'ambig.tbl'))
-        
+
         file = open(join(self.projectRoot,'ambig.tbl'),'w')
         for partner in airs:
             file.write("!\n")
@@ -274,21 +276,21 @@ class exportClassic:
                         file.write("       )  %1.1f 2.0 0.0\n" % partner.airUpperDistanceLimit)
                         file.write("!\n")
         file.close()
-    
+
     def __writeRunCnsFile(self):
-        
+
         """Write a HADDOCK version 2.1 compliant run.cns file"""
-        
+
         print("Generate 'run.cns' file")
         makeBackup(join(self.projectRoot,'run.cns'))
 
         self.run = open(join(self.projectRoot,'run.cns'),'w')
         self.run.write(self.__runCnsHeader())
-        
+
         self.run.write("\n{======== number of molecules for docking ==================}\n")
         self.run.write("{* number of components *}\n")
-        self.run.write("{===>} ncomponents=%i;\n" % len(self.partners)) 
-        
+        self.run.write("{===>} ncomponents=%i;\n" % len(self.partners))
+
         self.run.write("\n{======================= filenames =========================}\n")
         self.run.write("{*  the name of your current project *}\n")
         self.run.write("{*  this will be used as name for the generated structures *}\n")
@@ -297,37 +299,37 @@ class exportClassic:
         self.run.write("\n{* RUN directory *}\n")
         self.run.write("{*  the absolute path of your current run, e.g. /home/haddock/run1*}\n")
         self.run.write('{===>} run_dir="%s";\n' % join(self.projectRoot,"run"+str(self.latestRun.serial)))
-        
+
         for partner in self.partners:
             self.run.write('\n{* PDB file of molecule (protein) %s *}\n' % partner.code)
-            self.run.write('{===>} prot_coor_%s="%s.pdb";\n' % (partner.code,self.fileNames[partner])) 
+            self.run.write('{===>} prot_coor_%s="%s.pdb";\n' % (partner.code,self.fileNames[partner]))
             self.run.write('{* PSF file of molecule (protein) %s *}\n' % partner.code)
-            self.run.write('{===>} prot_psf_%s="%s.psf";\n' % (partner.code,self.fileNames[partner])) 
+            self.run.write('{===>} prot_psf_%s="%s.psf";\n' % (partner.code,self.fileNames[partner]))
             self.run.write('{* segid of molecule (protein) %s *}\n' % partner.code)
-            self.run.write('{===>} prot_segid_%s="%s";\n' % (partner.code,partner.code)) 
+            self.run.write('{===>} prot_segid_%s="%s";\n' % (partner.code,partner.code))
             self.run.write('{* fileroot of molecule (protein) %s *}\n' % partner.code)
-            self.run.write('{===>} prot_root_%s="%s";\n' % (partner.code,self.fileNames[partner])) 
+            self.run.write('{===>} prot_root_%s="%s";\n' % (partner.code,self.fileNames[partner]))
             self.run.write('{* Is molecule %s DNA? *}\n' % partner.code)
             self.run.write('{+ choice: true false +}\n')
             self.run.write('{===>} dna_%s=%s;\n' % (partner.code,str(partner.isDna).lower()))
-    
+
         self.run.write('\n{ Atomname nomenclature }\n')
         self.run.write('{ set true if you have IUPAC (e.g. LEU HB2 and HB3 and not HB2 and HB1) data (e.g. from XEASY) }\n')
         self.run.write('{ choice: true false }\n')
-        self.run.write('xplortodiana=false;\n') 
+        self.run.write('xplortodiana=false;\n')
 
         self.run.write('\n{* Remove non-polar hydrogens? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} delenph=%s;\n' % str(self.latestRun.get('removeNonPolarH')).lower()) 
+        self.run.write('{===>} delenph=%s;\n' % str(self.latestRun.get('removeNonPolarH')).lower())
 
         self.run.write('\n{* HADDOCK directory *}\n')
         self.run.write('{*  the absolute path of the HADDOCK program files *}\n')
-        self.run.write('{===>} haddock_dir="%s";\n' % self.latestRun.haddockDir) 
+        self.run.write('{===>} haddock_dir="%s";\n' % self.latestRun.haddockDir)
 
         self.run.write('\n{* Logfile directory *}\n')
         self.run.write('{* specify a directory for the large CNS log files *}\n')
         self.run.write('{===>} temptrash_dir="%s";\n' % join(self.projectRoot,"run"+str(self.latestRun.serial)))
-        
+
         self.__histidinePatches()
         self.__setFlexInterface()
         self.__setSymmetry()
@@ -346,17 +348,17 @@ class exportClassic:
         self.__setScoringProtocol()
         self.__setAnalysisProtocol()
         self.__setClusterParams()
-        
+
         self.run.write(self.__runCnsFooter())
         self.run.close()
-    
+
     def __histidinePatches(self):
-        
+
         HD1pstates = []; HE2pstates = []; length = 10; pcount = 0
-        
+
         for partner in self.partners:
-            
-            if partner.autoHistidinePstate == True: 
+
+            if partner.autoHistidinePstate == True:
                 for nr in range(1,11): HD1pstates.append((partner.code,nr,0)); HE2pstates.append((partner.code,nr,0))
             else:
                 count = 1
@@ -366,26 +368,26 @@ class exportClassic:
                 for chain in ensembles[0].sortedCoordChains():
                     for residue in chain.sortedResidues():
                         if residue.residue.ccpCode == 'His':
-                            if residue.residue.descriptor == "prot:HD1;deprot:HE2": 
+                            if residue.residue.descriptor == "prot:HD1;deprot:HE2":
                                 HD1pstates.append((partner.code,count,residue.residue.seqCode))
                                 count += 1
-                            elif residue.residue.descriptor == "deprot:HD1;prot:HE2":     
+                            elif residue.residue.descriptor == "deprot:HD1;prot:HE2":
                                 HE2pstates.append((partner.code,count,residue.residue.seqCode))
                                 count += 1
-                            elif residue.residue.descriptor == "prot:HD1;prot:HE2":     
+                            elif residue.residue.descriptor == "prot:HD1;prot:HE2":
                                 HD1pstates.append((partner.code,count,residue.residue.seqCode))
                                 HE2pstates.append((partner.code,count,residue.residue.seqCode))
                                 count += 1
                             else: pass
-            
+
             count = len(HD1pstates)
             while len(HD1pstates) < length: HD1pstates.append((partner.code,count+1,0)); count += 1
             count = len(HE2pstates)
-            while len(HE2pstates) < length: HE2pstates.append((partner.code,count+1,0)); count += 1                    
-        
+            while len(HE2pstates) < length: HE2pstates.append((partner.code,count+1,0)); count += 1
+
             length += 10
             pcount += 1
-    
+
         self.run.write('\n{==================== histidine patches =====================}\n')
         self.run.write('\n{* Patch to change doubly protonated HIS to singly protonated histidine (HD1) *}\n')
         self.run.write('{* just give the residue number of the histidines for the HISD patch, set them to zero if you do not want them *}\n')
@@ -399,84 +401,84 @@ class exportClassic:
         self.run.write('\n{* Patch to change doubly protonated HIS to singly protonated histidine (HE2) *}\n')
         self.run.write('{* just give the residue number of the histidines for the HISE patch, set them to zero if you do not want them *}\n')
         self.run.write('{+ table: rows=6 "molecule (Protein) A" "molecule (Protein) B"  "molecule (Protein) C"  "molecule (Protein) D"  "molecule (Protein) E"  "molecule (Protein) F" cols=10 "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" +}\n')
-        
+
         self.run.write('\nnumhise=%i;\n\n' % (len(HE2pstates)/pcount))
-        
+
         for pstate in HE2pstates:
             self.run.write('{===>} %s_hisd_resid_%i=%i;\n' % (pstate[0],pstate[1],pstate[2]))
 
     def __setFlexInterface(self):
-        
+
         self.run.write('\n{========= Definition of semi-flexible interface ============}\n')
         self.run.write('{* Define the interface of each molecule.*}\n')
         self.run.write('{* Side-chains and backbone of these residues will be allowed to move during semi-flexible refinement*}\n')
-        
+
         for partner in self.partners:
             self.run.write('\n{* number of semi-flexible segments for molecule (protein) %s (-1 for automated mode) *}\n' % partner.code)
             self.run.write('{* Note that current max is 10 (edit the run.cns to add more segments *}\n')
-            
+
             flex = getFlexibleResidues(partner)
-            
+
             if partner.semiFlexMode == 'manual':
-                self.run.write('\n{===>} nseg_%s=%i;\n' % (partner.code,len(flex['semi'])))    
+                self.run.write('\n{===>} nseg_%s=%i;\n' % (partner.code,len(flex['semi'])))
             else:
                 self.run.write('\n{===>} nseg_%s=-1;\n' % partner.code)
-            
+
             self.run.write('\n{* Residues of molecule (protein) %s at interface *}\n' % partner.code)
             self.run.write('{+ table: rows=10 "segment 1" "segment 2" "segment 3" "segment 4" "segment 5" "segment 6" "segment 7" "segment 8" "segment 9" "segment 10" cols=2 "Start residue" "End residue" +}\n')
             self.run.write("\n")
-            
+
             count = 1
             for semiflex in flex['semi']:
-                self.run.write('{===>} %s_start_seg_%i="%i";\n' % (partner.code,count,semiflex[0])) 
+                self.run.write('{===>} %s_start_seg_%i="%i";\n' % (partner.code,count,semiflex[0]))
                 self.run.write('{===>} %s_end_seg_%i="%i";\n' % (partner.code,count,semiflex[1]))
                 count += 1
-        
+
         self.run.write('\n{=========== Definition of fully flexible segments ==========}\n')
         self.run.write('{* Define the fully flexible segment of each molecule.*}\n')
         self.run.write('{* These segments will be allowed to move at all stages of it1 *}\n')
-        
+
         for partner in self.partners:
             self.run.write('\n{* Number of fully flexible segments for molecule (protein) %s *}\n' % partner.code)
             self.run.write('{* Note that current max is 5 (edit the run.cns to add more segments *}\n')
-            
+
             flex = getFlexibleResidues(partner)
-            
-            self.run.write('\n{===>} nfle_%s=%i;\n' % (partner.code,len(flex['full'])))    
-            
+
+            self.run.write('\n{===>} nfle_%s=%i;\n' % (partner.code,len(flex['full'])))
+
             self.run.write('\n{* Residues of molecule (protein) %s at interface *}\n' % partner.code)
             self.run.write('{+ table: rows=10 "segment 1" "segment 2" "segment 3" "segment 4" "segment 5" "segment 6" "segment 7" "segment 8" "segment 9" "segment 10" cols=2 "Start residue" "End residue" +}\n')
             self.run.write("\n")
-            
+
             count = 1
             for fullyflex in flex['full']:
-                self.run.write('{===>} %s_start_seg_%i="%i";\n' % (partner.code,count,fullyflex[0])) 
+                self.run.write('{===>} %s_start_seg_%i="%i";\n' % (partner.code,count,fullyflex[0]))
                 self.run.write('{===>} %s_end_seg_%i="%i";\n' % (partner.code,count,fullyflex[1]))
                 count += 1
-    
+
     def __setSymmetry(self):
-        
+
         symdict = {'ncs':[],'C2':[],'C3':[],'C5':[]}; symw = False
-    
+
         for symmetry in self.latestRun.sortedSymmetryRestraints():
             symdict[symmetry.symmetryCode].append((1,symmetry.segmentLength,'A'))
-        
+
         self.run.write('\n{====================== NCS restraints  =====================}\n')
         self.run.write('{* Do you want to use NCS restraints? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        
+
         if len(symdict['ncs']) > 0: self.run.write('{===>} ncs_on=true;\n')
         else: self.run.write('{===>} ncs_on=false;\n')
-        
+
         self.run.write('\n{* Force constant for NCS restraints *}\n')
         self.run.write('{===>} kncs=%1.1f;\n' % self.latestRun.get('ncsRestraintConstant'))
-        
+
         self.run.write('\n{* Number of NCS pairs *}\n')
         self.run.write('{===>} numncs=%i;\n' % len(symdict['ncs']))
-        
+
         self.run.write('\n{* Define the segments pairs for NCS restraints *}\n')
         self.run.write('{+ table: rows=5 "pair 1" "pair 2" "pair 3" "pair 4" "pair 5" " cols=6 "Start res seg1" "End res seg1" "Segid seg1" "Start res seg2" "End res seg2" "Segid seg2" +}\n')
-    
+
         symcount = 1
         for ncs in symdict['ncs']:
             self.run.write('{===>} ncs_sta1_%i="%i";\n' % (symcount,ncs[0]))
@@ -486,24 +488,24 @@ class exportClassic:
             self.run.write('{===>} ncs_end2_%i="%i";\n' % (symcount,ncs[1]))
             self.run.write('{===>} ncs_seg2_%i="%s";\n' % (symcount,ncs[2]))
             symcount += 1
-        
+
         self.run.write('\n{==================== Symmetry restraints  ==================}\n')
         self.run.write('{* Do you want to use symmetry restraints ? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        
+
         if len(symdict['C2']) > 0 or len(symdict['C3']) > 0 or len(symdict['C5']) > 0:
               self.run.write('{===>} sym_on=true;\n')
-        else: self.run.write('{===>} sym_on=false;\n')    
+        else: self.run.write('{===>} sym_on=false;\n')
 
         self.run.write('\n{* Force constant for symmetry restraints ? *}\n')
         self.run.write('{===>} ksym=%1.1f;\n' % self.latestRun.get('symmetryRestraintConstant'))
-    
+
         self.run.write('\n{* Number of C2 symmetry pairs *}\n')
         self.run.write('{===>} numc2sym=%i;\n' % len(symdict['C2']))
-        
+
         self.run.write('\n{* Define the segment pairs C2 symmetry restraints *}\n')
         self.run.write('{+ table: rows=10 "pair 1" "pair 2" "pair 3" "pair 4" "pair 5" "pair 6" "pair 7" "pair 8" "pair 9" "pair 10" cols=6 "Start res seg1" "End res seg1" "Segid seg1" "Start res seg2" "End res seg2" "Segid seg2" +}\n')
-        
+
         symcount = 1
         for c2 in symdict['C2']:
             self.run.write('{===>} c2sym_sta1_%i="%i";\n' % (symcount,c2[0]))
@@ -513,7 +515,7 @@ class exportClassic:
             self.run.write('{===>} c2sym_end2_%i="%i";\n' % (symcount,c2[1]))
             self.run.write('{===>} c2sym_seg2_%i="%s";\n' % (symcount,c2[2]))
             symcount += 1
-        
+
         self.run.write('\n{* Number of C3 symmetry pairs *}\n')
         self.run.write('{===>} numc3sym=%i;\n' % len(symdict['C3']))
 
@@ -560,10 +562,10 @@ class exportClassic:
             self.run.write('{===>} c5sym_sta5_%i="%i";\n' % (symcount,c5[0]))
             self.run.write('{===>} c5sym_end5_%i="%i";\n' % (symcount,c5[1]))
             self.run.write('{===>} c5sym_seg5_%i="%s";\n' % (symcount,c5[2]))
-            symcount += 1    
+            symcount += 1
 
     def __setDistanceRestraints(self):
-        
+
         self.run.write('\n{=========================== Distance restraints  ========================}\n')
         self.run.write('{* Turn on/off and energy constants for distance restraints *}\n')
         self.run.write('{+ table: rows=3 "distances" "AIR (ambig)" "hbonds" cols=6 "firstIteration" "lastIteration" "hot" "cool1" "cool2" "cool3"+}\n\n')
@@ -581,7 +583,7 @@ class exportClassic:
 
         self.run.write('\n{* Do you want to use hydrogen bond restraints? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} hbonds_on=%s;\n' % str(self.latestRun.get('useHBondRestraints')).lower()) 
+        self.run.write('{===>} hbonds_on=%s;\n' % str(self.latestRun.get('useHBondRestraints')).lower())
 
         self.run.write('\n{* Do you want to define randomly ambiguous interaction restraints from accessible residues? *}\n')
         self.run.write('{* Only residues in the defined flexible segments will be considered *}\n')
@@ -604,13 +606,13 @@ class exportClassic:
 
         self.run.write('\n{* Force constant for surface contact restraints *}\n')
         self.run.write('{===>} ksurf=%1.1f;\n' % self.latestRun.get('surfaceContactConstant'))
-        
+
         self.run.write('\n{ Use automated distance restraints weighting }\n')
         self.run.write('{ choice: true false }\n')
-        self.run.write('air_scaling=%s;\n' % str(self.latestRun.get('doAirScaling')).lower())  
+        self.run.write('air_scaling=%s;\n' % str(self.latestRun.get('doAirScaling')).lower())
 
         self.run.write('\n{ Define the number of distance restraints for automated weighting }\n')
-        self.run.write('tot_unamb=%i;\n' % self.latestRun.get('numUnambRestautoAir')) 
+        self.run.write('tot_unamb=%i;\n' % self.latestRun.get('numUnambRestautoAir'))
         self.run.write('{ Define the number of AIR restraints for automated weighting }\n')
         self.run.write('tot_amb=%i;\n' % self.latestRun.get('numAmbRestautoAir'))
 
@@ -618,41 +620,41 @@ class exportClassic:
         autoDistanceRestraintWeightStore = self.latestRun.findFirstHaddockEnergyTerm(code='autoDistanceRestraintWeightStore')
         for term in autoDistanceRestraintWeightStore.sortedEnergyTermParameters():
             self.run.write('%s=%s;\n' % (term.code,term.value))
-                
+
     def __setDnaRnaRestraints(self):
-        
+
         self.run.write('\n{======================DNA-RNA restraints ============================}\n')
         self.run.write('{* Use DNA/RNA restraints (dna-rna_restraints.def in data/sequence)? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} dnarest_on=%s;\n' % (repr(self.latestRun.get('useDnaRestraints'))).lower())        
-        
+        self.run.write('{===>} dnarest_on=%s;\n' % (repr(self.latestRun.get('useDnaRestraints'))).lower())
+
         if self.latestRun.get('useDnaRestraints') == True:
             for partner in self.partners:
                 if partner.isDna == True:
-                    print(("Generate 'dna-rna_restraints.def' file"))
+                    print("Generate 'dna-rna_restraints.def' file")
                     dnarestraints = dnaRnaRestraints(self.ccpnproject,partner,self.projectRoot)
                     dnarestraints.writeToFile()
-        
+
     def __setDihedrals(self):
-        
+
         self.run.write('\n{=========================== dihedrals ==============================}\n')
         self.run.write('{* energy constants *}\n')
         self.run.write('{+ table: rows=1 "dihedrals" cols=5 "use?" "hot" "cool1" "cool2" "cool3" +}\n')
 
         self.run.write('\n{+ choice: true false +}\n')
-        
+
         constraint = [c.code for c in self.latestRun.sortedHaddockEnergyTerms()]
         if 'DIHEDRAL' in constraint:
             self.run.write('{===>} dihedrals_on=true;\n')
         else:
-            self.run.write('{===>} dihedrals_on=false;\n')    
+            self.run.write('{===>} dihedrals_on=false;\n')
 
         dihRestraintEnergyStore = self.latestRun.findFirstHaddockEnergyTerm(code='dihRestraintEnergyStore')
         for term in dihRestraintEnergyStore.sortedEnergyTermParameters():
             self.run.write('{===>} %s=%s;\n' % (term.code,term.value))
-    
+
     def __setKarplusCoupling(self):
-        
+
         self.run.write("""
 {=========================== Karplus coupling restraints ====================}
 
@@ -710,56 +712,56 @@ class exportClassic:
  c5_cool2=1.0; 
  c5_cool3=1.0;
         """)
-    
+
     def __setRDC(self):
-        
+
         self.run.write('\n{=========================== residual dipolar couplings ======================}\n')
         self.run.write('\n{* Parameters *}\n')
         self.run.write('{+ table: rows=5 "class1" "class2" "class3" "class4" "class5"\n')
-        self.run.write('          cols=25 "type" "firstIt" "lastIt" "Ksani<br>(hot)" "Ksani<br>(cool1)" "Ksani<br>(cool2)" "Ksani<br>(cool3)" "R" "D"\n') 
+        self.run.write('          cols=25 "type" "firstIt" "lastIt" "Ksani<br>(hot)" "Ksani<br>(cool1)" "Ksani<br>(cool2)" "Ksani<br>(cool3)" "R" "D"\n')
         self.run.write(' "Kvean<br>(ini_bor_hot)" "Kvean<br>(fin_bor_hot)"\n')
-        self.run.write(' "Kvean<br>(ini_bor_cool1)" "Kvean<br>(fin_bor_cool1)"\n') 
+        self.run.write(' "Kvean<br>(ini_bor_cool1)" "Kvean<br>(fin_bor_cool1)"\n')
         self.run.write(' "Kvean<br>(ini_bor_cool2)" "Kvean<br>(fin_bor_cool2)"\n')
-        self.run.write(' "Kvean<br>(ini_bor_cool3)" "Kvean<br>(fin_bor_cool3)"\n') 
-        self.run.write(' "Kvean<br>(ini_cen_hot)" "Kvean<br>(fin_cen_hot)"\n') 
-        self.run.write(' "Kvean<br>(ini_cen_cool1)" "Kvean<br>(fin_cen_cool1)"\n') 
-        self.run.write(' "Kvean<br>(ini_cen_cool2)" "Kvean<br>(fin_cen_cool2)"\n') 
+        self.run.write(' "Kvean<br>(ini_bor_cool3)" "Kvean<br>(fin_bor_cool3)"\n')
+        self.run.write(' "Kvean<br>(ini_cen_hot)" "Kvean<br>(fin_cen_hot)"\n')
+        self.run.write(' "Kvean<br>(ini_cen_cool1)" "Kvean<br>(fin_cen_cool1)"\n')
+        self.run.write(' "Kvean<br>(ini_cen_cool2)" "Kvean<br>(fin_cen_cool2)"\n')
         self.run.write(' "Kvean<br>(ini_cen_cool3)" "Kvean<br>(fin_cen_cool3)"+}\n')
-        
+
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'RDC']
-        
+
         protocol_count = 1
         if len(constraint):
             for term in constraint:
                 if term.fileName:
                     protocol = self.latestRun.findFirstHaddockEnergyTerm(code='rdcProtocolStore',termId=term.termId)
-                    if protocol:    
+                    if protocol:
                         self.run.write('\n{+ choice: "NO" "SANI" "VANGLE" +}\n')
                         for energyTerm in protocol.sortedEnergyTermParameters():
-                            if energyTerm.code[0:3] == 'rdc':                            
+                            if energyTerm.code[0:3] == 'rdc':
                                 if energyTerm.code == 'rdc_choice':
                                     self.run.write('{===>} rdc%i_%s=%s;\n' % (protocol_count,energyTerm.code[4:len(energyTerm.code)],['NO','SANI','VANGLE'][int(energyTerm.value)]))
                                 else:
                                     self.run.write('{===>} rdc%i_%s=%s;\n' % (protocol_count,energyTerm.code[4:len(energyTerm.code)],energyTerm.value))
-                            else:    
+                            else:
                                 self.run.write('{===>} %s_%i=%1.1f;\n' % (energyTerm.code,protocol_count,energyTerm.value))
                     protocol_count += 1
                 else:
                     print("RDC Warning: RDC energyTerm %i defined but no RDC CNS file associated" % term.termId)
         else:
             self.run.write('\n{+ choice: "NO" "SANI" "VANGLE" +}\n')
-            for termId in range(1,6):    
+            for termId in range(1,6):
                 self.run.write('\n{===>} rdc%i_choice="NO";\n' % termId)
-                for term in rdcProtocolStore['terms']: 
+                for term in rdcProtocolStore['terms']:
                     if term[0:3] == 'rdc':
                         self.run.write('{===>} rdc%i_%s=%1.1f;\n' % (termId,term[4:len(term)],rdcProtocolStore['terms'][term]))
                     else:
-                        self.run.write('{===>} %s_%i=%1.1f;\n' % (term,termId,rdcProtocolStore['terms'][term]))        
-            
+                        self.run.write('{===>} %s_%i=%1.1f;\n' % (term,termId,rdcProtocolStore['terms'][term]))
+
     def __setRelaxationData(self):
-        
+
         constraint = [c for c in self.latestRun.sortedHaddockEnergyTerms() if c.code == 'DANI']
-        
+
         if len(constraint):
             self.run.write('\n{=========================== relaxation data ======================}\n')
             self.run.write('\n{* Parameters *}\n')
@@ -770,26 +772,26 @@ class exportClassic:
                 if term.fileName:
                     protocol = self.latestRun.findFirstHaddockEnergyTerm(code='daniProtocolStore',termId=term.termId)
                     if protocol:
-                        self.run.write('{===>} dan%i_choice="DANI";\n' % term.termId)    
+                        self.run.write('{===>} dan%i_choice="DANI";\n' % term.termId)
                         for energyTerm in protocol.sortedEnergyTermParameters():
                             self.run.write('{===>} dan%i_%s=%1.1f;\n' % (term.termId,energyTerm.code,energyTerm.value))
                 else:
                     print("DANI Warning: DANI energyTerm %i defined but no DANI CNS file associated" % term.termId)
-                    self.run.write('{===>} dan%i_choice="NO";\n' % term.termId)    
+                    self.run.write('{===>} dan%i_choice="NO";\n' % term.termId)
         else:
             self.run.write('{=========================== relaxation data ======================}\n')
             self.run.write('\n{* Parameters *}\n')
             self.run.write('{+ table: rows=5 "class1" "class2" "class3" "class4" "class5"\n')
             self.run.write('          cols=12 "type" "firstIt" "lastIt" "Kdani(hot)" "Kdani(cool1)" "Kdani(cool2)" "Kdani(cool3)" "Correlation time" "R" "D" "H frequency" "N frequency" +}\n')
             self.run.write('{+ choice: "NO" "DANI" +}\n')
-            for termId in range(1,6):    
+            for termId in range(1,6):
                 self.run.write('\n{===>} dan%i_choice="NO";\n' % termId)
-                for term in daniProtocolStore['terms']: self.run.write('{===>} dan%i_%s=%1.1f;\n' % (termId,term,daniProtocolStore['terms'][term]))    
-    
+                for term in daniProtocolStore['terms']: self.run.write('{===>} dan%i_%s=%1.1f;\n' % (termId,term,daniProtocolStore['terms'][term]))
+
     def __setTopologyFiles(self):
-        
+
         self.run.write('\n{===================== topology and parameter files ======================}\n')
-        
+
         for partner in self.partners:
             if partner.isDna == True:
                 self.run.write('\n{* topology file for molecule (protein) %s *}\n' % partner.code)
@@ -798,40 +800,40 @@ class exportClassic:
                 self.run.write('{===>} prot_link_%s="dna-rna.link";\n' % partner.code)
                 self.run.write('{* energy parameter file for molecule (protein) %s *}\n' % partner.code)
                 self.run.write('{===>} prot_par_%s="dna-rna-allatom.param";\n' % partner.code)
-            else:        
+            else:
                 self.run.write('\n{* topology file for molecule (protein) %s *}\n' % partner.code)
                 self.run.write('{===>} prot_top_%s="topallhdg5.3.pro";\n' % partner.code)
                 self.run.write('{* linkage file for molecule (protein) %s *}\n' % partner.code)
                 self.run.write('{===>} prot_link_%s="topallhdg5.3.pep";\n' % partner.code)
                 self.run.write('{* energy parameter file for molecule (protein) %s *}\n' % partner.code)
                 self.run.write('{===>} prot_par_%s="parallhdg5.3.pro";\n' % partner.code)
-        
+
         self.run.write('\n{* type of non-bonded parameters *}\n')
         self.run.write('{* specify the type of non-bonded interaction *}\n')
         self.run.write('{+ choice: "PROLSQ" "PARMALLH6" "PARALLHDG" "OPLSX" +}\n')
         self.run.write('{===>} par_nonbonded="%s";\n' % self.latestRun.get('nonBondedType'))
 
     def __setEnergyParams(self):
-        
+
         self.run.write('\n{===================== energy and interaction parameters ==================}\n')
 
         self.run.write('\n{ Do you want to include dihedral angle energy terms? }\n')
         self.run.write('{ choice: true false }\n')
-        self.run.write('dihedflag=%s;\n' % str(self.latestRun.get('doIncludeDihEnergy')).lower()) 
+        self.run.write('dihedflag=%s;\n' % str(self.latestRun.get('doIncludeDihEnergy')).lower())
 
         self.run.write('\n{* Do you want to include the electrostatic energy term for docking? *}\n')
         self.run.write('{* Note that it will be automatically included in the solvent refinement *}\n')
 
         self.run.write('\n{* Include electrostatic during rigid body docking (it0)? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} elecflag_0=%s; \n' % str(self.latestRun.get('doRigidBodyElectrostatics')).lower()) 
+        self.run.write('{===>} elecflag_0=%s; \n' % str(self.latestRun.get('doRigidBodyElectrostatics')).lower())
         self.run.write('{* Include electrostatic during semi-flexible SA (it1)? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} elecflag_1=%s; \n' % str(self.latestRun.get('doSAElectrostatics')).lower()) 
+        self.run.write('{===>} elecflag_1=%s; \n' % str(self.latestRun.get('doSAElectrostatics')).lower())
 
         self.run.write('\n{* Give the epsilon constant for the electrostatic energy term? *}\n')
         self.run.write('{* Note that for explicit solvent refinement cdie with epsilon=1 is used *}\n')
-        self.run.write('{===>} epsilon=%1.1f;\n' % self.latestRun.get('epsilon')) 
+        self.run.write('{===>} epsilon=%1.1f;\n' % self.latestRun.get('epsilon'))
 
         self.run.write('\n{* Use constant (cdie) or distance-dependent (rdie) dielectric? *}\n')
         self.run.write('{+ choice: cdie rdie +}\n')
@@ -846,9 +848,9 @@ class exportClassic:
         semiflexInterMolScalingStore = self.latestRun.findFirstHaddockEnergyTerm(code='semiflexInterMolScalingStore')
         for term in semiflexInterMolScalingStore.sortedEnergyTermParameters():
             self.run.write('{===>} %s=%s;\n' % (term.code,term.value))
-            
+
     def __setIterations(self):
-        
+
         self.run.write('\n{===================== Number of structures to dock =======================}\n')
         self.run.write('\n{* Setting for the rigid-body (it0) and semi-flexible refiment (it1) *}\n')
 
@@ -856,11 +858,11 @@ class exportClassic:
         self.run.write('{===>} structures_0=%i;\n' % self.latestRun.get('numIt0Structures'))
         self.run.write('       keepstruct_0=&structures_0;\n')
         self.run.write('{* number of structures for refinement *}\n')
-        self.run.write('{===>} structures_1=%i;\n' % self.latestRun.get('numIt1Structures')) 
+        self.run.write('{===>} structures_1=%i;\n' % self.latestRun.get('numIt1Structures'))
         self.run.write('       keepstruct_1=&structures_1;\n')
         self.run.write('       keepstruct_2=&structures_1;\n')
         self.run.write('{* number of structures to be analysed*}\n')
-        self.run.write('{===>} anastruc_1=%i;\n' % self.latestRun.get('numAnalysisStructures')) 
+        self.run.write('{===>} anastruc_1=%i;\n' % self.latestRun.get('numAnalysisStructures'))
         self.run.write('       anastruc_0=&anastruc_1;\n')
         self.run.write('       anastruc_2=&anastruc_1;\n')
 
@@ -872,10 +874,10 @@ class exportClassic:
 
         self.run.write('\n{* Sample 180 degrees rotated solutions during semi-flexible SA?*}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} rotate180_1=%s;\n' % str(self.latestRun.get('rotate180It1')).lower())    
-    
+        self.run.write('{===>} rotate180_1=%s;\n' % str(self.latestRun.get('rotate180It1')).lower())
+
     def __setDockingProtocol(self):
-        
+
         self.run.write('\n{=========================== DOCKING protocol =============================}\n')
         self.run.write('\n{* Randomize starting orientations? *}\n')
         self.run.write('{+ choice: true false +}\n')
@@ -894,7 +896,7 @@ class exportClassic:
 
         self.run.write('\n{* initial seed for random number generator *}\n')
         self.run.write('{* change to get different initial velocities *}\n')
-        self.run.write('{===>} iniseed=%i;\n' % self.latestRun.get('randomSeed')) 
+        self.run.write('{===>} iniseed=%i;\n' % self.latestRun.get('randomSeed'))
 
         dockingProtocolStore = self.latestRun.findFirstHaddockEnergyTerm(code='dockingProtocolStore')
         self.dockingProtocolDict = {}
@@ -902,68 +904,68 @@ class exportClassic:
             self.dockingProtocolDict[term.code] = term.value
 
         self.run.write('\n{* temperature for rigid body high temperature TAD *}\n')
-        self.run.write('{===>} tadhigh_t=%i;\n' % int(self.dockingProtocolDict['tadhigh_t'])) 
+        self.run.write('{===>} tadhigh_t=%i;\n' % int(self.dockingProtocolDict['tadhigh_t']))
 
         self.run.write('\n{* initial temperature for rigid body first TAD cooling step *}\n')
-        self.run.write('{===>} tadinit1_t=%i;\n' % int(self.dockingProtocolDict['tadinit1_t'])) 
+        self.run.write('{===>} tadinit1_t=%i;\n' % int(self.dockingProtocolDict['tadinit1_t']))
 
         self.run.write('\n{* final temperature after first cooling step *}\n')
-        self.run.write('{===>} tadfinal1_t=%i;\n' % int(self.dockingProtocolDict['tadfinal1_t'])) 
+        self.run.write('{===>} tadfinal1_t=%i;\n' % int(self.dockingProtocolDict['tadfinal1_t']))
 
         self.run.write('\n{* initial temperature for second TAD cooling step with flexible side-chain at the inferface *}\n')
-        self.run.write('{===>} tadinit2_t=%i;\n' % int(self.dockingProtocolDict['tadinit2_t'])) 
+        self.run.write('{===>} tadinit2_t=%i;\n' % int(self.dockingProtocolDict['tadinit2_t']))
 
         self.run.write('\n{* finale temperature after second cooling step *}\n')
-        self.run.write('{===>} tadfinal2_t=%i;\n' % int(self.dockingProtocolDict['tadfinal2_t'])) 
+        self.run.write('{===>} tadfinal2_t=%i;\n' % int(self.dockingProtocolDict['tadfinal2_t']))
 
         self.run.write('\n{* initial temperature for third TAD cooling step with fully flexible interface *}\n')
-        self.run.write('{===>} tadinit3_t=%i;\n' % int(self.dockingProtocolDict['tadinit3_t'])) 
+        self.run.write('{===>} tadinit3_t=%i;\n' % int(self.dockingProtocolDict['tadinit3_t']))
 
         self.run.write('\n{* finale temperature after third cooling step *}\n')
-        self.run.write('{===>} tadfinal3_t=%i;\n' % int(self.dockingProtocolDict['tadfinal3_t'])) 
+        self.run.write('{===>} tadfinal3_t=%i;\n' % int(self.dockingProtocolDict['tadfinal3_t']))
 
         self.run.write('\n{* time step *}\n')
-        self.run.write('{===>} timestep=%1.3f;\n' % self.dockingProtocolDict['timestep']) 
-        
+        self.run.write('{===>} timestep=%1.3f;\n' % self.dockingProtocolDict['timestep'])
+
         self.run.write('\n{* factor for timestep in TAD *}\n')
-        self.run.write('{===>} tadfactor=%i;\n' % int(self.dockingProtocolDict['tadfactor'])) 
+        self.run.write('{===>} tadfactor=%i;\n' % int(self.dockingProtocolDict['tadfactor']))
 
         self.run.write('\n{* number of MD steps for rigid body high temperature TAD *}\n')
-        self.run.write('{===>} initiosteps=%i;\n' % int(self.dockingProtocolDict['initiosteps'])) 
+        self.run.write('{===>} initiosteps=%i;\n' % int(self.dockingProtocolDict['initiosteps']))
 
         self.run.write('\n{* number of MD steps during first rigid body cooling stage *}\n')
-        self.run.write('{===>} cool1_steps=%i;\n' % int(self.dockingProtocolDict['cool1_steps'])) 
+        self.run.write('{===>} cool1_steps=%i;\n' % int(self.dockingProtocolDict['cool1_steps']))
 
         self.run.write('\n{* number of MD steps during second cooling stage with flexible side-chains at interface *}\n')
-        self.run.write('{===>} cool2_steps=%i;\n' % int(self.dockingProtocolDict['cool2_steps'])) 
+        self.run.write('{===>} cool2_steps=%i;\n' % int(self.dockingProtocolDict['cool2_steps']))
 
         self.run.write('\n{* number of MD steps during third cooling stage with fully flexible interface *}\n')
         self.run.write('{===>} cool3_steps=%i;\n' % int(self.dockingProtocolDict['cool3_steps']))
-    
+
     def __setSolvatedDocking(self):
-        
+
         self.run.write('\n{======================= Solvated rigid body docking=======================}\n')
         self.run.write('\n{* perform solvated docking ? *}\n')
         self.run.write('{+ choice: true false +}\n')
         self.run.write('{===>} waterdock=%s;\n' % str(self.latestRun.get('doWaterDock')).lower())
-        
+
         self.run.write('\n{* which method to use for solvating? *}\n')
         self.run.write('{* db: database-based (recommended), restraints: for restrained solvating to amino-acid most often forming\n')
         self.run.write('water mediated contacts and blank (""): for uniform waterlayer *}\n')
         self.run.write('{+ choice: "db" "restraints" "" +}\n')
-        
+
         if self.latestRun.get('useDbSolvateMethod') == True:
             self.run.write('{===>} solvate_method="db";\n')
         else:
-            self.run.write('{===>} solvate_method="";\n')    
+            self.run.write('{===>} solvate_method="";\n')
 
         self.run.write('\n{* initial cutoff for restraints solvating method *}\n')
-        self.run.write('{* all waters further away from a highly occuring water solvated residue will be removed in the generation\n') 
+        self.run.write('{* all waters further away from a highly occuring water solvated residue will be removed in the generation\n')
         self.run.write('of the initial solvation shell *}\n')
         self.run.write('{===>} water_restraint_initial=%1.1f;\n' % self.latestRun.get('waterInitRestCutoff'))
 
         self.run.write('\n{* cutoff for restraints solvating method *}\n')
-        self.run.write('{* upper distance limit for defining distance restraints between water and amino-acids often found to be\n') 
+        self.run.write('{* upper distance limit for defining distance restraints between water and amino-acids often found to be\n')
         self.run.write('involved in water-mediated contacts *}\n')
         self.run.write('{===>} water_restraint_cutoff=%1.1f;\n' % self.latestRun.get('waterRestCutoff'))
 
@@ -992,25 +994,25 @@ class exportClassic:
 
         self.run.write('\n{* number of different initial solvation shells to generate *}\n')
         self.run.write('{===>} waterensemble=%i;\n' % self.latestRun.get('numInitWaterShells'))
-        
+
     def __setWaterRefinement(self):
-        
+
         self.run.write('\n{==================== final explicit solvent refinement  ==================}\n')
         self.run.write('\n{* Do you want to refine your docking models in explicit solvent? *}\n')
         self.run.write('{+ choice: "yes" "no" +}\n')
-    
+
         if self.latestRun.get('numWrefStructures') > 0:
             self.run.write('{===>} firstwater="yes";\n')
         else:
-            self.run.write('{===>} firstwater="no";\n')    
+            self.run.write('{===>} firstwater="no";\n')
 
         self.run.write('\n{* Which solvent do you want to use? *}\n')
         self.run.write('{+ choice: "water" "dmso" +}\n')
-        self.run.write('{===>} solvent="%s";\n' % self.latestRun.get('solvent')) 
+        self.run.write('{===>} solvent="%s";\n' % self.latestRun.get('solvent'))
 
         self.run.write('\n{* number of structures for the explicit solvent refinement *}\n')
         self.run.write('{* the n best structures will be refined                    *}\n')
-        self.run.write('{===>} waterrefine=%i;\n' % self.latestRun.get('numWrefStructures')) 
+        self.run.write('{===>} waterrefine=%i;\n' % self.latestRun.get('numWrefStructures'))
         self.run.write('       structures_2=&waterrefine;\n')
 
         self.run.write('\n{* number of steps for heating phase (100, 200, 300K)?      *}\n')
@@ -1024,27 +1026,27 @@ class exportClassic:
 
         self.run.write('\n{* write additional PDB files including solvent ?           *}\n')
         self.run.write('{+ choice: true false +}\n')
-        
-        if self.latestRun.get('doWaterDock') == True: 
+
+        if self.latestRun.get('doWaterDock') == True:
             self.run.write('{===>} keepwater=true;\n')
         else:
-            self.run.write('{===>} keepwater=false;\n')     
+            self.run.write('{===>} keepwater=false;\n')
 
         self.run.write('\n{ calculate explicit desolvation energy (note this will double the cpu requirements) }\n')
         self.run.write('{ choice: true false }\n')
-        self.run.write('{===>} calcdesolv=%s;\n' % str(self.latestRun.get('calcDesolvation')).lower())    
-    
+        self.run.write('{===>} calcdesolv=%s;\n' % str(self.latestRun.get('calcDesolvation')).lower())
+
     def __setScoringProtocol(self):
-        
+
         """Write the scoring weights for the different docking stages"""
-        
+
         self.run.write('\n{================================ Scoring =================================}\n')
         self.run.write('\n{* Settings for the scoring of the docking solutions *}\n')
 
         self.run.write('\n{* Define the weights for the various terms for the sorting of structures (scoring) *}\n')
         self.run.write('{+ table: rows=11 "Evdw" "Eelec" "Edist" "Esani" "Edani" "Evean" "Ecdih" "Esym" "BSA" "dEint" "Edesolv"\n')
         self.run.write('         cols=3 "Rigid body EM" "semi-flexible SA" "Water refinement" +}\n')
-        
+
         scoringWeights = [(sw.term, sw.stage, sw.value) for sw in self.latestRun.scoringWeights]
         scoringWeights.sort()
         scoreTerm = ''
@@ -1058,7 +1060,7 @@ class exportClassic:
                 self.run.write("\n")
                 self.run.write("{===>} w_%s_%i=%1.1f;\n" % (term,stage,scoreWeight))
                 scoreTerm = term
-                
+
         self.run.write('\n{ Perform smoothed-scoring selection for rigid-body docking solutions ? }\n')
         self.run.write('{ choice: true false }\n')
         self.run.write('{ currently not used }\n')
@@ -1067,9 +1069,9 @@ class exportClassic:
         self.run.write('\n{* It is possible to skip structures in the selection of structure in it0 *}\n')
         self.run.write('{* Give for this the number of structures to skip: *}\n')
         self.run.write('{===>} skip_struc=%i;\n' % self.latestRun.get('skipStructures'))
-    
+
     def __setAnalysisProtocol(self):
-        
+
         self.run.write('\n{======================= analysis and clustering ==========================}\n')
         self.run.write('\n{* Cutoff distance (proton-acceptor) to define an hydrogen bond? *}\n')
         self.run.write('{===>} dist_hb=%1.1f;\n' % self.latestRun.get('analysisDistHBond'))
@@ -1082,7 +1084,7 @@ class exportClassic:
 
         self.run.write('\n{* Minimum cluster size? *}\n')
         self.run.write('{===>} clust_size=%i;\n' % self.latestRun.get('analysisClustSize'))
-        
+
         self.run.write('\n{========================= Structure quality analysis =====================}\n')
         self.run.write('\n{* specify location of the executables, e.g.  procheck.scr script. Make sure that your PRODIR and PROSA_BASE system variables are set correctly. Leave fields empty if you do not want to perform these checks *}\n')
 
@@ -1100,22 +1102,22 @@ class exportClassic:
         self.run.write('\n{======================= final clean-up ===================================}\n')
         self.run.write('\n{* Clean up the run directory after completion (only files for struct #1 are kept) ? *}\n')
         self.run.write('{+ choice: true false +}\n')
-        self.run.write('{===>} cleanup=true;\n')    
-    
+        self.run.write('{===>} cleanup=true;\n')
+
     def __setClusterParams(self):
-        
+
         self.run.write('\n{============================ parallel jobs ===============================}\n')
         self.run.write('\n{* How many nodes do you want to use in parallel? *}\n')
         self.run.write('{* leave unused fields blank, make sure that the queues are actually running *}\n')
         self.run.write('{+ table: rows=10 "1" "2" "3" "4" "5" "6" "7" "8" "9" "10"\n')
         self.run.write(' cols=3 "queue command" "cns executable" "number of jobs" +}\n')
 
-        self.run.write('\n{===>} queue_1="%s";\n' % self.latestRun.queueCommand) 
+        self.run.write('\n{===>} queue_1="%s";\n' % self.latestRun.queueCommand)
         self.run.write('{===>} cns_exe_1="%s";\n' % self.latestRun.cnsExecutable)
-        self.run.write('{===>} cpunumber_1=%i;\n' % self.latestRun.cpuNumber) 
-        
+        self.run.write('{===>} cpunumber_1=%i;\n' % self.latestRun.cpuNumber)
+
     def __runCnsHeader(self):
-        
+
         return"""!$Revision: 1.4 $
 !$Date: 2010-12-02 10:17:31 $
 !$RCSfile: HaddockExportClassic.py,v $
@@ -1169,10 +1171,10 @@ Information-driven Protein-DNA Docking using HADDOCK: it is a matter of flexibil
    - do not remove any evaluate statements from the file
    - pathnames should not exceed 80 characters -}
 {- begin block parameter definition -} define(
-"""        
+"""
 
     def __runCnsFooter(self):
-        
+
         return """
 {===========================================================================}
 {        things below this line do not normally need to be changed          }

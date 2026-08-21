@@ -58,8 +58,8 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
-import tkinter as Tkinter
 import math
+import tkinter as Tkinter
 
 from memops.gui.Color import scaleColor
 from memops.gui.MessageReporter import showWarning

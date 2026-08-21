@@ -9,10 +9,6 @@ Copyright (c) 2008 University of Cambridge. All rights reserved.
 
 
 import tkinter as Tkinter
-from .PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
-from .PeakSeparatorParams import PeakSeparatorParams
-from .PeakSeparatorPeakList import getPeakListParams
-from .PeakSeparatorRegion import getRegionParams
 
 from ccpnmr.analysis.core.UnitConverter import hz2pnt, pnt2hz
 from ccpnmr.analysis.core.WindowBasic import getSpectrumViews
@@ -27,6 +23,11 @@ from memops.gui.PulldownList import PulldownList
 from memops.gui.RadioButtons import RadioButtons
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.gui.TabbedFrame import TabbedFrame
+
+from .PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
+from .PeakSeparatorParams import PeakSeparatorParams
+from .PeakSeparatorPeakList import getPeakListParams
+from .PeakSeparatorRegion import getRegionParams
 
 
 class PeakSeparatorGui(BasePopup):

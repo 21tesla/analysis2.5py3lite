@@ -4,11 +4,9 @@ python $CINGROOT/python/cing/PluginCode/test/test_cyana.py
 """
 
 
-import unittest
 import os
-from unittest import TestCase
-
-from unittest import SkipTest
+import unittest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project

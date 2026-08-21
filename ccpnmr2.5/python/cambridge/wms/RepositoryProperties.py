@@ -2,6 +2,7 @@
 # added jmci; do we need this??
 
 import tkinter as Tkinter
+
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.Frame import Frame

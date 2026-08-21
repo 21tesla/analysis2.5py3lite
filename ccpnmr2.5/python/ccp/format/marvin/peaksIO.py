@@ -140,8 +140,9 @@ Code by Gary Thompson
 """
 
 import sys
-
-from collections.abc import Mapping as DictMixin  # py2 collections.UserDict.DictMixin removed in py3; Mapping provides the same read-only surface
+from collections.abc import (
+    Mapping as DictMixin,  # py2 collections.UserDict.DictMixin removed in py3; Mapping provides the same read-only surface
+)
 
 
 class Record(DictMixin):

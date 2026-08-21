@@ -39,11 +39,11 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
+
 from .HydrogenDynamics import *
 from .NoeRelaxation import optimiseRelaxation
 from .ResonanceIdentification import getCloudsResonanceList
-
-from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
 
 
 def midge(argServer=None):

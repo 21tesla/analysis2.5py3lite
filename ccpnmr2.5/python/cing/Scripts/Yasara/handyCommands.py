@@ -4,10 +4,10 @@ Created on Mar 30, 2010
 @author: jd
 '''
 
+import os
 from glob import glob
 
 import yasara  #@UnusedImport @UnresolvedImport
-import os
 from yasaramodule import *  #@UnusedWildImport
 
 from cing import cingDirTmp

@@ -3,13 +3,12 @@ Original from Wim Vranken.
 Used for eNMR/weNMR workshop data sets.
 """
 
-import tkinter as Tkinter
 import shutil
+import tkinter as Tkinter
 from glob import glob
 
-from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
-
 import cing
+from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
 from cing import issueListUrl
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

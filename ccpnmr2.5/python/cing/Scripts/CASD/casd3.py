@@ -10,8 +10,8 @@ import numpy as np
 import cing
 from cing import cingVersion
 from cing.Libs.AwkLike import AwkLikeS
-from cing.Libs.NTutils import NTpath
 from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.Libs.NTutils import NTpath
 
 #cing.verbosity = 9
 

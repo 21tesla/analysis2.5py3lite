@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
+
 from memops.gui.Scrollbar import Scrollbar
 from memops.universal.Region1D import Region1D
 from memops.universal.Util import formatDecimals

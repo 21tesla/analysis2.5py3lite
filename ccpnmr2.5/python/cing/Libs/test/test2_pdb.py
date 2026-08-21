@@ -5,12 +5,10 @@ python $CINGROOT/python/cing/Libs/test/test2_pdb.py
 Because of the name of this file it will not be executed when doing:
 cing --test
 """
+import os
 import profile
-import os
 import pstats
-import os
 import unittest
-import os
 from unittest import TestCase
 
 from cing import cingDirTestsData, cingDirTmp

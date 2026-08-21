@@ -82,7 +82,9 @@ Citing:          If you are using this software for academic purposes, we
 """
 
 import os
+
 from utrecht.haddock.HaddockBasic import getAirSegments, getFlexibleResidues, getPdbString, makeBackup
+
 from .HaddockLocal import daniProtocolStore, rdcProtocolStore
 
 

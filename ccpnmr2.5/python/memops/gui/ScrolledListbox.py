@@ -51,9 +51,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkinter.simpledialog
 import tkinter as Tkinter
-
+import tkinter.simpledialog
 
 from memops.gui.ButtonList import ButtonList
 from memops.gui.Frame import Frame

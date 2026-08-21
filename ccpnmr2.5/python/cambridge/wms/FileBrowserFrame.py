@@ -1,6 +1,6 @@
 
-import tkinter as Tkinter
 import mimetypes
+import tkinter as Tkinter
 from os import R_OK, access, listdir, path
 
 from ccpnmr.analysis.popups.BasePopup import BasePopup

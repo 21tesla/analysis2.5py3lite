@@ -5,12 +5,13 @@ try:
 except Exception:
     pass
 
-import cing
-from cing.Libs.NTutils import *  #@UnusedWildImport
-from cing.NRG.nrgCingRdb import bin_by
 import numpy as np  # old pylab-style pyplot star-imports no longer leak numpy names
 from matplotlib.dates import date2num, num2date
 from numpy import asarray
+
+import cing
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.NRG.nrgCingRdb import bin_by
 
 cing.verbosity = 9
 yearMin = 1990 # inclusive start

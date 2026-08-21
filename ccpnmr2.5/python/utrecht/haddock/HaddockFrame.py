@@ -83,16 +83,6 @@ Citing:          If you are using this software for academic purposes, we
 
 import os
 
-from .EditSymmetryPopup import EditSymmetryPopup
-from .HaddockBasic import addDaniParam, addRdcParam, copyRun, getStructureFromFile, setPartnerChains, setRunConstraintSet
-from .HaddockDaniPopup import HaddockDaniPopup
-from .HaddockExportClassic import exportClassic
-from .HaddockExportParam import exportParam
-from .HaddockImportRunCns import runCnsImporter
-from .HaddockLocal import *
-from .HaddockRdcPopup import HaddockRdcPopup
-from .HaddockServerUpload import HaddockServerUpload
-
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
 from memops.gui.CheckButton import CheckButton
@@ -110,6 +100,23 @@ from memops.gui.MultiWidget import MultiWidget
 from memops.gui.PulldownMenu import PulldownMenu
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.gui.TabbedFrame import TabbedFrame
+
+from .EditSymmetryPopup import EditSymmetryPopup
+from .HaddockBasic import (
+    addDaniParam,
+    addRdcParam,
+    copyRun,
+    getStructureFromFile,
+    setPartnerChains,
+    setRunConstraintSet,
+)
+from .HaddockDaniPopup import HaddockDaniPopup
+from .HaddockExportClassic import exportClassic
+from .HaddockExportParam import exportParam
+from .HaddockImportRunCns import runCnsImporter
+from .HaddockLocal import *
+from .HaddockRdcPopup import HaddockRdcPopup
+from .HaddockServerUpload import HaddockServerUpload
 
 activeColour  = '#B080F0'
 passiveColour = '#A0E0A0'

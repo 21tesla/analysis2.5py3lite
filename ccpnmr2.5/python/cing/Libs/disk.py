@@ -716,7 +716,7 @@ def mkdirs(dst):
     if dst == '' or os.path.exists(dst):
         return
     head, _tail = os.path.split(dst)
-    if os.sep == ':' and not ':' in head:
+    if os.sep == ':' and ':' not in head:
         head = head + ':'
     mkdirs(head)
 

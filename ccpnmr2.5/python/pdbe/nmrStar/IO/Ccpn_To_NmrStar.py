@@ -1,13 +1,12 @@
 import re
 
+from ccp.general.Util import findAllSysNamesByChemAtomOrSet, findChemCompSysName, findChemCompVarSysName
+
 #from ccp.api.molecule import ChemComp
 #from ccp.api.molecule import Molecule
-
 from memops.api import Implementation
-
-from ccp.general.Util import findChemCompSysName, findChemCompVarSysName, findAllSysNamesByChemAtomOrSet
-from pdbe.nmrStar.IO.Util import getCcpn2NmrStarConstants
 from pdbe.nmrStar.IO.Constants import unknownMapping
+from pdbe.nmrStar.IO.Util import getCcpn2NmrStarConstants
 
 #
 # HERE: ONLY depend on things that are linked to (a) NmrEntry.Entry in the data model!!
@@ -74,7 +73,7 @@ class ChemShiftRefList:
 class MeasurementByIndividualAtom:
 
   def __init__(self,measurement,resonance,resonanceToAtom):
-  
+
     #self.serial = serial
     self.measurement = measurement
     self.resonance = resonance
@@ -208,25 +207,25 @@ class Ccpn_To_NmrStar:
   that defines the foreign key). See the 'ignoreForeignKeys' variable in this script for a current list.
 
   """
-  
+
   #
   # List of links from the NMR entry that are used - is in principle CCPN version specific
   #
 
   nmrEntryLinkList = ['molSystem','structureGenerations','study','authors',
                       'contactPersons','entryMolecules','experiments']
-  
+
   value = None # Dummy to use in lambda functions
-    
+
   ignoreForeignLinks = ['Chem_comp.ID', 'Citation.ID', 'Assembly.ID', 'Entity_assembly.Entity_assembly_name',
                         'Entity_chimera_segment.ID']
 
   ignorePrimaryKeys = ['Citation_author.Ordinal', 'Entity_poly_seq.Hetero']
-  
+
   # This allows to search for application data with a different saveframe name! Will be mapped...
   # Note that table names also have to be specifically mapped!
   mapAppDataSaveFrames = {'general_distance_constraints':
-  
+
                               ('distance_constraints',
                                {'Distance_constraint_expt':     'Gen_dist_constraint_expt',
                                 'Distance_constraint_software': 'Gen_dist_constraint_software',
@@ -237,33 +236,33 @@ class Ccpn_To_NmrStar:
                                 'Dist_constraint_conv_err':     'Gen_dist_constraint_conv_err'
                                } )
                          }
-  
+
   # Dictionary to track chemAtomSysNames for export (to make sure they are PDB_REMED)
   chemAtomSysNames = {}
-  
+
   customSerials = {}
 
   def __init__(self,exportClass, ccpnVersion = '1.1.a2', nmrStarVersion = '3.1'):
-    
+
     # TODO here have to check if the CCPN and NMR-STAR versions match for the particular Ccpn2Star class!
     self.ccpnVersion = ccpnVersion
     self.nmrStarVersion = nmrStarVersion
     self.exportClass = exportClass
-    
+
     self.constants_ByVersion = getCcpn2NmrStarConstants(self.ccpnVersion,self.nmrStarVersion)
 
     self.patt = {}
-    self.patt['concValue'] = re.compile("^[^0-9\.]*([0-9\.]+)\s*[A-Za-z]+")
-    self.patt['concUnit']  = re.compile("^[^0-9\.]*[0-9\.]+\s*([A-Za-z]+)")
+    self.patt['concValue'] = re.compile(r"^[^0-9\.]*([0-9\.]+)\s*[A-Za-z]+")
+    self.patt['concUnit']  = re.compile(r"^[^0-9\.]*[0-9\.]+\s*([A-Za-z]+)")
 
     self.patt['confSub']  = re.compile("nmrConformerSubmitted:\'([^\']+)\'")
     self.patt['confCalc'] = re.compile("nmrConformerCalculated:\'([^\']+)\'")
     self.patt['confBest'] = re.compile("nmrStructureRepresent:\'([^\']+)\'")
     self.patt['confSel']  = re.compile("nmrModelSelection:\'([^\']+)\'")
 
-    self.patt['pdbId'] = re.compile("^[A-Za-z\d]{4}$")
+    self.patt['pdbId'] = re.compile(r"^[A-Za-z\d]{4}$")
 
-    self.patt['chemFormulaSpace'] = re.compile("(\d)([A-Z])")
+    self.patt['chemFormulaSpace'] = re.compile(r"(\d)([A-Z])")
     self.patt['chemFormulaOne']   = re.compile("([A-Za-z])1( |$)")
 
     # This is necessary to track custom created objects, to make sure they are not re-created in the
@@ -274,7 +273,7 @@ class Ccpn_To_NmrStar:
     self.dataCounts = {}
 
     self.setSfDict()
-    
+
     # Necessary for subclasses
     self.modifySfDict()
 
@@ -285,14 +284,14 @@ class Ccpn_To_NmrStar:
     return tag
 
   def setSerial(self,ccpnObject):
-  
+
     name = self.exportClass.writeStarTableDict['ccpnMap']
-  
+
     if name not in self.customSerials:
       self.customSerials[name] = 0
-      
+
     self.customSerials[name] += 1
-    
+
     return self.customSerials[name]
 
   def getStudyKeywords(self,entry):
@@ -347,7 +346,7 @@ class Ccpn_To_NmrStar:
     if className == 'JournalCitation':
       starType = 'journal'
 
-    elif className == 'BookCitation':    
+    elif className == 'BookCitation':
       starType = 'book'
 
     elif className == 'ThesisCitation':
@@ -405,7 +404,7 @@ class Ccpn_To_NmrStar:
     # TODO: better to hook this up to a class so can use self.molSystem?
     #       or nmrEntry.molSystem??!?!
 
-    molSysName = molSystem.name  
+    molSysName = molSystem.name
     if not molSysName:
       molSysName = molSystem.code
 
@@ -438,7 +437,7 @@ class Ccpn_To_NmrStar:
     return numMetalIons
 
   def getThiolState(self,chains):
-  
+
     #
     # Enumerated value!
     #
@@ -453,10 +452,10 @@ class Ccpn_To_NmrStar:
           if not residue.chemCompVar.descriptor.count('link:SG'):
             numFreeThiols += 1
           else:
-            numBoundThiols += 1            
-    
+            numBoundThiols += 1
+
     thiolState = 'not present'
-    
+
     if numFreeThiols:
       if not numBoundThiols:
         thiolState = 'all free'
@@ -549,9 +548,9 @@ class Ccpn_To_NmrStar:
   def convertBoolean(self,boolean):
 
     return self.constants_ByVersion['boolean'][boolean]
-    
+
   def getCoordinateAttr(self,coord,attrName):
-    
+
     return getattr(coord,attrName)
 
   # TODO: should go elsewhere
@@ -567,7 +566,7 @@ class Ccpn_To_NmrStar:
 
     #print 'VAL: [%s]' % value
 
-    return value  
+    return value
 
   def toString(self,value):
     return str(value)
@@ -586,14 +585,14 @@ class Ccpn_To_NmrStar:
       value = self.getTitle(value)
       value = "$" + value
 
-    return value  
+    return value
 
   def getValue(self,value):
 
     # Real chemical shifts can be 0.0 for example, so don't set as None if value is 0 in this case.
     # Otherwise - use getNonZeroValue shown below.
 
-    if type(value) != type(float() ):
+    if type(value) != type(0.0 ):
       return None
 
     value = '%.3f' % value
@@ -604,7 +603,7 @@ class Ccpn_To_NmrStar:
 
     if value == 0:
       return None
-    elif type(value) != type(float() ):
+    elif type(value) != type(0.0 ):
       return None
 
     value = '%.3f' % value
@@ -615,7 +614,7 @@ class Ccpn_To_NmrStar:
 
     if value == 0:
       return None
-    elif type(value) != type(float() ):
+    elif type(value) != type(0.0 ):
       return None
 
     value = '%.3f' % value
@@ -674,7 +673,7 @@ class Ccpn_To_NmrStar:
                              'hExchRates', 'isotropicS2s', 'jCouplings', 'noes', 'pkas',
                              'rdcs', 'shiftAnisotropies', 'shiftDifferences', 'shifts',
                              'spectralDensities', 't1Rhos', 't1s', 't2s')
-    
+
     for res in chain.sortedResidues():
       for atom in res.sortedAtoms():
         if not atom.atomSet:
@@ -779,7 +778,7 @@ class Ccpn_To_NmrStar:
     # TODO:
     # bondOrder has these choices: 'single', 'double', 'triple', 'aromatic', 'dative', 'singleplanar'
     # what are the corresponding NMR-STAR names?
-    
+
     if chemBond:
       bondOrder = chemBond.bondType
 
@@ -1154,16 +1153,16 @@ class Ccpn_To_NmrStar:
 
     # Tracks waters to 'fake' molResidues, not sure if still necessary with new handling of all waters in same (or a couple of) chain(s).
     # Modified for multiple waters in one chain - assuming that if first molecule in chain is water, so is the rest. (Wim 25/02/11)
-    
+
     molResidues = []
 
     if molecule.findFirstMolResidue().chemComp.ccpCode == 'Hoh':
-      
+
       if not hasattr(self,'residueToWaterMolRes'):
         self.residueToWaterMolRes = {}
-        
+
       refRes = molecule.findFirstChain().findFirstResidue()
-      
+
       if refRes in self.residueToWaterMolRes:
         for chain in molecule.chains:
           for residue in chain.sortedResidues():
@@ -1173,19 +1172,19 @@ class Ccpn_To_NmrStar:
         waterMolResCount = 1
         origToNewMolRes = {}
         tempMolResCCV = molecule.findFirstMolResidue().chemCompVar
-        
+
         for chain in molecule.sortedChains():
           for residue in chain.sortedResidues():
-            if not residue.molResidue in origToNewMolRes:
+            if residue.molResidue not in origToNewMolRes:
               waterMolRes = WaterMolResidue(waterMolResCount,residue.seqCode,tempMolResCCV,tempMolResCCV.chemComp.ccpCode)
-              origToNewMolRes[residue.molResidue] = waterMolRes         
+              origToNewMolRes[residue.molResidue] = waterMolRes
               waterMolResCount += 1
             else:
               waterMolRes = origToNewMolRes[residue.molResidue]
-  
+
             self.residueToWaterMolRes[residue] = waterMolRes
             molResidues.append(waterMolRes)
- 
+
     else:
       for molResidue in molecule.sortedMolResidues():
         molResidues.append(molResidue)
@@ -1219,11 +1218,11 @@ class Ccpn_To_NmrStar:
       tempMolRes = waterMolRes
 
     return tempMolRes
-  
+
   def getModelCoordinate(self,coordAtom):
 
     coordinate = coordAtom.newCoord(model = self.exportClass.ccpnVar['model'])
-    
+
     return [coordinate]
 
   def getDepartmentAndInstitution(self,person):
@@ -1248,13 +1247,13 @@ class Ccpn_To_NmrStar:
     #    currentGroup = currentPersonInGroup.group
 
     fullText = None
-    
+
     if currentGroup:
       fullText = currentGroup.name
 
       #if currentGroup.name != currentGroup.organisation.name:
       #  fullText += "\n" + currentGroup.organisation.name
-    
+
     return fullText
 
   def getStateProv(self,org):
@@ -1306,7 +1305,7 @@ class Ccpn_To_NmrStar:
     for lab in nmrEntry.sortedLaboratories():
       appData = lab.findFirstApplicationData(application='nmrStar', keyword='PinG Lab')
       if appData and appData.value:
-        continue 
+        continue
       if lab.name == lab.organisation.name:
         if lab not in laboratories:
           laboratories.append(lab)
@@ -1354,7 +1353,7 @@ class Ccpn_To_NmrStar:
       if ml in self.trackCustomObjects[ml.className]:
         continue
 
-      if not ml.className in self.dataListCounts:
+      if ml.className not in self.dataListCounts:
         self.dataListCounts[ml.className] = DataCount(measurementListDict[ml.className])
       else:
         self.dataListCounts[ml.className].incrementCount()
@@ -1370,7 +1369,7 @@ class Ccpn_To_NmrStar:
       if ddl in self.trackCustomObjects[ddl.className]:
         continue
 
-      if not ddl.className in self.dataListCounts:
+      if ddl.className not in self.dataListCounts:
         self.dataListCounts[ddl.className] = DataCount(measurementListDict[ddl.className])
       else:
         self.dataListCounts[ddl.className].incrementCount()
@@ -1388,7 +1387,7 @@ class Ccpn_To_NmrStar:
           if pl in self.trackCustomObjects[pl.className]:
             continue
 
-          if not pl.className in self.dataListCounts:
+          if pl.className not in self.dataListCounts:
             self.dataListCounts[pl.className] = DataCount('spectral_peak_list')
           else:
             self.dataListCounts[pl.className].incrementCount()
@@ -1417,9 +1416,9 @@ class Ccpn_To_NmrStar:
       'T1List':              'T1 relaxation values',
       'T1RhoList':           'T1rho relaxation values', # ???
       'T2List':              'T2 relaxation values',
-#      'DipolarRelaxList':    
-#      'ShiftAnisotropyList': 
-#      'ShiftDifferenceList': 
+#      'DipolarRelaxList':
+#      'ShiftAnisotropyList':
+#      'ShiftDifferenceList':
       }
 
     for ml in nmrEntry.sortedMeasurementLists():
@@ -1541,20 +1540,20 @@ class Ccpn_To_NmrStar:
     return relatedDbName
 
   def getNonStdChemCompVarList(self):
-  
+
     # TODO: Could in principle use previous loop to get this info as self.nonStdChemComps or something.
-  
+
     nonStdChemCompVars = []
-    
+
     for molecule in self.molecules:
       for molRes in molecule.sortedMolResidues():
         chemCompVar = molRes.chemCompVar
         if chemCompVar.chemComp.className == 'NonStdChemComp':
-          if not chemCompVar in nonStdChemCompVars:
+          if chemCompVar not in nonStdChemCompVars:
             nonStdChemCompVars.append(chemCompVar)
-            
+
     return nonStdChemCompVars
-  
+
   def getChemCompVarStarType(self,nonStdChemCompVar):
 
     starType = 'non-polymer'
@@ -1584,7 +1583,7 @@ class Ccpn_To_NmrStar:
           starType += 'NH3 amino terminus'
         elif linking == 'end':
           starType += 'COOH carboxy terminus'
-     
+
     elif nonStdChemCompVar.chemComp.molType in ('DNA','RNA'):
       starType = nonStdChemCompVar.chemComp.molType + ' '
       linking = nonStdChemCompVar.linking
@@ -1612,60 +1611,60 @@ class Ccpn_To_NmrStar:
     return starFormula
 
   def getCCVTitle(self,chemCompVar):
-  
+
     chemCompSysName = findChemCompSysName('CIF',chemCompVar.chemComp)
     if not chemCompSysName:
       chemCompSysName = findChemCompSysName('CUSTOM',chemCompVar.chemComp) # This for automatically created ChemComps
       if not chemCompSysName:
         chemCompSysName = chemCompVar.chemComp.ccpCode.upper()
-  
+
     return self.getTitle('chem_comp_' +  chemCompSysName)
     #return findChemCompSysName('CIF',chemCompVar.chemComp)
 
   def getChemCompCif(self,chemComp):
-    
+
     return findChemCompSysName('CIF',chemComp)
 
   def getChemCompVarCif(self,chemCompVar):
-    
+
     return findChemCompSysName('CIF',chemCompVar.chemComp)
-    
+
   def getPdbCoordAtomName(self,coordAtom):
-  
+
     return self.getPdbAtomName(coordAtom.atom)
 
   def getPdbAtomName(self,atom):
-  
+
     residue = atom.residue
     atomName = atom.name
-    
+
     # Track in dictionary for speed purposes
     if residue not in self.chemAtomSysNames:
       chemCompVar = residue.chemCompVar
       chemAtomSysNames = findAllSysNamesByChemAtomOrSet(chemCompVar.chemComp,chemCompVar.chemAtoms,'PDB_REMED')
 
-      self.chemAtomSysNames[residue] = (chemAtomSysNames, {})    
-    
+      self.chemAtomSysNames[residue] = (chemAtomSysNames, {})
+
     if atomName not in self.chemAtomSysNames[residue][1]:
-    
+
       sysAtomName = None
-      
+
       for casn in self.chemAtomSysNames[residue][0]:
-        
+
         if casn.atomName == atomName:
           # Atom name found, get it and break out of loop
           sysAtomName = casn.sysName
           self.chemAtomSysNames[residue][0].pop(self.chemAtomSysNames[residue][0].index(casn))
           break
-    
-      # Return CCPN/IUPAC atom name if not found  
+
+      # Return CCPN/IUPAC atom name if not found
       if not sysAtomName:
         sysAtomName = atomName
-        
+
       self.chemAtomSysNames[residue][1][atomName] = sysAtomName
-      
+
     return self.chemAtomSysNames[residue][1][atomName]
-    
+
 
   def getStarIsotopeLabelling(self,component):
 
@@ -1913,7 +1912,7 @@ class Ccpn_To_NmrStar:
       unit = '%'
 
     return unit
-    
+
   def getSamples(self,experiments):
 
     self.samples = []
@@ -1958,7 +1957,7 @@ class Ccpn_To_NmrStar:
         self.sampleCondSets.append(exp.sampleConditionSet)
 
       if exp.sample and exp.sample.ionicStrength:
-        
+
         # Make sure doesn't exist already. If not, then make sure that you track it.
         if exp.sampleConditionSet not in self.trackCustomObjects['ionicStrength']:
           ionicCond = IonicStrengthCondition(exp.sample.ionicStrength, exp.sampleConditionSet)
@@ -1976,7 +1975,7 @@ class Ccpn_To_NmrStar:
       issc = self.trackCustomObjects['ionicStrength'][scs]
       if issc not in self.sampleConds:
         self.sampleConds.append(issc)
-        
+
     if hasattr(scs, 'sampleConditions'):
       for sc in scs.sortedSsampleConditions():
         if sc not in self.sampleConds:
@@ -2308,74 +2307,74 @@ class Ccpn_To_NmrStar:
     return confBest
 
   def getAllResonanceParents(self,nmrEntry):
-  
+
     nmrProjectsAndConstraintStores = []
-    
+
     for nmrLinks in ('derivedDataLists','experiments','measurementLists'):
-      
+
       nmrLinkedObjects = getattr(nmrEntry,nmrLinks)
-      
+
       for nmrLinkedObject in nmrLinkedObjects:
         if nmrLinkedObject.parent not in nmrProjectsAndConstraintStores:
           nmrProjectsAndConstraintStores.append(nmrLinkedObject.parent)
-   
-    # TODO CAN I REALLY HANDLE THESE? Also currently ResonanceID is a direct link to the loop, without the _list ID, so can't have multiple ones! 
+
+    # TODO CAN I REALLY HANDLE THESE? Also currently ResonanceID is a direct link to the loop, without the _list ID, so can't have multiple ones!
     #for strucGen in nmrEntry.structureGenerations:
-    # 
+    #
     #   nmrProjectsAndConstraintStores.append(strucGen.nmrConstraintStore)
-        
+
     return nmrProjectsAndConstraintStores
-  
+
   def getResonances(self,resonanceParent):
-  
+
     if resonanceParent.className == 'NmrProject':
       resonances = resonanceParent.sortedResonances()
     else:
       resonances = resonanceParent.sortedFixedResonances()
-      
+
     self.currentResonances = resonances
 
     return resonances
-  
+
   def getOrderedResonances(self,constraintItem):
-    
+
     resonances = list(constraintItem.orderedResonances)
     if not resonances:
       resonances = constraintItem.sortedResonances()
     return resonances
-    
+
   def getResonanceSets(self):
 
     resonanceSets = []
     for resonance in self.currentResonances:
       resSet = resonance.resonanceSet
-      if not resSet in resonanceSets:
+      if resSet not in resonanceSets:
         resonanceSets.append(resSet)
-     
+
     return resonanceSets
-    
+
   def getResonanceGroups(self):
-    
+
     resonanceGroups = []
     for resonance in self.currentResonances:
       resGroup = resonance.resonanceGroup
-      if not resGroup in resonanceGroups:
+      if resGroup not in resonanceGroups:
         resonanceGroups.append(resGroup)
-     
+
     return resonanceGroups
-    
+
   def getResonanceGroupCompID(self,resonanceGroup):
-    
+
     comp_ID = None
 
     if not resonanceGroup:
       return
-    
+
     if resonanceGroup.residue:
       comp_ID = findChemCompSysName('CIF',resonanceGroup.residue.chemCompVar.chemComp)
     elif resonanceGroup.chemComp:
       comp_ID = findChemCompSysName('CIF',resonanceGroup.chemComp)
-    
+
     return comp_ID
 
   def getPeakListTitle(self,peakList):
@@ -2660,7 +2659,7 @@ class Ccpn_To_NmrStar:
 
   def getChemShiftRefValue(self,value):
 
-    if value == float(-999999999.0):
+    if value == -999999999.0:
       value = None
 
     return value
@@ -2776,7 +2775,7 @@ class Ccpn_To_NmrStar:
     return title
 
   def getDataDimsFromDataSource(self,dataSource):
-    
+
     dataDims = []
     for dataDim in dataSource.sortedDataDims():
       if dataDim.className == 'FreqDataDim':
@@ -2842,21 +2841,21 @@ class Ccpn_To_NmrStar:
 
     shiftList = self.exportClass.ccpnVar['shiftList']
     nmrStarFormat = self.exportClass.ccpnVar['nmrStarFormatIndividual']
-    
+
     chemShiftValue = shiftByIndividualAtom.measurement.value
 
     ambCode = nmrStarFormat.getShiftAmbiguityCode(chemShiftValue,shiftByIndividualAtom.resonanceToAtom,shiftList)
-            
+
     return ambCode
 
   def getMeasurementsByIndividualAtom(self,measurements):
-  
+
     if not hasattr(self,'measurementsByIndividualAtoms'):
       self.measurementsByIndividualAtoms = []
-    
+
     measurementsByIndividualAtoms = []
     for measurement in measurements:
-      
+
       # TODO this could be more than one?
       resonance = measurement.resonance
 
@@ -2864,7 +2863,7 @@ class Ccpn_To_NmrStar:
         continue
 
       # Need to distinguish because in first loop nmrStarFormat is not yet available
-      for resonanceToAtom in self.exportClass.ccpnVar['nmrStarFormatIndividual'].resonanceToAtoms[resonance]:      
+      for resonanceToAtom in self.exportClass.ccpnVar['nmrStarFormatIndividual'].resonanceToAtoms[resonance]:
         # See if exists already...
         foundMbia = False
         for mbia in self.measurementsByIndividualAtoms:
@@ -2872,26 +2871,26 @@ class Ccpn_To_NmrStar:
             measurementsByIndividualAtoms.append(mbia)
             foundMbia = True
             break
-       
+
         if not foundMbia:
           measurementsByIndividualAtoms.append(MeasurementByIndividualAtom(measurement,resonance,resonanceToAtom) )
 
     #measurementsByIndividualAtoms.sort(lambda a, b: cmp(a.resonance.serial, b.resonance.serial) )
-    
+
     # sort by assignment
     ll = []
     for xx in measurementsByIndividualAtoms:
       r2a = xx.resonanceToAtom
-      ll.append((r2a.chain.code, r2a.seqId, r2a.atomName, 
+      ll.append((r2a.chain.code, r2a.seqId, r2a.atomName,
                  r2a.resonance.serial,xx))
     measurementsByIndividualAtoms = [tt[4] for tt in ll]
-    
-    # Add to general dict - should probably be divided by measurement list to speed things up if becomes important!      
+
+    # Add to general dict - should probably be divided by measurement list to speed things up if becomes important!
 
     for mbia in measurementsByIndividualAtoms:
-      if not mbia in self.measurementsByIndividualAtoms:
+      if mbia not in self.measurementsByIndividualAtoms:
         self.measurementsByIndividualAtoms.append(mbia)
-        
+
     return measurementsByIndividualAtoms
 
   def getStarNoeValueType(self,noeValueType):
@@ -2972,7 +2971,7 @@ _Constraint_stat_list_rep
 Dihedral_angle_rmsd
 Dihedral_angle_rmsd_err
 """
-  
+
   def getStarConstraintType(self,constraintList):
 
     # Other NMR-STAR types not used here:
@@ -3036,15 +3035,15 @@ Dihedral_angle_rmsd_err
       starSubConstraintType = 'hydrogen bond'
 
     return starSubConstraintType
-  
+
   def getPdbCoordinateFileVersion(self,nmrEntry):
-    
+
     appData = nmrEntry.findFirstApplicationData(application='nmrStar',keyword='pdbCoordVers')
     if appData:
       version = appData.value
     else:
       version = None
-      
+
     return version
 
   def getStarSubSubConstraintType(self,constraintList):
@@ -3135,12 +3134,12 @@ Dihedral_angle_rmsd_err
     return constraintLists
 
   def getDistanceConstraintType(self,constraintList):
-  
+
     constraintType = 'NOE'
-    
+
     if constraintList.className == 'HBondConstraintList':
       constraintType = 'hydrogen bond'
-    
+
     else:
       for experiment in constraintList.sortedExperiments():
         if experiment.refExperiment:
@@ -3158,45 +3157,45 @@ Dihedral_angle_rmsd_err
         constraintItems.append(constraintItem)
 
     return constraintItems
-    
+
   def setConstraintTreeNodeMemberId(self,constraintItem):
-    
+
     orderedResonances = self.getOrderedResonances(constraintItem)
     index = orderedResonances.index(self.exportClass.ccpnVar['resonance'])
-    
-    return (index + 1) 
+
+    return (index + 1)
 
   def getGeneralConstraintLogic(self,constraint):
-    
+
     constraintLogic = None
-    
+
     if len(constraint.items) > 1:
       constraintLogic = 'OR'
-      
+
     return constraintLogic
 
   def getFirstAddressLine(self,address):
 
     index = 0
-    
+
     return self.getArrayEntryIndex(address,index)
 
   def getSecondAddressLine(self,address):
 
     index = 1
-    
+
     return self.getArrayEntryIndex(address,index)
 
   def getThirdAddressLine(self,address):
 
     index = 2
-    
+
     return self.getArrayEntryIndexToEnd(address,index)
 
   def getFirstPhoneNumber(self,phoneNums):
 
     index = 0
-    
+
     return self.getArrayEntryIndex(phoneNums,index)
 
   def getArrayEntryIndex(self,array,index):
@@ -3255,7 +3254,7 @@ Dihedral_angle_rmsd_err
         'Type=LOCAL': 'name'
       }
     }
- 
+
     return commonNameDict
 
   def setSysNamesLoop(self,ccpnLoop,ccpnMap):
@@ -3350,18 +3349,18 @@ Dihedral_angle_rmsd_err
     return experimentDict
 
   def setPdbDepositionSite(self,nmrEntry):
-    
+
     depSite = None
-    
+
     appData = nmrEntry.findFirstApplicationData(application='nmrStar',keyword='pdbDepSite')
-    
+
     if appData and appData.value:
       depSite = appData.value
-      
+
     return depSite
 
   def modifySfDict(self):
-  
+
     # Necessary if want to change specific mapping issue in a subclass.
     pass
 
@@ -3546,7 +3545,7 @@ Dihedral_angle_rmsd_err
 
             },
           },
-              
+
         'Entry_author': {                                                                                     # *** Includes mandatory fields
 
           'ccpnLoop':                    'nmrEntry.authors',
@@ -3912,7 +3911,7 @@ Dihedral_angle_rmsd_err
             #'Entity_assembly_ID_1':     [None,returnStarInt,'Entity_assembly.ID',True],                      # *** Optional
             #'Entity_assembly_ID_2':     [None,returnStarInt,'Entity_assembly.ID',True],                      # *** Optional
             #'Mol_interaction_type':     [None,lambda x = value: returnStarLine(x,length = 127),None,True],   # *** Optional - option
-          
+
             },
           },
 
@@ -4273,7 +4272,7 @@ Dihedral_angle_rmsd_err
           },
 
         #'Entry_ID':                     [None,returnStarString,'Entry.ID',True],
-        
+
         'Entity_systematic_name':        self.setSysNamesLoop('molecule.moleculeSysNames','moleculeSysName'), # *** Table
 
         #'Entry_ID':                     [None,returnStarString,'Entry.ID',True],
@@ -4349,7 +4348,7 @@ Dihedral_angle_rmsd_err
           },
 
         'Entity_poly_seq': {                                                                                  # *** Table
-    
+
           # TODO Does this only have to be set for hetero groups?
           #'category':                   'sequence',
 
@@ -4364,19 +4363,19 @@ Dihedral_angle_rmsd_err
             'Mon_ID':                   ('molResidue.chemCompVar.chemComp',self.getChemCompCif), # WARNING: THIS an ID but not an integer...
             'Num':                       'molResidue.serial',
             'Comp_index_ID':             'molResidue', # This is link to Entity_comp_index.ID
-    
+
             },
           },
 
         'Entity_comp_index_alt': {                                                                            # *** Includes optional fields - not for non-polymer
-    
+
           #'CONDITIONAL':               ( ('molecule',self.getMoleculeStarType),('polymer',) ),
 
           'tags': {
 
             #'Auth_seq_ID':              [None,lambda x = value: returnStarCode(x,length = 12),None,False],   # *** Optional
             #'Comp_label':               [None,lambda x = value: returnStarLabel(x,length = 127),None,True],  # *** Optional
-    
+
             },
           },
 
@@ -4426,7 +4425,7 @@ Dihedral_angle_rmsd_err
 
             },
           },
-        
+
         }
       }
 
@@ -4602,13 +4601,13 @@ Dihedral_angle_rmsd_err
 
 
     self.sfDict['chem_comp'] = {                                                                              # *** Priority 1
-    
+
       # TODO check this: shouldn't the entry or molsystem be passed in here??!
       'ccpnLoop':                        self.getNonStdChemCompVarList,
       'ccpnMap':                         'nonStdChemCompVar',
 
       'addCcpnMap':                     {'nonStdChemCompVar': [('chemComp','nonStdChemCompVar.chemComp')]},
-      
+
       'title':                          ('nonStdChemCompVar',self.getCCVTitle),
 
       'tags': {
@@ -4859,7 +4858,7 @@ Dihedral_angle_rmsd_err
           },
 
         }
-      }   
+      }
 
 
     self.sfDict['sample'] = {                                                                                 # *** Priority 1
@@ -4887,7 +4886,7 @@ Dihedral_angle_rmsd_err
         #'Storage_protocol':             [None,returnStarString,None,False],
 #        'Crystal_grow_method_cit_ID=LOCAL': None, #[None,returnStarInt,'Citation.ID',False], # Set this to None, otherwise it sets this to the wrong citation
 #        'Crystal_grow_seeding_cit_ID=LOCAL': None, #[None,returnStarInt,'Citation.ID',False], # Set this to None, otherwise it sets this to the wrong citation
-        
+
         },
 
       'tables': {
@@ -4909,7 +4908,7 @@ Dihedral_angle_rmsd_err
 #            'Assembly_ID=LOCAL':         None, #[None,returnStarInt,'Assembly.ID',False], # Set this to None, otherwise it sets this to the wrong assembly
             #'Assembly_label':           [None,lambda x = value: returnStarLabel(x,length = 127),None,False],
             'Entity_ID':                ('sampleComponent.refComponent',self.getComponentMolecule),
-            'Entity_label':             ('sampleComponent.refComponent',self.getComponentMoleculeName), 
+            'Entity_label':             ('sampleComponent.refComponent',self.getComponentMoleculeName),
             #'Entity_label':             [None,lambda x = value: returnStarLabel(x,length = 127),'Entity.Sf_framecode',False],
             #'Product_ID':               [None,returnStarInt,None,False],
             #'Type':                     [None,lambda x = value: returnStarLine(x,length = 127),None,False],
@@ -5123,7 +5122,7 @@ Dihedral_angle_rmsd_err
             'Details':                   'spectrometer.details',                                              # *** Optional
             'Field_strength':            'spectrometer.nominalFreq',                                          # *** Mandatory - option
             'Serial_number':             'spectrometer.serialNumber',
-            
+
 #            'Citation_ID=LOCAL':         None, #[None,returnStarInt,'Citation.ID',False], # Set this to None, otherwise it sets this to the wrong citation
 
             },
@@ -5308,12 +5307,12 @@ Dihedral_angle_rmsd_err
     ##############
     # Resonances #
     ##############
-    
+
     self.sfDict['resonance_linker'] = {                                                                       # *** Priority 1 - data - Not in ADIT-NMR?
-    
+
       'ccpnLoop':                       ('nmrEntry',self.getAllResonanceParents),
       'ccpnMap':                         'resonanceParent',
-      
+
       'title':                          ('resonanceParent.name',self.getTitle),
 
       'tags': {
@@ -5325,21 +5324,21 @@ Dihedral_angle_rmsd_err
       'tables': {
 
         'Resonance': {                                                                                        # *** Table
-        
+
           'ccpnLoop':                   ('resonanceParent',self.getResonances),
           'ccpnMap':                     'resonance',
 
           'tags': {
-                
+
             'Name':                      'resonance.name',
             'Resonance_set_ID':          'resonance.resonanceSet',   # *TODO*
             'Spin_system_ID':            'resonance.resonanceGroup', # Should these two lines be CCPN objects or IDs?
-                               
+
             },
-          }, 
-       
+          },
+
         'Resonance_covalent_link': {                                                                          # *** Table
-        
+
           #'ccpnLoop':                   [('resonanceParent',self.getResonances),
           #'ccpnMap':                    'resonance',
 
@@ -5347,12 +5346,12 @@ Dihedral_angle_rmsd_err
 
             #.Resonance_ID_1
             #.Resonance_ID_2
-                               
+
             },
           },
 
         'Resonance_assignment': {                                                                             # *** Table
-          
+
           # TODO: this loop might have problems re-using an existing Atom_set_ID if it was already set earlier? Or OK if specifically set in tags section?
           'ccpnLoop':                    [self.getResonanceSets,'resonanceSet.sortedAtomSets()','atomSet.sortedAtoms()'], # ccpnLoop list
           'ccpnMap':                     [('resonanceSet','Resonance_set_ID'),('atomSet','Atom_set_ID'),('atom','Atom_ID')],
@@ -5372,19 +5371,19 @@ Dihedral_angle_rmsd_err
             'Atom_ID':                  ('atom',self.getPdbAtomName),
             'Atom_isotope_number':       'resonanceSet.findFirstResonance().isotope.massNumber',
             #'Atom_set_ID':              'atomSet',
-                               
+
             },
           },
-        
+
         'Spin_system': {                                                                                      # *** Table
-        
+
           # TODO: some info from CCPN not transferred!!!
-        
+
           'ccpnLoop':                    self.getResonanceGroups,
           'ccpnMap':                     'resonanceGroup',
 
           'tags': {
-              
+
             'Entity_assembly_ID':        'resonanceGroup.residue.chain', # TODO: this could be multiple chains, in principle - how is that handled? Should this be part of PRIMARY?
             #'Entity_ID':                'resonanceGroup.residue.chain.molecule',
             'Comp_index_ID':            ('resonanceGroup.residue',self.getActualMolResidue), # Only relevant if residue set, so should be OK
@@ -5392,7 +5391,7 @@ Dihedral_angle_rmsd_err
 
             },
           },
-          
+
         'Spin_system_link': {                                                                                 # *** Table
 
           'tags': {
@@ -5661,11 +5660,11 @@ Dihedral_angle_rmsd_err
 
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='ShiftList', isSimulated=False)",
       'ccpnMap':                         'shiftList',
-      
+
       'title':                          ('shiftList',self.getMeasurementTitle),
 
       'tags': {
-      
+
         # Warning: did not put Labels in! IDs should be fine.
 
         #'Sf_category':                  ['assigned_chemical_shifts',lambda x = value: returnStarCode(x,length = 31),None,True],
@@ -5702,7 +5701,7 @@ Dihedral_angle_rmsd_err
         'Chem_shift_experiment':         self.setExperimentsLoop('shiftList.sortedExperiments()','experiment'), # *** Table
 
         #'Chem_shift_experiment': {                                                                           # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'shiftList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -5717,7 +5716,7 @@ Dihedral_angle_rmsd_err
             #'Assigned_chem_shift_list_ID': [None,returnStarInt,'Assigned_chem_shift_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Systematic_chem_shift_offset': {                                                                     # *** Includes optional fields
 
@@ -5755,12 +5754,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'Atom_chem_shift': {                                                                                  # *** Table
-        
+
           'ccpnLoop':                   ('shiftList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                      ('measurementByIndividualAtom.measurement.value', self.getValue),
@@ -5774,7 +5773,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         # TODO: is this necessary? Should be taken care of by Resonance, no?
 
@@ -5790,7 +5789,7 @@ Dihedral_angle_rmsd_err
             },
           },
 
-      
+
         }
       }
 
@@ -5803,7 +5802,7 @@ Dihedral_angle_rmsd_err
       'title':                          ('jCouplingList',self.getMeasurementTitle),
 
       'tags': {
-      
+
         #'Sf_category':                  ['coupling_constants',lambda x = value: returnStarCode(x,length = 31),None,True],
         #'Sf_framecode':                 [None,lambda x = value: returnStarCode(x,length = 127),None,False],  # *** Mandatory - set in NmrStarExport - auto
         #'Entry_ID':                     [None,lambda x = value: returnStarCode(x,length = 12),'Entry.ID',True],
@@ -5824,7 +5823,7 @@ Dihedral_angle_rmsd_err
         'Coupling_constant_experiment':  self.setExperimentsLoop('jCouplingList.sortedExperiments()','experiment'), # *** Table
 
         #'Coupling_constant_experiment': {                                                                    # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'jCouplingList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -5839,7 +5838,7 @@ Dihedral_angle_rmsd_err
             #'Coupling_constant_list_ID': [None,returnStarInt,'Coupling_constant_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Coupling_constant_software':    self.setSoftwareLoop('jCouplingList'),                               # *** Table
 
@@ -5920,14 +5919,14 @@ Dihedral_angle_rmsd_err
 
 
     self.sfDict['chem_shift_anisotropy'] = {                                                                  # *** Priority 1 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='ShiftAnisotropyList')",
       'ccpnMap':                         'shiftAnisotropyList',
-      
+
       'title':                          ('shiftAnisotropyList',self.getMeasurementTitle),
 
       'tags': {
-      
+
         #'Sf_category':                  ['chem_shift_anisotropy',lambda x = value: returnStarCode(x,length = 31),None,True],
         #'Sf_framecode':                 [None,lambda x = value: returnStarCode(x,length = 127),None,False],
         #'Entry_ID':                     [None,lambda x = value: returnStarCode(x,length = 12),'Entry.ID',True],
@@ -5949,7 +5948,7 @@ Dihedral_angle_rmsd_err
         'CS_anistropy_experiment':       self.setExperimentsLoop('shiftAnisotropyList.sortedExperiments()','experiment'), # *** Table
 
         #'CS_anistropy_experiment': {                                                                         # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'shiftAnisotropyList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -5964,7 +5963,7 @@ Dihedral_angle_rmsd_err
             #'Chem_shift_anisotropy_ID': [None,returnStarInt,'Chem_shift_anisotropy.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'CS_anisotropy_software':        self.setSoftwareLoop('shiftAnisotropyList'),                         # *** Table
 
@@ -5985,12 +5984,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'CS_anisotropy': {                                                                                    # *** Table
-        
+
           'ccpnLoop':                   ('shiftAnisotropyList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                       'measurementByIndividualAtom.measurement.value',
@@ -6008,7 +6007,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
@@ -6018,11 +6017,11 @@ Dihedral_angle_rmsd_err
 
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='ShiftList', isSimulated=True)",
       'ccpnMap':                         'shiftList',
-      
+
       'title':                          ('shiftList',self.getMeasurementTitle),
 
       'tags': {
-      
+
         # Warning: did not put Labels in! IDs should be fine.
 
         #'Sf_category':                  ['theoretical_chem_shifts',lambda x = value: returnStarCode(x,length = 31),None,True],
@@ -6043,7 +6042,7 @@ Dihedral_angle_rmsd_err
         #'Chem_shift_15N_err':           [None,returnStarFloat,None,False],
         #'Chem_shift_19F_err':           [None,returnStarFloat,None,False],
         #'Chem_shift_31P_err':           [None,returnStarFloat,None,False],
-      
+
         'Details':                       'shiftList.details',                                                 # *** Optional
 
         #'Text_data_format':             [None,lambda x = value: returnStarLine(x,length = 127),None,False],
@@ -6054,12 +6053,12 @@ Dihedral_angle_rmsd_err
       'tables': {
 
         'Theoretical_chem_shift': {                                                                           # *** Table
-        
+
           'ccpnLoop':                   ('shiftList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                       'measurementByIndividualAtom.measurement.value',
@@ -6071,8 +6070,8 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
-      
+          },
+
         }
       }
 
@@ -6127,7 +6126,7 @@ Dihedral_angle_rmsd_err
 
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='RdcList')",
       'ccpnMap':                         'rdcList',
-      
+
       'title':                          ('rdcList',self.getMeasurementTitle),
 
       'tags': {
@@ -6152,7 +6151,7 @@ Dihedral_angle_rmsd_err
         'RDC_experiment':                self.setExperimentsLoop('rdcList.sortedExperiments()','experiment'), # *** Table
 
         #'RDC_experiment': {                                                                                  # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'rdcList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6245,7 +6244,7 @@ Dihedral_angle_rmsd_err
 
 
     self.sfDict['spectral_density_values'] = {                                                                # *** Priority 3 - data
-    
+
       #'ccpnLoop':                       "nmrEntry.findAllDerivedDataLists(className='SpectralDensityList')",
       'ccpnLoop':                       ('nmrEntry', self.getAllSpectralDensityDerivations),
       'ccpnMap':                         'spectralDensityDerivation',
@@ -6274,7 +6273,7 @@ Dihedral_angle_rmsd_err
         'Spectral_density_experiment':   self.setExperimentsLoop('spectralDensityDerivation.parent.sortedExperiments()','experiment'), # *** Table
 
         #'Spectral_density_experiment': {                                                                     # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'spectralDensityDerivation.parent.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6345,7 +6344,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms':           'datum.sortedResonances()',
 
             },
-          }, 
+          },
 
         }
       }
@@ -6385,7 +6384,7 @@ Dihedral_angle_rmsd_err
         'Other_data_experiment':         self.setExperimentsLoop('dataDerivation.parent.sortedExperiments()','experiment'), # *** Table
 
         #'Other_data_experiment': {                                                                           # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'dataDerivation.parent.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6400,7 +6399,7 @@ Dihedral_angle_rmsd_err
             #'Other_data_type_list_ID':  [None,returnStarInt,'Other_data_type_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Other_data_software':           self.setSoftwareLoop('dataDerivation.parent'),                       # *** Table
 
@@ -6450,17 +6449,17 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms':           'datum.sortedResonances()',
 
             },
-          }, 
+          },
 
         }
       }
 
 
     self.sfDict['H_exch_rates'] = {                                                                           # *** Priority 2 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='HExchRateList')",
       'ccpnMap':                         'hExchRateList',
-      
+
       'title':                          ('hExchRateList',self.getMeasurementTitle),
 
       'tags': {
@@ -6485,7 +6484,7 @@ Dihedral_angle_rmsd_err
         'H_exch_rate_experiment':        self.setExperimentsLoop('hExchRateList.sortedExperiments()','experiment'), # *** Table
 
         #'H_exch_rate_experiment': {                                                                          # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'HExchRateList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6500,7 +6499,7 @@ Dihedral_angle_rmsd_err
             #'H_exch_rate_list_ID':      [None,returnStarInt,'H_exch_rate_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'H_exch_rate_software':          self.setSoftwareLoop('hExchRateList'),                               # *** Table
 
@@ -6521,12 +6520,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'H_exch_rate': {                                                                                      # *** Table
-        
+
           'ccpnLoop':                   ('hExchRateList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                       'measurementByIndividualAtom.measurement.value',
@@ -6537,17 +6536,17 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
 
 
     self.sfDict['H_exch_protection_factors'] = {                                                              # *** Priority 4 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='HExchProtectionList')",
       'ccpnMap':                         'hExchProtectionList',
-      
+
       'title':                          ('hExchProtectionList',self.getMeasurementTitle),
 
       'tags': {
@@ -6573,7 +6572,7 @@ Dihedral_angle_rmsd_err
         'H_exch_protection_fact_experiment': self.setExperimentsLoop('hExchProtectionList.sortedExperiments()','experiment'), # *** Table
 
         #'H_exch_protection_fact_experiment': {                                                               # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'hExchProtectionList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6588,7 +6587,7 @@ Dihedral_angle_rmsd_err
             #'H_exch_protection_factor_list_ID': [None,returnStarInt,'H_exch_protection_factor_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'H_exch_protect_fact_software':  self.setSoftwareLoop('hExchProtectionList'),                         # *** Table
 
@@ -6609,12 +6608,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'H_exch_protection_factor': {                                                                         # *** Table
-        
+
           'ccpnLoop':                   ('hExchProtectionList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                       'measurementByIndividualAtom.measurement.value',
@@ -6625,7 +6624,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
@@ -6776,7 +6775,7 @@ Dihedral_angle_rmsd_err
         'Heteronucl_NOE_experiment':     self.setExperimentsLoop('noeList.sortedExperiments()','experiment'), # *** Table
 
         #'Heteronucl_NOE_experiment': {                                                                       # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'noeList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6789,7 +6788,7 @@ Dihedral_angle_rmsd_err
             #'Sample_state':             [None,lambda x = value: returnStarLine(x,length = 31),None,True],
             #'Entry_ID':                 [None,lambda x = value: returnStarCode(x,length = 12),'Entry.ID',True],
             #'Heteronucl_NOE_list_ID':   [None,returnStarInt,'Heteronucl_NOE_list.ID',True],
-            
+
         #    },
         #  },
 
@@ -6864,10 +6863,10 @@ Dihedral_angle_rmsd_err
 
 
     self.sfDict['heteronucl_T1_relaxation'] = {                                                               # *** Priority 1 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='T1List')",
       'ccpnMap':                         't1List',
-      
+
       'title':                          ('t1List',self.getMeasurementTitle),
 
       'tags': {
@@ -6894,7 +6893,7 @@ Dihedral_angle_rmsd_err
         'Heteronucl_T1_experiment':      self.setExperimentsLoop('t1List.sortedExperiments()','experiment'),  # *** Table
 
         #'Heteronucl_T1_experiment': {                                                                        # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   't1List.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -6930,12 +6929,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'T1': {                                                                                               # *** Table
-        
+
           'ccpnLoop':                   ('t1List.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'Val':                       'measurementByIndividualAtom.measurement.value',
@@ -6946,17 +6945,17 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
 
 
     self.sfDict['heteronucl_T1rho_relaxation'] = {                                                            # *** Priority 1 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='T1RhoList')",
       'ccpnMap':                         't1RhoList',
-      
+
       'title':                          ('t1RhoList',self.getMeasurementTitle),
 
       'tags': {
@@ -6988,7 +6987,7 @@ Dihedral_angle_rmsd_err
         'Heteronucl_T1rho_experiment':   self.setExperimentsLoop('t1RhoList.sortedExperiments()','experiment'), # *** Table
 
         #'Heteronucl_T1rho_experiment': {                                                                     # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'T1RhoList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -7025,12 +7024,12 @@ Dihedral_angle_rmsd_err
 
 
         'T1rho': {                                                                                            # *** Table
-        
+
           'ccpnLoop':                   ('t1RhoList.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'T1rho_val':                 'measurementByIndividualAtom.measurement.value',
@@ -7043,21 +7042,21 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
 
 
     self.sfDict['heteronucl_T2_relaxation'] = {                                                               # *** Priority 1 - data
-    
+
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='T2List')",
       'ccpnMap':                         't2List',
-      
+
       'title':                          ('t2List',self.getMeasurementTitle),
 
       'tags': {
-      
+
         #'Sf_category':                  ['heteronucl_T2_relaxation',lambda x = value: returnStarCode(x,length = 31),None,True],
         #'Sf_framecode':                 [None,lambda x = value: returnStarCode(x,length = 127),None,False],  # *** Mandatory - set in NmrStarExport - auto
         #'Entry_ID':                     [None,lambda x = value: returnStarCode(x,length = 12),'Entry.ID',True],
@@ -7085,7 +7084,7 @@ Dihedral_angle_rmsd_err
         'Heteronucl_T2_experiment':      self.setExperimentsLoop('t2List.sortedExperiments()','experiment'),  # *** Table
 
         #'Heteronucl_T2_experiment': {                                                                        # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   't2List.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -7100,7 +7099,7 @@ Dihedral_angle_rmsd_err
             #'Heteronucl_T2_list_ID':    [None,returnStarInt,'Heteronucl_T2_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Heteronucl_T2_software':        self.setSoftwareLoop('t2List'),                                      # *** Table
 
@@ -7121,12 +7120,12 @@ Dihedral_angle_rmsd_err
         #  },
 
         'T2': {                                                                                               # *** Table
-        
+
           'ccpnLoop':                   ('t2List.sortedMeasurements()',self.getMeasurementsByIndividualAtom),
           'ccpnMap':                     'measurementByIndividualAtom',
 
           'tags': {
-                
+
             #'ID':                       'shiftByIndividualAtom.serial', # TODO this is a hack - can this be done better?
             'Atom_isotope_number':       'measurementByIndividualAtom.resonance.isotope.massNumber',
             'T2_val':                    'measurementByIndividualAtom.measurement.value',
@@ -7139,7 +7138,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms_individual': 'measurementByIndividualAtom'
 
             },
-          }, 
+          },
 
         }
       }
@@ -7149,7 +7148,7 @@ Dihedral_angle_rmsd_err
 
       'ccpnLoop':                        "nmrEntry.findAllMeasurementLists(className='DipolarRelaxList')",
       'ccpnMap':                         'dipolarRelaxList',
-      
+
       'title':                          ('dipolarRelaxList.name',self.getTitle),
 
       'tags': {
@@ -7175,7 +7174,7 @@ Dihedral_angle_rmsd_err
         'Dipole_dipole_experiment':      self.setExperimentsLoop('dipolarRelaxList.sortedExperiments()','experiment'), # *** Table
 
         #'Dipole_dipole_relax_experiment': {                                                                  # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'dipolarRelaxList.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -7190,7 +7189,7 @@ Dihedral_angle_rmsd_err
             #'Dipole_dipole_relax_list_ID': [None,returnStarInt,'Dipole_dipole_relax_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Dipole_dipole_relax_software':  self.setSoftwareLoop('dipolarRelaxList'),                            # *** Table
 
@@ -7526,7 +7525,7 @@ Dihedral_angle_rmsd_err
 
 
     self.sfDict['order_parameters'] = {                                                                       # *** Priority 1 - data
-    
+
       #'ccpnLoop':                       "nmrEntry.findAllDerivedDataLists(className='IsotropicS2List')",
       'ccpnLoop':                       ('nmrEntry', self.getAllIsotropicS2Derivations),
       'ccpnMap':                         'isotropicS2Derivation',
@@ -7557,7 +7556,7 @@ Dihedral_angle_rmsd_err
         'Order_parameter_experiment':    self.setExperimentsLoop('isotropicS2Derivation.parent.sortedExperiments()','experiment'), # *** Table
 
         #'Order_parameter_experiment': {                                                                      # *** Includes mandatory fields
-        
+
         #  'ccpnLoop':                   'isotropicS2Derivation.parent.sortedExperiments()',
         #  'ccpnMap':                    'experiment',
 
@@ -7572,7 +7571,7 @@ Dihedral_angle_rmsd_err
             #'Order_parameter_list_ID':  [None,returnStarInt,'Order_parameter_list.ID',True],
 
         #    },
-        #  }, 
+        #  },
 
         'Order_parameter_software':      self.setSoftwareLoop('isotropicS2Derivation.parent'),                # *** Table
 
@@ -7643,7 +7642,7 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setAtoms':           'datum.sortedResonances()',
 
             },
-          }, 
+          },
 
         }
       }
@@ -7914,7 +7913,7 @@ Dihedral_angle_rmsd_err
 
       'ccpnLoop':                        'nmrEntry.sortedStructureGenerations()',
       'ccpnMap':                         'structureGeneration',
-      
+
       'addCcpnMap':                     {'structureGeneration': [('structureEnsemble','structureGeneration.structureEnsemble')]},
 
       'title':                          ('structureGeneration.name',self.getTitle),
@@ -7950,7 +7949,7 @@ Dihedral_angle_rmsd_err
             #'Conformer_family_coord_set_ID': [None,returnStarInt,'Conformer_family_coord_set.ID',True],
 
             },
-          }, 
+          },
 
         'Conformer_family_software':     self.setSoftwareLoop('structureGeneration'),                         # *** Table
 
@@ -8024,7 +8023,7 @@ Dihedral_angle_rmsd_err
           },
 
         'Atom_site': {                                                                                        # *** Table
-        
+
           'ccpnLoop':                    ['structureEnsemble.sortedModels()','structureEnsemble.sortedCoordChains()','coordChain.sortedResidues()','coordResidue.sortedAtoms()',('coordAtom',self.getModelCoordinate)],
           'ccpnMap':                     [('model',''),('coordChain',''),('coordResidue','Label_comp_ID'),('coordAtom',''),('coordinate','ID')],
           'nmrStarKeyType':              'global', # To ensure that atom IDs increase over different 'inside' CCPN loops
@@ -8189,8 +8188,8 @@ Dihedral_angle_rmsd_err
             'CUSTOM_setApplDataNames':   'constraintItem.parent',
 
             # CCPN attributes - not in NMR-STAR?:
-            #targetValue  	Float  	0..1  	Desired value of constrained parameter  
-            #error 	Float 	0..1 	Uncertainty (estimated standard deviation) of targetValue  
+            #targetValue  	Float  	0..1  	Desired value of constrained parameter
+            #error 	Float 	0..1 	Uncertainty (estimated standard deviation) of targetValue
 
             'Angle_upper_bound_val':     'constraintItem.upperLimit',
             'Angle_lower_bound_val':     'constraintItem.lowerLimit',
@@ -8323,7 +8322,7 @@ Dihedral_angle_rmsd_err
         'Dist_constraint_tree': {                                                                             # *** Table
 
           #
-          # When multiple ID values are set within the same loop, 
+          # When multiple ID values are set within the same loop,
           # then need to define the tags specifically...
           #
 
@@ -8423,11 +8422,11 @@ Dihedral_angle_rmsd_err
       }
 
 
-    
+
     #
     # Added by Wim, 2009/09/01. Test for new distance constraint saveframe.
     #
-    
+
     self.sfDict['general_distance_constraints'] = {                                                           # *** Priority 1 - data - Not in ADIT-NMR?
 
       'ccpnLoop':                       ('structureGenerations',self.getDistanceConstraintLists),
@@ -8443,7 +8442,7 @@ Dihedral_angle_rmsd_err
         },
 
       'tables': {
-      
+
         # TODO Uncomment when inserted in dictionary!
 
         #'Gen_dist_constraint_comment': {                                                                      # *** Table
@@ -8453,7 +8452,7 @@ Dihedral_angle_rmsd_err
         #    },
         #  },
 
-        # TODO: 
+        # TODO:
 
         'Gen_dist_constraint_software':  self.setSoftwareLoop('constraintList'),                              # *** Table
 
@@ -8464,7 +8463,7 @@ Dihedral_angle_rmsd_err
         'Gen_dist_constraint': {                                                                              # *** Table
 
           #
-          # When multiple ID values are set within the same loop, 
+          # When multiple ID values are set within the same loop,
           # then need to define the tags specifically...
           #
 
@@ -8484,11 +8483,11 @@ Dihedral_angle_rmsd_err
              #_Gen_dist_constraint.Intensity_lower_val_err
              #_Gen_dist_constraint.Intensity_upper_val_err
              #_Gen_dist_constraint.Contribution_fractional_val
-    
+
             },
           },
 
- 
+
         'Gen_dist_constraint_comment_org': {                                                                  # *** Table
 
           'tags': {
@@ -8520,7 +8519,7 @@ Dihedral_angle_rmsd_err
 
             },
           },
-          
+
         # Gen_dist_constraint_parse_file NOT included!
 
         }
@@ -9273,28 +9272,28 @@ Dihedral_angle_rmsd_err
 class Ccpn_To_NmrStar_test(Ccpn_To_NmrStar):
 
   def someNewFunction(self):
-  
+
     # Can here define some new method that is necessary
     pass
-  
+
   def modifyExistingFunction(self):
-  
+
     # Can here modify (reset, in effect) an existing method
     # For example, def getSpectrometers(), in case some changes on CCPN side...
-    
+
     pass
-    
+
   def modifySfDict(self):
-    
+
     # Here can make small changes to the mapping dictionary, if required
     # Major differences would probably be handled better by defining a new setSfDict() method.
-    
+
     # For an example of minor changes, say that the CCPN class name for ShiftList changes to
     # ChemicalShiftList. The original value in the 'assigned_chemical_shifts' saveframe for
     # the 'ccpnLoop' key is:
-    
+
     #"nmrEntry.findAllMeasurementLists(className='ShiftList', isSimulated=False)",
-    
+
     # This would have to be fixed in the following way:
 
     #self.sfDict['assigned_chemical_shifts']['ccpnLoop'] = "nmrEntry.findAllMeasurementLists(className='ChemicalShiftList', isSimulated=False)",
@@ -9302,10 +9301,10 @@ class Ccpn_To_NmrStar_test(Ccpn_To_NmrStar):
     print("  Modifying mapping dictionary... ")
 
     pass
- 
+
 
 #
-# Version definitions...   
+# Version definitions...
 #
 # See Constants.py importVersionSep for replacement string for '.' in version numbers (has to be '_', though)
 #

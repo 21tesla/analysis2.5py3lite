@@ -4,14 +4,15 @@
 # added jmci; do we need this??
 
 import tkinter as Tkinter
-from .SharedBeanService_services import *
-from .WSString import *
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 from memops.gui.Tree import Tree
+
+from .SharedBeanService_services import *
+from .WSString import *
 
 # # # # #   B I G   T O - D O  P O I N T S   # # # # #
 #

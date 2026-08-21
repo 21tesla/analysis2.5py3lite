@@ -6,7 +6,6 @@ import re
 import sys
 import time
 import urllib.request
-
 from html.parser import HTMLParser as SGMLParser  # py2 sgmllib removed in py3
 
 __author__="Jan Bot"

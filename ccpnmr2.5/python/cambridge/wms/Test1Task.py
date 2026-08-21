@@ -4,6 +4,7 @@
 
 from .Task import Task
 
+
 class Test1Task(Task):
 
     def __init__(self, rep, name, status=None):

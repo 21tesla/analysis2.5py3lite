@@ -2,8 +2,8 @@
 Unit test execute as:
 python -u $CINGROOT/python/cing/Scripts/test/test_iCingRobot.py
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import (

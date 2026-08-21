@@ -4,12 +4,10 @@ python $CINGROOT/python/cing/PluginCode/test/test_xplor.py
 
 For testing execution of cing inside of Xplor-NIH python interpreter with the data living outside of it.
 """
-import unittest
 import os
+import unittest
 from shutil import copyfile, rmtree
-from unittest import TestCase
-
-from unittest import SkipTest
+from unittest import SkipTest, TestCase
 
 from cing import cingDirTestsData, cingDirTmp
 from cing.core.classes import Project

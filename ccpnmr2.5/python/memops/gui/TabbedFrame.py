@@ -52,8 +52,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import tkinter as Tkinter
-# Creates a system of embedded frames, each with a selectable toggle tab at the top
 
+# Creates a system of embedded frames, each with a selectable toggle tab at the top
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
 from memops.gui.ToolTip import ToolTip

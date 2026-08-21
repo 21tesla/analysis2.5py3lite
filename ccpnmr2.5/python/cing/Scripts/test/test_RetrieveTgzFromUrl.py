@@ -2,8 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/PluginCode/test/test_RetrieveTgzFromUrl.py
 """
-import unittest
 import os
+import unittest
 from unittest import TestCase
 
 from cing import cingDirTmp

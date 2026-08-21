@@ -2,37 +2,33 @@
 
 import os
 
+from ccp.general.Constants import chemShiftRefRatios
 from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
-from ccpnmr.analysis.popups.BasePopup import BasePopup
-from ccpnmr.analysis.core.WindowBasic import createSpectrumWindow
 from ccpnmr.analysis.core.Util import getAnalysisSpectrum
+from ccpnmr.analysis.core.WindowBasic import createSpectrumWindow
+from ccpnmr.analysis.popups.BasePopup import BasePopup
+from gothenburg.prodecomp import CcpnProdecomp, Projection
+from gothenburg.prodecomp.PeaksToInterval import ccpnPeaksToInterval
 
 #from ccpnmr.api.Analysis import ApiError
 from memops.api.Implementation import ApiError
-
-from ccp.general.Constants import chemShiftRefRatios
-
 from memops.editor.Util import createDismissHelpButtonList
-
-from memops.gui.Color import hsbToRgb, hexRepr
+from memops.gui.ButtonList import ButtonList
+from memops.gui.Color import hexRepr, hsbToRgb
+from memops.gui.Entry import Entry
+from memops.gui.FloatEntry import FloatEntry
 from memops.gui.Frame import Frame
+from memops.gui.IntEntry import IntEntry
+from memops.gui.Label import Label
+from memops.gui.LabelDivider import LabelDivider
 from memops.gui.LabelFrame import LabelFrame
-from memops.gui.TabbedFrame import TabbedFrame
+from memops.gui.MessageReporter import showInfo, showWarning
+from memops.gui.PulldownList import PulldownList
+from memops.gui.RadioButtons import RadioButtons
 from memops.gui.ScrolledGraph import ScrolledGraph
 from memops.gui.ScrolledMatrix import ScrolledMatrix
-from memops.gui.ButtonList import ButtonList
-from memops.gui.Label import Label
-from memops.gui.MessageReporter import showWarning, showInfo
-from memops.gui.Entry import Entry
-from memops.gui.IntEntry import IntEntry
-from memops.gui.FloatEntry import FloatEntry
-from memops.gui.PulldownList import PulldownList
-from memops.gui.LabelDivider import LabelDivider
-from memops.gui.RadioButtons import RadioButtons
+from memops.gui.TabbedFrame import TabbedFrame
 
-from gothenburg.prodecomp import Projection
-from gothenburg.prodecomp import CcpnProdecomp
-from gothenburg.prodecomp.PeaksToInterval import ccpnPeaksToInterval
 shapeMatrixHeadings = ['Shape Name','Nucleus', 'Sweep Width\n(ppm)',
              'Carrier Freq\nOffset (ppm)', 'Left edge\nOffset (ppm)',
              'Comment']
@@ -100,7 +96,7 @@ class ProdecompPopup(BasePopup):
 
 
 #def getPpmRange(refppm, refpt, ppmPerPoint, pointsRange):
-#  
+#
 #  return [refppm + (x - refpt)* ppmPerPoint for x in pointsRange]
 
 
@@ -324,7 +320,7 @@ class ProdecompFrame(Frame):
                             expands=True)
     buttonList.grid(row=5,column=0,sticky='ew')
 
-    
+
     #
     # Output & Results
     #
@@ -474,7 +470,7 @@ class ProdecompFrame(Frame):
 
         for dataSource in experiment.dataSources:
           dataDims = dataSource.sortedDataDims()
-          
+
           if (dataSource.dataType == 'processed' and dataSource.numDim == 2
               and len(dataDims) == 2):   #necessary with some unfinished specs
 
@@ -524,7 +520,7 @@ class ProdecompFrame(Frame):
     self.compEntry.set(interval[2])
 
   def setIntervalStart(self, *event):
-    
+
     interval = self.intervalMatrix.currentObject
     if interval is None:
       return
@@ -539,7 +535,7 @@ class ProdecompFrame(Frame):
     self.updateIntervals()
 
   def setIntervalEnd(self, *event):
-    
+
     interval = self.intervalMatrix.currentObject
     if interval is None:
       return
@@ -554,7 +550,7 @@ class ProdecompFrame(Frame):
     self.updateIntervals()
 
   def setNumComps(self, *event):
-    
+
     interval = self.intervalMatrix.currentObject
     if interval is None:
       return
@@ -615,7 +611,7 @@ class ProdecompFrame(Frame):
     self.updateIntervals()
 
   def removeInterval(self):
-    
+
     interval = self.intervalMatrix.currentObject
     if interval:
       self.decompositions.remove(interval)
@@ -703,8 +699,8 @@ class ProdecompFrame(Frame):
       if len(origsizes) == 1:
         self.numPointsOrig[1] = origsizes.pop()
 
-      if None in self.numPointsOrig: print(('WARNING, selected spectra were not the same original shape'))
-      if None in self.numPoints: print(('WARNING, selected spectra were not the same shape'))
+      if None in self.numPointsOrig: print('WARNING, selected spectra were not the same original shape')
+      if None in self.numPoints: print('WARNING, selected spectra were not the same shape')
       else:
         for tag in tags:
           # set textMatrix
@@ -1092,9 +1088,9 @@ class ProdecompFrame(Frame):
     self.update_idletasks()
     for i, windowPane in enumerate(window.sortedSpectrumWindowPanes()):
       windowPane.name = '%s_%d' % (isotopes[i], i+1)
-    
+
     # geometry
-    
+
     """width = int(self.winfo_screenwidth())/2
 
     nWin = len(windows)
@@ -1126,13 +1122,13 @@ class ProdecompFrame(Frame):
         y = i*heightK
         popup.geometry('%dx%d+%d+%d' % (width,heightK,x,y))
     """
-    
+
     width = int(self.winfo_screenwidth())/3
     height = int(self.winfo_screenheight())
     popup = analysis.getWindowPopup(window.name, doOpen=True)
     popup.geometry('%dx%d+%d+%d' % (width,height,0,0))
-    
-    
+
+
 
     # scrollbars
     """for window in windows:
@@ -1140,17 +1136,17 @@ class ProdecompFrame(Frame):
         axisPanel = window.findFirstAxisPanel(label=label)
         axisPanel.isVisible = False
     """
-    
+
     for windowPane in window.sortedSpectrumWindowPanes():
       for label in ('x', 'y'):
         axisPanel = windowPane.findFirstAxisPanel(label=label)
         axisPanel.isVisible = False
-      
-     
+
+
     for spec in self.spectra:
       if spec.isProdecompActive:
         break
-    
+
     dataDims = spec.sortedDataDims()
     numPointsDir = dataDims[0].numPoints - 1
     numPointsShape = dataDims[1].numPoints - 1
@@ -1273,17 +1269,17 @@ class ProdecompFrame(Frame):
     """ NBNB TOXIC CODE!
     Relies on numpy objects outfdir and outf
     """
-    
+
     allPaneWidth = int(self.winfo_screenwidth()*0.1)
     allPaneHeight = 20
 
     self.updateIntervals()
-    
+
     interval = self.displayIntervalPulldown.getObject()
     if not interval:
       return
-    
-    
+
+
     #for interval in self.intervalMatrix.currentObjects:
     #  if interval[3]:
     self.tabbedFrame.select(3)
@@ -1301,14 +1297,14 @@ class ProdecompFrame(Frame):
     dataDims = spec.sortedDataDims()
     numPointsDir = dataDims[0].numPoints - 1
     numPointsShape = dataDims[1].numPoints - 1
-    
+
     dataDimRef = self.dataDimRefDict[self.acqName][0]
-    ppmxfd = [dataDimRef.pointToValue(x) 
+    ppmxfd = [dataDimRef.pointToValue(x)
               for x in range(intervalA,intervalB+1)]
     #ppmxfd =  getPpmRange(sw,tfo,
     #                     range(intervalA,intervalB+1),
     #                     numPointsDir )
-    
+
     dataSets = []
     names = []
     for i in range(numComps):
@@ -1345,25 +1341,25 @@ class ProdecompFrame(Frame):
       self.graphFrame.select(index)
 
     # N: a: -41.106/Np; b = 7024.99999999873/60.810663 + 41.1064623173443/2 = 136.076
-    
-    graphParams = {'xLabels':None, 'symbolSize':1, 
+
+    graphParams = {'xLabels':None, 'symbolSize':1,
                    'xTicks':True, 'yTicks':False, 'graphType':'line',
-                   'reverseX':True, 'dataColors':None, 'lineWidths':None, 
+                   'reverseX':True, 'dataColors':None, 'lineWidths':None,
                   }
-    
+
     title = 'Direct Dimension Components'
     graph = ScrolledGraph(frames[1], dataSets=dataSets,
                           width=300, height=200, title=title,
-                          xLabel='[ppm]', zoom=1.5, showCoords=True, 
+                          xLabel='[ppm]', zoom=1.5, showCoords=True,
                           yLabel=acqName, dataNames=names, **graphParams)
-    
+
     graph.grid(row=0, column=0, sticky='nsew')
     self.graphs.append(graph)
 
     # NB New Sep 2010 - All graphs tab
     graph2 = ScrolledGraph(frames[0], dataSets=dataSets,
-                           width=allPaneWidth, height=allPaneHeight, 
-                           showCoords=False, 
+                           width=allPaneWidth, height=allPaneHeight,
+                           showCoords=False,
                            xLabel='[ppm]',  zoom=2.4,
                            xGrid=True, yGrid=False,
                            yLabel=acqName, **graphParams)
@@ -1396,21 +1392,21 @@ class ProdecompFrame(Frame):
           scale = 1.0
         dataSet = [(x, data[j]/scale) for j, x in enumerate(ppmxf)]
         #dataSet = [(x, outf[j][k][i]) for j, x in enumerate(ppmxf)]
-        
+
         dataSets.append(dataSet)
         names.append('Component %d' % (i+1) )
 
       title = 'Indirect Dimension Components for %s' % label
       graph = ScrolledGraph(frames[k+2], dataSets=dataSets,
                             width=300, height=200, title=title,
-                            xLabel='[ppm]',  zoom=1.5, showCoords=True, 
+                            xLabel='[ppm]',  zoom=1.5, showCoords=True,
                             yLabel=label, dataNames=names, **graphParams)
- 
-                          
+
+
       graph.grid(row=0, column=0,sticky='nsew')
 
       self.graphs.append(graph)
-    
+
       # NB New Sep 2010 - All graphs tab
       if isotope == '13C':
         column = 1
@@ -1424,14 +1420,14 @@ class ProdecompFrame(Frame):
         nextGrid0 += 1
         dataNames = None
       graph2 = ScrolledGraph(frames[0], dataSets=dataSets, zoom=2.4,
-                             width=allPaneWidth, height=allPaneHeight, 
-                             yLabel=label, dataNames=dataNames, 
-                             xLabel='[ppm]', showCoords=False, 
+                             width=allPaneWidth, height=allPaneHeight,
+                             yLabel=label, dataNames=dataNames,
+                             xLabel='[ppm]', showCoords=False,
                              xGrid=True, yGrid=False,
                              **graphParams)
       graph2.grid(row=row, column=column, sticky='nsew')
     frames[0].grid_rowconfigure(max(nextGrid0,nextGrid1)-1 , weight=1)
-      
+
 
   def saveXml(self):
     """ WARNING! TOXIC CODE!
@@ -1498,9 +1494,9 @@ class ProdecompFrame(Frame):
       decomposition.setAttribute("ncomponents", str(allComp))
       decomposition.setAttribute("nregions", str(len(intervals)))
       decomposition.setAttribute("nprojsets", str(len(experiments)))
-      decomposition.setAttribute("reconstructable", 
+      decomposition.setAttribute("reconstructable",
                                  (defaultReconstructable and 'true' or 'false'))
-      decomposition.setAttribute("resolved", 
+      decomposition.setAttribute("resolved",
                                  (defaultResolved and 'true' or 'false'))
       if refExperiment is not None:
         decomposition.setAttribute("refexperiment", refExperiment.name)
