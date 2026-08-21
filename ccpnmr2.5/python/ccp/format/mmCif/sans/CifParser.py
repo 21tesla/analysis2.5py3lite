@@ -303,7 +303,7 @@ class parser:
                 val = ""
             else:
                 self._eh.fatalError(self._lex.getLine(), "Invalid token: " + self._lex.getText())
-                return true
+                return True
 
 
 #

@@ -63,7 +63,7 @@ class Canvas(Tkinter.Canvas, Base):
         kw["borderwidth"] = borderwidth
         kw["highlightthickness"] = highlightthickness
 
-        tkinter.Canvas.__init__(self, parent, *args, **kw)
+        Tkinter.Canvas.__init__(self, parent, *args, **kw)
 
         self.parent = parent
 

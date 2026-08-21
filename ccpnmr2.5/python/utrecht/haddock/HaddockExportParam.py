@@ -150,7 +150,7 @@ class exportParam:
             print("Export parameter to file %s" % self.filename)
             makeBackup(self.filename)
 
-            self.file = file(self.filename,'w')
+            self.file = open(self.filename,'w')
             self.file.write(self.filestring)
             self.file.close()
 
@@ -177,7 +177,7 @@ class exportParam:
             for term in constraint:
                 if term.fileName and os.path.isfile(term.fileName):
                     ambigstring = ""
-                    ambigfile = file(term.fileName,'r')
+                    ambigfile = open(term.fileName,'r')
                     for line in ambigfile.readlines(): ambigstring += line
                     ambigfile.close()
 
@@ -433,7 +433,7 @@ class exportParam:
                 for term in constraint:
                     if term.fileName and os.path.isfile(term.fileName):
                         hbondstring = ""
-                        hbondfile = file(term.fileName,'r')
+                        hbondfile = open(term.fileName,'r')
                         for line in hbondfile.readlines(): hbondstring += line
                         hbondfile.close()
             if hbondstring:
@@ -447,7 +447,7 @@ class exportParam:
             for term in constraint:
                 if term.fileName and os.path.isfile(term.fileName):
                     unambigstring = ""
-                    unambigfile = file(term.fileName,'r')
+                    unambigfile = open(term.fileName,'r')
                     for line in unambigfile.readlines(): unambigstring += line
                     unambigfile.close()
             if unambigstring:
@@ -490,7 +490,7 @@ class exportParam:
             for term in constraint:
                 if term.fileName and os.path.isfile(term.fileName):
                     dihedralstring = ""
-                    dihedralfile = file(term.fileName,'r')
+                    dihedralfile = open(term.fileName,'r')
                     for line in dihedralfile.readlines(): dihedralstring += line
                     dihedralfile.close()
             if dihedralstring:
@@ -587,9 +587,9 @@ class exportParam:
 
             if danifile:
                 danistring = ""
-                openfile = file(danifile,'r')
+                openfile = open(danifile,'r')
                 for line in openfile.readlines(): danistring += line
-                opnefile.close()
+                openfile.close()
 
                 self.filestring += ('%sdanidata = %s,\n' % (" "*self.identlevel,repr(danistring)))
 
@@ -645,7 +645,7 @@ class exportParam:
 
             if rdcfile:
                 rdcstring = ""
-                openfile = file(rdcfile,'r')
+                openfile = open(rdcfile,'r')
                 for line in openfile.readlines(): rdcstring += line
                 openfile.close()
 

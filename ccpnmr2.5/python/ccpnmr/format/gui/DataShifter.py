@@ -55,6 +55,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import sys
 import tkinter as Tkinter
 import traceback
+from functools import reduce
 
 from ccp.general.Util import setCurrentStore
 from ccpnmr.format.general.Constants import assign_kw, newResonances_kw

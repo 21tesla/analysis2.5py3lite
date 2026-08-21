@@ -104,7 +104,7 @@ def filterPeakListWithCloud(argServer, peakList=None, pattern=r"t_intra_0\d+.pdb
 
             coords1 = getResonanceCoords(clouds, resonances1)
             coords2 = getResonanceCoords(clouds, resonances2)
-            dist = getEnsembleCoordsDist(coord1, coord2)
+            dist = getEnsembleCoordsDist(coords1, coords2)
 
 
 def getResonanceCoords(clouds, resonances):
@@ -569,9 +569,9 @@ def getMeanCloud(clouds):
             x += clouds[i][resonance][0]
             y += clouds[i][resonance][1]
             z += clouds[i][resonance][2]
-        x /= M
-        y /= M
-        z /= M
+        x /= N
+        y /= N
+        z /= N
         meanCloud[resonance] = (x, y, z)
 
     return meanCloud

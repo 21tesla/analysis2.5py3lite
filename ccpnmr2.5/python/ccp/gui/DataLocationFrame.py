@@ -346,16 +346,16 @@ if __name__ == "__main__":
     from memops.gui.MessageReporter import showWarning
     from memops.universal.Io import normalisePath
 
+    r = Tkinter.Tk()
+
     path = normalisePath(path)
     askdir = lambda title, prompt, initial_value: askDir(
-        title, prompt, initial_value, parent=top, extra_dismiss_text="Skip"
+        title, prompt, initial_value, parent=r, extra_dismiss_text="Skip"
     )
     askfile = lambda title, prompt, initial_value: askFile(
-        title, prompt, initial_value, parent=top, extra_dismiss_text="Skip"
+        title, prompt, initial_value, parent=r, extra_dismiss_text="Skip"
     )
     project = loadProject(path, showWarning=showWarning, askDir=askdir, askFile=askfile)
-
-    r = Tkinter.Tk()
 
     popup = DataLocationPopup(r, project)
 

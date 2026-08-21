@@ -54,6 +54,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import math
 import os
+import sys
 
 from ccp.format.nmrStar.bmrb.File import File
 from ccp.general.Geometry import getDistanceFromCoordinates

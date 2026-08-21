@@ -1106,7 +1106,7 @@ Results are written to %s'''
       return
 
     if dataSet.format != setup.CCPN:
-      if not file:
+      if not dataSet.file:
         showWarning('Failure','%s No file selected' % warnMsg)
         return
 

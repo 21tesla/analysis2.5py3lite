@@ -40,6 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import operator
+from functools import reduce
 
 # code based on rewriting and modification of integrator code of
 # Felician Dancea and Ulrich Gunther, Birmingham, copyright (c) 2005

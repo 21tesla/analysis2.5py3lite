@@ -1,6 +1,7 @@
 # MemopsRoot
 
 import pickle
+from functools import reduce
 
 key_project_settings = 'project.settings'
 

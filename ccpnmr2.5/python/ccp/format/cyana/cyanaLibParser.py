@@ -322,7 +322,7 @@ class CyanaRefInfo:
     def __cmp__(self, other):
 
         if not isinstance(other, CyanaRefInfo):
-            return cmp(id(self), other)
+            return (id(self) > other) - (id(self) < other)
 
         if self.name < other.name:
             return -1

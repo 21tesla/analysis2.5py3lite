@@ -43,7 +43,7 @@ def logLinearFit(xs, ys, weights=None, findDev=False):
 
     n = len(xsToFit)
     if n < 2:
-        raise MathException("n = %d, need at least 2 points of same sign" % n)
+        raise ValueError("n = %d, need at least 2 points of same sign" % n)
 
     result = linearFit(xsToFit, ysToFit, weightsToFit, findDev)
     ((a, b), chisq, ysFit) = result[:4]

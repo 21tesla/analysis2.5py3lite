@@ -1501,9 +1501,9 @@ class Duplex:
             minA = min(self.startResidueA.ccpCode, self.startResidueB.ccpCode)
             minB = min(other.startResidueA.ccpCode, other.startResidueB.ccpCode)
 
-            return cmp(minA, minB)
+            return (minA > minB) - (minA < minB)
         else:
-            return cmp(self, other)
+            return (self > other) - (self < other)
 
     def delete(self):
 
@@ -1684,9 +1684,9 @@ class Sheet:
             minA = min(self.startResidueA.ccpCode, self.startResidueB.ccpCode)
             minB = min(other.startResidueA.ccpCode, other.startResidueB.ccpCode)
 
-            return cmp(minA, minB)
+            return (minA > minB) - (minA < minB)
         else:
-            return cmp(self, other)
+            return (self > other) - (self < other)
 
     def delete(self):
 
@@ -1947,9 +1947,11 @@ class Helix:
     def __cmp__(self, other):
 
         if isinstance(Helix, other):
-            return cmp(self.startResidue.ccpCode, other.startResidue.ccpCode)
+            return (self.startResidue.ccpCode > other.startResidue.ccpCode) - (
+                self.startResidue.ccpCode < other.startResidue.ccpCode
+            )
         else:
-            return cmp(self, other)
+            return (self > other) - (self < other)
 
     def delete(self):
 

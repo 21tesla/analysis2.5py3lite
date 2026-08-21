@@ -40,6 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import math
+from functools import cmp_to_key
 
 from ccp.api.nmr import Nmr
 from ccpnmr.analysis.core import ExperimentBasic
@@ -1804,7 +1805,7 @@ class WindowDraw:
         analysisSpectrum1 = view1.analysisSpectrum
         analysisSpectrum2 = view2.analysisSpectrum
 
-        c = cmp(analysisSpectrum1.rank, analysisSpectrum2.rank)
+        c = (analysisSpectrum1.rank > analysisSpectrum2.rank) - (analysisSpectrum1.rank < analysisSpectrum2.rank)
         if c != 0:
             return c
 
@@ -1814,18 +1815,18 @@ class WindowDraw:
         expt1 = spectrum1.experiment
         expt2 = spectrum2.experiment
 
-        c = cmp(expt1.name, expt2.name)
+        c = (expt1.name > expt2.name) - (expt1.name < expt2.name)
         if c != 0:
             return c
 
-        return cmp(spectrum1.name, spectrum2.name)
+        return (spectrum1.name > spectrum2.name) - (spectrum1.name < spectrum2.name)
 
     def doCanvas(self, handler, object=None, row=0, col=0):
 
         windowPane = self.windowPane
         window = windowPane.spectrumWindow
         allViews = list(self.getSpectrumViews())
-        allViews.sort(self.compareViewOrder)
+        allViews.sort(key=cmp_to_key(self.compareViewOrder))
         allViews.reverse()
 
         # print 'doCanvas1'

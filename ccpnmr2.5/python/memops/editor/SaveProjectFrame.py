@@ -187,7 +187,7 @@ class SaveProjectFrame(Frame):
                 return  # give another chance
         except Implementation.ApiError as e:
             showError("Save project", e.error_msg)
-        except (OSError, e):
+        except OSError as e:
             showError("Save project", str(e))
 
         if done:

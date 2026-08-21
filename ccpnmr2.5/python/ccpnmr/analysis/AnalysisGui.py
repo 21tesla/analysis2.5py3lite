@@ -210,7 +210,8 @@ Continuing...
     if startupFile:
         if os.path.isfile(startupFile):
             try:
-                execfile(startupFile)
+                with open(startupFile, "r") as startup:
+                    exec(compile(startup.read(), startupFile, "exec"))
             except Exception as e:
                 print(startupExecError % (traceback.format_exc(), startupFile))
                 print(e)

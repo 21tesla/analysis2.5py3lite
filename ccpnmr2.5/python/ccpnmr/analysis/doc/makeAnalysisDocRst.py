@@ -41,6 +41,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 import os
 import tkinter as Tkinter
+from functools import cmp_to_key
 
 RST_PATH = "ccpnmr/analysis/doc/source"
 
@@ -398,18 +399,18 @@ def cmpChildren(child1, child2):
             v1 = d1.get(key)
             v2 = d2.get(key)
             if v1 is not None and v2 is not None:
-                c = cmp(int(v1), int(v2))
+                c = (int(v1) > int(v2)) - (int(v1) < int(v2))
                 if c:
                     return c
 
     for key in ("winfo_y", "winfo_x"):
         f1 = getattr(child1, key)
         f2 = getattr(child2, key)
-        c = cmp(f1(), f2())
+        c = (f1() > f2()) - (f1() < f2())
         if c:
             return c
 
-    return cmp(child1, child2)
+    return (child1 > child2) - (child1 < child2)
 
 
 def getWidgetChildren(widget):
@@ -421,7 +422,7 @@ def getWidgetChildren(widget):
 
     # below condition excludes popups
     children = [child for child in children if hasattr(child, "grid_info")]
-    children.sort(cmpChildren)
+    children.sort(key=cmp_to_key(cmpChildren))
 
     return children
 
@@ -438,7 +439,7 @@ def getGriddedWidgetChildren(widget):
         for child in children
         if hasattr(child, "grid_info") and child.grid_info().get("row") and child.grid_info().get("column")
     ]
-    children.sort(cmpChildren)
+    children.sort(key=cmp_to_key(cmpChildren))
 
     return children
 

@@ -59,7 +59,7 @@ import tkinter as Tkinter
 class ObjectButton(Tkinter.Button):
     def __init__(self, parent, toggledDict={}, untoggledDict={}, command=None, toggled=False, *args, **kw):
 
-        tkinter.Button.__init__(self, parent, *args, **kw)
+        Tkinter.Button.__init__(self, parent, *args, **kw)
 
         self.parent = parent
 

@@ -1,3 +1,5 @@
+import math
+
 from memops.math.fit.FitClass import FitClass
 from memops.math.fit.logLinearFit import logLinearFit
 
@@ -18,7 +20,7 @@ squares fit on the log y values, to determine the best fit, %s."""
     def getValue(self, x, params):
 
         (A, B) = params
-        y = A * exp(-B * x)
+        y = A * math.exp(-B * x)
 
         return y
 

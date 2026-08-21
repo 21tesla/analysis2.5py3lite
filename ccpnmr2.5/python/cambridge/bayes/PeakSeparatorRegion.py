@@ -53,7 +53,7 @@ def getRegionParams(params, argServer=None, HEIGHT_MULTIPLIER=2.5):
 
   # make sure that dragged region and peak list match!
   if not spectrumWindowView:
-    peakListName = '%s:%s:%s' % (spectrum.experiment.name, spectrum.name, peakList.serial)
+    peakListName = '%s:%s:%s' % (analysisSpectrum.experiment.name, analysisSpectrum.name, peakList.serial)
     showWarning( 'Incorrect Peak List',
       "Peak list '%s' doesn't match selected spectral region, please select another peak list." % peakListName )
     return

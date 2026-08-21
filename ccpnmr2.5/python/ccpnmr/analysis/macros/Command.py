@@ -39,6 +39,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import importlib
+
 from memops.general import Implementation
 
 
@@ -77,7 +79,7 @@ class Command:
     def reload(self):
 
         try:
-            reload(self.module)
+            importlib.reload(self.module)
         except:
             raise Implementation.ApiError('could not reload module "' + self.module_name + '"')
             return

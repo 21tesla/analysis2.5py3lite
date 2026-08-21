@@ -56,6 +56,8 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
+import importlib
+
 from memops.general import Implementation
 
 
@@ -96,7 +98,7 @@ class Command:
     def reload(self):
 
         try:
-            reload(self.module)
+            importlib.reload(self.module)
         except:
             self.argumentServer.showWarning('could not reload module "' + self.module_name + '"')
             raise

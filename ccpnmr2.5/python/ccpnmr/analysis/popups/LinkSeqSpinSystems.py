@@ -40,6 +40,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import pickle
+from functools import cmp_to_key
 
 from ccpnmr.analysis.core.AssignmentBasic import (
     assignSpinSystemResidue,
@@ -2439,9 +2440,9 @@ class LinkSeqSpinSystemsPopup(BasePopup):
         else:
 
             def compFunc(a, b):
-                return cmp(a[0], b[0])
+                return (a[0] > b[0]) - (a[0] < b[0])
 
-        mergedMatches.sort(compFunc)
+        mergedMatches.sort(key=cmp_to_key(compFunc))
         mergedMatches.reverse()
 
         return mergedMatches

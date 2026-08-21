@@ -53,6 +53,8 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
+import uuid
+
 
 def fetchUrl(url, values=None, headers=None, timeout=None):
 

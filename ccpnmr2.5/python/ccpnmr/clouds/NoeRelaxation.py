@@ -327,7 +327,7 @@ def assignAmbigPeaks(peaks, resonances):
     tolerance = 0.015
     shifts = []
 
-    N - len(resonances)
+    N = len(resonances)
     for resonance in resonances:
         shifts.append(resonance.findFirstShift().value)
 
@@ -336,7 +336,7 @@ def assignAmbigPeaks(peaks, resonances):
             ppm = pnt2ppm(peakDim.position, peakDim.dataDimRef)
             candidates = []
             for i in range(N):
-                if abs(ppm - shift) <= tolerance:
+                if abs(ppm - shifts[i]) <= tolerance:
                     candidates.append(i)
 
             if len(candidates) == 1:

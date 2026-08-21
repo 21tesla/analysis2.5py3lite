@@ -58,7 +58,7 @@ class LabelFrame(Tkinter.LabelFrame):
         kw.setdefault( 'bd', 2 )
         kw.setdefault( 'bg', 'grey90' )
 
-        tkinter.LabelFrame.__init__(self, parent, *args, **kw)
+        Tkinter.LabelFrame.__init__(self, parent, *args, **kw)
 
         self.parent = parent
     # end def __init__

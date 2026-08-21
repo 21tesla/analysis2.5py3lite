@@ -41,6 +41,7 @@ __version__ = "0.7.2"
 
 import operator
 import struct
+from functools import reduce
 
 # check endianess
 _big_endian = struct.pack('i', 1)[0] != 1

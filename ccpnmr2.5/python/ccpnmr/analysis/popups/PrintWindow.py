@@ -548,7 +548,7 @@ class PrintWindowPopup(BasePopup):
             msg = 'Saved to file "%s"' % printFrame.file_name
             showInfo("Success", msg, parent=self)
 
-        except (OSError, e):
+        except OSError as e:
             showError("IO Error", str(e), parent=self)
 
         if isOverrideSpectrumSelected:

@@ -1,4 +1,5 @@
 import re
+from functools import reduce
 
 from ccp.format.general.Constants import defaultMolCode, defaultSeqInsertCode
 from ccp.general.Util import findAllSysNamesByChemAtomOrSet, findChemCompSysName

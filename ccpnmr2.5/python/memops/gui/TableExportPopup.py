@@ -159,7 +159,7 @@ class TableExportPopup(BasePopup):
 
         try:
             fp = open(file, "w")
-        except (OSError, e):
+        except OSError as e:
             showError("File error", str(e))
             return False
 

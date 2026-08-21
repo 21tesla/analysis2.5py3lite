@@ -759,7 +759,7 @@ class FormatConverter(BasePopup):
         try:
             self.project.saveModified()
             return True
-        except (OSError, e):
+        except OSError as e:
             showError("Saving file", str(e))
             return False
         except ApiError as e:

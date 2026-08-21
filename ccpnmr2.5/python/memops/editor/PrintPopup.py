@@ -132,7 +132,7 @@ class PrintPopup(BasePopup):
 
         try:
             self.outputHandler = self.printFrame.getOutputHandler(self.width, self.height)
-        except (OSError, e):
+        except OSError as e:
             showError("IO Error", str(e), parent=self)
             return False
         except:

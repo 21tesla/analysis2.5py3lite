@@ -105,6 +105,8 @@ BACKBONE_ATOMS = ('C','CA','CB','HA','HA2','HA3','H','N')
 
 def testMacro(argServer):
 
+  from cambridge.dangle.DangleGui import DangleGui
+
   project = argServer.getProject()
   popup = DangleGui(argServer.parent)
   popup.open()

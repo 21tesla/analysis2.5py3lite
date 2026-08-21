@@ -201,10 +201,10 @@ class ResonanceFrame(Frame):
                     molSystemA = getResonanceMolSystem(resonanceA) or ""
                     molSystemB = getResonanceMolSystem(resonanceB) or ""
                     if molSystemA == molSystemB:
-                        texts.append(molSystemA and molSystemA.code)
+                        textMatrix.append(molSystemA and molSystemA.code)
                     else:
-                        texts.append("%s,%s" % (molSystemA and molSystemA.code, molSystemB and molSystemB.code))
-                    colors.append(None)
+                        textMatrix.append("%s,%s" % (molSystemA and molSystemA.code, molSystemB and molSystemB.code))
+                    colorMatrix.append(None)
 
             objectList = self.jCouplings
 

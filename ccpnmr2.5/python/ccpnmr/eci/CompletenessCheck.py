@@ -1,5 +1,6 @@
 import re
 import sys
+from functools import reduce
 
 from ccpnmr.eci.AditMandFields import aditMandDict
 from memops.general.Io import loadProject
@@ -194,7 +195,7 @@ def getCcpnMapValue(ccpnMap, startObject):
             ccpnMapValue = ccpnMap()
 
         except:
-            self.setMessage(
+            print(
                 "  Error: ccpnLoop can only be string, function or tuple(string,function). Is %s." % str(ccpnMap)
             )
 

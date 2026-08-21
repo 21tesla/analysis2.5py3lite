@@ -58,6 +58,7 @@ import math
 import os
 import string
 import sys
+from functools import reduce
 
 ######################################################################
 # hack for Python 2.1 compatibility  NBNB                                                      #

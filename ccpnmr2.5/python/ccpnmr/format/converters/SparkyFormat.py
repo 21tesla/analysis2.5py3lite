@@ -468,7 +468,7 @@ class SparkyFormat(DataFormat):
         else:
             self.unit = None
             self.messageReporter.showError(
-                "Error", "No peak position available from sparky peak file %s" % file, self.guiParent
+                "Error", "No peak position available from sparky peak file %s" % self.fileName, self.guiParent
             )
 
     def setPeakDim(self):

@@ -580,7 +580,7 @@ class UpdateServer:
             response = urllib.urlopen(addr, context=context)
 
             data = response.read()  # just split for testing
-            if isinstance(data, unicode):
+            if isinstance(data, bytes):
                 data = data.decode("UTF-8")
             response.close()
 
