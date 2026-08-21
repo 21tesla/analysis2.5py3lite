@@ -357,6 +357,8 @@ if __name__ == "__main__":
     )
     project = loadProject(path, showWarning=showWarning, askDir=askdir, askFile=askfile)
 
+    from ccp.gui.DataLocationPopup import DataLocationPopup
+
     popup = DataLocationPopup(r, project)
 
     r.withdraw()

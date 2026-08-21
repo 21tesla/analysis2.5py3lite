@@ -291,7 +291,7 @@ class WorkFlow:
         stdin.close()
 
         if removeFile:
-            os.remove(tgzFile)
+            os.remove(tgzFileName)
 
         return textOutput
 
@@ -338,7 +338,7 @@ class WorkFlow:
         stdin.close()
 
         if removeFile:
-            os.remove(zipFile)
+            os.remove(zipFileName)
 
         return textOutput
 

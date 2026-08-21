@@ -333,7 +333,7 @@ def returnLong(x, default=0.0, verbose=1):
     """
 
     try:
-        x = long(x)
+        x = int(x)
     except:
         if verbose:
             print("Error converting '" + str(x) + "' to long: set to %s" % str(default))

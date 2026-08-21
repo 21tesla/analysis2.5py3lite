@@ -43,6 +43,7 @@ from ccp.api.nmr import NmrConstraint
 from ccpnmr.analysis.core.AssignmentBasic import assignResToDim, clearPeakDim, findMatchingShifts
 from ccpnmr.analysis.core.ConstraintBasic import getFixedResonance
 from ccpnmr.analysis.core.PeakBasic import findPeaks, getPeakDimPpm, searchPeaks
+from ccpnmr.analysis.core.UnitConverter import pnt2ppm
 from ccpnmr.c.Midge import Midge
 
 

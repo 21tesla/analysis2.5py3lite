@@ -1803,7 +1803,7 @@ Results are written to %s'''
     try:
       values = self.listExportResidues(text)
 
-    except Exception:
+    except Exception as msg:
       print('ERROR:', msg)
       showError('Wrong input format',
                 'Specify export residues by enumerating their numbers separated by commas and hyphens, e.g. 1,3,10-20',

@@ -1054,7 +1054,7 @@ def matchSequences(molSystem, resIdToChemComp, chains=None):
     if mappings:
         chain = chains[0]
         mapping = mappings[0]
-        seqMap = dict((tt[0], tt[1].seqId) for tt in mappping.items() if None not in tt)
+        seqMap = dict((tt[0], tt[1].seqId) for tt in mapping.items() if None not in tt)
         return chain, seqMap
     #
     return None, {}

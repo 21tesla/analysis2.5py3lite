@@ -47,7 +47,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 from ccp.format.spectra.params.ExternalParams import ExternalParams, fidDimType, freqDimType
-from ccp.util.Software import getMethod
+from ccp.util.Software import getMethod, getSoftware
 from memops.general.Implementation import ApiError
 from memops.universal import BlockData
 from memops.universal.ElementTree import ElementTree as ET

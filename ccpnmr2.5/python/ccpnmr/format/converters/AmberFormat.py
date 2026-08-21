@@ -53,6 +53,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import copy
+import sys
+import traceback
 
 from ccpnmr.format.converters.DataFormat import DataFormat, IOkeywords
 
@@ -108,7 +110,7 @@ class AmberFormat(DataFormat):
                 )
 
         except:
-            errorMessage = traceback.format_exception_only(sys.exc_type, sys.exc_value)[-1]
+            errorMessage = traceback.format_exception_only(*sys.exc_info()[:2])[-1]
             self.messageReporter.showWarning(
                 "Warning",
                 " Cannot read %s constraints for %s...:\n%s" % (self.constraintApiCode, self.formatLabel, errorMessage),
@@ -118,7 +120,7 @@ class AmberFormat(DataFormat):
 
             raise
 
-            return traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_info()[2])
+            return traceback.format_exception(*sys.exc_info())
 
     #
     # Functions different to default functions in DataFormat

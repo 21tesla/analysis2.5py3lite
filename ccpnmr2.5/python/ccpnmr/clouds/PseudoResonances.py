@@ -38,6 +38,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 
+from ccpnmr.analysis.core.PeakBasic import getPeakDimPpm
+
+
 class PseudoMolSystem:
     def __init__(self):
         self.pseudoResons = []

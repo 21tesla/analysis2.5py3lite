@@ -602,7 +602,7 @@ class CCPNReader:
             try:
               item = constraint.items[0]
             except:
-              print('Skipping dihedral angle restraint #%d: No contributions found.' % constraint_index)
+              print('Skipping dihedral angle restraint #%d: No contributions found.' % constraint.serial)
               continue
 
             r_isd = data.TorsionAngleMeasurement()

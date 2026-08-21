@@ -39,6 +39,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import copy
+
 from ccp.general.ChemCompOverview import chemCompOverview
 from ccp.general.Io import getChemComp, getStdChemComps
 

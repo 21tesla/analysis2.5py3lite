@@ -46,7 +46,7 @@ class FitClass:
     #   ys list[float]
     def getValues(self, xs, params):
 
-        return [getValue(x, params) for x in xs]
+        return [self.getValue(x, params) for x in xs]
 
     # returns [params, chisq, ysFit, optionally paramsDev]
     # input:

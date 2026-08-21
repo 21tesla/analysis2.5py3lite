@@ -59,6 +59,7 @@ software development. Bioinformatics 21, 1678-1684.
 
 from ccp.gui.ViewStructureFrame import ViewStructureFrame, symbolColor, symbolMultiplier
 from memops.gui.MessageReporter import showWarning
+from memops.universal.Geometry import vectorsAdd, vectorsSubtract
 
 try:
     from ccp.c import StructAtom, StructBond, StructStructure

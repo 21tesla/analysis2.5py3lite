@@ -373,7 +373,7 @@ def removeDisconnectedAtoms(atomCoordList):
         dx2 = (coord[0] - cx) * (coord[0] - cx)
         dy2 = (coord[1] - cy) * (coord[1] - cy)
         dz2 = (coord[2] - cz) * (coord[2] - cz)
-        d = math.sqrt(dx2 + dy2 + dz2)
+        d = sqrt(dx2 + dy2 + dz2)
         D.append(d)
         m += d
         n += 1

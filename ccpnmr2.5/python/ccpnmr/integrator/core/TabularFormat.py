@@ -85,7 +85,7 @@ class TabularFormat:
 
     def getText(self):
         """get text as block"""
-        return lineSep.join(self.lines)
+        return self.lineSep.join(self.lines)
 
     def export(self, target):
         """Write text to file
@@ -192,7 +192,7 @@ class TabularFormat:
         formats = self.columnFormats
 
         if self.numTableColumns is None:
-            raise exception("No table currenlty open")
+            raise Exception("No table currenlty open")
 
         if None in values and not self.dummiesAllowed:
             raise ValueError("value 'None' not allowed")

@@ -43,7 +43,9 @@ from ccpnmr.analysis.core import ExperimentBasic
 from ccpnmr.analysis.core.AssignmentBasic import (
     addSpinSystemResonance,
     assignResToDim,
+    estimateAssignmentTolerances,
     findConnectedSpinSystem,
+    findMatchingPeakDimShifts,
     findSpinSystem,
     makeSeqSpinSystemLink,
     setResonanceTypeFromRefExp,
@@ -51,6 +53,7 @@ from ccpnmr.analysis.core.AssignmentBasic import (
 from ccpnmr.analysis.core.PeakBasic import findPeaks, pickPeak, searchPeaks
 from ccpnmr.analysis.core.UnitConverter import pnt2ppm, ppm2pnt
 from ccpnmr.analysis.core.Util import getAnalysisDataDim
+from ccp.lib.MoleculeQuery import areResonancesBound
 
 try:
     from memops.gui.MessageReporter import showWarning
