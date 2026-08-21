@@ -96,6 +96,7 @@ from cing.core.database import translateAtomName
 from cing.core.molecule import Resonance
 from cing.Libs import PyMMLib
 from cing.Libs.AwkLike import AwkLike
+from cing.Libs.disk import Path
 from cing.Libs.pdb import MatchGame, moveFirstDigitToEnd
 from cyana2ccpn.classes4 import ChemicalShiftRestraint, RDCRestraint, RDCRestraintList
 
@@ -323,7 +324,7 @@ class CyanaParser(dict):
 
         if cyanaPath != None:
             # extract files from cyanaPath using extentions
-            self.rootPath = path(cyanaPath)
+            self.rootPath = Path(cyanaPath)
             if not self.rootPath.exists() or not self.rootPath.isdir():
                 ntu.nTerror('CyanaParser.parse: invalid directory %s', cyanaPath)
                 return None
@@ -565,7 +566,7 @@ class CyanaParser(dict):
                 sequenceId = line.int( 5 )
                 if sequenceId not in self._seqDict:
                     ntu.nTwarning( 'CyanaParser.parseFinalProtFile: undefined sequenceId %d in "%s:%d" (%s)' % (
-                                    sequenceId, protFile, f.NR, f[0]))
+                                    sequenceId, finalProtFile, line.NR, line[0]))
                     error = True
                 else:
                     residueId = self._seqDict[sequenceId]
@@ -580,7 +581,7 @@ class CyanaParser(dict):
 
                     if atm == None:
                         ntu.nTwarning( 'CyanaParser.parseFinalProtFile: cannot define atom in "%s:%d" (%s)',
-                                        protFile, f.NR, f[0]
+                                        finalProtFile, line.NR, line[0]
                                      )
                         error = True
                         continue
@@ -621,7 +622,7 @@ class CyanaParser(dict):
 
                 if atom == None:
                         ntu.nTwarning( 'CyanaParser.parseFinalProtFile: cannot define atom in "%s:%d" (%s)',
-                                        originalProtFile, f.NR, f[0]
+                                        originalProtFile, line.NR, line[0]
                                      )
                         error = True
                         continue
@@ -729,7 +730,7 @@ problem resides in the multiple assignments that alters format
 
         error = False
 
-        _path,name,_ext = path( xpkFile ).split3()
+        _path,name,_ext = Path( xpkFile ).split3()
         peaks = PeakList( name=name, status='keep' )
 
         dimension = 0
@@ -1332,7 +1333,7 @@ problem resides in the multiple assignments that alters format
         if self._atomDict == None or len(self._atomDict) == 0:
             return None
 
-        _dir,name,_ext = path( rdcFile ).split3()
+        _dir,name,_ext = Path( rdcFile ).split3()
         result = RDCRestraintList( name=name, status='keep')
 
         for line in AwkLike( rdcFile, commentString="#", minNF=7 ):
@@ -1400,7 +1401,7 @@ problem resides in the multiple assignments that alters format
 
         self.pdbRecords = PyMMLib.PDBFile(pdbFile)
         if not self.pdbRecords:
-            nTerror('CyanaParser.parsePdbFile: parsing PDB-file "%s"', pdbFile)
+            ntu.nTerror('CyanaParser.parsePdbFile: parsing PDB-file "%s"', pdbFile)
             return None
         #end if
 

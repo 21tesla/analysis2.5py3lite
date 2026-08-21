@@ -333,6 +333,7 @@ class FormatConverterWrapper:
       importFormatNames = self.newResonances[resonanceParent].keys()
       importFormatNames.sort()
 
+      existingForceChainMappings = {}
       for importFormatName in importFormatNames:
 
         origUnlinked = -999

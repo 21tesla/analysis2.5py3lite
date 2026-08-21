@@ -425,6 +425,8 @@ class Output:
 
 
 if __name__ == "__main__":
+    from memops.universal.PostScript import PostScript
+
     p = PostScript(file_name="test.ps", plot_size=(12.0, 20.0), do_outline_box=True)
     p.newRange(-100.0, -100.0, 100.0, 100.0, True)
     p.drawLine(-100, -100, 300, 150)

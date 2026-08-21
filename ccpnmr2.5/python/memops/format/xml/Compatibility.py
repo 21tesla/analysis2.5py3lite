@@ -996,7 +996,7 @@ def conv_ccp_MolSystem_1_0_106(headObject):
                 ll = res.chemCompVar.linkEnds
                 linkEnds = [x for x in res.chemCompVar.linkEnds if x.chemAtoms[0] is ca]
                 if len(linkEnds) == 1:
-                    linkCodes.append(x.linkCode)
+                    linkCodes.append(linkEnds[0].linkCode)
                 else:
                     break
             else:
@@ -2042,6 +2042,8 @@ def parse_descriptor_113(descriptor):
 #
 
 
+loadError = "Cannot load XML: "
+
 def getVersion(stream):
     # get version of input stream
 
@@ -2199,7 +2201,7 @@ def special_conv_1_0_204(project):
                                 nn = residueMapping.seqId
                                 residueMapping.__dict__["seqId"] = nn - corr
 
-                    for nameMapping in nameMapping:
+                    for nameMapping in nameMappings:
                         # fix ccpnmr.NameMapping.ChainMapping
                         for chainMapping in nameMapping.chainMappings:
                             if chainMapping.chainCode == chainCode:

@@ -231,7 +231,7 @@ class FcWorkFlow(WorkFlow):
 
             refExperiment = None
 
-            expPrototype = project.findFirstNmrExpPrototype(name=expPrototypeName)
+            expPrototype = self.ccpnProject.findFirstNmrExpPrototype(name=expPrototypeName)
             if expPrototype:
                 refExperiment = expPrototype.findFirstRefExperiment(name=refExpName)
 

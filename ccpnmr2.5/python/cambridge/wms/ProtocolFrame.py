@@ -309,6 +309,6 @@ if __name__ == "__main__":
   else:
     ccpnProject = None
 
-  popup = ProtocolFramePopup(root, ccpnProject=ccpnProject)
+  popup = ProtocolPopup(root, ccpnProject=ccpnProject)
 
   root.mainloop()

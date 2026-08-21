@@ -450,6 +450,7 @@ class BlackledgeModuleFrame(Frame):
   def findModuleExportBackValuesFile(self):
     """ Find the Back Values file that the User hopefully exported from MODULE """
 
+    moduleBvFileGood = False
     def yes():    moduleBvFileGood = True
     def cancel(): moduleBvFileGood = False
 
@@ -482,7 +483,7 @@ class BlackledgeModuleFrame(Frame):
       chosenBvFile = showMulti('MODULE', 'Multiple possible MODULE Back Value\nfiles found, please select one:' % possibleFiles, \
                 texts=texts, objects=objects, parent=self)
 
-      if os.path.isfile( modulePdbFile ):
+      if os.path.isfile( chosenBvFile ):
         moduleBackValueFile = chosenBvFile
 
     else:

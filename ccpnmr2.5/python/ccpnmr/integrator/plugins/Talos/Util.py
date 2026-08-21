@@ -65,7 +65,7 @@ def getCode1Letter(chemCompVar):
 
     code1Letter = chemCompVar.chemComp.code1Letter
     if code1Letter is None:
-        raise ValueError("Residue %s has no one-letter code" % res)
+        raise ValueError("Residue %s has no one-letter code" % chemCompVar)
 
     # Special cases
     if chemCompVar.chemComp.ccpCode == "Cys":

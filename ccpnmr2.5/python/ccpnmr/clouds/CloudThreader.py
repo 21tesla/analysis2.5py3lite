@@ -314,10 +314,10 @@ def getSpinSystemScore(typeScores, residue, spinSystem):
 
     return score
 
-    if p > 0.0:
-        score = Log(p)
-    else:
-        score = -10.0
+    # if p > 0.0:
+    #     score = Log(p)
+    # else:
+    #     score = -10.0
 
     return score
 

@@ -267,13 +267,12 @@ class MultipartPostHandler(urllib.request.BaseHandler):
             v_vars = []
             try:
                  for(key, value) in data.items():
-                     if type(value) == file:
+                     if hasattr(value, "read"):
                          v_files.append((key, value))
                      else:
                          v_vars.append((key, value))
             except TypeError:
-                systype, value, traceback = sys.exc_info()
-                raise TypeError("not a valid non-string sequence or mapping object", traceback)
+                raise TypeError("not a valid non-string sequence or mapping object")
 
             if len(v_files) == 0:
                 data = urllib.urlencode(v_vars, doseq)

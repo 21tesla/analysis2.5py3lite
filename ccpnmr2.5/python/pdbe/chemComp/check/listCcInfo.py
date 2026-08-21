@@ -49,4 +49,4 @@ if __name__ == '__main__':
 
     for namingSystem in namingSystemList:
       for tempCasn in namingSystem.findAllAtomSysNames(atomName = chemAtomOrSet.name, atomSubType = chemAtomOrSet.subType):
-        print("   %15s %s" % (namingSystem.name, chemAtomSysName.sysName))
+        print("   %15s %s" % (namingSystem.name, tempCasn.sysName))

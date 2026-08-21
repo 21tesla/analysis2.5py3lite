@@ -75,6 +75,8 @@ def getIpythonVersionTuple(reportAsIs = False):
     """
     iPythonVersion = None
     try:
+        import IPython
+
         if reportAsIs:
             return IPython.__version__
         # end if

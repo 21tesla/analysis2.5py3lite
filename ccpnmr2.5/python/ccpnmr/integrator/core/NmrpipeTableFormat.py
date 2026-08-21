@@ -94,7 +94,7 @@ class NmrpipeTableFormat(TabularFormat):
         """get residue type idnetifying string"""
         code1Letter = residue.chemCompVar.chemComp.code1Letter
         if code1Letter is None:
-            raise ValueError("Residue %s has no one-letter code" % res)
+            raise ValueError("Residue %s has no one-letter code" % residue)
         #
         return code1Letter
 

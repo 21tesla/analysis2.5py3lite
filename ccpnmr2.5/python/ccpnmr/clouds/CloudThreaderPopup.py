@@ -1411,9 +1411,9 @@ def calcDistDistributions(dirName, intraFileName="intraDistribs001.txt", interFi
 
                     if not (amide1 and alpha2):
                         continue
-                        if coord1 and coord2:
-                            dist = getCoordsDist(coord1, coord2)
-                            key = str(round(dist, 1))
+                        # if coord1 and coord2:
+                        #     dist = getCoordsDist(coord1, coord2)
+                        #     key = str(round(dist, 1))
 
                     if inter.get(delta) is None:
                         inter[delta] = [{} for x in range(9)]

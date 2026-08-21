@@ -1196,9 +1196,10 @@ def setPresetLinks(
 
                 if refObject in createdObjectDict[resClassName]["fromObjects"]:
                     refIndex = createdObjectDict[resClassName]["fromObjects"].index(refObject)
-                    newObjects.append(createdObjectDict[resClassName]["toObjects"][refIndex])
+                    newObject = createdObjectDict[resClassName]["toObjects"][refIndex]
+                    newObjects.append(newObject)
                     if verbose:
-                        print("  Direct %s map: %s -> %s" % (resClassName, ccpnObject, newObject))
+                        print("  Direct %s map: %s -> %s" % (resClassName, refObject, newObject))
                     resonanceFound = True
                     break
 

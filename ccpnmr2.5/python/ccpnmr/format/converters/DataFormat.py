@@ -16054,7 +16054,7 @@ Cannot map atom names for export.
     def setKeywords(self):
 
         for keyword in self.peopleAndCitationsFile.keywords:
-            keyword = rawCitation.keywd
+            pass
 
     def findVagueCitation(self, className, title, year):
 

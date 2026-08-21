@@ -525,7 +525,7 @@ class ModelTraverse_py_2_1:
             resultIndices.reverse()
 
         else:
-            raise MemopsError("Partitioning roles %s and %s are incompatible" % (partitionRoles[0], partitionRole[1]))
+            raise MemopsError("Partitioning roles %s and %s are incompatible" % (partitionRoles[0], partitionRoles[1]))
 
         # set uplinks lists
         result = ([], partitionRoles)

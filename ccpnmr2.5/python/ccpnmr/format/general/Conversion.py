@@ -452,7 +452,7 @@ class FormatConversion:
                             if len(dataSources.pop().peakLists) != 1:
                                 identifier += ".%d" % peakList.serial
                         else:
-                            identifier += ".%d.%d" % (dataSource.serial, peakList.serial)
+                            identifier += ".%d.%d" % (peakList.dataSource.serial, peakList.serial)
 
                 elif informationType == "sequence":
                     identifier = ccpnObjectOrList[0].molSystem.code

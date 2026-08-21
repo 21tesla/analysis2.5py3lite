@@ -1455,7 +1455,7 @@ def mergeParallelRuns(calcId, projectFiles, targetDir=None):
         backupData = None
         for runId, inDir in sorted(subdirDict.items()):
             propFile = os.path.join(integratorDir, inDir, propFileName)
-            if os.path.isfile(propfile):
+            if os.path.isfile(propFile):
                 propData = json.load(open(propFile))
                 if masterCalcId == propData.get("CCPN.masterCalcId"):
                     wmsProtocol = propData.get("CCPN.Run.wmsProtocolName")

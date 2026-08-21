@@ -150,6 +150,8 @@ def getResMapping(resonances, ignoreSerials = None, ignoreChains = None, ignoreR
 
       if onlyElements:
 
+        from ccpnmr.format.general.Util import getApplResNames, getNameInfo
+
         resNames = getApplResNames('nmrStar',[resonance])
 
         if resNames:

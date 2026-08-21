@@ -360,7 +360,7 @@ class MarvinFormat(DataFormat):
                 #  peakIntensity.delete()
                 if not self.preserveAssignments:
                     if len(target_peak.sortedPeakContribs()) > 0:
-                        # peakName = "%s:%d[%d]" % (target_peak.peakList.dataSource.name,target_peak.peakList.serial, target_peak.serial)
+                        peakName = "%s:%d[%d]" % (target_peak.peakList.dataSource.name, target_peak.peakList.serial, target_peak.serial)
 
                         print("Warning: replacing assignments for peak %s" % peakName)
                         for peakContrib in target_peak.sortedPeakContribs():

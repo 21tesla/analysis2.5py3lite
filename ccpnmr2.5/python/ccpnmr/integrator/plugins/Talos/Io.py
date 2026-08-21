@@ -92,7 +92,7 @@ class TalosFormat:
         stream = open(filePath, "w")
         try:
             if "atomNames" in self.IOkeywords:
-                writeShiftFile(stream, residues, measurementList, minShiftQuality, atomNames=atomNames)
+                writeShiftFile(stream, residues, measurementList, minShiftQuality, atomNames=self.IOkeywords["atomNames"])
             else:
                 writeShiftFile(stream, residues, measurementList, minShiftQuality)
         finally:

@@ -45,6 +45,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 # NB If you continue to use this, please make any bug fixes in ccp.lib as well.
 
+from ccp.lib.StructureLib import _getStructureCoordinates
 from math import sqrt
 
 # from ccp.general.Geometry import calcTorsionAngleRadians, calcTorsionAngleDegrees
@@ -241,7 +242,7 @@ def centerStructures(structures):
     print("DEPRECATED, function centerCoordinates should not be used")
 
     for structure in structures:
-        coords = getStructureCoordinates(structure)
+        coords = _getStructureCoordinates(structure)
         centerCoordinates(coords)
 
 

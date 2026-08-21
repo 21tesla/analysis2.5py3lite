@@ -951,7 +951,7 @@ class NmrStarFormat(DataFormat):
                                 methName = soft.methodLabel
                                 coordMethod = self.project.currentMethodStore.findFirstMethod(name=methName)
                                 if not coordMethod:
-                                    coordMethod = self.project.currentMethodStore.newMethod(name=meth.methodLabel)
+                                    coordMethod = self.project.currentMethodStore.newMethod(name=methName)
 
                                 if not coordMethod.software:
                                     coordMethod.setSoftware(software)

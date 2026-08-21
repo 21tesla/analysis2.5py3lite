@@ -635,8 +635,8 @@ def generateSymmetryWeights(spectrum, nSteps=100, isWatergate=0, weightingFactor
     if bleachRegions:
         for ppm, width in bleachRegions:
             for i in range(nSteps):
-                if (abs(weights[i][0][0] + threshold - ppm) <= width) or (
-                    abs(weights[i][0][0] - threshold - ppm) <= width
+                if (abs(weights[i][0][0] + weightingFactor - ppm) <= width) or (
+                    abs(weights[i][0][0] - weightingFactor - ppm) <= width
                 ):
                     gaussexp = (weights[i][0][0] - ppm) / width
                     gaussexp = (gaussexp * gaussexp) / -2.0

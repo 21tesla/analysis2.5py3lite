@@ -1,7 +1,7 @@
 import os
 import re
 
-from pdbe.adatah.Constants import archivesDataDir, bmrbRestUrl, bmrbUrl
+from pdbe.adatah.Constants import archivesDataDir, bmrbRestUrl, bmrbUrl, chemCompArchiveDataDir
 from pdbe.adatah.Io import getDataFromHttp, getReferenceTextFileFromHttp, getTextFromHttp
 
 #
@@ -649,7 +649,7 @@ class NmrStarBmrbArchiveHandler:
 
     self.formatObjectDict['NmrStar'].file = nmrStarFile
 
-    self.formatObjectDict['NmrStar'].readProject(nmrStarFileName, entry = self.entry, molSystem = self.molSystem, version = '2.1.1', minimalPrompts = 1, chemCompPath = curChemCompRepository, **localKeywds)
+    self.formatObjectDict['NmrStar'].readProject(nmrStarFileName, entry = self.entry, molSystem = self.molSystem, version = '2.1.1', minimalPrompts = 1, chemCompPath = chemCompArchiveDataDir, **localKeywds)
 
     self.formatObjectDict['NmrStar'].nameMapping.isOriginalImport = True
 

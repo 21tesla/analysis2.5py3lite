@@ -663,7 +663,7 @@ def transferData(
                 obj._singleDelete(objsToBeDeleted)
             except:
                 deleteFailed = True
-                print("WARNING Error in deleting object of class %s, id %s" % (xx.__class__, id(xx)))
+                print("WARNING Error in deleting object of class %s, id %s" % (obj.__class__, id(obj)))
 
         if targetObj is not None:
             try:

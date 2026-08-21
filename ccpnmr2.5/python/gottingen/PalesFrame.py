@@ -6,6 +6,7 @@ from memops.general.Util import copySubTree
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList, UtilityButtonList
 from memops.gui.Entry import Entry
+from memops.gui.FileSelect import FileType
 from memops.gui.FileSelectPopup import FileSelectPopup
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
@@ -451,6 +452,10 @@ class GenericDataMatrix(ScrolledMatrix):
         values.append(model)
         names.append('%s:%s:%s' % (code, ensembleId, model.serial))
 
+    try:
+        index = values.index(value)
+    except ValueError:
+        index = 0
     widget.setup(names, values, index)
 
   def getConstraintList(self, widget, obj, attrName):
@@ -466,6 +471,10 @@ class GenericDataMatrix(ScrolledMatrix):
         names.append('%s:%s (%s)' %
         (storeSerial, constraintList.serial, constraintList.className))
 
+    try:
+        index = values.index(value)
+    except ValueError:
+        index = 0
     widget.setup(names, values, index)
 
   def stdGetter(self, widget, obj, attrName):
