@@ -5,6 +5,7 @@
 # ExtendNMRFrame.
 
 
+import tkinter as Tkinter
 import os
 
 # added jmci; do we need this??
@@ -361,7 +362,7 @@ if __name__ == "__main__":
 
   import sys
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

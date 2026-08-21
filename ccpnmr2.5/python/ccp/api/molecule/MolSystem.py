@@ -146,7 +146,7 @@ cleared first.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2895,7 +2895,7 @@ creates the Residue and Atom objects corresponding to it.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7952,7 +7952,7 @@ normal way of dividing a Chain in ChainFragments.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -8969,7 +8969,7 @@ class ChainInteraction(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -9882,7 +9882,7 @@ NMR-observable impurities in an Nmr study).
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -18095,7 +18095,7 @@ links.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -18954,7 +18954,7 @@ of the MolSystem
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -19770,7 +19770,7 @@ class MolSystemSysName(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -20496,7 +20496,7 @@ class NonCovalentBond(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -21257,7 +21257,7 @@ class Residue(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -25569,7 +25569,7 @@ structures. May be from same or different generation cycles.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

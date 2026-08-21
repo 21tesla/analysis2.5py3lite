@@ -491,7 +491,7 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2132,7 +2132,7 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3736,7 +3736,7 @@ class AnalysisPopup(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -5222,7 +5222,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -13762,7 +13762,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -17663,7 +17663,7 @@ this is a program-specific part of the model.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -19903,7 +19903,7 @@ class AxisMapping(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -20676,7 +20676,7 @@ class AxisRegion(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -22005,7 +22005,7 @@ plots.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -23196,7 +23196,7 @@ SpectrumWindow.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -25087,7 +25087,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -25764,7 +25764,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -26743,7 +26743,7 @@ class MarkDim(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -27526,7 +27526,7 @@ class PanelType(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -28222,7 +28222,7 @@ class PopupOption(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -28941,7 +28941,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -30082,7 +30082,7 @@ simultaneously.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -32517,7 +32517,7 @@ time, and only windows in the active group are displayed.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -33647,7 +33647,7 @@ have one.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -35171,7 +35171,7 @@ SpectrumWindow being considered.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -36611,7 +36611,7 @@ class StoredContour(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -37628,7 +37628,7 @@ SpectrumWindow being considered.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -38434,7 +38434,7 @@ class Ruler(AbstractMark):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -39412,7 +39412,7 @@ class Mark(AbstractMark):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -40391,7 +40391,7 @@ class AxisPanel(SidePanel):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -41444,7 +41444,7 @@ class SlicePanel(SidePanel):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

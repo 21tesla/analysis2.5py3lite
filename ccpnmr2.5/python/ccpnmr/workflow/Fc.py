@@ -6,7 +6,7 @@ from memops.universal.Io import joinPath
 
 
 class FcWorkFlow(WorkFlow):
-    FcWorkFlowError = StandardError
+    FcWorkFlowError = Exception
 
     #
     # componentList contains the data elements that this particular workflow bit can handle as input.

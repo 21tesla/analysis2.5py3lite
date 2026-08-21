@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 from os import listdir, path
 from tkinter import PhotoImage
 
@@ -830,7 +831,7 @@ if __name__ == "__main__":
     import mimetypes
     from os import R_OK, access
 
-    import Tkinter
+    import tkinter as Tkinter
 
     root = Tkinter.Tk()
     root.grid_columnconfigure(0, weight=1)

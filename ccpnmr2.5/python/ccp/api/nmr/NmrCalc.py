@@ -1275,7 +1275,7 @@ a restraint derived from relaxation measurements.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2025,7 +2025,7 @@ class NmrCalcStore(memops.api.Implementation.TopObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3587,7 +3587,7 @@ class Run(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7339,7 +7339,7 @@ class RunParameter(ccp.api.general.Template.MultiTypeValue):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -8496,7 +8496,7 @@ class TensorData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -9310,7 +9310,7 @@ class FloatMatrixData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -10706,7 +10706,7 @@ parameters for successive phases of an annealing protocol.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -11890,7 +11890,7 @@ class MolSystemData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -13619,7 +13619,7 @@ class MolResidueData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -15754,7 +15754,7 @@ class SpinSystemData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -17024,7 +17024,7 @@ class StructureEnsembleData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -18638,7 +18638,7 @@ class SpectrumData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -19619,7 +19619,7 @@ class MeasurementListData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -20521,7 +20521,7 @@ class ExternalData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -21550,7 +21550,7 @@ class ConstraintStoreData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -23029,7 +23029,7 @@ class DerivedListData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -23931,7 +23931,7 @@ class PeakListData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -25035,7 +25035,7 @@ class ViolationListData(Data):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -26039,7 +26039,7 @@ class EnergyTerm(ConstraintStoreData):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

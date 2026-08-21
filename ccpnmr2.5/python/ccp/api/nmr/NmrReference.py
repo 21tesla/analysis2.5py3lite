@@ -155,7 +155,7 @@ i+1-refPoint).
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2548,7 +2548,7 @@ the meanValue or the randomCoilValue attribute must be set.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -5369,7 +5369,7 @@ in Xxx.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -6367,7 +6367,7 @@ source.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7664,7 +7664,7 @@ relevant Vars
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -9104,7 +9104,7 @@ handle, holding information about where the actual data are stored.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

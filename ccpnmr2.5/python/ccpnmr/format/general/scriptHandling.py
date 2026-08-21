@@ -81,7 +81,7 @@ Generic script handler class
 
 
 class ScriptHandler:
-    ScriptHandlerError = StandardError
+    ScriptHandlerError = Exception
 
     """
   In subclasses, below variables should be redefined!

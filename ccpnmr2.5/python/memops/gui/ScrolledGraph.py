@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import math
 
 from memops.gui.Color import hexRepr, hexToRgb
@@ -1420,7 +1421,7 @@ class ScrolledGraph(Frame):
 if __name__ == "__main__":
     import math
 
-    import Tkinter
+    import tkinter as Tkinter
 
     root = Tkinter.Tk()
     root.grid_columnconfigure(0, weight=1)

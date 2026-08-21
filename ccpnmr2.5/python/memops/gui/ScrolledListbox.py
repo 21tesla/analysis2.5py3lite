@@ -51,7 +51,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import tkSimpleDialog
+import tkinter.simpledialog
+import tkinter as Tkinter
+
 
 from memops.gui.ButtonList import ButtonList
 from memops.gui.Frame import Frame
@@ -158,7 +160,7 @@ class ScrolledListbox(Frame):
 
     def addItem(self):
 
-        newItem = tkSimpleDialog.askstring("Enter new value", "New value:", parent=self)
+        newItem = tkinter.simpledialog.askstring("Enter new value", "New value:", parent=self)
 
         if newItem:
             newItem = newItem.strip()

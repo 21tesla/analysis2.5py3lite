@@ -180,7 +180,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             dataDict["inConstructor"] = True
             try:
-                for key, value in attrlinks.iteritems():
+                for key, value in attrlinks.items():
                     try:
                         func = getattr(self.__class__, key).fset
                     except:
@@ -1857,7 +1857,7 @@ class AccessObject(memops.api.Implementation.DataObject):
 
             dataDict["inConstructor"] = True
             try:
-                for key, value in attrlinks.iteritems():
+                for key, value in attrlinks.items():
                     try:
                         func = getattr(self.__class__, key).fset
                     except:
@@ -3056,7 +3056,7 @@ class Permission(memops.api.Implementation.DataObject):
 
             dataDict["inConstructor"] = True
             try:
-                for key, value in attrlinks.iteritems():
+                for key, value in attrlinks.items():
                     try:
                         func = getattr(self.__class__, key).fset
                     except:
@@ -4349,7 +4349,7 @@ class User(memops.api.Implementation.DataObject):
 
             dataDict["inConstructor"] = True
             try:
-                for key, value in attrlinks.iteritems():
+                for key, value in attrlinks.items():
                     try:
                         func = getattr(self.__class__, key).fset
                     except:
@@ -6158,7 +6158,7 @@ class UserGroup(memops.api.Implementation.DataObject):
 
             dataDict["inConstructor"] = True
             try:
-                for key, value in attrlinks.iteritems():
+                for key, value in attrlinks.items():
                     try:
                         func = getattr(self.__class__, key).fset
                     except:

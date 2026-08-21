@@ -39,6 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import pickle
 from ccpnmr.analysis.core.AssignmentBasic import (
     assignSpinSystemResidue,
     clearSeqSpinSystemLinks,
@@ -1228,7 +1229,7 @@ class LinkSeqSpinSystemsPopup(BasePopup):
         data = self.analysisProject.linkSeqSpinSystemsData
         if data:
             try:
-                options = cPickle.loads(data)
+                options = pickle.loads(data)
             except:
                 options = {}  # Mal formed opt string - prob XML truncated
 
@@ -1334,7 +1335,7 @@ class LinkSeqSpinSystemsPopup(BasePopup):
         options["focusEntryH"] = self.focusEntryH.get() or DEFAULT_FOCUS_WIDTH_H
         options["maxMatches"] = self.maxMatchesEntry.get() or 7
 
-        data = cPickle.dumps(options)
+        data = pickle.dumps(options)
         self.analysisProject.linkSeqSpinSystemsData = data
 
     def updateLinks(self, resonanceGroupProb):

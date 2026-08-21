@@ -2089,7 +2089,7 @@ ChemAtom(Set) involved.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3228,7 +3228,7 @@ class ChemAngle(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3995,7 +3995,7 @@ ChemCompVars.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -6065,7 +6065,7 @@ class ChemBond(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -10778,7 +10778,7 @@ for all ChemCompVars, others have different names for different sets.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -12028,7 +12028,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -14383,7 +14383,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     
     # calculate mass
     xx = self.root.currentChemElementStore
-    result = sum(ii * xx.findFirstChemElement(symbol=ss).mass for (ss, ii) in dd.iteritems())
+    result = sum(ii * xx.findFirstChemElement(symbol=ss).mass for (ss, ii) in dd.items())
     return result
   
   def getName(self):
@@ -15963,7 +15963,7 @@ reference.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -17105,7 +17105,7 @@ class ChemTorsionSysName(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -17857,7 +17857,7 @@ created and linked to the correct AbstractChemAtoms.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -19264,7 +19264,7 @@ given explicitly
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -21544,7 +21544,7 @@ and their order in the link define the stereochemistry of the atoms.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -22957,7 +22957,7 @@ definition of LinkEnds.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -24096,7 +24096,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -26139,7 +26139,7 @@ from one.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -27971,7 +27971,7 @@ four standrad DNA or RNA bases
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

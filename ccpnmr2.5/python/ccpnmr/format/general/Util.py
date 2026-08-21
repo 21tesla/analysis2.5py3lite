@@ -82,7 +82,7 @@ from memops.universal.Util import returnFloat, returnInt, returnLong
 #
 
 
-class SimpleError(StandardError):
+class SimpleError(Exception):
     def __init__(self, value):
 
         self.value = value

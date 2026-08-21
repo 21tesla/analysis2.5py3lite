@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 import re
 import time
 
@@ -478,7 +479,7 @@ class RepositoryFrame(Frame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

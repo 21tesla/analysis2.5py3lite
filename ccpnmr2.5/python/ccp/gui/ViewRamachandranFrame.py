@@ -58,6 +58,7 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
+import tkinter as Tkinter
 import math
 
 from memops.gui.Color import scaleColor
@@ -896,7 +897,7 @@ class ViewRamachandranFrame(ScrolledCanvas):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     root = Tkinter.Tk()
     root.grid_columnconfigure(0, weight=1)

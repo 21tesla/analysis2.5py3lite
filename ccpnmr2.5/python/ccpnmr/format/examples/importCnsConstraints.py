@@ -11,6 +11,7 @@ Level: basic
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
+import tkinter as Tkinter
 #
 # Get the Implementation package to create a project
 #

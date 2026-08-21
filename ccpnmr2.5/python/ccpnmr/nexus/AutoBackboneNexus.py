@@ -24,6 +24,7 @@ for further information, please contact :
 
 """
 
+import tkinter as Tkinter
 from math import exp, sqrt
 
 from ccpnmr.analysis.core.AssignmentBasic import findConnectedSpinSystem

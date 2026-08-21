@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 import os
 
 from ccp.api.nmr import NmrConstraint

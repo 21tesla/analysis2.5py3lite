@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from memops.editor.Util import getKeyList, getObjectKey
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 
@@ -128,7 +129,7 @@ class ObjectTable(ScrolledMatrix):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.api import Implementation as Impl
 

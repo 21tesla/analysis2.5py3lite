@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import memops.gui.QueryDialogBox as QueryDialogBox
 from memops.gui.FileSelectPopup import FileSelectPopup
 
@@ -164,7 +165,7 @@ class DataEntry:
 dataEntry = DataEntry()
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     r = Tkinter.Tk()
     print(dataEntry.askString("ask string title", "ask string prompt"))

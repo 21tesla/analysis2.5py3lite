@@ -7,6 +7,7 @@
 #from memops.universal.Io import getTopDirectory
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
+import tkinter as Tkinter
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
@@ -272,7 +273,7 @@ if __name__ == "__main__":
 
   import sys
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

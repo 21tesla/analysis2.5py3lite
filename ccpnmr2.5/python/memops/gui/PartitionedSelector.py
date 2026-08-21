@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from memops.gui.Canvas import Canvas
 from memops.gui.Color import invertColor, scaleColor
 from memops.gui.Frame import Frame
@@ -389,7 +390,7 @@ if __name__ == "__main__":
     import os
 
     import OpenGL.Tk as GLTK
-    import Tkinter as tk
+    import tkinter as tk
 
     b = GLTK.Opengl(height=100, width=100)
     root = b.master

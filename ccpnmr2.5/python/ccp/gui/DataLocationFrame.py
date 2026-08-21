@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import os
 
 from ccp.api.general.DataLocation import MimeTypeDataStore, NumericMatrix
@@ -338,7 +339,7 @@ if __name__ == "__main__":
 
     path = sys.argv[1]
 
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.general.Io import loadProject
     from memops.gui.DataEntry import askDir, askFile

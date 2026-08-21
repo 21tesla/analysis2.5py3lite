@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 from memops.gui.Base import Base
 from memops.gui.ButtonList import ButtonList
 from memops.gui.Entry import Entry

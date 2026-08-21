@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from ccpnmr.analysis.core.ExperimentBasic import getThroughSpacePeakLists
 from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
 from ccpnmr.clouds.NoeMatrix import getNoeMatrixFromPeaks

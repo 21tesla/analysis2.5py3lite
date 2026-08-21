@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 from math import sqrt
 
 from memops.gui import Color
@@ -1444,7 +1445,7 @@ class PulldownEditWidget(EditWidget):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.gui.Entry import Entry
     from memops.gui.LabelFrame import LabelFrame

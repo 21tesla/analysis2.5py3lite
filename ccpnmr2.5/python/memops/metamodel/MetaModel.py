@@ -1069,7 +1069,7 @@ class MetaModelElement:
 
         # set parameters
         # set order (name and container needed for error handling)
-        ll = parameterData.keys()
+        ll = list(parameterData.keys())
         ll.remove("name")
         ll.remove("container")
         ll = ["name", "container"] + ll

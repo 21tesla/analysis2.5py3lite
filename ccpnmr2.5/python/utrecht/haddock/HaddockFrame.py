@@ -84,7 +84,7 @@ Citing:          If you are using this software for academic purposes, we
 import os
 
 from EditSymmetryPopup import EditSymmetryPopup
-from HaddockBasic import addDaniParam, addRdcParam, copyRun, getStructureFromFile, setPartnerChains, setRunConstraintSet
+from utrecht.haddock.HaddockBasic import addDaniParam, addRdcParam, copyRun, getStructureFromFile, setPartnerChains, setRunConstraintSet
 from HaddockDaniPopup import HaddockDaniPopup
 from HaddockExportClassic import exportClassic
 from HaddockExportParam import exportParam

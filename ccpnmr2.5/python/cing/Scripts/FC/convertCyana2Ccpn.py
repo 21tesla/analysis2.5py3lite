@@ -1,6 +1,7 @@
 """
 See doc in convertXplor2Ccpn.py
 """
+import tkinter as Tkinter
 import shutil
 from glob import glob
 

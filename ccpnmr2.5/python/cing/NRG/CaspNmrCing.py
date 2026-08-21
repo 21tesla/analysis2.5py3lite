@@ -22,6 +22,7 @@ or similar. The minus of -15 is necessary because it needs to signal it's childr
 Execute like:
 python -u $CINGROOT/python/cing/NRG/CaspNmrCing.py
 """
+import pickle
 import csv
 import shutil
 import string

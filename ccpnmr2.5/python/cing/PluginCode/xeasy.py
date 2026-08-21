@@ -111,7 +111,7 @@ class Xeasy( NTdict ):
         resNumDict = molecule.getResNumDict()
         maxToReport = 100 # no need to fill screen.
         errCount = 0
-        for p in self.prot.itervalues():
+        for p in self.prot.values():
             if p.shift == NOSHIFT: # don't waiste user attention for unimportant stuff.
                 continue
             if p.resNum not in resNumDict:
@@ -150,7 +150,7 @@ class Xeasy( NTdict ):
 #        TODO: finish recoding
 
         # now update the values
-        for p in self.prot.itervalues():
+        for p in self.prot.values():
             if p.atom and p.shift != NOSHIFT:
                 p.atom.resonances().value = p.shift
                 p.atom.resonances().error = p.error

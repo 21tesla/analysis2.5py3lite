@@ -43,15 +43,15 @@ import operator
 import struct
 
 # check endianess
-_big_endian = struct.pack('i',1)[0] != '\x01'
+_big_endian = struct.pack('i', 1)[0] != 1
 
 # and define appropriate constants
-NaN    = struct.unpack('d', '\x00\x00\x00\x00\x00\x00\xf8\xff')[0]
-PosInf = struct.unpack('d', '\x00\x00\x00\x00\x00\x00\xf0\x7f')[0]
+NaN    = struct.unpack('d', b'\x00\x00\x00\x00\x00\x00\xf8\xff')[0]
+PosInf = struct.unpack('d', b'\x00\x00\x00\x00\x00\x00\xf0\x7f')[0]
 NegInf = -PosInf
 if _big_endian:
-    NaN    = struct.unpack('d', '\x7F\xF8\x00\x00\x00\x00\x00\x00')[0]
-    PosInf = struct.unpack('d', '\x7F\xF0\x00\x00\x00\x00\x00\x00')[0]
+    NaN    = struct.unpack('d', b'\x7F\xF8\x00\x00\x00\x00\x00\x00')[0]
+    PosInf = struct.unpack('d', b'\x7F\xF0\x00\x00\x00\x00\x00\x00')[0]
     NegInf = -PosInf
 
 def _double_as_bytes(dval):

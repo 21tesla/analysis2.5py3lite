@@ -12,12 +12,13 @@ import pydoc
 import re
 import sys
 import time
+import io
 from copy import deepcopy
 from fnmatch import fnmatch
 from gzip import GzipFile
 from os import makedirs
 from os.path import dirname, exists, expanduser, normpath
-from string import find
+find = str.find
 from subprocess import PIPE, Popen
 from xml.dom import Node, minidom
 from xml.sax import saxutils
@@ -1931,14 +1932,14 @@ class NTdict(dict):
     # end def
 
     def update(self, fromDict):
-        for key, value in fromDict.iteritems():
+        for key, value in fromDict.items():
             self[key] = value
     # end def
 
     def toDict(self):
         'Convert to regular dictionary.'
         result = {}
-        for key, value in self.iteritems():
+        for key, value in self.items():
             result[ key ] = value
         return result
     # end def
@@ -2425,7 +2426,7 @@ class NTparameter(NTtree): # pylint: disable=R0904
     def update(self, fromDict):
         """Update preserves/establises the linked structure
         """
-        for key, value in fromDict.iteritems():
+        for key, value in fromDict.items():
 #            print '>>', repr(self), type(self), repr(value), type(value)
             if (type(self) == type(value) and key not in self):
                 self.addChild2(value)
@@ -3438,7 +3439,7 @@ def nTtoXML(obj, depth=0, stream=sys.stdout, indent='\t', lineEnd='\n'):
         nTindent(depth, stream, indent)
         fprintf(stream, "<dict>")
         fprintf(stream, lineEnd)
-        for key, value in obj.iteritems():
+        for key, value in obj.items():
             nTindent(depth+1, stream, indent)
             fprintf(stream, "<key name=%s>", quote(key))
             fprintf(stream, lineEnd)
@@ -3916,6 +3917,7 @@ class PrintWrap:
     # end def
 
     def __call__(self, form, *args):
+        import cing
         if self.verbose > cing.verbosity: # keep my mouth shut per request.
             return
         if self.prefix:
@@ -4013,7 +4015,7 @@ class CodeError(Exception):
 # end class
 
 
-class NTfile(file):
+class NTfile(io.FileIO):
     """
 File class with a binary read/write typecode as defined for array module:
 
@@ -4042,7 +4044,7 @@ mentation). The actual size can be accessed through the itemsize attribute. The 
 represent the full range of C's unsigned (long) integers.
     """
     def __init__(self, *args, **kwds):
-        file.__init__(self, *args, **kwds)
+        io.FileIO.__init__(self, *args, **kwds)
     #end def
 
     def binaryWrite(self, typecode, *numbers):

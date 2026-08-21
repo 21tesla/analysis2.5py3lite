@@ -39,6 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 import os
 
 from ccp.general.Constants import standardResidueCcpCodes
@@ -1266,7 +1267,7 @@ def isSchemeEditable(scheme):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.api import Implementation
     from memops.format.xml import Util as xmlUtil

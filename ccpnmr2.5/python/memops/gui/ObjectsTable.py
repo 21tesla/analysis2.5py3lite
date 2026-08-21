@@ -50,6 +50,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+import tkinter as Tkinter
 # ObjectsTable is for displaying a selection of attributes
 # of an array of objects, allowing the user to update their values
 # It requires a list of attributes, how these are labelled on the

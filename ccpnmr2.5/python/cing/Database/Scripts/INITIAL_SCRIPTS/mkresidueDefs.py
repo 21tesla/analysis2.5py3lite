@@ -1368,7 +1368,7 @@ for r in AwkLikeS( cyanaLib ):
                 tmp[idx] = (idx, aname, r.dollar[3], [r.int(9), r.int(10), r.int(11),r.int(12)], r.int(13) )
 
             # process the dihedral lines
-            for name, atoms in tmp2.iteritems():
+            for name, atoms in tmp2.items():
                 dihedralDef = []
                 for a in atoms:
                     if a==0:
@@ -1382,7 +1382,7 @@ for r in AwkLikeS( cyanaLib ):
                 res.appendDihedral( name, atoms=dihedralDef )
 
             # process the atom lines
-            for idx, aname, type, topol, pseudo in tmp.itervalues():
+            for idx, aname, type, topol, pseudo in tmp.values():
                 if idx >= astart and idx <= astop and (aname in res):
                     #print idx, atm, topol
                     atm = res[aname]

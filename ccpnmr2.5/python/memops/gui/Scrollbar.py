@@ -50,6 +50,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+import tkinter as Tkinter
 # not a subclass of Tkinter.Scrollbar
 # but with approximately same functionality
 # but allows resizing with middle button

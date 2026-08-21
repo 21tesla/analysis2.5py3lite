@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from ccpnmr.format.gui.BasePopup import TemporaryBasePopup
 from memops.gui.Label import Label
 from memops.gui.Util import createDismissButton

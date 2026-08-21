@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from ccp.gui.DataLocationFrame import DataLocationFrame
 from memops.editor.BasePopup import BasePopup
 
@@ -94,7 +95,7 @@ if __name__ == "__main__":
 
     path = sys.argv[1]
 
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.general.Io import loadProject
     from memops.gui.DataEntry import askDir, askFile

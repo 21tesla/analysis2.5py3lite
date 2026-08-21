@@ -320,7 +320,7 @@ class Queeny( Odict ):
 
         nTmessage('==> Queeny adding restraints (# elements = %d)', len(self))
 
-        for dme in self.itervalues():
+        for dme in self.values():
             dme.upperChange = 0.0
         #end for
 
@@ -377,7 +377,7 @@ class Queeny( Odict ):
     #end def
 
     def initFlagged(self):
-        for dme in self.itervalues():
+        for dme in self.values():
             dme.flagged = False
         self.nflagged = 0
     #end def
@@ -459,9 +459,9 @@ class Queeny( Odict ):
                 atm1  = dme12.atm1
                 atm2  = dme12.atm2
 
-                for atmN1,dme in atm1.neighbors.iteritems(): # duplicate, because gets added onto original
+                for atmN1,dme in atm1.neighbors.items(): # duplicate, because gets added onto original
                     self.triangulate(atmN1, atm1, atm2, dme, dme12)
-                for atmN2,dme in atm2.neighbors.iteritems():
+                for atmN2,dme in atm2.neighbors.items():
                     self.triangulate(atm1, atm2, atmN2, dme12, dme)
                 dme12.upperChange=0.0
                 dme12.flagged=True
@@ -482,7 +482,7 @@ class Queeny( Odict ):
         """
 #        nTdebug('Queeny.setUncertainty: starting')
 
-        for dme in self.itervalues():
+        for dme in self.values():
             if dme.upper > dme.lower:
                 dme.uncertainty = max(DmElement.uncertaintyMinvalue, math.log(dme.upper-dme.lower))
             else:

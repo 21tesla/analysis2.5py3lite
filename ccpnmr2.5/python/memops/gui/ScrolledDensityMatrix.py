@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from math import log
 
 log10 = log(10)
@@ -612,7 +613,7 @@ class ScrolledDensityMatrix(ScrolledCanvas):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     root = Tkinter.Tk()
     root.grid_columnconfigure(0, weight=1)

@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 import os
 
 # added jmci; do we need this??
@@ -601,7 +602,7 @@ class ProjectFrame(Frame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from math import sqrt
 
 from ccpnmr.analysis.core.StructureBasic import getAtomSetCoords

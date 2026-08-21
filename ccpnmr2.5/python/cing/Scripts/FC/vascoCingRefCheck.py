@@ -3,6 +3,7 @@
 # Execute in a directory with both a CCPN and a CING project directory named 1brv and 1brv.cing respectively.
 # $CINGROOT/python/cing/Scripts/FC/vascoCingRefCheck.py 1brv
 
+import tkinter as Tkinter
 import glob
 
 from matplotlib import mlab
@@ -340,7 +341,7 @@ if __name__ == '__main__':
 #              File "/Users/jd/workspace35/ccpn/python/pdbe/software/vascoReferenceCheck.py", line 178, in createSsInfo
 #                from pdbe.analysis.external.stride.Util import StrideInfo #@UnresolvedImport
 #            ImportError: No module named external.stride.Util
-        import Tkinter
+        import tkinter as Tkinter
         root = Tkinter.Tk()
         ccpnDir = entryCode
         vascoReferenceCheck = VascoReferenceCheck(guiParent=root)

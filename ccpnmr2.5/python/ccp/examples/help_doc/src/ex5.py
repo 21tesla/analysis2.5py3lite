@@ -1,4 +1,5 @@
 # Standard python library.
+import tkinter as Tkinter
 import os
 
 # Get Tkinter for popups.

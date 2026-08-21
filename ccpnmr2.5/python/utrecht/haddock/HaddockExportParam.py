@@ -82,8 +82,7 @@ Citing:          If you are using this software for academic purposes, we
 """
 
 import os
-
-from HaddockBasic import getAirSegments, getFlexibleResidues, getPdbString, makeBackup
+from utrecht.haddock.HaddockBasic import getAirSegments, getFlexibleResidues, getPdbString, makeBackup
 from HaddockLocal import daniProtocolStore, rdcProtocolStore
 
 

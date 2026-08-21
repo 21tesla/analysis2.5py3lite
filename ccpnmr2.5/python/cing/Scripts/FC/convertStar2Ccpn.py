@@ -3,6 +3,7 @@ Original from Wim Vranken.
 Used for eNMR/weNMR workshop data sets.
 """
 
+import tkinter as Tkinter
 import shutil
 from glob import glob
 
@@ -15,7 +16,7 @@ from memops.api import Implementation
 from memops.api.Implementation import ApiError
 
 try:
-    import Tkinter
+    import tkinter as Tkinter
 except:
     if cing.verbosity == cing.verbosityDebug:
         if False:

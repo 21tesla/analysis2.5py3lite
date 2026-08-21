@@ -15,6 +15,7 @@ ALSO have list of components that can be tested in each software?
 
 """
 
+import tkinter as Tkinter
 import os
 import shutil
 import time
@@ -40,7 +41,7 @@ class WorkFlow:
     # TODO Connect this to command line arguments? See eNmr.convertCasdNmrToCcpn
     #
 
-    WorkFlowError = StandardError
+    WorkFlowError = Exception
 
     def __init__(self, **keywds):
 
@@ -132,7 +133,7 @@ class WorkFlow:
 
         self.useGui = useGui
         if useGui:
-            import Tkinter
+            import tkinter as Tkinter
 
             self.guiRoot = Tkinter.Tk()
         else:

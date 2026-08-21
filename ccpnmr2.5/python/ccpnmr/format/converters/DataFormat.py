@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import operator
 import os
 import string
@@ -112,7 +113,6 @@ from ccpnmr.format.general.Constants import (
     atomSerial_kw,
     ccpNmr_kw,
     chemShiftAllowedDiff,
-    code1LetterToCcpCodeDict,
     coordinateImportSourceName,
     dateTimeStamp_kw,
     defaultMolCode,
@@ -126,6 +126,7 @@ from ccpnmr.format.general.Constants import (
     tagSep,
 )
 from ccpnmr.format.general.TopShared import TopShared
+from ccp.general.Constants import code1LetterToCcpCodeDict
 
 #
 # Import user interaction code. Note that a lot of this code will not
@@ -1368,7 +1369,7 @@ class DataFormat(TopShared):
     # FormatConverter Error Class
     #
 
-    class FormatConverterError(StandardError):
+    class FormatConverterError(Exception):
         def __init__(self, value):
             self.value = value
 

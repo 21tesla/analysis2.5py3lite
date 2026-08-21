@@ -59,7 +59,7 @@ from memops.api import Implementation as ApiImp
 from memops.general import Implementation as GenImp
 
 classMapping = {}
-classMapping[types.BooleanType] = ApiImp.AppDataBoolean
+classMapping[bool] = ApiImp.AppDataBoolean
 classMapping[int] = ApiImp.AppDataInt
 classMapping[float] = ApiImp.AppDataFloat
 classMapping[str] = ApiImp.AppDataString

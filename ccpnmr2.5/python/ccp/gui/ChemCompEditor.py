@@ -56,6 +56,7 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import string
 import time
 

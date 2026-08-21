@@ -12,6 +12,7 @@ Level: intermediate
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
+import tkinter as Tkinter
 #
 # Get the top level data model package
 #

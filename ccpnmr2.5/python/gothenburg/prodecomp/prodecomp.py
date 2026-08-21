@@ -67,11 +67,12 @@ from numpy import (
     r_,
     random,
     roll,
-    sometrue,
+    bool_,
     squeeze,
     where,
     zeros,
 )
+sometrue = bool_
 
 # "sum" is a python built-in
 from numpy import sum as nSum

@@ -5,7 +5,7 @@ First version: gv June 3, 2007
 
 from glob import glob
 from shutil import copy
-from string import upper
+upper = str.upper
 
 from cing import issueListUrl
 from cing.core.constants import *  #@UnusedWildImport

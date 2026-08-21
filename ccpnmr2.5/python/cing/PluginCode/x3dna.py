@@ -300,7 +300,7 @@ class X3dna(NTdict):
         found = False
         infoText = None # Helping pylint.
         parameterBlockId = None
-        for parameterBlockId, infoText in self.outputInfoDict.iteritems():
+        for parameterBlockId, infoText in self.outputInfoDict.items():
         #        print parameterBlockId, infoText
             try:
                 if block.split('\n')[1].strip() in infoText:

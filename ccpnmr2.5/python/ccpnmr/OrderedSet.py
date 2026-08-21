@@ -30,10 +30,10 @@ __date__ = "$Date: 2017-04-07 10:28:41 +0000 (Fri, April 07, 2017) $"
 # =========================================================================================
 
 
-import collections
+from collections.abc import MutableSet
 
 
-class OrderedSet(collections.MutableSet):
+class OrderedSet(MutableSet):
     def __init__(self, iterable=None):
         self.end = end = []
         end += [None, end, end]  # sentinel node for doubly linked list
@@ -94,7 +94,7 @@ class OrderedSet(collections.MutableSet):
         return set(self) == set(other)
 
 
-class FrozenOrderedSet(collections.MutableSet):
+class FrozenOrderedSet(MutableSet):
     def __init__(self, iterable=None):
         self.end = end = []
         end += [None, end, end]  # sentinel node for doubly linked list

@@ -4,6 +4,7 @@ Execute like:
 python -u $CINGROOT/python/cing/NRG/doAnnotateNrgCing.py $x $y
 '''
 
+import tkinter as Tkinter
 import tarfile
 from shutil import rmtree
 

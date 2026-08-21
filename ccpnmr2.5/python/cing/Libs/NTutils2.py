@@ -151,7 +151,7 @@ _outOutputStreamContainerList = [ nTmessageNoEOL, nTdebug, nTdetail, nTmessage, 
 _errOutputStreamContainerList = [ nTerror, nTcodeerror, nTexception ]
 
 #: To dump some output to never see again
-_bitBucket = open('/dev/null', 'aw')
+_bitBucket = open('/dev/null', 'a')
 #: Regular output at the start of the program"
 _returnMyStdOut = sys.stdout
 #: Error output at the start of the program"

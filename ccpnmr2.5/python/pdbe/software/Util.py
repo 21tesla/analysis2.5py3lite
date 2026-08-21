@@ -383,7 +383,7 @@ class ContactOccurrenceHandler:
 
   contactInfoImportPath = "pdbe.software.data"
 
-  class ContactOccurrenceError(StandardError):
+  class ContactOccurrenceError(Exception):
 
     def __init__(self, value):
       self.value = value

@@ -8,6 +8,7 @@ Copyright (c) 2008 University of Cambridge. All rights reserved.
 """
 
 
+import tkinter as Tkinter
 from PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
 from PeakSeparatorParams import PeakSeparatorParams
 from PeakSeparatorPeakList import getPeakListParams
@@ -700,7 +701,7 @@ class PeakSeparatorGui(BasePopup):
 
 def launchPeakSeparator():
 
-  import Tkinter
+  import tkinter as Tkinter
 
   global top
 

@@ -62,8 +62,7 @@ secondary structure. J Magn Reson. 202(2010):223-233.
 
 import os
 import sys
-
-from Predictor import Predictor
+from cambridge.dangle.src.Predictor import Predictor
 from Protein import Protein
 from Reference import Reference
 

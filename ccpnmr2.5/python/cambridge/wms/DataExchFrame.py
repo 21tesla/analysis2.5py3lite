@@ -3,6 +3,7 @@
 
 # added jmci; do we need this??
 
+import tkinter as Tkinter
 from SharedBeanService_services import *
 from WSString import *
 
@@ -225,7 +226,7 @@ class DataExchFrame(Frame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

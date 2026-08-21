@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from ccpnmr.analysis.core.AssignmentBasic import assignSpinSystemResidue
 from ccpnmr.clouds.CloudBasic import getCloudsFromFile, getFileNamesFromPattern
 from ccpnmr.clouds.CloudHomologueAssign import cloudHomologueAssign

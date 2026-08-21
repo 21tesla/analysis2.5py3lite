@@ -1,4 +1,5 @@
 
+import tkinter as Tkinter
 from ccp.general.Util import setCurrentStore
 from ccp.gui.ChemCompEditor import ChemCompEditPopup
 from ccp.gui.ChemCompFrame import ChemCompFrame

@@ -11,11 +11,12 @@ Run:
 python $CINGROOT/python/cing/Scripts/convertD1D2_2Db2.py
 """
 
+import pickle
 import csv
 
 from matplotlib.pyplot import hist
 from numpy.ma.core import multiply
-from numpy.matrixlib.defmatrix import mat  # pylint: disable=E0611
+from numpy import matrix as mat  # pylint: disable=E0611
 
 from cing import cingDirData, cingDirTmp
 from cing.core.database import NTdb
@@ -279,7 +280,7 @@ def main():
     dbase[ 'histd1BySs1' ] = histd1BySs1
     dbase[ 'histd1' ] = histd1 #  4 kb
 
-    cPickle.dump(dbase, output, 2)
+    pickle.dump(dbase, output, 2)
     output.close()
 
 

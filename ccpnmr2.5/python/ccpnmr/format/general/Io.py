@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 from memops.universal.Io import getPythonDirectory, joinPath
 
 
@@ -86,7 +87,7 @@ class TextPipe:
             self.textArea.append(text)
 
         if self.guiWindow:
-            import Tkinter
+            import tkinter as Tkinter
 
             self.textArea.see(Tkinter.END)
 

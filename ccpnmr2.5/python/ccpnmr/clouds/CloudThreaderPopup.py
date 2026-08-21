@@ -37,6 +37,8 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import pickle
+import tkinter as Tkinter
 from math import sqrt
 from os import listdir
 
@@ -1470,9 +1472,9 @@ def calcDistDistributions(dirName, intraFileName="intraDistribs001.txt", interFi
                 intra[ccpCode][atom1][atom2] = distr
 
     intraFile = open(intraFileName, "w")
-    cPickle.dump(intra, intraFile)
+    pickle.dump(intra, intraFile)
     interFile = open(interFileName, "w")
-    cPickle.dump(inter, interFile)
+    pickle.dump(inter, interFile)
 
     intraFile.close()
     interFile.close()
@@ -1491,7 +1493,7 @@ def getCoordsDist(coord1, coord2):
 def readDistribution(fileName):
 
     file = open(fileName)
-    dict = cPickle.load(file)
+    dict = pickle.load(file)
 
     return dict
 

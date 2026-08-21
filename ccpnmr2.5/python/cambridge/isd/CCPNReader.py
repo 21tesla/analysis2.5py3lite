@@ -1,5 +1,7 @@
 # MemopsRoot
 
+import pickle
+
 key_project_settings = 'project.settings'
 
 def get_isd_name():
@@ -33,7 +35,6 @@ def getObjectKeyString(object, delimiter='|'):
   return delimiter.join(keys)
 
 def is_number(s):
-
   from string import digits
 
   for x in s:
@@ -1043,13 +1044,11 @@ class CCPNReader:
 
     def get_app_data_object(self, app_data):
 
-      import cPickle
 
-      return cPickle.loads(app_data.value)['object']
+      return pickle.loads(app_data.value)['object']
 
     def find_app_data(self, app_data, key):
 
-      import cPickle
 
       for x in app_data:
 
@@ -1057,8 +1056,8 @@ class CCPNReader:
           continue
 
         try:
-          d = cPickle.loads(x.value)
-        except cPickle.UnpicklingError:
+          d = pickle.loads(x.value)
+        except pickle.UnpicklingError:
           continue
           
         if d['key'] == key:

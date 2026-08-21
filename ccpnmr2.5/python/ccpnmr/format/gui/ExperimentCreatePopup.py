@@ -52,7 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
-import Tkinter
+import tkinter as Tkinter
 
 from ccp.general.Util import setCurrentStore
 from ccpnmr.format.general.Io import getHelpUrlDir

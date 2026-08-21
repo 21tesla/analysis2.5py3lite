@@ -486,7 +486,7 @@ class ProjectResult(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -1428,7 +1428,7 @@ class ProjectVersionResult(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2447,7 +2447,7 @@ class TaskResult(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3331,7 +3331,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -4797,7 +4797,7 @@ class TaskQuery(AbstractQuery):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -5682,7 +5682,7 @@ class ProjectVersionQuery(AbstractQuery):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -6568,7 +6568,7 @@ class ProjectQuery(AbstractQuery):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

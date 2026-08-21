@@ -38,6 +38,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 
 """
+import tkinter as Tkinter
 # * * * * * * * * * * * * * * TBD * * * * * * * * * * * * * * *
 #
 # Type spin system as we go?
@@ -1930,7 +1931,7 @@ class LinkSideChainsPopup(BasePopup):
       2) 
       
       """
-            import Tkinter
+            import tkinter as Tkinter
 
             from memops.gui.ScrolledDensityMatrix import ScrolledDensityMatrix
 

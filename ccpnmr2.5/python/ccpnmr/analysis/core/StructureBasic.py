@@ -61,6 +61,9 @@ except ImportError:
 
 from memops.universal.Geometry import matrixMultiply
 
+# Re-export the structure analysis helpers dependent modules import from StructureBasic.
+from ccp.lib.StructureLib import alignStructures, getAtomSetCoords, getAtomSetsDihedral, getAtomSetsDistance
+
 BACKBONE_ATOMS = {
     "protein": ("N", "C", "CA"),
     "RNA": ("OP1", "P", "O3'", "O5'", "C3'", "C4'", "C5'"),

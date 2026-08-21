@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 # creates scrolled frame with attribute frame which is used
 # from outside this code as the parent of the frame to be scrolled
 # this only works if the size of that frame is fixed at construction

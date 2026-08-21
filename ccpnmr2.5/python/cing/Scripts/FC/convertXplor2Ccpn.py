@@ -3,6 +3,7 @@ Original from Wim Vranken.
 Used for eNMR/weNMR workshop data sets.
 """
 
+import tkinter as Tkinter
 import shutil
 from glob import glob
 

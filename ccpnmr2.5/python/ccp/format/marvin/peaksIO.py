@@ -141,7 +141,7 @@ Code by Gary Thompson
 
 import sys
 
-from UserDict import DictMixin
+from collections.UserDict import DictMixin
 
 # todo: rename values
 

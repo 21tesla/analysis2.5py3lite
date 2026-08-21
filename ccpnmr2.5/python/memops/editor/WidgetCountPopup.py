@@ -60,6 +60,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from memops.editor.BasePopup import BasePopup
 from memops.gui.Base import getRoot, getWidgetCount
 from memops.gui.IntEntry import IntEntry

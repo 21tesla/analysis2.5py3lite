@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import pickle
 from math import exp, log, sqrt
 from os import listdir
 from os.path import exists, isfile
@@ -974,7 +975,7 @@ def calcDistDistributions(dirName, intraFileName="intraDistribs001.txt", interFi
                 intra[ccpCode][atom1][atom2] = distr
 
     intraFile = open(intraFileName, "w")
-    cPickle.dump(intra, intraFile)
+    pickle.dump(intra, intraFile)
 
     intraFile.close()
     interFile.close()
@@ -993,7 +994,7 @@ def getCoordsDist(coord1, coord2):
 def readIntraDistribution(fileName):
 
     file = open(fileName)
-    dict = cPickle.load(file)
+    dict = pickle.load(file)
 
     return dict
 

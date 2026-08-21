@@ -12,7 +12,7 @@ casdNmrDataUrl = os.path.join(eNmrUrl,"casd-nmr-data-sets")
 from pdbe.adatah.Constants import archivesDataDir
 casdNmrDataDir = os.path.join(archivesDataDir,'casdNmr')
 
-class CasdNmrError(StandardError):
+class CasdNmrError(Exception):
   pass
 
 def getCasdNmrProjectInfo(casdNmrRefFile=None):

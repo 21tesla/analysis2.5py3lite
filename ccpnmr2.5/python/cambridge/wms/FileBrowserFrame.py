@@ -1,4 +1,5 @@
 
+import tkinter as Tkinter
 import mimetypes
 from os import R_OK, access, listdir, path
 
@@ -199,7 +200,7 @@ class FileBrowserFrame(Frame):
 
 if __name__ == '__main__':
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

@@ -22,8 +22,7 @@ Imports structure(s) into the CCPN project using a CCPN routine
 
 import json
 import os
-
-import CyanaParser.CyanaParser as cp
+import cyana2ccpn.CyanaParser.CyanaParser as cp
 
 from ccp.lib.StructureIo import getStructureFromFile
 from ccpnmr.analysis.core.AssignmentBasic import assignAtomsToRes, assignResToDim
@@ -134,7 +133,7 @@ def importFromCyana(nmrCalcRun, targetDir):
     violatedPeaks = loadViolatedDistanceRestraints(c.violationLists, nmrProject, nmrCalcRun, nmrConstraintStore,
                            resonanceDictionaries['fixedResonanceDict'],
                            resonanceDictionaries['cingFixedResonanceDict'],molSystem, AnalysisProject)
-    for peakList,peaks in violatedPeaks.iteritems():
+    for peakList,peaks in violatedPeaks.items():
       spectrum = peakList.getDataSource()
       newPeakList = spectrum.newPeakList()
       newPeakList.details = 'violated'
@@ -175,7 +174,7 @@ def splitAssignedUnassigned(peakList, assignedPeakList, unassignedPeakList):
 def createAtomtoResonanceMap(nmrProject):
   atomToResonanceMap = {}
   resonanceToAtomMap = getResonanceAtomMap('IUPAC', nmrProject.sortedResonances())
-  for k, v in resonanceToAtomMap.iteritems():
+  for k, v in resonanceToAtomMap.items():
     atomTuple = (v[0].chain, v[0].seqId, v[0].atomName)
     atomToResonanceMap[atomTuple] = k
   return atomToResonanceMap

@@ -508,7 +508,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
         result = {}
         if len(line) < 65:
             return None
-        for field, fieldDef in defs.iteritems():
+        for field, fieldDef in defs.items():
             c1, c2, func, dummyStore = fieldDef
             result[ field ] = func(line[c1:c2])
         return result
@@ -574,7 +574,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
                     return True
 
 #                nTdebug("working on residue %s" % residue)
-                for field, value in result.iteritems():
+                for field, value in result.items():
                     if not self.procheckDefs[field][3]: # Checking store parameter.
                         continue
                     # Insert for key: "field" if missing an empty  NTlist.
@@ -606,7 +606,7 @@ B   7 U   999.900 999.900 999.900 999.900 999.900 999.900   0.000   1.932 999.90
                 return
             #end if
 
-            for field, value in result.iteritems():
+            for field, value in result.items():
                 if not self.procheckEnsembleDefs[field][3]: # Checking store parameter.
                     continue
                 # end if

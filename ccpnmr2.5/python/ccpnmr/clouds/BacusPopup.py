@@ -37,6 +37,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from ccpnmr.analysis.core.ExperimentBasic import getSpectrumIsotopes
 from ccpnmr.clouds.ResonanceIdentification import run2dBacus, run3dBacus
 from memops.editor.BasePopup import BasePopup

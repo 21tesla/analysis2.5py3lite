@@ -50,6 +50,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 """
+import tkinter as Tkinter
 # old code so probably of dubious coding style at best
 
 # TBD check if list is really long and then go sideways

@@ -52,6 +52,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import os
 
 from ccp.api.molecule import MolSystem
@@ -88,7 +89,7 @@ class Tool:
 
         if not guiParent:
             try:
-                import Tkinter
+                import tkinter as Tkinter
 
                 self.guiParent = Tkinter.Tk()
 

@@ -2,6 +2,7 @@
 # added jmci; do we need this??
 
 #from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
+import tkinter as Tkinter
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.Frame import Frame
@@ -165,7 +166,7 @@ class RepositoryPropertiesFrame(Frame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

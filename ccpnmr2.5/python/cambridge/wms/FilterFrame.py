@@ -1,5 +1,6 @@
 
 # required for WS layer
+import tkinter as Tkinter
 from SharedBeanService_services import *
 from WSString import *
 
@@ -151,7 +152,7 @@ class FilterFrame(LabelFrame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

@@ -10,6 +10,7 @@ if the input project is in cwd.
 
 Most functionality is hard-coded here so be careful reading the actual code.
 """
+import tkinter as Tkinter
 from glob import glob
 
 from ccpnmr.format.converters.PseudoPdbFormat import PseudoPdbFormat

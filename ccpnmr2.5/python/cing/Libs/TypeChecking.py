@@ -88,7 +88,7 @@ class TypeChecker:
 
             else:
                 s = 'is_type: internal error.'
-                raise StandardError(s)
+                raise Exception(s)
 
     def check_type(self, token, *names):
 

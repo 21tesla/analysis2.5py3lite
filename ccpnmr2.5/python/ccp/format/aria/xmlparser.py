@@ -243,7 +243,7 @@ class SelfmadeXMLParser:
             self.EndElementHandler(tag)
             return xmlfile[match.end() :]
 
-        raise StandardError("mis-formatted xml file")
+        raise Exception("mis-formatted xml file")
 
     def handle_element_match(self, match):
 

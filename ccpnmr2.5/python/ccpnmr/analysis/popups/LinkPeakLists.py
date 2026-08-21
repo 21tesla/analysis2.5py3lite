@@ -39,6 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import pickle
 from ccpnmr.analysis.core.AssignmentAdvanced import assignSpecNonRootResonances, pickAssignSpecFromRoot
 from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs, getPrimaryDataDimRef, getSeqAssignRefExperiments
 from ccpnmr.analysis.core.MarkBasic import createPeakMark
@@ -993,7 +994,7 @@ class LinkPeakListsPopup(BasePopup):
         data = analysisProject.linkPeakListsData
         if data:
             try:
-                options = cPickle.loads(data)
+                options = pickle.loads(data)
             except Exception:
                 options = {}
         else:
@@ -1092,7 +1093,7 @@ class LinkPeakListsPopup(BasePopup):
             options["peakList"] = self.getPeakListId(self.peakList)
 
         try:
-            data = cPickle.dumps(options)
+            data = pickle.dumps(options)
             self.analysisProject.linkPeakListsData = data
         except:
             pass

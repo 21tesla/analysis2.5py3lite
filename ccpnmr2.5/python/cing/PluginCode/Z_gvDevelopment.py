@@ -372,7 +372,7 @@ class gvProcheck:
     #    print ">>", line
         result = {}
         if (len(line) >= 64):
-            for field,fieldDef in self.procheckDefs.iteritems():
+            for field,fieldDef in self.procheckDefs.items():
                 c1,c2,func = fieldDef
                 result[ field ] = func(line[c1:c2])
             #end for
@@ -415,7 +415,7 @@ class gvProcheck:
                 else:
 
                     residue.setdefault( 'procheck', NTstruct() )
-                    for field,value in result.iteritems():
+                    for field,value in result.items():
                         residue.procheck.setdefault( field, NTlist() )
                         residue.procheck[field].append( value )
                     #end for

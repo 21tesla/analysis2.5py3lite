@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 import os
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat

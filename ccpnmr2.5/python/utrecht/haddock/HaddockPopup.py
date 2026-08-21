@@ -81,6 +81,7 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 
+import tkinter as Tkinter
 import sys
 
 from HaddockFrame import HaddockFrame
@@ -109,7 +110,7 @@ def standAloneUse(argv=None):
     """Use the Haddock GUI in stand alone mode"""
 
 
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.general.Io import loadProject
 

@@ -60,6 +60,7 @@ software development. Bioinformatics 21, 1678-1684.
 
 """
 
+import tkinter as Tkinter
 import re
 
 from ccp.api.nmr import NmrExpPrototype
@@ -2591,7 +2592,7 @@ class RefExperimentFrame(Frame):
 ################################################################
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.api.Implementation import MemopsRoot
 

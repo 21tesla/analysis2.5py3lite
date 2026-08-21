@@ -2,6 +2,7 @@
 # General class to make a CCPN project from archive files #
 ###########################################################
 
+import tkinter as Tkinter
 import os
 import shutil
 import sys
@@ -41,7 +42,7 @@ class DataHandler:
   # DataHandlerError class
   #
 
-  class DataHandlerError(StandardError):
+  class DataHandlerError(Exception):
 
     def __init__(self, value):
       self.value = value
@@ -201,7 +202,7 @@ class DataHandler:
       # Create main Tk window for popups and immediately display (so it ends up in right window
       #
 
-      import Tkinter
+      import tkinter as Tkinter
       self.guiRoot = Tkinter.Tk()
 
     #

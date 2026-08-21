@@ -3,7 +3,7 @@
 from operator import attrgetter
 
 import numpy
-from numpy import convolve, mat, multiply, ones
+from numpy import convolve, matrix as mat, multiply, ones
 from numpy import linalg as LA
 
 from cing import issueListUrl

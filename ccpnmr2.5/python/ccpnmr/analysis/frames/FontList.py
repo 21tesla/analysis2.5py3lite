@@ -46,6 +46,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 from memops.gui.PulldownList import PulldownList
 
 tkNames = ["Helvetica", "Times", "Courier"]
@@ -98,7 +99,7 @@ if __name__ == "__main__":
     def myCallback(font):
         print("myCallback", font)
 
-    import Tkinter
+    import tkinter as Tkinter
 
     r = Tkinter.Tk()
     f = FontList(r, isOpenGL=True, callback=myCallback)

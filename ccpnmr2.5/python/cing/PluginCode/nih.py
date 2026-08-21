@@ -937,7 +937,7 @@ nrows:    %d''', self.tabFile, self.columnDefs.zap('name'), self.nrows
         #end for
         fprintf( stream, '\n' )
 
-        for d,v in self.data.iteritems():
+        for d,v in self.data.items():
             fprintf( stream, 'DATA %s %s\n', d, v ) # Note: only ONE space between DATA and identifier!!!
         #end for
         fprintf( stream, '\n' )

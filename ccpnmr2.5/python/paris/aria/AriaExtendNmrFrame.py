@@ -54,6 +54,7 @@ integration in NMR structure calculation. Bioinformatics 23:381-382
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import os
 import sys
 

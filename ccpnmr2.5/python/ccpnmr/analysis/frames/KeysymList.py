@@ -39,6 +39,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import tkinter as Tkinter
 import string
 
 from memops.gui.PulldownList import PulldownList
@@ -89,7 +90,7 @@ class KeysymList(PulldownList):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     def callback(selected_indices, entry):
 

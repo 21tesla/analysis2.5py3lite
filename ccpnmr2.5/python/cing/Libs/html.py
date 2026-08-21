@@ -1,6 +1,7 @@
 """
 Adds html generation methods
 """
+import pickle
 import shutil
 from glob import glob1
 
@@ -232,7 +233,7 @@ class HistogramsForPlotting:
             dbase_file_abs_name =  os.path.join( self.histDir, 'phipsi_wi_db.dat' )
             #dbaseTemp = shelve.open( dbase_file_abs_name )
             dbase_file = open(dbase_file_abs_name, 'rb') # read binary
-            dbaseTemp = cPickle.load(dbase_file)
+            dbaseTemp = pickle.load(dbase_file)
         #    pprint.pprint(dbaseTemp)
             self.histRamaCombined                   = dbaseTemp[ 'histRamaCombined' ]
             self.histRamaBySsAndResType             = dbaseTemp[ 'histRamaBySsAndResType' ]
@@ -251,7 +252,7 @@ class HistogramsForPlotting:
 #            nTdebug("Loading Janin histograms")
             dbase_file_abs_name = os.path.join( self.histDir, 'chi1chi2_wi_db.dat' )
             dbase_file = open(dbase_file_abs_name, 'rb') # read binary
-            dbaseTemp = cPickle.load(dbase_file)
+            dbaseTemp = pickle.load(dbase_file)
             self.histJaninBySsAndResType            = dbaseTemp[ 'histJaninBySsAndResType' ]
             self.histJaninCtupleBySsAndResType      = dbaseTemp[ 'histJaninCtupleBySsAndResType' ]
             self.histJaninBySsAndCombinedResType    = dbaseTemp[ 'histJaninBySsAndCombinedResType' ]
@@ -263,7 +264,7 @@ class HistogramsForPlotting:
 #            nTdebug("Loading D1D2 histograms")
             dbase_file_abs_name = os.path.join( self.histDir, 'cb4ncb4c_wi_db.dat' )
             dbase_file = open(dbase_file_abs_name, 'rb') # read binary
-            dbaseTemp = cPickle.load(dbase_file)
+            dbaseTemp = pickle.load(dbase_file)
             self.histd1BySs0AndResTypes             = dbaseTemp[ 'histd1BySs0AndResTypes' ]
             self.histd1BySs1AndResTypes             = dbaseTemp[ 'histd1BySs1AndResTypes' ]
             self.histd1CtupleBySsAndResTypes        = dbaseTemp[ 'histd1CtupleBySsAndResTypes' ]
@@ -1088,7 +1089,7 @@ class HTMLfile:
         self.reset()
         htmlObjects.append( self )
 
-        for key,value in kwds.iteritems():
+        for key,value in kwds.items():
             setattr(self,key,value)
     #end def
 
@@ -1414,7 +1415,7 @@ class HTMLfile:
 
         #print '*****', tag, [args], (kwds)
         openTag = sprintf('<%s',tag)
-        for key,value in kwds.iteritems():
+        for key,value in kwds.items():
             openTag = openTag + sprintf(' %s="%s"', key, value)
         #end for
 

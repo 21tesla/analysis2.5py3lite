@@ -150,7 +150,7 @@ class Alignment(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -1856,7 +1856,7 @@ unknown disulfide binding topology).
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2747,7 +2747,7 @@ more chains.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3574,7 +3574,7 @@ the data bypassing the API.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -6174,7 +6174,7 @@ are disjoint and no residue can be a member of more than one.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7636,7 +7636,7 @@ etc.
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -11105,7 +11105,7 @@ etc.
     
     # calculate mass
     xx = self.root.currentChemElementStore
-    result = sum(ii * xx.findFirstChemElement(symbol=ss).mass for (ss, ii) in dd.iteritems())
+    result = sum(ii * xx.findFirstChemElement(symbol=ss).mass for (ss, ii) in dd.items())
     return result
   
   def getMoleculeSysNames(self):
@@ -13674,7 +13674,7 @@ class MoleculeSysName(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
         
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

@@ -1,6 +1,7 @@
 # TODO: Necessary or can get from stats?
 #from pdbe.analysis.shifts.reref import make_selection, make_sel3
 
+import tkinter as Tkinter
 import os
 import random
 
@@ -29,7 +30,7 @@ class VascoReferenceCheck:
   vascoRefDataPath = os.path.join(getTopDirectory(),'python','pdbe','analysis','shifts','reref','data')
 
   # TODO: Make executable command line script?
-  class VascoReferenceCheckError(StandardError):
+  class VascoReferenceCheckError(Exception):
 
     pass
 
@@ -528,7 +529,7 @@ class VascoReferenceCheck:
 
 if __name__ == '__main__':
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
 

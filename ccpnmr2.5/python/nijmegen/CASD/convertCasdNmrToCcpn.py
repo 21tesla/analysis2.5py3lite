@@ -67,7 +67,7 @@ def getCasdNmrProjectInfo(casdNmrRefFile=None):
 class ConvertCasdNmrToCcpn(ScriptHandler,FcWorkFlow):
 
 
-  class ConvertCasdNmrError(StandardError):
+  class ConvertCasdNmrError(Exception):
     pass
 
   #

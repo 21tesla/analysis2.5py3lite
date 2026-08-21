@@ -142,7 +142,7 @@ general terms.
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2566,7 +2566,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3855,7 +3855,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -5895,7 +5895,7 @@ refPotentialTerms
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7774,7 +7774,7 @@ class PotentialScale(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -9321,7 +9321,7 @@ interpretation generally requires reference to the application.
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -10883,7 +10883,7 @@ class RefTermParameter(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

@@ -1,4 +1,5 @@
 
+import tkinter as Tkinter
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from grenoble.BlackledgeModule.BlackledgeModuleFrame import BlackledgeModuleFrame
 
@@ -23,7 +24,7 @@ class BlackledgeModulePopup(BasePopup):
 
 def launchModulePopup():
 
-  import Tkinter
+  import tkinter as Tkinter
 
   global top
 

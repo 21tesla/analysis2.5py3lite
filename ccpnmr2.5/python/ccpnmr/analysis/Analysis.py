@@ -39,12 +39,12 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
+import pickle
 import os
 import shutil
 import sys
 import time
 
-import cPickle
 
 from ccp.api.nmr import Nmr
 from ccp.general.Io import getDataSourceFileName
@@ -2464,7 +2464,7 @@ class Analysis:
             data = application.getValue(self.analysisProject, keyword="customResidueCodesDict", defaultValue=None)
 
             if data:
-                resDict = cPickle.loads(data)
+                resDict = pickle.loads(data)
             else:
                 resDict = MoleculeBasic.userResidueCodesDict
 

@@ -59,7 +59,7 @@ from ccp.format.general.Util import getRegularExpressions, getSeqAndInsertCode
 from memops.universal.Util import returnInt
 
 
-class FileParseError(StandardError):
+class FileParseError(Exception):
     def __init__(self, value):
 
         self.value = value

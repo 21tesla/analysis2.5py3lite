@@ -7,9 +7,17 @@
 
 ## Adjusted by gv for specific purpose of NTmol
 
-from types import ListType, StringType, TupleType
+# py2 types.* aliases were removed in Python 3
+ListType = list
+StringType = str
+TupleType = tuple
 
-import fpformat
+# py2 fpformat was removed in Python 3
+class _fpformat:
+    @staticmethod
+    def fix(value, digits):
+        return '%.*f' % (int(digits), value)
+fpformat = _fpformat
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

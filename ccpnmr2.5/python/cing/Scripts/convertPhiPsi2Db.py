@@ -1,3 +1,4 @@
+import pickle
 import csv
 
 from numpy.lib.twodim_base import histogram2d
@@ -161,7 +162,7 @@ def main():
     dbase[ 'histRamaCtupleBySsAndResType' ] = histRamaCtupleBySsAndResType
 #    pickle.dump(dbase, output, -1)
 #    pickle.dump(dbase, output)
-    cPickle.dump(dbase, output, 2) # Was -1 for the most recent version but this caused an issue 239
+    pickle.dump(dbase, output, 2) # Was -1 for the most recent version but this caused an issue 239
     # NB 2 is the highest listed protocol too but behind the scenes cPickle will probably write something higher still.
     # If the protocol parameter is omitted, protocol 0 is used.
     # If protocol is specified as a negative value or HIGHEST_PROTOCOL, the highest protocol version will be used.

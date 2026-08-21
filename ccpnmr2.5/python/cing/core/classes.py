@@ -4,6 +4,7 @@ Split into 3 for better performance.
 """
 
 
+import cing
 from cing import cingRoot, issueListUrl
 from cing.core.classes2 import *  #@UnusedWildImport
 from cing.core.constants import *  #@UnusedWildImport

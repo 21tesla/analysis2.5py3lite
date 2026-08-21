@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 LICENSE = """
 ======================COPYRIGHT/LICENSE START==========================
 

@@ -11,6 +11,7 @@ Level: intermediate
 Contact: Wim Vranken <wim@ebi.ac.uk>
 """
 
+import tkinter as Tkinter
 #
 # These are standard Python libraries
 #

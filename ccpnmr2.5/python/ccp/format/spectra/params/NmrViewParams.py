@@ -61,7 +61,8 @@ from os import stat
 
 # from sets import Set
 from os.path import isfile, splitext
-from string import atof, atoi
+atof = float
+atoi = int
 
 from ccp.format.spectra.params.ExternalParams import ExternalParams
 from memops.general.Implementation import ApiError

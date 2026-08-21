@@ -6,6 +6,7 @@ cd $D/NRG-CING/prep/F/br/1brv ; python $CINGROOT/python/cing/Scripts/FC/utils.py
     $D/NRG-CING/prep/S/br/1brv/1brv.tgz 1brv_assign.tgz swapCheck
 """
 
+import tkinter as Tkinter
 import tarfile
 from glob import glob
 from shutil import rmtree

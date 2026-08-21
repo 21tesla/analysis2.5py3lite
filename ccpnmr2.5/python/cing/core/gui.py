@@ -1,4 +1,5 @@
 #@PydevCodeAnalysisIgnore # pylint: disable-all
+import tkinter as Tkinter
 import os
 import sys
 

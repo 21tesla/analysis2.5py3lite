@@ -1,3 +1,4 @@
+import pickle
 import csv
 
 from numpy.lib.twodim_base import histogram2d
@@ -139,7 +140,7 @@ def main():
     dbase[ 'histJaninBySsAndResType' ] = histJaninBySsAndResType
     dbase[ 'histJaninCtupleBySsAndResType' ] = histJaninCtupleBySsAndResType
 #    histJaninCtupleBySsAndResType
-    cPickle.dump(dbase, output, 2)
+    pickle.dump(dbase, output, 2)
     output.close()
 
 

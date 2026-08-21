@@ -59,7 +59,7 @@ from memops.api import Implementation
 #
 
 
-class DepositionImportError(StandardError):
+class DepositionImportError(Exception):
 
   def __init__(self, value):
     self.value = value

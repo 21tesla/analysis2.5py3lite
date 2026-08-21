@@ -1,3 +1,4 @@
+import tkinter as Tkinter
 import time
 
 # required for WS layer
@@ -394,7 +395,7 @@ class TaskFilterFrame(LabelFrame):
 
 if __name__ == "__main__":
 
-  import Tkinter
+  import tkinter as Tkinter
 
   root = Tkinter.Tk()
   root.withdraw()

@@ -56,7 +56,7 @@ import os
 import string
 import threading
 
-import Tkinter
+import tkinter as Tkinter
 
 from ccpnmr.format.general.Constants import IoSetupList, allFormatsDict
 from ccpnmr.format.general.Io import getHelpUrlDir

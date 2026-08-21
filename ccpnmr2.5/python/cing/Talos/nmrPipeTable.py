@@ -265,7 +265,7 @@ class NmrPipeTable( NTdict ):
         #end for
         fprintf( stream, '\n' )
 
-        for d,v in self.data.iteritems():
+        for d,v in self.data.items():
             fprintf( stream, 'DATA     %s %s\n', d, v )
         #end for
 

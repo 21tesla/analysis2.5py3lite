@@ -51,6 +51,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 """
 
+import tkinter as Tkinter
 import re
 
 from memops.gui.Entry import Entry
@@ -75,7 +76,7 @@ class FloatEntry(Entry):
 
 
 if __name__ == "__main__":
-    import Tkinter
+    import tkinter as Tkinter
 
     from memops.gui.Button import Button
 

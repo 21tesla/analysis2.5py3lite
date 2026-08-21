@@ -583,7 +583,7 @@ class ResidueDef( NTtree ):
             residueDict[LOOSE][n] = self
         #end for
         #different convention definitions
-        for convR, nameR in self.nameDict.iteritems():
+        for convR, nameR in self.nameDict.items():
             residueDict.setdefault( convR, {} )
             if (nameR != None):
                 residueDict[convR][nameR] = self
@@ -1059,7 +1059,7 @@ class AtomDef( NTtree ):
         """
         # set entry of atomDict of residueDef to self
         atomDict = self.residueDef.atomDict
-        for convA, nameA in self.nameDict.iteritems():
+        for convA, nameA in self.nameDict.items():
             atomDict.setdefault( convA, {} )
             if (nameA != None):
                 # XPLOR definitions have possibly multiple entries

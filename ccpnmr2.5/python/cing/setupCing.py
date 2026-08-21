@@ -25,7 +25,7 @@ respective functionalities.
 # The idea is that this script runs without PYTHONPATH being set yet.
 import os
 import sys
-from string import strip
+strip = str.strip
 from subprocess import PIPE, Popen
 
 

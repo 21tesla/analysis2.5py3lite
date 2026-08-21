@@ -66,7 +66,7 @@ class PeakSeparatorParams:
     self.maxHeight    = None
     self.minHeight    = None
 
-    self.keys = [ key for key in self.__dict__.iterkeys() ]
+    self.keys = [ key for key in self.__dict__.keys() ]
 
     self.ClibKeys     = [ 'peakShape', 'positivePeaks', 'minAtoms', 'maxAtoms', \
                           'minSigma', 'maxSigma', 'rate', 'dataFile', 'Ndim', \

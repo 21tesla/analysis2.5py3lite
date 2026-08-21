@@ -80,8 +80,7 @@ Citing:          If you are using this software for academic purposes, we
               Proteins: Struc. Funct. & Bioinformatic 69, 726-733.    
 =========================================================================
 """
-
-from HaddockBasic import setPartnerChains
+from utrecht.haddock.HaddockBasic import setPartnerChains
 
 from memops.editor.BasePopup import BasePopup
 from memops.editor.Util import createDismissHelpButtonList

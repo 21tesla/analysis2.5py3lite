@@ -120,7 +120,7 @@ class AuremolFormat(DataFormat):
             self.measurementFile = self.MeasurementFileClass(self.fileName)
             self.measurementFile.read(metaFile=metaFile)
 
-        except StandardError:
+        except Exception:
             errorMessage = traceback.format_exception_only(sys.exc_type, sys.exc_value)[-1]
 
             self.messageReporter.showWarning(

@@ -133,7 +133,7 @@ class EnumValue(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -1476,7 +1476,7 @@ class ProtocolAccess(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -2498,7 +2498,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -3819,7 +3819,7 @@ run, and set it in NmrCalc.
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -6301,7 +6301,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -7640,7 +7640,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -9931,7 +9931,7 @@ class InterfaceParameter(InterfaceObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:
@@ -11650,7 +11650,7 @@ class InterfaceLabel(InterfaceObject):
       dataDict['inConstructor'] = True
       try:
 
-        for key, value in attrlinks.iteritems():
+        for key, value in attrlinks.items():
           try:
             func = getattr(self.__class__, key).fset
           except:

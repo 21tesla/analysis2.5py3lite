@@ -1385,8 +1385,8 @@ def _getUnicodeGreek():
     u = 913
     l = 945
     for a in romanLetterOrder:
-        dict[a] = unichr(u)
-        dict[a.lower()] = unichr(l)
+        dict[a] = chr(u)
+        dict[a.lower()] = chr(l)
         u += 1
         l += 1
 
