@@ -61,7 +61,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 #  (w,h) = popup.maxsize()
 #  popup.geometry('%dx%d+0+0' % (w,h-50))
 
-import types
 
 from memops.gui.Canvas import Canvas
 from memops.gui.Color import scaleColor

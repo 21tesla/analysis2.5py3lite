@@ -62,9 +62,9 @@ software development. Bioinformatics 21, 1678-1684.
 import os
 import re
 import urllib
+from io import StringIO
 
 import pandas as pd
-from io import StringIO
 
 from ccp.general.Constants import standardResidueCcpCodes
 from ccp.general.Util import setCurrentStore

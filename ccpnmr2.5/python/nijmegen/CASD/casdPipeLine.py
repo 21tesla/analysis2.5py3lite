@@ -388,12 +388,14 @@ def makeCcpnProject(entryName):
             else:
               print('Reading restraint file', dataType, formatName, rfile)
               fcw.readFile(dataType, formatName, rpath)
-              if fcw.conversionSuccess: print(("Successful restraint file read:\n%s" % fcw.conversionInfo))
+              if fcw.conversionSuccess:
+                print(("Successful restraint file read:\n%s" % fcw.conversionInfo))
                 restraintLists.append(fcw.ccpnObjectOrList)
               else:
                 print ("Failed restraint file read:\n%s" % fcw.conversionInfo)
 
-          if restraintLists: print(("Found restraint lists: %s" % len(restraintLists)))
+          if restraintLists:
+            print(("Found restraint lists: %s" % len(restraintLists)))
             casdRun.newConstraintStoreData(constraintLists=restraintLists, name='Restraintlists')
 
         

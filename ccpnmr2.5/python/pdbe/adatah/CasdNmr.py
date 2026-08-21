@@ -45,9 +45,9 @@ def getCasdNmrProjectInfo(casdNmrRefFile=None):
       # Some custum hacking here - content of href lines with data not dependable enough...
       if dataLine.count("rutgers") or dataLine.count('Data for') or dataLine.count('/wenmr/files/files/'):
 
+        dataLine = dataLine.replace("<span>","")
+        dataLine = dataLine.replace("</span>","")
         hrefSearch = hrefPatt.search(dataLine)
-    dataLine = dataLine.replace("<span>","")
-    dataLine = dataLine.replace("</span>","")
         projectNameSearch = hrefNamePatt.search(dataLine)
 
         if hrefSearch:

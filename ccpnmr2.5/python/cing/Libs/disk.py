@@ -2,10 +2,6 @@
 # GWV 20130528: Added path routines
 # Visit www.yasara.org for more...
 # Copyright by Elmar Krieger
-from glob import glob
-from glob import glob1
-from optparse import OptionParser
-from string import digits
 import fnmatch
 import os
 import re
@@ -13,7 +9,9 @@ import shutil
 import sys
 import time
 import zipfile
-
+from glob import glob, glob1
+from optparse import OptionParser
+from string import digits
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -164,8 +162,8 @@ def modtimes(filelist):
 def havesamecontent(filename1,filename2):
     if (not os.path.exists(filename1) or not os.path.exists(filename2)):
         return(0)
-    content1=open(filename1,"r").read()
-    content2=open(filename2,"r").read()
+    content1=open(filename1).read()
+    content2=open(filename2).read()
     return (content1==content2)
 
 # BUILD TEMPORARY FILE NAME
@@ -410,7 +408,7 @@ def unzipped(filename):
     return(data)
 
 
-class Tailer(object):
+class Tailer:
     """\
     Courtesy of msthornton
     from: http://code.google.com/p/pytailer/

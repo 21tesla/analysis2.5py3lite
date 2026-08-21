@@ -58,7 +58,6 @@ import math
 import os
 import string
 import sys
-import types
 
 ######################################################################
 # hack for Python 2.1 compatibility  NBNB                                                      #

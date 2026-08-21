@@ -1,5 +1,4 @@
 """Smoke tests for memops.metamodel — the data-model backbone."""
-import pytest
 
 from memops.metamodel.ImpConstants import instance_level
 from memops.metamodel.MetaModel import (

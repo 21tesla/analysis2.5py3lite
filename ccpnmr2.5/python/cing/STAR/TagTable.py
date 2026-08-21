@@ -1,9 +1,9 @@
 """
 Classes for dealing with STAR syntax
 """
-from cing.Libs.NTutils import * #@UnusedWildImport
-from cing.STAR.Text import * #@UnusedWildImport
-import types
+
+from cing.Libs.NTutils import *  #@UnusedWildImport
+from cing.STAR.Text import *  #@UnusedWildImport
 
 
 #Looped and free tags can not be mixed in same object.

@@ -9,7 +9,6 @@ much like the code in Wattos.Database.DBMS.
 import csv
 import operator
 import urllib
-
 from io import StringIO
 
 from cing.Libs.NTutils import *  #@UnusedWildImport

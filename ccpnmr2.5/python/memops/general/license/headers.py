@@ -56,7 +56,6 @@ software development. Bioinformatics 21, 1678-1684.
 import os
 import re
 import sys
-import types
 
 from memops.general.license.contacts import stdContacts
 from memops.general.license.formats import formats

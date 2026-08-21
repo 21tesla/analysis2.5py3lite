@@ -58,7 +58,6 @@ IInitial package capable of read/write access to STAR files without nested loops
 
 """
 ## Standard modules
-import types
 
 from ccp.format.nmrStar.bmrb.Text import *  # @UnusedWildImport
 from ccp.format.nmrStar.bmrb.Utils import *  # @UnusedWildImport

@@ -354,8 +354,6 @@ class ProdecompFrame(Frame):
 
     #
     if isinstance(self.parent, BasePopup):
-            pass
-
       bottomButtons = createDismissHelpButtonList(self.tabbedFrame.sideFrame,
                                                   texts=texts, commands=commands,
                                                   expands=True)
@@ -446,8 +444,6 @@ class ProdecompFrame(Frame):
     iType   = self.iTypePulldown.getText()
 
     if self.peakList:
-            pass
-
       intervals = ccpnPeaksToInterval(self.peakList, iHalfRange=iWidth/2.0,
                                       shiftScale=sScale, peakShapeModel=pModel,
                                       halfWidthHalfHeight=hwhh,
@@ -471,8 +467,6 @@ class ProdecompFrame(Frame):
       nmrProject = self.project.currentNmrProject
 
       for experiment in nmrProject.experiments:
-              pass
-
         eName = experiment.name
 
         # get list of ExpDimRef pairs connected by onebond transfers
@@ -580,8 +574,6 @@ class ProdecompFrame(Frame):
     intervals = []
 
     for i, decomposition in enumerate(self.decompositions):
-            pass
-
       color = [None,] * 5
       if decomposition[3]:
         complete = 'Yes'
@@ -651,8 +643,6 @@ class ProdecompFrame(Frame):
     dataSources = [spec for spec in self.spectra if spec.isProdecompActive]
 
     if dataSources and self.shapeNames:
-            pass
-
       self.numPoints = [None, None]
       self.numPointsOrig = [None, None]
 
@@ -704,8 +694,6 @@ class ProdecompFrame(Frame):
         if hasattr(dataDim, 'numPointsOrig'):
           origsizes.add(dataDim.numPointsOrig)
         for dataDimRef in dataDim.sortedDataDimRefs():
-                pass
-
           shapeName = dataDimRef.expDimRef.displayName
           ll = dataDimRefDict.get(shapeName)
           if ll is not None:
@@ -719,8 +707,6 @@ class ProdecompFrame(Frame):
       if None in self.numPoints: print(('WARNING, selected spectra were not the same shape'))
       else:
         for tag in tags:
-                pass
-
           # set textMatrix
           if textMatrix:
             # normal case
@@ -908,8 +894,6 @@ class ProdecompFrame(Frame):
 
     ff = Projection.formatScalingFactor
     for i, spec in enumerate(spectra):
-            pass
-
       dataDims = spec.sortedDataDims()
 
       if not hasattr(spec, 'isProdecompActive'):

@@ -52,7 +52,6 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 """
 
 import os
-import types
 
 from memops.gui import Documentation as Doc
 from memops.gui.Base import getPopup

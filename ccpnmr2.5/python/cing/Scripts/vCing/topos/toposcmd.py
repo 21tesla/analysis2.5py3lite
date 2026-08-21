@@ -6,9 +6,9 @@ $CINGROOT/python/cing/Scripts/vCing/topos/toposcmd.py --realm https://topos.grid
 $CINGROOT/python/cing/Scripts/vCing/topos/toposcmd.py --realm https://topos.grid.sara.nl/4.1 --pool vCing --timeout 30 get-num-tokens
 """
 import getopt
+from io import StringIO
 
 import pycurl
-from io import StringIO
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

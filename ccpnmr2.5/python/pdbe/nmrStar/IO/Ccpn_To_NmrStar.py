@@ -2780,7 +2780,7 @@ class Ccpn_To_NmrStar:
     dataDims = []
     for dataDim in dataSource.sortedDataDims():
       if dataDim.className == 'FreqDataDim':
-    dataDims.append(dataDim)
+        dataDims.append(dataDim)
 
     return dataDims
 

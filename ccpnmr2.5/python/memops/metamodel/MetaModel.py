@@ -598,7 +598,6 @@ booleans = (True, False)
 import copy
 import string
 import time
-import types
 
 from memops.metamodel import ImpConstants, TaggedValues
 

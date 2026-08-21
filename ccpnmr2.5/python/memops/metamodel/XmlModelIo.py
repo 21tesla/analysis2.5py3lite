@@ -8,7 +8,6 @@ repositoryId = "$Id: XmlModelIo.py,v 1.18 2010-06-25 10:10:31 rhfogh Exp $"
 
 import os
 import time
-import types
 
 import memops.general.Constants as genConstants
 import memops.universal.Io as uniIo

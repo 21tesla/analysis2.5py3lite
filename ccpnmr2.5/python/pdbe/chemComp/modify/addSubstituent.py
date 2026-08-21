@@ -1,25 +1,28 @@
-import os, re
+import os
+import re
 
+from ccp.general.Io import getChemComp, getChemCompCoord
+from ccp.general.Util import getDescriptorDict, getDescriptorFromDict, getOtherAtom
+from ccpnmr.format.converters.Mol2Format import Mol2Format
 from memops.api import Implementation
 from memops.general.Io import getCcpFileString
-from memops.universal.Util import drawBox
 from memops.universal.Geometry import superposeNewVectorsOnOld
-
-from ccp.general.Util import getOtherAtom, getDescriptorDict, getDescriptorFromDict, mergeDescriptorDicts
-from ccp.general.Io import getChemComp, getChemCompCoord
-
-from ccpnmr.format.converters.Mol2Format import Mol2Format
-
-from pdbe.chemComp.Constants import origMol2DataDir
-from pdbe.chemComp.Io import findChemCompOrCoordFilePath, saveTemporaryChemCompOrCoord
-from pdbe.chemComp.Io import consolidateTemporaryChemCompOrCoord
-from pdbe.chemComp.Io import findExistingChemCompInfo, findExistingChemCompCoordInfo
-
+from memops.universal.Util import drawBox
+from pdbe.chemComp.Constants import (
+  editChemCompCoordDataDir,
+  editChemCompDataDir,
+  origMol2DataDir,
+  testChemCompCoordDataDir,
+  testChemCompDataDir,
+)
+from pdbe.chemComp.Io import (
+  consolidateTemporaryChemCompOrCoord,
+  findChemCompOrCoordFilePath,
+  findExistingChemCompCoordInfo,
+  findExistingChemCompInfo,
+  saveTemporaryChemCompOrCoord,
+)
 from pdbe.chemComp.modify.Constants import substituentInfo
-
-from pdbe.chemComp.Constants import editChemCompDataDir, testChemCompDataDir
-from pdbe.chemComp.Constants import editChemCompCoordDataDir, testChemCompCoordDataDir
-
 
 copyDict = {
 

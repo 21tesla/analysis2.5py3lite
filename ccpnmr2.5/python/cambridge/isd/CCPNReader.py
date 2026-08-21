@@ -27,7 +27,7 @@ def getObjectKeyString(object, delimiter='|'):
     keyType = type(key)
     if keyType is type([]):
       keys[i] = delimiter.join([str(k) for k in key])
-    elif keyType is not type(''):
+    elif keyType is not str:
       keys[i] = str(key)
   
   return delimiter.join(keys)
@@ -106,7 +106,6 @@ def make_isd_residue(ccp_residue, connectivity):
      Output: ISD residue
   """
 
-  from Atom import Atom
   from ResidueIsd import Residue
         
   residue_type = ccp_residue.ccpCode
@@ -152,8 +151,8 @@ def create_isd_polymer(ccp_chain):
      Output: ISD polymer
   """
 
-  from Polymer_isd import Polymer
   from Connectivity import load_connectivity
+  from Polymer_isd import Polymer
 
   polymer = Polymer()
 
@@ -283,8 +282,8 @@ class CCPNReader:
     def __init__(self, filename=None, first_residue_number=1,
                  decompose_restraints=0, debug=False, project=None):
 
-        from data import DataSet
         from Connectivity import load_connectivity
+        from data import DataSet
 
         self.debug = debug
 
@@ -303,8 +302,9 @@ class CCPNReader:
     
     def open_ccpn_project(self, filename):
 
-        from memops.general.Io import loadProject
         import os
+
+        from memops.general.Io import loadProject
 
         filename = os.path.expanduser(filename)
 
@@ -312,7 +312,7 @@ class CCPNReader:
             ccpn_project = loadProject(filename)
 
         except Exception as msg:
-            raise IOError('Could not access CCPN project "%s". Error message was: %s' % (filename, msg))
+            raise OSError('Could not access CCPN project "%s". Error message was: %s' % (filename, msg))
 
         return ccpn_project
 
@@ -555,7 +555,7 @@ class CCPNReader:
     def convert_dihedral_restraint_list(self, constraint_list):
         
         import data
-        from ccp.lib.MoleculeQuery import getAtomsTorsion
+
 
         restraints = []
 
@@ -646,7 +646,7 @@ class CCPNReader:
     def convert_jcoupling_restraint_list(self, constraint_list):
         
         import data
-        from ccp.lib.MoleculeQuery import getAtomsTorsion
+
         from ccpnmr.analysis.ConstraintBasic import getConstraintAtoms
 
         restraints = []
@@ -796,7 +796,8 @@ class CCPNReader:
             
             if self.decompose:
 
-              import data, TBLReader
+              import data
+              import TBLReader
               
               D = TBLReader.decompose_restraints(restraint_list.restraints)
 
@@ -830,8 +831,9 @@ class CCPNReader:
 
     def write_xml(self, filename):
 
-        from isdxml import ISDXMLPickler
         import os
+
+        from isdxml import ISDXMLPickler
 
         filename = os.path.expanduser(filename)
 
@@ -885,7 +887,6 @@ class CCPNReader:
 
     def read_constraint_lists(self, keys):
 
-        import data
 
         comment_template = 'CCPN constraint list. ISD identifier=%s'
 
@@ -1013,10 +1014,12 @@ class CCPNReader:
 
     def new_app_data_object(self, dest, src, obj_key, key=None):
 
-      from pickle import dumps
-      from memops.api.Implementation import AppDataString
-      from isd import VERSION_STRING
       import time
+      from pickle import dumps
+
+      from isd import VERSION_STRING
+
+      from memops.api.Implementation import AppDataString
 
       if key is not None:
 
@@ -1115,7 +1118,6 @@ class CCPNReader:
 
     def read_project_settings(self, nmr_project_name, key):
 
-      from pickle import loads
 
       print('Reading ISD project settings from CCPN NmrProject %s using key %s  ...' %
             (nmr_project_name, key))
@@ -1193,15 +1195,14 @@ class CCPNReader:
 
 if __name__ == '__main__':
 
-  import sys, os
+  import os
+  import sys
 
   modules = os.environ['ISD_ROOT'] + '/src/py'
 
   if not modules in sys.path:
     sys.path.insert(0, modules)
 
-  from setup import create_simulation_from_project as F
-  from utils import Load
 
   ccpn_project = '/home/wr222/projects/aria2.1/examples/werner/ccpn/hrdc_ccpn_project.xml'
   ccpn_project = '/home/wr222/test_isd/tudor.xml'

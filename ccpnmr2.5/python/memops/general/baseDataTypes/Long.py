@@ -53,7 +53,6 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
-import types
 
 # corresponding python type
 PythonType = int
