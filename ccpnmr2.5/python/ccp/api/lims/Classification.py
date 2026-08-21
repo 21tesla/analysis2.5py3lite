@@ -1143,7 +1143,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('experimentTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1204,7 +1204,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('hazardPhrases').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -1265,7 +1265,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('holderCategorys').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1326,7 +1326,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('instrumentTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1387,7 +1387,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('sampleCategories').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1449,7 +1449,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('sampleComponentCategory').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1510,7 +1510,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('targetScoreboards').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1571,7 +1571,7 @@ class Classification(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('targetStatus').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1628,7 +1628,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('experimentTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1658,7 +1658,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1711,7 +1711,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('hazardPhrases').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1741,7 +1741,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -1794,7 +1794,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('holderCategorys').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1824,7 +1824,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1877,7 +1877,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('instrumentTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1907,7 +1907,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1960,7 +1960,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('sampleCategories').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1990,7 +1990,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -2044,7 +2044,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('sampleComponentCategory').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2074,7 +2074,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -2127,7 +2127,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('targetScoreboards').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2157,7 +2157,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -2210,7 +2210,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('targetStatus').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2240,7 +2240,7 @@ class Classification(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -3412,7 +3412,7 @@ caregories include buffering agent, salt, inhibitor,...
       currentValues = dataDict.get('components')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'naturalSource', 'refSampleComponentStore',))
@@ -3471,7 +3471,7 @@ caregories include buffering agent, salt, inhibitor,...
 
       currentValues = dataDict.get('components')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3486,7 +3486,7 @@ caregories include buffering agent, salt, inhibitor,...
       currentValues = dataDict.get('components')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'naturalSource', 'refSampleComponentStore',))
@@ -4656,7 +4656,7 @@ organisations can have their own types.
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -4711,7 +4711,7 @@ organisations can have their own types.
       currentValues = dataDict.get('instrumentTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -4780,7 +4780,7 @@ organisations can have their own types.
       currentValues = dataDict.get('protocols')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -4835,7 +4835,7 @@ organisations can have their own types.
       currentValues = dataDict.get('sampleCategories')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -4894,7 +4894,7 @@ organisations can have their own types.
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4909,7 +4909,7 @@ organisations can have their own types.
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -4959,7 +4959,7 @@ organisations can have their own types.
     if (nConditions == 0):
       currentValues = dataDict.get('instrumentTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4967,7 +4967,7 @@ organisations can have their own types.
       currentValues = dataDict.get('instrumentTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -5024,7 +5024,7 @@ organisations can have their own types.
 
       currentValues = dataDict.get('protocols')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5039,7 +5039,7 @@ organisations can have their own types.
       currentValues = dataDict.get('protocols')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -5089,7 +5089,7 @@ organisations can have their own types.
     if (nConditions == 0):
       currentValues = dataDict.get('sampleCategories')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5097,7 +5097,7 @@ organisations can have their own types.
       currentValues = dataDict.get('sampleCategories')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -6525,7 +6525,7 @@ class TargetScoreboard(AbstractCategory):
       currentValues = dataDict.get('targetStatus')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -6577,7 +6577,7 @@ class TargetScoreboard(AbstractCategory):
     if (nConditions == 0):
       currentValues = dataDict.get('targetStatus')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6585,7 +6585,7 @@ class TargetScoreboard(AbstractCategory):
       currentValues = dataDict.get('targetStatus')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -7696,7 +7696,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('abstractHolderTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'holderStore',))
@@ -7767,7 +7767,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('holders')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -7824,7 +7824,7 @@ organisations can have their own categories.
 
       currentValues = dataDict.get('abstractHolderTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7839,7 +7839,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('abstractHolderTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'holderStore',))
@@ -7898,7 +7898,7 @@ organisations can have their own categories.
 
       currentValues = dataDict.get('holders')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7913,7 +7913,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('holders')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -10078,7 +10078,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('experimentTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -10147,7 +10147,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('instruments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'instrumentType', 'model', 'name', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -10216,7 +10216,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('procedures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'numCycles', 'procNumber', 'role', 'serial', 'access', 'protocol',))
@@ -10268,7 +10268,7 @@ specific to a particular organisation.
     if (nConditions == 0):
       currentValues = dataDict.get('experimentTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10276,7 +10276,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('experimentTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -10333,7 +10333,7 @@ specific to a particular organisation.
 
       currentValues = dataDict.get('instruments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10348,7 +10348,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('instruments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'instrumentType', 'model', 'name', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -10405,7 +10405,7 @@ specific to a particular organisation.
 
       currentValues = dataDict.get('procedures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10420,7 +10420,7 @@ specific to a particular organisation.
       currentValues = dataDict.get('procedures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'numCycles', 'procNumber', 'role', 'serial', 'access', 'protocol',))
@@ -11967,7 +11967,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('abstractSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'solvent', 'access', 'sampleStore',))
@@ -12024,7 +12024,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('experimentTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -12081,7 +12081,7 @@ organisations can have their own categories.
 
       currentValues = dataDict.get('abstractSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12096,7 +12096,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('abstractSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'solvent', 'access', 'sampleStore',))
@@ -12148,7 +12148,7 @@ organisations can have their own categories.
     if (nConditions == 0):
       currentValues = dataDict.get('experimentTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12156,7 +12156,7 @@ organisations can have their own categories.
       currentValues = dataDict.get('experimentTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -13421,7 +13421,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('blueprintStatuss')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -13476,7 +13476,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('targetScoreboards')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -13545,7 +13545,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('targetStatus')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'target',))
@@ -13604,7 +13604,7 @@ class TargetStatus(AbstractCategory):
 
       currentValues = dataDict.get('blueprintStatuss')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13619,7 +13619,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('blueprintStatuss')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -13669,7 +13669,7 @@ class TargetStatus(AbstractCategory):
     if (nConditions == 0):
       currentValues = dataDict.get('targetScoreboards')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13677,7 +13677,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('targetScoreboards')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -13734,7 +13734,7 @@ class TargetStatus(AbstractCategory):
 
       currentValues = dataDict.get('targetStatus')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13749,7 +13749,7 @@ class TargetStatus(AbstractCategory):
       currentValues = dataDict.get('targetStatus')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'target',))

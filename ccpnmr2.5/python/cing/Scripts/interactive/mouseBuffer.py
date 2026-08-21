@@ -4,6 +4,8 @@
 # %run /Users/jd/workspace35/cing/python/cing/NRG/tmpStoreNRGCING2db.py 1brv .
 #
 # NB this script fails if the MySql backend is not installed.
+
+import cing
 from cing import header
 from cing.core.classes import Project
 from cing.core.constants import *  #@UnusedWildImport

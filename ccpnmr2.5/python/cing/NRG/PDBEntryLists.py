@@ -196,7 +196,7 @@ def getPdbEntries(onlyNmr=False, mustHaveExperimentalNmrData=False, onlySolidSta
     queryText = open(inputFile).read()
 #    nTdebug("queryText:\n%s" % queryText)
 #    nTdebug("querying...")
-    req = urllib.request.Request(url=rpcUrl, data=queryText)
+    req = urllib.request.Request(url=rpcUrl, data=queryText.encode("utf-8"))  # py3: urllib data must be bytes
     f = urllib.request.urlopen(req)
     result = []
     for _i, record in enumerate(f.readlines()):

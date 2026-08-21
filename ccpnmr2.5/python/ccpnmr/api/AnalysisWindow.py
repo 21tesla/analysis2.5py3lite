@@ -194,7 +194,7 @@ class AbstractModule(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'module',))
@@ -246,7 +246,7 @@ class AbstractModule(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -270,7 +270,7 @@ class AbstractModule(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'module',))
@@ -1665,7 +1665,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'diagonalExclusion', 'isSampled', 'measurementType', 'numDecimals', 'access', 'analysisWindowStore',))
@@ -1726,7 +1726,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisUnits').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisWindowStore',))
@@ -1787,7 +1787,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('modules').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'helpUrl', 'name', 'access', 'analysisWindowStore',))
@@ -1844,7 +1844,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1874,7 +1874,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'diagonalExclusion', 'isSampled', 'measurementType', 'numDecimals', 'access', 'analysisWindowStore',))
@@ -1927,7 +1927,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisUnits').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1957,7 +1957,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisWindowStore',))
@@ -2010,7 +2010,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('modules').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2040,7 +2040,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'helpUrl', 'name', 'access', 'analysisWindowStore',))
@@ -3222,7 +3222,7 @@ class AxisType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisUnits')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisWindowStore',))
@@ -3277,7 +3277,7 @@ class AxisType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowAxes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -3329,7 +3329,7 @@ class AxisType(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('axisUnits')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3337,7 +3337,7 @@ class AxisType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisUnits')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisWindowStore',))
@@ -3387,7 +3387,7 @@ class AxisType(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('windowAxes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3395,7 +3395,7 @@ class AxisType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowAxes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -5149,7 +5149,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'diagonalExclusion', 'isSampled', 'measurementType', 'numDecimals', 'access', 'analysisWindowStore',))
@@ -5204,7 +5204,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowAxes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -5256,7 +5256,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('axisTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5264,7 +5264,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'diagonalExclusion', 'isSampled', 'measurementType', 'numDecimals', 'access', 'analysisWindowStore',))
@@ -5314,7 +5314,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('windowAxes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5322,7 +5322,7 @@ class AxisUnit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowAxes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -7413,7 +7413,7 @@ class WindowAxis(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisMappings')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisDataDim', 'spectrumMapping', 'windowAxis',))
@@ -7472,7 +7472,7 @@ class WindowAxis(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('axisMappings')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7487,7 +7487,7 @@ class WindowAxis(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisMappings')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisDataDim', 'spectrumMapping', 'windowAxis',))
@@ -10235,7 +10235,7 @@ class Window(AbstractModule):
       currentValues = dataDict.get('axes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -10306,7 +10306,7 @@ class Window(AbstractModule):
       currentValues = dataDict.get('spectrumMappings')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isInToolbar', 'access', 'analysisSpectrum', 'window',))
@@ -10358,7 +10358,7 @@ class Window(AbstractModule):
     if (nConditions == 0):
       currentValues = dataDict.get('axes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10382,7 +10382,7 @@ class Window(AbstractModule):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'axisType', 'axisUnit', 'boundAxis', 'window',))
@@ -10441,7 +10441,7 @@ class Window(AbstractModule):
 
       currentValues = dataDict.get('spectrumMappings')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10456,7 +10456,7 @@ class Window(AbstractModule):
       currentValues = dataDict.get('spectrumMappings')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isInToolbar', 'access', 'analysisSpectrum', 'window',))

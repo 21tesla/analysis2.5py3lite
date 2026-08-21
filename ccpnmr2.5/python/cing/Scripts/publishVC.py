@@ -20,6 +20,8 @@ How to copy VC on nmr (production machine):
 =====================================================================
 @author: jd
 '''
+
+import cing
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.settings import *  #@UnusedWildImport

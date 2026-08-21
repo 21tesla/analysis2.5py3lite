@@ -787,7 +787,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('dropAnnotations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -848,7 +848,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('images').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createDate', 'fileName', 'filePath', 'mimeType', 'access', 'crystallizationStore',))
@@ -910,7 +910,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('parameterDefinitions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'crystallizationStore',))
@@ -971,7 +971,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('scoringSchemes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'version', 'access', 'crystallizationStore',))
@@ -1029,7 +1029,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('dropAnnotations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1059,7 +1059,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -1112,7 +1112,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('images').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1150,7 +1150,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createDate', 'fileName', 'filePath', 'mimeType', 'access', 'crystallizationStore',))
@@ -1204,7 +1204,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('parameterDefinitions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1234,7 +1234,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'crystallizationStore',))
@@ -1288,7 +1288,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('scoringSchemes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1318,7 +1318,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'version', 'access', 'crystallizationStore',))
@@ -3848,7 +3848,7 @@ class Image(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -3903,7 +3903,7 @@ class Image(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'value', 'access', 'image', 'parameterDefinition',))
@@ -3955,7 +3955,7 @@ class Image(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dropAnnotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3963,7 +3963,7 @@ class Image(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -4013,7 +4013,7 @@ class Image(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4037,7 +4037,7 @@ class Image(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'value', 'access', 'image', 'parameterDefinition',))
@@ -6357,7 +6357,7 @@ values are associated with an Experiment.
       currentValues = dataDict.get('parameters')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'value', 'access', 'image', 'parameterDefinition',))
@@ -6409,7 +6409,7 @@ values are associated with an Experiment.
     if (nConditions == 0):
       currentValues = dataDict.get('parameters')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6417,7 +6417,7 @@ values are associated with an Experiment.
       currentValues = dataDict.get('parameters')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'value', 'access', 'image', 'parameterDefinition',))
@@ -8160,7 +8160,7 @@ class Score(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -8212,7 +8212,7 @@ class Score(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dropAnnotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8220,7 +8220,7 @@ class Score(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -9320,7 +9320,7 @@ class ScoringScheme(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('scores').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'value', 'access', 'scoringScheme',))
@@ -9372,7 +9372,7 @@ class ScoringScheme(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('scores').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9396,7 +9396,7 @@ class ScoringScheme(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'value', 'access', 'scoringScheme',))

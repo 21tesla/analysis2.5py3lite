@@ -4286,7 +4286,7 @@ data model. It is used by the FormatConverter software.
       currentValues = dataDict.get('atomMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'chainCode', 'formatName', 'molSystemCode', 'moleculeName', 'name', 'seqId', 'serial', 'access', 'nameMapping',))
@@ -4341,7 +4341,7 @@ data model. It is used by the FormatConverter software.
       currentValues = dataDict.get('chainMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'formatChainCode', 'formatFirstSeqCode', 'formatLastSeqCode', 'formatSeqInsertCode', 'serial', 'access', 'nameMapping',))
@@ -4396,7 +4396,7 @@ data model. It is used by the FormatConverter software.
       currentValues = dataDict.get('moleculeMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('formatName', 'name', 'serial', 'access', 'nameMapping',))
@@ -4451,7 +4451,7 @@ data model. It is used by the FormatConverter software.
       currentValues = dataDict.get('resLinkMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('resonanceName', 'serial', 'access', 'nameMapping',))
@@ -4506,7 +4506,7 @@ data model. It is used by the FormatConverter software.
       currentValues = dataDict.get('resStatusMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSinglePossEquiv', 'isSingleProchiral', 'isStereo', 'resonanceName', 'serial', 'access', 'nameMapping',))
@@ -4558,7 +4558,7 @@ data model. It is used by the FormatConverter software.
     if (nConditions == 0):
       currentValues = dataDict.get('atomMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4582,7 +4582,7 @@ data model. It is used by the FormatConverter software.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'chainCode', 'formatName', 'molSystemCode', 'moleculeName', 'name', 'seqId', 'serial', 'access', 'nameMapping',))
@@ -4632,7 +4632,7 @@ data model. It is used by the FormatConverter software.
     if (nConditions == 0):
       currentValues = dataDict.get('chainMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4656,7 +4656,7 @@ data model. It is used by the FormatConverter software.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'formatChainCode', 'formatFirstSeqCode', 'formatLastSeqCode', 'formatSeqInsertCode', 'serial', 'access', 'nameMapping',))
@@ -4706,7 +4706,7 @@ data model. It is used by the FormatConverter software.
     if (nConditions == 0):
       currentValues = dataDict.get('moleculeMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4730,7 +4730,7 @@ data model. It is used by the FormatConverter software.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('formatName', 'name', 'serial', 'access', 'nameMapping',))
@@ -4780,7 +4780,7 @@ data model. It is used by the FormatConverter software.
     if (nConditions == 0):
       currentValues = dataDict.get('resLinkMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4804,7 +4804,7 @@ data model. It is used by the FormatConverter software.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('resonanceName', 'serial', 'access', 'nameMapping',))
@@ -4854,7 +4854,7 @@ data model. It is used by the FormatConverter software.
     if (nConditions == 0):
       currentValues = dataDict.get('resStatusMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4878,7 +4878,7 @@ data model. It is used by the FormatConverter software.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSinglePossEquiv', 'isSingleProchiral', 'isStereo', 'resonanceName', 'serial', 'access', 'nameMapping',))
@@ -6191,7 +6191,7 @@ class NameMappingStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('nameMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('formatName', 'isOriginalImport', 'namingSystem', 'serial', 'access', 'nameMappingStore',))
@@ -6248,7 +6248,7 @@ class NameMappingStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('nameMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6278,7 +6278,7 @@ class NameMappingStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('formatName', 'isOriginalImport', 'namingSystem', 'serial', 'access', 'nameMappingStore',))

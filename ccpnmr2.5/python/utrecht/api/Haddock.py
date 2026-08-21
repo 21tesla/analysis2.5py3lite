@@ -458,7 +458,7 @@ class Chain(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residues').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('flexibility', 'haddockSeqId', 'interaction', 'access', 'chain', 'residue',))
@@ -510,7 +510,7 @@ class Chain(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('residues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -534,7 +534,7 @@ class Chain(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('flexibility', 'haddockSeqId', 'interaction', 'access', 'chain', 'residue',))
@@ -2156,7 +2156,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('energyTermParameters').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'value', 'access', 'haddockEnergyTerm',))
@@ -2208,7 +2208,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('energyTermParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2232,7 +2232,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'value', 'access', 'haddockEnergyTerm',))
@@ -3757,7 +3757,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chains').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'haddockPartner',))
@@ -3809,7 +3809,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chains').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3833,7 +3833,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'haddockPartner',))
@@ -5597,7 +5597,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('haddockPartners').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('airUpperDistanceLimit', 'autoHistidinePstate', 'code', 'forceFieldCode', 'isDna', 'semiFlexMode', 'access', 'haddockProject', 'molSystem', 'structureEnsemble',))
@@ -5658,7 +5658,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('runs').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -5715,7 +5715,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('haddockPartners').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5745,7 +5745,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('airUpperDistanceLimit', 'autoHistidinePstate', 'code', 'forceFieldCode', 'isDna', 'semiFlexMode', 'access', 'haddockProject', 'molSystem', 'structureEnsemble',))
@@ -5798,7 +5798,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('runs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5828,7 +5828,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -9046,7 +9046,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('haddockEnergyTerms').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
@@ -9101,7 +9101,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('scoringWeights').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('stage', 'term', 'value', 'access', 'run',))
@@ -9156,7 +9156,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('symmetryRestraints')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))
@@ -9208,7 +9208,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('haddockEnergyTerms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9240,7 +9240,7 @@ class Run(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
@@ -9290,7 +9290,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('scoringWeights').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9322,7 +9322,7 @@ class Run(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('stage', 'term', 'value', 'access', 'run',))
@@ -9372,7 +9372,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('symmetryRestraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9380,7 +9380,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('symmetryRestraints')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))

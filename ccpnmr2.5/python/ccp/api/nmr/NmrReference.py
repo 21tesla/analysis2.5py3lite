@@ -951,7 +951,7 @@ i+1-refPoint).
       currentValues = dataDict.get('refAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -1011,7 +1011,7 @@ i+1-refPoint).
       currentValues = dataDict.get('refAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -3341,7 +3341,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = dataDict.get('chemAtomShiftCorrs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'molType', 'seqOffset', 'value', 'access', 'chemAtomNmrRef',))
@@ -3396,7 +3396,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = self.getChemAtoms()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -3451,7 +3451,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = dataDict.get('chemCompVarNmrRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompNmrRef',))
@@ -3506,7 +3506,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = dataDict.get('shiftDistributions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'serial', 'access', 'chemCompNmrRef',))
@@ -3558,7 +3558,7 @@ the meanValue or the randomCoilValue attribute must be set.
     if (nConditions == 0):
       currentValues = self.getChemAtoms()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3566,7 +3566,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = self.getChemAtoms()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -3616,7 +3616,7 @@ the meanValue or the randomCoilValue attribute must be set.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomShiftCorrs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3651,7 +3651,7 @@ the meanValue or the randomCoilValue attribute must be set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'molType', 'seqOffset', 'value', 'access', 'chemAtomNmrRef',))
@@ -3701,7 +3701,7 @@ the meanValue or the randomCoilValue attribute must be set.
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompVarNmrRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3709,7 +3709,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = dataDict.get('chemCompVarNmrRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompNmrRef',))
@@ -3759,7 +3759,7 @@ the meanValue or the randomCoilValue attribute must be set.
     if (nConditions == 0):
       currentValues = dataDict.get('shiftDistributions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3767,7 +3767,7 @@ the meanValue or the randomCoilValue attribute must be set.
       currentValues = dataDict.get('shiftDistributions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'serial', 'access', 'chemCompNmrRef',))
@@ -6785,7 +6785,7 @@ source.
       currentValues = dataDict.get('chemAtomNmrDistribs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'serial', 'access', 'chemCompNmrRef',))
@@ -6840,7 +6840,7 @@ source.
       currentValues = dataDict.get('chemAtomNmrRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -6895,7 +6895,7 @@ source.
       currentValues = dataDict.get('chemCompVarNmrRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompNmrRef',))
@@ -6947,7 +6947,7 @@ source.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomNmrDistribs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6971,7 +6971,7 @@ source.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'serial', 'access', 'chemCompNmrRef',))
@@ -7021,7 +7021,7 @@ source.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomNmrRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7045,7 +7045,7 @@ source.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -7095,7 +7095,7 @@ source.
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompVarNmrRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7127,7 +7127,7 @@ source.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompNmrRef',))
@@ -8221,7 +8221,7 @@ relevant Vars
       currentValues = dataDict.get('chemAtomNmrRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -8276,7 +8276,7 @@ relevant Vars
       currentValues = self.getChemCompVars()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -8328,7 +8328,7 @@ relevant Vars
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomNmrRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8336,7 +8336,7 @@ relevant Vars
       currentValues = dataDict.get('chemAtomNmrRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('meanValue', 'name', 'randomCoilValue', 'refPoint', 'refValue', 'serial', 'stdDev', 'subType', 'valuePerPoint', 'access', 'chemCompNmrRef',))
@@ -8386,7 +8386,7 @@ relevant Vars
     if (nConditions == 0):
       currentValues = self.getChemCompVars()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8394,7 +8394,7 @@ relevant Vars
       currentValues = self.getChemCompVars()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -9759,7 +9759,7 @@ handle, holding information about where the actual data are stored.
       currentValues = dataDict.get('chemCompNmrRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'sourceName', 'access', 'nmrReferenceStore',))
@@ -9816,7 +9816,7 @@ handle, holding information about where the actual data are stored.
 
       currentValues = dataDict.get('chemCompNmrRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9846,7 +9846,7 @@ handle, holding information about where the actual data are stored.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'sourceName', 'access', 'nmrReferenceStore',))

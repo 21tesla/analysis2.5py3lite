@@ -228,7 +228,7 @@ class AwkLike(_AwkLike):
             self.close()
             raise StopIteration
         elif returnVal == 0:
-            return self.next()
+            return next(self)  # py3: .next() method removed; recurse via next()
         else:
             return self
         #end if
@@ -288,7 +288,7 @@ class AwkLikeS( _AwkLike ):
         if returnVal == -1:
             raise StopIteration
         elif returnVal == 0:
-            return self.next()
+            return next(self)  # py3: .next() method removed; recurse via next()
         else:
             return self
     #end def

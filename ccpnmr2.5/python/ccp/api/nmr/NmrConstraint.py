@@ -350,7 +350,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraintGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -406,7 +406,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrConstraintValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -461,7 +461,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('peakContribs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataSourceSerial', 'experimentSerial', 'peakListSerial', 'peakSerial', 'access', 'constraint',))
@@ -516,7 +516,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = self.getPeaks()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -571,7 +571,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('violations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -623,7 +623,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('constraintGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -631,7 +631,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraintGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -682,7 +682,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('nmrConstraintValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -690,7 +690,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrConstraintValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -740,7 +740,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getPeaks()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -748,7 +748,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = self.getPeaks()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -798,7 +798,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('peakContribs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -836,7 +836,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataSourceSerial', 'experimentSerial', 'peakListSerial', 'peakSerial', 'access', 'constraint',))
@@ -886,7 +886,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('violations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -894,7 +894,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('violations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -2578,7 +2578,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = self.getExperiments()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -2634,7 +2634,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = self.getMeasurementLists()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -2690,7 +2690,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrConstraintListValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -2752,7 +2752,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getExperiments()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2760,7 +2760,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = self.getExperiments()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -2811,7 +2811,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getMeasurementLists()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2819,7 +2819,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = self.getMeasurementLists()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -2870,7 +2870,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('nmrConstraintListValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2878,7 +2878,7 @@ class AbstractConstraintList(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrConstraintListValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -5812,7 +5812,7 @@ class ConditionState(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraintLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -5864,7 +5864,7 @@ class ConditionState(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('constraintLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5872,7 +5872,7 @@ class ConditionState(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraintLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -7153,7 +7153,7 @@ class ConstraintGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -7205,7 +7205,7 @@ class ConstraintGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('constraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7213,7 +7213,7 @@ class ConstraintGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('constraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -10427,7 +10427,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('atoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -10482,7 +10482,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('resonanceSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'nmrConstraintStore',))
@@ -10534,7 +10534,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('atoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10542,7 +10542,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('atoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -10592,7 +10592,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('resonanceSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10600,7 +10600,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('resonanceSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'nmrConstraintStore',))
@@ -12273,7 +12273,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chainStateLinks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainStateSerial', 'chainStateSetSerial', 'access', 'fixedResonance',))
@@ -12328,7 +12328,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemShiftConstraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -12383,7 +12383,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('covalentlyBound')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -12438,7 +12438,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('csaConstraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -12493,7 +12493,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dihedralConstraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -12548,7 +12548,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('pairwiseConstraintItems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'firstResonance',))
@@ -12603,7 +12603,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('resCoords')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('x', 'y', 'z', 'access', 'resonance', 'structure',))
@@ -12655,7 +12655,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chainStateLinks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12679,7 +12679,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainStateSerial', 'chainStateSetSerial', 'access', 'fixedResonance',))
@@ -12729,7 +12729,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chemShiftConstraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12737,7 +12737,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemShiftConstraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -12787,7 +12787,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('covalentlyBound')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12795,7 +12795,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('covalentlyBound')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -12845,7 +12845,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('csaConstraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12853,7 +12853,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('csaConstraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -12903,7 +12903,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dihedralConstraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12911,7 +12911,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dihedralConstraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -12962,7 +12962,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('pairwiseConstraintItems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12970,7 +12970,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('pairwiseConstraintItems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'firstResonance',))
@@ -13020,7 +13020,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('resCoords')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13028,7 +13028,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('resCoords')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('x', 'y', 'z', 'access', 'resonance', 'structure',))
@@ -15280,7 +15280,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('atomSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -15335,7 +15335,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('resonances')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -15387,7 +15387,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('atomSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15395,7 +15395,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('atomSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -15445,7 +15445,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('resonances')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15453,7 +15453,7 @@ valid for a StructureGeneration and the associated ConstraintLists.
       currentValues = dataDict.get('resonances')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -18190,7 +18190,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('additionalStructureAnalyses')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -18265,7 +18265,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('analysisLayouts')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -18340,7 +18340,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('analysisPanels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -18403,7 +18403,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('chainStates')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'chainStateSet',))
@@ -18464,7 +18464,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('conditionStates').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'dynamicAlignment', 'name', 'serial', 'staticAlignment', 'access', 'nmrConstraintStore',))
@@ -18525,7 +18525,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('constraintGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -18586,7 +18586,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('constraintLists').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -18661,7 +18661,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('dangleChains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))
@@ -18722,7 +18722,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('fixedAtomSets').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -18783,7 +18783,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('fixedResonanceSets').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'nmrConstraintStore',))
@@ -18844,7 +18844,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('fixedResonances').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -18905,7 +18905,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('resStructures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'access', 'nmrConstraintStore',))
@@ -18966,7 +18966,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('structureAnalyses')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -19028,7 +19028,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('structureGenerations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'generationType', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject', 'structureEnsemble',))
@@ -19083,7 +19083,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('validationStores')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
@@ -19144,7 +19144,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('violationLists').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -19200,7 +19200,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('additionalStructureAnalyses')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19211,7 +19211,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('additionalStructureAnalyses')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -19271,7 +19271,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('analysisLayouts')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19289,7 +19289,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('analysisLayouts')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -19349,7 +19349,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('analysisPanels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19367,7 +19367,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('analysisPanels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -19422,7 +19422,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('chainStates')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19433,7 +19433,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('chainStates')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'chainStateSet',))
@@ -19486,7 +19486,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('conditionStates').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19516,7 +19516,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'dynamicAlignment', 'name', 'serial', 'staticAlignment', 'access', 'nmrConstraintStore',))
@@ -19569,7 +19569,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('constraintGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19599,7 +19599,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -19652,7 +19652,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('constraintLists').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19682,7 +19682,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -19742,7 +19742,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('dangleChains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19760,7 +19760,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('dangleChains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))
@@ -19813,7 +19813,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('fixedAtomSets').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19843,7 +19843,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -19896,7 +19896,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('fixedResonances').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19926,7 +19926,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -19980,7 +19980,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('fixedResonanceSets').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20010,7 +20010,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'nmrConstraintStore',))
@@ -20063,7 +20063,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('resStructures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20093,7 +20093,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'access', 'nmrConstraintStore',))
@@ -20146,7 +20146,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('structureAnalyses')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20157,7 +20157,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('structureAnalyses')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -20211,7 +20211,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('structureGenerations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20222,7 +20222,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('structureGenerations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'generationType', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject', 'structureEnsemble',))
@@ -20272,7 +20272,7 @@ This class serves as TopObject.
     if (nConditions == 0):
       currentValues = dataDict.get('validationStores')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20280,7 +20280,7 @@ This class serves as TopObject.
       currentValues = dataDict.get('validationStores')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
@@ -20333,7 +20333,7 @@ This class serves as TopObject.
 
       currentValues = dataDict.get('violationLists').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20363,7 +20363,7 @@ This class serves as TopObject.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -23151,7 +23151,7 @@ key
       currentValues = self.getOrderedResonances()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -23206,7 +23206,7 @@ key
       currentValues = dataDict.get('resonances')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -23267,7 +23267,7 @@ key
       currentValues = self.getOrderedResonances()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -23317,7 +23317,7 @@ key
     if (nConditions == 0):
       currentValues = dataDict.get('resonances')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23325,7 +23325,7 @@ key
       currentValues = dataDict.get('resonances')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -25085,7 +25085,7 @@ Atoms. Intended for protocols that generate 3D structures without
       currentValues = dataDict.get('coords').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('x', 'y', 'z', 'access', 'resonance', 'structure',))
@@ -25137,7 +25137,7 @@ Atoms. Intended for protocols that generate 3D structures without
     if (nConditions == 0):
       currentValues = dataDict.get('coords').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -25161,7 +25161,7 @@ Atoms. Intended for protocols that generate 3D structures without
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('x', 'y', 'z', 'access', 'resonance', 'structure',))
@@ -27298,7 +27298,7 @@ ConstraintLists.
       currentValues = dataDict.get('molStructures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -27353,7 +27353,7 @@ ConstraintLists.
       currentValues = dataDict.get('violations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -27405,7 +27405,7 @@ ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('molStructures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -27413,7 +27413,7 @@ ConstraintLists.
       currentValues = dataDict.get('molStructures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -27463,7 +27463,7 @@ ConstraintLists.
     if (nConditions == 0):
       currentValues = dataDict.get('violations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -27487,7 +27487,7 @@ ConstraintLists.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -29364,7 +29364,7 @@ alternative assignemnts.
       currentValues = dataDict.get('items').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('error', 'lowerLimit', 'serial', 'targetValue', 'upperLimit', 'access', 'constraint',))
@@ -29425,7 +29425,7 @@ alternative assignemnts.
       currentValues = dataDict.get('resonances')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -29481,7 +29481,7 @@ alternative assignemnts.
     if (nConditions == 0):
       currentValues = dataDict.get('items').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -29505,7 +29505,7 @@ alternative assignemnts.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('error', 'lowerLimit', 'serial', 'targetValue', 'upperLimit', 'access', 'constraint',))
@@ -29569,7 +29569,7 @@ alternative assignemnts.
       currentValues = dataDict.get('resonances')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'resonanceSerial', 'serial', 'access', 'nmrConstraintStore', 'resonanceSet',))
@@ -30663,7 +30663,7 @@ that should be reproduced by the structure.
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'vectorLength', 'weight', 'access', 'method', 'parentList',))
@@ -30721,7 +30721,7 @@ that should be reproduced by the structure.
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -30745,7 +30745,7 @@ that should be reproduced by the structure.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'vectorLength', 'weight', 'access', 'method', 'parentList',))
@@ -31718,7 +31718,7 @@ class HBondConstraintList(AbstractConstraintList):
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -31776,7 +31776,7 @@ class HBondConstraintList(AbstractConstraintList):
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -31800,7 +31800,7 @@ class HBondConstraintList(AbstractConstraintList):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -32774,7 +32774,7 @@ class DistanceConstraintList(AbstractConstraintList):
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('backCalcVolume', 'details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -32832,7 +32832,7 @@ class DistanceConstraintList(AbstractConstraintList):
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -32856,7 +32856,7 @@ class DistanceConstraintList(AbstractConstraintList):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('backCalcVolume', 'details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -33831,7 +33831,7 @@ should be reproduced by the structure.
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -33889,7 +33889,7 @@ should be reproduced by the structure.
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -33913,7 +33913,7 @@ should be reproduced by the structure.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList',))
@@ -34935,7 +34935,7 @@ class CsaConstraintList(AbstractConstraintList):
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -34993,7 +34993,7 @@ class CsaConstraintList(AbstractConstraintList):
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -35017,7 +35017,7 @@ class CsaConstraintList(AbstractConstraintList):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -36109,7 +36109,7 @@ couplings.
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -36167,7 +36167,7 @@ couplings.
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -36191,7 +36191,7 @@ couplings.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -37214,7 +37214,7 @@ class ChemShiftConstraintList(AbstractConstraintList):
       currentValues = dataDict.get('constraints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -37272,7 +37272,7 @@ class ChemShiftConstraintList(AbstractConstraintList):
     if (nConditions == 0):
       currentValues = dataDict.get('constraints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -37296,7 +37296,7 @@ class ChemShiftConstraintList(AbstractConstraintList):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'lowerLimit', 'origData', 'serial', 'targetValue', 'upperLimit', 'weight', 'access', 'method', 'parentList', 'resonance',))
@@ -40970,7 +40970,7 @@ alternative assignment possibilities.
       currentValues = dataDict.get('items').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -41032,7 +41032,7 @@ alternative assignment possibilities.
     if (nConditions == 0):
       currentValues = dataDict.get('items').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -41059,7 +41059,7 @@ alternative assignment possibilities.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -42238,7 +42238,7 @@ alternative assignment possibilities.
       currentValues = dataDict.get('items').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -42300,7 +42300,7 @@ alternative assignment possibilities.
     if (nConditions == 0):
       currentValues = dataDict.get('items').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -42327,7 +42327,7 @@ alternative assignment possibilities.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -43438,7 +43438,7 @@ alternative assignment possibilities.
       currentValues = dataDict.get('items').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -43500,7 +43500,7 @@ alternative assignment possibilities.
     if (nConditions == 0):
       currentValues = dataDict.get('items').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -43527,7 +43527,7 @@ alternative assignment possibilities.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -44700,7 +44700,7 @@ assignment, describing alternative assignment possibilities.
       currentValues = dataDict.get('items').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))
@@ -44762,7 +44762,7 @@ assignment, describing alternative assignment possibilities.
     if (nConditions == 0):
       currentValues = dataDict.get('items').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -44789,7 +44789,7 @@ assignment, describing alternative assignment possibilities.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'constraint', 'firstResonance',))

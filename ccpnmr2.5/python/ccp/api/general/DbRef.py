@@ -733,7 +733,7 @@ class Database(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('entries').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -790,7 +790,7 @@ class Database(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('entries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -820,7 +820,7 @@ class Database(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -2533,7 +2533,7 @@ database.
       currentValues = dataDict.get('alignments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -2604,7 +2604,7 @@ database.
       currentValues = dataDict.get('blueprintDbRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'dbRef', 'expBlueprint',))
@@ -2673,7 +2673,7 @@ database.
       currentValues = dataDict.get('componentDbRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignBegin', 'alignEnd', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'serial', 'threadingProg', 'threadingScore', 'access', 'component', 'dbRef',))
@@ -2742,7 +2742,7 @@ database.
       currentValues = dataDict.get('molSystems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -2811,7 +2811,7 @@ database.
       currentValues = dataDict.get('targetGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -2880,7 +2880,7 @@ database.
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -2937,7 +2937,7 @@ database.
 
       currentValues = dataDict.get('alignments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2952,7 +2952,7 @@ database.
       currentValues = dataDict.get('alignments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -3011,7 +3011,7 @@ database.
 
       currentValues = dataDict.get('blueprintDbRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3026,7 +3026,7 @@ database.
       currentValues = dataDict.get('blueprintDbRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'dbRef', 'expBlueprint',))
@@ -3083,7 +3083,7 @@ database.
 
       currentValues = dataDict.get('componentDbRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3098,7 +3098,7 @@ database.
       currentValues = dataDict.get('componentDbRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignBegin', 'alignEnd', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'serial', 'threadingProg', 'threadingScore', 'access', 'component', 'dbRef',))
@@ -3155,7 +3155,7 @@ database.
 
       currentValues = dataDict.get('molSystems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3170,7 +3170,7 @@ database.
       currentValues = dataDict.get('molSystems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -3227,7 +3227,7 @@ database.
 
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3242,7 +3242,7 @@ database.
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -3299,7 +3299,7 @@ database.
 
       currentValues = dataDict.get('targetGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3314,7 +3314,7 @@ database.
       currentValues = dataDict.get('targetGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))

@@ -1025,7 +1025,7 @@ class XmlModelGen(TextWriter_py_2_1.TextWriter_py_2_1, ModelTraverse_py_2_1.Mode
             self.indent += self.INDENT
             ind = self.indent * " "
 
-            items = value.items()
+            items = list(value.items())  # py3: dict.items() is a view; indexed/assigned below
             items.sort()
 
             for key, val in items:

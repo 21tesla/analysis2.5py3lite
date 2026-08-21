@@ -889,7 +889,7 @@ general terms.
       currentValues = dataDict.get('annealStages').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('finalTemp', 'function', 'initialTemp', 'name', 'numSteps', 'numSubSteps', 'serial', 'timeStep', 'timeStepScaling', 'access', 'annealProtocol',))
@@ -946,7 +946,7 @@ general terms.
       currentValues = dataDict.get('energyTerms').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'serial', 'access', 'annealProtocol',))
@@ -1015,7 +1015,7 @@ general terms.
       currentValues = dataDict.get('haddockRuns')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -1070,7 +1070,7 @@ general terms.
       currentValues = self.getNmrCalcRuns()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -1120,7 +1120,7 @@ general terms.
     if (nConditions == 0):
       currentValues = dataDict.get('annealStages').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1144,7 +1144,7 @@ general terms.
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('finalTemp', 'function', 'initialTemp', 'name', 'numSteps', 'numSubSteps', 'serial', 'timeStep', 'timeStepScaling', 'access', 'annealProtocol',))
@@ -1196,7 +1196,7 @@ general terms.
     if (nConditions == 0):
       currentValues = dataDict.get('energyTerms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1220,7 +1220,7 @@ general terms.
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'serial', 'access', 'annealProtocol',))
@@ -1277,7 +1277,7 @@ general terms.
 
       currentValues = dataDict.get('haddockRuns')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1292,7 +1292,7 @@ general terms.
       currentValues = dataDict.get('haddockRuns')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -1342,7 +1342,7 @@ general terms.
     if (nConditions == 0):
       currentValues = self.getNmrCalcRuns()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1350,7 +1350,7 @@ general terms.
       currentValues = self.getNmrCalcRuns()
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -3137,7 +3137,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('annealProtocols').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'applicationVersion', 'code', 'details', 'methodStoreName', 'name', 'access', 'annealProtocolStore',))
@@ -3200,7 +3200,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refPotentialTerms').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'code', 'details', 'index', 'name', 'access', 'annealProtocolStore',))
@@ -3255,7 +3255,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('annealProtocols').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3293,7 +3293,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'applicationVersion', 'code', 'details', 'methodStoreName', 'name', 'access', 'annealProtocolStore',))
@@ -3349,7 +3349,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('refPotentialTerms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3390,7 +3390,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('application', 'code', 'details', 'index', 'name', 'access', 'annealProtocolStore',))
@@ -4488,7 +4488,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('potentialScales')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -4540,7 +4540,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('potentialScales')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4548,7 +4548,7 @@ class AnnealStage(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('potentialScales')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -6510,7 +6510,7 @@ refPotentialTerms
       currentValues = dataDict.get('haddockEnergyTerms')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
@@ -6565,7 +6565,7 @@ refPotentialTerms
       currentValues = self.getNmrCalcEnergyTerms()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealEnergyTermSerial', 'code', 'constraintStoreSerial', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -6620,7 +6620,7 @@ refPotentialTerms
       currentValues = dataDict.get('potentialScales').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -6679,7 +6679,7 @@ refPotentialTerms
 
       currentValues = dataDict.get('haddockEnergyTerms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6694,7 +6694,7 @@ refPotentialTerms
       currentValues = dataDict.get('haddockEnergyTerms')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'fileName', 'name', 'termId', 'access', 'constraintList', 'energyTerm', 'run',))
@@ -6744,7 +6744,7 @@ refPotentialTerms
     if (nConditions == 0):
       currentValues = self.getNmrCalcEnergyTerms()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6752,7 +6752,7 @@ refPotentialTerms
       currentValues = self.getNmrCalcEnergyTerms()
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('annealEnergyTermSerial', 'code', 'constraintStoreSerial', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -6802,7 +6802,7 @@ refPotentialTerms
     if (nConditions == 0):
       currentValues = dataDict.get('potentialScales').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6834,7 +6834,7 @@ refPotentialTerms
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -9836,7 +9836,7 @@ interpretation generally requires reference to the application.
       currentValues = dataDict.get('potentialScales')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -9891,7 +9891,7 @@ interpretation generally requires reference to the application.
       currentValues = dataDict.get('refTermParameters').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'value', 'access', 'refPotentialTerm',))
@@ -9943,7 +9943,7 @@ interpretation generally requires reference to the application.
     if (nConditions == 0):
       currentValues = dataDict.get('potentialScales')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9951,7 +9951,7 @@ interpretation generally requires reference to the application.
       currentValues = dataDict.get('potentialScales')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'finalScale', 'function', 'initialScale', 'access', 'annealStage', 'energyTerm', 'refPotentialTerm',))
@@ -10001,7 +10001,7 @@ interpretation generally requires reference to the application.
     if (nConditions == 0):
       currentValues = dataDict.get('refTermParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10025,7 +10025,7 @@ interpretation generally requires reference to the application.
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'name', 'value', 'access', 'refPotentialTerm',))

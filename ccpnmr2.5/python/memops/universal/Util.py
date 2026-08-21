@@ -108,7 +108,7 @@ def capitalizeUnderscore(s):
 
     t = ""
     for n in range(len(s)):
-        if (n > 0) and (s[n] in string.uppercase):
+        if (n > 0) and (s[n] in string.ascii_uppercase):
             t = t + "_"
 
         t = t + s[n].upper()

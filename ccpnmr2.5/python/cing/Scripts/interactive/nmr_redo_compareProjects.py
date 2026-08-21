@@ -3,6 +3,7 @@ Execute like:
 python -u $CINGROOT/python/cing/Scripts/interactive/nmr_redo_compareProjects.py --target 2kq3
 '''
 
+import cing
 from cing import cingVersion
 from cing.core.classes import ProjectTree
 from cing.Libs.AwkLike import AwkLikeS

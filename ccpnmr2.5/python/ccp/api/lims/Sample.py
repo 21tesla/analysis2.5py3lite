@@ -286,7 +286,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('hazardPhrases')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -341,7 +341,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getLocalRiskPhrases()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -396,7 +396,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getRPhrases()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -451,7 +451,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getSPhrases()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -506,7 +506,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleCategories')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -561,7 +561,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleComponents').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -613,7 +613,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('hazardPhrases')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -621,7 +621,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('hazardPhrases')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -671,7 +671,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getLocalRiskPhrases()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -679,7 +679,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getLocalRiskPhrases()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -729,7 +729,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getRPhrases()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -737,7 +737,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getRPhrases()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -787,7 +787,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getSPhrases()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -795,7 +795,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = self.getSPhrases()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phrase', 'access', 'classification',))
@@ -845,7 +845,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('sampleCategories')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -853,7 +853,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleCategories')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -903,7 +903,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('sampleComponents').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -927,7 +927,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -3686,7 +3686,7 @@ the contents of the sample.
       currentValues = dataDict.get('contents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -3738,7 +3738,7 @@ the contents of the sample.
     if (nConditions == 0):
       currentValues = dataDict.get('contents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3746,7 +3746,7 @@ the contents of the sample.
       currentValues = dataDict.get('contents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -5650,7 +5650,7 @@ class SampleStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('abstractSamples').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'solvent', 'access', 'sampleStore',))
@@ -5707,7 +5707,7 @@ class SampleStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('abstractSamples').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5737,7 +5737,7 @@ class SampleStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'solvent', 'access', 'sampleStore',))
@@ -7325,7 +7325,7 @@ supplier and batch independant.
       currentValues = dataDict.get('conformings')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amountDisplayUnit', 'amountUnit', 'batchNum', 'colPosition', 'currentAmount', 'currentAmountFlag', 'details', 'initialAmount', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'rowPosition', 'solvent', 'subPosition', 'access', 'holder', 'outputSample', 'refSample', 'sampleStore',))
@@ -7400,7 +7400,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refInputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -7469,7 +7469,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refOutputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -7524,7 +7524,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refSamplePositions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'rowPosition', 'serial', 'subPosition', 'access', 'holder', 'refSample',))
@@ -7579,7 +7579,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refSampleSources').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('catalogNum', 'dataPageUrl', 'access', 'refSample', 'supplier',))
@@ -7637,7 +7637,7 @@ supplier and batch independant.
     if (nConditions == 0):
       currentValues = dataDict.get('conformings')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7645,7 +7645,7 @@ supplier and batch independant.
       currentValues = dataDict.get('conformings')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amountDisplayUnit', 'amountUnit', 'batchNum', 'colPosition', 'currentAmount', 'currentAmountFlag', 'details', 'initialAmount', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'rowPosition', 'solvent', 'subPosition', 'access', 'holder', 'outputSample', 'refSample', 'sampleStore',))
@@ -7708,7 +7708,7 @@ supplier and batch independant.
 
       currentValues = dataDict.get('refInputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7723,7 +7723,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refInputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -7780,7 +7780,7 @@ supplier and batch independant.
 
       currentValues = dataDict.get('refOutputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7795,7 +7795,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refOutputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -7845,7 +7845,7 @@ supplier and batch independant.
     if (nConditions == 0):
       currentValues = dataDict.get('refSamplePositions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7853,7 +7853,7 @@ supplier and batch independant.
       currentValues = dataDict.get('refSamplePositions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'rowPosition', 'serial', 'subPosition', 'access', 'holder', 'refSample',))
@@ -7903,7 +7903,7 @@ supplier and batch independant.
     if (nConditions == 0):
       currentValues = dataDict.get('refSampleSources').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7927,7 +7927,7 @@ supplier and batch independant.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('catalogNum', 'dataPageUrl', 'access', 'refSample', 'supplier',))
@@ -10695,7 +10695,7 @@ located in an Holder.
       currentValues = dataDict.get('dropAnnotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -10766,7 +10766,7 @@ located in an Holder.
       currentValues = dataDict.get('inputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -10837,7 +10837,7 @@ located in an Holder.
       currentValues = dataDict.get('mixtures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -10906,7 +10906,7 @@ located in an Holder.
       currentValues = dataDict.get('nmrExperiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -10973,7 +10973,7 @@ located in an Holder.
 
       currentValues = dataDict.get('dropAnnotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10988,7 +10988,7 @@ located in an Holder.
       currentValues = dataDict.get('dropAnnotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -11047,7 +11047,7 @@ located in an Holder.
 
       currentValues = dataDict.get('inputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11062,7 +11062,7 @@ located in an Holder.
       currentValues = dataDict.get('inputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -11121,7 +11121,7 @@ located in an Holder.
 
       currentValues = dataDict.get('mixtures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11136,7 +11136,7 @@ located in an Holder.
       currentValues = dataDict.get('mixtures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -11193,7 +11193,7 @@ located in an Holder.
 
       currentValues = dataDict.get('nmrExperiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11208,7 +11208,7 @@ located in an Holder.
       currentValues = dataDict.get('nmrExperiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))

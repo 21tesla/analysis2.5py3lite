@@ -6,6 +6,8 @@ Created on 8 Jan 2013
 script to update xplor N-terminal and C-terminal name conventions
 
 '''
+
+import cing
 from cing import cingPythonCingDir
 from cing.core.database import NTdb, saveToSML
 from cing.Libs.NTutils import *  #@UnusedWildImport

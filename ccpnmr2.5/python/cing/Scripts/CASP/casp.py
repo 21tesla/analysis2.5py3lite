@@ -3,6 +3,7 @@
 # Execute like:
 # python -u $CINGROOT/python/cing/Scripts/CASD/casd2.py --target CGR26A
 
+import cing
 from cing import cingVersion
 from cing.core.classes import ProjectTree
 from cing.Libs.AwkLike import AwkLikeS

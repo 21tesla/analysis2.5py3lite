@@ -6,6 +6,7 @@ import unittest
 import os
 from unittest import TestCase
 
+import cing
 from cing import cingDirTmp
 from cing.Database.Scripts.createStarUserLib import createStarUserLib
 from cing.Libs.NTutils import *  #@UnusedWildImport

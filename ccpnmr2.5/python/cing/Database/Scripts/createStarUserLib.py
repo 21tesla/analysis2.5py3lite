@@ -2,6 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Database/Scripts/createStarUserLib.py
 """
+
+import cing
 from cing.core.database import NTdb
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

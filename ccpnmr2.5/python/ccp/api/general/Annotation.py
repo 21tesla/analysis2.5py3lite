@@ -1067,7 +1067,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -1122,7 +1122,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('projects')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -1177,7 +1177,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -1232,7 +1232,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -1284,7 +1284,7 @@ class Annotation(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1292,7 +1292,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -1342,7 +1342,7 @@ class Annotation(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('projects')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1350,7 +1350,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('projects')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -1400,7 +1400,7 @@ class Annotation(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1408,7 +1408,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -1458,7 +1458,7 @@ class Annotation(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('targetGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1466,7 +1466,7 @@ class Annotation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -3864,7 +3864,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('annotations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -3927,7 +3927,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('molFeatures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'featureType', 'serial', 'access', 'annotationStore', 'molResidue',))
@@ -3982,7 +3982,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('annotations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4012,7 +4012,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -4067,7 +4067,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('molFeatures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4097,7 +4097,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'featureType', 'serial', 'access', 'annotationStore', 'molResidue',))

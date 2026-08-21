@@ -121,10 +121,10 @@ pageTracker._trackPageview();
 } catch(err) {}</script>
 """
 old_string = r"<!-- INSERT GOOGLE ANALYTICS TEMPLATE HERE -->"
-htmlBody = string.replace(htmlBody, old_string, GOOGLE_ANALYTICS_TEMPLATE)
+htmlBody = htmlBody.replace(old_string, GOOGLE_ANALYTICS_TEMPLATE)
 old_string = r"<!-- INSERT NEW DATE HERE -->"
 new_string = time.asctime()
-htmlBody = string.replace(htmlBody, old_string, new_string)
+htmlBody = htmlBody.replace(old_string, new_string)
 
 
 class DataTablesServer:
@@ -241,7 +241,7 @@ class DataTablesServer:
             file_content = htmlHead + '\n' + htmlBody
             old_string = r"<!-- INSERT MAIN HERE -->"
             new_string = invalidPdbHtmlMain % pdb_id
-            file_content = string.replace(file_content, old_string, new_string )
+            file_content = file_content.replace(old_string, new_string )
             print(file_content)
             return
         # end def
@@ -250,7 +250,7 @@ class DataTablesServer:
             file_content = htmlHead + '\n' + htmlBody
             old_string = r"<!-- INSERT MAIN HERE -->"
             new_string = absentPdbHtmlMain % { "pdb_id": pdb_id }
-            file_content = string.replace(file_content, old_string, new_string )
+            file_content = file_content.replace(old_string, new_string )
             print(file_content)
             return
         # end def

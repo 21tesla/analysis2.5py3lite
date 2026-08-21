@@ -84,7 +84,7 @@ Citing:          If you are using this software for academic purposes, we
 import tkinter as Tkinter
 import sys
 
-from HaddockFrame import HaddockFrame
+from .HaddockFrame import HaddockFrame
 
 from memops.editor.BasePopup import BasePopup
 from memops.gui.FileSelectPopup import FileSelectPopup

@@ -1,4 +1,6 @@
 "script to save NTdb to convention"
+
+import cing
 from cing import cingPythonCingDir
 from cing.core.database import NTdb, saveToSML
 from cing.Libs.NTutils import *  #@UnusedWildImport

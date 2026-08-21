@@ -13,7 +13,7 @@ maxHeight,
 
 """
 
-from PeakSeparatorPeakList import getPeakListParams
+from .PeakSeparatorPeakList import getPeakListParams
 
 from ccp.api.general.DataLocation import NumericMatrix
 from ccpnmr.analysis.core.UnitConverter import ppm2pnt

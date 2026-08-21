@@ -207,7 +207,7 @@ class AbstractHolderType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('holderCategories')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -259,7 +259,7 @@ class AbstractHolderType(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('holderCategories')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -267,7 +267,7 @@ class AbstractHolderType(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('holderCategories')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1784,7 +1784,7 @@ group holder together.
       currentValues = dataDict.get('contents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -1839,7 +1839,7 @@ group holder together.
       currentValues = dataDict.get('holderCategories')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -1894,7 +1894,7 @@ group holder together.
       currentValues = dataDict.get('holderLocations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('endDate', 'serial', 'startDate', 'access', 'holder', 'location',))
@@ -1949,7 +1949,7 @@ group holder together.
       currentValues = dataDict.get('refSamplePositions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'rowPosition', 'serial', 'subPosition', 'access', 'holder', 'refSample',))
@@ -2018,7 +2018,7 @@ group holder together.
       currentValues = dataDict.get('samples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amountDisplayUnit', 'amountUnit', 'batchNum', 'colPosition', 'currentAmount', 'currentAmountFlag', 'details', 'initialAmount', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'rowPosition', 'solvent', 'subPosition', 'access', 'holder', 'outputSample', 'refSample', 'sampleStore',))
@@ -2070,7 +2070,7 @@ group holder together.
     if (nConditions == 0):
       currentValues = dataDict.get('contents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2078,7 +2078,7 @@ group holder together.
       currentValues = dataDict.get('contents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -2128,7 +2128,7 @@ group holder together.
     if (nConditions == 0):
       currentValues = dataDict.get('holderCategories')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2136,7 +2136,7 @@ group holder together.
       currentValues = dataDict.get('holderCategories')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -2186,7 +2186,7 @@ group holder together.
     if (nConditions == 0):
       currentValues = dataDict.get('holderLocations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2210,7 +2210,7 @@ group holder together.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('endDate', 'serial', 'startDate', 'access', 'holder', 'location',))
@@ -2260,7 +2260,7 @@ group holder together.
     if (nConditions == 0):
       currentValues = dataDict.get('refSamplePositions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2284,7 +2284,7 @@ group holder together.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'rowPosition', 'serial', 'subPosition', 'access', 'holder', 'refSample',))
@@ -2341,7 +2341,7 @@ group holder together.
 
       currentValues = dataDict.get('samples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2356,7 +2356,7 @@ group holder together.
       currentValues = dataDict.get('samples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amountDisplayUnit', 'amountUnit', 'batchNum', 'colPosition', 'currentAmount', 'currentAmountFlag', 'details', 'initialAmount', 'ionicStrength', 'isActive', 'isHazard', 'name', 'ph', 'rowPosition', 'solvent', 'subPosition', 'access', 'holder', 'outputSample', 'refSample', 'sampleStore',))
@@ -5533,7 +5533,7 @@ class HolderStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('holderTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'holderStore',))
@@ -5594,7 +5594,7 @@ class HolderStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('holders').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -5651,7 +5651,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('holders').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5681,7 +5681,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'endDate', 'name', 'rowPosition', 'startDate', 'subPosition', 'access', 'holder', 'holderStore', 'holderType',))
@@ -5734,7 +5734,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('holderTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5764,7 +5764,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'holderStore',))
@@ -10066,7 +10066,7 @@ rather than A1.
       currentValues = dataDict.get('holderTypePositions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'maxVolume', 'maxVolumeDiplayUnit', 'name', 'rowPosition', 'serial', 'subPosition', 'access', 'holderType',))
@@ -10120,7 +10120,7 @@ rather than A1.
     if (nConditions == 0):
       currentValues = dataDict.get('holderTypePositions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10144,7 +10144,7 @@ rather than A1.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('colPosition', 'details', 'maxVolume', 'maxVolumeDiplayUnit', 'name', 'rowPosition', 'serial', 'subPosition', 'access', 'holderType',))

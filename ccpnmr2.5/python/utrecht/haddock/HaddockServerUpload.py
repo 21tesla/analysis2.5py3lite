@@ -82,8 +82,8 @@ Citing:          If you are using this software for academic purposes, we
 """
 import http.client
 
-import urlparse
-from HaddockExportParam import exportParam
+import urllib.parse as urlparse  # py2 'urlparse' removed in py3
+from .HaddockExportParam import exportParam
 
 from memops.editor.BasePopup import BasePopup
 from memops.editor.Util import createDismissHelpButtonList

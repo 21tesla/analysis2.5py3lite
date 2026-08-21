@@ -7,7 +7,7 @@ import sys
 import time
 import urllib.request
 
-from sgmllib import SGMLParser
+from html.parser import HTMLParser as SGMLParser  # py2 sgmllib removed in py3
 
 __author__="Jan Bot"
 __author_institute__="Delft University of Technology"
@@ -28,6 +28,17 @@ class PoolParser(SGMLParser):
         self.in_row = False
         self.token = {}
         self.state = ''
+
+    def handle_starttag(self, tag, attrs):
+        # py3 HTMLParser dispatches via handle_starttag; py2 SGMLParser called start_<tag> directly
+        handler = getattr(self, "start_" + tag, None)
+        if handler is not None:
+            handler(attrs)
+
+    def handle_endtag(self, tag):
+        handler = getattr(self, "end_" + tag, None)
+        if handler is not None:
+            handler()
 
     def start_table(self, attrs):
         """Method to find the directory listing."""

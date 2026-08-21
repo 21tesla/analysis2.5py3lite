@@ -115,7 +115,7 @@ class Version:
 
         return "%s.%s.%s%s" % (self.major, self.minor, self.level, self.release)
 
-    def __cmp__(self, other):
+    def _cmp(self, other):
 
         if not isinstance(other, Version):
             return (id(self) > id(other)) - (id(self) < id(other))
@@ -134,6 +134,22 @@ class Version:
                 result = (self.release > other.release) - (self.release < other.release)
 
         return result
+
+    # py3: __cmp__ removed; provide the rich-comparison surface it used to drive
+    def __lt__(self, other):
+        return self._cmp(other) < 0
+
+    def __le__(self, other):
+        return self._cmp(other) <= 0
+
+    def __gt__(self, other):
+        return self._cmp(other) > 0
+
+    def __ge__(self, other):
+        return self._cmp(other) >= 0
+
+    def __eq__(self, other):
+        return self._cmp(other) == 0
 
     def __hash__(self):
         return hash(("__!@#$%%memops.general.Version.Version", self.major, self.minor, self.level, self.release))

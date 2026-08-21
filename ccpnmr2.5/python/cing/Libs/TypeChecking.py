@@ -46,7 +46,7 @@ TYPES = {float: FLOAT,
          bool: BOOL,
          bool: BOOL}
 
-for python_type, my_type in TYPES.items():
+for python_type, my_type in list(TYPES.items()):
     TYPES[my_type] = python_type
 
 class TypeChecker:

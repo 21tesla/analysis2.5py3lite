@@ -529,7 +529,7 @@ class DangleChain(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dangleResidues').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('numIslands', 'omegaLower', 'omegaUpper', 'omegaValue', 'phiLower', 'phiUpper', 'phiValue', 'psiLower', 'psiUpper', 'psiValue', 'secStrucCode', 'access', 'dangleChain', 'residue',))
@@ -581,7 +581,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dangleResidues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -605,7 +605,7 @@ class DangleChain(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('numIslands', 'omegaLower', 'omegaUpper', 'omegaValue', 'phiLower', 'phiUpper', 'phiValue', 'psiLower', 'psiUpper', 'psiValue', 'secStrucCode', 'access', 'dangleChain', 'residue',))
@@ -3921,7 +3921,7 @@ class serves as TopObject.
       currentValues = dataDict.get('dangleChains').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))
@@ -3978,7 +3978,7 @@ class serves as TopObject.
 
       currentValues = dataDict.get('dangleChains').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4008,7 +4008,7 @@ class serves as TopObject.
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))

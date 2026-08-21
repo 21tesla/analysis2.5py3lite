@@ -977,7 +977,7 @@ values are associated with an Experiment.
       currentValues = dataDict.get('parameters')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'experiment', 'parameterDefinition',))
@@ -1036,7 +1036,7 @@ values are associated with an Experiment.
 
       currentValues = dataDict.get('parameters')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1051,7 +1051,7 @@ values are associated with an Experiment.
       currentValues = dataDict.get('parameters')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'experiment', 'parameterDefinition',))
@@ -3355,7 +3355,7 @@ class Procedure(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('instrumentTypes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -3410,7 +3410,7 @@ class Procedure(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('steps').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'duration', 'durationDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure',))
@@ -3462,7 +3462,7 @@ class Procedure(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('instrumentTypes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3470,7 +3470,7 @@ class Procedure(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('instrumentTypes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -3520,7 +3520,7 @@ class Procedure(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('steps').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3544,7 +3544,7 @@ class Procedure(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'duration', 'durationDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure',))
@@ -5716,7 +5716,7 @@ that contain steps.
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -5771,7 +5771,7 @@ that contain steps.
       currentValues = dataDict.get('parameterDefinitions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'mandatory', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'protocol', 'step',))
@@ -5826,7 +5826,7 @@ that contain steps.
       currentValues = dataDict.get('procedures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'numCycles', 'procNumber', 'role', 'serial', 'access', 'protocol',))
@@ -5881,7 +5881,7 @@ that contain steps.
       currentValues = dataDict.get('refInputSamples').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -5936,7 +5936,7 @@ that contain steps.
       currentValues = dataDict.get('refOutputSamples').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -5991,7 +5991,7 @@ that contain steps.
       currentValues = dataDict.get('references')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -6050,7 +6050,7 @@ that contain steps.
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6065,7 +6065,7 @@ that contain steps.
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -6115,7 +6115,7 @@ that contain steps.
     if (nConditions == 0):
       currentValues = dataDict.get('parameterDefinitions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6139,7 +6139,7 @@ that contain steps.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'mandatory', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'protocol', 'step',))
@@ -6189,7 +6189,7 @@ that contain steps.
     if (nConditions == 0):
       currentValues = dataDict.get('procedures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6213,7 +6213,7 @@ that contain steps.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'numCycles', 'procNumber', 'role', 'serial', 'access', 'protocol',))
@@ -6263,7 +6263,7 @@ that contain steps.
     if (nConditions == 0):
       currentValues = dataDict.get('refInputSamples').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6287,7 +6287,7 @@ that contain steps.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -6337,7 +6337,7 @@ that contain steps.
     if (nConditions == 0):
       currentValues = dataDict.get('refOutputSamples').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6361,7 +6361,7 @@ that contain steps.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -6411,7 +6411,7 @@ that contain steps.
     if (nConditions == 0):
       currentValues = dataDict.get('references')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6419,7 +6419,7 @@ that contain steps.
       currentValues = dataDict.get('references')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -8802,7 +8802,7 @@ class ProtocolStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('protocols').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -8859,7 +8859,7 @@ class ProtocolStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocols').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8889,7 +8889,7 @@ class ProtocolStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -10176,7 +10176,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('addSteps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'details', 'duration', 'durationDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'refInputSample',))
@@ -10247,7 +10247,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('inputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -10302,7 +10302,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('solAflowSteps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('beginProportionSolA', 'details', 'duration', 'durationDisplayUnit', 'endProportionSolA', 'flowType', 'flowrate', 'flowrateDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'solutionA', 'solutionB',))
@@ -10357,7 +10357,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('solBflowSteps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('beginProportionSolA', 'details', 'duration', 'durationDisplayUnit', 'endProportionSolA', 'flowType', 'flowrate', 'flowrateDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'solutionA', 'solutionB',))
@@ -10407,7 +10407,7 @@ InputSampleDef.sampleCategory is null).
     if (nConditions == 0):
       currentValues = dataDict.get('addSteps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10415,7 +10415,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('addSteps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'details', 'duration', 'durationDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'refInputSample',))
@@ -10474,7 +10474,7 @@ InputSampleDef.sampleCategory is null).
 
       currentValues = dataDict.get('inputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10489,7 +10489,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('inputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -10539,7 +10539,7 @@ InputSampleDef.sampleCategory is null).
     if (nConditions == 0):
       currentValues = dataDict.get('solAflowSteps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10547,7 +10547,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('solAflowSteps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('beginProportionSolA', 'details', 'duration', 'durationDisplayUnit', 'endProportionSolA', 'flowType', 'flowrate', 'flowrateDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'solutionA', 'solutionB',))
@@ -10597,7 +10597,7 @@ InputSampleDef.sampleCategory is null).
     if (nConditions == 0):
       currentValues = dataDict.get('solBflowSteps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10605,7 +10605,7 @@ InputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('solBflowSteps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('beginProportionSolA', 'details', 'duration', 'durationDisplayUnit', 'endProportionSolA', 'flowType', 'flowrate', 'flowrateDisplayUnit', 'name', 'role', 'serial', 'stepNumber', 'access', 'procedure', 'solutionA', 'solutionB',))
@@ -12895,7 +12895,7 @@ OutputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('outputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refOutputSample', 'sample',))
@@ -12954,7 +12954,7 @@ OutputSampleDef.sampleCategory is null).
 
       currentValues = dataDict.get('outputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12969,7 +12969,7 @@ OutputSampleDef.sampleCategory is null).
       currentValues = dataDict.get('outputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refOutputSample', 'sample',))
@@ -14909,7 +14909,7 @@ certain time (duration).
       currentValues = dataDict.get('parameterDefinitions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'mandatory', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'protocol', 'step',))
@@ -14964,7 +14964,7 @@ certain time (duration).
       currentValues = dataDict.get('refInputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -15019,7 +15019,7 @@ certain time (duration).
       currentValues = dataDict.get('refOutputSamples')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -15071,7 +15071,7 @@ certain time (duration).
     if (nConditions == 0):
       currentValues = dataDict.get('parameterDefinitions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15079,7 +15079,7 @@ certain time (duration).
       currentValues = dataDict.get('parameterDefinitions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'displayUnit', 'label', 'mandatory', 'maxValue', 'minValue', 'name', 'paramType', 'serial', 'unit', 'access', 'protocol', 'step',))
@@ -15129,7 +15129,7 @@ certain time (duration).
     if (nConditions == 0):
       currentValues = dataDict.get('refInputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15137,7 +15137,7 @@ certain time (duration).
       currentValues = dataDict.get('refInputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))
@@ -15187,7 +15187,7 @@ certain time (duration).
     if (nConditions == 0):
       currentValues = dataDict.get('refOutputSamples')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15195,7 +15195,7 @@ certain time (duration).
       currentValues = dataDict.get('refOutputSamples')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'displayUnit', 'name', 'serial', 'unit', 'access', 'protocol', 'refSample', 'step',))

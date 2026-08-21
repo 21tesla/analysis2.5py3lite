@@ -5,6 +5,7 @@ Use akin linkNmrStarData.py, so e.g.:
 python -u $CINGROOT/python/cing/Scripts/FC/mergeNrgBmrbShifts.py 1ieh -bmrbCodes bmr4969 -raise -force
 """
 
+import cing
 from cing import cingDirTmp
 from cing.core.classes import Project
 from cing.Libs.forkoff import do_cmd

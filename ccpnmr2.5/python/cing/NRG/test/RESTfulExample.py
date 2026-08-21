@@ -17,7 +17,7 @@ queryText = """
 print("query:\n", queryText)
 print("querying PDB...\n")
 
-req = urllib.request.Request(url, data=queryText)
+req = urllib.request.Request(url, data=queryText.encode("utf-8"))  # py3: urllib data must be bytes
 f = urllib.request.urlopen(req)
 result = f.read()
 

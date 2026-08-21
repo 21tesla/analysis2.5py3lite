@@ -62,7 +62,10 @@ except ImportError:
 from memops.universal.Geometry import matrixMultiply
 
 # Re-export the structure analysis helpers dependent modules import from StructureBasic.
-from ccp.lib.StructureLib import alignStructures, getAtomSetCoords, getAtomSetsDihedral, getAtomSetsDistance
+from ccp.lib.StructureLib import makeEmptyEnsembleCopy, copyModelToEnsemble, makeEnsemble
+from ccp.lib.StructureLib import alignStructures, compareEnsembles
+from ccp.lib.StructureLib import getResiduePhiPsi, getAtomSetCoords
+from ccp.lib.StructureLib import getAtomSetsDihedral, getAtomSetsDistance
 
 BACKBONE_ATOMS = {
     "protein": ("N", "C", "CA"),
@@ -98,6 +101,8 @@ TWOPI = 6.2831853071795864
 # Functions moved elsewhere
 # from ccp.lib.StructureIo import makeStructureDictFromPdb # no longer needed.
 # from ccp.lib.StructureIo import makeStructureDictFromRoughPdb # no longer needed.
+from ccp.lib.StructureIo import makePdbFromStructure
+from ccp.lib.StructureIo import makeStructureEnsemble, getStructureFromFile
 
 
 # Obsolete, unused, and incorrect

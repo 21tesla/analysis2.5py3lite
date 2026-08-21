@@ -59,7 +59,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 #
 import os
 
-from distanceConstraintsIO import (
+from .distanceConstraintsIO import (
     NmrStarDistanceConstraint,
     NmrStarDistanceConstraintFile,
     NmrStarDistanceConstraintItem,

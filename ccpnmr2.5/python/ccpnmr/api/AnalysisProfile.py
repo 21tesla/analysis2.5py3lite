@@ -1165,7 +1165,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('colorSchemes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -1226,7 +1226,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('macros').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'function', 'isInMenu', 'isInMouseMenu', 'module', 'name', 'ordering', 'path', 'serial', 'shortcut', 'access', 'analysisProfile',))
@@ -1287,7 +1287,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refExpProfiles').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -1348,7 +1348,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('residueProfiles').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'guiName', 'molType', 'access', 'analysisProfile',))
@@ -1405,7 +1405,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('colorSchemes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1435,7 +1435,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -1488,7 +1488,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('macros').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1518,7 +1518,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'function', 'isInMenu', 'isInMouseMenu', 'module', 'name', 'ordering', 'path', 'serial', 'shortcut', 'access', 'analysisProfile',))
@@ -1571,7 +1571,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('refExpProfiles').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1601,7 +1601,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -1654,7 +1654,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('residueProfiles').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1692,7 +1692,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'guiName', 'molType', 'access', 'analysisProfile',))
@@ -6997,7 +6997,7 @@ class RefExpProfile(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('negColorSchemes')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -7052,7 +7052,7 @@ class RefExpProfile(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('posColorSchemes')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -7112,7 +7112,7 @@ class RefExpProfile(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('negColorSchemes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))
@@ -7170,7 +7170,7 @@ class RefExpProfile(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('posColorSchemes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProfile',))

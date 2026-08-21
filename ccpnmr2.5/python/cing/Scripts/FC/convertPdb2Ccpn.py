@@ -7,6 +7,8 @@ import tkinter as Tkinter
 import shutil
 from glob import glob
 
+import cing
+
 from ccpnmr.format.converters.PseudoPdbFormat import PseudoPdbFormat
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

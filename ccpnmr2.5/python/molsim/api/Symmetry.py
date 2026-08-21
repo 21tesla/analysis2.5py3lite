@@ -804,7 +804,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('symmetries').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))
@@ -861,7 +861,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('symmetries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -891,7 +891,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('segmentLength', 'serial', 'symmetryCode', 'access', 'molSystemSymmetrySet',))
@@ -1971,7 +1971,7 @@ class Segment(memops.api.Implementation.DataObject):
       currentValues = self.getResidues()
       result = list()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -2031,7 +2031,7 @@ class Segment(memops.api.Implementation.DataObject):
       currentValues = self.getResidues()
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -3048,7 +3048,7 @@ a multichain MolSystem.
       currentValues = dataDict.get('haddockRuns')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -3103,7 +3103,7 @@ a multichain MolSystem.
       currentValues = dataDict.get('segments').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'access', 'symmetry',))
@@ -3162,7 +3162,7 @@ a multichain MolSystem.
 
       currentValues = dataDict.get('haddockRuns')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3177,7 +3177,7 @@ a multichain MolSystem.
       currentValues = dataDict.get('haddockRuns')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('analysisClustRmsd', 'analysisClustSize', 'analysisDistHBond', 'analysisDistNonbond', 'calcDesolvation', 'centerOfMassConstant', 'centerOfMassRestraints', 'cnsExecutable', 'cpuNumber', 'dielectricType', 'doAirScaling', 'doIncludeDihEnergy', 'doRigidBodyElectrostatics', 'doRigidBodyWaterTrans', 'doRigidTranslations', 'doSAElectrostatics', 'doWaterAnalysis', 'doWaterDock', 'epsilon', 'haddockDir', 'initialRigidBodyMinim', 'nTrails', 'ncsRestraintConstant', 'nonBondedType', 'numAmbRestautoAir', 'numAnalysisStructures', 'numInitWaterShells', 'numIt0Structures', 'numIt1Structures', 'numUnambRestautoAir', 'numWrefStructures', 'queueCommand', 'radomizeStartOriention', 'randomAmbigRestraints', 'randomExclParts', 'randomExcludeAir', 'randomSeed', 'removeNonPolarH', 'rigidbodyIMinteractScaling', 'rotate180It0', 'rotate180It1', 'serial', 'skipStructures', 'solvent', 'surfaceContactConstant', 'surfaceContactRestraints', 'symmetryRestraintConstant', 'useDbSolvateMethod', 'useDnaRestraints', 'useHBondRestraints', 'waterInitRestCutoff', 'waterRestCutoff', 'waterRestScale', 'waterSurfaceCutoff', 'waterToAddRandom', 'waterToKeep', 'access', 'annealProtocol', 'haddockProject', 'nmrConstraintStore',))
@@ -3227,7 +3227,7 @@ a multichain MolSystem.
     if (nConditions == 0):
       currentValues = dataDict.get('segments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3259,7 +3259,7 @@ a multichain MolSystem.
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'firstSeqId', 'access', 'symmetry',))

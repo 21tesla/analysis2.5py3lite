@@ -604,7 +604,7 @@ class ChemElement(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('isotopes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -656,7 +656,7 @@ class ChemElement(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('isotopes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -680,7 +680,7 @@ class ChemElement(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -2058,7 +2058,7 @@ class ChemElementStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chemElements').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNumber', 'atomicRadius', 'covalentRadius', 'mass', 'name', 'symbol', 'access', 'chemElementStore',))
@@ -2115,7 +2115,7 @@ class ChemElementStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chemElements').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2145,7 +2145,7 @@ class ChemElementStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNumber', 'atomicRadius', 'covalentRadius', 'mass', 'name', 'symbol', 'access', 'chemElementStore',))

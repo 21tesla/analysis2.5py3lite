@@ -52,7 +52,7 @@ except ImportError:
 from ccp.lib import MoleculeQuery
 from ccp.lib.MoleculeQuery import *  # noqa - re-exports the API these core classes depended on in py2
 from ccp.lib.MoleculeAlign import getChainResidueMapping, getSequenceResidueMapping
-from ccp.lib.MoleculeModify import makeChain
+from ccp.lib.MoleculeModify import copyMolecule, makeChain
 from ccpnmr.analysis.core.AssignmentBasic import assignAtomsToRes, assignResonanceResidue, getResidueResonances
 
 # STANDARD_ISOTOPES = ['1H','13C','15N','31P','2H','29Si','19F','17O', '79Br']

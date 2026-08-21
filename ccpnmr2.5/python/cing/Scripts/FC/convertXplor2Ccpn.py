@@ -8,6 +8,8 @@ import shutil
 from glob import glob
 
 from ccpnmr.format.converters.CnsFormat import CnsFormat
+
+import cing
 from cing import cingDirTestsData, cingDirTmp
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

@@ -3009,7 +3009,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('dataStores').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'path', 'serial', 'access', 'dataLocationStore', 'dataUrl',))
@@ -3070,7 +3070,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('dataUrls').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'url', 'access', 'dataLocationStore',))
@@ -3127,7 +3127,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('dataStores').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3157,7 +3157,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'path', 'serial', 'access', 'dataLocationStore', 'dataUrl',))
@@ -3210,7 +3210,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('dataUrls').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3240,7 +3240,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'url', 'access', 'dataLocationStore',))
@@ -4158,7 +4158,7 @@ class DataUrl(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -4215,7 +4215,7 @@ class DataUrl(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataStores')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'path', 'serial', 'access', 'dataLocationStore', 'dataUrl',))
@@ -4272,7 +4272,7 @@ class DataUrl(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('annotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4287,7 +4287,7 @@ class DataUrl(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -4339,7 +4339,7 @@ class DataUrl(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dataStores')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4347,7 +4347,7 @@ class DataUrl(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataStores')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'path', 'serial', 'access', 'dataLocationStore', 'dataUrl',))
@@ -5379,7 +5379,7 @@ records, which may be real or (hyper)complex
       currentValues = dataDict.get('nmrDataSources')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -5438,7 +5438,7 @@ records, which may be real or (hyper)complex
 
       currentValues = dataDict.get('nmrDataSources')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5453,7 +5453,7 @@ records, which may be real or (hyper)complex
       currentValues = dataDict.get('nmrDataSources')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -7463,7 +7463,7 @@ class MimeTypeDataStore(AbstractDataStore):
       currentValues = dataDict.get('photoPersons')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -7522,7 +7522,7 @@ class MimeTypeDataStore(AbstractDataStore):
 
       currentValues = dataDict.get('photoPersons')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7537,7 +7537,7 @@ class MimeTypeDataStore(AbstractDataStore):
       currentValues = dataDict.get('photoPersons')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -10689,7 +10689,7 @@ header size refers to the header of the entire dataasource.
       currentValues = dataDict.get('componentShapes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'shapeMatrix',))
@@ -10744,7 +10744,7 @@ header size refers to the header of the entire dataasource.
       currentValues = dataDict.get('components').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amplitude', 'annotation', 'regionId', 'serial', 'status', 'access', 'shapeMatrix',))
@@ -10798,7 +10798,7 @@ header size refers to the header of the entire dataasource.
     if (nConditions == 0):
       currentValues = dataDict.get('components').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10822,7 +10822,7 @@ header size refers to the header of the entire dataasource.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amplitude', 'annotation', 'regionId', 'serial', 'status', 'access', 'shapeMatrix',))
@@ -10872,7 +10872,7 @@ header size refers to the header of the entire dataasource.
     if (nConditions == 0):
       currentValues = dataDict.get('componentShapes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10896,7 +10896,7 @@ header size refers to the header of the entire dataasource.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'shapeMatrix',))

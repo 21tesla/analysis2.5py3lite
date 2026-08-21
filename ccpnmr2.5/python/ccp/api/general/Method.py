@@ -2661,7 +2661,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -2716,7 +2716,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('columns')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('columnType', 'details', 'instrumentType', 'model', 'name', 'serial', 'serialNumber', 'volume', 'volumeDisplayUnit', 'access', 'contactPerson', 'instrumentStore', 'loadingMethod', 'manufacturer',))
@@ -2785,7 +2785,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('compressDataSources')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -2854,7 +2854,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('constraintLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -2923,7 +2923,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('constraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -2992,7 +2992,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('dataDerivations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'method', 'parentList',))
@@ -3061,7 +3061,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('dataDims')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'fileDim', 'isComplex', 'numPoints', 'shapeSerial', 'unit', 'access', 'analysisDataDim', 'dataSource', 'expDim', 'predictMethod',))
@@ -3130,7 +3130,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('derivedDataLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'method', 'nmrProject',))
@@ -3199,7 +3199,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('derivedNmrExperiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -3268,7 +3268,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -3337,7 +3337,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('fitPeakLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -3406,7 +3406,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('intensPeakLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -3475,7 +3475,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('measurementLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -3544,7 +3544,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('measurements')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'figOfMerit', 'value', 'access', 'method', 'parentList',))
@@ -3599,7 +3599,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'method',))
@@ -3668,7 +3668,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('peakIntensities')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('error', 'intensityType', 'value', 'access', 'method', 'peak',))
@@ -3737,7 +3737,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('peaks')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -3806,7 +3806,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('processDataSources')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -3875,7 +3875,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('snDataSources')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -3944,7 +3944,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('structureAnalyses')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -4013,7 +4013,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('structureGenerations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'generationType', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject', 'structureEnsemble',))
@@ -4082,7 +4082,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('violations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -4134,7 +4134,7 @@ processing) or real-world (e.g. purification).
     if (nConditions == 0):
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4142,7 +4142,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -4192,7 +4192,7 @@ processing) or real-world (e.g. purification).
     if (nConditions == 0):
       currentValues = dataDict.get('columns')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4200,7 +4200,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('columns')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('columnType', 'details', 'instrumentType', 'model', 'name', 'serial', 'serialNumber', 'volume', 'volumeDisplayUnit', 'access', 'contactPerson', 'instrumentStore', 'loadingMethod', 'manufacturer',))
@@ -4257,7 +4257,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('compressDataSources')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4272,7 +4272,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('compressDataSources')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -4329,7 +4329,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('constraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4344,7 +4344,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('constraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -4401,7 +4401,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('constraintLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4416,7 +4416,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('constraintLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -4473,7 +4473,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('dataDerivations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4488,7 +4488,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('dataDerivations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'method', 'parentList',))
@@ -4545,7 +4545,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('dataDims')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4560,7 +4560,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('dataDims')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'fileDim', 'isComplex', 'numPoints', 'shapeSerial', 'unit', 'access', 'analysisDataDim', 'dataSource', 'expDim', 'predictMethod',))
@@ -4617,7 +4617,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('derivedDataLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4632,7 +4632,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('derivedDataLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'method', 'nmrProject',))
@@ -4689,7 +4689,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('derivedNmrExperiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4704,7 +4704,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('derivedNmrExperiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -4761,7 +4761,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4776,7 +4776,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -4833,7 +4833,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('fitPeakLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4848,7 +4848,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('fitPeakLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -4905,7 +4905,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('intensPeakLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4920,7 +4920,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('intensPeakLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -4977,7 +4977,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('measurements')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4992,7 +4992,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('measurements')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'figOfMerit', 'value', 'access', 'method', 'parentList',))
@@ -5049,7 +5049,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('measurementLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5064,7 +5064,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('measurementLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -5114,7 +5114,7 @@ processing) or real-world (e.g. purification).
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5138,7 +5138,7 @@ processing) or real-world (e.g. purification).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'method',))
@@ -5195,7 +5195,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('peaks')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5210,7 +5210,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('peaks')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -5267,7 +5267,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('peakIntensities')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5282,7 +5282,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('peakIntensities')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('error', 'intensityType', 'value', 'access', 'method', 'peak',))
@@ -5339,7 +5339,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('processDataSources')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5354,7 +5354,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('processDataSources')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -5411,7 +5411,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('snDataSources')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5426,7 +5426,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('snDataSources')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -5483,7 +5483,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('structureAnalyses')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5498,7 +5498,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('structureAnalyses')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -5555,7 +5555,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('structureGenerations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5570,7 +5570,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('structureGenerations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'generationType', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject', 'structureEnsemble',))
@@ -5627,7 +5627,7 @@ processing) or real-world (e.g. purification).
 
       currentValues = dataDict.get('violations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5642,7 +5642,7 @@ processing) or real-world (e.g. purification).
       currentValues = dataDict.get('violations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcValue', 'calcValueError', 'fractionViolated', 'violation', 'access', 'constraint', 'method', 'violationList',))
@@ -11265,7 +11265,7 @@ class MethodStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('methods').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -11326,7 +11326,7 @@ class MethodStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('software').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'vendorAddress', 'vendorName', 'vendorWebAddress', 'version', 'access', 'methodStore',))
@@ -11383,7 +11383,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('methods').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11413,7 +11413,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -11466,7 +11466,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('software').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11504,7 +11504,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'vendorAddress', 'vendorName', 'vendorWebAddress', 'version', 'access', 'methodStore',))
@@ -14062,7 +14062,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -14131,7 +14131,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -14200,7 +14200,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('entries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -14255,7 +14255,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('methods')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -14324,7 +14324,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('validationStores')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
@@ -14376,7 +14376,7 @@ class Software(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14384,7 +14384,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -14441,7 +14441,7 @@ class Software(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('dropAnnotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14456,7 +14456,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -14513,7 +14513,7 @@ class Software(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('entries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14528,7 +14528,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('entries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -14578,7 +14578,7 @@ class Software(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('methods')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14586,7 +14586,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('methods')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -14643,7 +14643,7 @@ class Software(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('validationStores')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14658,7 +14658,7 @@ class Software(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('validationStores')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))

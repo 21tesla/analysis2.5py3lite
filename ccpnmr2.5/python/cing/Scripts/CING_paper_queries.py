@@ -2,6 +2,8 @@
 Unit test execute as:
 python $CINGROOT/python/cing/Scripts/cingProfile.py
 """
+
+import cing
 from cing.Libs.html import hPlot
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

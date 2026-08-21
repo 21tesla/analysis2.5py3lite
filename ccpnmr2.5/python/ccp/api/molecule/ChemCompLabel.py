@@ -1624,7 +1624,7 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('isotopomers').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'weight', 'access', 'chemCompLabel',))
@@ -1676,7 +1676,7 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('isotopomers').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1700,7 +1700,7 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'weight', 'access', 'chemCompLabel',))
@@ -2529,7 +2529,7 @@ uncorrelated isotope distribution on its atoms.
       currentValues = dataDict.get('atomLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'name', 'subType', 'weight', 'access', 'isotopomer',))
@@ -2581,7 +2581,7 @@ uncorrelated isotope distribution on its atoms.
     if (nConditions == 0):
       currentValues = dataDict.get('atomLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2616,7 +2616,7 @@ uncorrelated isotope distribution on its atoms.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'name', 'subType', 'weight', 'access', 'isotopomer',))
@@ -3709,7 +3709,7 @@ same source or are generally used together.
       currentValues = dataDict.get('chemCompLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'molType', 'access', 'labelingScheme',))
@@ -3766,7 +3766,7 @@ same source or are generally used together.
 
       currentValues = dataDict.get('chemCompLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3804,7 +3804,7 @@ same source or are generally used together.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'molType', 'access', 'labelingScheme',))

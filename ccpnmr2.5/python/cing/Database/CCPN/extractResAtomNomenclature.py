@@ -85,8 +85,7 @@ for chemComp in memopsRoot.chemComps:
     resText += '  CCPN %s %-4s' % (chemComp.molType, ccpId)
 
     atomTexts = []
-    chemAtomNames = atomDict.keys()
-    chemAtomNames.sort()
+    chemAtomNames = sorted(atomDict.keys())  # py3: dict.keys() is a view, not a sortable list
 
     for chemAtomName in chemAtomNames:
       atomText = 'ATOM '

@@ -1753,7 +1753,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('entryMolecules')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('productionMethod', 'sourceType', 'vectorType', 'access', 'entry', 'experimentalSource', 'molecule',))
@@ -1822,7 +1822,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSeqFragments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molecule', 'naturalSource',))
@@ -1891,7 +1891,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molecules')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
@@ -1960,7 +1960,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -2019,7 +2019,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('entryMolecules')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2034,7 +2034,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('entryMolecules')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('productionMethod', 'sourceType', 'vectorType', 'access', 'entry', 'experimentalSource', 'molecule',))
@@ -2091,7 +2091,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molSeqFragments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2106,7 +2106,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSeqFragments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molecule', 'naturalSource',))
@@ -2163,7 +2163,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molecules')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2178,7 +2178,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molecules')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
@@ -2235,7 +2235,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2250,7 +2250,7 @@ class NaturalSource(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -6371,7 +6371,7 @@ class Taxonomy(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('naturalSources').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atccNumber', 'cellLine', 'cellLocation', 'cellType', 'details', 'fraction', 'geneMnemonic', 'genus', 'ictvCode', 'kingdom', 'ncbiTaxonomyId', 'organ', 'organelle', 'organismAcronym', 'organismName', 'plasmid', 'plasmidDetails', 'scientificName', 'secretion', 'serial', 'species', 'strain', 'subVariant', 'superKingdom', 'tissue', 'variant', 'access', 'taxonomy',))
@@ -6428,7 +6428,7 @@ class Taxonomy(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('naturalSources').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6458,7 +6458,7 @@ class Taxonomy(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atccNumber', 'cellLine', 'cellLocation', 'cellType', 'details', 'fraction', 'geneMnemonic', 'genus', 'ictvCode', 'kingdom', 'ncbiTaxonomyId', 'organ', 'organelle', 'organismAcronym', 'organismName', 'plasmid', 'plasmidDetails', 'scientificName', 'secretion', 'serial', 'species', 'strain', 'subVariant', 'superKingdom', 'tissue', 'variant', 'access', 'taxonomy',))

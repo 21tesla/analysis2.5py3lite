@@ -3930,7 +3930,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('projectQueries').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -3991,7 +3991,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('projectVersionQueries').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -4052,7 +4052,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('taskQueries').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -4109,7 +4109,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projectQueries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4139,7 +4139,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -4192,7 +4192,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projectVersionQueries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4222,7 +4222,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -4275,7 +4275,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('taskQueries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4305,7 +4305,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('criteria', 'date', 'serial', 'userName', 'access', 'wmsQueryStore',))
@@ -5211,7 +5211,7 @@ class TaskQuery(AbstractQuery):
       currentValues = dataDict.get('taskResults').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'taskSerial', 'wmsSegmentName', 'access', 'taskQuery',))
@@ -5263,7 +5263,7 @@ class TaskQuery(AbstractQuery):
     if (nConditions == 0):
       currentValues = dataDict.get('taskResults').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5287,7 +5287,7 @@ class TaskQuery(AbstractQuery):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'taskSerial', 'wmsSegmentName', 'access', 'taskQuery',))
@@ -6096,7 +6096,7 @@ class ProjectVersionQuery(AbstractQuery):
       currentValues = dataDict.get('projectVersionResults').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'versionTag', 'wmsSegmentName', 'access', 'projectVersionQuery',))
@@ -6149,7 +6149,7 @@ class ProjectVersionQuery(AbstractQuery):
     if (nConditions == 0):
       currentValues = dataDict.get('projectVersionResults').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6173,7 +6173,7 @@ class ProjectVersionQuery(AbstractQuery):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'versionTag', 'wmsSegmentName', 'access', 'projectVersionQuery',))
@@ -6982,7 +6982,7 @@ class ProjectQuery(AbstractQuery):
       currentValues = dataDict.get('projectResults').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'wmsSegmentName', 'access', 'projectQuery',))
@@ -7034,7 +7034,7 @@ class ProjectQuery(AbstractQuery):
     if (nConditions == 0):
       currentValues = dataDict.get('projectResults').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7058,7 +7058,7 @@ class ProjectQuery(AbstractQuery):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('projectName', 'serial', 'wmsSegmentName', 'access', 'projectQuery',))

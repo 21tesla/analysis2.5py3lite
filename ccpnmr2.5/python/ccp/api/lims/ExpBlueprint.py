@@ -925,7 +925,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -980,7 +980,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialMolComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -1032,7 +1032,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('sampleComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1040,7 +1040,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('concDisplayUnit', 'concentration', 'concentrationError', 'concentrationUnit', 'details', 'purity', 'serial', 'abstractSample', 'access', 'blueprintComponent', 'container', 'refComponent',))
@@ -1091,7 +1091,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trialMolComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1099,7 +1099,7 @@ class BlueprintComponent(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialMolComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -5479,7 +5479,7 @@ of wish targets and non-polymer molecules.
       currentValues = dataDict.get('blueprintComponents').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -5534,7 +5534,7 @@ of wish targets and non-polymer molecules.
       currentValues = dataDict.get('blueprintDbRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'dbRef', 'expBlueprint',))
@@ -5589,7 +5589,7 @@ of wish targets and non-polymer molecules.
       currentValues = dataDict.get('blueprintStatuses').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -5658,7 +5658,7 @@ of wish targets and non-polymer molecules.
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -5710,7 +5710,7 @@ of wish targets and non-polymer molecules.
     if (nConditions == 0):
       currentValues = dataDict.get('blueprintComponents').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5734,7 +5734,7 @@ of wish targets and non-polymer molecules.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -5784,7 +5784,7 @@ of wish targets and non-polymer molecules.
     if (nConditions == 0):
       currentValues = dataDict.get('blueprintDbRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5808,7 +5808,7 @@ of wish targets and non-polymer molecules.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'dbRef', 'expBlueprint',))
@@ -5858,7 +5858,7 @@ of wish targets and non-polymer molecules.
     if (nConditions == 0):
       currentValues = dataDict.get('blueprintStatuses').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5882,7 +5882,7 @@ of wish targets and non-polymer molecules.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -5939,7 +5939,7 @@ of wish targets and non-polymer molecules.
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5954,7 +5954,7 @@ of wish targets and non-polymer molecules.
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -8343,7 +8343,7 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('expBlueprints').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'localName', 'pathway', 'serial', 'similarityDetails', 'systematicName', 'whyChosen', 'access', 'expBlueprintStore', 'owner',))
@@ -8400,7 +8400,7 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('expBlueprints').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8430,7 +8430,7 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'localName', 'pathway', 'serial', 'similarityDetails', 'systematicName', 'whyChosen', 'access', 'expBlueprintStore', 'owner',))

@@ -30,8 +30,8 @@ Atom:
 
 import time
 
-from numpy.lib.index_tricks import ogrid
-from numpy.lib.twodim_base import histogram2d
+from numpy import ogrid  # numpy.lib.index_tricks removed in numpy 2.x
+from numpy import histogram2d  # numpy.lib.twodim_base removed in numpy 2.x
 
 from cing.core.classes2 import RestraintList
 from cing.core.constants import *  #@UnusedWildImport

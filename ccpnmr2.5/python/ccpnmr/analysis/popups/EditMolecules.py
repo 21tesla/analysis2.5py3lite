@@ -80,7 +80,7 @@ RES_CODE_MODES = ["1-Letter", "3-Letter/Ccp"]
 
 POLYMER_MOLTYPES = ["protein", "DNA", "RNA", "carbohydrate", "DNA/RNA"]
 
-ALPHABET = set(string.uppercase)
+ALPHABET = set(string.ascii_uppercase)
 
 # TBD
 #

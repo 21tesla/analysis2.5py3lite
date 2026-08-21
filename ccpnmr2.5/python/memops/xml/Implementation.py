@@ -4911,7 +4911,7 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
 
                                 else:
                                     if tmpMap["type"] == "child":
-                                        items = val.items()
+                                        items = list(val.items())  # py3: dict.items() is a view; indexed/assigned below
                                         items.sort()
                                         ll = [x[1] for x in items]
                                     else:

@@ -1,3 +1,4 @@
+import cing
 from cing import cingDirScripts, cingDirTestsData
 from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.NTutils import *  #@UnusedWildImport

@@ -2718,7 +2718,7 @@ class Mixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('mixtureComponents').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'componentType', 'serial', 'access', 'mixture',))
@@ -2773,7 +2773,7 @@ class Mixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialExperiments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'expCode', 'name', 'serial', 'access', 'mixture',))
@@ -2828,7 +2828,7 @@ class Mixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trials')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))
@@ -2880,7 +2880,7 @@ class Mixture(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('mixtureComponents').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2904,7 +2904,7 @@ class Mixture(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'componentType', 'serial', 'access', 'mixture',))
@@ -2954,7 +2954,7 @@ class Mixture(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trials')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2962,7 +2962,7 @@ class Mixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trials')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))
@@ -3012,7 +3012,7 @@ class Mixture(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trialExperiments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3036,7 +3036,7 @@ class Mixture(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'expCode', 'name', 'serial', 'access', 'mixture',))
@@ -4310,7 +4310,7 @@ class MixtureComponent(memops.api.Implementation.DataObject):
       currentValues = self.getTrialHits()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))
@@ -4362,7 +4362,7 @@ class MixtureComponent(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getTrialHits()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4370,7 +4370,7 @@ class MixtureComponent(memops.api.Implementation.DataObject):
       currentValues = self.getTrialHits()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))
@@ -5990,7 +5990,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('mixtures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -6045,7 +6045,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
       currentValues = self.getRefDataStores()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
@@ -6106,7 +6106,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('trialGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phaseType', 'serial', 'access', 'nmrScreen',))
@@ -6167,7 +6167,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('trialSets').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'evaluateOnlyUnambiguous', 'evaluateSingleResonance', 'identifyAllosteric', 'name', 'serial', 'useInverseEffects', 'useVolume', 'access', 'nmrScreen',))
@@ -6224,7 +6224,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('mixtures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6254,7 +6254,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -6312,7 +6312,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
       currentValues = self.getRefDataStores()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
@@ -6365,7 +6365,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('trialGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6395,7 +6395,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phaseType', 'serial', 'access', 'nmrScreen',))
@@ -6448,7 +6448,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('trialSets').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6478,7 +6478,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'evaluateOnlyUnambiguous', 'evaluateSingleResonance', 'identifyAllosteric', 'name', 'serial', 'useInverseEffects', 'useVolume', 'access', 'nmrScreen',))
@@ -9825,7 +9825,7 @@ class Trial(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('mixtures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -9880,7 +9880,7 @@ class Trial(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phaseType', 'serial', 'access', 'nmrScreen',))
@@ -9935,7 +9935,7 @@ class Trial(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialHits').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))
@@ -9987,7 +9987,7 @@ class Trial(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('mixtures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9995,7 +9995,7 @@ class Trial(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('mixtures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrScreen', 'sample',))
@@ -10045,7 +10045,7 @@ class Trial(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trialGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10053,7 +10053,7 @@ class Trial(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'phaseType', 'serial', 'access', 'nmrScreen',))
@@ -10103,7 +10103,7 @@ class Trial(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trialHits').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10127,7 +10127,7 @@ class Trial(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))
@@ -11679,7 +11679,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataSources')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -11734,7 +11734,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experimentHits')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('figOfMerit', 'meritCode', 'normalisedChange', 'access', 'trialExperiment', 'trialHit',))
@@ -11786,7 +11786,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dataSources')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11794,7 +11794,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataSources')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dataType', 'details', 'isNormalStorage', 'isSimulated', 'name', 'noiseLevel', 'numDim', 'numShapes', 'numSparsePoints', 'recordNumber', 'scale', 'serial', 'signalLevel', 'storageDetails', 'access', 'activePeakList', 'analysisSpectrum', 'compressMethod', 'dataStore', 'experiment', 'processMethod', 'processedFrom', 'snMethod',))
@@ -11844,7 +11844,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('experimentHits')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11852,7 +11852,7 @@ class TrialExperiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experimentHits')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('figOfMerit', 'meritCode', 'normalisedChange', 'access', 'trialExperiment', 'trialHit',))
@@ -13296,7 +13296,7 @@ class TrialGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trials')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))
@@ -13348,7 +13348,7 @@ class TrialGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('trials')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13356,7 +13356,7 @@ class TrialGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trials')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))
@@ -14795,7 +14795,7 @@ class TrialHit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experimentHits').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('figOfMerit', 'meritCode', 'normalisedChange', 'access', 'trialExperiment', 'trialHit',))
@@ -14850,7 +14850,7 @@ class TrialHit(memops.api.Implementation.DataObject):
       currentValues = self.getMixtureComponents()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'componentType', 'serial', 'access', 'mixture',))
@@ -14905,7 +14905,7 @@ class TrialHit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('refNmrSpectra')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'concentration', 'details', 'name', 'pH', 'serial', 'solvent', 'temperature', 'access', 'dataSource', 'refDataStore',))
@@ -14957,7 +14957,7 @@ class TrialHit(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('experimentHits').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14981,7 +14981,7 @@ class TrialHit(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('figOfMerit', 'meritCode', 'normalisedChange', 'access', 'trialExperiment', 'trialHit',))
@@ -15031,7 +15031,7 @@ class TrialHit(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getMixtureComponents()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15039,7 +15039,7 @@ class TrialHit(memops.api.Implementation.DataObject):
       currentValues = self.getMixtureComponents()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'componentType', 'serial', 'access', 'mixture',))
@@ -15089,7 +15089,7 @@ class TrialHit(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('refNmrSpectra')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15097,7 +15097,7 @@ class TrialHit(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('refNmrSpectra')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'concentration', 'details', 'name', 'pH', 'serial', 'solvent', 'temperature', 'access', 'dataSource', 'refDataStore',))
@@ -16757,7 +16757,7 @@ the same parameter settings.
       currentValues = dataDict.get('experimentWeights').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('changeIsPositive', 'expCode', 'intensityScale', 'meritThreshold', 'weight', 'access', 'trialSet',))
@@ -16812,7 +16812,7 @@ the same parameter settings.
       currentValues = dataDict.get('regionWeights').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('maxPpm', 'minPpm', 'serial', 'weight', 'access', 'trialSet',))
@@ -16867,7 +16867,7 @@ the same parameter settings.
       currentValues = dataDict.get('trials').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))
@@ -16919,7 +16919,7 @@ the same parameter settings.
     if (nConditions == 0):
       currentValues = dataDict.get('experimentWeights').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -16943,7 +16943,7 @@ the same parameter settings.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('changeIsPositive', 'expCode', 'intensityScale', 'meritThreshold', 'weight', 'access', 'trialSet',))
@@ -16993,7 +16993,7 @@ the same parameter settings.
     if (nConditions == 0):
       currentValues = dataDict.get('regionWeights').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -17017,7 +17017,7 @@ the same parameter settings.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('maxPpm', 'minPpm', 'serial', 'weight', 'access', 'trialSet',))
@@ -17067,7 +17067,7 @@ the same parameter settings.
     if (nConditions == 0):
       currentValues = dataDict.get('trials').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -17091,7 +17091,7 @@ the same parameter settings.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'serial', 'access', 'trialSet',))

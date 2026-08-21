@@ -1,7 +1,7 @@
 
 from math import atan2, cos, sin, sqrt
 
-from NeuralNetwork import NN
+from .NeuralNetwork import NN
 
 aminoAcidLetters = ['I','L','V','F','W',
                     'Y','C','A','G','P',

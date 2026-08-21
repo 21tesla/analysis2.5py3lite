@@ -614,7 +614,7 @@ class Project(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('projectVersions').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationTime', 'status', 'summary', 'versionTag', 'access', 'createdByTask', 'project',))
@@ -669,7 +669,7 @@ class Project(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('rawFiles').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'path', 'serial', 'access', 'project',))
@@ -721,7 +721,7 @@ class Project(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('projectVersions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -745,7 +745,7 @@ class Project(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationTime', 'status', 'summary', 'versionTag', 'access', 'createdByTask', 'project',))
@@ -795,7 +795,7 @@ class Project(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('rawFiles').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -819,7 +819,7 @@ class Project(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'path', 'serial', 'access', 'project',))
@@ -2160,7 +2160,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('outputTasks')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
@@ -2212,7 +2212,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('outputTasks')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2220,7 +2220,7 @@ class ProjectVersion(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('outputTasks')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
@@ -6524,7 +6524,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('projects').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'name', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'access', 'wmsSegment',))
@@ -6585,7 +6585,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('tasks').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))
@@ -6642,7 +6642,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projects').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6672,7 +6672,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'location', 'name', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'access', 'wmsSegment',))
@@ -6725,7 +6725,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('tasks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6755,7 +6755,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('dateCompleted', 'dateStarted', 'nmrCalcRunSerial', 'nmrCalcStoreName', 'operatorId', 'protocolName', 'serial', 'status', 'summary', 'access', 'generatedVersion', 'inputVersion', 'wmsSegment',))

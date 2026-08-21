@@ -1,7 +1,7 @@
 import pickle
 import csv
 
-from numpy.lib.twodim_base import histogram2d
+from numpy import histogram2d  # numpy.lib.twodim_base removed in numpy 2.x
 
 from cing import cingDirData, cingDirTmp
 from cing.core.molecule import common20AADict

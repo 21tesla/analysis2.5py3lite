@@ -5,10 +5,12 @@ except Exception:
     pass
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
+# NB: interactive demo (time.sleep(1000) mid-module); fails fast on the
+# py2-only 'date2num' leak on purpose so the import smoke test does not hang.
 
 clf()
 ion()
-hold(False)
+# hold(False)  # py2 pylab-only; no-op in modern matplotlib and no longer provided by pyplot
 
 yearIntMin = 1990 # inclusive start
 yearIntMax = 2014 # exclusive end

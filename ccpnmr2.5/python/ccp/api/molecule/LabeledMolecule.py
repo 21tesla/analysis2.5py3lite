@@ -1267,7 +1267,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -1336,7 +1336,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -1392,7 +1392,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molLabelFractions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'labeledMixture', 'molLabel',))
@@ -1451,7 +1451,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1466,7 +1466,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -1523,7 +1523,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1538,7 +1538,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -1589,7 +1589,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('molLabelFractions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1613,7 +1613,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'labeledMixture', 'molLabel',))
@@ -3289,7 +3289,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('labeledMixtures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'averageComposition', 'labeledMolecule',))
@@ -3350,7 +3350,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('molLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'labeledMolecule',))
@@ -3408,7 +3408,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('labeledMixtures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3438,7 +3438,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'averageComposition', 'labeledMolecule',))
@@ -3491,7 +3491,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('molLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3521,7 +3521,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'labeledMolecule',))
@@ -4465,7 +4465,7 @@ class MolLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('averageLabeledMixtures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'averageComposition', 'labeledMolecule',))
@@ -4520,7 +4520,7 @@ class MolLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molLabelFractions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'labeledMixture', 'molLabel',))
@@ -4575,7 +4575,7 @@ class MolLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('resLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('resId', 'access', 'molLabel',))
@@ -4628,7 +4628,7 @@ class MolLabel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('averageLabeledMixtures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4636,7 +4636,7 @@ class MolLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('averageLabeledMixtures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'averageComposition', 'labeledMolecule',))
@@ -4686,7 +4686,7 @@ class MolLabel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('molLabelFractions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4694,7 +4694,7 @@ class MolLabel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molLabelFractions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'labeledMixture', 'molLabel',))
@@ -4744,7 +4744,7 @@ class MolLabel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('resLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4768,7 +4768,7 @@ class MolLabel(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('resId', 'access', 'molLabel',))
@@ -6553,7 +6553,7 @@ ResLabelFractions.
       currentValues = dataDict.get('atomLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('massNumber', 'serial', 'weight', 'access', 'resLabel',))
@@ -6608,7 +6608,7 @@ ResLabelFractions.
       currentValues = dataDict.get('resLabelFractions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopomerSerial', 'schemeName', 'weight', 'access', 'resLabel',))
@@ -6660,7 +6660,7 @@ ResLabelFractions.
     if (nConditions == 0):
       currentValues = dataDict.get('atomLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6684,7 +6684,7 @@ ResLabelFractions.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('massNumber', 'serial', 'weight', 'access', 'resLabel',))
@@ -6734,7 +6734,7 @@ ResLabelFractions.
     if (nConditions == 0):
       currentValues = dataDict.get('resLabelFractions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6766,7 +6766,7 @@ ResLabelFractions.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopomerSerial', 'schemeName', 'weight', 'access', 'resLabel',))
@@ -7613,7 +7613,7 @@ class ResLabelFraction(memops.api.Implementation.DataObject):
       currentValues = self.getIsotopomers()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'weight', 'access', 'chemCompLabel',))
@@ -7665,7 +7665,7 @@ class ResLabelFraction(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getIsotopomers()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7673,7 +7673,7 @@ class ResLabelFraction(memops.api.Implementation.DataObject):
       currentValues = self.getIsotopomers()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'weight', 'access', 'chemCompLabel',))

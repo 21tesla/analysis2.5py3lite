@@ -84,8 +84,8 @@ Citing:          If you are using this software for academic purposes, we
 import sys
 from     os.path             import join, isdir
 from     os                     import makedirs
-from    HaddockBasic        import getPdbString, getAirSegments, getFlexibleResidues, makeBackup
-from     HaddockDnaRnaRest     import dnaRnaRestraints
+from    .HaddockBasic        import getPdbString, getAirSegments, getFlexibleResidues, makeBackup
+from     .HaddockDnaRnaRest     import dnaRnaRestraints
 from .HaddockLocal import *
 
 class exportClassic:

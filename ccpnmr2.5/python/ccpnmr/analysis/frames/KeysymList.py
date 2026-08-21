@@ -73,8 +73,8 @@ class KeysymList(PulldownList):
             None,
         ]
         for category, sublabels in (
-            ("a-z", string.lowercase[:26]),
-            ("A-Z", string.uppercase[:26]),
+            ("a-z", string.ascii_lowercase[:26]),
+            ("A-Z", string.ascii_uppercase[:26]),
             # ('0-9', string.digits),
             ("F keys", fkey_entries),
             ("Misc", misc_entries),

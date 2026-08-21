@@ -1051,7 +1051,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authors')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -1120,7 +1120,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('definition', 'details', 'name', 'serial', 'sf', 'unit', 'access', 'method', 'nmrProject',))
@@ -1175,7 +1175,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editors')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -1244,7 +1244,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -1313,7 +1313,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('methods')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -1382,7 +1382,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSystems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -1451,7 +1451,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molecules')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
@@ -1520,7 +1520,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -1589,7 +1589,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntriesPrimary')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -1658,7 +1658,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrProbes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'diameter', 'instrumentType', 'model', 'name', 'probeType', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -1727,7 +1727,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrSpectrometers')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'instrumentType', 'model', 'name', 'nominalFreq', 'protonFreq', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -1796,7 +1796,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('protocols')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -1865,7 +1865,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('ratioShiftReferences')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomGroup', 'indirectShiftRatio', 'isotopeCode', 'molName', 'referenceType', 'serial', 'unit', 'value', 'access', 'citation', 'nmrProject', 'shiftRatioCitation',))
@@ -1934,7 +1934,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleConditionSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrProject',))
@@ -2003,7 +2003,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('shiftReferences')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomGroup', 'indirectShiftRatio', 'isotopeCode', 'molName', 'referenceType', 'serial', 'unit', 'value', 'access', 'citation', 'nmrProject', 'shiftRatioCitation',))
@@ -2072,7 +2072,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('software')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'vendorAddress', 'vendorName', 'vendorWebAddress', 'version', 'access', 'methodStore',))
@@ -2141,7 +2141,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -2210,7 +2210,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -2270,7 +2270,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authors')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -2327,7 +2327,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('dataLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2342,7 +2342,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dataLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('definition', 'details', 'name', 'serial', 'sf', 'unit', 'access', 'method', 'nmrProject',))
@@ -2400,7 +2400,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editors')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -2457,7 +2457,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2472,7 +2472,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -2529,7 +2529,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('methods')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2544,7 +2544,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('methods')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'procedure', 'serial', 'task', 'access', 'instrument', 'methodStore', 'software',))
@@ -2601,7 +2601,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molSystems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2616,7 +2616,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSystems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -2673,7 +2673,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molecules')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2688,7 +2688,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molecules')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('calcIsoelectricPoint', 'createdBy', 'details', 'fragmentDetails', 'guid', 'isFinalised', 'isModifiable', 'lastUnlockedBy', 'longName', 'mutationDetails', 'name', 'seqDetails', 'smiles', 'smilesType', 'access', 'memopsRoot', 'naturalSource',))
@@ -2745,7 +2745,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('nmrEntries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2760,7 +2760,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -2832,7 +2832,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntriesPrimary')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -2889,7 +2889,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('nmrProbes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2904,7 +2904,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrProbes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'diameter', 'instrumentType', 'model', 'name', 'probeType', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -2961,7 +2961,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('nmrSpectrometers')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2976,7 +2976,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrSpectrometers')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'instrumentType', 'model', 'name', 'nominalFreq', 'protonFreq', 'serial', 'serialNumber', 'access', 'contactPerson', 'instrumentStore', 'manufacturer',))
@@ -3033,7 +3033,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('protocols')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3048,7 +3048,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('protocols')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -3105,7 +3105,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('ratioShiftReferences')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3120,7 +3120,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('ratioShiftReferences')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomGroup', 'indirectShiftRatio', 'isotopeCode', 'molName', 'referenceType', 'serial', 'unit', 'value', 'access', 'citation', 'nmrProject', 'shiftRatioCitation',))
@@ -3177,7 +3177,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('sampleConditionSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3192,7 +3192,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleConditionSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'nmrProject',))
@@ -3249,7 +3249,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('shiftReferences')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3264,7 +3264,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('shiftReferences')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomGroup', 'indirectShiftRatio', 'isotopeCode', 'molName', 'referenceType', 'serial', 'unit', 'value', 'access', 'citation', 'nmrProject', 'shiftRatioCitation',))
@@ -3321,7 +3321,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('software')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3336,7 +3336,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('software')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'vendorAddress', 'vendorName', 'vendorWebAddress', 'version', 'access', 'methodStore',))
@@ -3393,7 +3393,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3408,7 +3408,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -3465,7 +3465,7 @@ class Citation(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('targetGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3480,7 +3480,7 @@ class Citation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -8925,7 +8925,7 @@ class CitationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('citations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -8982,7 +8982,7 @@ class CitationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('citations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9012,7 +9012,7 @@ class CitationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))

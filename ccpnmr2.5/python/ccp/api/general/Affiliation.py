@@ -727,7 +727,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('organisations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('city', 'country', 'emailAddress', 'faxNumber', 'name', 'organisationType', 'phoneNumber', 'postalCode', 'province', 'serial', 'url', 'access', 'affiliationStore',))
@@ -788,7 +788,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('persons').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -845,7 +845,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('organisations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -875,7 +875,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('city', 'country', 'emailAddress', 'faxNumber', 'name', 'organisationType', 'phoneNumber', 'postalCode', 'province', 'serial', 'url', 'access', 'affiliationStore',))
@@ -928,7 +928,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('persons').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -958,7 +958,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('familyName', 'familyTitle', 'givenName', 'serial', 'title', 'access', 'affiliationStore', 'currentPersonInGroup',))
@@ -2117,7 +2117,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -2186,7 +2186,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -2241,7 +2241,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('personInGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -2300,7 +2300,7 @@ class Group(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2315,7 +2315,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -2372,7 +2372,7 @@ class Group(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('nmrEntries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2387,7 +2387,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nmrEntries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -2437,7 +2437,7 @@ class Group(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('personInGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2445,7 +2445,7 @@ class Group(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('personInGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -4327,7 +4327,7 @@ class Organisation(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('groups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'url', 'access', 'organisation',))
@@ -4379,7 +4379,7 @@ class Organisation(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('groups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4403,7 +4403,7 @@ class Organisation(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'url', 'access', 'organisation',))
@@ -8242,7 +8242,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authorCitations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -8311,7 +8311,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authoredEntries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -8380,7 +8380,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('contactEntries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -8449,7 +8449,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('createdExps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -8518,7 +8518,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('createdProtocols')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -8587,7 +8587,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -8656,7 +8656,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editedExps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -8725,7 +8725,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editedProtocols')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -8794,7 +8794,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editorCitations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -8863,7 +8863,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('expBlueprints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'localName', 'pathway', 'serial', 'similarityDetails', 'systematicName', 'whyChosen', 'access', 'expBlueprintStore', 'owner',))
@@ -8918,7 +8918,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('personInGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -8987,7 +8987,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -9042,7 +9042,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('users')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))
@@ -9101,7 +9101,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('authorCitations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9116,7 +9116,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authorCitations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -9173,7 +9173,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('authoredEntries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9188,7 +9188,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('authoredEntries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -9245,7 +9245,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('contactEntries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9260,7 +9260,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('contactEntries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -9317,7 +9317,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('createdExps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9332,7 +9332,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('createdExps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -9389,7 +9389,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('createdProtocols')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9404,7 +9404,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('createdProtocols')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -9461,7 +9461,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('dropAnnotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9476,7 +9476,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dropAnnotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('cmdLineParam', 'scoreDate', 'serial', 'access', 'annotator', 'crystallizationStore', 'image', 'sample', 'score', 'software',))
@@ -9533,7 +9533,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('editedExps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9548,7 +9548,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editedExps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -9605,7 +9605,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('editedProtocols')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9620,7 +9620,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editedProtocols')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('creationDate', 'details', 'lastEditedDate', 'name', 'objective', 'serial', 'access', 'creator', 'experimentType', 'lastEditor', 'protocolStore',))
@@ -9677,7 +9677,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('editorCitations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9692,7 +9692,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('editorCitations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -9749,7 +9749,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('expBlueprints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9764,7 +9764,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('expBlueprints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'localName', 'pathway', 'serial', 'similarityDetails', 'systematicName', 'whyChosen', 'access', 'expBlueprintStore', 'owner',))
@@ -9814,7 +9814,7 @@ class Person(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('personInGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9838,7 +9838,7 @@ class Person(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('deliveryAddress', 'emailAddress', 'endDate', 'faxNumber', 'mailingAddress', 'position', 'serial', 'access', 'group', 'person', 'photo',))
@@ -9895,7 +9895,7 @@ class Person(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9910,7 +9910,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -9960,7 +9960,7 @@ class Person(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('users')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9968,7 +9968,7 @@ class Person(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('users')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isSuperuser', 'name', 'passwordHashed', 'access', 'accessControlStore', 'person',))

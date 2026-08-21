@@ -207,7 +207,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemAngles')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -262,7 +262,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemBonds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -317,7 +317,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemCompVars')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -372,7 +372,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemTorsions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -427,7 +427,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('coreStereochemistries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -482,7 +482,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('stereochemistries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -534,7 +534,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAngles')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -542,7 +542,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemAngles')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -592,7 +592,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('chemBonds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -600,7 +600,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemBonds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -650,7 +650,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompVars')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -658,7 +658,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemCompVars')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -708,7 +708,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('chemTorsions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -716,7 +716,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('chemTorsions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -767,7 +767,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('coreStereochemistries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -775,7 +775,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('coreStereochemistries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -825,7 +825,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
     if (nConditions == 0):
       currentValues = dataDict.get('stereochemistries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -833,7 +833,7 @@ LinkAtom partaking in the bond and 'prev_2' for the other LinkAtom.
       currentValues = dataDict.get('stereochemistries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -3550,7 +3550,7 @@ class ChemAngle(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -3610,7 +3610,7 @@ class ChemAngle(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -4715,7 +4715,7 @@ ChemCompVars.
       currentValues = dataDict.get('chemAtomSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -4770,7 +4770,7 @@ ChemCompVars.
       currentValues = dataDict.get('chemAtoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chirality', 'elementSymbol', 'name', 'nuclGroupType', 'shortVegaType', 'subType', 'waterExchangeable', 'access', 'chemAtomSet', 'chemComp',))
@@ -4822,7 +4822,7 @@ ChemCompVars.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4830,7 +4830,7 @@ ChemCompVars.
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chirality', 'elementSymbol', 'name', 'nuclGroupType', 'shortVegaType', 'subType', 'waterExchangeable', 'access', 'chemAtomSet', 'chemComp',))
@@ -4880,7 +4880,7 @@ ChemCompVars.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4888,7 +4888,7 @@ ChemCompVars.
       currentValues = dataDict.get('chemAtomSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -6413,7 +6413,7 @@ class ChemBond(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemAtoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -6465,7 +6465,7 @@ class ChemBond(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6473,7 +6473,7 @@ class ChemBond(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -7171,7 +7171,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemAngles').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -7232,7 +7232,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemAtomSets').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -7293,7 +7293,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemAtoms').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -7354,7 +7354,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemBonds').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -7415,7 +7415,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemCompVars').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -7476,7 +7476,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('chemTorsions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -7537,7 +7537,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('linkEnds').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -7598,7 +7598,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('namingSystems').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -7673,7 +7673,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('residueTypeProbs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'possibility', 'resonanceGroup',))
@@ -7734,7 +7734,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('stereochemistries').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -7791,7 +7791,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemAngles').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7824,7 +7824,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -7877,7 +7877,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemAtoms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7915,7 +7915,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -7968,7 +7968,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemAtomSets').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8006,7 +8006,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -8059,7 +8059,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemBonds').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8092,7 +8092,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -8145,7 +8145,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemCompVars').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8183,7 +8183,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -8236,7 +8236,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('chemTorsions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8269,7 +8269,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -8322,7 +8322,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('linkEnds').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8352,7 +8352,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -8405,7 +8405,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('namingSystems').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8435,7 +8435,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -8495,7 +8495,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('residueTypeProbs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8513,7 +8513,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
       currentValues = dataDict.get('residueTypeProbs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'possibility', 'resonanceGroup',))
@@ -8566,7 +8566,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       currentValues = dataDict.get('stereochemistries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8596,7 +8596,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stereoClass', 'value', 'access', 'chemComp',))
@@ -11237,7 +11237,7 @@ for all ChemCompVars, others have different names for different sets.
       currentValues = self.getChemCompVars()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -11292,7 +11292,7 @@ for all ChemCompVars, others have different names for different sets.
       currentValues = dataDict.get('specificChemCompVars')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -11344,7 +11344,7 @@ for all ChemCompVars, others have different names for different sets.
     if (nConditions == 0):
       currentValues = self.getChemCompVars()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11352,7 +11352,7 @@ for all ChemCompVars, others have different names for different sets.
       currentValues = self.getChemCompVars()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -11402,7 +11402,7 @@ for all ChemCompVars, others have different names for different sets.
     if (nConditions == 0):
       currentValues = dataDict.get('specificChemCompVars')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11410,7 +11410,7 @@ for all ChemCompVars, others have different names for different sets.
       currentValues = dataDict.get('specificChemCompVars')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -13143,7 +13143,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemAngles()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -13198,7 +13198,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemAtomSets()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -13253,7 +13253,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = dataDict.get('chemAtoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -13308,7 +13308,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemBonds()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -13363,7 +13363,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemCompSysNames()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -13418,7 +13418,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemTorsions()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -13473,7 +13473,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getLinkEnds()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -13528,7 +13528,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = dataDict.get('specificSysNames')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -13580,7 +13580,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getChemAngles()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13588,7 +13588,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemAngles()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chemComp',))
@@ -13638,7 +13638,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13646,7 +13646,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -13696,7 +13696,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getChemAtomSets()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13704,7 +13704,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemAtomSets()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('distCorr', 'isEquivalent', 'isProchiral', 'name', 'subType', 'access', 'chemAtomSet', 'chemComp',))
@@ -13754,7 +13754,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getChemBonds()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13762,7 +13762,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemBonds()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bondType', 'stereochem', 'access', 'chemComp',))
@@ -13812,7 +13812,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getChemCompSysNames()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13820,7 +13820,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemCompSysNames()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -13870,7 +13870,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getChemTorsions()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13878,7 +13878,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getChemTorsions()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'chemComp',))
@@ -13928,7 +13928,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = self.getLinkEnds()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13936,7 +13936,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = self.getLinkEnds()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -13986,7 +13986,7 @@ constraints are placed on ChemCompVar and LinkEnd.
     if (nConditions == 0):
       currentValues = dataDict.get('specificSysNames')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13994,7 +13994,7 @@ constraints are placed on ChemCompVar and LinkEnd.
       currentValues = dataDict.get('specificSysNames')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -14262,7 +14262,7 @@ constraints are placed on ChemCompVar and LinkEnd.
         del dd[ss]
         next = next + 2
     
-    items = dd.items()
+    items = list(dd.items())  # py3: dict.items() is a view; indexed/assigned below
     items.sort()
     for ss, ii in items:
       ll[next] = ss
@@ -16347,7 +16347,7 @@ reference.
       currentValues = dataDict.get('chemAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -16402,7 +16402,7 @@ reference.
       currentValues = dataDict.get('sysNames')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'chemTorsion', 'namingSystem',))
@@ -16462,7 +16462,7 @@ reference.
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -16512,7 +16512,7 @@ reference.
     if (nConditions == 0):
       currentValues = dataDict.get('sysNames')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -16520,7 +16520,7 @@ reference.
       currentValues = dataDict.get('sysNames')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'chemTorsion', 'namingSystem',))
@@ -18422,7 +18422,7 @@ created and linked to the correct AbstractChemAtoms.
       currentValues = self.getChemCompVars()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -18474,7 +18474,7 @@ created and linked to the correct AbstractChemAtoms.
     if (nConditions == 0):
       currentValues = self.getChemCompVars()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18482,7 +18482,7 @@ created and linked to the correct AbstractChemAtoms.
       currentValues = self.getChemCompVars()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -19933,7 +19933,7 @@ given explicitly
       currentValues = dataDict.get('atomSetVariantSystems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -19988,7 +19988,7 @@ given explicitly
       currentValues = dataDict.get('atomSysNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomName', 'atomSubType', 'sysName', 'access', 'namingSystem',))
@@ -20043,7 +20043,7 @@ given explicitly
       currentValues = dataDict.get('atomVariantSystems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -20098,7 +20098,7 @@ given explicitly
       currentValues = dataDict.get('chemCompSysNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -20153,7 +20153,7 @@ given explicitly
       currentValues = dataDict.get('chemTorsionSysNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'chemTorsion', 'namingSystem',))
@@ -20205,7 +20205,7 @@ given explicitly
     if (nConditions == 0):
       currentValues = dataDict.get('atomSetVariantSystems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20213,7 +20213,7 @@ given explicitly
       currentValues = dataDict.get('atomSetVariantSystems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -20263,7 +20263,7 @@ given explicitly
     if (nConditions == 0):
       currentValues = dataDict.get('atomSysNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20295,7 +20295,7 @@ given explicitly
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomName', 'atomSubType', 'sysName', 'access', 'namingSystem',))
@@ -20345,7 +20345,7 @@ given explicitly
     if (nConditions == 0):
       currentValues = dataDict.get('atomVariantSystems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20353,7 +20353,7 @@ given explicitly
       currentValues = dataDict.get('atomVariantSystems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomReference', 'atomSetReference', 'chemComp',))
@@ -20403,7 +20403,7 @@ given explicitly
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompSysNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20427,7 +20427,7 @@ given explicitly
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'namingSystem',))
@@ -20477,7 +20477,7 @@ given explicitly
     if (nConditions == 0):
       currentValues = dataDict.get('chemTorsionSysNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20501,7 +20501,7 @@ given explicitly
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('sysName', 'access', 'chemTorsion', 'namingSystem',))
@@ -22004,7 +22004,7 @@ and their order in the link define the stereochemistry of the atoms.
       currentValues = dataDict.get('chemAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -22059,7 +22059,7 @@ and their order in the link define the stereochemistry of the atoms.
       currentValues = dataDict.get('coreAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -22119,7 +22119,7 @@ and their order in the link define the stereochemistry of the atoms.
       currentValues = dataDict.get('chemAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -22177,7 +22177,7 @@ and their order in the link define the stereochemistry of the atoms.
       currentValues = dataDict.get('coreAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'subType', 'access', 'chemComp',))
@@ -24829,7 +24829,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
       currentValues = dataDict.get('boundLinkEnds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -24894,7 +24894,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
       currentValues = dataDict.get('remoteLinkEnds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -24948,7 +24948,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
     if (nConditions == 0):
       currentValues = dataDict.get('boundLinkEnds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -24956,7 +24956,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
       currentValues = dataDict.get('boundLinkEnds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))
@@ -25016,7 +25016,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
     if (nConditions == 0):
       currentValues = dataDict.get('remoteLinkEnds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -25024,7 +25024,7 @@ ChemAtoms, unlike LinkAtoms, are part of the ChemComp itself.
       currentValues = dataDict.get('remoteLinkEnds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'boundChemAtom', 'boundLinkAtom', 'chemComp', 'remoteChemAtom', 'remoteLinkAtom',))

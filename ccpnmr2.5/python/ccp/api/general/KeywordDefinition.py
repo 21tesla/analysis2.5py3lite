@@ -1815,7 +1815,7 @@ program or standard).
       currentValues = dataDict.get('keywordDefinitions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('explanation', 'keyword', 'name', 'access', 'keywordDefinitionStore',))
@@ -1873,7 +1873,7 @@ program or standard).
 
       currentValues = dataDict.get('keywordDefinitions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1903,7 +1903,7 @@ program or standard).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('explanation', 'keyword', 'name', 'access', 'keywordDefinitionStore',))

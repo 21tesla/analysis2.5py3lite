@@ -879,7 +879,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
             currentValues = dataDict.get("accessObjects").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -949,7 +949,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
             currentValues = dataDict.get("userGroups").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -1013,7 +1013,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
             currentValues = dataDict.get("users").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -1072,7 +1072,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             currentValues = dataDict.get("accessObjects").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -1102,7 +1102,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -1167,7 +1167,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             currentValues = dataDict.get("users").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -1197,7 +1197,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -1259,7 +1259,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             currentValues = dataDict.get("userGroups").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -1289,7 +1289,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -2286,7 +2286,7 @@ class AccessObject(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("permissions").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -2345,7 +2345,7 @@ class AccessObject(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("permissions").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -2383,7 +2383,7 @@ class AccessObject(memops.api.Implementation.DataObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -4922,7 +4922,7 @@ class User(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("ledGroups")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -4980,7 +4980,7 @@ class User(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("userGroups")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -5035,7 +5035,7 @@ class User(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("ledGroups")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -5043,7 +5043,7 @@ class User(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("ledGroups")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -5099,7 +5099,7 @@ class User(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("userGroups")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -5107,7 +5107,7 @@ class User(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("userGroups")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -6706,7 +6706,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("leaders")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -6767,7 +6767,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("members")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -6828,7 +6828,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("permissions")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -6887,7 +6887,7 @@ class UserGroup(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("leaders")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -6895,7 +6895,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("leaders")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -6954,7 +6954,7 @@ class UserGroup(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("members")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -6962,7 +6962,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("members")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -7021,7 +7021,7 @@ class UserGroup(memops.api.Implementation.DataObject):
         if nConditions == 0:
             currentValues = dataDict.get("permissions")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -7029,7 +7029,7 @@ class UserGroup(memops.api.Implementation.DataObject):
             currentValues = dataDict.get("permissions")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(

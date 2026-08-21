@@ -758,7 +758,7 @@ class ChemAtomCharge(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemCompVarCharges')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCharge',))
@@ -811,7 +811,7 @@ class ChemAtomCharge(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompVarCharges')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -819,7 +819,7 @@ class ChemAtomCharge(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemCompVarCharges')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCharge',))
@@ -2538,7 +2538,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chemAtomCharges').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'partialCharge', 'serial', 'subType', 'access', 'chemCompCharge',))
@@ -2600,7 +2600,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chemCompVarCharges').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCharge',))
@@ -2657,7 +2657,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chemAtomCharges').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2687,7 +2687,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'partialCharge', 'serial', 'subType', 'access', 'chemCompCharge',))
@@ -2741,7 +2741,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chemCompVarCharges').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2779,7 +2779,7 @@ class ChemCompCharge(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCharge',))
@@ -4073,7 +4073,7 @@ with an 'any' attribute must belong to all the relevant Vars
       currentValues = dataDict.get('chemAtomCharges')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'partialCharge', 'serial', 'subType', 'access', 'chemCompCharge',))
@@ -4128,7 +4128,7 @@ with an 'any' attribute must belong to all the relevant Vars
       currentValues = self.getChemCompVars()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -4181,7 +4181,7 @@ with an 'any' attribute must belong to all the relevant Vars
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomCharges')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4189,7 +4189,7 @@ with an 'any' attribute must belong to all the relevant Vars
       currentValues = dataDict.get('chemAtomCharges')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'partialCharge', 'serial', 'subType', 'access', 'chemCompCharge',))
@@ -4239,7 +4239,7 @@ with an 'any' attribute must belong to all the relevant Vars
     if (nConditions == 0):
       currentValues = self.getChemCompVars()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4247,7 +4247,7 @@ with an 'any' attribute must belong to all the relevant Vars
       currentValues = self.getChemCompVars()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))

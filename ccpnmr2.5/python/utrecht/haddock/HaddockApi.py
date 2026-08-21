@@ -81,12 +81,12 @@ Citing:          If you are using this software for academic purposes, we
 =========================================================================
 """
 import os
-from utrecht.haddock.HaddockBasic import addDaniParam, addRdcParam, getStructureFromFile
-from HaddockExportClassic import exportClassic
-from HaddockExportParam import exportParam
-from HaddockImportRunCns import runCnsImporter
+from .HaddockBasic import addDaniParam, addRdcParam, getStructureFromFile
+from .HaddockExportClassic import exportClassic
+from .HaddockExportParam import exportParam
+from .HaddockImportRunCns import runCnsImporter
 from .HaddockLocal import *
-from HaddockServerUpload import ServerUpload
+from .HaddockServerUpload import ServerUpload
 
 
 class HaddockApi:

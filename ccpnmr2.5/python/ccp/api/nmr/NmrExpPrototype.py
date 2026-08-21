@@ -825,7 +825,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = self.getExpGraphs()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -880,7 +880,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = dataDict.get('expMeasurements')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -935,7 +935,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = dataDict.get('expTransfers')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'transferToSelf', 'transferType', 'access', 'expGraph',))
@@ -987,7 +987,7 @@ to a given nucleus is used for filtering during an experiment.
     if (nConditions == 0):
       currentValues = self.getExpGraphs()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -995,7 +995,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = self.getExpGraphs()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -1045,7 +1045,7 @@ to a given nucleus is used for filtering during an experiment.
     if (nConditions == 0):
       currentValues = dataDict.get('expMeasurements')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1053,7 +1053,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = dataDict.get('expMeasurements')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -1103,7 +1103,7 @@ to a given nucleus is used for filtering during an experiment.
     if (nConditions == 0):
       currentValues = dataDict.get('expTransfers')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1111,7 +1111,7 @@ to a given nucleus is used for filtering during an experiment.
       currentValues = dataDict.get('expTransfers')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'transferToSelf', 'transferType', 'access', 'expGraph',))
@@ -2919,7 +2919,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = self.getAtomSites()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -2974,7 +2974,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = self.getExpMeasurements()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -3029,7 +3029,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = dataDict.get('expSteps').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -3084,7 +3084,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = dataDict.get('expTransfers').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'transferToSelf', 'transferType', 'access', 'expGraph',))
@@ -3136,7 +3136,7 @@ molecule topologies giving rise to peaks of different sign.
     if (nConditions == 0):
       currentValues = self.getAtomSites()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3144,7 +3144,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = self.getAtomSites()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -3194,7 +3194,7 @@ molecule topologies giving rise to peaks of different sign.
     if (nConditions == 0):
       currentValues = self.getExpMeasurements()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3202,7 +3202,7 @@ molecule topologies giving rise to peaks of different sign.
       currentValues = self.getExpMeasurements()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -3252,7 +3252,7 @@ molecule topologies giving rise to peaks of different sign.
     if (nConditions == 0):
       currentValues = dataDict.get('expSteps').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3276,7 +3276,7 @@ molecule topologies giving rise to peaks of different sign.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -3326,7 +3326,7 @@ molecule topologies giving rise to peaks of different sign.
     if (nConditions == 0):
       currentValues = dataDict.get('expTransfers').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3350,7 +3350,7 @@ molecule topologies giving rise to peaks of different sign.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'transferToSelf', 'transferType', 'access', 'expGraph',))
@@ -4512,7 +4512,7 @@ others are possible.
       currentValues = dataDict.get('atomSites')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -4567,7 +4567,7 @@ others are possible.
       currentValues = self.getExpGraphs()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -4622,7 +4622,7 @@ others are possible.
       currentValues = dataDict.get('expSteps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -4677,7 +4677,7 @@ others are possible.
       currentValues = dataDict.get('refExpDimRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -4737,7 +4737,7 @@ others are possible.
       currentValues = dataDict.get('atomSites')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -4787,7 +4787,7 @@ others are possible.
     if (nConditions == 0):
       currentValues = self.getExpGraphs()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4795,7 +4795,7 @@ others are possible.
       currentValues = self.getExpGraphs()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -4845,7 +4845,7 @@ others are possible.
     if (nConditions == 0):
       currentValues = dataDict.get('expSteps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4853,7 +4853,7 @@ others are possible.
       currentValues = dataDict.get('expSteps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -4903,7 +4903,7 @@ others are possible.
     if (nConditions == 0):
       currentValues = dataDict.get('refExpDimRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4911,7 +4911,7 @@ others are possible.
       currentValues = dataDict.get('refExpDimRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -6443,7 +6443,7 @@ times, e.g. for out-and-back experiments.
       currentValues = dataDict.get('refExpDimRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -6495,7 +6495,7 @@ times, e.g. for out-and-back experiments.
     if (nConditions == 0):
       currentValues = dataDict.get('refExpDimRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6503,7 +6503,7 @@ times, e.g. for out-and-back experiments.
       currentValues = dataDict.get('refExpDimRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -7605,7 +7605,7 @@ observable peaks from a ginve ExpGraph.
       currentValues = dataDict.get('atomSites')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -7657,7 +7657,7 @@ observable peaks from a ginve ExpGraph.
     if (nConditions == 0):
       currentValues = dataDict.get('atomSites')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7665,7 +7665,7 @@ observable peaks from a ginve ExpGraph.
       currentValues = dataDict.get('atomSites')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -9185,7 +9185,7 @@ experiment
       currentValues = dataDict.get('atomSites').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -9246,7 +9246,7 @@ experiment
       currentValues = dataDict.get('expGraphs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -9307,7 +9307,7 @@ experiment
       currentValues = dataDict.get('expMeasurements').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -9368,7 +9368,7 @@ experiment
       currentValues = dataDict.get('refExperiments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isReversed', 'name', 'serial', 'synonym', 'access', 'nmrExpPrototype',))
@@ -9425,7 +9425,7 @@ experiment
 
       currentValues = dataDict.get('atomSites').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9455,7 +9455,7 @@ experiment
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isotopeCode', 'maxNumber', 'maxShift', 'minNumber', 'minShift', 'name', 'numberStep', 'serial', 'access', 'nmrExpPrototype',))
@@ -9508,7 +9508,7 @@ experiment
 
       currentValues = dataDict.get('expGraphs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9538,7 +9538,7 @@ experiment
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('peakSign', 'serial', 'access', 'nmrExpPrototype',))
@@ -9591,7 +9591,7 @@ experiment
 
       currentValues = dataDict.get('expMeasurements').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9621,7 +9621,7 @@ experiment
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('measurementType', 'serial', 'access', 'nmrExpPrototype',))
@@ -9674,7 +9674,7 @@ experiment
 
       currentValues = dataDict.get('refExperiments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9704,7 +9704,7 @@ experiment
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isReversed', 'name', 'serial', 'synonym', 'access', 'nmrExpPrototype',))
@@ -11204,7 +11204,7 @@ class RefExpDim(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('refExpDimRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -11256,7 +11256,7 @@ class RefExpDim(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('refExpDimRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11280,7 +11280,7 @@ class RefExpDim(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('constantTime', 'groupingId', 'serial', 'access', 'expMeasurement', 'refExpDim',))
@@ -12382,7 +12382,7 @@ correspond to each other.
       currentValues = self.getCoupledIsotopes()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -12437,7 +12437,7 @@ correspond to each other.
       currentValues = dataDict.get('expSteps')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -12489,7 +12489,7 @@ correspond to each other.
     if (nConditions == 0):
       currentValues = self.getCoupledIsotopes()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12497,7 +12497,7 @@ correspond to each other.
       currentValues = self.getCoupledIsotopes()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -12547,7 +12547,7 @@ correspond to each other.
     if (nConditions == 0):
       currentValues = dataDict.get('expSteps')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12555,7 +12555,7 @@ correspond to each other.
       currentValues = dataDict.get('expSteps')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'stepNumber', 'access', 'expGraph', 'expMeasurement',))
@@ -14210,7 +14210,7 @@ available in the NmrExpPrototype
       currentValues = dataDict.get('refExpDims').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'access', 'refExperiment',))
@@ -14265,7 +14265,7 @@ available in the NmrExpPrototype
       currentValues = dataDict.get('systematicNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'refExperiment',))
@@ -14317,7 +14317,7 @@ available in the NmrExpPrototype
     if (nConditions == 0):
       currentValues = dataDict.get('refExpDims').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14341,7 +14341,7 @@ available in the NmrExpPrototype
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'access', 'refExperiment',))
@@ -14391,7 +14391,7 @@ available in the NmrExpPrototype
     if (nConditions == 0):
       currentValues = dataDict.get('systematicNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14415,7 +14415,7 @@ available in the NmrExpPrototype
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'refExperiment',))

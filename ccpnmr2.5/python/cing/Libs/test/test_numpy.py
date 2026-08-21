@@ -6,7 +6,7 @@ import unittest
 from unittest import TestCase
 
 from numpy import *  #@UnusedWildImport
-from numpy.testing.utils import assert_equal
+from numpy.testing import assert_equal
 
 from cing.Libs.NTutils import *  #@UnusedWildImport
 

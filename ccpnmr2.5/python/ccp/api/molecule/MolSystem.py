@@ -1010,7 +1010,7 @@ cleared first.
       currentValues = dataDict.get('chainStateSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -1079,7 +1079,7 @@ cleared first.
       currentValues = dataDict.get('fixedAtomSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -1148,7 +1148,7 @@ cleared first.
       currentValues = dataDict.get('molSysAtomValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -1203,7 +1203,7 @@ cleared first.
       currentValues = dataDict.get('nonCovalentBonds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molSystem',))
@@ -1262,7 +1262,7 @@ cleared first.
 
       currentValues = dataDict.get('chainStateSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1277,7 +1277,7 @@ cleared first.
       currentValues = dataDict.get('chainStateSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -1334,7 +1334,7 @@ cleared first.
 
       currentValues = dataDict.get('fixedAtomSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1349,7 +1349,7 @@ cleared first.
       currentValues = dataDict.get('fixedAtomSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrConstraintStore',))
@@ -1406,7 +1406,7 @@ cleared first.
 
       currentValues = dataDict.get('molSysAtomValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1421,7 +1421,7 @@ cleared first.
       currentValues = dataDict.get('molSysAtomValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -1471,7 +1471,7 @@ cleared first.
     if (nConditions == 0):
       currentValues = dataDict.get('nonCovalentBonds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1479,7 +1479,7 @@ cleared first.
       currentValues = dataDict.get('nonCovalentBonds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molSystem',))
@@ -4376,7 +4376,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('analysisLayouts')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -4433,7 +4433,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('chainFragments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isLinearPolymer', 'molType', 'serial', 'access', 'chain',))
@@ -4488,7 +4488,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('chainInteractions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('interactionType', 'access', 'molSystem',))
@@ -4557,7 +4557,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('chainStateSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -4626,7 +4626,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('dangleChains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))
@@ -4695,7 +4695,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('molSysChainValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -4750,7 +4750,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('residues').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -4819,7 +4819,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('resonanceGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -4876,7 +4876,7 @@ creates the Residue and Atom objects corresponding to it.
 
       currentValues = dataDict.get('analysisLayouts')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4891,7 +4891,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('analysisLayouts')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -4943,7 +4943,7 @@ creates the Residue and Atom objects corresponding to it.
     if (nConditions == 0):
       currentValues = dataDict.get('chainFragments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4967,7 +4967,7 @@ creates the Residue and Atom objects corresponding to it.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isLinearPolymer', 'molType', 'serial', 'access', 'chain',))
@@ -5017,7 +5017,7 @@ creates the Residue and Atom objects corresponding to it.
     if (nConditions == 0):
       currentValues = dataDict.get('chainInteractions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5025,7 +5025,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('chainInteractions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('interactionType', 'access', 'molSystem',))
@@ -5082,7 +5082,7 @@ creates the Residue and Atom objects corresponding to it.
 
       currentValues = dataDict.get('chainStateSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5097,7 +5097,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('chainStateSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -5154,7 +5154,7 @@ creates the Residue and Atom objects corresponding to it.
 
       currentValues = dataDict.get('dangleChains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5169,7 +5169,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('dangleChains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'chain', 'dangleStore', 'nmrConstraintStore', 'shiftList',))
@@ -5226,7 +5226,7 @@ creates the Residue and Atom objects corresponding to it.
 
       currentValues = dataDict.get('molSysChainValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5241,7 +5241,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('molSysChainValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -5291,7 +5291,7 @@ creates the Residue and Atom objects corresponding to it.
     if (nConditions == 0):
       currentValues = dataDict.get('residues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5315,7 +5315,7 @@ creates the Residue and Atom objects corresponding to it.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -5372,7 +5372,7 @@ creates the Residue and Atom objects corresponding to it.
 
       currentValues = dataDict.get('resonanceGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5387,7 +5387,7 @@ creates the Residue and Atom objects corresponding to it.
       currentValues = dataDict.get('resonanceGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -5627,7 +5627,7 @@ creates the Residue and Atom objects corresponding to it.
         del dd[ss]
         next = next + 2
     
-    items = dd.items()
+    items = list(dd.items())  # py3: dict.items() is a view; indexed/assigned below
     items.sort()
     for (ss, ii) in items:
       ll[next] = ss
@@ -8336,7 +8336,7 @@ normal way of dividing a Chain in ChainFragments.
       currentValues = dataDict.get('residues')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -8396,7 +8396,7 @@ normal way of dividing a Chain in ChainFragments.
       currentValues = dataDict.get('residues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -9312,7 +9312,7 @@ class ChainInteraction(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -9364,7 +9364,7 @@ class ChainInteraction(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9372,7 +9372,7 @@ class ChainInteraction(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -12227,7 +12227,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('analysisLayouts')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -12302,7 +12302,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('analysisPanels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -12365,7 +12365,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('chainInteractions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('interactionType', 'access', 'molSystem',))
@@ -12426,7 +12426,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('chains').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -12487,7 +12487,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -12548,7 +12548,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('dbReferences')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -12623,7 +12623,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('entries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -12684,7 +12684,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemLinks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dihedralAngle', 'access', 'molSystem',))
@@ -12743,7 +12743,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemSymmetrySets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'symmetrySetId', 'access', 'memopsRoot', 'molSystem',))
@@ -12804,7 +12804,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemSysNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'molSystem',))
@@ -12879,7 +12879,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -12954,7 +12954,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('nmrExperiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -13013,7 +13013,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('nmrScreens')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
@@ -13074,7 +13074,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('nonCovalentBonds').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molSystem',))
@@ -13133,7 +13133,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('structureEnsembles')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNamingSystem', 'createdBy', 'details', 'ensembleId', 'guid', 'isModifiable', 'lastUnlockedBy', 'resNamingSystem', 'softwareName', 'access', 'memopsRoot', 'molSystem', 'structureGeneration',))
@@ -13194,7 +13194,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('structureGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('detail', 'name', 'serial', 'access', 'molSystem',))
@@ -13256,7 +13256,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('analysisLayouts')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13274,7 +13274,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('analysisLayouts')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -13334,7 +13334,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('analysisPanels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13352,7 +13352,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('analysisPanels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -13407,7 +13407,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('chains').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13437,7 +13437,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -13490,7 +13490,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('chainInteractions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13523,7 +13523,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('interactionType', 'access', 'molSystem',))
@@ -13576,7 +13576,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13587,7 +13587,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -13640,7 +13640,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('dbReferences')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13651,7 +13651,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('dbReferences')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -13711,7 +13711,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('entries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13729,7 +13729,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('entries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -13782,7 +13782,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('molSystemLinks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13815,7 +13815,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dihedralAngle', 'access', 'molSystem',))
@@ -13867,7 +13867,7 @@ NMR-observable impurities in an Nmr study).
       root.refreshTopObjects('molsim.Symmetry')
       currentValues = dataDict.get('molSystemSymmetrySets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13877,7 +13877,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemSymmetrySets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'details', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'symmetrySetId', 'access', 'memopsRoot', 'molSystem',))
@@ -13930,7 +13930,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('molSystemSysNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13960,7 +13960,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'molSystem',))
@@ -14020,7 +14020,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('molSystemValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14038,7 +14038,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('molSystemValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -14098,7 +14098,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('nmrExperiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14116,7 +14116,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('nmrExperiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'details', 'name', 'nmrTubeType', 'numDim', 'numScans', 'sampleState', 'sampleVolume', 'serial', 'spinningAngle', 'spinningRate', 'userExpCode', 'volumeUnit', 'access', 'derivationMethod', 'dipolarRelaxList', 'hExchProtectionList', 'hExchRateList', 'isotropicS2List', 'jCouplingList', 'nmrProject', 'noeList', 'pkaList', 'probe', 'rawData', 'rdcList', 'refExperiment', 'sample', 'sampleConditionSet', 'shiftAnisotropyList', 'shiftDifferenceList', 'shiftList', 'spectralDensityList', 'spectrometer', 't1List', 't1RhoList', 't2List',))
@@ -14168,7 +14168,7 @@ NMR-observable impurities in an Nmr study).
       root.refreshTopObjects('ccp.nmr.NmrScreen')
       currentValues = dataDict.get('nmrScreens')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14178,7 +14178,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('nmrScreens')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
@@ -14231,7 +14231,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('nonCovalentBonds').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14264,7 +14264,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molSystem',))
@@ -14316,7 +14316,7 @@ NMR-observable impurities in an Nmr study).
       root.refreshTopObjects('ccp.molecule.MolStructure')
       currentValues = dataDict.get('structureEnsembles')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14326,7 +14326,7 @@ NMR-observable impurities in an Nmr study).
       currentValues = dataDict.get('structureEnsembles')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('atomNamingSystem', 'createdBy', 'details', 'ensembleId', 'guid', 'isModifiable', 'lastUnlockedBy', 'resNamingSystem', 'softwareName', 'access', 'memopsRoot', 'molSystem', 'structureGeneration',))
@@ -14379,7 +14379,7 @@ NMR-observable impurities in an Nmr study).
 
       currentValues = dataDict.get('structureGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14409,7 +14409,7 @@ NMR-observable impurities in an Nmr study).
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('detail', 'name', 'serial', 'access', 'molSystem',))
@@ -18416,7 +18416,7 @@ links.
       currentValues = dataDict.get('molSystemLinkEnds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molSystemLink', 'residue',))
@@ -18468,7 +18468,7 @@ links.
     if (nConditions == 0):
       currentValues = dataDict.get('molSystemLinkEnds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18476,7 +18476,7 @@ links.
       currentValues = dataDict.get('molSystemLinkEnds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molSystemLink', 'residue',))
@@ -20809,7 +20809,7 @@ class NonCovalentBond(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('atoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -20861,7 +20861,7 @@ class NonCovalentBond(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('atoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20869,7 +20869,7 @@ class NonCovalentBond(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('atoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -22520,7 +22520,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('atoms').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -22589,7 +22589,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chainStateSets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -22658,7 +22658,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dangleResidues')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('numIslands', 'omegaLower', 'omegaUpper', 'omegaValue', 'phiLower', 'phiUpper', 'phiValue', 'psiLower', 'psiUpper', 'psiValue', 'secStrucCode', 'access', 'dangleChain', 'residue',))
@@ -22727,7 +22727,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSysResidueValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -22782,7 +22782,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSystemLinkEnds').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molSystemLink', 'residue',))
@@ -22851,7 +22851,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residueProbs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'possibility', 'resonanceGroup',))
@@ -22920,7 +22920,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('resonanceGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -22972,7 +22972,7 @@ class Residue(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('atoms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -22996,7 +22996,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -23053,7 +23053,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('chainStateSets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23068,7 +23068,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chainStateSets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stateSetType', 'access', 'chain', 'nmrProject',))
@@ -23125,7 +23125,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('dangleResidues')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23140,7 +23140,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dangleResidues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('numIslands', 'omegaLower', 'omegaUpper', 'omegaValue', 'phiLower', 'phiUpper', 'phiValue', 'psiLower', 'psiUpper', 'psiValue', 'secStrucCode', 'access', 'dangleChain', 'residue',))
@@ -23197,7 +23197,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('molSysResidueValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23212,7 +23212,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('molSysResidueValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -23262,7 +23262,7 @@ class Residue(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('molSystemLinkEnds').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23286,7 +23286,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molSystemLink', 'residue',))
@@ -23343,7 +23343,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('residueProbs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23358,7 +23358,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residueProbs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('weight', 'access', 'possibility', 'resonanceGroup',))
@@ -23415,7 +23415,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('resonanceGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23430,7 +23430,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('resonanceGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -26226,7 +26226,7 @@ structures. May be from same or different generation cycles.
       currentValues = dataDict.get('entries')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -26291,7 +26291,7 @@ structures. May be from same or different generation cycles.
       currentValues = dataDict.get('models')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -26350,7 +26350,7 @@ structures. May be from same or different generation cycles.
 
       currentValues = dataDict.get('entries')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -26365,7 +26365,7 @@ structures. May be from same or different generation cycles.
       currentValues = dataDict.get('entries')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('bmrbProcessing', 'details', 'entryType', 'experimentListDetails', 'name', 'title', 'access', 'molSystem', 'nmrEntryStore', 'primaryCitation', 'study',))
@@ -26420,7 +26420,7 @@ structures. May be from same or different generation cycles.
 
       currentValues = dataDict.get('models')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -26433,7 +26433,7 @@ structures. May be from same or different generation cycles.
       currentValues = dataDict.get('models')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))

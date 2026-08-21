@@ -2,6 +2,8 @@
 # do we actually need this on the client side? Can probably
 # handle with simple structures
 
+from .Task import Task
+
 class Test1Task(Task):
 
     def __init__(self, rep, name, status=None):

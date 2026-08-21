@@ -2936,7 +2936,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('interfaceLabels').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'interfaceGroup', 'label', 'row', 'rowspan', 'serial', 'access', 'protocolInterface',))
@@ -2991,7 +2991,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('interfaceParameters').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
@@ -3043,7 +3043,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('interfaceLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3067,7 +3067,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'interfaceGroup', 'label', 'row', 'rowspan', 'serial', 'access', 'protocolInterface',))
@@ -3118,7 +3118,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('interfaceParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3142,7 +3142,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
@@ -4621,7 +4621,7 @@ run, and set it in NmrCalc.
       currentValues = dataDict.get('content')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
@@ -4676,7 +4676,7 @@ run, and set it in NmrCalc.
       currentValues = dataDict.get('interfaceParameters')
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
@@ -4728,7 +4728,7 @@ run, and set it in NmrCalc.
     if (nConditions == 0):
       currentValues = dataDict.get('content')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4736,7 +4736,7 @@ run, and set it in NmrCalc.
       currentValues = dataDict.get('content')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
@@ -4787,7 +4787,7 @@ run, and set it in NmrCalc.
     if (nConditions == 0):
       currentValues = dataDict.get('interfaceParameters')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4795,7 +4795,7 @@ run, and set it in NmrCalc.
       currentValues = dataDict.get('interfaceParameters')
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('col', 'colspan', 'hicard', 'interfaceGroup', 'isEditable', 'isOrdered', 'locard', 'row', 'rowspan', 'serial', 'access', 'protocolInterface', 'protocolParameter',))
@@ -6749,7 +6749,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('protocolAccesss').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('localUserName', 'password', 'serial', 'userName', 'access', 'protocolService',))
@@ -6801,7 +6801,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('protocolAccesss').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6825,7 +6825,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('localUserName', 'password', 'serial', 'userName', 'access', 'protocolService',))
@@ -8425,7 +8425,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('protocolInterfaces').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'info', 'name', 'title', 'access', 'wmsProtocol',))
@@ -8486,7 +8486,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('protocolParameters').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
@@ -8547,7 +8547,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('protocolServices').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('login', 'result', 'run', 'serial', 'status', 'url', 'access', 'wmsProtocol',))
@@ -8604,7 +8604,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolInterfaces').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8634,7 +8634,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'info', 'name', 'title', 'access', 'wmsProtocol',))
@@ -8687,7 +8687,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8717,7 +8717,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'hicard', 'ioRole', 'locard', 'name', 'paramType', 'serial', 'access', 'container', 'wmsProtocol',))
@@ -8770,7 +8770,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('protocolServices').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8800,7 +8800,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('login', 'result', 'run', 'serial', 'status', 'url', 'access', 'wmsProtocol',))
@@ -10582,7 +10582,7 @@ class InterfaceParameter(InterfaceObject):
       currentValues = dataDict.get('enumValues').values()
       result = set()
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'value', 'access', 'interfaceParameter',))
@@ -10634,7 +10634,7 @@ class InterfaceParameter(InterfaceObject):
     if (nConditions == 0):
       currentValues = dataDict.get('enumValues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10658,7 +10658,7 @@ class InterfaceParameter(InterfaceObject):
 
       result = None
 
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if (nConditions == 1):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'serial', 'value', 'access', 'interfaceParameter',))

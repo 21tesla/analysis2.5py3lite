@@ -24,7 +24,7 @@ try:
     from matplotlib.colors import LinearSegmentedColormap
     from matplotlib.patches import Ellipse, Patch, Polygon
     from matplotlib.path import Path
-    from matplotlib.ticker import Formatter, FuncFormatter, NullFormatter
+    from matplotlib.ticker import Formatter, FuncFormatter, Locator, MaxNLocator, MultipleLocator, NullFormatter
     LUTSIZE = 256
     # datad/gray: matplotlib.cm internals replaced with modern API
     import matplotlib

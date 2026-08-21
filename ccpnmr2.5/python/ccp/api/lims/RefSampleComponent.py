@@ -291,7 +291,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('categories')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -347,7 +347,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('componentDbRefs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignBegin', 'alignEnd', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'serial', 'threadingProg', 'threadingScore', 'access', 'component', 'dbRef',))
@@ -403,7 +403,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('compositeElements')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -458,7 +458,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('labels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementName', 'incorporation', 'isUniform', 'labelName', 'labelType', 'massNumber', 'numInstances', 'serial', 'access', 'component',))
@@ -510,7 +510,7 @@ Cell, Substance and Composite.
     if (nConditions == 0):
       currentValues = dataDict.get('categories')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -518,7 +518,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('categories')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'classification',))
@@ -569,7 +569,7 @@ Cell, Substance and Composite.
     if (nConditions == 0):
       currentValues = dataDict.get('componentDbRefs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -593,7 +593,7 @@ Cell, Substance and Composite.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignBegin', 'alignEnd', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'serial', 'threadingProg', 'threadingScore', 'access', 'component', 'dbRef',))
@@ -644,7 +644,7 @@ Cell, Substance and Composite.
     if (nConditions == 0):
       currentValues = dataDict.get('compositeElements')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -652,7 +652,7 @@ Cell, Substance and Composite.
       currentValues = dataDict.get('compositeElements')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -702,7 +702,7 @@ Cell, Substance and Composite.
     if (nConditions == 0):
       currentValues = dataDict.get('labels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -726,7 +726,7 @@ Cell, Substance and Composite.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementName', 'incorporation', 'isUniform', 'labelName', 'labelType', 'massNumber', 'numInstances', 'serial', 'access', 'component',))
@@ -3596,7 +3596,7 @@ class CompositeElement(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('interactions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affinity', 'assessmentMethod', 'details', 'interactionType', 'serial', 'access', 'composite',))
@@ -3648,7 +3648,7 @@ class CompositeElement(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('interactions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3656,7 +3656,7 @@ class CompositeElement(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('interactions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affinity', 'assessmentMethod', 'details', 'interactionType', 'serial', 'access', 'composite',))
@@ -4806,7 +4806,7 @@ class CompositeInteraction(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('elements')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -4858,7 +4858,7 @@ class CompositeInteraction(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('elements')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4866,7 +4866,7 @@ class CompositeInteraction(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('elements')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -6302,7 +6302,7 @@ atoms with these names.
       currentValues = dataDict.get('molResidues')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -6354,7 +6354,7 @@ atoms with these names.
     if (nConditions == 0):
       currentValues = dataDict.get('molResidues')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6362,7 +6362,7 @@ atoms with these names.
       currentValues = dataDict.get('molResidues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -10834,7 +10834,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('components').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'naturalSource', 'refSampleComponentStore',))
@@ -10894,7 +10894,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refDataStores')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
@@ -10952,7 +10952,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('components').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10982,7 +10982,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'access', 'naturalSource', 'refSampleComponentStore',))
@@ -11035,7 +11035,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
       root.refreshTopObjects('ccp.lims.RefData')
       currentValues = dataDict.get('refDataStores')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11045,7 +11045,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refDataStores')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'refSampleComponentStore',))
@@ -12044,7 +12044,7 @@ as both are valid together.
       currentValues = dataDict.get('isotopeLabels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'incorporation', 'massNumber', 'serial', 'access', 'specificLabelGroup',))
@@ -12097,7 +12097,7 @@ as both are valid together.
     if (nConditions == 0):
       currentValues = dataDict.get('isotopeLabels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12121,7 +12121,7 @@ as both are valid together.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'incorporation', 'massNumber', 'serial', 'access', 'specificLabelGroup',))
@@ -13984,7 +13984,7 @@ so is lysozyme.
       currentValues = dataDict.get('blueprintComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -14047,7 +14047,7 @@ so is lysozyme.
       currentValues = dataDict.get('molCompFeatures').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endSeqId', 'featureType', 'name', 'ordering', 'serial', 'startSeqId', 'status', 'access', 'molComponent', 'refMolComponent',))
@@ -14116,7 +14116,7 @@ so is lysozyme.
       currentValues = dataDict.get('nucTargets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -14185,7 +14185,7 @@ so is lysozyme.
       currentValues = dataDict.get('protTargets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -14240,7 +14240,7 @@ so is lysozyme.
       currentValues = dataDict.get('refMolCompFeatures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endSeqId', 'featureType', 'name', 'ordering', 'serial', 'startSeqId', 'status', 'access', 'molComponent', 'refMolComponent',))
@@ -14310,7 +14310,7 @@ so is lysozyme.
       currentValues = dataDict.get('relatedExpBlueprints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -14365,7 +14365,7 @@ so is lysozyme.
       currentValues = dataDict.get('specificLabelGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('fraction', 'serial', 'access', 'molComponent',))
@@ -14425,7 +14425,7 @@ so is lysozyme.
 
       currentValues = dataDict.get('blueprintComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14440,7 +14440,7 @@ so is lysozyme.
       currentValues = dataDict.get('blueprintComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -14498,7 +14498,7 @@ so is lysozyme.
     if (nConditions == 0):
       currentValues = dataDict.get('molCompFeatures').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14522,7 +14522,7 @@ so is lysozyme.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endSeqId', 'featureType', 'name', 'ordering', 'serial', 'startSeqId', 'status', 'access', 'molComponent', 'refMolComponent',))
@@ -14579,7 +14579,7 @@ so is lysozyme.
 
       currentValues = dataDict.get('nucTargets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14594,7 +14594,7 @@ so is lysozyme.
       currentValues = dataDict.get('nucTargets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -14651,7 +14651,7 @@ so is lysozyme.
 
       currentValues = dataDict.get('protTargets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14666,7 +14666,7 @@ so is lysozyme.
       currentValues = dataDict.get('protTargets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -14717,7 +14717,7 @@ so is lysozyme.
     if (nConditions == 0):
       currentValues = dataDict.get('refMolCompFeatures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14725,7 +14725,7 @@ so is lysozyme.
       currentValues = dataDict.get('refMolCompFeatures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endSeqId', 'featureType', 'name', 'ordering', 'serial', 'startSeqId', 'status', 'access', 'molComponent', 'refMolComponent',))
@@ -14783,7 +14783,7 @@ so is lysozyme.
 
       currentValues = dataDict.get('relatedExpBlueprints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14798,7 +14798,7 @@ so is lysozyme.
       currentValues = dataDict.get('relatedExpBlueprints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -14849,7 +14849,7 @@ so is lysozyme.
     if (nConditions == 0):
       currentValues = dataDict.get('specificLabelGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14873,7 +14873,7 @@ so is lysozyme.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('fraction', 'serial', 'access', 'molComponent',))
@@ -19776,7 +19776,7 @@ plasmids.
       currentValues = dataDict.get('elements').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -19831,7 +19831,7 @@ plasmids.
       currentValues = dataDict.get('interactions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affinity', 'assessmentMethod', 'details', 'interactionType', 'serial', 'access', 'composite',))
@@ -19891,7 +19891,7 @@ plasmids.
     if (nConditions == 0):
       currentValues = dataDict.get('elements').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19915,7 +19915,7 @@ plasmids.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'stoichiometry', 'access', 'component', 'composite',))
@@ -19965,7 +19965,7 @@ plasmids.
     if (nConditions == 0):
       currentValues = dataDict.get('interactions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -19989,7 +19989,7 @@ plasmids.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affinity', 'assessmentMethod', 'details', 'interactionType', 'serial', 'access', 'composite',))

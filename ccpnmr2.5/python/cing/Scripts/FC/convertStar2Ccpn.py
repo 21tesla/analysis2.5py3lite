@@ -8,6 +8,8 @@ import shutil
 from glob import glob
 
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
+
+import cing
 from cing import issueListUrl
 from cing.Libs.forkoff import do_cmd
 from cing.Libs.NTutils import *  #@UnusedWildImport

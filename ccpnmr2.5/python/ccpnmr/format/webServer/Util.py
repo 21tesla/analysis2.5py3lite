@@ -7,7 +7,7 @@
 import glob
 import os
 
-import anydbm
+import dbm as anydbm  # py2 anydbm removed in py3; dbm.open has the same call surface used here
 
 # TODO this should go in Constants.py
 passwordFile = "data/users.db"

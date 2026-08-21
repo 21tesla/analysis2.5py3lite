@@ -56,20 +56,24 @@ software development. Bioinformatics 21, 1678-1684.
 ===========================REFERENCE END===============================
 """
 
-from ccp.api.molecule import MolSystem
+from ccp.api.molecule import MolSystem, Molecule
+from ccp.api.nmr import Nmr
 
 # from ccp.util.Assignment import deleteResonanceSet
 # from ccp.general.Io import getChemComp
 
 try:
-    pass
-except:
-    pass
+    from memops.gui.MessageReporter import showWarning
+except ImportError:
+    from memops.universal.MessageReporter import showWarning
 
 # Moved to more appropriate location.
+from ccp.util.Assignment import findAtomSetResonances
+from ccp.lib.MoleculeModify import makeMolecule, addMolResidues, makeLinearSequence
 # The following should not be needed:
 # from ccp.lib.MoleculeModify import _getLinearChemCompData as getLinearChemCompData
-from ccp.lib.MoleculeModify import nextChainCode
+from ccp.lib.MoleculeModify import setMolResidueCcpCode, setMolResidueChemCompVar
+from ccp.lib.MoleculeModify import nextChainCode, makeChain, renumberChainSeqCodes
 
 
 # Used in Analysis v2 (only), but hardly worth copying over:

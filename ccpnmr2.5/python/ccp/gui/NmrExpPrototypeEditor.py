@@ -1685,7 +1685,7 @@ class ExpGraphFrame(Frame):
             if expGraph in expGraphs:
                 pass
             elif len(expGraphs) == 1:
-                expGraph = iter(expGraphs).next()
+                expGraph = next(iter(expGraphs))
             else:
                 expGraph = None
         else:
@@ -2211,7 +2211,7 @@ class RefExperimentFrame(Frame):
         if self.nmrExpPrototype:
             refExperiments = self.nmrExpPrototype.refExperiments
             if len(refExperiments) == 1:
-                obj = iter(refExperiments).next()
+                obj = next(iter(refExperiments))
                 self.refExperimentMatrix.currentObject = self.refExperiment = obj
                 self.isEditable = hasattr(obj, "isEditable") and obj.isEditable
 

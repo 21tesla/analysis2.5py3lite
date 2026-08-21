@@ -606,7 +606,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('actionLinks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('role', 'serial', 'access', 'panel', 'target',))
@@ -663,7 +663,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('listenLinks')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('role', 'serial', 'access', 'panel', 'target',))
@@ -718,7 +718,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'panel',))
@@ -768,7 +768,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('actionLinks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -792,7 +792,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('role', 'serial', 'access', 'panel', 'target',))
@@ -844,7 +844,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('listenLinks')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -852,7 +852,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('listenLinks')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('role', 'serial', 'access', 'panel', 'target',))
@@ -902,7 +902,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -926,7 +926,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'panel',))
@@ -2519,7 +2519,7 @@ class ActionLink(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'actionLink',))
@@ -2571,7 +2571,7 @@ class ActionLink(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2595,7 +2595,7 @@ class ActionLink(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'actionLink',))
@@ -4406,7 +4406,7 @@ class AxisGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('panelAxes')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'showScale', 'access', 'axisGroup', 'windowPanel',))
@@ -4458,7 +4458,7 @@ class AxisGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('panelAxes')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4466,7 +4466,7 @@ class AxisGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('panelAxes')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'showScale', 'access', 'axisGroup', 'windowPanel',))
@@ -6030,7 +6030,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('analysisLayouts')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -6093,7 +6093,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'layout',))
@@ -6154,7 +6154,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('marks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'serial', 'access', 'layout',))
@@ -6215,7 +6215,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('panels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCollapsed', 'layoutArea', 'moduleCode', 'name', 'rank', 'serial', 'access', 'layout',))
@@ -6276,7 +6276,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'layout',))
@@ -6337,7 +6337,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('rulers').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('axisCode', 'color', 'dashLength', 'lineWidth', 'position', 'serial', 'unit', 'access', 'layout',))
@@ -6398,7 +6398,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('windowPanelGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isGridGroup', 'serial', 'spectrumSharing', 'access', 'layout',))
@@ -6460,7 +6460,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('analysisLayouts')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6478,7 +6478,7 @@ class Layout(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('analysisLayouts')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -6533,7 +6533,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6563,7 +6563,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('serial', 'access', 'layout',))
@@ -6616,7 +6616,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('marks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6646,7 +6646,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'serial', 'access', 'layout',))
@@ -6699,7 +6699,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('panels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6729,7 +6729,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCollapsed', 'layoutArea', 'moduleCode', 'name', 'rank', 'serial', 'access', 'layout',))
@@ -6782,7 +6782,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6812,7 +6812,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'layout',))
@@ -6865,7 +6865,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('rulers').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6895,7 +6895,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('axisCode', 'color', 'dashLength', 'lineWidth', 'position', 'serial', 'unit', 'access', 'layout',))
@@ -6948,7 +6948,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('windowPanelGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6978,7 +6978,7 @@ class Layout(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isGridGroup', 'serial', 'spectrumSharing', 'access', 'layout',))
@@ -9938,7 +9938,7 @@ class Mark(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('markDims').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('axisCode', 'position', 'serial', 'unit', 'access', 'mark',))
@@ -9990,7 +9990,7 @@ class Mark(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('markDims').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10014,7 +10014,7 @@ class Mark(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('axisCode', 'position', 'serial', 'unit', 'access', 'mark',))
@@ -13870,7 +13870,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'windowPanelGroup',))
@@ -13925,7 +13925,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowPanels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCollapsed', 'layoutArea', 'moduleCode', 'name', 'rank', 'serial', 'showCouplings', 'showMultiplets', 'showPosition', 'showStructure', 'useMultiplePeakLists', 'access', 'layout', 'windowPanelGroup',))
@@ -13977,7 +13977,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14001,7 +14001,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'description', 'floatValue', 'intValue', 'name', 'textValue', 'access', 'windowPanelGroup',))
@@ -14051,7 +14051,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('windowPanels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14059,7 +14059,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowPanels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCollapsed', 'layoutArea', 'moduleCode', 'name', 'rank', 'serial', 'showCouplings', 'showMultiplets', 'showPosition', 'showStructure', 'useMultiplePeakLists', 'access', 'layout', 'windowPanelGroup',))
@@ -17468,7 +17468,7 @@ class ModulePanel(AbstractPanel):
       currentValues = dataDict.get('analysisPanels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -17533,7 +17533,7 @@ class ModulePanel(AbstractPanel):
 
       currentValues = dataDict.get('analysisPanels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -17548,7 +17548,7 @@ class ModulePanel(AbstractPanel):
       currentValues = dataDict.get('analysisPanels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -18010,7 +18010,7 @@ class WindowPanel(AbstractPanel):
       currentValues = dataDict.get('panelAxes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'showScale', 'access', 'axisGroup', 'windowPanel',))
@@ -18081,7 +18081,7 @@ class WindowPanel(AbstractPanel):
       currentValues = dataDict.get('spectrumViews')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('intensityScaling', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'access', 'spectrumMapping', 'windowPanel',))
@@ -18137,7 +18137,7 @@ class WindowPanel(AbstractPanel):
     if (nConditions == 0):
       currentValues = dataDict.get('panelAxes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18161,7 +18161,7 @@ class WindowPanel(AbstractPanel):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'showScale', 'access', 'axisGroup', 'windowPanel',))
@@ -18220,7 +18220,7 @@ class WindowPanel(AbstractPanel):
 
       currentValues = dataDict.get('spectrumViews')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18235,7 +18235,7 @@ class WindowPanel(AbstractPanel):
       currentValues = dataDict.get('spectrumViews')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('intensityScaling', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'access', 'spectrumMapping', 'windowPanel',))

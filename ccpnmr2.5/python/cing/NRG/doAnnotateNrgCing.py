@@ -10,6 +10,7 @@ import tarfile
 import os
 from shutil import rmtree
 
+import cing
 from cing import header
 from cing.core.classes import Project
 from cing.core.constants import *  #@UnusedWildImport

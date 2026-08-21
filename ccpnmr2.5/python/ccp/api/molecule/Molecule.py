@@ -2185,7 +2185,7 @@ unknown disulfide binding topology).
       currentValues = dataDict.get('molResLinkEnds')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molResLink', 'molResidue',))
@@ -2237,7 +2237,7 @@ unknown disulfide binding topology).
     if (nConditions == 0):
       currentValues = dataDict.get('molResLinkEnds')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2245,7 +2245,7 @@ unknown disulfide binding topology).
       currentValues = dataDict.get('molResLinkEnds')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molResLink', 'molResidue',))
@@ -4405,7 +4405,7 @@ the data bypassing the API.
       currentValues = dataDict.get('isotopeLabels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'incorporation', 'massNumber', 'serial', 'access', 'specificLabelGroup',))
@@ -4474,7 +4474,7 @@ the data bypassing the API.
       currentValues = dataDict.get('molFeatures')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'featureType', 'serial', 'access', 'annotationStore', 'molResidue',))
@@ -4529,7 +4529,7 @@ the data bypassing the API.
       currentValues = dataDict.get('molResLinkEnds').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molResLink', 'molResidue',))
@@ -4588,7 +4588,7 @@ the data bypassing the API.
 
       currentValues = dataDict.get('isotopeLabels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4603,7 +4603,7 @@ the data bypassing the API.
       currentValues = dataDict.get('isotopeLabels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'incorporation', 'massNumber', 'serial', 'access', 'specificLabelGroup',))
@@ -4660,7 +4660,7 @@ the data bypassing the API.
 
       currentValues = dataDict.get('molFeatures')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4675,7 +4675,7 @@ the data bypassing the API.
       currentValues = dataDict.get('molFeatures')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'featureType', 'serial', 'access', 'annotationStore', 'molResidue',))
@@ -4725,7 +4725,7 @@ the data bypassing the API.
     if (nConditions == 0):
       currentValues = dataDict.get('molResLinkEnds').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4749,7 +4749,7 @@ the data bypassing the API.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('linkCode', 'access', 'molResLink', 'molResidue',))
@@ -6697,7 +6697,7 @@ are disjoint and no residue can be a member of more than one.
       currentValues = dataDict.get('alignments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -6754,7 +6754,7 @@ are disjoint and no residue can be a member of more than one.
       currentValues = dataDict.get('limitResidues')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -6804,7 +6804,7 @@ are disjoint and no residue can be a member of more than one.
     if (nConditions == 0):
       currentValues = dataDict.get('alignments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6812,7 +6812,7 @@ are disjoint and no residue can be a member of more than one.
       currentValues = dataDict.get('alignments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -6864,7 +6864,7 @@ are disjoint and no residue can be a member of more than one.
     if (nConditions == 0):
       currentValues = dataDict.get('limitResidues')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6872,7 +6872,7 @@ are disjoint and no residue can be a member of more than one.
       currentValues = dataDict.get('limitResidues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -9344,7 +9344,7 @@ etc.
       currentValues = dataDict.get('alignments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -9421,7 +9421,7 @@ etc.
       currentValues = dataDict.get('chains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -9482,7 +9482,7 @@ etc.
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -9557,7 +9557,7 @@ etc.
       currentValues = dataDict.get('entryMolecules')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('productionMethod', 'sourceType', 'vectorType', 'access', 'entry', 'experimentalSource', 'molecule',))
@@ -9632,7 +9632,7 @@ etc.
       currentValues = dataDict.get('molComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -9693,7 +9693,7 @@ etc.
       currentValues = dataDict.get('molResLinks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dihedralAngle', 'access', 'molecule',))
@@ -9754,7 +9754,7 @@ etc.
       currentValues = dataDict.get('molResidues').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -9815,7 +9815,7 @@ etc.
       currentValues = dataDict.get('molSeqFragments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molecule', 'naturalSource',))
@@ -9876,7 +9876,7 @@ etc.
       currentValues = dataDict.get('moleculeSysNames').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'molecule',))
@@ -9931,7 +9931,7 @@ etc.
 
       currentValues = dataDict.get('alignments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9961,7 +9961,7 @@ etc.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alignLength', 'alignmentProgram', 'alignmentScore', 'dbRefAlignBegin', 'dbRefAlignEnd', 'details', 'homologyRatio', 'nIdentical', 'nPositive', 'serial', 'access', 'dbRef', 'molSeqFragment', 'molecule',))
@@ -10023,7 +10023,7 @@ etc.
 
       currentValues = dataDict.get('chains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10041,7 +10041,7 @@ etc.
       currentValues = dataDict.get('chains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -10094,7 +10094,7 @@ etc.
 
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10105,7 +10105,7 @@ etc.
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -10165,7 +10165,7 @@ etc.
 
       currentValues = dataDict.get('entryMolecules')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10183,7 +10183,7 @@ etc.
       currentValues = dataDict.get('entryMolecules')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('productionMethod', 'sourceType', 'vectorType', 'access', 'entry', 'experimentalSource', 'molecule',))
@@ -10243,7 +10243,7 @@ etc.
 
       currentValues = dataDict.get('molComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10261,7 +10261,7 @@ etc.
       currentValues = dataDict.get('molComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -10314,7 +10314,7 @@ etc.
 
       currentValues = dataDict.get('molResLinks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10347,7 +10347,7 @@ etc.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dihedralAngle', 'access', 'molecule',))
@@ -10400,7 +10400,7 @@ etc.
 
       currentValues = dataDict.get('molResidues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10430,7 +10430,7 @@ etc.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'seqCode', 'seqInsertCode', 'serial', 'access', 'chemComp', 'molSeqFragment', 'molecule',))
@@ -10483,7 +10483,7 @@ etc.
 
       currentValues = dataDict.get('molSeqFragments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10516,7 +10516,7 @@ etc.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'molecule', 'naturalSource',))
@@ -10569,7 +10569,7 @@ etc.
 
       currentValues = dataDict.get('moleculeSysNames').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10599,7 +10599,7 @@ etc.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'namingSystem', 'access', 'molecule',))
@@ -10780,7 +10780,7 @@ etc.
           del dd[ss]
           next = next + 2
     
-      items = dd.items()
+      items = list(dd.items())  # py3: dict.items() is a view; indexed/assigned below
       items.sort()
       for (ss, ii) in items:
         ll[next] = ss

@@ -9,6 +9,7 @@ After execution copy the data over to the right spot.
 No need to update the indices unless changing the entries.
 """
 
+import cing
 from cing import cingDirScripts, cingDirTestsData
 from cing.core.constants import *  #@UnusedWildImport
 from cing.Libs.NTutils import *  #@UnusedWildImport

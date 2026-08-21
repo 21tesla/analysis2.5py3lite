@@ -824,7 +824,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('annotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -881,7 +881,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('subProjects')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -936,7 +936,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -993,7 +993,7 @@ could groups targets that are not related by their properties.
 
       currentValues = dataDict.get('annotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1008,7 +1008,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('annotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -1060,7 +1060,7 @@ could groups targets that are not related by their properties.
     if (nConditions == 0):
       currentValues = dataDict.get('subProjects')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1068,7 +1068,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('subProjects')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -1118,7 +1118,7 @@ could groups targets that are not related by their properties.
     if (nConditions == 0):
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1126,7 +1126,7 @@ could groups targets that are not related by their properties.
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -4015,7 +4015,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -4086,7 +4086,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('blueprintComponents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -4141,7 +4141,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -4196,7 +4196,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dbRefs')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -4251,7 +4251,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nucleicAcids')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -4306,7 +4306,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('projects')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -4361,7 +4361,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -4416,7 +4416,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetStatus').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'target',))
@@ -4473,7 +4473,7 @@ class Target(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('annotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4488,7 +4488,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -4547,7 +4547,7 @@ class Target(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('blueprintComponents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4562,7 +4562,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('blueprintComponents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('alwaysIncluded', 'approxBeginSeqId', 'approxEndSeqId', 'componentType', 'details', 'domain', 'serial', 'status', 'whyChosen', 'access', 'expBlueprint', 'molComponent', 'target',))
@@ -4612,7 +4612,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4620,7 +4620,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -4670,7 +4670,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('dbRefs')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4678,7 +4678,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('dbRefs')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -4728,7 +4728,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('nucleicAcids')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4736,7 +4736,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('nucleicAcids')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casNum', 'details', 'empiricalFormula', 'molType', 'molecularMass', 'name', 'seqDetails', 'seqString', 'access', 'labeledMixture', 'molecule', 'naturalSource', 'refSampleComponentStore',))
@@ -4786,7 +4786,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('projects')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4794,7 +4794,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('projects')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -4844,7 +4844,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('targetGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4852,7 +4852,7 @@ class Target(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('targetGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -4902,7 +4902,7 @@ class Target(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('targetStatus').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4926,7 +4926,7 @@ class Target(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'target',))
@@ -9541,7 +9541,7 @@ protein family.
       currentValues = dataDict.get('annotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -9598,7 +9598,7 @@ protein family.
       currentValues = dataDict.get('citations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -9653,7 +9653,7 @@ protein family.
       currentValues = dataDict.get('entrys')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -9708,7 +9708,7 @@ protein family.
       currentValues = dataDict.get('subTargetGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -9763,7 +9763,7 @@ protein family.
       currentValues = dataDict.get('targets')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -9820,7 +9820,7 @@ protein family.
 
       currentValues = dataDict.get('annotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9835,7 +9835,7 @@ protein family.
       currentValues = dataDict.get('annotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -9887,7 +9887,7 @@ protein family.
     if (nConditions == 0):
       currentValues = dataDict.get('citations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9895,7 +9895,7 @@ protein family.
       currentValues = dataDict.get('citations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('casAbstractCode', 'details', 'doi', 'firstPage', 'lastPage', 'medlineUiCode', 'pubMedId', 'serial', 'status', 'title', 'year', 'access', 'citationStore',))
@@ -9945,7 +9945,7 @@ protein family.
     if (nConditions == 0):
       currentValues = dataDict.get('entrys')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9953,7 +9953,7 @@ protein family.
       currentValues = dataDict.get('entrys')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altCode', 'code', 'details', 'name', 'release', 'serial', 'subCode', 'url', 'access', 'database',))
@@ -10003,7 +10003,7 @@ protein family.
     if (nConditions == 0):
       currentValues = dataDict.get('subTargetGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10011,7 +10011,7 @@ protein family.
       currentValues = dataDict.get('subTargetGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -10061,7 +10061,7 @@ protein family.
     if (nConditions == 0):
       currentValues = dataDict.get('targets')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10069,7 +10069,7 @@ protein family.
       currentValues = dataDict.get('targets')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -13353,7 +13353,7 @@ class TargetStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('projects').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -13414,7 +13414,7 @@ class TargetStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('targetGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))
@@ -13475,7 +13475,7 @@ class TargetStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('targets').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -13532,7 +13532,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('projects').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13562,7 +13562,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'serial', 'shortName', 'startDate', 'access', 'project', 'targetStore',))
@@ -13615,7 +13615,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('targets').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13645,7 +13645,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('biochemicalFunction', 'biologicalProcess', 'catalyticActivity', 'cellLocation', 'commonName', 'details', 'functionDescription', 'geneName', 'localName', 'orf', 'pathway', 'proteinName', 'serial', 'similarityDetails', 'systematicName', 'topology', 'whyChosen', 'access', 'creator', 'protein', 'species', 'targetStore',))
@@ -13698,7 +13698,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('targetGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13736,7 +13736,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('completeName', 'details', 'groupingType', 'namingSystem', 'shortName', 'access', 'targetGroup', 'targetStore',))

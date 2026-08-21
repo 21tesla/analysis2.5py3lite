@@ -85,7 +85,7 @@ Citing:          If you are using this software for academic purposes, we
 A Python example script for the use of the Haddock API.
 """
 
-from HaddockApi import *
+from .HaddockApi import *
 
 if __name__ == '__main__':
 

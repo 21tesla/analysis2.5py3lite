@@ -1449,7 +1449,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -1506,7 +1506,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('blueprintStatuss')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -1561,7 +1561,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('next')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -1616,7 +1616,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('outputSamples').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refOutputSample', 'sample',))
@@ -1671,7 +1671,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('parameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'experiment', 'parameterDefinition',))
@@ -1726,7 +1726,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('previous')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -1781,7 +1781,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('sampleIos').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -1838,7 +1838,7 @@ class Experiment(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('annotations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1853,7 +1853,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('annotations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'description', 'details', 'name', 'path', 'serial', 'access', 'annotationStore', 'author', 'dataUrl',))
@@ -1905,7 +1905,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('blueprintStatuss')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1913,7 +1913,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('blueprintStatuss')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('date', 'serial', 'access', 'code', 'expBlueprint', 'experiment',))
@@ -1963,7 +1963,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('next')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1971,7 +1971,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('next')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -2021,7 +2021,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('outputSamples').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2045,7 +2045,7 @@ class Experiment(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refOutputSample', 'sample',))
@@ -2095,7 +2095,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('parameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2119,7 +2119,7 @@ class Experiment(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'paramType', 'serial', 'unit', 'value', 'access', 'experiment', 'parameterDefinition',))
@@ -2169,7 +2169,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('previous')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2177,7 +2177,7 @@ class Experiment(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('previous')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -2227,7 +2227,7 @@ class Experiment(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('sampleIos').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2251,7 +2251,7 @@ class Experiment(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('amount', 'amountDisplayUnit', 'amountUnit', 'name', 'role', 'serial', 'access', 'experiment', 'refInputSample', 'sample',))
@@ -5638,7 +5638,7 @@ class ExperimentGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -5690,7 +5690,7 @@ class ExperimentGroup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('experiments')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5698,7 +5698,7 @@ class ExperimentGroup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('experiments')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -7232,7 +7232,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('experimentGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'name', 'purpose', 'serial', 'startDate', 'access', 'experimentStore',))
@@ -7293,7 +7293,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('experiments').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -7350,7 +7350,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('experiments').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7380,7 +7380,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'isLocked', 'lastEditedDate', 'name', 'serial', 'startDate', 'status', 'access', 'creator', 'expBlueprint', 'experimentGroup', 'experimentStore', 'experimentType', 'group', 'instrument', 'lastEditor', 'method', 'protocol',))
@@ -7433,7 +7433,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('experimentGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7463,7 +7463,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'endDate', 'name', 'purpose', 'serial', 'startDate', 'access', 'experimentStore',))

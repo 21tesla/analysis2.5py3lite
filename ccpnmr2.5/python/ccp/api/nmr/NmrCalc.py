@@ -216,7 +216,7 @@ parameterGroup (data) link (but different serials).
       currentValues = dataDict.get('runParameters')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'code', 'floatValue', 'intValue', 'ioRole', 'name', 'serial', 'textValue', 'access', 'data', 'run',))
@@ -268,7 +268,7 @@ parameterGroup (data) link (but different serials).
     if (nConditions == 0):
       currentValues = dataDict.get('runParameters')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -276,7 +276,7 @@ parameterGroup (data) link (but different serials).
       currentValues = dataDict.get('runParameters')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'code', 'floatValue', 'intValue', 'ioRole', 'name', 'serial', 'textValue', 'access', 'data', 'run',))
@@ -2708,7 +2708,7 @@ class NmrCalcStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('runs').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -2765,7 +2765,7 @@ class NmrCalcStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('runs').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2795,7 +2795,7 @@ class NmrCalcStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -4532,7 +4532,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('data').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -4587,7 +4587,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('derivedRuns')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -4642,7 +4642,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = self.getInputs()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -4697,7 +4697,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = self.getOutputs()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -4752,7 +4752,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('runParameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'code', 'floatValue', 'intValue', 'ioRole', 'name', 'serial', 'textValue', 'access', 'data', 'run',))
@@ -4804,7 +4804,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('data').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4828,7 +4828,7 @@ class Run(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -4878,7 +4878,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('derivedRuns')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4886,7 +4886,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('derivedRuns')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('affiliationStoreName', 'annealProtocolApp', 'annealProtocolCode', 'annealProtocolStoreName', 'details', 'methodStoreName', 'operatorSerial', 'serial', 'softwareName', 'softwareVersion', 'status', 'structureGenerationSerial', 'wmsProtocolName', 'access', 'masterRun', 'nmrCalcStore', 'operator',))
@@ -4936,7 +4936,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getInputs()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4944,7 +4944,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = self.getInputs()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -4994,7 +4994,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = self.getOutputs()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5002,7 +5002,7 @@ class Run(memops.api.Implementation.DataObject):
       currentValues = self.getOutputs()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -5052,7 +5052,7 @@ class Run(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('runParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -5076,7 +5076,7 @@ class Run(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'code', 'floatValue', 'intValue', 'ioRole', 'name', 'serial', 'textValue', 'access', 'data', 'run',))
@@ -11327,7 +11327,7 @@ parameters for successive phases of an annealing protocol.
       currentValues = dataDict.get('data')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -11381,7 +11381,7 @@ parameters for successive phases of an annealing protocol.
     if (nConditions == 0):
       currentValues = dataDict.get('data')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11389,7 +11389,7 @@ parameters for successive phases of an annealing protocol.
       currentValues = dataDict.get('data')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'details', 'ioRole', 'name', 'serial', 'access', 'parameterGroup', 'run',))
@@ -12632,7 +12632,7 @@ class MolSystemData(Data):
       currentValues = self.getChains()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -12694,7 +12694,7 @@ class MolSystemData(Data):
       currentValues = self.getChains()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -14458,7 +14458,7 @@ class MolResidueData(Data):
       currentValues = self.getChains()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -14513,7 +14513,7 @@ class MolResidueData(Data):
       currentValues = self.getResidues()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -14575,7 +14575,7 @@ class MolResidueData(Data):
       currentValues = self.getChains()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -14625,7 +14625,7 @@ class MolResidueData(Data):
     if (nConditions == 0):
       currentValues = self.getResidues()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14633,7 +14633,7 @@ class MolResidueData(Data):
       currentValues = self.getResidues()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -16375,7 +16375,7 @@ class SpinSystemData(Data):
       currentValues = self.getResonanceGroups()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -16429,7 +16429,7 @@ class SpinSystemData(Data):
     if (nConditions == 0):
       currentValues = self.getResonanceGroups()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -16437,7 +16437,7 @@ class SpinSystemData(Data):
       currentValues = self.getResonanceGroups()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('ccpCode', 'clusterCode', 'descriptor', 'details', 'isActive', 'linking', 'molType', 'name', 'secStrucCode', 'serial', 'access', 'nmrProject', 'residue',))
@@ -17731,7 +17731,7 @@ class StructureEnsembleData(Data):
       currentValues = self.getModels()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -17793,7 +17793,7 @@ class StructureEnsembleData(Data):
       currentValues = self.getModels()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -22222,7 +22222,7 @@ class ConstraintStoreData(Data):
       currentValues = self.getConstraintLists()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -22284,7 +22284,7 @@ class ConstraintStoreData(Data):
       currentValues = self.getConstraintLists()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -26654,7 +26654,7 @@ class EnergyTerm(ConstraintStoreData):
       currentValues = dataDict.get('energyTermParameters').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'value', 'access', 'energyTerm',))
@@ -26710,7 +26710,7 @@ class EnergyTerm(ConstraintStoreData):
     if (nConditions == 0):
       currentValues = dataDict.get('energyTermParameters').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -26734,7 +26734,7 @@ class EnergyTerm(ConstraintStoreData):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'value', 'access', 'energyTerm',))

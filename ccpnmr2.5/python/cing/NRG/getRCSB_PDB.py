@@ -5,6 +5,8 @@ Execute like:
 
 python $CINGROOT/python/cing/NRG/getRCSB_PDB.py
 """
+
+import cing
 from cing import cingDirTmp
 from cing.Libs.NTutils import *  #@UnusedWildImport
 from cing.NRG.PDBEntryLists import getPdbEntries, writeEntryListToFile

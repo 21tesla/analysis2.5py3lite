@@ -678,7 +678,7 @@ class ChemAtomCoord(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemCompVarCoords')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCoord',))
@@ -730,7 +730,7 @@ class ChemAtomCoord(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chemCompVarCoords')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -738,7 +738,7 @@ class ChemAtomCoord(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chemCompVarCoords')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCoord',))
@@ -2439,7 +2439,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chemAtomCoords').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'subType', 'x', 'y', 'z', 'access', 'chemCompCoord',))
@@ -2500,7 +2500,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chemCompVarCoords').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCoord',))
@@ -2557,7 +2557,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chemAtomCoords').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2587,7 +2587,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'subType', 'x', 'y', 'z', 'access', 'chemCompCoord',))
@@ -2640,7 +2640,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chemCompVarCoords').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2678,7 +2678,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'linking', 'access', 'chemCompCoord',))
@@ -3955,7 +3955,7 @@ relevant Vars
       currentValues = dataDict.get('chemAtomCoords')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'subType', 'x', 'y', 'z', 'access', 'chemCompCoord',))
@@ -4010,7 +4010,7 @@ relevant Vars
       currentValues = self.getChemCompVars()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))
@@ -4062,7 +4062,7 @@ relevant Vars
     if (nConditions == 0):
       currentValues = dataDict.get('chemAtomCoords')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4070,7 +4070,7 @@ relevant Vars
       currentValues = dataDict.get('chemAtomCoords')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'subType', 'x', 'y', 'z', 'access', 'chemCompCoord',))
@@ -4120,7 +4120,7 @@ relevant Vars
     if (nConditions == 0):
       currentValues = self.getChemCompVars()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4128,7 +4128,7 @@ relevant Vars
       currentValues = self.getChemCompVars()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'formalCharge', 'glycoCtCode', 'isAromatic', 'isDefaultVar', 'isParamagnetic', 'linking', 'nonStereoSmiles', 'stereoSmiles', 'varName', 'access', 'chemComp',))

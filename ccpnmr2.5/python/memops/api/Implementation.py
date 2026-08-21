@@ -77,7 +77,7 @@ from memops.metamodel import XmlModelIo
 
 topPackage = XmlModelIo.readModel(checkValidity=False)
 metaPackage = topPackage.metaObjFromQualName("memops.Implementation")
-from memops.general.baseDataTypes import Double, Float, Int, Long, String
+from memops.general.baseDataTypes import Any, Boolean, Dict, Double, Float, Int, Long, String
 
 
 ###############################################################################
@@ -4971,7 +4971,7 @@ class DataObject(MemopsObject):
             currentValues = dataDict.get("applicationData")
             result = list()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -5043,7 +5043,7 @@ class DataObject(MemopsObject):
             currentValues = dataDict.get("applicationData")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -5651,7 +5651,7 @@ class TopObject(DataObject):
             currentValues = self.getActiveRepositories()
             result = list()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -5719,7 +5719,7 @@ class TopObject(DataObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10229,7 +10229,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("accessControlStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10291,7 +10291,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = self.getActiveRepositories()
             result = list()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10354,7 +10354,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("affiliationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10420,7 +10420,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("analysisProfiles").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10503,7 +10503,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("analysisProjectV3s").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10577,7 +10577,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("analysisProjects").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10693,7 +10693,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("analysisWindowStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10759,7 +10759,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("annealProtocolStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10825,7 +10825,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("annotationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10891,7 +10891,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("chemCompCharges").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -10960,7 +10960,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("chemCompCoords").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11029,7 +11029,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("chemComps").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11106,7 +11106,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("chemElementStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11172,7 +11172,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("citationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11238,7 +11238,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("classifications").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11304,7 +11304,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("crystallizationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11370,7 +11370,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("dangleStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11438,7 +11438,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("dataLocationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11504,7 +11504,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("databases").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11573,7 +11573,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("expBlueprintStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11639,7 +11639,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("experimentStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11705,7 +11705,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("haddockProjects").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11772,7 +11772,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("holderStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11838,7 +11838,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("instrumentStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11904,7 +11904,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("keywordDefinitionStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -11970,7 +11970,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("labeledMolecules").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12036,7 +12036,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("labelingSchemes").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12104,7 +12104,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("layouts").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12179,7 +12179,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("locationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12245,7 +12245,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("methodStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12311,7 +12311,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("molSystemSymmetrySets").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12380,7 +12380,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("molSystems").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12449,7 +12449,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("molecules").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12525,7 +12525,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nameMappingStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12591,7 +12591,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrCalcStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12659,7 +12659,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrConstraintStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12726,7 +12726,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrEntryStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12792,7 +12792,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrExpPrototypes").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12863,7 +12863,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrProjects").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12931,7 +12931,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrReferenceStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -12999,7 +12999,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("nmrScreens").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13071,7 +13071,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("packageLocators").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13132,7 +13132,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("protocolStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13198,7 +13198,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("refDataStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13265,7 +13265,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("refSampleComponentStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13327,7 +13327,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("repositories").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13390,7 +13390,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("sampleStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13456,7 +13456,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("stereochemistryStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13522,7 +13522,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("structureEnsembles").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13594,7 +13594,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("targetStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13660,7 +13660,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("taxonomies").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13722,7 +13722,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = self.getTopObjects()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13787,7 +13787,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("validationStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13857,7 +13857,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("wmsProtocols").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13928,7 +13928,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("wmsQueryStores").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -13994,7 +13994,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("wmsSegments").values()
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14054,7 +14054,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("memops.AccessControl")
             currentValues = dataDict.get("accessControlStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14084,7 +14084,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14152,7 +14152,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = dataDict.get("activeRepositories")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14211,7 +14211,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Affiliation")
             currentValues = dataDict.get("affiliationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14241,7 +14241,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14303,7 +14303,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.AnalysisProfile")
             currentValues = dataDict.get("analysisProfiles").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14333,7 +14333,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14412,7 +14412,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.Analysis")
             currentValues = dataDict.get("analysisProjects").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14442,7 +14442,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14554,7 +14554,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.AnalysisV3")
             currentValues = dataDict.get("analysisProjectV3s").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14584,7 +14584,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14654,7 +14654,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.AnalysisWindow")
             currentValues = dataDict.get("analysisWindowStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14684,7 +14684,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14746,7 +14746,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("molsim.AnnealProtocol")
             currentValues = dataDict.get("annealProtocolStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14776,7 +14776,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14838,7 +14838,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Annotation")
             currentValues = dataDict.get("annotationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14868,7 +14868,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -14930,7 +14930,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.ChemComp")
             currentValues = dataDict.get("chemComps").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -14968,7 +14968,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15041,7 +15041,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.ChemCompCharge")
             currentValues = dataDict.get("chemCompCharges").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15082,7 +15082,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15147,7 +15147,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.ChemCompCoord")
             currentValues = dataDict.get("chemCompCoords").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15188,7 +15188,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15253,7 +15253,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.ChemElement")
             currentValues = dataDict.get("chemElementStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15283,7 +15283,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15345,7 +15345,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Citation")
             currentValues = dataDict.get("citationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15375,7 +15375,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15437,7 +15437,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Classification")
             currentValues = dataDict.get("classifications").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15467,7 +15467,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15529,7 +15529,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Crystallization")
             currentValues = dataDict.get("crystallizationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15559,7 +15559,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15621,7 +15621,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("cambridge.Dangle")
             currentValues = dataDict.get("dangleStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15651,7 +15651,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15715,7 +15715,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.DataLocation")
             currentValues = dataDict.get("dataLocationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15745,7 +15745,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15807,7 +15807,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.DbRef")
             currentValues = dataDict.get("databases").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15837,7 +15837,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15902,7 +15902,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.ExpBlueprint")
             currentValues = dataDict.get("expBlueprintStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -15932,7 +15932,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -15994,7 +15994,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Experiment")
             currentValues = dataDict.get("experimentStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16024,7 +16024,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16086,7 +16086,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("utrecht.Haddock")
             currentValues = dataDict.get("haddockProjects").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16116,7 +16116,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16179,7 +16179,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Holder")
             currentValues = dataDict.get("holderStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16209,7 +16209,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16271,7 +16271,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Instrument")
             currentValues = dataDict.get("instrumentStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16301,7 +16301,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16363,7 +16363,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.KeywordDefinition")
             currentValues = dataDict.get("keywordDefinitionStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16393,7 +16393,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16455,7 +16455,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.LabeledMolecule")
             currentValues = dataDict.get("labeledMolecules").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16485,7 +16485,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16547,7 +16547,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.ChemCompLabel")
             currentValues = dataDict.get("labelingSchemes").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16577,7 +16577,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16641,7 +16641,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.AnalysisLayout")
             currentValues = dataDict.get("layouts").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16671,7 +16671,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16742,7 +16742,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Location")
             currentValues = dataDict.get("locationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16772,7 +16772,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16834,7 +16834,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Method")
             currentValues = dataDict.get("methodStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16864,7 +16864,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -16926,7 +16926,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.MolSystem")
             currentValues = dataDict.get("molSystems").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -16956,7 +16956,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17021,7 +17021,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("molsim.Symmetry")
             currentValues = dataDict.get("molSystemSymmetrySets").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17059,7 +17059,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17124,7 +17124,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.Molecule")
             currentValues = dataDict.get("molecules").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17154,7 +17154,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17226,7 +17226,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccpnmr.NameMapping")
             currentValues = dataDict.get("nameMappingStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17256,7 +17256,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17318,7 +17318,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrCalc")
             currentValues = dataDict.get("nmrCalcStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17356,7 +17356,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17420,7 +17420,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrConstraint")
             currentValues = dataDict.get("nmrConstraintStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17450,7 +17450,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17513,7 +17513,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrEntry")
             currentValues = dataDict.get("nmrEntryStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17543,7 +17543,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17605,7 +17605,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrExpPrototype")
             currentValues = dataDict.get("nmrExpPrototypes").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17635,7 +17635,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17702,7 +17702,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.Nmr")
             currentValues = dataDict.get("nmrProjects").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17732,7 +17732,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17796,7 +17796,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrReference")
             currentValues = dataDict.get("nmrReferenceStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17834,7 +17834,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17898,7 +17898,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.nmr.NmrScreen")
             currentValues = dataDict.get("nmrScreens").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -17928,7 +17928,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -17998,7 +17998,7 @@ class MemopsRoot(ImplementationObject):
         if nConditions == 0:
             currentValues = dataDict.get("packageLocators").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18024,7 +18024,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18081,7 +18081,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Protocol")
             currentValues = dataDict.get("protocolStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18111,7 +18111,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18173,7 +18173,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.RefData")
             currentValues = dataDict.get("refDataStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18203,7 +18203,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18266,7 +18266,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.RefSampleComponent")
             currentValues = dataDict.get("refSampleComponentStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18296,7 +18296,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18356,7 +18356,7 @@ class MemopsRoot(ImplementationObject):
         if nConditions == 0:
             currentValues = dataDict.get("repositories").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18382,7 +18382,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18441,7 +18441,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Sample")
             currentValues = dataDict.get("sampleStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18471,7 +18471,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18533,7 +18533,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.Stereochemistry")
             currentValues = dataDict.get("stereochemistryStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18563,7 +18563,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18625,7 +18625,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.MolStructure")
             currentValues = dataDict.get("structureEnsembles").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18663,7 +18663,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18731,7 +18731,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.lims.Target")
             currentValues = dataDict.get("targetStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18761,7 +18761,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18823,7 +18823,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.general.Taxonomy")
             currentValues = dataDict.get("taxonomies").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18853,7 +18853,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18913,7 +18913,7 @@ class MemopsRoot(ImplementationObject):
         if nConditions == 0:
             currentValues = self.getTopObjects()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -18921,7 +18921,7 @@ class MemopsRoot(ImplementationObject):
             currentValues = set(x for x in dataDict.get("topObjects").values() if not x.isDeleted)
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -18982,7 +18982,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("ccp.molecule.Validation")
             currentValues = dataDict.get("validationStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -19012,7 +19012,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -19078,7 +19078,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("cambridge.WmsProtocol")
             currentValues = dataDict.get("wmsProtocols").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -19108,7 +19108,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -19175,7 +19175,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("cambridge.WmsQuery")
             currentValues = dataDict.get("wmsQueryStores").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -19205,7 +19205,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -19267,7 +19267,7 @@ class MemopsRoot(ImplementationObject):
             root.refreshTopObjects("cambridge.Wms")
             currentValues = dataDict.get("wmsSegments").values()
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -19297,7 +19297,7 @@ class MemopsRoot(ImplementationObject):
 
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -28874,7 +28874,7 @@ class PackageLocator(ImplementationObject):
             currentValues = dataDict.get("repositories")
             result = list()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -28936,7 +28936,7 @@ class PackageLocator(ImplementationObject):
             currentValues = dataDict.get("repositories")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -30042,7 +30042,7 @@ class Repository(ImplementationObject):
             currentValues = dataDict.get("stored")
             result = set()
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(
@@ -30094,7 +30094,7 @@ class Repository(ImplementationObject):
         if nConditions == 0:
             currentValues = dataDict.get("stored")
             if currentValues:
-                result = iter(currentValues).next()
+                result = next(iter(currentValues))
             else:
                 result = None
 
@@ -30102,7 +30102,7 @@ class Repository(ImplementationObject):
             currentValues = dataDict.get("stored")
             result = None
 
-            items = conditions.items()
+            items = list(conditions.items())  # py3: dict.items() is a view; code may index/assign below
             if nConditions == 1:
                 (key, condition) = items[0]
                 directAttrs = frozenset(

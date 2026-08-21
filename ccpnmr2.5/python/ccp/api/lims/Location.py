@@ -818,7 +818,7 @@ class Location(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('contents')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('locationType', 'name', 'pressure', 'pressureDisplayUnit', 'serial', 'tempDisplayUnit', 'temperature', 'access', 'location', 'locationStore', 'organisation',))
@@ -887,7 +887,7 @@ class Location(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('holderLocations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('endDate', 'serial', 'startDate', 'access', 'holder', 'location',))
@@ -939,7 +939,7 @@ class Location(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('contents')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -947,7 +947,7 @@ class Location(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('contents')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('locationType', 'name', 'pressure', 'pressureDisplayUnit', 'serial', 'tempDisplayUnit', 'temperature', 'access', 'location', 'locationStore', 'organisation',))
@@ -1004,7 +1004,7 @@ class Location(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('holderLocations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1019,7 +1019,7 @@ class Location(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('holderLocations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('endDate', 'serial', 'startDate', 'access', 'holder', 'location',))
@@ -3000,7 +3000,7 @@ class LocationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('locations').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('locationType', 'name', 'pressure', 'pressureDisplayUnit', 'serial', 'tempDisplayUnit', 'temperature', 'access', 'location', 'locationStore', 'organisation',))
@@ -3057,7 +3057,7 @@ class LocationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('locations').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3087,7 +3087,7 @@ class LocationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('locationType', 'name', 'pressure', 'pressureDisplayUnit', 'serial', 'tempDisplayUnit', 'temperature', 'access', 'location', 'locationStore', 'organisation',))

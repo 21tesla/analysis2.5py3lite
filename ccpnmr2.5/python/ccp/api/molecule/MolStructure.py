@@ -884,7 +884,7 @@ a given set of coordinates.
       currentValues = dataDict.get('atomValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -939,7 +939,7 @@ a given set of coordinates.
       currentValues = dataDict.get('coords').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'atom', 'model',))
@@ -991,7 +991,7 @@ a given set of coordinates.
     if (nConditions == 0):
       currentValues = dataDict.get('atomValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -999,7 +999,7 @@ a given set of coordinates.
       currentValues = dataDict.get('atomValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -1049,7 +1049,7 @@ a given set of coordinates.
     if (nConditions == 0):
       currentValues = dataDict.get('coords').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1073,7 +1073,7 @@ a given set of coordinates.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'atom', 'model',))
@@ -2582,7 +2582,7 @@ class Chain(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chainValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -2637,7 +2637,7 @@ class Chain(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residues').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqCode', 'seqId', 'seqInsertCode', 'access', 'chain',))
@@ -2689,7 +2689,7 @@ class Chain(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('chainValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2697,7 +2697,7 @@ class Chain(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('chainValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -2747,7 +2747,7 @@ class Chain(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('residues').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2771,7 +2771,7 @@ class Chain(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqCode', 'seqId', 'seqInsertCode', 'access', 'chain',))
@@ -7014,7 +7014,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('coords')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'atom', 'model',))
@@ -7069,7 +7069,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('structureGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('detail', 'name', 'serial', 'access', 'molSystem',))
@@ -7124,7 +7124,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('structureValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -7193,7 +7193,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('violationLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -7245,7 +7245,7 @@ Corresponds to a PDB MODEL.
     if (nConditions == 0):
       currentValues = dataDict.get('coords')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7253,7 +7253,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('coords')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'atom', 'model',))
@@ -7303,7 +7303,7 @@ Corresponds to a PDB MODEL.
     if (nConditions == 0):
       currentValues = dataDict.get('structureGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7311,7 +7311,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('structureGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('detail', 'name', 'serial', 'access', 'molSystem',))
@@ -7361,7 +7361,7 @@ Corresponds to a PDB MODEL.
     if (nConditions == 0):
       currentValues = dataDict.get('structureValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7369,7 +7369,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('structureValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -7426,7 +7426,7 @@ Corresponds to a PDB MODEL.
 
       currentValues = dataDict.get('violationLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7441,7 +7441,7 @@ Corresponds to a PDB MODEL.
       currentValues = dataDict.get('violationLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'serial', 'access', 'nmrConstraintStore',))
@@ -9445,7 +9445,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('atoms').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -9500,7 +9500,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residueValidations')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -9552,7 +9552,7 @@ class Residue(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('atoms').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9584,7 +9584,7 @@ class Residue(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -9634,7 +9634,7 @@ class Residue(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('residueValidations')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -9642,7 +9642,7 @@ class Residue(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residueValidations')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -11903,7 +11903,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('analysisLayouts')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -11978,7 +11978,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('analysisPanels')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -12041,7 +12041,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('coordChains').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'access', 'structureEnsemble',))
@@ -12102,7 +12102,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('dataMatrices').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'details', 'name', 'unit', 'access', 'structureEnsemble',))
@@ -12158,7 +12158,7 @@ trajectory for the MolSystem or part of it.
       currentValues = self.getEnsembleValidations()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -12219,7 +12219,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('models').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -12280,7 +12280,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('orderedAtoms')
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -12356,7 +12356,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('structureAnalyses')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -12411,7 +12411,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('validationStores')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))
@@ -12474,7 +12474,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('analysisLayouts')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12492,7 +12492,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('analysisLayouts')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'layout',))
@@ -12552,7 +12552,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('analysisPanels')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12570,7 +12570,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('analysisPanels')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('access', 'analysisProjectV3', 'currentMolSystem', 'currentRestraintSet', 'panel',))
@@ -12625,7 +12625,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('coordChains').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12655,7 +12655,7 @@ trajectory for the MolSystem or part of it.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'access', 'structureEnsemble',))
@@ -12708,7 +12708,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('dataMatrices').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12738,7 +12738,7 @@ trajectory for the MolSystem or part of it.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('defaultValue', 'details', 'name', 'unit', 'access', 'structureEnsemble',))
@@ -12789,7 +12789,7 @@ trajectory for the MolSystem or part of it.
     if (nConditions == 0):
       currentValues = self.getEnsembleValidations()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12797,7 +12797,7 @@ trajectory for the MolSystem or part of it.
       currentValues = self.getEnsembleValidations()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -12850,7 +12850,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('models').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12880,7 +12880,7 @@ trajectory for the MolSystem or part of it.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -12944,7 +12944,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('orderedAtoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -13005,7 +13005,7 @@ trajectory for the MolSystem or part of it.
 
       currentValues = dataDict.get('structureAnalyses')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13023,7 +13023,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('structureAnalyses')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'access', 'method', 'nmrConstraintStore', 'nmrProject',))
@@ -13074,7 +13074,7 @@ trajectory for the MolSystem or part of it.
     if (nConditions == 0):
       currentValues = dataDict.get('validationStores')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -13082,7 +13082,7 @@ trajectory for the MolSystem or part of it.
       currentValues = dataDict.get('validationStores')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot', 'nmrConstraintStore', 'nmrProject', 'software', 'structureEnsemble',))

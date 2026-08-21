@@ -1005,7 +1005,7 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisMappings')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'analysisDataDim', 'spectrumWindowView',))
@@ -1057,7 +1057,7 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('axisMappings')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1065,7 +1065,7 @@ class AnalysisDataDim(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('axisMappings')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'analysisDataDim', 'spectrumWindowView',))
@@ -2633,7 +2633,7 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowPeakLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isAnnotationDrawn', 'isSymbolDrawn', 'access', 'analysisPeakList', 'spectrumWindowView',))
@@ -2685,7 +2685,7 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('windowPeakLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2693,7 +2693,7 @@ class AnalysisPeakList(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('windowPeakLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isAnnotationDrawn', 'isSymbolDrawn', 'access', 'analysisPeakList', 'spectrumWindowView',))
@@ -4197,7 +4197,7 @@ class AnalysisPopup(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('popupOptions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'keyword', 'access', 'analysisPopup',))
@@ -4249,7 +4249,7 @@ class AnalysisPopup(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('popupOptions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4273,7 +4273,7 @@ class AnalysisPopup(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'keyword', 'access', 'analysisPopup',))
@@ -7069,7 +7069,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('analysisPopups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('height', 'isOpen', 'name', 'screenX', 'screenY', 'title', 'width', 'access', 'analysisProject',))
@@ -7130,7 +7130,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('analysisSpectra').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBaseLevel', 'autoLevelChanger', 'autoLevelMode', 'autoNumLevels', 'contourDir', 'font', 'multipletPattern', 'rank', 'shortcut', 'sliceColor', 'useBoundingBox', 'usePeakArrow', 'usePrecalculated', 'access', 'analysisProject', 'dataSource',))
@@ -7193,7 +7193,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisRegionGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -7254,7 +7254,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('diagonalExclusion', 'isSampled', 'measurementType', 'name', 'numDecimals', 'peakSize', 'access', 'analysisProject',))
@@ -7315,7 +7315,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('axisUnits').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisProject',))
@@ -7376,7 +7376,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('chainMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'molSystemCode', 'access', 'analysisProject',))
@@ -7437,7 +7437,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('marks').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'serial', 'access', 'analysisProject',))
@@ -7498,7 +7498,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('panelTypes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProject', 'axisType',))
@@ -7559,7 +7559,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('rulers').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'position', 'serial', 'access', 'analysisProject', 'panelType',))
@@ -7620,7 +7620,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('spectrumWindowGroups').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -7681,7 +7681,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('spectrumWindows').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCanvasLabelShown', 'isCanvasMidpointShown', 'isIconified', 'isXSliceDrawn', 'isXTickShown', 'isYSliceDrawn', 'isYTickShown', 'isZeroLineShown', 'name', 'serial', 'stripAxis', 'useMultiplePeakLists', 'useOverrideRegion', 'access', 'analysisProject',))
@@ -7736,7 +7736,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('analysisPopups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7766,7 +7766,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('height', 'isOpen', 'name', 'screenX', 'screenY', 'title', 'width', 'access', 'analysisProject',))
@@ -7819,7 +7819,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('analysisSpectra').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7849,7 +7849,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('autoBaseLevel', 'autoLevelChanger', 'autoLevelMode', 'autoNumLevels', 'contourDir', 'font', 'multipletPattern', 'rank', 'shortcut', 'sliceColor', 'useBoundingBox', 'usePeakArrow', 'usePrecalculated', 'access', 'analysisProject', 'dataSource',))
@@ -7904,7 +7904,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisRegionGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7934,7 +7934,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -7987,7 +7987,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8017,7 +8017,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('diagonalExclusion', 'isSampled', 'measurementType', 'name', 'numDecimals', 'peakSize', 'access', 'analysisProject',))
@@ -8070,7 +8070,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('axisUnits').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8100,7 +8100,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisProject',))
@@ -8153,7 +8153,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('chainMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8191,7 +8191,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chainCode', 'molSystemCode', 'access', 'analysisProject',))
@@ -8244,7 +8244,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('marks').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8274,7 +8274,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'serial', 'access', 'analysisProject',))
@@ -8327,7 +8327,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('panelTypes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8357,7 +8357,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'analysisProject', 'axisType',))
@@ -8410,7 +8410,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('rulers').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8440,7 +8440,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('color', 'dashLength', 'gapLength', 'lineWidth', 'position', 'serial', 'access', 'analysisProject', 'panelType',))
@@ -8493,7 +8493,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('spectrumWindows').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8523,7 +8523,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCanvasLabelShown', 'isCanvasMidpointShown', 'isIconified', 'isXSliceDrawn', 'isXTickShown', 'isYSliceDrawn', 'isYTickShown', 'isZeroLineShown', 'name', 'serial', 'stripAxis', 'useMultiplePeakLists', 'useOverrideRegion', 'access', 'analysisProject',))
@@ -8576,7 +8576,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('spectrumWindowGroups').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8606,7 +8606,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -14850,7 +14850,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('analysisDataDims').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('assignTolerance', 'chemShiftWeight', 'noeTolerance', 'peakFindBoxWidth', 'peakFindMinLineWidth', 'refSamplePlane', 'access', 'analysisSpectrum', 'dataDim',))
@@ -14905,7 +14905,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('analysisPeakLists').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('noeIntensityType', 'noeRefDistance', 'noeRefIntensity', 'symbolColor', 'symbolStyle', 'textColor', 'access', 'analysisSpectrum', 'peakList',))
@@ -14962,7 +14962,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('spectrumWindowViews')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isContourLineVisible', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'isSliceVisible', 'access', 'analysisSpectrum', 'spectrumWindowPane',))
@@ -15017,7 +15017,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('storedContours').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('path', 'serial', 'access', 'analysisSpectrum',))
@@ -15067,7 +15067,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('analysisDataDims').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15091,7 +15091,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('assignTolerance', 'chemShiftWeight', 'noeTolerance', 'peakFindBoxWidth', 'peakFindMinLineWidth', 'refSamplePlane', 'access', 'analysisSpectrum', 'dataDim',))
@@ -15141,7 +15141,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('analysisPeakLists').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15165,7 +15165,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('noeIntensityType', 'noeRefDistance', 'noeRefIntensity', 'symbolColor', 'symbolStyle', 'textColor', 'access', 'analysisSpectrum', 'peakList',))
@@ -15217,7 +15217,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('spectrumWindowViews')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15225,7 +15225,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('spectrumWindowViews')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isContourLineVisible', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'isSliceVisible', 'access', 'analysisSpectrum', 'spectrumWindowPane',))
@@ -15275,7 +15275,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('storedContours').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -15299,7 +15299,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('path', 'serial', 'access', 'analysisSpectrum',))
@@ -18422,7 +18422,7 @@ this is a program-specific part of the model.
       currentValues = dataDict.get('atomSetMappings')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'mappingType', 'name', 'access', 'chemAtomSet', 'residueMapping',))
@@ -18477,7 +18477,7 @@ this is a program-specific part of the model.
       currentValues = self.getAtomSets()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrProject',))
@@ -18532,7 +18532,7 @@ this is a program-specific part of the model.
       currentValues = self.getResonances()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'serial', 'access', 'nmrProject', 'resonanceGroup', 'resonanceSet',))
@@ -18584,7 +18584,7 @@ this is a program-specific part of the model.
     if (nConditions == 0):
       currentValues = self.getAtomSets()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18592,7 +18592,7 @@ this is a program-specific part of the model.
       currentValues = self.getAtomSets()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'nmrProject',))
@@ -18642,7 +18642,7 @@ this is a program-specific part of the model.
     if (nConditions == 0):
       currentValues = dataDict.get('atomSetMappings')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18650,7 +18650,7 @@ this is a program-specific part of the model.
       currentValues = dataDict.get('atomSetMappings')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'mappingType', 'name', 'access', 'chemAtomSet', 'residueMapping',))
@@ -18700,7 +18700,7 @@ this is a program-specific part of the model.
     if (nConditions == 0):
       currentValues = self.getResonances()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18708,7 +18708,7 @@ this is a program-specific part of the model.
       currentValues = self.getResonances()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isotopeCode', 'name', 'serial', 'access', 'nmrProject', 'resonanceGroup', 'resonanceSet',))
@@ -22487,7 +22487,7 @@ plots.
       currentValues = dataDict.get('axisRegions')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isActive', 'serial', 'size', 'access', 'axisPanel', 'axisRegionGroup',))
@@ -22539,7 +22539,7 @@ plots.
     if (nConditions == 0):
       currentValues = dataDict.get('axisRegions')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -22547,7 +22547,7 @@ plots.
       currentValues = dataDict.get('axisRegions')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isActive', 'serial', 'size', 'access', 'axisPanel', 'axisRegionGroup',))
@@ -23799,7 +23799,7 @@ SpectrumWindow.
       currentValues = dataDict.get('axisUnits')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisProject',))
@@ -23854,7 +23854,7 @@ SpectrumWindow.
       currentValues = self.getIsotopes()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -23906,7 +23906,7 @@ SpectrumWindow.
     if (nConditions == 0):
       currentValues = dataDict.get('axisUnits')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -23914,7 +23914,7 @@ SpectrumWindow.
       currentValues = dataDict.get('axisUnits')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isBackwards', 'unit', 'access', 'analysisProject',))
@@ -23972,7 +23972,7 @@ SpectrumWindow.
       currentValues = self.getIsotopes()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('abundance', 'gyroMagneticRatio', 'halfLife', 'halfLifeError', 'halfLifeType', 'magneticMoment', 'mass', 'massNumber', 'quadrupoleMoment', 'receptivity', 'spin', 'access', 'chemElement',))
@@ -26184,7 +26184,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('residueMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqId', 'access', 'chainMapping',))
@@ -26236,7 +26236,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('residueMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -26260,7 +26260,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqId', 'access', 'chainMapping',))
@@ -29284,7 +29284,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('atomSetMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'mappingType', 'name', 'access', 'chemAtomSet', 'residueMapping',))
@@ -29336,7 +29336,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
     if (nConditions == 0):
       currentValues = dataDict.get('atomSetMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -29360,7 +29360,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('elementSymbol', 'mappingType', 'name', 'access', 'chemAtomSet', 'residueMapping',))
@@ -30736,7 +30736,7 @@ simultaneously.
       currentValues = dataDict.get('spectrumWindowGroups')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -30791,7 +30791,7 @@ simultaneously.
       currentValues = dataDict.get('spectrumWindowPanes').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('aspectRatio', 'name', 'serial', 'access', 'spectrumWindow',))
@@ -30843,7 +30843,7 @@ simultaneously.
     if (nConditions == 0):
       currentValues = dataDict.get('spectrumWindowGroups')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -30851,7 +30851,7 @@ simultaneously.
       currentValues = dataDict.get('spectrumWindowGroups')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'serial', 'access', 'analysisProject',))
@@ -30901,7 +30901,7 @@ simultaneously.
     if (nConditions == 0):
       currentValues = dataDict.get('spectrumWindowPanes').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -30925,7 +30925,7 @@ simultaneously.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('aspectRatio', 'name', 'serial', 'access', 'spectrumWindow',))
@@ -32960,7 +32960,7 @@ time, and only windows in the active group are displayed.
       currentValues = dataDict.get('spectrumWindows')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCanvasLabelShown', 'isCanvasMidpointShown', 'isIconified', 'isXSliceDrawn', 'isXTickShown', 'isYSliceDrawn', 'isYTickShown', 'isZeroLineShown', 'name', 'serial', 'stripAxis', 'useMultiplePeakLists', 'useOverrideRegion', 'access', 'analysisProject',))
@@ -33012,7 +33012,7 @@ time, and only windows in the active group are displayed.
     if (nConditions == 0):
       currentValues = dataDict.get('spectrumWindows')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -33020,7 +33020,7 @@ time, and only windows in the active group are displayed.
       currentValues = dataDict.get('spectrumWindows')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isCanvasLabelShown', 'isCanvasMidpointShown', 'isIconified', 'isXSliceDrawn', 'isXTickShown', 'isYSliceDrawn', 'isYTickShown', 'isZeroLineShown', 'name', 'serial', 'stripAxis', 'useMultiplePeakLists', 'useOverrideRegion', 'access', 'analysisProject',))
@@ -34119,7 +34119,7 @@ have one.
       currentValues = dataDict.get('axisPanels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isVisible', 'label', 'thickness', 'access', 'axisUnit', 'panelType', 'spectrumWindowPane',))
@@ -34174,7 +34174,7 @@ have one.
       currentValues = dataDict.get('slicePanels').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isVisible', 'label', 'thickness', 'access', 'spectrumWindowPane',))
@@ -34229,7 +34229,7 @@ have one.
       currentValues = dataDict.get('spectrumWindowViews').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isContourLineVisible', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'isSliceVisible', 'access', 'analysisSpectrum', 'spectrumWindowPane',))
@@ -34281,7 +34281,7 @@ have one.
     if (nConditions == 0):
       currentValues = dataDict.get('axisPanels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -34305,7 +34305,7 @@ have one.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isVisible', 'label', 'thickness', 'access', 'axisUnit', 'panelType', 'spectrumWindowPane',))
@@ -34355,7 +34355,7 @@ have one.
     if (nConditions == 0):
       currentValues = dataDict.get('slicePanels').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -34379,7 +34379,7 @@ have one.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isVisible', 'label', 'thickness', 'access', 'spectrumWindowPane',))
@@ -34429,7 +34429,7 @@ have one.
     if (nConditions == 0):
       currentValues = dataDict.get('spectrumWindowViews').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -34453,7 +34453,7 @@ have one.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isContourLineVisible', 'isInToolbar', 'isNegVisible', 'isPosVisible', 'isSliceVisible', 'access', 'analysisSpectrum', 'spectrumWindowPane',))
@@ -35596,7 +35596,7 @@ SpectrumWindow being considered.
       currentValues = dataDict.get('axisMappings').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'analysisDataDim', 'spectrumWindowView',))
@@ -35651,7 +35651,7 @@ SpectrumWindow being considered.
       currentValues = dataDict.get('windowPeakLists').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isAnnotationDrawn', 'isSymbolDrawn', 'access', 'analysisPeakList', 'spectrumWindowView',))
@@ -35703,7 +35703,7 @@ SpectrumWindow being considered.
     if (nConditions == 0):
       currentValues = dataDict.get('axisMappings').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -35727,7 +35727,7 @@ SpectrumWindow being considered.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('label', 'access', 'analysisDataDim', 'spectrumWindowView',))
@@ -35777,7 +35777,7 @@ SpectrumWindow being considered.
     if (nConditions == 0):
       currentValues = dataDict.get('windowPeakLists').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -35801,7 +35801,7 @@ SpectrumWindow being considered.
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isAnnotationDrawn', 'isSymbolDrawn', 'access', 'analysisPeakList', 'spectrumWindowView',))
@@ -37021,7 +37021,7 @@ class StoredContour(memops.api.Implementation.DataObject):
       currentValues = self.getDataDims()
       result = list()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'fileDim', 'isComplex', 'numPoints', 'shapeSerial', 'unit', 'access', 'analysisDataDim', 'dataSource', 'expDim', 'predictMethod',))
@@ -37081,7 +37081,7 @@ class StoredContour(memops.api.Implementation.DataObject):
       currentValues = self.getDataDims()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('dim', 'fileDim', 'isComplex', 'numPoints', 'shapeSerial', 'unit', 'access', 'analysisDataDim', 'dataSource', 'expDim', 'predictMethod',))
@@ -39834,7 +39834,7 @@ class Mark(AbstractMark):
       currentValues = dataDict.get('markDims').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('position', 'serial', 'access', 'axisType', 'mark',))
@@ -39886,7 +39886,7 @@ class Mark(AbstractMark):
     if (nConditions == 0):
       currentValues = dataDict.get('markDims').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -39910,7 +39910,7 @@ class Mark(AbstractMark):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('position', 'serial', 'access', 'axisType', 'mark',))
@@ -40842,7 +40842,7 @@ class AxisPanel(SidePanel):
       currentValues = dataDict.get('axisRegions').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isActive', 'serial', 'size', 'access', 'axisPanel', 'axisRegionGroup',))
@@ -40894,7 +40894,7 @@ class AxisPanel(SidePanel):
     if (nConditions == 0):
       currentValues = dataDict.get('axisRegions').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -40918,7 +40918,7 @@ class AxisPanel(SidePanel):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('isActive', 'serial', 'size', 'access', 'axisPanel', 'axisRegionGroup',))

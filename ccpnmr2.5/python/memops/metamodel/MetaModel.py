@@ -1605,7 +1605,7 @@ class HasSupertype:
             elements.update(obj._MetaModelElement__elementDict)
 
         # return sorted list
-        items = elements.items()
+        items = list(elements.items())  # py3: dict.items() is a view; indexed/assigned below
         items.sort()
         if clazz:
             result = [x[1] for x in items if isinstance(x[1], clazz)]

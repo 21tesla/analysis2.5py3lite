@@ -9,10 +9,10 @@ Copyright (c) 2008 University of Cambridge. All rights reserved.
 
 
 import tkinter as Tkinter
-from PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
-from PeakSeparatorParams import PeakSeparatorParams
-from PeakSeparatorPeakList import getPeakListParams
-from PeakSeparatorRegion import getRegionParams
+from .PeakSeparator import SeparatePeakRoutine, SeparatePeaksInPeakList
+from .PeakSeparatorParams import PeakSeparatorParams
+from .PeakSeparatorPeakList import getPeakListParams
+from .PeakSeparatorRegion import getRegionParams
 
 from ccpnmr.analysis.core.UnitConverter import hz2pnt, pnt2hz
 from ccpnmr.analysis.core.WindowBasic import getSpectrumViews

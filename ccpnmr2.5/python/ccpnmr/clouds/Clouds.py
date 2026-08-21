@@ -39,9 +39,9 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 """
 
-from HydrogenDynamics import *
-from NoeRelaxation import optimiseRelaxation
-from ResonanceIdentification import getCloudsResonanceList
+from .HydrogenDynamics import *
+from .NoeRelaxation import optimiseRelaxation
+from .ResonanceIdentification import getCloudsResonanceList
 
 from ccpnmr.analysis.core.StructureBasic import getAtomSetsDistance
 

@@ -98,6 +98,7 @@ from .HaddockLocal import daniProtocolStore, rdcProtocolStore
 #from ccpnmr.analysis.core.MoleculeBasic  import findMatchingChain, getLinkedResidue
 #from ccpnmr.analysis.core.StructureBasic import getBestNamingSystem, findMatchingMolSystemAtom
 from ccpnmr.format.converters.CnsFormat import CnsFormat
+from ccp.lib.StructureIo import getStructureFromFile
 
 
 def addRdcParam(run,termId):

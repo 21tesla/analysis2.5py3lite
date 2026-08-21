@@ -821,7 +821,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
       currentValues = self.getNmrScreens()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
@@ -882,7 +882,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refNmrSpectra').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'concentration', 'details', 'name', 'pH', 'serial', 'solvent', 'temperature', 'access', 'dataSource', 'refDataStore',))
@@ -936,7 +936,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
     if (nConditions == 0):
       currentValues = self.getNmrScreens()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -944,7 +944,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
       currentValues = self.getNmrScreens()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'endDate', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'objective', 'pH', 'sampleType', 'startDate', 'temperature', 'userProtocolCode', 'access', 'memopsRoot', 'target',))
@@ -997,7 +997,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('refNmrSpectra').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1027,7 +1027,7 @@ class RefDataStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'concentration', 'details', 'name', 'pH', 'serial', 'solvent', 'temperature', 'access', 'dataSource', 'refDataStore',))
@@ -2453,7 +2453,7 @@ class RefNmrSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialHits')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))
@@ -2512,7 +2512,7 @@ class RefNmrSpectrum(memops.api.Implementation.DataObject):
 
       currentValues = dataDict.get('trialHits')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2527,7 +2527,7 @@ class RefNmrSpectrum(memops.api.Implementation.DataObject):
       currentValues = dataDict.get('trialHits')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('componentName', 'details', 'figOfMerit', 'isConfirmed', 'meritCode', 'serial', 'access', 'trial',))

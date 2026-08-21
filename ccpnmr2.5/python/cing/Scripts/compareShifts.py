@@ -10,9 +10,9 @@ from cing.Libs.NTutils import *  #@UnusedWildImport
 #------------------------------------------------------------------------------------
 # PARAMETERS ed.
 #------------------------------------------------------------------------------------
-ADCadef = range(501, 658) + [800, 850]
-ADedtadef = range(501, 658) + [None, None]
-BDdef = range(501, 603) + [None] + range(603, 657) + [None, None]
+ADCadef = list(range(501, 658)) + [800, 850]  # py3: range + list no longer concatenates
+ADedtadef = list(range(501, 658)) + [None, None]
+BDdef = list(range(501, 603)) + [None] + list(range(603, 657)) + [None, None]
 
 defsA = ('H2_2Ca_64_100C', 'CYANA', ADCadef)     # AD-Calcium
 defsB = ('H2_AD_EDTA_63_100', 'CYANA2', ADedtadef)  # AD edta

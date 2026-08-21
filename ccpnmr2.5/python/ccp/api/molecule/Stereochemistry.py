@@ -1982,7 +1982,7 @@ class StereochemistryStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('refStereochemistries').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'numAtoms', 'numCoreAtoms', 'serial', 'stereoClass', 'access', 'stereochemistryStore',))
@@ -2040,7 +2040,7 @@ class StereochemistryStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('refStereochemistries').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -2070,7 +2070,7 @@ class StereochemistryStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'numAtoms', 'numCoreAtoms', 'serial', 'stereoClass', 'access', 'stereochemistryStore',))

@@ -1502,7 +1502,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
       currentValues = self.getNmrCalcStores()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'nmrProjectName', 'validationStoreName', 'access', 'memopsRoot',))
@@ -1563,7 +1563,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
       currentValues = dataDict.get('validationResults').values()
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -1617,7 +1617,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
     if (nConditions == 0):
       currentValues = self.getNmrCalcStores()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1625,7 +1625,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
       currentValues = self.getNmrCalcStores()
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('createdBy', 'guid', 'isModifiable', 'lastUnlockedBy', 'name', 'nmrProjectName', 'validationStoreName', 'access', 'memopsRoot',))
@@ -1678,7 +1678,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
 
       currentValues = dataDict.get('validationResults').values()
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -1708,7 +1708,7 @@ class ValidationStore(memops.api.Implementation.TopObject):
 
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('booleanValue', 'context', 'details', 'figOfMerit', 'floatValue', 'intValue', 'keyword', 'serial', 'textValue', 'access', 'validationStore',))
@@ -3438,7 +3438,7 @@ class NmrConstraintListValidation(ValidationResult):
       currentValues = dataDict.get('nmrConstraintLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -3501,7 +3501,7 @@ class NmrConstraintListValidation(ValidationResult):
 
       currentValues = dataDict.get('nmrConstraintLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -3519,7 +3519,7 @@ class NmrConstraintListValidation(ValidationResult):
       currentValues = dataDict.get('nmrConstraintLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'name', 'serial', 'unit', 'usedForCalculation', 'access', 'conditionState', 'method', 'nmrConstraintStore',))
@@ -4787,7 +4787,7 @@ class NmrConstraintValidation(ValidationResult):
       currentValues = dataDict.get('nmrConstraints')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -4850,7 +4850,7 @@ class NmrConstraintValidation(ValidationResult):
 
       currentValues = dataDict.get('nmrConstraints')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -4868,7 +4868,7 @@ class NmrConstraintValidation(ValidationResult):
       currentValues = dataDict.get('nmrConstraints')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'origData', 'serial', 'weight', 'access', 'method', 'parentList',))
@@ -6135,7 +6135,7 @@ class NmrMeasurementListValidation(ValidationResult):
       currentValues = dataDict.get('nmrMeasurementLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -6198,7 +6198,7 @@ class NmrMeasurementListValidation(ValidationResult):
 
       currentValues = dataDict.get('nmrMeasurementLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -6216,7 +6216,7 @@ class NmrMeasurementListValidation(ValidationResult):
       currentValues = dataDict.get('nmrMeasurementLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'unit', 'access', 'method', 'nmrProject',))
@@ -7492,7 +7492,7 @@ class NmrMeasurementValidation(ValidationResult):
       currentValues = dataDict.get('nmrMeasurements')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'figOfMerit', 'value', 'access', 'method', 'parentList',))
@@ -7555,7 +7555,7 @@ class NmrMeasurementValidation(ValidationResult):
 
       currentValues = dataDict.get('nmrMeasurements')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -7573,7 +7573,7 @@ class NmrMeasurementValidation(ValidationResult):
       currentValues = dataDict.get('nmrMeasurements')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'error', 'figOfMerit', 'value', 'access', 'method', 'parentList',))
@@ -8841,7 +8841,7 @@ class PeakValidation(ValidationResult):
       currentValues = dataDict.get('peaks')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -8903,7 +8903,7 @@ class PeakValidation(ValidationResult):
 
       currentValues = dataDict.get('peaks')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -8921,7 +8921,7 @@ class PeakValidation(ValidationResult):
       currentValues = dataDict.get('peaks')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('annotation', 'constraintWeight', 'details', 'figOfMerit', 'height', 'serial', 'volume', 'access', 'fitMethod', 'peakList',))
@@ -10184,7 +10184,7 @@ class PeakListValidation(ValidationResult):
       currentValues = dataDict.get('peakLists')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -10246,7 +10246,7 @@ class PeakListValidation(ValidationResult):
 
       currentValues = dataDict.get('peakLists')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -10264,7 +10264,7 @@ class PeakListValidation(ValidationResult):
       currentValues = dataDict.get('peakLists')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'isSimulated', 'name', 'serial', 'access', 'analysisPeakList', 'dataSource', 'fitMethod', 'intensMethod',))
@@ -11526,7 +11526,7 @@ class ResidueValidation(ValidationResult):
       currentValues = dataDict.get('residues')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqCode', 'seqId', 'seqInsertCode', 'access', 'chain',))
@@ -11588,7 +11588,7 @@ class ResidueValidation(ValidationResult):
 
       currentValues = dataDict.get('residues')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -11606,7 +11606,7 @@ class ResidueValidation(ValidationResult):
       currentValues = dataDict.get('residues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('seqCode', 'seqId', 'seqInsertCode', 'access', 'chain',))
@@ -12868,7 +12868,7 @@ class AtomValidation(ValidationResult):
       currentValues = dataDict.get('atoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -12930,7 +12930,7 @@ class AtomValidation(ValidationResult):
 
       currentValues = dataDict.get('atoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -12948,7 +12948,7 @@ class AtomValidation(ValidationResult):
       currentValues = dataDict.get('atoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('altLocationCode', 'index', 'name', 'access', 'residue',))
@@ -14196,7 +14196,7 @@ class StructureValidation(ValidationResult):
       currentValues = dataDict.get('models')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -14258,7 +14258,7 @@ class StructureValidation(ValidationResult):
 
       currentValues = dataDict.get('models')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -14276,7 +14276,7 @@ class StructureValidation(ValidationResult):
       currentValues = dataDict.get('models')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('details', 'index', 'name', 'serial', 'access', 'structureEnsemble',))
@@ -16277,7 +16277,7 @@ class ChainValidation(ValidationResult):
       currentValues = dataDict.get('chains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'access', 'structureEnsemble',))
@@ -16339,7 +16339,7 @@ class ChainValidation(ValidationResult):
 
       currentValues = dataDict.get('chains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -16357,7 +16357,7 @@ class ChainValidation(ValidationResult):
       currentValues = dataDict.get('chains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'access', 'structureEnsemble',))
@@ -17553,7 +17553,7 @@ class MolSysAtomValidation(ValidationResult):
       currentValues = dataDict.get('atoms')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -17605,7 +17605,7 @@ class MolSysAtomValidation(ValidationResult):
     if (nConditions == 0):
       currentValues = dataDict.get('atoms')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -17613,7 +17613,7 @@ class MolSysAtomValidation(ValidationResult):
       currentValues = dataDict.get('atoms')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('name', 'access', 'atomSet', 'residue',))
@@ -18749,7 +18749,7 @@ class MolSystemValidation(ValidationResult):
       currentValues = dataDict.get('molSystems')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -18801,7 +18801,7 @@ class MolSystemValidation(ValidationResult):
     if (nConditions == 0):
       currentValues = dataDict.get('molSystems')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -18809,7 +18809,7 @@ class MolSystemValidation(ValidationResult):
       currentValues = dataDict.get('molSystems')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('code', 'createdBy', 'details', 'guid', 'hasChemExchange', 'isModifiable', 'lastUnlockedBy', 'name', 'access', 'memopsRoot',))
@@ -19957,7 +19957,7 @@ class MolSysChainValidation(ValidationResult):
       currentValues = dataDict.get('chains')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -20009,7 +20009,7 @@ class MolSysChainValidation(ValidationResult):
     if (nConditions == 0):
       currentValues = dataDict.get('chains')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -20017,7 +20017,7 @@ class MolSysChainValidation(ValidationResult):
       currentValues = dataDict.get('chains')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('chemExchangeState', 'code', 'conformationalIsomer', 'details', 'magnEquivalenceCode', 'pdbOneLetterCode', 'physicalState', 'role', 'access', 'analysisPanel', 'molSystem', 'molecule',))
@@ -21150,7 +21150,7 @@ class MolSysResidueValidation(ValidationResult):
       currentValues = dataDict.get('residues')
       result = set()
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))
@@ -21202,7 +21202,7 @@ class MolSysResidueValidation(ValidationResult):
     if (nConditions == 0):
       currentValues = dataDict.get('residues')
       if (currentValues):
-        result = iter(currentValues).next()
+        result = next(iter(currentValues))
       else:
         result = None
 
@@ -21210,7 +21210,7 @@ class MolSysResidueValidation(ValidationResult):
       currentValues = dataDict.get('residues')
       result = None
       
-      items = conditions.items()
+      items = list(conditions.items())  # py3: dict.items() is a view; indexed/assigned below
       if ((nConditions == 1)):
         (key, condition) = items[0]
         directAttrs = frozenset(('descriptor', 'details', 'linking', 'seqCode', 'seqId', 'seqInsertCode', 'access', 'chain', 'chainFragment',))

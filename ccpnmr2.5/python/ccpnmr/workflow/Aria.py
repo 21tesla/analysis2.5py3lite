@@ -88,7 +88,7 @@ class AriaWorkFlow(WorkFlow):
 import urllib
 import urllib.request
 
-import cookielib
+import http.cookiejar as cookielib  # py2 cookielib moved to http.cookiejar
 
 from pdbe.adatah.Io import MultipartPostHandler
 
