@@ -944,7 +944,6 @@ class ProdecompFrame(Frame):
           if sname:
             acqNames.add(sname)
           else:
-                  pass
             try:
               acqName = expDimRef.isotopeCodes[0]
             except IndexError:
@@ -1084,11 +1083,11 @@ class ProdecompFrame(Frame):
       axisTypePairs = []
       for name in isotopes:
         axisType = analysisProject.findFirstAxisType(name=name)
-    axisTypePairs.append( (axisType, valueAxis) ) 
-     
+        axisTypePairs.append( (axisType, valueAxis) )
+
       window = createSpectrumWindow(analysisProject.root, 'Prodecomp',
                                     axisTypePairs, spectrum=None,
-                    ncols=1, nrows=1, regions=None)   
+                                    ncols=1, nrows=1, regions=None)
 
     self.update_idletasks()
     for i, windowPane in enumerate(window.sortedSpectrumWindowPanes()):
@@ -1163,9 +1162,8 @@ class ProdecompFrame(Frame):
     windowPane = windowPanes[0]
 
     dataDimRef = self.dataDimRefDict[self.acqName][0]
-    xPpmPoints = [dataDimRef.pointToValue(x) 
+    xPpmPoints = [dataDimRef.pointToValue(x)
                   for x in range(intervalA,intervalB+1)]
-                          pass
     #xPpmPoints =  getPpmRange(sw,tfo, range(intervalA,intervalB+1),
     #                          numPointsDir )
 
@@ -1188,8 +1186,6 @@ class ProdecompFrame(Frame):
 
     pointsRange = range(numPointsShape)
     for k, label in enumerate(shapeNames):
-            pass
-
       isotope, sw, tfo = self.shapeParams[label]
       dataDimRef = self.dataDimRefDict[label][0]
 
@@ -1309,7 +1305,6 @@ class ProdecompFrame(Frame):
     dataDimRef = self.dataDimRefDict[self.acqName][0]
     ppmxfd = [dataDimRef.pointToValue(x) 
               for x in range(intervalA,intervalB+1)]
-                      pass
     #ppmxfd =  getPpmRange(sw,tfo,
     #                     range(intervalA,intervalB+1),
     #                     numPointsDir )
@@ -1378,16 +1373,12 @@ class ProdecompFrame(Frame):
 
     pointsRange = range(numPointsShape)
     for k, label in enumerate(shapeNames):
-            pass
-
       isotope, sw, tfo = self.shapeParams[label] #@UnusedVariable
       dataDimRef = self.dataDimRefDict[label][0]
 
       if sw is None:
         ppmxf = pointsRange
       else:
-              pass
-        
         ppmxf = [dataDimRef.pointToValue(x) for x in pointsRange]
         #ppmxf =  getPpmRange(sw, tfo, pointsRange, numPointsShape)
 
@@ -1472,7 +1463,6 @@ class ProdecompFrame(Frame):
     allComp = sum(x[2] for x in intervals)
 
     if intervals and allComp:
-            pass
 
 
       dataSources = [spec for spec in inpDataSources if spec.isProdecompActive]
@@ -1551,8 +1541,6 @@ class ProdecompFrame(Frame):
 
       # create ProjSet element and contents
       for jj, experiment in enumerate(experiments):
-              pass
-
         specs = [x for x in dataSources if x.experiment is experiment]
 
         # get dimensions
@@ -1618,8 +1606,6 @@ class ProdecompFrame(Frame):
       #Write out components
       cIndex = -1 # set component index to start at zero
       for index, interval in enumerate(intervals):
-              pass
-
         intervalA, intervalB, nComp, intervalId = interval #@UnusedVariable
         output = self.prodecompOutput[intervalId]
         outfdir, outf, acqName, shapeNames = output
@@ -1715,8 +1701,6 @@ def getRefExperiment(experiments, acqName, shapeNames):
     for xp in experiments:
       for xpDim in xp.sortedExpDims():
         for xpDimRef in xpDim.sortedExpDimRefs():
-                pass
-
           refExpDimRef = xpDimRef.refExpDimRef
           if refExpDimRef is None:
             print('WARNING, %s has no refExpDimRef' % xpDimRef)
@@ -1745,12 +1729,11 @@ def getRefExperiment(experiments, acqName, shapeNames):
   return result
 
 if __name__ == "__main__":
-        pass
 
   import sys
-  import Tkinter
+  import tkinter
 
-  root = Tkinter.Tk()
+  root = tkinter.Tk()
   root.withdraw()
 
   if len(sys.argv) == 2:
