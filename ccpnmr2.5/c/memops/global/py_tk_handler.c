@@ -562,7 +562,7 @@ static PyObject *new_py_tk_handler(PyObject *widget)
     if (!tk_handler)
 	 RETURN_OBJ_ERROR("allocating Tk_handler object");
 
-    PY_MALLOC(obj, struct Py_Tk_handler, &Tk_handler_type);
+    obj = (Py_Tk_handler) PyObject_New(struct Py_Tk_handler, &Tk_handler_type);
 
     if (!obj)
     {
@@ -583,7 +583,7 @@ static void delete_py_tk_handler(PyObject *self)
 
     delete_tk_handler(tk_handler);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -595,7 +595,7 @@ static int print_py_tk_handler(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_tk_handler(PyObject *self, char *name)
+static PyObject *getattr_py_tk_handler(PyObject *self, PyObject *attr_name)
 {
 /*
     Tk_handler *obj = (Tk_handler *) self;
@@ -609,7 +609,7 @@ static PyObject *getattr_py_tk_handler(PyObject *self, char *name)
 	return get_Tk_handler_format(a);
     else
 */
-	return Py_FindMethod(py_handler_methods, self, name);
+	return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -642,23 +642,44 @@ static PySequenceMethods Tk_handler_sequence_methods =
 
 static PyTypeObject Tk_handler_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "TkHandler", /* name */
-    sizeof(struct Py_Tk_handler), /* basicsize */
-    0, /* itemsize */
-    delete_py_tk_handler, /* destructor */
-    0, /* printfunc */
-    getattr_py_tk_handler, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Tk_handler_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "TkHandler",                           /* tp_name */
+    sizeof(struct Py_Tk_handler),           /* tp_basicsize */
+    0,                                      /* tp_itemsize */
+    (destructor) delete_py_tk_handler,      /* tp_dealloc */
+    0,                                      /* tp_vectorcall */
+    0,                                      /* tp_getattr */
+    0,                                      /* tp_setattr */
+    0,                                      /* tp_as_async */
+    0,                                      /* tp_repr */
+    0,                                      /* tp_as_number */
+    0,                                      /* tp_as_sequence */
+    0,                                      /* tp_as_mapping */
+    0,                                      /* tp_hash */
+    0,                                      /* tp_call */
+    0,                                      /* tp_str */
+    (getattrofunc) getattr_py_tk_handler,   /* tp_getattro */
+    0,                                      /* tp_setattro */
+    0,                                      /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                     /* tp_flags */
+    "TkHandler -- Tk window drawing handler", /* tp_doc */
+    0,                                      /* tp_traverse */
+    0,                                      /* tp_clear */
+    0,                                      /* tp_richcompare */
+    0,                                      /* tp_weaklistoffset */
+    0,                                      /* tp_iter */
+    0,                                      /* tp_iternext */
+    py_handler_methods,                     /* tp_methods */
+    0,                                      /* tp_members */
+    0,                                      /* tp_getset */
+    0,                                      /* tp_base */
+    0,                                      /* tp_dict */
+    0,                                      /* tp_descr_get */
+    0,                                      /* tp_descr_set */
+    0,                                      /* tp_dictoffset */
+    0,                                      /* tp_init */
+    0,                                      /* tp_alloc */
+    0,                                      /* tp_new */
 };
 
 /*****************************************************************************
@@ -702,22 +723,37 @@ static struct PyMethodDef Tk_handler_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initTkHandler(void)
+static struct PyModuleDef tk_handler_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "TkHandler",
+    "CCPNMR TkHandler module (Python 3 compatible)",
+    -1,
+    Tk_handler_type_methods
+};
 
-#ifdef WIN64
-    Tk_handler_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("TkHandler", Tk_handler_type_methods);
+PyMODINIT_FUNC PyInit_TkHandler(void)
+{
+    if (PyType_Ready(&Tk_handler_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&tk_handler_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("TkHandler.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module TkHandler");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

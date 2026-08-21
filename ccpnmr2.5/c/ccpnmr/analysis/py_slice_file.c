@@ -198,7 +198,7 @@ static PyObject *new_py_slice_file(int orient, int dim,
     if (!slice_file)
         RETURN_OBJ_ERROR("allocating Slice_file object");
 
-    PY_MALLOC(obj, struct Py_Slice_file, &Slice_file_type);
+    obj = (Py_Slice_file) PyObject_New(struct Py_Slice_file, &Slice_file_type);
 
     if (!obj)
     {
@@ -223,7 +223,7 @@ static void delete_py_slice_file(PyObject *self)
 
     delete_slice_file(slice_file);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -235,15 +235,19 @@ static int print_py_slice_file(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_slice_file(PyObject *self, char *name)
+static PyObject *getattr_py_slice_file(PyObject *self, PyObject *attr_name)
 {
     Py_Slice_file obj = (Py_Slice_file) self;
     Slice_file slice_file = obj->slice_file;
 
-    if (equal_strings(name, "dim"))
-        return Py_BuildValue("i", slice_file->dim);
-    else
-        return Py_FindMethod(py_handler_methods, self, name);
+    if (PyUnicode_Check(attr_name))
+    {
+        const char *name = PyUnicode_AsUTF8(attr_name);
+        if (name && strcmp(name, "dim") == 0)
+            return Py_BuildValue("i", slice_file->dim);
+    }
+
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -276,23 +280,44 @@ static PySequenceMethods Slice_file_sequence_methods =
 
 static PyTypeObject Slice_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "SliceFile", /* name */
-    sizeof(struct Py_Slice_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_slice_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_slice_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Slice_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "SliceFile",                                 /* tp_name */
+    sizeof(struct Py_Slice_file),                 /* tp_basicsize */
+    0,                                            /* tp_itemsize */
+    (destructor) delete_py_slice_file,            /* tp_dealloc */
+    0,                                            /* tp_vectorcall */
+    0,                                            /* tp_getattr */
+    0,                                            /* tp_setattr */
+    0,                                            /* tp_as_async */
+    0,                                            /* tp_repr */
+    0,                                            /* tp_as_number */
+    0,                                            /* tp_as_sequence */
+    0,                                            /* tp_as_mapping */
+    0,                                            /* tp_hash */
+    0,                                            /* tp_call */
+    0,                                            /* tp_str */
+    (getattrofunc) getattr_py_slice_file,         /* tp_getattro */
+    0,                                            /* tp_setattro */
+    0,                                            /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                           /* tp_flags */
+    "SliceFile -- contour slice file",            /* tp_doc */
+    0,                                            /* tp_traverse */
+    0,                                            /* tp_clear */
+    0,                                            /* tp_richcompare */
+    0,                                            /* tp_weaklistoffset */
+    0,                                            /* tp_iter */
+    0,                                            /* tp_iternext */
+    py_handler_methods,                           /* tp_methods */
+    0,                                            /* tp_members */
+    0,                                            /* tp_getset */
+    0,                                            /* tp_base */
+    0,                                            /* tp_dict */
+    0,                                            /* tp_descr_get */
+    0,                                            /* tp_descr_set */
+    0,                                            /* tp_dictoffset */
+    0,                                            /* tp_init */
+    0,                                            /* tp_alloc */
+    0,                                            /* tp_new */
 };
 
 /*****************************************************************************
@@ -340,22 +365,37 @@ static struct PyMethodDef Slice_file_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initSliceFile(void)
+static struct PyModuleDef slice_file_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "SliceFile",
+    "CCPNMR SliceFile module (Python 3 compatible)",
+    -1,
+    Slice_file_type_methods
+};
 
-#ifdef WIN64
-    Slice_file_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("SliceFile", Slice_file_type_methods);
+PyMODINIT_FUNC PyInit_SliceFile(void)
+{
+    if (PyType_Ready(&Slice_file_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&slice_file_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("SliceFile.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module SliceFile");
+    return m;
 }

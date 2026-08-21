@@ -35,6 +35,13 @@ MEC   = "ccpnmr2.5/c/other/meccano"
 #   conda create -n ccpnmr-gsl -c conda-forge gsl
 GSL   = os.environ.get("CCP_GSL_PREFIX", "/home/logan/software/anaconda3/envs/ccpnmr-gsl")
 
+# Tcl/Tk header prefix for the window-handler exts (GlHandler, TkHandler).
+# The project venv's Python (Anaconda base) ships tk 8.6 headers; link libs
+# resolve to the system tk8.6 (same SONAME) at import time.
+TKINC = os.path.join(os.environ.get("CCP_TK_PREFIX", "/home/logan/software/anaconda3"), "include")
+# X11 symbols are resolved via a versioned direct link (no -dev symlink needed).
+X11LINK = "-l:libX11.so.6"
+
 CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
 
 
@@ -58,6 +65,18 @@ GMEM = [f"{G}/hash_list.c", f"{G}/hash_table.c", f"{G}/mem_cache.c",
         f"{G}/mutex.c", f"{G}/py_mem_cache.c"]                   # +GU below
 GBLK = GMEM + [f"{G}/block_file.c", f"{G}/shape_file.c", f"{G}/int_array.c",
                f"{G}/py_block_file.c", f"{G}/py_shape_file.c"]   # block-file I/O
+
+# Shared drawing/IO dep set.  py_draw_handler wraps every handler backend, so
+# pull in the full handler chain (gl/tk/pdf/ps/store) with cores:
+DRAWDEPS = [f"{G}/py_draw_handler.c",
+            f"{G}/py_store_handler.c", f"{G}/store_handler.c",
+            f"{G}/py_pdf_handler.c", f"{G}/pdf_handler.c",
+            f"{G}/py_ps_handler.c", f"{G}/ps_handler.c",
+            f"{G}/py_gl_handler.c", f"{G}/gl_handler.c",
+            f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
+            f"{G}/clipping.c"]
+DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
+DRAWINC_EXTRA = [TKINC]
 
 # ------------------------------------------------------------------ family defs
 # name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
@@ -121,6 +140,29 @@ FAM = {
                         + GU + GBLK + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"],
                         [ANA, G], ["m"]),
 
+    # --- analysis, Py3-migrated Phase 4 (import:  ccpnmr.c.<Name>) ----------
+    "WinPeakList":     ([f"{ANA}/py_win_peak_list.c", f"{ANA}/win_peak_list.c",
+                         f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
+                         f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
+                        + DRAWDEPS + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"] + GU + GBLK,
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+    "PeakCluster":     ([f"{ANA}/py_peak_cluster.c", f"{ANA}/peak_cluster.c",
+                         f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/symbol.c",
+                         f"{ANA}/py_peak.c", f"{G}/nonlinear_model.c",
+                         f"{G}/gauss_jordan.c"]
+                        + DRAWDEPS + GU + GBLK, [ANA, G] + DRAWINC_EXTRA, DRAWLIBS,
+                        (), (), [X11LINK]),
+    "ContourFile":     ([f"{ANA}/py_contour_file.c", f"{ANA}/contour_file.c",
+                         f"{ANA}/contour_data.c", f"{ANA}/contour_levels.c",
+                         f"{ANA}/contour_style.c", f"{ANA}/py_contour_levels.c",
+                         f"{ANA}/py_contour_style.c"]
+                        + DRAWDEPS + GU + GBLK + [f"{G}/store_file.c", f"{G}/py_store_file.c",
+                                                   f"{G}/contourer.c"],
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+    "SliceFile":       ([f"{ANA}/py_slice_file.c", f"{ANA}/slice_file.c"]
+                        + DRAWDEPS + GU + GBLK,
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+
     # --- ccp structure, Tier-1 (import:  ccp.c.<Name>) ----------------------
     "StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
                         + [f"{G}/color.c"] + GU, [STR, G], []),
@@ -129,12 +171,29 @@ FAM = {
     "StructUtil":      ([f"{STR}/py_struct_util.c", f"{STR}/struct_util.c"]
                         + [f"{G}/geometry.c", f"{G}/eigenvalue.c", f"{G}/linalg.c"] + GU,
                         [STR, G], ["m"]),
+    "StructStructure": ([f"{STR}/py_structure.c", f"{STR}/structure.c",
+                         f"{STR}/atom.c", f"{STR}/bond.c", f"{STR}/struct_util.c",
+                         f"{STR}/py_atom.c", f"{STR}/py_bond.c"]
+                        + DRAWDEPS + [f"{G}/color.c", f"{G}/geometry.c", f"{G}/eigenvalue.c",
+                                      f"{G}/linalg.c", f"{G}/sorts.c"] + GU,
+                        [STR, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
 
     # --- cambridge bayes (import:  cambridge.c.BayesPeakSeparator) ----------
     "BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
                         f"{BAYES}/app.c", f"{BAYES}/distribution.c", f"{BAYES}/random.c",
                         f"{BAYES}/hilbert.c", f"{BAYES}/bayesys3.c"]
                         + GU + GBLK, [BAYES, G], ["m"]),
+
+    # --- memops window handlers (Tier-2: needs Tk/TK headers + GL/glut/X11) --
+    # import:  memops.c.GlHandler / memops.c.TkHandler
+    "GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
+                         f"{G}/clipping.c"]
+                        + GU, [G, TKINC], ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        (), (), [X11LINK]),
+    "TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
+                         f"{G}/clipping.c"]
+                        + GU, [G, TKINC], ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        (), (), [X11LINK]),
 
     # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
     "Meccano":         ([f"{MEC}/pysrc/py_meccano.c",

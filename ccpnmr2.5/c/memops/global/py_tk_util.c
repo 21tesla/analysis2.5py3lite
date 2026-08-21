@@ -129,7 +129,7 @@ Tk_Window get_tk_window(PyObject *widget, Tcl_Interp *tcl_interp,
             tk_count = (int) Tk_GetNumMainWindows();
             if (tk_main_win)
             {
-                path = PyString_AsString(o);
+                path = (char *) PyUnicode_AsUTF8(o);
                 tk_display_win = Tk_NameToWindow(tcl_interp, path, tk_main_win);
             }
             else

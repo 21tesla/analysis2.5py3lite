@@ -126,9 +126,7 @@ static PyObject *removeAtom(PyObject *self, PyObject *args)
 	RETURN_OBJ_ERROR(error_msg);
     }
 
-    methods = atom_list->ob_type->tp_methods;
-    func = PyCFunction_GetFunction(Py_FindMethod(methods, atom_list, "remove"));
-    if ((func)(atom_list, atom_obj) == NULL)
+    if (PyObject_CallMethod(atom_list, "remove", "O", atom_obj) == NULL)
     {
 	sprintf(error_msg, "removing atom_obj");
 	RETURN_OBJ_ERROR(error_msg);
@@ -232,9 +230,7 @@ static PyObject *removeBond(PyObject *self, PyObject *args)
 	RETURN_OBJ_ERROR(error_msg);
     }
 
-    methods = bond_list->ob_type->tp_methods;
-    func = PyCFunction_GetFunction(Py_FindMethod(methods, bond_list, "remove"));
-    if ((func)(bond_list, bond_obj) == NULL)
+    if (PyObject_CallMethod(bond_list, "remove", "O", bond_obj) == NULL)
     {
 	sprintf(error_msg, "removing bond_obj");
 	RETURN_OBJ_ERROR(error_msg);
@@ -464,7 +460,7 @@ static PyObject *new_py_structure(void)
     if (!structure)
 	RETURN_OBJ_ERROR("allocating Structure object");
 
-    PY_MALLOC(obj, struct Py_Structure, &Structure_type);
+    obj = (Py_Structure) PyObject_New(struct Py_Structure, &Structure_type);
 
     obj->atom_list = PyList_New(0);
     obj->bond_list = PyList_New(0);
@@ -494,7 +490,7 @@ static void delete_py_structure(PyObject *self)
 
     Py_DECREF(obj->atom_list);
     Py_DECREF(obj->bond_list);
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -506,7 +502,7 @@ static int print_py_structure(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_structure(PyObject *self, char *name)
+static PyObject *getattr_py_structure(PyObject *self, PyObject *attr_name)
 {
 /*
     Structure *obj = (Structure *) self;
@@ -520,7 +516,7 @@ static PyObject *getattr_py_structure(PyObject *self, char *name)
 	return get_Structure_format(a);
     else
 */
-	return Py_FindMethod(py_handler_methods, self, name);
+	return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -553,23 +549,44 @@ static PySequenceMethods Structure_sequence_methods =
 
 static PyTypeObject Structure_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "StructStructure", /* name */
-    sizeof(struct Py_Structure), /* basicsize */
-    0, /* itemsize */
-    delete_py_structure, /* destructor */
-    0, /* printfunc */
-    getattr_py_structure, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Structure_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "StructStructure",                         /* tp_name */
+    sizeof(struct Py_Structure),                /* tp_basicsize */
+    0,                                          /* tp_itemsize */
+    (destructor) delete_py_structure,           /* tp_dealloc */
+    0,                                          /* tp_vectorcall */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    0,                                          /* tp_as_async */
+    0,                                          /* tp_repr */
+    0,                                          /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    0,                                          /* tp_call */
+    0,                                          /* tp_str */
+    (getattrofunc) getattr_py_structure,        /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                         /* tp_flags */
+    "StructStructure -- molecular structure",   /* tp_doc */
+    0,                                          /* tp_traverse */
+    0,                                          /* tp_clear */
+    0,                                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    0,                                          /* tp_iter */
+    0,                                          /* tp_iternext */
+    py_handler_methods,                         /* tp_methods */
+    0,                                          /* tp_members */
+    0,                                          /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    0,                                          /* tp_new */
 };
 
 /*****************************************************************************
@@ -615,22 +632,37 @@ static struct PyMethodDef Structure_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initStructStructure(void)
+static struct PyModuleDef structure_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "StructStructure",
+    "CCPNMR StructStructure module (Python 3 compatible)",
+    -1,
+    Structure_type_methods
+};
 
-#ifdef WIN64
-    Structure_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("StructStructure", Structure_type_methods);
+PyMODINIT_FUNC PyInit_StructStructure(void)
+{
+    if (PyType_Ready(&Structure_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&structure_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("StructStructure.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
-    
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module StructStructure");
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
+
+    return m;
 }

@@ -184,7 +184,7 @@ static PyObject *new_py_contour_file(int xdim, int ydim,
     if (!contour_file)
         RETURN_OBJ_ERROR(error_msg);
 
-    PY_MALLOC(obj, struct Py_Contour_file, &Contour_file_type);
+    obj = (Py_Contour_file) PyObject_New(struct Py_Contour_file, &Contour_file_type);
 
     if (!obj)
     {
@@ -209,7 +209,7 @@ static void delete_py_contour_file(PyObject *self)
 
     delete_contour_file(contour_file);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -221,20 +221,30 @@ static int print_py_contour_file(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_contour_file(PyObject *self, char *name)
+static PyObject *getattr_py_contour_file(PyObject *self, PyObject *attr_name)
 {
     Py_Contour_file obj = (Py_Contour_file) self;
     Contour_file contour_file = obj->contour_file;
+    const char *name;
 
-    if (equal_strings(name, "xdim"))
+    if (!PyUnicode_Check(attr_name))
+    {
+        PyErr_SetString(ErrorObject, "attribute name must be a string");
+        return NULL;
+    }
+    name = PyUnicode_AsUTF8(attr_name);
+    if (!name)
+        return NULL;
+
+    if (strcmp(name, "xdim") == 0)
     {
         return Py_BuildValue("i", contour_file->xdim);
     }
-    else if (equal_strings(name, "ydim"))
+    else if (strcmp(name, "ydim") == 0)
     {
         return Py_BuildValue("i", contour_file->ydim);
     }
-    else if (equal_strings(name, "have_neg"))
+    else if (strcmp(name, "have_neg") == 0)
     {
         if (contour_file->store_file)
             return Py_BuildValue("i", contour_file->store_file->have_neg);
@@ -243,7 +253,7 @@ static PyObject *getattr_py_contour_file(PyObject *self, char *name)
         else
             RETURN_OBJ_ERROR("do not have valid attribute have_neg");
     }
-    else if (equal_strings(name, "have_pos"))
+    else if (strcmp(name, "have_pos") == 0)
     {
         if (contour_file->store_file)
             return Py_BuildValue("i", contour_file->store_file->have_pos);
@@ -254,7 +264,7 @@ static PyObject *getattr_py_contour_file(PyObject *self, char *name)
     }
     else
     {
-        return Py_FindMethod(py_handler_methods, self, name);
+        return PyObject_GenericGetAttr(self, attr_name);
     }
 }
 
@@ -288,23 +298,44 @@ static PySequenceMethods Contour_file_sequence_methods =
 
 static PyTypeObject Contour_file_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "ContourFile", /* name */
-    sizeof(struct Py_Contour_file), /* basicsize */
-    0, /* itemsize */
-    delete_py_contour_file, /* destructor */
-    0, /* printfunc */
-    getattr_py_contour_file, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Contour_file_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "ContourFile",                               /* tp_name */
+    sizeof(struct Py_Contour_file),               /* tp_basicsize */
+    0,                                            /* tp_itemsize */
+    (destructor) delete_py_contour_file,          /* tp_dealloc */
+    0,                                            /* tp_vectorcall */
+    0,                                            /* tp_getattr */
+    0,                                            /* tp_setattr */
+    0,                                            /* tp_as_async */
+    0,                                            /* tp_repr */
+    0,                                            /* tp_as_number */
+    0,                                            /* tp_as_sequence */
+    0,                                            /* tp_as_mapping */
+    0,                                            /* tp_hash */
+    0,                                            /* tp_call */
+    0,                                            /* tp_str */
+    (getattrofunc) getattr_py_contour_file,       /* tp_getattro */
+    0,                                            /* tp_setattro */
+    0,                                            /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                           /* tp_flags */
+    "ContourFile -- contour display file",        /* tp_doc */
+    0,                                            /* tp_traverse */
+    0,                                            /* tp_clear */
+    0,                                            /* tp_richcompare */
+    0,                                            /* tp_weaklistoffset */
+    0,                                            /* tp_iter */
+    0,                                            /* tp_iternext */
+    py_handler_methods,                           /* tp_methods */
+    0,                                            /* tp_members */
+    0,                                            /* tp_getset */
+    0,                                            /* tp_base */
+    0,                                            /* tp_dict */
+    0,                                            /* tp_descr_get */
+    0,                                            /* tp_descr_set */
+    0,                                            /* tp_dictoffset */
+    0,                                            /* tp_init */
+    0,                                            /* tp_alloc */
+    0,                                            /* tp_new */
 };
 
 /*****************************************************************************
@@ -384,22 +415,37 @@ static struct PyMethodDef Contour_file_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initContourFile(void)
+static struct PyModuleDef contour_file_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "ContourFile",
+    "CCPNMR ContourFile module (Python 3 compatible)",
+    -1,
+    Contour_file_type_methods
+};
 
-#ifdef WIN64
-    Contour_file_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("ContourFile", Contour_file_type_methods);
+PyMODINIT_FUNC PyInit_ContourFile(void)
+{
+    if (PyType_Ready(&Contour_file_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&contour_file_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("ContourFile.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module ContourFile");
+    return m;
 }

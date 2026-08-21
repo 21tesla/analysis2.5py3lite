@@ -243,7 +243,7 @@ static PyObject *new_py_win_peak_list(Peak_list peak_list, Bool hasValueAxis)
     if (!win_peak_list)
         RETURN_OBJ_ERROR("allocating Win_peak_list object");
 
-    PY_MALLOC(obj, struct Py_Win_peak_list, &Win_peak_list_type);
+    obj = (Py_Win_peak_list) PyObject_New(struct Py_Win_peak_list, &Win_peak_list_type);
 
     if (!obj)
     {
@@ -268,7 +268,7 @@ static void delete_py_win_peak_list(PyObject *self)
 
     delete_win_peak_list(win_peak_list);
 
-    PY_FREE(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 /*
@@ -280,7 +280,7 @@ static int print_py_win_peak_list(PyObject *self, FILE *fp, int flags)
 }
 */
 
-static PyObject *getattr_py_win_peak_list(PyObject *self, char *name)
+static PyObject *getattr_py_win_peak_list(PyObject *self, PyObject *attr_name)
 {
     /*
         Win_peak_list *obj = (Win_peak_list *) self;
@@ -294,7 +294,7 @@ static PyObject *getattr_py_win_peak_list(PyObject *self, char *name)
     	return get_Win_peak_list_format(a);
         else
     */
-    return Py_FindMethod(py_handler_methods, self, name);
+    return PyObject_GenericGetAttr(self, attr_name);
 }
 
 /*****************************************************************************
@@ -327,23 +327,44 @@ static PySequenceMethods Win_peak_list_sequence_methods =
 
 static PyTypeObject Win_peak_list_type =
 {
-#ifdef WIN64
-    1, NULL,
-#else
-    PyObject_HEAD_INIT(&PyType_Type)
-#endif
-    0,
-    "WinPeakList", /* name */
-    sizeof(struct Py_Win_peak_list), /* basicsize */
-    0, /* itemsize */
-    delete_py_win_peak_list, /* destructor */
-    0, /* printfunc */
-    getattr_py_win_peak_list, /* getattr */
-    0, /* setattr */
-    0, /* cmpfunc */
-    0, /* reprfunc */
-    0, /* PyNumberMethods */
-    /*&Win_peak_list_sequence_methods*/ /* PySequenceMethods */
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "WinPeakList",                               /* tp_name */
+    sizeof(struct Py_Win_peak_list),              /* tp_basicsize */
+    0,                                            /* tp_itemsize */
+    (destructor) delete_py_win_peak_list,         /* tp_dealloc */
+    0,                                            /* tp_vectorcall */
+    0,                                            /* tp_getattr */
+    0,                                            /* tp_setattr */
+    0,                                            /* tp_as_async */
+    0,                                            /* tp_repr */
+    0,                                            /* tp_as_number */
+    0,                                            /* tp_as_sequence */
+    0,                                            /* tp_as_mapping */
+    0,                                            /* tp_hash */
+    0,                                            /* tp_call */
+    0,                                            /* tp_str */
+    (getattrofunc) getattr_py_win_peak_list,      /* tp_getattro */
+    0,                                            /* tp_setattro */
+    0,                                            /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,                           /* tp_flags */
+    "WinPeakList -- window peak list",            /* tp_doc */
+    0,                                            /* tp_traverse */
+    0,                                            /* tp_clear */
+    0,                                            /* tp_richcompare */
+    0,                                            /* tp_weaklistoffset */
+    0,                                            /* tp_iter */
+    0,                                            /* tp_iternext */
+    py_handler_methods,                           /* tp_methods */
+    0,                                            /* tp_members */
+    0,                                            /* tp_getset */
+    0,                                            /* tp_base */
+    0,                                            /* tp_dict */
+    0,                                            /* tp_descr_get */
+    0,                                            /* tp_descr_set */
+    0,                                            /* tp_dictoffset */
+    0,                                            /* tp_init */
+    0,                                            /* tp_alloc */
+    0,                                            /* tp_new */
 };
 
 /*****************************************************************************
@@ -394,22 +415,37 @@ static struct PyMethodDef Win_peak_list_type_methods[] =
 * object-file found on PYTHONPATH. File and function names matter if dynamic.
 ******************************************************************************/
 
-PY_MOD_INIT_FUNC initWinPeakList(void)
+static struct PyModuleDef win_peak_list_module_def =
 {
-    PyObject *m, *d;
+    PyModuleDef_HEAD_INIT,
+    "WinPeakList",
+    "CCPNMR WinPeakList module (Python 3 compatible)",
+    -1,
+    Win_peak_list_type_methods
+};
 
-#ifdef WIN64
-    Win_peak_list_type.ob_type = &PyType_Type;
-#endif
-    /* create the module and add the functions */
-    m = Py_InitModule("WinPeakList", Win_peak_list_type_methods);
+PyMODINIT_FUNC PyInit_WinPeakList(void)
+{
+    if (PyType_Ready(&Win_peak_list_type) < 0)
+        return NULL;
 
-    /* create exception object and add to module */
+    PyObject *m = PyModule_Create(&win_peak_list_module_def);
+    if (!m)
+        return NULL;
+
     ErrorObject = PyErr_NewException("WinPeakList.error", NULL, NULL);
+    if (!ErrorObject)
+    {
+        Py_DECREF(m);
+        return NULL;
+    }
     Py_INCREF(ErrorObject);
-    PyModule_AddObject(m, "error", ErrorObject);
+    if (PyDict_SetItemString(PyModule_GetDict(m), "error", ErrorObject) < 0)
+    {
+        Py_DECREF(ErrorObject);
+        Py_DECREF(m);
+        return NULL;
+    }
 
-    /* check for errors */
-    if (PyErr_Occurred())
-        Py_FatalError("can't initialize module WinPeakList");
+    return m;
 }

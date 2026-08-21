@@ -50,7 +50,29 @@ Only `ccpnmr.analysis.AnalysisGui:main` exists (`def main`, line 84). 7 modules 
 - Verify: `pip install -e . --no-deps` in .venv → 8 scripts exist; `hasattr`/signature check;
   GUI ones boot-tested in P4-5.
 
-### P4-4a — Migrate + build the 7 remaining stale-py2 C exts — status: NEW (key finding 2026-08-21)
+### P4-4a — Migrate + build the 7 remaining stale-py2 C exts — status: DONE (commit pending)
+**RESULT 7/7 import OK + functional smoke OK + the 6 GUI modules that used to print
+"Will continue without ... C functionality" now import CLEAN (no degraded path):**
+ccpnmr.analysis.frames.WindowFrame, ccpnmr.analysis.Analysis, ccp.gui.ViewStructureFrame,
+ccp.gui.ViewChemCompVarFrame, ccpnmr.analysis.core.WindowDraw, ccpnmr.analysis.core.DataAnalysisBasic.
+Functional: `StructStructure()` instance API (addAtom/addBond/draw/.../zoom) OK;
+`PeakCluster(3,0)`/`(3,2)` OK (addPeak/draw/removePeak/...); ContourFile exposes ContourFile+StoredContourFile.
+
+**Migrated (recipe = `_phase2a_recipe.md`, verbatim):** py_gl_handler.c, py_tk_handler.c,
+py_structure.c (PLUS 2 stale `Py_FindMethod(methods, obj, "remove")` → `PyObject_CallMethod(obj,"remove","O",obj)`),
+py_win_peak_list.c, py_peak_cluster.c, py_contour_file.c (real getattr dispatch → PyUnicode_AsUTF8+strcmp),
+py_slice_file.c (ditto). ALSO py_tk_util.c: `PyString_AsString` → `(char*)PyUnicode_AsUTF8`.
+setup.py: +7 FAM entries; new infra: `TKINC` (env CCP_TK_PREFIX), `X11LINK=-l:libX11.so.6`,
+`DRAWDEPS`/`DRAWLIBS` (py_draw_handler pulls the whole handler chain gl/tk/pdf/ps/store + cores;
+analysis exts statically embed them as the stale .so's did). ContourFile also needs `{G}/contourer.c`.
+BUILD: `CC=/usr/bin/gcc CXX=/usr/bin/g++ CCP_EXT=<7 names> .venv/bin/python setup.py build_ext --inplace --force`
+(--force REQUIRED when the source list changes; system gcc because anaconda gcc lacks GL/tk in its sysroot;
+tk.h/tcl.h from anaconda include). Copy flat .so (`ccpnmr2.5/python/<Name>.cpython-313*.so`) onto c-tree targets:
+`c/memops/global/{Gl,Tk}Handler.so`, `c/ccp/structure/StructStructure.so`,
+`c/ccpnmr/analysis/{WinPeakList,PeakCluster,ContourFile,SliceFile}.so` (= symlink targets, tracked in git).
+Lesson: setuptools up-to-date check ignores source-LIST changes → always `--force` when FAM entries change.
+
+### P4-4a (legacy) — Migrate + build the 7 remaining stale-py2 C exts — finding 2026-08-21
 **Finding:** app prints "will continue without ... C functionality" because 7 exts are stale **py2**
 `.so` files (`undefined symbol: PyInt_AsLong`), never in setup.py (that's why Phase 2a left them out):
 - `memops/c/GlHandler.so` — window GL drawing
