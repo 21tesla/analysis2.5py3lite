@@ -1645,7 +1645,7 @@ Cell, Substance and Composite.
     dataDict = self.__dict__
     sortdd = dataDict.get('componentDbRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1670,7 +1670,7 @@ Cell, Substance and Composite.
     dataDict = self.__dict__
     sortdd = dataDict.get('labels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11526,7 +11526,7 @@ class RefSampleComponentStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('components')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -12484,7 +12484,7 @@ as both are valid together.
     dataDict = self.__dict__
     sortdd = dataDict.get('isotopeLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -16805,7 +16805,7 @@ so is lysozyme.
     dataDict = self.__dict__
     sortdd = dataDict.get('molCompFeatures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -16886,7 +16886,7 @@ so is lysozyme.
     dataDict = self.__dict__
     sortdd = dataDict.get('specificLabelGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20456,7 +20456,7 @@ plasmids.
     dataDict = self.__dict__
     sortdd = dataDict.get('elements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20468,7 +20468,7 @@ plasmids.
     dataDict = self.__dict__
     sortdd = dataDict.get('interactions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

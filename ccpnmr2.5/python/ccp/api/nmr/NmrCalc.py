@@ -3429,7 +3429,7 @@ class NmrCalcStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('runs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7084,7 +7084,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('data')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7132,7 +7132,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('runParameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -27113,7 +27113,7 @@ class EnergyTerm(ConstraintStoreData):
     dataDict = self.__dict__
     sortdd = dataDict.get('energyTermParameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

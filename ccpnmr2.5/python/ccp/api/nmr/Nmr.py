@@ -3107,7 +3107,7 @@ abstractDataDim.dim need not be equal to the corresponding expDim.dim.
     dataDict = self.__dict__
     sortdd = dataDict.get('dimensionScalings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13298,7 +13298,7 @@ Links: to the residues changing conformation.
     dataDict = self.__dict__
     sortdd = dataDict.get('chainStates')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20911,7 +20911,7 @@ such does not include the actual data matrix
     dataDict = self.__dict__
     sortdd = dataDict.get('dataDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20923,7 +20923,7 @@ such does not include the actual data matrix
     dataDict = self.__dict__
     sortdd = dataDict.get('dataSourceImages')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20935,7 +20935,7 @@ such does not include the actual data matrix
     dataDict = self.__dict__
     sortdd = dataDict.get('peakLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -20978,7 +20978,7 @@ such does not include the actual data matrix
     dataDict = self.__dict__
     sortdd = dataDict.get('sparseSamplings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -26310,7 +26310,7 @@ class ExpDim(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('expDimRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -30295,7 +30295,7 @@ with a DimensionScaling
     dataDict = self.__dict__
     sortdd = dataDict.get('expDimRefMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41115,7 +41115,7 @@ of ExpDims as well.
     dataDict = self.__dict__
     sortdd = dataDict.get('dataSources')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41170,7 +41170,7 @@ of ExpDims as well.
     dataDict = self.__dict__
     sortdd = dataDict.get('expChainStates')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41182,7 +41182,7 @@ of ExpDims as well.
     dataDict = self.__dict__
     sortdd = dataDict.get('expDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41194,7 +41194,7 @@ of ExpDims as well.
     dataDict = self.__dict__
     sortdd = dataDict.get('expTransfers')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47875,7 +47875,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('atomSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47890,7 +47890,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('chainStateSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47905,7 +47905,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('derivedDataLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47920,7 +47920,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('experiments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47935,7 +47935,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('measurementLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47976,7 +47976,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('nmrExpSeries')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -47991,7 +47991,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('peakClusters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48006,7 +48006,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('resonanceGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48021,7 +48021,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('resonanceSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48036,7 +48036,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('resonances')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48051,7 +48051,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('sampleConditionSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48066,7 +48066,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('shiftReferences')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48081,7 +48081,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('structureAnalyses')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -48096,7 +48096,7 @@ class NmrProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('structureGenerations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -53224,7 +53224,7 @@ class Peak(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('peakContribs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -53236,7 +53236,7 @@ class Peak(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('peakDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -53248,7 +53248,7 @@ class Peak(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('peakIntensities')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -59283,7 +59283,7 @@ decayRate.
     dataDict = self.__dict__
     sortdd = dataDict.get('peakDimComponents')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -59295,7 +59295,7 @@ decayRate.
     dataDict = self.__dict__
     sortdd = dataDict.get('peakDimContribs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -65819,7 +65819,7 @@ class PeakList(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('peaks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -75680,7 +75680,7 @@ general permits greater flexibility.
     dataDict = self.__dict__
     sortdd = dataDict.get('resonanceProbs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -80834,7 +80834,7 @@ status of the ResonanceGroup as a vehicle for tentative assignments.
     dataDict = self.__dict__
     sortdd = dataDict.get('residueProbs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -80846,7 +80846,7 @@ status of the ResonanceGroup as a vehicle for tentative assignments.
     dataDict = self.__dict__
     sortdd = dataDict.get('residueTypeProbs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -80858,7 +80858,7 @@ status of the ResonanceGroup as a vehicle for tentative assignments.
     dataDict = self.__dict__
     sortdd = dataDict.get('resonanceGroupProbs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -86642,7 +86642,7 @@ class SampleConditionSet(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('sampleConditions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -94960,7 +94960,7 @@ class SpectralDensityDerivation(AbstractDataDerivation):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivedData')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -95857,7 +95857,7 @@ class IsotropicS2Derivation(AbstractDataDerivation):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivedData')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -96754,7 +96754,7 @@ class DataDerivation(AbstractDataDerivation):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivedData')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -97651,7 +97651,7 @@ class PKaDerivation(AbstractDataDerivation):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivedData')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -100947,7 +100947,7 @@ the original data.
     dataDict = self.__dict__
     sortdd = dataDict.get('dataDimRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -116922,7 +116922,7 @@ class NoeList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -118591,7 +118591,7 @@ identifying information is presented in the 'details' record.
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -120138,7 +120138,7 @@ class ShiftAnisotropyList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -121808,7 +121808,7 @@ shift_in_referenceShiftList
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -123706,7 +123706,7 @@ class T1RhoList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -125622,7 +125622,7 @@ context, and/or that identifying information is presented in the
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -127632,7 +127632,7 @@ class ShiftList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -129081,7 +129081,7 @@ class HExchRateList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -130745,7 +130745,7 @@ class HExchProtectionList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -132297,7 +132297,7 @@ class JCouplingList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -133843,7 +133843,7 @@ class DipolarRelaxList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -135389,7 +135389,7 @@ class RdcList(AbstractMeasurementList):
     dataDict = self.__dict__
     sortdd = dataDict.get('measurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -143654,7 +143654,7 @@ class SpectralDensityList(DerivedDataList):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -145519,7 +145519,7 @@ measurements that do not fit any of the predefined categories.
     dataDict = self.__dict__
     sortdd = dataDict.get('derivations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -147096,7 +147096,7 @@ class IsotropicS2List(DerivedDataList):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -148306,7 +148306,7 @@ class PkaList(DerivedDataList):
     dataDict = self.__dict__
     sortdd = dataDict.get('derivations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

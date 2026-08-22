@@ -1490,7 +1490,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('projectVersions')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1502,7 +1502,7 @@ class Project(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('rawFiles')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7155,7 +7155,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('projects')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7170,7 +7170,7 @@ class WmsSegment(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('tasks')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

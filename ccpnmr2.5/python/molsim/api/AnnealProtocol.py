@@ -2367,7 +2367,7 @@ general terms.
     dataDict = self.__dict__
     sortdd = dataDict.get('annealStages')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2379,7 +2379,7 @@ general terms.
     dataDict = self.__dict__
     sortdd = dataDict.get('energyTerms')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3704,7 +3704,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('annealProtocols')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3719,7 +3719,7 @@ class AnnealProtocolStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('refPotentialTerms')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7642,7 +7642,7 @@ refPotentialTerms
     dataDict = self.__dict__
     sortdd = dataDict.get('potentialScales')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10754,7 +10754,7 @@ interpretation generally requires reference to the application.
     dataDict = self.__dict__
     sortdd = dataDict.get('refTermParameters')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

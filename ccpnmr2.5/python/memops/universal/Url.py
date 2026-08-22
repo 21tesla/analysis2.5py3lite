@@ -183,9 +183,11 @@ def fetchHttpResponse(url, method="GET", data=None, headers=None):
     import os
     import ssl
     import urllib
-    from urllib import urlencode
+    import urllib3
+    from urllib.parse import urlencode
+    from urllib.request import getproxies
 
-    import urllib3.contrib.pyopenssl
+    # urllib3.contrib.pyopenssl is imported lazily below (only when IS_PYOPENSSL)
 
     if not headers:
         headers = {"Content-type": "application/x-www-form-urlencoded;charset=UTF-8", "User-Agent": "ccpn-v2.5.0"}
@@ -231,7 +233,7 @@ def fetchHttpResponse(url, method="GET", data=None, headers=None):
             if proxyUrl:
                 return proxyUrl
 
-    proxyUrl = _getProxyIn(os.environ) or _getProxyIn(urllib.getproxies())
+    proxyUrl = _getProxyIn(os.environ) or _getProxyIn(getproxies())
     # proxy may still not be defined
     if proxyUrl:
         http = urllib3.ProxyManager(proxyUrl, **options)

@@ -3473,7 +3473,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('colorSchemes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3488,7 +3488,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('macros')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3503,7 +3503,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('refExpProfiles')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3518,7 +3518,7 @@ class AnalysisProfile(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('residueProfiles')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

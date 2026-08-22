@@ -1335,7 +1335,7 @@ class Database(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('entries')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

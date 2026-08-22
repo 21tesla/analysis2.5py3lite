@@ -5021,7 +5021,7 @@ class AnalysisPopup(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('popupOptions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13222,7 +13222,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('analysisPopups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13237,7 +13237,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('analysisSpectra')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13252,7 +13252,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisRegionGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13267,7 +13267,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13282,7 +13282,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisUnits')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13297,7 +13297,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('chainMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13312,7 +13312,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('marks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13327,7 +13327,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('panelTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13342,7 +13342,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('rulers')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13357,7 +13357,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('spectrumWindowGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13372,7 +13372,7 @@ class AnalysisProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('spectrumWindows')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17432,7 +17432,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('analysisDataDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17444,7 +17444,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('analysisPeakLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17468,7 +17468,7 @@ class AnalysisSpectrum(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('storedContours')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -26631,7 +26631,7 @@ class ChainMapping(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('residueMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -29637,7 +29637,7 @@ class ResidueMapping(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('atomSetMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -32350,7 +32350,7 @@ simultaneously.
     dataDict = self.__dict__
     sortdd = dataDict.get('spectrumWindowPanes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -35012,7 +35012,7 @@ have one.
     dataDict = self.__dict__
     sortdd = dataDict.get('axisPanels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -35024,7 +35024,7 @@ have one.
     dataDict = self.__dict__
     sortdd = dataDict.get('slicePanels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -35036,7 +35036,7 @@ have one.
     dataDict = self.__dict__
     sortdd = dataDict.get('spectrumWindowViews')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -36470,7 +36470,7 @@ SpectrumWindow being considered.
     dataDict = self.__dict__
     sortdd = dataDict.get('axisMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -36482,7 +36482,7 @@ SpectrumWindow being considered.
     dataDict = self.__dict__
     sortdd = dataDict.get('windowPeakLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -40271,7 +40271,7 @@ class Mark(AbstractMark):
     dataDict = self.__dict__
     sortdd = dataDict.get('markDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41322,7 +41322,7 @@ class AxisPanel(SidePanel):
     dataDict = self.__dict__
     sortdd = dataDict.get('axisRegions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

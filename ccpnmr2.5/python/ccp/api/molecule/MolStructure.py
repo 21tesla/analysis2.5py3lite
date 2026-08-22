@@ -1929,7 +1929,7 @@ a given set of coordinates.
     dataDict = self.__dict__
     sortdd = dataDict.get('coords')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3282,7 +3282,7 @@ class Chain(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('residues')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10304,7 +10304,7 @@ class Residue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('atoms')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -15018,7 +15018,7 @@ trajectory for the MolSystem or part of it.
 
     sortdd = dataDict.get('coordChains')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -15033,7 +15033,7 @@ trajectory for the MolSystem or part of it.
 
     sortdd = dataDict.get('dataMatrices')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -15061,7 +15061,7 @@ trajectory for the MolSystem or part of it.
 
     sortdd = dataDict.get('models')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

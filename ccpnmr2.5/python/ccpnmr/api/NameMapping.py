@@ -5442,7 +5442,7 @@ data model. It is used by the FormatConverter software.
     dataDict = self.__dict__
     sortdd = dataDict.get('atomMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5454,7 +5454,7 @@ data model. It is used by the FormatConverter software.
     dataDict = self.__dict__
     sortdd = dataDict.get('chainMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5466,7 +5466,7 @@ data model. It is used by the FormatConverter software.
     dataDict = self.__dict__
     sortdd = dataDict.get('moleculeMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5478,7 +5478,7 @@ data model. It is used by the FormatConverter software.
     dataDict = self.__dict__
     sortdd = dataDict.get('resLinkMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5490,7 +5490,7 @@ data model. It is used by the FormatConverter software.
     dataDict = self.__dict__
     sortdd = dataDict.get('resStatusMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6574,7 +6574,7 @@ class NameMappingStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('nameMappings')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

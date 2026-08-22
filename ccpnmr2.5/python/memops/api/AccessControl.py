@@ -1642,7 +1642,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
         sortdd = dataDict.get("accessObjects")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -1657,7 +1657,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
         sortdd = dataDict.get("userGroups")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -1672,7 +1672,7 @@ class AccessControlStore(memops.api.Implementation.TopObject):
 
         sortdd = dataDict.get("users")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -2892,7 +2892,7 @@ class AccessObject(memops.api.Implementation.DataObject):
         dataDict = self.__dict__
         sortdd = dataDict.get("permissions")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result

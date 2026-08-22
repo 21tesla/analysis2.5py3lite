@@ -1272,7 +1272,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('organisations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1287,7 +1287,7 @@ class AffiliationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('persons')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5716,7 +5716,7 @@ class Organisation(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('groups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13666,7 +13666,7 @@ class Person(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('personInGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

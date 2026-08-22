@@ -515,6 +515,8 @@ def downloadChemCompInfoFromCcpForge(repository, molType, ccpCode, sourceName=No
         request = fetchHttpResponse(ccpForgeIndexUrl)
         ccIndex = request.read()
         request.close()
+        if isinstance(ccIndex, bytes):
+            ccIndex = ccIndex.decode("utf-8")
         csvString = StringIO(ccIndex)
         df = pd.read_csv(csvString)
 
@@ -544,6 +546,8 @@ def downloadChemCompInfoFromCcpForge(repository, molType, ccpCode, sourceName=No
                 try:
                     data = r2.read()
                     r2.close()
+                    if isinstance(data, bytes):
+                        data = data.decode("utf-8", errors="replace")
 
                     if data and (
                         "Not Found" in data[: min(20, len(data))] or "Invalid request" in data[: min(20, len(data))]
@@ -887,10 +891,11 @@ def _fetchUrlData(urlLocation):
 
 def _readDataFromRequest(request):
     """Read string from download from request"""
-    data = StringIO(request.read())
+    data = request.read()
     request.close()
-    if data and data.buf:
-        return data.buf
+    if isinstance(data, bytes):
+        data = data.decode("utf-8", errors="replace")
+    return data
 
 
 if __name__ == "__main__":

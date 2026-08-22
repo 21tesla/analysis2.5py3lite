@@ -3251,7 +3251,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('chemAtomCoords')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3266,7 +3266,7 @@ class ChemCompCoord(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('chemCompVarCoords')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

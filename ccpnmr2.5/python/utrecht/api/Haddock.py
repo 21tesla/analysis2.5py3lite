@@ -804,7 +804,7 @@ class Chain(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('residues')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3040,7 +3040,7 @@ class HaddockEnergyTerm(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('energyTermParameters')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4835,7 +4835,7 @@ class HaddockPartner(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('chains')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6232,7 +6232,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('haddockPartners')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6247,7 +6247,7 @@ class HaddockProject(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('runs')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14482,7 +14482,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('haddockEnergyTerms')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14494,7 +14494,7 @@ class Run(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('scoringWeights')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

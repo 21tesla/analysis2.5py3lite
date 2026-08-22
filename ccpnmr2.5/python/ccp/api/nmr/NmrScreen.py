@@ -3766,7 +3766,7 @@ class Mixture(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('mixtureComponents')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3778,7 +3778,7 @@ class Mixture(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('trialExperiments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8028,7 +8028,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('mixtures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8043,7 +8043,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('trialGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8058,7 +8058,7 @@ class NmrScreen(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('trialSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11001,7 +11001,7 @@ class Trial(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('trialHits')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -16064,7 +16064,7 @@ class TrialHit(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('experimentHits')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17920,7 +17920,7 @@ the same parameter settings.
     dataDict = self.__dict__
     sortdd = dataDict.get('experimentWeights')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17932,7 +17932,7 @@ the same parameter settings.
     dataDict = self.__dict__
     sortdd = dataDict.get('regionWeights')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17944,7 +17944,7 @@ the same parameter settings.
     dataDict = self.__dict__
     sortdd = dataDict.get('trials')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

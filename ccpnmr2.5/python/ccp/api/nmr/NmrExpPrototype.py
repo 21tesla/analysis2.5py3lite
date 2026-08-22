@@ -3735,7 +3735,7 @@ molecule topologies giving rise to peaks of different sign.
     dataDict = self.__dict__
     sortdd = dataDict.get('expSteps')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3747,7 +3747,7 @@ molecule topologies giving rise to peaks of different sign.
     dataDict = self.__dict__
     sortdd = dataDict.get('expTransfers')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10668,7 +10668,7 @@ experiment
 
     sortdd = dataDict.get('atomSites')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10683,7 +10683,7 @@ experiment
 
     sortdd = dataDict.get('expGraphs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10698,7 +10698,7 @@ experiment
 
     sortdd = dataDict.get('expMeasurements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10713,7 +10713,7 @@ experiment
 
     sortdd = dataDict.get('refExperiments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11540,7 +11540,7 @@ class RefExpDim(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('refExpDimRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14943,7 +14943,7 @@ available in the NmrExpPrototype
     dataDict = self.__dict__
     sortdd = dataDict.get('refExpDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14955,7 +14955,7 @@ available in the NmrExpPrototype
     dataDict = self.__dict__
     sortdd = dataDict.get('systematicNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

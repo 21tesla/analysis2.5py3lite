@@ -140,5 +140,14 @@ StarToken = collections.namedtuple("StarToken", ("type", "value"))
 
 
 def getTokenIterator(text):
-    """Iterator that returns an iterator over all STAR tokens in a generic STAR file"""
-    return (StarToken(x.lastindex, x.group(x.lastindex)) for x in _star_pattern.finditer(text))
+    r"""Iterator that returns an iterator over all STAR tokens in a generic STAR file.
+
+    Python 3.1+ re.finditer yields zero-length matches that Python 2 suppressed.
+    The STAR regex has alternatives that match at in-line positions with \S*,
+    producing empty strings; filter those out as they carry no semantic meaning.
+    """
+    return (
+        StarToken(x.lastindex, x.group(x.lastindex))
+        for x in _star_pattern.finditer(text)
+        if x.group(x.lastindex) != ""
+    )

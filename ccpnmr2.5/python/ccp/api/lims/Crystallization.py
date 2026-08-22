@@ -1669,7 +1669,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('dropAnnotations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1684,7 +1684,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('images')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1700,7 +1700,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('parameterDefinitions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1715,7 +1715,7 @@ class CrystallizationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('scoringSchemes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4729,7 +4729,7 @@ class Image(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9826,7 +9826,7 @@ class ScoringScheme(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('scores')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

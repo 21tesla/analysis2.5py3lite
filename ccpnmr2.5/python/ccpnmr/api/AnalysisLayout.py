@@ -1954,7 +1954,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('actionLinks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -1978,7 +1978,7 @@ class AbstractPanel(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3057,7 +3057,7 @@ class ActionLink(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8422,7 +8422,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8437,7 +8437,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('marks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8452,7 +8452,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('panels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8467,7 +8467,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8482,7 +8482,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('rulers')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8497,7 +8497,7 @@ class Layout(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('windowPanelGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10618,7 +10618,7 @@ class Mark(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('markDims')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14818,7 +14818,7 @@ class WindowPanelGroup(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -19050,7 +19050,7 @@ class WindowPanel(AbstractPanel):
     dataDict = self.__dict__
     sortdd = dataDict.get('panelAxes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

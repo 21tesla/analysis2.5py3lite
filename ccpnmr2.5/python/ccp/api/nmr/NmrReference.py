@@ -5151,7 +5151,7 @@ the meanValue or the randomCoilValue attribute must be set.
     dataDict = self.__dict__
     sortdd = dataDict.get('chemAtomShiftCorrs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7520,7 +7520,7 @@ source.
     dataDict = self.__dict__
     sortdd = dataDict.get('chemAtomNmrDistribs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7532,7 +7532,7 @@ source.
     dataDict = self.__dict__
     sortdd = dataDict.get('chemAtomNmrRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7544,7 +7544,7 @@ source.
     dataDict = self.__dict__
     sortdd = dataDict.get('chemCompVarNmrRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10327,7 +10327,7 @@ handle, holding information about where the actual data are stored.
 
     sortdd = dataDict.get('chemCompNmrRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

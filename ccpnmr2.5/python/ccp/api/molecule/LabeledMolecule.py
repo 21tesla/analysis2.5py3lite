@@ -2544,7 +2544,7 @@ class LabeledMixture(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('molLabelFractions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3843,7 +3843,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('labeledMixtures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3858,7 +3858,7 @@ class LabeledMolecule(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('molLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5327,7 +5327,7 @@ class MolLabel(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('resLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7062,7 +7062,7 @@ ResLabelFractions.
     dataDict = self.__dict__
     sortdd = dataDict.get('atomLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7074,7 +7074,7 @@ ResLabelFractions.
     dataDict = self.__dict__
     sortdd = dataDict.get('resLabelFractions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

@@ -4628,7 +4628,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('projectQueries')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4643,7 +4643,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('projectVersionQueries')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4658,7 +4658,7 @@ class WmsQueryStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('taskQueries')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -5563,7 +5563,7 @@ class TaskQuery(AbstractQuery):
     dataDict = self.__dict__
     sortdd = dataDict.get('taskResults')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6449,7 +6449,7 @@ class ProjectVersionQuery(AbstractQuery):
     dataDict = self.__dict__
     sortdd = dataDict.get('projectVersionResults')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7334,7 +7334,7 @@ class ProjectQuery(AbstractQuery):
     dataDict = self.__dict__
     sortdd = dataDict.get('projectResults')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

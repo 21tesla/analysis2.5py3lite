@@ -7564,7 +7564,7 @@ of wish targets and non-polymer molecules.
     dataDict = self.__dict__
     sortdd = dataDict.get('blueprintComponents')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7576,7 +7576,7 @@ of wish targets and non-polymer molecules.
     dataDict = self.__dict__
     sortdd = dataDict.get('blueprintDbRefs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7588,7 +7588,7 @@ of wish targets and non-polymer molecules.
     dataDict = self.__dict__
     sortdd = dataDict.get('blueprintStatuses')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8726,7 +8726,7 @@ class ExpBlueprintStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('expBlueprints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

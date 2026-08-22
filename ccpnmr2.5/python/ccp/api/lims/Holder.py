@@ -3867,7 +3867,7 @@ group holder together.
     dataDict = self.__dict__
     sortdd = dataDict.get('holderLocations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3879,7 +3879,7 @@ group holder together.
     dataDict = self.__dict__
     sortdd = dataDict.get('refSamplePositions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6084,7 +6084,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('holderTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6099,7 +6099,7 @@ class HolderStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('holders')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10774,7 +10774,7 @@ rather than A1.
     dataDict = self.__dict__
     sortdd = dataDict.get('holderTypePositions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

@@ -1108,7 +1108,7 @@ class DangleChain(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('dangleResidues')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4458,7 +4458,7 @@ class serves as TopObject.
 
     sortdd = dataDict.get('dangleChains')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

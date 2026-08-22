@@ -1372,7 +1372,7 @@ class ChemElement(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('isotopes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2441,7 +2441,7 @@ class ChemElementStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('chemElements')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

@@ -2056,7 +2056,7 @@ class ChemCompLabel(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('isotopomers')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2982,7 +2982,7 @@ uncorrelated isotope distribution on its atoms.
     dataDict = self.__dict__
     sortdd = dataDict.get('atomLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4278,7 +4278,7 @@ same source or are generally used together.
 
     sortdd = dataDict.get('chemCompLabels')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

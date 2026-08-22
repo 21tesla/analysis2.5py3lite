@@ -7660,7 +7660,7 @@ creates the Residue and Atom objects corresponding to it.
     dataDict = self.__dict__
     sortdd = dataDict.get('chainFragments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7741,7 +7741,7 @@ creates the Residue and Atom objects corresponding to it.
     dataDict = self.__dict__
     sortdd = dataDict.get('residues')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17655,7 +17655,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('chainInteractions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17670,7 +17670,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('chains')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17737,7 +17737,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('molSystemLinks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17766,7 +17766,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('molSystemSysNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17839,7 +17839,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('nonCovalentBonds')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -17868,7 +17868,7 @@ NMR-observable impurities in an Nmr study).
 
     sortdd = dataDict.get('structureGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -25260,7 +25260,7 @@ class Residue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('atoms')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -25329,7 +25329,7 @@ class Residue(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('molSystemLinkEnds')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

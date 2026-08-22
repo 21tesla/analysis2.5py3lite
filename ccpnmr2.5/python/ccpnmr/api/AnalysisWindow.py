@@ -929,7 +929,7 @@ class AbstractModule(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2378,7 +2378,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2393,7 +2393,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('axisUnits')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2408,7 +2408,7 @@ class AnalysisWindowStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('modules')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10787,7 +10787,7 @@ class Window(AbstractModule):
     dataDict = self.__dict__
     sortdd = dataDict.get('axes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

@@ -4912,7 +4912,10 @@ def saveToStream(stream, topObject, mapping=None, comment=None, simplified=True,
                                 else:
                                     if tmpMap["type"] == "child":
                                         items = list(val.items())  # py3: dict.items() is a view; indexed/assigned below
-                                        items.sort()
+                                        # py3: keys may be non-orderable types (e.g. Method objects);
+                                        # sort by a stable comparable id instead of letting tuple __lt__
+                                        # compare objects by type.
+                                        items.sort(key=lambda x: id(x[0]))
                                         ll = [x[1] for x in items]
                                     else:
                                         ll = list(val)

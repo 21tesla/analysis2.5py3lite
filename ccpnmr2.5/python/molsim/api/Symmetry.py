@@ -1456,7 +1456,7 @@ class MolSystemSymmetrySet(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('symmetries')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3933,7 +3933,7 @@ a multichain MolSystem.
     dataDict = self.__dict__
     sortdd = dataDict.get('segments')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

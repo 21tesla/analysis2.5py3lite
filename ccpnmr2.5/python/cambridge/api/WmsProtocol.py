@@ -3675,7 +3675,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('interfaceLabels')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3687,7 +3687,7 @@ class ProtocolInterface(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('interfaceParameters')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7493,7 +7493,7 @@ class ProtocolService(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('protocolAccesss')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9727,7 +9727,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('protocolInterfaces')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9742,7 +9742,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('protocolParameters')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9757,7 +9757,7 @@ class WmsProtocol(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('protocolServices')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11502,7 +11502,7 @@ class InterfaceParameter(InterfaceObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('enumValues')
 
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

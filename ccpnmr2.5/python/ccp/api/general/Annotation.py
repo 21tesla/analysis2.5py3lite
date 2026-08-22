@@ -4411,7 +4411,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('annotations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4426,7 +4426,7 @@ class AnnotationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('molFeatures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

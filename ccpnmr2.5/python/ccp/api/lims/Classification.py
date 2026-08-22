@@ -2663,7 +2663,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('experimentTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2678,7 +2678,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('hazardPhrases')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2693,7 +2693,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('holderCategorys')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2708,7 +2708,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('instrumentTypes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2723,7 +2723,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('sampleCategories')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2739,7 +2739,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('sampleComponentCategory')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2754,7 +2754,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('targetScoreboards')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -2769,7 +2769,7 @@ class Classification(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('targetStatus')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

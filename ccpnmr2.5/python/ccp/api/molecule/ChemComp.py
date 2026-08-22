@@ -10400,7 +10400,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemAngles')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10415,7 +10415,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemAtomSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10430,7 +10430,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemAtoms')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10445,7 +10445,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemBonds')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10460,7 +10460,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemCompVars')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10475,7 +10475,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('chemTorsions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10490,7 +10490,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('linkEnds')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10505,7 +10505,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('namingSystems')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10542,7 +10542,7 @@ Atoms, Bonds etc. linked to do not form a consistent set.
 
     sortdd = dataDict.get('stereochemistries')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -21367,7 +21367,7 @@ given explicitly
     dataDict = self.__dict__
     sortdd = dataDict.get('atomSysNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -21391,7 +21391,7 @@ given explicitly
     dataDict = self.__dict__
     sortdd = dataDict.get('chemCompSysNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -21403,7 +21403,7 @@ given explicitly
     dataDict = self.__dict__
     sortdd = dataDict.get('chemTorsionSysNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

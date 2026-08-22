@@ -8249,7 +8249,7 @@ class Target(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('targetStatus')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14068,7 +14068,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('projects')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14083,7 +14083,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('targetGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14098,7 +14098,7 @@ class TargetStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('targets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

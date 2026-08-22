@@ -3566,7 +3566,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('dataStores')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -3581,7 +3581,7 @@ class DataLocationStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('dataUrls')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11504,7 +11504,7 @@ header size refers to the header of the entire dataasource.
     dataDict = self.__dict__
     sortdd = dataDict.get('componentShapes')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11516,7 +11516,7 @@ header size refers to the header of the entire dataasource.
     dataDict = self.__dict__
     sortdd = dataDict.get('components')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

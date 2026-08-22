@@ -10321,7 +10321,7 @@ processing) or real-world (e.g. purification).
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11818,7 +11818,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('methods')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -11833,7 +11833,7 @@ class MethodStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('software')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

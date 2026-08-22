@@ -2075,7 +2075,7 @@ class AbstractSample(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('sampleComponents')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -6049,7 +6049,7 @@ class SampleStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('abstractSamples')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9060,7 +9060,7 @@ supplier and batch independant.
     dataDict = self.__dict__
     sortdd = dataDict.get('refSampleSources')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

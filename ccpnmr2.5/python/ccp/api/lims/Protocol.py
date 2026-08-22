@@ -4606,7 +4606,7 @@ class Procedure(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('steps')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8030,7 +8030,7 @@ that contain steps.
     dataDict = self.__dict__
     sortdd = dataDict.get('parameterDefinitions')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8042,7 +8042,7 @@ that contain steps.
     dataDict = self.__dict__
     sortdd = dataDict.get('procedures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8054,7 +8054,7 @@ that contain steps.
     dataDict = self.__dict__
     sortdd = dataDict.get('refInputSamples')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -8066,7 +8066,7 @@ that contain steps.
     dataDict = self.__dict__
     sortdd = dataDict.get('refOutputSamples')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -9185,7 +9185,7 @@ class ProtocolStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('protocols')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

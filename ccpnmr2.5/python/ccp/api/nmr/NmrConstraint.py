@@ -2095,7 +2095,7 @@ class AbstractConstraint(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('peakContribs')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -14498,7 +14498,7 @@ class FixedResonance(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('chainStateLinks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22751,7 +22751,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('conditionStates')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22766,7 +22766,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('constraintGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22781,7 +22781,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('constraintLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22818,7 +22818,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('fixedAtomSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22833,7 +22833,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('fixedResonanceSets')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22848,7 +22848,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('fixedResonances')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22863,7 +22863,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('resStructures')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -22920,7 +22920,7 @@ This class serves as TopObject.
 
     sortdd = dataDict.get('violationLists')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -25512,7 +25512,7 @@ Atoms. Intended for protocols that generate 3D structures without
     dataDict = self.__dict__
     sortdd = dataDict.get('coords')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -28040,7 +28040,7 @@ ConstraintLists.
     dataDict = self.__dict__
     sortdd = dataDict.get('violations')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -29909,7 +29909,7 @@ alternative assignemnts.
     dataDict = self.__dict__
     sortdd = dataDict.get('items')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -30972,7 +30972,7 @@ that should be reproduced by the structure.
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -32027,7 +32027,7 @@ class HBondConstraintList(AbstractConstraintList):
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -33083,7 +33083,7 @@ class DistanceConstraintList(AbstractConstraintList):
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -34140,7 +34140,7 @@ should be reproduced by the structure.
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -35352,7 +35352,7 @@ class CsaConstraintList(AbstractConstraintList):
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -36418,7 +36418,7 @@ couplings.
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -37631,7 +37631,7 @@ class ChemShiftConstraintList(AbstractConstraintList):
     dataDict = self.__dict__
     sortdd = dataDict.get('constraints')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -41417,7 +41417,7 @@ alternative assignment possibilities.
     dataDict = self.__dict__
     sortdd = dataDict.get('items')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -42601,7 +42601,7 @@ alternative assignment possibilities.
     dataDict = self.__dict__
     sortdd = dataDict.get('items')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -43879,7 +43879,7 @@ alternative assignment possibilities.
     dataDict = self.__dict__
     sortdd = dataDict.get('items')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -45063,7 +45063,7 @@ assignment, describing alternative assignment possibilities.
     dataDict = self.__dict__
     sortdd = dataDict.get('items')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

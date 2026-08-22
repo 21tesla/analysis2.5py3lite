@@ -6007,7 +6007,7 @@ the data bypassing the API.
     dataDict = self.__dict__
     sortdd = dataDict.get('molResLinkEnds')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13207,7 +13207,7 @@ etc.
 
     sortdd = dataDict.get('alignments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13303,7 +13303,7 @@ etc.
 
     sortdd = dataDict.get('molResLinks')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13318,7 +13318,7 @@ etc.
 
     sortdd = dataDict.get('molResidues')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13333,7 +13333,7 @@ etc.
 
     sortdd = dataDict.get('molSeqFragments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -13348,7 +13348,7 @@ etc.
 
     sortdd = dataDict.get('moleculeSysNames')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

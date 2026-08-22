@@ -7638,7 +7638,7 @@ other depositions?).
     dataDict = self.__dict__
     sortdd = dataDict.get('entryMolecules')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7734,7 +7734,7 @@ other depositions?).
     dataDict = self.__dict__
     sortdd = dataDict.get('relatedEntries')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10260,7 +10260,7 @@ class NmrEntryStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('entries')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -10275,7 +10275,7 @@ class NmrEntryStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('studies')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result

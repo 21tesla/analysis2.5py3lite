@@ -26526,7 +26526,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("memops.AccessControl")
         sortdd = dataDict.get("accessControlStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26540,7 +26540,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Affiliation")
         sortdd = dataDict.get("affiliationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26554,7 +26554,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.AnalysisProfile")
         sortdd = dataDict.get("analysisProfiles")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26568,7 +26568,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.AnalysisV3")
         sortdd = dataDict.get("analysisProjectV3s")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26582,7 +26582,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.Analysis")
         sortdd = dataDict.get("analysisProjects")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26596,7 +26596,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.AnalysisWindow")
         sortdd = dataDict.get("analysisWindowStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26610,7 +26610,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("molsim.AnnealProtocol")
         sortdd = dataDict.get("annealProtocolStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26624,7 +26624,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Annotation")
         sortdd = dataDict.get("annotationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26638,7 +26638,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.ChemCompCharge")
         sortdd = dataDict.get("chemCompCharges")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26652,7 +26652,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.ChemCompCoord")
         sortdd = dataDict.get("chemCompCoords")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26666,7 +26666,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.ChemComp")
         sortdd = dataDict.get("chemComps")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26680,7 +26680,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.ChemElement")
         sortdd = dataDict.get("chemElementStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26694,7 +26694,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Citation")
         sortdd = dataDict.get("citationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26708,7 +26708,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Classification")
         sortdd = dataDict.get("classifications")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26722,7 +26722,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Crystallization")
         sortdd = dataDict.get("crystallizationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26736,7 +26736,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("cambridge.Dangle")
         sortdd = dataDict.get("dangleStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26750,7 +26750,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.DataLocation")
         sortdd = dataDict.get("dataLocationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26764,7 +26764,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.DbRef")
         sortdd = dataDict.get("databases")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26778,7 +26778,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.ExpBlueprint")
         sortdd = dataDict.get("expBlueprintStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26792,7 +26792,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Experiment")
         sortdd = dataDict.get("experimentStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26806,7 +26806,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("utrecht.Haddock")
         sortdd = dataDict.get("haddockProjects")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26820,7 +26820,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Holder")
         sortdd = dataDict.get("holderStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26834,7 +26834,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Instrument")
         sortdd = dataDict.get("instrumentStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26848,7 +26848,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.KeywordDefinition")
         sortdd = dataDict.get("keywordDefinitionStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26862,7 +26862,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.LabeledMolecule")
         sortdd = dataDict.get("labeledMolecules")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26876,7 +26876,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.ChemCompLabel")
         sortdd = dataDict.get("labelingSchemes")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26890,7 +26890,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.AnalysisLayout")
         sortdd = dataDict.get("layouts")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26904,7 +26904,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Location")
         sortdd = dataDict.get("locationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26918,7 +26918,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Method")
         sortdd = dataDict.get("methodStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26932,7 +26932,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("molsim.Symmetry")
         sortdd = dataDict.get("molSystemSymmetrySets")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26946,7 +26946,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.MolSystem")
         sortdd = dataDict.get("molSystems")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26960,7 +26960,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.Molecule")
         sortdd = dataDict.get("molecules")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26974,7 +26974,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccpnmr.NameMapping")
         sortdd = dataDict.get("nameMappingStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -26988,7 +26988,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrCalc")
         sortdd = dataDict.get("nmrCalcStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27002,7 +27002,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrConstraint")
         sortdd = dataDict.get("nmrConstraintStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27016,7 +27016,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrEntry")
         sortdd = dataDict.get("nmrEntryStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27030,7 +27030,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrExpPrototype")
         sortdd = dataDict.get("nmrExpPrototypes")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27044,7 +27044,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.Nmr")
         sortdd = dataDict.get("nmrProjects")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27058,7 +27058,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrReference")
         sortdd = dataDict.get("nmrReferenceStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27072,7 +27072,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.nmr.NmrScreen")
         sortdd = dataDict.get("nmrScreens")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27084,7 +27084,7 @@ class MemopsRoot(ImplementationObject):
         dataDict = self.__dict__
         sortdd = dataDict.get("packageLocators")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27098,7 +27098,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Protocol")
         sortdd = dataDict.get("protocolStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27112,7 +27112,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.RefData")
         sortdd = dataDict.get("refDataStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27126,7 +27126,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.RefSampleComponent")
         sortdd = dataDict.get("refSampleComponentStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27138,7 +27138,7 @@ class MemopsRoot(ImplementationObject):
         dataDict = self.__dict__
         sortdd = dataDict.get("repositories")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27152,7 +27152,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Sample")
         sortdd = dataDict.get("sampleStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27166,7 +27166,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.Stereochemistry")
         sortdd = dataDict.get("stereochemistryStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27180,7 +27180,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.MolStructure")
         sortdd = dataDict.get("structureEnsembles")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27194,7 +27194,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.lims.Target")
         sortdd = dataDict.get("targetStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27208,7 +27208,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.general.Taxonomy")
         sortdd = dataDict.get("taxonomies")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27234,7 +27234,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("ccp.molecule.Validation")
         sortdd = dataDict.get("validationStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27248,7 +27248,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("cambridge.WmsProtocol")
         sortdd = dataDict.get("wmsProtocols")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27262,7 +27262,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("cambridge.WmsQuery")
         sortdd = dataDict.get("wmsQueryStores")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result
@@ -27276,7 +27276,7 @@ class MemopsRoot(ImplementationObject):
         root.refreshTopObjects("cambridge.Wms")
         sortdd = dataDict.get("wmsSegments")
 
-        ll = sortdd.keys()
+        ll = list(sortdd.keys())
         ll.sort()
         result = [sortdd[x] for x in ll]
         return result

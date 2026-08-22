@@ -4879,7 +4879,7 @@ class Experiment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('outputSamples')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4891,7 +4891,7 @@ class Experiment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('parameters')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -4915,7 +4915,7 @@ class Experiment(memops.api.Implementation.DataObject):
     dataDict = self.__dict__
     sortdd = dataDict.get('sampleIos')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7783,7 +7783,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('experimentGroups')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
@@ -7798,7 +7798,7 @@ class ExperimentStore(memops.api.Implementation.TopObject):
 
     sortdd = dataDict.get('experiments')
     
-    ll = sortdd.keys()
+    ll = list(sortdd.keys())
     ll.sort()
     result = [sortdd[x] for x in ll]
     return result
