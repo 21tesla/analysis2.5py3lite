@@ -19,6 +19,8 @@ Build filter:
     below).  This lets you build a single extension for incremental work.
 """
 import os
+import sys
+
 from setuptools import setup, Extension
 
 # Source directories -----------------------------------------------------------------
@@ -30,10 +32,23 @@ STR   = "ccpnmr2.5/c/ccp/structure"
 BAYES = "ccpnmr2.5/c/other/cambridge/bayes"
 MEC   = "ccpnmr2.5/c/other/meccano"
 
-# GSL (GNU Scientific Library) prefix for the Meccano ext.  Installed as an
-# isolated conda env (does NOT touch the anaconda base env):
-#   conda create -n ccpnmr-gsl -c conda-forge gsl
-GSL   = os.environ.get("CCP_GSL_PREFIX", "/home/logan/software/anaconda3/envs/ccpnmr-gsl")
+# GSL (GNU Scientific Library) prefix for the Meccano ext.  Meccano is
+# OPTIONAL: if no usable GSL is found the whole distribution still builds
+# and Meccano is omitted with a warning (grenoble.c.Meccano import then fails
+# with an actionable message).  Resolution order: $CCP_GSL_PREFIX, /usr,
+# isolated conda env (conda create -n ccpnmr-gsl -c conda-forge gsl).
+def _gsl_usable(prefix):
+    if not prefix or not os.path.isdir(os.path.join(prefix, "include", "gsl")):
+        return False
+    libdir = os.path.join(prefix, "lib")
+    return os.path.isdir(libdir) and any(n.startswith("libgsl") for n in os.listdir(libdir))
+
+GSL = next(
+    (p for p in (os.environ.get("CCP_GSL_PREFIX"), "/usr",
+                 "/home/logan/software/anaconda3/envs/ccpnmr-gsl")
+     if _gsl_usable(p)),
+    None,
+)
 
 # Tcl/Tk header prefix for the window-handler exts (GlHandler, TkHandler).
 # The project venv's Python (Anaconda base) ships tk 8.6 headers; link libs
@@ -238,6 +253,14 @@ BACKBONE = [
 
 # ---------------------------------------------------------------------------
 all_exts = list(BACKBONE)
+# Meccano is the one OPTIONAL ext: needs GSL (see resolution above).
+if "Meccano" in FAM and GSL is None:
+    print("WARNING: no usable GSL found ($CCP_GSL_PREFIX, /usr, conda envs) — "
+          "skipping OPTIONAL ext 'Meccano'. The distribution builds without it; "
+          "grenoble.c.Meccano imports fail with an actionable hint. Install GSL "
+          "(e.g. conda install -c conda-forge gsl / apt install libgsl-dev) and "
+          "rebuild to enable Meccano.", file=sys.stderr)
+    FAM = {n: s for n, s in FAM.items() if n != "Meccano"}
 # FAM specs are (srcs, inc, libs) or extended (srcs, inc, libs, libdirs, define, link)
 all_exts += [mk(name, *spec) for name, spec in FAM.items()]
 

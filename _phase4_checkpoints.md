@@ -151,11 +151,28 @@ GUI launch requires GlHandler or TkHandler → **P4-5 depends on this bucket**.
 pkg `c/` symlink targets (resolved to real files): cambridge/c(1) ccp/c(4) ccpnmr/c(17) memops/c(10)
 grenoble/c(1 Meccano) + cing superpose — all present.
 
-### P4-4 — C extensions in the wheel — status: TBD
-- Confirm `setuptools.build_meta` builds `ext_modules` during wheel build (CI + local).
-- Meccano/GSL: optional build — if GSL headers absent, omit the ext with a clear warning;
-  runtime import in grenoble must fail with an actionable message (install-gsl hint).
-- Build-env requirements documented in README (build-essential, numpy headers).
+### P4-4 — C extensions in the wheel — ✅ DONE (2026-08-21)
+**Verified (installed wheel, /tmp/ccp-dist-venv):**
+- ALL ext import surfaces import OK: **39/39** — memops.c(10) + ccpnmr.c(21) + ccp.c(4) +
+  cambridge.c.BayesPeakSeparator + grenoble.c.Meccano + cing.Libs.cython.superpose.
+- `setuptools.build_meta` builds `ext_modules` during `uv build` ✓ (both canonical + no-GSL builds).
+
+**Meccano/GSL OPTIONAL — fixed + verified:**
+- setup.py: GSL resolution now `$CCP_GSL_PREFIX` → `/usr` → conda env `ccpnmr-gsl`; if NONE usable,
+  Meccano ext is SKIPPED with a WARNING to stderr (previously the whole build HARD-FAILED —
+  `pip install .tar.gz` without GSL was broken). No-GSL build verified: build succeeds, warning
+  printed (test: temporarily renamed conda GSL env; restored).
+- `grenoble/meccano/MeccanoPopup.py`: import guard now raises an ACTIONABLE message (was a
+  generic "contact ccpn-dev"): GSL optional, how to enable (conda-forge gsl / libgsl-dev +
+  CCP_GSL_PREFIX + rebuild), everything else works without it. Guard path tested via import
+  blocker (new message confirmed in rebuilt wheel).
+- NOTE: `grenoble/c/Meccano…py3.13…so` + `cing/Libs/cython/superpose…so` are PRE-BUILT py3.13
+  x86_64 artifacts (untracked, shipped as package data). Runtime availability of Meccano further
+  needs GSL runtime libs (wheel here links libgsl.so.28 + libopenblas via rpath of the build env);
+  without them the actionable error above fires. superpose needs only Python+OpenMP → portable.
+  Regenerate via `setup.py` (Meccano) / `cing/Libs/cython/compile.py` (superpose) if the ABI changes.
+- **Build env for C exts** (README, P4-6): system gcc (anaconda cc lacks GL/glx.h), freeglut,
+  tk/tcl 8.6, libX11.so.6, python3.13 headers, GSL optional, OpenMP (superpose prebuilt).
 
 ### P4-5 — GUI launch tests under Xvfb — status: TBD
 - `sudo apt-get install -y xvfb` (user approved 2026-08-21).

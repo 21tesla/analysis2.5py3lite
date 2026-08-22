@@ -24,7 +24,15 @@ from memops.gui.TabbedFrame import TabbedFrame
 try:
   from grenoble.c import Meccano
 except Exception as e:
-  ee = Exception('There was a problem importing Meccano module, perhaps the C code was not compiled, exception thrown by system was: %s (please contact ccpn-dev@ccpn.ac.uk for further information)' % e)
+  ee = Exception(
+    'Meccano C extension unavailable (%s: %s).\n'
+    'Meccano is an OPTIONAL feature requiring GNU Scientific Library (GSL) at build\n'
+    'time; this distribution was built without it, or the GSL runtime libraries are\n'
+    'missing on this machine. To enable it: install GSL (e.g. `conda install -c\n'
+    'conda-forge gsl` or `apt install libgsl-dev`), point CCP_GSL_PREFIX at it and\n'
+    'rebuild the distribution. All other CCPNMR features work without Meccano.'
+    % (type(e).__name__, e)
+  )
   raise ee
 
 import os
