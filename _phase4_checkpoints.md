@@ -206,12 +206,30 @@ has a cwd-based `../../..`/python join — dead demo code after mainloop, left a
 Post-fix regression: source + installed smoke/pytest/boot all unchanged-green (1646/0/83,
 1637/0/83, 43/14/10 both, 8/8 boot both).
 
-### P4-6 — README + CI polish — status: TBD
-- Real `README.md` (what it is / what works / install / run / test / scope notes
-  re: legacy modules); pyproject `readme` → README.md (survey.md stays as internal doc).
-- CI: add "distribution" job (build wheel → clean install → smoke + functional tests);
-  GUI job (xvfb) if stable; Meccano skipped in CI (no GSL in runner).
-- Update `_phase4_recipe.md`? (Only if the recipe file is needed; checkpoints carry the map.)
+### P4-6 — README + CI polish — ✅ DONE (2026-08-21)
+- **README.md** (real, user-facing): what it is, verified-gate table, the 8 console
+  commands, install (wheel / source build requirements), optional features
+  (Meccano+GSL, cing optional stack), how to re-run the gates, repo layout, scope notes.
+  pyproject `readme` → README.md (survey.md stays internal). Wheel rebuilt so METADATA
+  carries the new readme.
+- **CI `.github/workflows/ci.yml`**: new `distribution` job — apt build deps
+  (build-essential, python3-dev/tk, libgl1-mesa-dev, freeglut3-dev, tk-dev, libx11-dev,
+  xvfb, fonts) → `uv build` (Meccano auto-skipped on the GSL-less runner via the P4-4
+  optional path — this CI job is the no-GSL proof in a real environment) → clean venv
+  install + `pip check` → 8-script assertion → installed smoke (must be `FAILED: 0`)
+  → functional pytest parity assert (43 passed / 14 skipped / 10 data-gated fails,
+  same 10 as source) → GUI boot under Xvfb (must be `8/8 apps booted OK`).
+  Lint/cext/python jobs unchanged. YAML validated.
+- No separate `_phase4_recipe.md` needed — the checkpoint file carries the full map.
+
+## PHASE 4 COMPLETE (2026-08-21)
+All buckets DONE + committed: P4-1 (entry points), P4-2 (28 functional tests + 6 py3
+bug fixes), P4-3 (dist build + clean install, wheel & sdist), P4-4 (C exts in wheel +
+Meccano/GSL optional), P4-5 (8/8 GUI boot source+installed, 11 GUI runtime bugs fixed),
+P4-6 (README + CI distribution job). Final verified state:
+- source: compile 0, smoke 1646/0/83, pytest 43/14/10, boot 8/8
+- installed (wheel, fresh venv): smoke 1637/0/83, pytest 43/14/10, boot 8/8,
+  pip check clean, 8/8 scripts, 39/39 ext imports
 
 ## Gate set (Phase 4, current after P4-3)
 ```bash
