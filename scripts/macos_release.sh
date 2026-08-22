@@ -70,25 +70,32 @@ command -v cc >/dev/null || die "cc not found — run: xcode-select --install"
 "$PYTHON" -c 'import Cython'    2>/dev/null || "$PYTHON" -m pip install --quiet cython
 
 # Tk headers — same candidate order as setup.py::_tkinc()
-"$PYTHON" -c '
+"$PYTHON" -c "
 import os, sys, sysconfig
 cands = []
-if os.environ.get("CCP_TK_PREFIX"):
-    cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
-inc = sysconfig.get_paths()["include"]
-cands.append(os.path.join(os.path.dirname(inc), "include"))
-cfg = os.path.join(os.path.dirname(os.path.dirname(sys.executable)), "pyvenv.cfg")
+if os.environ.get(\"CCP_TK_PREFIX\"):
+    cands.append(os.path.join(os.environ[\"CCP_TK_PREFIX\"], \"include\", \"tcl-tk\"))
+    cands.append(os.path.join(os.environ[\"CCP_TK_PREFIX\"], \"include\"))
+inc = sysconfig.get_paths()[\"include\"]
+cands.append(os.path.join(os.path.dirname(inc), \"include\"))
+cfg = os.path.join(os.path.dirname(os.path.dirname(sys.executable)), \"pyvenv.cfg\")
 if os.path.exists(cfg):
     for line in open(cfg):
-        if line.startswith("home = "):
-            cands.append(os.path.join(os.path.dirname(line.split("=", 1)[1].strip()), "include"))
+        if line.startswith(\"home = \"):
+            cands.append(os.path.join(os.path.dirname(line.split(\"=\", 1)[1].strip()), \"include\"))
             break
-cands += ["/opt/homebrew/opt/tcl-tk/include", "/usr/local/opt/tcl-tk/include", inc]
-hit = next((c for c in cands if os.path.exists(os.path.join(c, "tk.h"))), None)
+cands += [
+    \"/opt/homebrew/opt/tcl-tk/include/tcl-tk\",
+    \"/opt/homebrew/opt/tcl-tk/include\",
+    \"/usr/local/opt/tcl-tk/include/tcl-tk\",
+    \"/usr/local/opt/tcl-tk/include\",
+    inc
+]
+hit = next((c for c in cands if os.path.exists(os.path.join(c, \"tk.h\"))), None)
 if not hit:
-    sys.exit("tk.h not found. Install Tk for Python (brew install python-tk@3.13, or conda: python=3.13 tk) or set CCP_TK_PREFIX=<prefix>")
-print("ok: tk.h in " + hit)
-' || die "tk.h not found — install Tk (see above)"
+    sys.exit(\"tk.h not found. Install Tk for Python (brew install python-tk@3.13, or conda: python=3.13 tk) or set CCP_TK_PREFIX=<prefix>\")
+print(\"ok: tk.h in \" + hit)
+" || die "tk.h not found — install Tk (see above)"
 
 # X11 (macOS: XQuartz supplies libX11 for the Tk window handler)
 if [ "$(uname -s)" = "Darwin" ]; then

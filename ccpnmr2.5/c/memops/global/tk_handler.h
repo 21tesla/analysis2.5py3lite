@@ -94,6 +94,8 @@ extern void start_front_tk_handler(Tk_handler tk_handler);
 
 extern void start_back_tk_handler(Tk_handler tk_handler);
 
+extern void end_back_tk_handler(Tk_handler tk_handler);
+
 /* tk_handler takes copy of background */
 extern void set_background_tk_handler(Tk_handler tk_handler, float *background);
 

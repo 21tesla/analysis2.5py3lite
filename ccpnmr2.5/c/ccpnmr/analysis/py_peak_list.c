@@ -878,7 +878,7 @@ static PyObject *fitPeaksInRegion(PyObject *self, PyObject *args)
         RETURN_OBJ_ERROR("must have arguments: method, peaks, block_file, first, last, dim_done");
 
     if ((method != GAUSSIAN_METHOD) && (method != LORENTZIAN_METHOD))
-        RETURN_ERROR_MSG("method must be GAUSSIAN_METHOD or LORENTZIAN_METHOD");
+        RETURN_OBJ_ERROR("method must be GAUSSIAN_METHOD or LORENTZIAN_METHOD");
 
     npeaks = get_python_list_size(peaks_obj);
     if (npeaks < 0)

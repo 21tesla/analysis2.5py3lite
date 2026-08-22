@@ -121,13 +121,25 @@ static void store_get_region(Generic_ptr data, float *x0, float *y0,
 {
 }
 
-static Drawing_funcs drawing_funcs = { STORE_DRAWING,
-	store_start_draw, store_end_draw, store_new_draw_range,
-	store_draw_line, store_draw_clipped_line,
-	store_draw_polyline, store_draw_clipped_polyline, store_draw_text,
-	store_set_draw_color, store_set_draw_font, store_set_line_style,
-        store_set_line_width, store_fill_circle, store_draw_circle,
-        store_get_background, store_get_region };
+static Drawing_funcs drawing_funcs = {
+    .draw_medium = STORE_DRAWING,
+    .start_draw = store_start_draw,
+    .end_draw = store_end_draw,
+    .new_draw_range = store_new_draw_range,
+    .draw_line = store_draw_line,
+    .draw_clipped_line = store_draw_clipped_line,
+    .draw_polyline = store_draw_polyline,
+    .draw_clipped_polyline = store_draw_clipped_polyline,
+    .draw_text = store_draw_text,
+    .set_draw_color = store_set_draw_color,
+    .set_draw_font = store_set_draw_font,
+    .set_line_style = store_set_line_style,
+    .set_line_width = store_set_line_width,
+    .fill_circle = store_fill_circle,
+    .draw_circle = store_draw_circle,
+    .get_background = store_get_background,
+    .get_region = store_get_region
+};
  
 Drawing_funcs *store_drawing_funcs()
 {

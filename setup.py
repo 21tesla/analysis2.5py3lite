@@ -75,15 +75,20 @@ def _tkinc():
     include dir as last resort."""
     cands = []
     if os.environ.get("CCP_TK_PREFIX"):
+        cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include", "tcl-tk"))
         cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
     inc = sysconfig.get_paths()["include"]
     cands.append(os.path.join(os.path.dirname(inc), "include"))   # conda layout
     base = _venv_base_prefix()
     if base:
         cands.append(os.path.join(base, "include"))               # venv -> base python
-    cands += ["/opt/homebrew/opt/tcl-tk/include",                 # Homebrew (Apple silicon)
-              "/usr/local/opt/tcl-tk/include",                    # Homebrew (Intel)
-              inc]
+    cands += [
+        "/opt/homebrew/opt/tcl-tk/include/tcl-tk",
+        "/opt/homebrew/opt/tcl-tk/include",                       # Homebrew (Apple silicon)
+        "/usr/local/opt/tcl-tk/include/tcl-tk",
+        "/usr/local/opt/tcl-tk/include",                          # Homebrew (Intel)
+        inc
+    ]
     for c in cands:
         if os.path.exists(os.path.join(c, "tk.h")):
             return c
@@ -102,14 +107,20 @@ TKINC = _tkinc()
 #    Xlib directly (XDrawLine, XFillArc, ...) — XQuartz (/opt/X11) supplies
 #    those headers + libX11.  GLUT is then not needed at all.
 if DARWIN:
-    GLX_DEFINE = ("IGNORE_GL=1",)
+    GLX_DEFINE = (("IGNORE_GL", "1"),)
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
     # Library search paths (must be -L library_dirs, emitted BEFORE the -ltk8.6
     # etc. references — macOS ld resolves -l left-to-right).  Tk/Tcl live in
     # the prefix that supplied tk.h (conda env, Homebrew tcl-tk, or
     # $CCP_TK_PREFIX); X11 in XQuartz.
-    GLX_LIBDIRS = [os.path.join(os.path.dirname(TKINC), "lib"),
+    if TKINC.endswith("/include/tcl-tk"):
+        _tk_base = TKINC[:-15]
+    elif TKINC.endswith("/include"):
+        _tk_base = TKINC[:-8]
+    else:
+        _tk_base = os.path.dirname(TKINC)
+    GLX_LIBDIRS = [os.path.join(_tk_base, "lib"),
                    os.path.join(_x11p, "lib")]
     GLX_LINK = ["-lX11"]
 else:
@@ -118,7 +129,7 @@ else:
     GLX_LIBDIRS = []
     GLX_LINK = ["-l:libX11.so.6"]
 
-CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
+CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-error=incompatible-function-pointer-types"]
 
 
 def mk(name, sources, include, libs=(), libdirs=(), define=(), link=()):

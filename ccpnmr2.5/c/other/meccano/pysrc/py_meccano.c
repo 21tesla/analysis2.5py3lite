@@ -46,6 +46,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 ===========================REFERENCE END===============================
 */
 #include "meccano.h"
+#include "myHBSC.h"
 
 #include "python_util.h"
 

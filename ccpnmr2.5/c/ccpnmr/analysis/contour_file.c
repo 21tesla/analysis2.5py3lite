@@ -158,7 +158,7 @@ static Contour_data get_contour_data(Contour_file contour_file,
     return contour_data;
 }
 
-static delete_components(Contour_file contour_file)
+static void delete_components(Contour_file contour_file)
 {
     FREE(contour_file->components, int);
     contour_file->ncomponents = 0;
