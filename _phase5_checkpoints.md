@@ -108,7 +108,28 @@ Still covered by `test_module_imports` (8/8 import + attribute checks for all).
 → 12 pass / 4 skip; 2 new real instantiations, 10 vague skips → 4 documented).
 compileall **0**; import_smoke **1646/0/83** (unchanged).
 
-### P5-3 — Ship / productize — status: PENDING
-- `git tag v2.5.2-py3`; PyPI upload path + install doc (`pip install <wheel>` then
-  `pip install ccpnmr[optional]`); optional conda-forge recipe.
-- Verify tag/contents; close Phase 5 + update project memory.
+### P5-3 — Ship / productize — status: DONE (this bucket — closes Phase 5)
+**Publish-ready verified (dist/ wheel + sdist from Phase 4, re-inspected here):**
+- METADATA: Name `ccpnmr`, Version 2.5.2, License LGPL-2.1, Project-URL (Homepage + Source),
+  extras `gui|optional|testing|dev`, 8 console_scripts; wheel **77 .so** + data dirs
+  (model 965 / data 779 / doc 34 / license 2); sdist ships **setup.py + 122 C sources**.
+  → `pip check` clean, 8/8 scripts, installed smoke FAILED:0, GUI boot 8/8 (Phase-4 gates, unchanged).
+**Deliverables added (this bucket):**
+- `docs/PUBLISHING.md` — install (wheel/sdist/PyPI), build env (system gcc, GL/Tk, GSL optional),
+  gate set, twine check/upload path, PyPI name caveat, conda pointer.
+- `scripts/publish.sh` — build → verify clean install → `twine check`; `--upload` flag to publish
+  (opt-in; not executed here). Syntax-checked (`bash -n`).
+- `recipe/meta.yaml` + `recipe/README.md` — **optional starting-point conda-forge recipe**
+  (build-from-sdist, C compiler + cython/numpy host deps, GSL optional/maintainer- TODO).
+- `README.md` — added a short "Publishing (upstream)" section (tag, docs, recipe) before Scope notes.
+**Git tag:** `v2.5.2-py3` (annotated) at the Phase-5 close-out commit.
+**Memory:** project memory + index updated to Phases 0-5 COMPLETE.
+
+---
+
+## PHASE 5 COMPLETE (2026-08-21)
+Buckets: P5-1 (green NEF parser-test suite; fix cwd-anchored testdata path; skip-unbundled +
+add shipped-sample parse test), P5-2 (4 latent py3 bugs + C-ext instantiation test expansion),
+P5-3 (publish docs/script/recipe + tag). Final verified state (live on tree):
+- compile 0; smoke **1646 OK / 0 FAILED / 83 BY-DESIGN**; pytest **47 passed / 13 skipped / 0 failed**;
+  GUI boot 8/8; 39/39 C-ext imports; `pip check` clean; wheel 77 .so + sdist 122 C sources; tag `v2.5.2-py3`.

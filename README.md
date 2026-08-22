@@ -109,6 +109,14 @@ gui_boot_test.py    Xvfb GUI launch harness
 tests (ccpnmr2.5/python/tests)  functional pytest suite
 ```
 
+## Publishing (upstream)
+
+- **Tag:** `v2.5.2-py3` (this release).
+- **Install / publish docs:** [`docs/PUBLISHING.md`](./docs/PUBLISHING.md) — build env,
+  gate set, `scripts/publish.sh` (build → verify → `twine check`/`upload`),
+  plus a PyPI name caveat.
+- **Conda-forge recipe (starting point):** [`recipe/meta.yaml`](./recipe/meta.yaml).
+
 ## Scope notes
 
 - Legacy single-purpose modules (clouds, haddock extender, some CASD/education
