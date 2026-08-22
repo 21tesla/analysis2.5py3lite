@@ -76,15 +76,16 @@ TKINC = _tkinc()
 #  * Linux: OpenGL via GLX from an X11 GL stack (freeglut/mesa provide glx.h);
 #    X11 symbols resolved via a versioned direct link (no -dev symlink needed).
 #  * macOS: there is no GLX — gl_handler.c compiles its GLX context code out
-#    under IGNORE_GL, so the GL-dependent window handlers degrade to the Tk
-#    path while the data layer, fitting and 2D drawing keep full function.
-#    glut.h (and libglut, if still referenced) come from XQuartz
-#    (/opt/X11 by default; override with CCP_X11_PREFIX) or `brew install mesa`.
+#    under IGNORE_GL (the guard wraps essentially the whole file), so the
+#    GL-dependent window handlers degrade to the Tk path while the data layer,
+#    fitting and 2D drawing keep full function.  tk_handler.c still calls
+#    Xlib directly (XDrawLine, XFillArc, ...) — XQuartz (/opt/X11) supplies
+#    those headers + libX11.  GLUT is then not needed at all.
 if DARWIN:
     GLX_DEFINE = ("IGNORE_GL=1",)
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
-    GLX_LINK = []
+    GLX_LINK = ["-L" + os.path.join(_x11p, "lib"), "-lX11"]
 else:
     GLX_DEFINE = ()
     GLX_INC = []
@@ -123,7 +124,11 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/py_gl_handler.c", f"{G}/gl_handler.c",
             f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
             f"{G}/clipping.c"]
-DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
+if DARWIN:
+    # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
+    DRAWLIBS = ["tk8.6", "tcl8.6", "m"]
+else:
+    DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
 DRAWINC_EXTRA = [TKINC] + GLX_INC
 
 # ------------------------------------------------------------------ family defs
@@ -236,11 +241,11 @@ FAM = {
     # import:  memops.c.GlHandler / memops.c.TkHandler
     "GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
-                        + GU, [G, TKINC] + GLX_INC, ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
                         (), GLX_DEFINE, GLX_LINK),
     "TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
-                        + GU, [G, TKINC] + GLX_INC, ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
                         (), GLX_DEFINE, GLX_LINK),
 
     # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
