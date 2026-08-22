@@ -1317,7 +1317,7 @@ class CalcRatesPopup(BasePopup):
 
     def getExpSeries(self):
 
-        expSeries = getSampledDimExperiments(self.nmrProject) + self.nmrProject.sortedNmrExpSeries()
+        expSeries = list(getSampledDimExperiments(self.nmrProject)) + self.nmrProject.sortedNmrExpSeries()
 
         """wb104: 08 Mar 2010: changed to allow everything, Tim not
        sure this is good idea, so leave below code here for now

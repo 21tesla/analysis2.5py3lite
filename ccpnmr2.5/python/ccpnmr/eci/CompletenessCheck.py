@@ -1189,7 +1189,7 @@ def checkNmrEntryCompleteness(nmrEntry, textReport=False, submissionType="PDB"):
     for key in sorted(finalInfoDict.keys()):
         finalInfoList.append(finalInfoDict[key])
 
-    finalInfoList.sort(listCol6Cmp)
+    finalInfoList.sort(key=lambda x: x[5])
 
     if not textReport:
         finalInfoList2 = []

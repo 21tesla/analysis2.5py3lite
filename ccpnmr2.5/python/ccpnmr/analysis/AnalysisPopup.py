@@ -150,7 +150,7 @@ from memops.gui.MessageReporter import showError, showInfo, showWarning, showYes
 from memops.gui.WebBrowser import WebBrowser
 from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
 from nijmegen.cing.CingPopup import CingPopup
-from paris.aria.AriaExtendNmrFrame import AriaPopup
+#from paris.aria.AriaExtendNmrFrame import AriaPopup
 from rutgers.rpf.PyRPF import PyRpfPopup
 from utrecht.haddock.HaddockPopup import HaddockPopup
 
@@ -358,14 +358,19 @@ class AnalysisPopup(BasePopup, Analysis):
         self.errorHandler = ErrorHandler()
 
         def show_error(*args):
+            import traceback
+            traceback.print_exception(*args)
             try:
                 self._root().report_callback_exception_tk_native(*args)
-                if self.analysisProfile.sendBugReports != "no":
-                    formatedTb = traceback.format_exception(*args)
+                if self.analysisProfile and self.analysisProfile.sendBugReports != "no":
+                    if len(args) == 3:
+                        formatedTb = traceback.format_exception(args[0], args[1], args[2])
+                    else:
+                        formatedTb = traceback.format_exception(*args)
                     if self.errorHandler.reportNeeded(formatedTb, *args):
                         popup = ReportErrorPopup(self, formatedTb, *args)
-            except:
-                print("Automated report failed")
+            except Exception as e:
+                print("Automated report failed:", e)
 
         self._root().report_callback_exception_tk_native = self._root().report_callback_exception
         self._root().report_callback_exception = show_error
@@ -2204,6 +2209,7 @@ class AnalysisPopup(BasePopup, Analysis):
             self.menus[name].entryconfig(index, state=state)
 
     def newProject(self, name=""):
+        print(f"DEBUG: AnalysisPopup.newProject called with name='{name}'")
 
         def validName(name):
             if len(name) > 32:
@@ -2216,23 +2222,32 @@ class AnalysisPopup(BasePopup, Analysis):
             return True
 
         if self.project:
+            print("DEBUG: AnalysisPopup.newProject closing existing project...")
             if not self.closeProject():
+                print("DEBUG: AnalysisPopup.newProject closeProject returned False. Aborting.")
                 return
+            print("DEBUG: AnalysisPopup.newProject existing project closed.")
 
         prompt = "Enter project name:"
         while not name:
+            print(f"DEBUG: AnalysisPopup.newProject calling askString(title='Project : New', prompt='{prompt}')")
             name = askString(title="Project : New", prompt=prompt, parent=self)
+            print(f"DEBUG: AnalysisPopup.newProject askString returned: {name}")
 
             if name is None:
+                print("DEBUG: AnalysisPopup.newProject user cancelled. Breaking loop.")
                 break
 
             elif not validName(name):
+                print(f"DEBUG: AnalysisPopup.newProject invalid name '{name}'. Looping again.")
                 name = ""
                 prompt = 'Name invalid.\nEnter project name\n(between 1 and 32 chars; alphanumeric and "_" only):'
 
         if name:
+            print(f"DEBUG: AnalysisPopup.newProject proceeding with valid name '{name}'")
             project = Impl.MemopsRoot(name=name)
             self.initProject(project)
+            print("DEBUG: AnalysisPopup.newProject initProject complete.")
 
     def openPopup(self, popup_name, clazz, oldStyle=False, *args, **kw):
 
@@ -2638,11 +2653,11 @@ class AnalysisPopup(BasePopup, Analysis):
     def activateAriaSetup(self):
         # Leave for a bit so old tutorial script works.
 
-        self.openPopup("aria_setup", AriaPopup)
+        pass #self.openPopup("aria_setup", AriaPopup)
 
     def startAria(self):
 
-        self.openPopup("aria_setup", AriaPopup)
+        pass #self.openPopup("aria_setup", AriaPopup)
 
     def setupCyanaCalculation(self):
 

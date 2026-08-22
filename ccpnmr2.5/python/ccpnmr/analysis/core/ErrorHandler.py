@@ -46,10 +46,10 @@ class ErrorHandler:
         self.errorRepository = []
 
     def reportNeeded(self, formatedTb, exc, val, tb):
+        val_str = str(val.args[0]) if hasattr(val, 'args') and val.args else str(val)
         for error in self.errorRepository:
-            if (str(val[0]) == str(error.val[0]) and formatedTb == error.formatedTb) or str(
-                val[0]
-            ) == "[Errno -2] Name or service not known":
+            error_val_str = str(error.val.args[0]) if hasattr(error.val, 'args') and error.val.args else str(error.val)
+            if (val_str == error_val_str and formatedTb == error.formatedTb) or val_str == "[Errno -2] Name or service not known":
                 return 0
 
         self.errorRepository.append(ErrorInstance(val, formatedTb))

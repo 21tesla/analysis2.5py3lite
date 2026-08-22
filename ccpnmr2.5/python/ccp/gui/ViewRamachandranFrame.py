@@ -527,8 +527,8 @@ class ViewRamachandranFrame(ScrolledCanvas):
         lines = lines[4:]
 
         # initialize intensities[i][j] to 0
-        x = int(dims[0]) / binSize
-        y = int(dims[1]) / binSize
+        x = int(dims[0]) // binSize
+        y = int(dims[1]) // binSize
         intensities = [[0] * y for i in range(x)]
 
         # Here the intensities are read row by row corresponding to the matrix.
@@ -542,8 +542,8 @@ class ViewRamachandranFrame(ScrolledCanvas):
             if i >= int(dims[0]):
                 i = 0
                 j = j + 1
-                y = j / binSize
-            x = i / binSize
+                y = j // binSize
+            x = i // binSize
             value = int(line.strip())
             intensities[x][y] += value
             total += value
@@ -587,7 +587,7 @@ class ViewRamachandranFrame(ScrolledCanvas):
         green = 0.6 * (1 - j)
         blue = green
 
-        return "#%02x%02x%02x" % (red * maxInt, green * maxInt, blue * maxInt)
+        return "#%02x%02x%02x" % (int(red * maxInt), int(green * maxInt), int(blue * maxInt))
 
     def updateCrosshair(self, phi, phiSD, psi, psiSD):
         # phi and psi must lie between -180 and 180

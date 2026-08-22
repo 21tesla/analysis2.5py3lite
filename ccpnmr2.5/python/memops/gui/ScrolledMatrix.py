@@ -935,7 +935,7 @@ class ScrolledMatrix(Frame):
             text = "%2d %s %d %2d:%2.2d" % (text.day, months[text.month], text.year, text.hour, text.minute)
 
         elif textType is unicodeType:
-            text = text.encode("utf-8")
+            pass
 
         elif textType != stringType:
             text = str(text)
@@ -946,8 +946,15 @@ class ScrolledMatrix(Frame):
         return text
 
     def refreshSizeAfter(self, event, scrollRefresh=True):
+        if event:
+            sz = (event.width, event.height)
+            if getattr(self, '_last_cfg_sz', None) == sz:
+                return
+            self._last_cfg_sz = sz
 
-        self.after_idle(lambda: self.refreshSize(event, scrollRefresh))
+        if hasattr(self, '_pending_refreshSize'):
+            self.after_cancel(self._pending_refreshSize)
+        self._pending_refreshSize = self.after_idle(lambda: self.refreshSize(event, scrollRefresh))
 
     def refreshSize(self, event=None, scrollRefresh=True):
 
@@ -2292,7 +2299,7 @@ class ScrolledMatrix(Frame):
                 self.vertScrollbar.place_forget()
                 self.filterCanvas.place_forget()
 
-        self.update_idletasks()
+        # self.update_idletasks() # Disabled to prevent RecursionError on Python 3 Tkinter
 
     def destroy(self):
 

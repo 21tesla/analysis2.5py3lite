@@ -229,12 +229,18 @@ class TabbedFrame(Frame):
         if event:
             w = event.width
             h = event.height
+            sz = (w, h)
+            if getattr(self, '_last_cfg_sz', None) == sz:
+                return
+            self._last_cfg_sz = sz
             self.config(width=w, height=h)
         else:
             w = int(self.winfo_width())
             h = int(self.winfo_height())
 
-        self.after_idle(lambda: self.draw(w, h))
+        if hasattr(self, '_pending_draw'):
+            self.after_cancel(self._pending_draw)
+        self._pending_draw = self.after_idle(lambda: self.draw(w, h))
 
     def draw(self, w, h):
 

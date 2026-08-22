@@ -666,7 +666,7 @@ class MeccanoPopup(BasePopup):
 
 
     phipsiData = []
-    seqCodes = dihedralDict.keys()
+    seqCodes = list(dihedralDict.keys())
     seqCodes.sort()
 
     for seqCode in seqCodes:
@@ -1054,16 +1054,17 @@ class MeccanoPopup(BasePopup):
       firstSeq = residues[0].seqCode
       lastSeq = residues[-2].seqCode
 
-      if first < firstSeq:
+      if first is None or first < firstSeq:
         first = firstSeq
 
-      if last == first:
+      if last is None:
         last = lastSeq
-
+      elif last == first:
+        last = lastSeq
       elif last > lastSeq:
         last = lastSeq
 
-      if first > last:
+      if first is not None and last is not None and first > last:
         last, first = first, last
 
 

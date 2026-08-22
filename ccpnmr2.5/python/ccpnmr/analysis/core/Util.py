@@ -94,7 +94,7 @@ def getHueSortedColorSchemes(analysisProfile):
 
     sortList = [(getAverageHue(cs), cs) for cs in schemes]
 
-    sortList.sort()
+    sortList.sort(key=lambda x: x[0])
 
     return [x[1] for x in sortList]
 
