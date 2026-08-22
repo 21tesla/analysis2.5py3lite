@@ -36,6 +36,19 @@ gui = [
     "PyOpenGL>=3.1.9",
     "Pillow>=10.0",
 ]
+# Optional third-party used by cing / web-server / advanced I/O modules.
+# Not required by the 8 core console apps; install for full tree coverage:
+#   pip install ccpnmr[optional]
+optional = [
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+    "sqlalchemy>=2.0",
+    "cherrypy>=18.0",
+    "decorator>=5.0",
+    "mako>=1.3",
+    "psycopg2-binary>=2.9; platform_system == 'Linux' or platform_system == 'Darwin'",
+]
+# System-dependent (native build, not in extras): pycurl (needs libcurl-dev)
 testing = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
@@ -63,7 +76,16 @@ Homepage = "https://ccpnc.iqfr.csic.es/"
 Source = "https://github.com/ccpnccpn/ccpnmr2"
 
 [tool.setuptools.packages.find]
-where = ["ccpnmr2.5/python"]
+# Two roots:
+#  - ccpnmr2.5/python: the Python packages (memops, ccp, ccpnmr, ...)
+#  - ccpnmr2.5:        the non-Python data dirs the runtime resolves relative
+#                      to the python dir's PARENT (source layout) — model
+#                      (XML metamodel — required at import time), data, doc,
+#                      license. Ships them at the wheel root so an installed
+#                      tree keeps the same relative layout under site-packages
+#                      (getTopDirectory() handles both layouts).
+where = ["ccpnmr2.5/python", "ccpnmr2.5"]
+namespaces = true
 include = [
     "memops*",
     "ccp*",
@@ -82,10 +104,18 @@ include = [
     "regensburg*",
     "rutgers*",
     "utrecht*",
+    "model*",
+    "data*",
+    "doc*",
+    "license*",
 ]
 
 [tool.setuptools.package-data]
-"*" = ["*.xml", "*.py", "*.html", "*.nef", "*.cui"]
+# Full-tree data coverage: the apps ship icons (gif/png), docs (html/rst),
+# StarML (sml), DB schemas (sql), peak/structure data (int/pdb/str/seq),
+# GUI code (js/css) inside package dirs. Selective lists proved incomplete
+# (Phase 4, 2026-08-21) — ship everything non-Python in the tree.
+"*" = ["*"]
 
 # ---------------------------------------------------------------------------
 # Tool configuration

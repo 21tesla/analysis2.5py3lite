@@ -8,13 +8,34 @@ import re
 import sys
 import traceback
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ccpnmr2.5', 'python')
+# Default: the in-repo source tree next to this script. Override with
+# CCP_SMOKE_ROOT to smoke-test an INSTALLED tree (site-packages) — used by the
+# Phase-4 distribution gate (fresh venv -> pip install wheel -> smoke).
+ROOT = os.environ.get(
+    'CCP_SMOKE_ROOT', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ccpnmr2.5', 'python'))
 sys.path.insert(0, ROOT)
+
+# INSTALLED state: site-packages also holds third-party code (pip, numpy, ...).
+# Restrict the walk to top-level entries of the installed ccpnmr distribution
+# itself, read from its dist-info RECORD.
+ALLOWED_TOP = None
+if os.environ.get('CCP_SMOKE_ROOT'):
+    record = os.path.join(ROOT, 'ccpnmr-2.5.2.dist-info', 'RECORD')
+    ALLOWED_TOP = set()
+    with open(record) as f:
+        for line in f:
+            path = line.split(',', 1)[0].strip()
+            if path:
+                top = path.split('/')[0]
+                if not top.endswith('.dist-info'):
+                    ALLOWED_TOP.add(top)
 
 # Third-party modules that are NOT installed in this venv -> "missing dep", not a code bug.
 MISSING_DEPS = {'scipy', 'tkinter', 'Tkinter'}  # Tkinter kept: we WANT to flag capital-Tkinter as a code smell? No -> see below.
 # matplotlib is genuinely optional/heavy; missing = dep, not code bug.
-OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', 'nose'}
+OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', 'nose',
+               # Optional third-party (not in the core distribution deps):
+               'sqlalchemy', 'cherrypy', 'decorator', 'mako', 'psycopg2', 'pycurl'}
 
 # ============================================================================
 # Modules that are NON-IMPORTABLE BY DESIGN (NOT code regressions).
@@ -190,6 +211,12 @@ for rel, modname in files:
     if modname in seen_mod:
         continue
     seen_mod.add(modname)
+    if ALLOWED_TOP is not None:
+        top = modname.split('.')[0]
+        if top in ('model', 'data', 'doc', 'license'):
+            continue  # pure runtime data dirs shipped at the wheel root — not code
+        if top not in ALLOWED_TOP:
+            continue
     try:
         importlib.import_module(modname)
         if modname in KNOWN_NON_IMPORTABLE:

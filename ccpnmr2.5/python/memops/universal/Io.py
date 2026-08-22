@@ -178,8 +178,14 @@ def getTopDirectory():
     """
 
     func = os.path.dirname
-
-    return func(getPythonDirectory())
+    pythonDir = getPythonDirectory()
+    top = func(pythonDir)
+    # Installed layout (pip wheel, Phase 4): the packages AND the data dirs
+    # (model/, data/, doc/) all live under the same site-packages dir, so the
+    # 'top' dir IS the python dir. Source layout keeps <top>/python + <top>/model.
+    if not os.path.isdir(joinPath(top, 'model')) and os.path.isdir(joinPath(pythonDir, 'model')):
+        return pythonDir
+    return top
 
 
 def pathIsInDirectory(path, directory):

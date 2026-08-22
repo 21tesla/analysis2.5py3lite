@@ -13,6 +13,7 @@
 - smoke **1643 OK / 0 FAILED / 83 BY-DESIGN**; compile 0 errors;
   pytest 15 pass / 14 skip / 10 fail (10 = data-gated `/home/logan/software/testdata/` missing, pre-existing).
 - Phase 1–3 complete: syntax, runtime, C-ext (30 exts), import surface, ruff-safe + F821 audit.
+- **After P4-2 (2026-08-21 `4fba0f9`):** smoke **1646 / 0 / 83**; pytest **43 pass** / 14 skip / 10 fail (10 = same data-gated); **6 py3 runtime bugs fixed**.
 
 ## Phase 4 scope decisions (recorded 2026-08-21)
 1. Legacy modules: keep in dist, skip in functional tests.
@@ -90,24 +91,65 @@ Shim created: `~/local-libs/libglut.so.3 -> /usr/lib/x86_64-linux-gnu/libglut.so
 REBUILT exts link the local SONAME — no shim needed on a normal distro install of freeglut).
 GUI launch requires GlHandler or TkHandler → **P4-5 depends on this bucket**.
 
-### P4-2 — Functional core tests (self-contained, no external testdata) — status: TBD
-New tests under `ccpnmr2.5/python/tests/` (conftest already sets pythonpath):
-- project creation via memops editor API;
-- synthetic FID → NEF spectrum object → FFT processing pipeline → peak detection →
-  resonance creation/assignment → save project → reload → assert data parity;
-- C-ext-backed storage paths (ShapeFile/BlockFile) instantiated in the flow or adjacent test.
-- Expect real py3 runtime bugs to surface — FIXING them is the point of this phase.
-- Scope: core only; legacy modules (clouds/haddock/etc.) excluded per user decision.
+### P4-2 — Functional core tests (self-contained, no external testdata) — ✅ DONE (commit `4fba0f9`, 2026-08-21)
+**3 new pytest modules (28 tests), all passing.** New tests:
+- `test_nef_parse.py` (11 tests) — StarTokeniser/StarIo/GenericStarParser parse of bundled NEF
+- `test_project_lifecycle.py` (8 tests) — newProject/createExperiment/createSpectrum/saveProject/loadProject round-trip
+- `test_nef_import.py` (9 tests) — CcpnNefReader.importNewProject + save + reload
 
-### P4-3 — Distribution build + clean install — status: TBD
-- `uv build` (sdist + wheel); build-system `requires` must include numpy (+Cython if
-  generated .c needed at build time) so isolated wheel builds work.
-- Fresh venv (python3.13, outside project, e.g. /tmp/ccp-dist-venv) →
-  `pip install <wheel>` → `pip check` → whole-tree import smoke from INSTALLED state →
-  functional tests from install state.
-- Verify wheel contains: all 24+ top-level packages, package data (*.xml *.py *.html *.nef *.cui),
-  30 .so extensions.
-- Surface packaging gaps; fix (packages.find include list, package-data, missing deps).
+**6 py3 runtime bugs found and fixed:**
+1. `StarTokeniser.getTokenIterator` — py3.1+ re.finditer zero-width match bug (empty strings in token stream) → filter empty tokens
+2. 57 auto-generated API files (394 sites): `ll = sortdd.keys()` + `.sort()` → `list()` wrapper
+3. `memops/universal/Url.py` — `from urllib import urlencode` (py2) → `urllib.parse`; missing `urllib3`; unconditional `pyopenssl` import
+4. `ccp/general/Io.py` — `StringIO(request.read())` bytes→str decode; `data.buf` (py2-only)
+5. `AssignmentBasic.py getAmbigProchiralLabel` — mixed str/int tuple sort → type-discriminator
+6. `memops/xml/Implementation.py saveToStream` — `Method` objects as dict keys; sort with `id(key)` not `tuple<`
+
+**Gate deltas:** smoke 1643→1646 OK, pytest 15→43 pass, no new fails.
+
+### P4-3 — Distribution build + clean install — ✅ DONE (2026-08-21)
+**Gates (both wheel AND sdist, fresh venvs /tmp/ccp-dist-venv + /tmp/ccp-dist-sdist):**
+- `uv build` → sdist 34.7MB + wheel 48.8MB. **BUILD: `CC=/usr/bin/gcc CXX=/usr/bin/g++ uv build`**
+  (anaconda cc has no GL/glx.h in its sysroot — same lesson as P4-4a).
+- `pip install` + `pip check` → **No broken requirements**. **8/8 console scripts** both ways.
+- Sdist path COMPILES ALL C EXTS at install time (MANIFEST.in + setup.py) → 38 flat + 32 pkg = 70 .so.
+- **Smoke from INSTALLED state: 1637 OK / 0 FAILED / 83 BY-DESIGN** (both venvs).
+  Source run = 1646/0/83 — the OK-count delta is the walk basis (tree walk vs dist-RECORD-scoped
+  walk; e.g. the non-shipped `tests/` package), NOT missing code: both states 0 FAILED, 83 BY-DESIGN.
+- **Functional tests from installed state: 43 pass / 14 skip / 10 fail** — 10 = same data-gated
+  `/home/logan/software/testdata/` (pre-existing, present in source run too).
+
+**Packaging gaps found + fixed (this bucket):**
+1. **Runtime data dirs**: apps resolve `<parent(pythonDir)>/model|data|doc` via
+   `memops.universal.Io.getTopDirectory()` — with site-packages layout that pointed at
+   lib/python3.13 → 564 modules failed (RootPackage.xml …). Fixed:
+   - `getTopDirectory()` now returns pythonDir when `<pythonDir>/model` exists (installed layout
+     = data dirs shipped BESIDE packages).
+   - pyproject `packages.find` dual-root (`ccpnmr2.5/python` + `ccpnmr2.5`) + `namespaces=true`
+     + include `model* data* doc* license*` → wheel ships model(965)/data(779)/doc(34)/license(2)
+     files at wheel root → install into site-packages.
+2. **package-data too narrow** (`*.xml *.py *.html *.nef *.cui`) missed 705 gifs, 660 .int,
+   sql, sml, css, js, pdb, seq … → now `"*": ["*"]` (full tree; doc build/html kept — product docs).
+3. **MANIFEST.in**: sdist now includes all C sources (`ccpnmr2.5/c` *.c *.h) + setup.py →
+   `pip install .tar.gz` builds the exts (verified in /tmp/ccp-dist-sdist).
+4. **Optional third-party**: 48 installed-state failures were all missing optionals (scipy,
+   matplotlib, sqlalchemy, cherrypy, decorator, mako, psycopg2, pycurl — 30 via the
+   `ImportWarning("Sql")` in cing/PluginCode/sqlAlchemy.py which ALSO needs psycopg2).
+   → new `pip install ccpnmr[optional]` extra (incl. psycopg2-binary, mako; pycurl noted
+   system-dependent — binary wheel exists on manylinux so it installs fine). With extras: 0 FAILED.
+   (source venv had these ad-hoc — that's why source baseline was 0 FAILED.)
+5. **Test path anchoring**: test_nef_parse/test_nef_import used `__file__/../ccpnmr/...` —
+   broke when run outside the source tree. Now anchored at `ccpnmr.__file__` package
+   (works source AND installed). Both suites re-verified identical green in all 3 states.
+6. **import_smoke.py**: `CCP_SMOKE_ROOT` env override + RECORD-scoped walk for installed state
+   (site-packages also holds pip/numpy/…); data dirs (model/data/doc/license) never walked as code;
+   optional-third-party names added to OPT_MISSING so they classify missing-dep, not FAILED.
+7. superpose (cing Cython ext, imported by cing.core.validate) was a 4th unlisted ext — ships as
+   data .so (py3.13, works). **P4-4: wire into setup.py so rebuilds compile it (superpose.c in tree).**
+
+**Wheel content verified:** 18 top-level pkgs + root data dirs, 30 setup.py exts as flat .so +
+pkg `c/` symlink targets (resolved to real files): cambridge/c(1) ccp/c(4) ccpnmr/c(17) memops/c(10)
+grenoble/c(1 Meccano) + cing superpose — all present.
 
 ### P4-4 — C extensions in the wheel — status: TBD
 - Confirm `setuptools.build_meta` builds `ext_modules` during wheel build (CI + local).
@@ -131,15 +173,23 @@ New tests under `ccpnmr2.5/python/tests/` (conftest already sets pythonpath):
   GUI job (xvfb) if stable; Meccano skipped in CI (no GSL in runner).
 - Update `_phase4_recipe.md`? (Only if the recipe file is needed; checkpoints carry the map.)
 
-## Gate set (Phase 4, unchanged baseline + new)
+## Gate set (Phase 4, current after P4-3)
 ```bash
 cd /home/logan/software/ccpnmr2.5.2-qwen
-MPLBACKEND=Agg .venv/bin/python import_smoke.py                       # 1643 / 0 / 83
+MPLBACKEND=Agg .venv/bin/python import_smoke.py                       # 1646 / 0 / 83
 .venv/bin/python -m compileall -q ccpnmr2.5/python/ 2>&1 | grep -ci "Sorry"   # 0
-.venv/bin/python -m pytest -q                                         # 15 / 14 / 10 (10 data-gated) + new functional pass
-# NEW: distribution gate
-uv build && <fresh venv>/bin/pip install dist/ccpnmr-*.whl && <fresh venv>/bin/python import_smoke.py
-# NEW: GUI gate (local)
+.venv/bin/python -m pytest -q                                         # 43 / 14 / 10 (10 = data-gated testdata)
+# Distribution gate (P4-3) — wheel + sdist, fresh venv outside project:
+CC=/usr/bin/gcc CXX=/usr/bin/g++ uv build
+uv venv --seed --python <py3.13> /tmp/ccp-dist-venv                   # then:
+uv pip install --python /tmp/ccp-dist-venv/bin/python dist/ccpnmr-2.5.2-cp313-*.whl "scipy" "matplotlib" "sqlalchemy" "cherrypy" "decorator" "mako" "psycopg2-binary" "pycurl" "pytest>=8.0"
+/tmp/ccp-dist-venv/bin/pip check                                      # No broken requirements
+ls /tmp/ccp-dist-venv/bin | grep -c ccpnmr                            # 8
+CCP_SMOKE_ROOT=/tmp/ccp-dist-venv/lib/python3.13/site-packages MPLBACKEND=Agg \
+  /tmp/ccp-dist-venv/bin/python import_smoke.py                       # 1637 / 0 / 83
+cd /tmp && /tmp/ccp-dist-venv/bin/python -m pytest /tmp/ccp-dist-tests --pyargs ccpnmr.nef.testing.Test_Star_parsers -q   # 43 / 14 / 10
+# (sdist twin: cp sdist tests into /tmp/ccp-dist-tests, same 2 venvs in P4-3 log)
+# NEW (P4-5): GUI gate (local)
 xvfb-run -a <fresh or venv>/bin/python <gui-boot test>
 ```
 

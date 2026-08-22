@@ -5,9 +5,11 @@ objects (DataBlock, SaveFrame, Loop) expose the expected content.
 """
 from pathlib import Path
 
+import ccpnmr
 from ccpnmr.nef import StarIo
 
-NEF = Path(__file__).resolve().parent.parent / "ccpnmr" / "nef" / "testdata" / "CCPN_Commented_Example.nef"
+# Anchored at the ccpnmr package: identical for source tree and installed dist.
+NEF = Path(ccpnmr.__file__).resolve().parent / "nef" / "testdata" / "CCPN_Commented_Example.nef"
 
 
 def _parse():

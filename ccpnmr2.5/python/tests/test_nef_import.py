@@ -10,17 +10,17 @@ Self-contained: uses bundled NEF test data, writes to tmp_path only.
 Legacy/clouds/haddock modules excluded per user decision.
 """
 import os
+from pathlib import Path
 
 import pytest
 
+import ccpnmr
 from memops.general import Io as memopsIo
 from ccpnmr.v2io import NefIo
 from ccpnmr.nef import StarIo
 
-NEF = (
-    __import__("pathlib").Path(__file__).resolve().parent.parent
-    / "ccpnmr" / "nef" / "testdata" / "CCPN_Commented_Example.nef"
-)
+# Anchored at the ccpnmr package: identical for source tree and installed dist.
+NEF = Path(ccpnmr.__file__).resolve().parent / "nef" / "testdata" / "CCPN_Commented_Example.nef"
 PROJECT_NAME = "CCPN_Commented_Example"
 
 
