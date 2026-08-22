@@ -30,4 +30,33 @@ __date__ = "$Date: 2020-01-13 17:46:24 +0000 (Mon, January 13, 2020) $"
 
 import os
 
-TEST_FILE_PATH = os.path.join(os.path.dirname(os.getcwd()), "testdata")
+# ---------------------------------------------------------------------------
+# Location of the NEF test-data files.
+#
+# The previous value anchored on the working directory:
+#       os.path.join(os.path.dirname(os.getcwd()), "testdata")
+# which only resolved when the test runner's cwd happened to be the *parent*
+# of a directory literally named "testdata".  That made these tests data-gated
+# for every consumer of the distribution -- and unrelated to where the bundled
+# samples actually live.
+#
+# Anchor on the package instead: the samples ship with the code in
+# .../ccpnmr/nef/testdata/, right next to this module (nef/testing/).  An
+# explicit CCP_TESTDATA env var takes precedence (use it to point at a full
+# local dataset, e.g. a BMRB checkout); the legacy cwd-based location is kept
+# only as a last-resort fallback so no existing setup silently loses its data.
+# ---------------------------------------------------------------------------
+_PKG_TESTDATA = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "testdata"  # .../ccpnmr/nef/testdata
+)
+_LEGACY_TESTDATA = os.path.join(os.path.dirname(os.getcwd()), "testdata")
+
+
+def _resolve_test_file_path():
+    for cand in (os.environ.get("CCP_TESTDATA"), _PKG_TESTDATA, _LEGACY_TESTDATA):
+        if cand and os.path.isdir(cand):
+            return cand
+    return _PKG_TESTDATA  # stable, well-defined default even when no dir exists
+
+
+TEST_FILE_PATH = _resolve_test_file_path()
