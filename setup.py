@@ -125,11 +125,14 @@ if DARWIN:
     GLX_LINK = ["-lX11"]
 else:
     GLX_DEFINE = ()
-    GLX_INC = []
-    GLX_LIBDIRS = []
+    GLX_INC = ["/usr/include"]
+    GLX_LIBDIRS = ["/usr/lib/x86_64-linux-gnu", "/usr/lib"]
     GLX_LINK = ["-l:libX11.so.6"]
 
-CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-error=incompatible-function-pointer-types"]
+if DARWIN:
+    CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-error=incompatible-function-pointer-types"]
+else:
+    CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-error=incompatible-pointer-types"]
 
 
 def mk(name, sources, include, libs=(), libdirs=(), define=(), link=()):
