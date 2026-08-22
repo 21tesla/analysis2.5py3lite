@@ -213,7 +213,7 @@ class PdbSequenceFile(PdbGenericFile):
         chainIdInfo = {}
         oldChainId = None
 
-        modelCoordKeys = pdbFile.modelCoordinates.keys()
+        modelCoordKeys = list(pdbFile.modelCoordinates.keys())
         modelCoordKeys.sort()
         modelCoordRefKey = modelCoordKeys[0]
 

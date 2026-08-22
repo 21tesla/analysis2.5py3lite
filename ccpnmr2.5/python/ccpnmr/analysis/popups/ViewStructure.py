@@ -156,7 +156,7 @@ class ViewStructurePopup(BasePopup):
         label = Label(frame, text=" Dist Method:", grid=(0, 9), sticky="e")
         tipText = "Where the distances between sets of atoms are displayed, sets whether to use the NOE equivalent (sum r^-6 intensities) or minimum distance"
         self.distMethodPulldown = PulldownList(
-            frame, callback=self.setDistMethod, texts=distanceMethods.keys(), grid=(0, 10), sticky="e", tipText=tipText
+            frame, callback=self.setDistMethod, texts=list(distanceMethods.keys()), grid=(0, 10), sticky="e", tipText=tipText
         )
 
         row += 1

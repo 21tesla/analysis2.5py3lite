@@ -285,7 +285,7 @@ class VascoReferenceCheck:
       molType = 'protein'
       protonToHeavyAtomDict = protonToHeavyAtom[molType]
 
-      seqKeys = self.whatIfInfo['chains'][chainCode].keys()
+      seqKeys = list(self.whatIfInfo['chains'][chainCode].keys())
       seqKeys.sort()
 
       for seqKey in seqKeys:
@@ -520,7 +520,7 @@ class VascoReferenceCheck:
     # Print out info
     #
 
-    atomKeys = self.rerefInfo.keys()
+    atomKeys = list(self.rerefInfo.keys())
     atomKeys.sort()
 
     for atomKey in atomKeys:

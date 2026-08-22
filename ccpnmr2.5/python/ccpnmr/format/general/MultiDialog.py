@@ -614,7 +614,7 @@ class MultiDialog:
             # Order according to %
             #
 
-            percentages = formatPercentages.keys()
+            percentages = list(formatPercentages.keys())
             percentages.sort()
             percentages.reverse()
 
@@ -708,7 +708,7 @@ class MultiDialog:
         nonGuiClass = NonGuiClass()
         nonGuiClass.chainDict = {}
 
-        ccpChainList = self.ccpChainLabelDict.keys()
+        ccpChainList = list(self.ccpChainLabelDict.keys())
         ccpChainList.sort()
 
         for formatChainText in self.formatChainList[:-1]:
@@ -862,7 +862,7 @@ class MultiDialog:
         nonGuiClass = NonGuiClass()
         nonGuiClass.chainDict = {}
 
-        ccpChainLabelList = self.ccpChainLabelDict.keys()
+        ccpChainLabelList = list(self.ccpChainLabelDict.keys())
         ccpChainLabelList.sort()
 
         exportChainCodes = []
@@ -1022,7 +1022,7 @@ class MultiDialog:
 
             atomPercentDict[atomPercent].append(namingSystemName)
 
-        atomPercentList = atomPercentDict.keys()
+        atomPercentList = list(atomPercentDict.keys())
         atomPercentList.sort()
         atomPercentList.reverse()
 
@@ -1134,7 +1134,7 @@ class MultiDialog:
         self.chemAtomList = []
         self.chemAtomDict = {}
 
-        elementSymbols = self.elementAtomSets.keys()
+        elementSymbols = list(self.elementAtomSets.keys())
         elementSymbols.sort()
 
         #
@@ -1336,7 +1336,7 @@ class MultiDialog:
         self.chemAtomList = []
         self.chemAtomDict = {}
 
-        elementSymbols = self.elementAtomSets.keys()
+        elementSymbols = list(self.elementAtomSets.keys())
         elementSymbols.sort()
 
         #

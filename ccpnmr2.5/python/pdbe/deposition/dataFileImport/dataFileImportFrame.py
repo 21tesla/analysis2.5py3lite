@@ -292,7 +292,7 @@ class DataFileImportFrame(Frame):
     fileTypes = [FileType('all', ['*'])]
 
     for dataType in dataTypes:
-      formatNames = fileTypeDict[dataType].keys()
+      formatNames = list(fileTypeDict[dataType].keys())
       formatNames.sort()
       for formatName in formatNames:
         if formatName in self.fcWrapper.formatNameLists[dataType]:

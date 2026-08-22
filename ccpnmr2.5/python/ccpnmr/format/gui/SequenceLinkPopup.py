@@ -272,7 +272,7 @@ class SequenceLinkPopup(TemporaryBasePopup):
             text = ""
 
             if texts:
-                textSorted = texts.keys()
+                textSorted = list(texts.keys())
                 textSorted.sort()
 
                 for textItem in textSorted:

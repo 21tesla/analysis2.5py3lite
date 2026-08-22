@@ -2764,13 +2764,13 @@ stereochemistry is cna be seen by examining the atom network.
 #            nTcodeerror("1 in modResDescriptorForTerminii for an NA")
     ccpnResDescriptorNew = ''
     if protList:
-        keyList = protList.keys()
+        keyList = list(protList.keys())
         keyList.sort()
         ccpnResDescriptorNew += 'prot:' + ','.join(keyList)
     if deprotList:
         if ccpnResDescriptorNew != '':
             ccpnResDescriptorNew += ';'
-        keyList = deprotList.keys()
+        keyList = list(deprotList.keys())
         keyList.sort()
         ccpnResDescriptorNew += 'deprot:' + ','.join(keyList)
     if ccpnResDescriptorItemSaveList:

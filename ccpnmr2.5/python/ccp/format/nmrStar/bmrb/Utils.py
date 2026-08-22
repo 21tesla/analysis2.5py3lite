@@ -34,7 +34,7 @@ class Lister:
 
     def attrnames(self):
         result = ""
-        keys = self.__dict__.keys()
+        keys = list(self.__dict__.keys())
         keys.sort()
         for attr in keys:
             if attr[:2] == "__":

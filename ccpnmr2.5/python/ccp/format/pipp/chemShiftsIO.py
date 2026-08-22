@@ -198,7 +198,7 @@ class PippChemShiftFile(PippGenericFile):
             atomNameKey = (chemShift.atomName,) + tuple(chemShift.otherAtomNames)
             shiftsByResidue[chemShift.seqCode][atomNameKey] = chemShift
 
-        seqCodes = shiftsByResidue.keys()
+        seqCodes = list(shiftsByResidue.keys())
         seqCodes.sort()
 
         for ssIndex in range(len(seqCodes)):
@@ -212,7 +212,7 @@ class PippChemShiftFile(PippGenericFile):
             # Write out chem shifts
             #
 
-            atomNameKeys = shiftsByResidue[seqCode].keys()
+            atomNameKeys = list(shiftsByResidue[seqCode].keys())
             atomNameKeys.sort()
 
             for atomNameKey in atomNameKeys:

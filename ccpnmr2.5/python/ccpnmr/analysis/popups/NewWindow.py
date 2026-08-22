@@ -343,7 +343,7 @@ class NewWindowPopup(BasePopup):
             axisIsotopes[label] = (axisType.measurementType.lower(), set(axisType.isotopeCodes))
 
         spectraSel = []
-        axes = axisIsotopes.keys()
+        axes = list(axisIsotopes.keys())
         axes.sort()
         for name, spectrum in spectra:
             dimIsotopes = spectrumIsotopes[spectrum]

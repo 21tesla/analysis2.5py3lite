@@ -102,8 +102,8 @@ def readCrosspeakFile(project, verbose=False):
 
     x = array.array("i")
     y = array.array("f")
-    x.fromstring(s)
-    y.fromstring(s)
+    x.frombytes(s)
+    y.frombytes(s)
 
     ndim = x[3]
 

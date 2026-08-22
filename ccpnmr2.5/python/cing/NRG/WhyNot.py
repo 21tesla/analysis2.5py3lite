@@ -73,7 +73,7 @@ class WhyNotEntry:
 class WhyNot(dict):
     def __str__(self):
         result = ''
-        keyList = self.keys()
+        keyList = list(self.keys())
         keyList.sort()
         for key in keyList:
             whyNotEntry = self[key]

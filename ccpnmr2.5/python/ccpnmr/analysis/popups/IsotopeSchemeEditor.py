@@ -360,7 +360,7 @@ class IsotopeSchemeEditor(BasePopup):
         )
 
         label = Label(frame, text="Molecule Type:", grid=(0, 2), sticky="e")
-        entries = standardResidueCcpCodes.keys()
+        entries = list(standardResidueCcpCodes.keys())
         entries.sort()
         entries.reverse()
         tipText = "Selects which type of bio-polymer to define residue isotopomer labelling for"
@@ -1024,7 +1024,7 @@ class IsotopeSchemeEditor(BasePopup):
                 if symbol:
                     elementDict[symbol] = True
 
-            names = elementDict.keys()
+            names = list(elementDict.keys())
             names.sort()
 
         else:

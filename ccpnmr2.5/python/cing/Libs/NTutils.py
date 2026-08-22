@@ -2041,7 +2041,7 @@ class CountMap(NTdict):
     def toString(self):
         'Sorted by key not by value.'
         lineList = []
-        keyList = self.keys()
+        keyList = list(self.keys())
         keyList.sort()
 #        keyList.reverse()
         for key in keyList:
@@ -4217,7 +4217,7 @@ class ExecuteProgram(NTdict):
             cmd = cmdPathAppend + '; ' + cmd
 
         if self.appendEnvVariableDict:
-            envVariableList = self.appendEnvVariableDict.keys()
+            envVariableList = list(self.appendEnvVariableDict.keys())
             envVariableList.sort()
             extraEnvList = []
             for envVariable in envVariableList:
@@ -5133,7 +5133,7 @@ def toCsv(inObject):
         for item in inObject:
             result += "%s\n" % item
     if isinstance(inObject, dict):
-        keyList = inObject.keys()
+        keyList = list(inObject.keys())
         keyList.sort()
         for key in keyList:
             result += "%s,%s\n" % ( key, str(inObject[key]) )

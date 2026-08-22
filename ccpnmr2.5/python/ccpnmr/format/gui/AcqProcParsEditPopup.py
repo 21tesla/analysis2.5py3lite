@@ -359,7 +359,7 @@ class AcqProcParsEditPopup(TemporaryBasePopup):
         # Now do the processed data stuff...
         #
 
-        formatNames = self.freqFormats.keys()
+        formatNames = list(self.freqFormats.keys())
         formatNames.sort()
 
         for formatName in formatNames:

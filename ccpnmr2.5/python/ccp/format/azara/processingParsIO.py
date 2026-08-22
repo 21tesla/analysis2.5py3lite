@@ -310,13 +310,13 @@ if __name__ == "__main__":
 
         procParFile.read(verbose=1)
 
-        aparsKeys = procParFile.aPars.keys()
+        aparsKeys = list(procParFile.aPars.keys())
         aparsKeys.sort()
         print("apars")
         for aparsKey in aparsKeys:
             print("  %-20s: %s" % (aparsKey, str(procParFile.aPars[aparsKey])))
 
-        fparsKeys = procParFile.fPars.keys()
+        fparsKeys = list(procParFile.fPars.keys())
         fparsKeys.sort()
         print("fpars")
         for fparsKey in fparsKeys:

@@ -864,7 +864,7 @@ class XmlModelGen(TextWriter_py_2_1.TextWriter_py_2_1, ModelTraverse_py_2_1.Mode
                     self.writeElementRecursive(obj)
 
         # handle normal cases
-        ll = metaObj._MetaModelElement__elementDict.items()
+        ll = list(metaObj._MetaModelElement__elementDict.items())
         ll.sort()
         if ll:
             self.fp.write("\n")

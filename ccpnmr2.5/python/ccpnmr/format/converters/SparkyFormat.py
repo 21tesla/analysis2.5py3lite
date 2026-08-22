@@ -259,7 +259,7 @@ class SparkyFormat(DataFormat):
         for csList in self.project.currentNmrProject.findAllMeasurementLists(className="ShiftList"):
             csListDict[csList.serial] = csList
 
-        serials = csListDict.keys()
+        serials = list(csListDict.keys())
         serials.sort()
 
         csLists = []

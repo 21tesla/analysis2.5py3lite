@@ -103,11 +103,11 @@ class MMCIFSequenceFile(MMCIFFile):
         self.chemCompInfo = self.mmCif.getChemCompInfo()
 
         self.coordinateInfo = self.mmCif.getCoordinateInfo()
-        models = self.coordinateInfo.keys()
+        models = list(self.coordinateInfo.keys())
         models.sort()
         self.coordinateRefModel = models[0]
 
-        entityIds = sequenceInfo.keys()
+        entityIds = list(sequenceInfo.keys())
         entityIds.sort()
 
         #
@@ -121,7 +121,7 @@ class MMCIFSequenceFile(MMCIFFile):
             if moleculeType == "polymer" and polymerType:
                 entityIds.pop(entityIds.index(entityId))
 
-                chainCodes = sequenceInfo[entityId][-1].keys()
+                chainCodes = list(sequenceInfo[entityId][-1].keys())
                 chainCodes.sort()
 
                 if polymerType.count("polypep"):
@@ -173,7 +173,7 @@ class MMCIFSequenceFile(MMCIFFile):
         for entityId in entityIds:
             (moleculeType, moleculeName, polymerType, chainCodes, residueInfo) = sequenceInfo[entityId]
 
-            chainCodes = sequenceInfo[entityId][-1].keys()
+            chainCodes = list(sequenceInfo[entityId][-1].keys())
             chainCodes.sort()
 
             for chainCode in chainCodes:
@@ -345,7 +345,7 @@ class MMCIFSequenceFile(MMCIFFile):
         # Set the bonds on the sequence element level!
         #
 
-        mmCifBondTypes = bondInfo.keys()
+        mmCifBondTypes = list(bondInfo.keys())
         mmCifBondTypes.sort()
 
         for mmCifBondType in mmCifBondTypes:

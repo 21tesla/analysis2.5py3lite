@@ -1276,7 +1276,7 @@ class NmrStarFormat(DataFormat):
         self.setupTable(tableName)
 
         # THESE KEYS ARE INTEGERS - leave as is!
-        modelNumbers = self.coordinateFile.modelCoordinates.keys()
+        modelNumbers = list(self.coordinateFile.modelCoordinates.keys())
         modelNumbers.sort()
 
         for modelNumber in modelNumbers:

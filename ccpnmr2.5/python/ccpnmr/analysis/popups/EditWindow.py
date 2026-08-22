@@ -377,7 +377,7 @@ class EditWindowPopup(BasePopup):
         self.panelTypeWidget = PulldownList(self, callback=self.setAxisPanelType)
 
         self.sliceThicknessWidget = PulldownList(
-            self, callback=self.setSliceThickness, texts=map(str, SLICE_HEIGHT_VALS), objects=SLICE_HEIGHT_VALS
+            self, callback=self.setSliceThickness, texts=list(map(str, SLICE_HEIGHT_VALS)), objects=SLICE_HEIGHT_VALS
         )
 
         self.tiedAxesWidget = MultiWidget(self, CheckButton, callback=self.setTiedAxes, minRows=0, useImages=False)

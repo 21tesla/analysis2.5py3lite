@@ -249,7 +249,7 @@ class DyanaCoordinateFile(DyanaGenericFile):
         if len(self.modelCoordinates) > 1:
             print("Warning: can only handle 1 model per file for %s! Writing 1st model in list..." % self.format)
 
-        modelNums = self.modelCoordinates.keys()
+        modelNums = list(self.modelCoordinates.keys())
         modelNums.sort()
         modelNum = modelNums[0]
 

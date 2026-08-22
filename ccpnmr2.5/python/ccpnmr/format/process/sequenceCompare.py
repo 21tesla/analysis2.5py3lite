@@ -181,7 +181,7 @@ class SequenceCompare:
 
     def createFormatFileChainInformation(self):
 
-        formatChainCodes = self.formatFileResidueDict.keys()
+        formatChainCodes = list(self.formatFileResidueDict.keys())
         formatChainCodes.sort()
 
         if not formatChainCodes:

@@ -208,7 +208,7 @@ def loadProjectFile(filePath, partialLoad=False):
     filePath = os.path.abspath(filePath)
     lowestDir = os.path.dirname(filePath)
 
-    project = loadFromStream(open(filePath), topObjId=topObjId, partialLoad=partialLoad)
+    project = loadFromStream(open(filePath, "rb"), topObjId=topObjId, partialLoad=partialLoad)
 
     activeRepositories = project.__dict__["activeRepositories"]
     if not activeRepositories:
@@ -226,14 +226,14 @@ def loadTopObject(repositoryPath, topObject):
     filePath = xmlUtil.findTopObjectPath(repositoryPath, topObject)
     topObjId = xmlUtil.getTopObjIdFromFileName(filePath, mustBeMultipart=True)
 
-    return loadFromStream(open(filePath), topObjId=topObjId, topObject=topObject)
+    return loadFromStream(open(filePath, "rb"), topObjId=topObjId, topObject=topObject)
 
 
 def loadFromFile(memopsRoot, filePath, partialLoad=False):
     """Load topObject from filePath and MemopsRoot"""
 
     # open file
-    stream = open(filePath)
+    stream = open(filePath, "rb")
 
     # load file
     try:

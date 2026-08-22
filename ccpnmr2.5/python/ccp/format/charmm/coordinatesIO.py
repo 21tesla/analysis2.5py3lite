@@ -165,7 +165,7 @@ class CharmmCoordinateFile(CharmmGenericFile):
         # TODO: only writing out one model at a time per file...
         #
 
-        modelNums = self.modelCoordinates.keys()
+        modelNums = list(self.modelCoordinates.keys())
         modelNums.sort()
 
         modelCoords = self.modelCoordinates[modelNums[0]]

@@ -144,7 +144,7 @@ class ChainLinkPopup(TemporaryBasePopup):
         self.formatRemoveCode = {}
         self.formatRemoveLabel = {}
 
-        ccpChainLabels = self.ccpChainLabelDict.keys()
+        ccpChainLabels = list(self.ccpChainLabelDict.keys())
         ccpChainLabels.sort()
 
         ccpChainSeqIdLabels = {}

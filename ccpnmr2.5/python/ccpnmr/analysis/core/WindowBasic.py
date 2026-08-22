@@ -2264,7 +2264,7 @@ def zoomToShowPeaks(peaks, windowPane, row=None, col=None):
     for peak in peaks:
         if peak.peakList.dataSource in spectra:
             dimMapping = getPeakDimAxisMapping(peak, windowPane)
-            axes = dimMapping.keys()
+            axes = list(dimMapping.keys())
             axes.sort()
 
             for i, axis in enumerate(axes):
@@ -3040,7 +3040,7 @@ def getSpinSystemWindowShifts(spinSystems, windowPane, shiftList=None):
 
     for spectrum in spectra[:1]:
         dimMapping = getDataDimAxisMapping(spectrum, windowPane)
-        axisNames = dimMapping.keys()
+        axisNames = list(dimMapping.keys())
         axisNames.sort()
 
         for key in axisNames:
@@ -3049,7 +3049,7 @@ def getSpinSystemWindowShifts(spinSystems, windowPane, shiftList=None):
 
     for spectrum in spectra[1:]:
         dimMapping = getDataDimAxisMapping(spectrum, windowPane)
-        axisNames = dimMapping.keys()
+        axisNames = list(dimMapping.keys())
         axisNames.sort()
 
         i = 0

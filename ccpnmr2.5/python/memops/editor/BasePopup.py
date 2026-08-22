@@ -124,9 +124,9 @@ class BasePopup(memops.gui.BasePopup.BasePopup):
 
     def turnOffNotifiers(self, modifyList=False):
 
-        for classname in self.notifies.keys():
+        for classname in list(self.notifies.keys()):
             cc = self.notifies[classname]
-            for key in cc.keys():
+            for key in list(cc.keys()):
                 try:
                     (funcname, application, keyword) = key
                 except:
@@ -138,10 +138,10 @@ class BasePopup(memops.gui.BasePopup.BasePopup):
 
     def turnOnNotifiers(self):
 
-        for classname in self.notifies.keys():
+        for classname in list(self.notifies.keys()):
             cc = self.notifies[classname]
             notifies = Implementation.getClassFromFullName(classname)._notifies
-            for key in cc.keys():
+            for key in list(cc.keys()):
                 try:
                     (funcname, application, keyword) = key
                 except:

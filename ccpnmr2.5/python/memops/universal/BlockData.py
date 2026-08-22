@@ -238,7 +238,7 @@ def writeBlockData(file, data, npoints, blockSizes=None):
             d = data[ind]
         x.append(d)
 
-    fp.write(x.tostring())
+    fp.write(x.tobytes())
     fp.close()
 
 

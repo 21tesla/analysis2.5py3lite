@@ -3679,7 +3679,7 @@ class RmsdResult( NTdict ):
     def _closest(self):
         """Internal routine to calculate the model closest to mean
         """
-        c = zip(self.heavyAtoms, self.models)
+        c = list(zip(self.heavyAtoms, self.models))
         c.sort()
         self.closestToMean = c[0][1]
     #end def
@@ -7145,7 +7145,7 @@ def getNextAvailableChainId(chainIdListAlreadyUsed = []):
 
 def unmatchedAtomByResDictToString(unmatchedAtomByResDict):
     msg = ''
-    resNameList = unmatchedAtomByResDict.keys()
+    resNameList = list(unmatchedAtomByResDict.keys())
     resNameList.sort()
     for resName in resNameList:
         atmNameList = unmatchedAtomByResDict[ resName ][0]
@@ -7210,7 +7210,7 @@ def getTripletHistogramList(resTypeListBySequenceOrder, doOnlyOverall = False, s
         hist2 = getDeepByKeys(hPlot.histd1ByResTypes, resTypeNext, resType)
         histListTuple.append((hist1,hist2))
     else:
-        ssTypeList = hPlot.histd1BySs0AndResTypes.keys()
+        ssTypeList = list(hPlot.histd1BySs0AndResTypes.keys())
         ssTypeList.sort() # in place sort to: space, H, S
 #        nTdebug("ssTypeList: %s" % ssTypeList)
         for ssType in ssTypeList:

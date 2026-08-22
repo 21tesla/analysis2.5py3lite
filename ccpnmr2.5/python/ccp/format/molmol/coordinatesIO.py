@@ -171,7 +171,7 @@ class MolmolCoordinateFile(MolmolGenericFile):
         if len(self.modelCoordinates) > 1:
             multipleModels = 1
 
-        modelNums = self.modelCoordinates.keys()
+        modelNums = list(self.modelCoordinates.keys())
         modelNums.sort()
 
         for modelNum in modelNums:

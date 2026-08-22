@@ -598,7 +598,7 @@ class ReadPdb:
         coordinateFile = coordinatesIO.PdbCoordinateFile(self.pdbFile)
         coordinateFile.read(maxNum=1)
 
-        modelCoordKeys = coordinateFile.modelCoordinates.keys()
+        modelCoordKeys = list(coordinateFile.modelCoordinates.keys())
         modelCoordKeys.sort()
 
         refModel = modelCoordKeys[0]

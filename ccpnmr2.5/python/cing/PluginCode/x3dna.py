@@ -329,7 +329,7 @@ class X3dna(NTdict):
 
         # generalized storing mechanism; see Whatif (here there's one level less).
         coplanarList = self.coplanars[0]
-        coplanarIdList = results.keys()
+        coplanarIdList = list(results.keys())
         coplanarIdList.sort()
 
         for coplanarIdStr in coplanarIdList:

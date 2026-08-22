@@ -761,9 +761,9 @@ class WindowDraw:
 
         r0 = max(view_region[0], world_region[0])
         r1 = min(view_region[1], world_region[1])
-        axisMapping.tile0 = int(r0) / npoints
-        axisMapping.tile1 = int(r1 + 1) / npoints
-        axisMapping.ntiles = axisMapping.tile1 - axisMapping.tile0 + 1
+        axisMapping.tile0 = int(r0) // npoints
+        axisMapping.tile1 = int(r1 + 1) // npoints
+        axisMapping.ntiles = int(axisMapping.tile1 - axisMapping.tile0 + 1)
 
         # print 'determineDimRange3', axisPanel.label, dataDim.dim, r0, r1, \
         #         npoints, axisMapping.tile0, axisMapping.tile1, axisMapping.ntiles

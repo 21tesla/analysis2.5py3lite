@@ -720,7 +720,7 @@ class XEasyFormat(DataFormat):
         # Make sure atomNames are in XEasy order...
         #
 
-        atomsIndexList = chemAtomOrder.keys()
+        atomsIndexList = list(chemAtomOrder.keys())
         atomsIndexList.sort()
 
         for atomIndex in atomsIndexList:

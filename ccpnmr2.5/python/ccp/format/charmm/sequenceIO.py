@@ -83,7 +83,7 @@ class CharmmSequenceFile(CharmmGenericFile):
         segId = -1
         residueName = ""
 
-        modelNums = coordinateFile.modelCoordinates.keys()
+        modelNums = list(coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         for coordinate in coordinateFile.modelCoordinates[modelNums[0]]:

@@ -391,7 +391,7 @@ SCALE3      0.000000  0.000000  1.000000        0.00000      \n""")
         if len(self.modelCoordinates) > 1:
             multipleModels = 1
 
-        modelNums = self.modelCoordinates.keys()
+        modelNums = list(self.modelCoordinates.keys())
         modelNums.sort()
 
         oldCoord = None

@@ -782,7 +782,7 @@ class BrowseAtomsPopup(BasePopup):
         for residue in chain.residues:
             codeDict[getResidueCode(residue)] = True
 
-        codes = codeDict.keys()
+        codes = list(codeDict.keys())
         codes.sort()
 
         return codes

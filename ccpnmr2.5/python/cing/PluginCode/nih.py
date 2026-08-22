@@ -520,7 +520,7 @@ def parseNMRPipeHeader( data ):
 
     # convert the data also to char format
     charData = array.array('b')
-    charData.fromstring( array.array('f',data).tostring())
+    charData.frombytes( array.array('f',data).tobytes())
 
     # Parse and interpret the header data
     header = NTdict()
@@ -549,7 +549,7 @@ def parseNMRPipeHeader( data ):
         #define SIZE_F4LABEL    8
         n1 = NIHheaderDefs[root+'LABEL']*4  # 4 Bytes per float
         n2 = n1 + NIHheaderDefs['SIZE_F'+str(d)+'LABEL'] # given in Bytes
-        dim.label = charData[n1:n2].tostring()
+        dim.label = charData[n1:n2].tobytes()
 
         # Int's
         #define FDF4APOD      53 /* Non-standard. */
@@ -670,7 +670,7 @@ def parseNMRPipeHeader( data ):
                    ('TITLE',60),('COMMENT',160)
                   ]:
         n = NIHheaderDefs['FD'+name]*4
-        header[name.lower()] = charData[n:n+i].tostring()
+        header[name.lower()] = charData[n:n+i].tobytes()
     #end for
 
 

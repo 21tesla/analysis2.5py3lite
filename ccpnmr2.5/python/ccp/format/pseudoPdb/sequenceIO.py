@@ -78,7 +78,7 @@ class PseudoPdbSequenceFile(PseudoPdbGenericFile):
         chainId = -9999
         residueName = ""
 
-        modelNums = coordinateFile.modelCoordinates.keys()
+        modelNums = list(coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         for coordinate in coordinateFile.modelCoordinates[modelNums[0]]:

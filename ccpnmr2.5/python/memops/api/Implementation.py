@@ -112,6 +112,14 @@ class ComplexDataType:
             + ": %s" % (self,)
         )
 
+    def __lt__(self, other):
+        try:
+            if self.__class__.__name__ != other.__class__.__name__:
+                return self.__class__.__name__ < other.__class__.__name__
+        except AttributeError:
+            pass
+        return id(self) < id(other)
+
     def checkAllValid(self, complete=False):
         """
         CheckAllValid for memops.Implementation.ComplexDataType

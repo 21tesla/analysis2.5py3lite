@@ -82,7 +82,7 @@ class MMCIFCoordinateFile(MMCIFFile):
         self.chemCompInfo = self.mmCif.getChemCompInfo()
 
         self.coordinateInfo = self.mmCif.getCoordinateInfo()
-        modelNums = self.coordinateInfo.keys()
+        modelNums = list(self.coordinateInfo.keys())
         modelNums.sort()
 
         #

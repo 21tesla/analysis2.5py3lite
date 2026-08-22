@@ -238,7 +238,7 @@ class TranslatePeakPopup(BasePopup):
     def changedFixedDimsButton(self, selected):
 
         if not selected:
-            keys = self.dimMapping.keys()
+            keys = list(self.dimMapping.keys())
             keys.sort()
             usedSet = set()
             for moveDim in keys:

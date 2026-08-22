@@ -141,19 +141,19 @@ def writeMappingFile(project, outFile, originalFormats=None):
 
             resonancesSortDict[chainCode][seqCode][seqInsertCode][atomName] = resonanceName
 
-        chainCodeList = resonancesSortDict.keys()
+        chainCodeList = list(resonancesSortDict.keys())
         chainCodeList.sort()
 
         for chainCode in chainCodeList:
-            seqCodeList = resonancesSortDict[chainCode].keys()
+            seqCodeList = list(resonancesSortDict[chainCode].keys())
             seqCodeList.sort()
 
             for seqCode in seqCodeList:
-                seqInsertCodeList = resonancesSortDict[chainCode][seqCode].keys()
+                seqInsertCodeList = list(resonancesSortDict[chainCode][seqCode].keys())
                 seqInsertCodeList.sort()
 
                 for seqInsertCode in seqInsertCodeList:
-                    atomNameList = resonancesSortDict[chainCode][seqCode][seqInsertCode].keys()
+                    atomNameList = list(resonancesSortDict[chainCode][seqCode][seqInsertCode].keys())
                     atomNameList.sort()
 
                     for atomName in atomNameList:

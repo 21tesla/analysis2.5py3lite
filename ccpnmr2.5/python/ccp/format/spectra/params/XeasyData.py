@@ -70,7 +70,7 @@ def writeAzaraDataFile(xeasyParams, azaraParams):
     for i in range(nblocks):
         data = fpr.read(nbytes * blockSize)
         x = array.array("b")
-        x.fromstring(data)
+        x.frombytes(data)
         z = array.array("f")
         for j in range(blockSize):
             if nbytes == 1:

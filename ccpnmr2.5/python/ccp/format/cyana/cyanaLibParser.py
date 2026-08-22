@@ -209,7 +209,7 @@ class CyanaLibrary:
                 atomOrderDict[cyanaCode].append(atom.name)
 
         if verbose:
-            resNames = atomOrderDict.keys()
+            resNames = list(atomOrderDict.keys())
             resNames.sort()
             for resName in resNames:
                 print(resName)

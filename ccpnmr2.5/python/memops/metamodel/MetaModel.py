@@ -997,7 +997,7 @@ class MetaModelElement:
 
         elif pData.get("type") == "content":
             if tag == "constraints":
-                ll = self._ConstrainedElement__constraints.items()
+                ll = list(self._ConstrainedElement__constraints.items())
                 ll.sort()
                 return [x[1] for x in ll]
             else:
@@ -1705,7 +1705,7 @@ class AbstractDataType(ConstrainedElement, HasSupertype):
         for supertype in allSupertypes:
             constraints.update(supertype._ConstrainedElement__constraints)
 
-        ll = constraints.items()
+        ll = list(constraints.items())
         ll.sort()
         return [x[1] for x in ll]
 
@@ -2554,7 +2554,7 @@ class MetaPackage(MetaModelElement):
             # check shortName
             if self.shortName is not None:
                 raise MemopsError(
-                    "%s: branch package has shortName"(
+                    "%s: branch package has shortName" % (
                         self,
                     )
                 )

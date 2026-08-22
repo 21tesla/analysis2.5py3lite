@@ -454,7 +454,7 @@ class PeakTableFrame(Frame):
 
         locations = []
         index = 0
-        xyPlaneKeys = orthogonalDict.keys()
+        xyPlaneKeys = list(orthogonalDict.keys())
         xyPlaneKeys.sort()
 
         if xyPlaneKeys:

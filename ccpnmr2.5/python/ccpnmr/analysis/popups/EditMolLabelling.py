@@ -1062,7 +1062,7 @@ class EditMolLabellingPopup(BasePopup):
                 if symbol:
                     elementDict[symbol] = True
 
-            names = elementDict.keys()
+            names = list(elementDict.keys())
             names.sort()
 
         else:

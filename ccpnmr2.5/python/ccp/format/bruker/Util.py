@@ -220,7 +220,7 @@ def getStdExpNamesByLength():
             byLen[strLen] = []
         byLen[strLen].append(stdExpName)
 
-    strLengths = byLen.keys()
+    strLengths = list(byLen.keys())
     strLengths.sort()
     strLengths.reverse()
 

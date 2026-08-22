@@ -683,7 +683,7 @@ class SpinSystemTypeScoresPopup(BasePopup):
 
             ccpDict[ccpCode] = True
 
-        ccpCodes = ccpDict.keys()
+        ccpCodes = list(ccpDict.keys())
         ccpCodes.sort()
 
         return ccpCodes

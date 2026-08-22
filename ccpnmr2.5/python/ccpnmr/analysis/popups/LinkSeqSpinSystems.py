@@ -1165,7 +1165,7 @@ class LinkSeqSpinSystemsPopup(BasePopup):
         for residue in chain.residues:
             codeDict[residue.ccpCode] = True
 
-        ccpCodes = codeDict.keys()
+        ccpCodes = list(codeDict.keys())
         ccpCodes.sort()
 
         return ccpCodes

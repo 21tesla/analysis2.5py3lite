@@ -486,7 +486,15 @@ def parseResidueExpr(molSystem, selector):
 
     chainExprs = selector.split(";")
     for chainExpr in chainExprs:
-        code, resExpr = (x.strip() for x in chainExpr.split(":", 1))
+        if not chainExpr.strip():
+            continue
+        parts = chainExpr.split(":", 1)
+        if len(parts) == 1:
+            code = parts[0].strip()
+            resExpr = ""
+        else:
+            code = parts[0].strip()
+            resExpr = parts[1].strip()
 
         chain = molSystem.findFirstChain(code=code)
         if chain is None:
@@ -1101,7 +1109,8 @@ def setupCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None, ma
         argServer, protocolName=protocolName, prelimProtocolName=prelimProtocolName, masterRun=masterRun
     )
 
-    executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
+    if nmrCalcRun is not None:
+        executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
 
 
 def runCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None, masterRun=None):
@@ -1109,7 +1118,8 @@ def runCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None, mast
         argServer, protocolName=protocolName, prelimProtocolName=prelimProtocolName, masterRun=masterRun
     )
 
-    executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
+    if nmrCalcRun is not None:
+        executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
 
     xx = argServer.askYesNo("Run Calculation")
     if xx:
@@ -1207,9 +1217,9 @@ def prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=None):
     # Set up calculation and write data files
     pluginModule = intUtil.getIntegratorPlugin(protocolName)
 
-    # Create target directory. NB must not exist before this point,
+    # Create target directory.
     targetDir = nmrCalcDir(nmrCalcRun)
-    os.makedirs(targetDir)
+    os.makedirs(targetDir, exist_ok=True)
     outfp = open(uniIo.joinPath(targetDir, setupLogFile), "w")
     print("Redirecting output to %s" % setupLogFile)
 

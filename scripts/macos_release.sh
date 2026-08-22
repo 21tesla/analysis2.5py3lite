@@ -186,7 +186,7 @@ if [ "$RELEASE" = 1 ]; then
   TAG="${TAG:-v2.5.2-py3-macos-$ARCH}"
   command -v gh >/dev/null || die "gh CLI not found — brew install gh — or drop --release and upload $WHEEL to a GitHub Release manually"
   gh auth status >/dev/null 2>&1 || die "not authenticated — run: gh auth login"
-  REPO="$(gh repo view --json fullName -q .fullName)"
+  REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
   gh release create "$TAG" "$WHEEL" \
     --title "$TAG — CCPNMR Analysis 2.5.2, Python 3, macOS $ARCH" \
     --notes "CCPNMR Analysis 2.5.2 modernized to Python 3 — macOS $ARCH wheel (tag $(git rev-parse --short HEAD)).

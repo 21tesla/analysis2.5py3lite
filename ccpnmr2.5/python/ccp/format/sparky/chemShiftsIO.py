@@ -161,7 +161,7 @@ class SparkyChemShiftFile(SparkyGenericFile):
                     return
 
                 # Set order for column headers
-                colNumKeys = colNums.keys()
+                colNumKeys = list(colNums.keys())
                 colNumKeys.sort()
 
                 for colNum in colNumKeys:

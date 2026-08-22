@@ -201,7 +201,7 @@ try:
 
       newNrgCingPdbCodes = getCingCcpnTgzFileList()
 
-      pdbCodes = newNrgCingPdbCodes.keys()
+      pdbCodes = list(newNrgCingPdbCodes.keys())
       pdbCodes.sort()
 
       for pdbCode in pdbCodes:

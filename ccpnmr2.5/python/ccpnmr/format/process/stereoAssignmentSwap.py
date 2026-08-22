@@ -623,7 +623,7 @@ class StereoAssignmentSwapCheck:
                 # Then recalculate and add a constraint item if necessary
                 #
 
-                distConstraints = constraintsViolated.keys()
+                distConstraints = list(constraintsViolated.keys())
                 distConstraints.sort()
 
                 for distConstr in distConstraints:
@@ -726,7 +726,7 @@ class StereoAssignmentSwapCheck:
         # Print out info - TODO need this as XML?
         #
 
-        infoTypes = self.infoText.keys()
+        infoTypes = list(self.infoText.keys())
         infoTypes.sort()
 
         for infoType in infoTypes:
@@ -1149,7 +1149,7 @@ class StereoAssignmentCleanup(StereoAssignmentSwapCheck):
         self.triplets = {}
 
         # Generate a list of triplets, only for ones that have resonances - rest is dealt with later on.
-        resList = self.prochiralResonancesDict.keys()
+        resList = list(self.prochiralResonancesDict.keys())
         resList.sort()
 
         for res in resList:
@@ -1171,7 +1171,7 @@ class StereoAssignmentCleanup(StereoAssignmentSwapCheck):
         prochiralPriority = {}
         self.prochiralConstraints = {}
 
-        prochiralKeys = self.triplets.keys()
+        prochiralKeys = list(self.triplets.keys())
         prochiralKeys.sort()
         Triplet_count = len(prochiralKeys)
         if Triplet_count < 1:
@@ -1180,7 +1180,7 @@ class StereoAssignmentCleanup(StereoAssignmentSwapCheck):
         invalidTripletCount = 0  # Like 1a24 1    185    LEU    CD* that is invalid and can easily be recognized because it gets no involved restraints.
         for prochiralKey in prochiralKeys:
             # print prochiralKey
-            atomTuples = self.triplets[prochiralKey].keys()
+            atomTuples = list(self.triplets[prochiralKey].keys())
             atomTuples.sort()
             connectedConstraints = []
             unambiguousStereoConstraints = []  # These are constraints where there is no additional stereo ambiguity in the constraint items involving the prochiral
@@ -1680,7 +1680,7 @@ class StereoAssignmentCleanup(StereoAssignmentSwapCheck):
 #  16 numVeryLargeViol (post processing TODO: check)
 #  17 numLargeViol (post processing TODO: check)
 """)
-        finalIds = finalList.keys()
+        finalIds = list(finalList.keys())
         finalIds.sort()
 
         meat = ""

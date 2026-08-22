@@ -149,7 +149,7 @@ class PdbPeopleAndCitationsFile(PdbGenericFile):
 
         # Additional reference info from REMARK 1
         if self.pdbFile.otherCitations:
-            refIds = self.pdbFile.otherCitations.keys()
+            refIds = list(self.pdbFile.otherCitations.keys())
             refIds.sort()
             for refId in refIds:
                 journalInfoList.append(self.pdbFile.otherCitations[refId])

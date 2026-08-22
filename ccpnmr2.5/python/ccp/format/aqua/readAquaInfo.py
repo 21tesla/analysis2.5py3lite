@@ -187,19 +187,19 @@ def getAquaAtomInfo(chemCompCodes={}):
 if __name__ == "__main__":
     chemCompCodes = getAquaAtomInfo()
 
-    chemCompCodeList = chemCompCodes.keys()
+    chemCompCodeList = list(chemCompCodes.keys())
     chemCompCodeList.sort()
 
     for chemCompCode in chemCompCodeList:
         print(chemCompCode)
 
-        atomNameList = chemCompCodes[chemCompCode].keys()
+        atomNameList = list(chemCompCodes[chemCompCode].keys())
         atomNameList.sort()
 
         for aquaAtomName in atomNameList:
             print("  " + aquaAtomName)
 
-            formatList = chemCompCodes[chemCompCode][aquaAtomName].keys()
+            formatList = list(chemCompCodes[chemCompCode][aquaAtomName].keys())
             formatList.sort()
 
             for format in formatList:

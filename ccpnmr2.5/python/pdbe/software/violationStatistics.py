@@ -1021,7 +1021,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     self.output['modelOrder'] = []
 
-    rmsValues = modelRms.keys()
+    rmsValues = list(modelRms.keys())
     rmsValues.sort()
 
     for rmsValue in rmsValues:
@@ -1124,7 +1124,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     infoValuesList = []
 
-    infoTypeValueList = constraintCountInfoDict.keys()
+    infoTypeValueList = list(constraintCountInfoDict.keys())
     infoTypeValueList.sort()
 
     for infoTypeValue in infoTypeValueList:
@@ -1145,7 +1145,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     self.getStatistics(False)
 
-    dclKeys = self.output['ensemble']['constraintLists'].keys()
+    dclKeys = list(self.output['ensemble']['constraintLists'].keys())
     dclKeys.sort()
 
     finalData = {}
@@ -1158,7 +1158,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       if clType != 'distance':
         continue
 
-      consKeys = self.output['constraintInfo'][dclKey].keys()
+      consKeys = list(self.output['constraintInfo'][dclKey].keys())
       consKeys.sort()
 
       if dclKey not in finalData:
@@ -1267,7 +1267,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       fout.write(drawBox("%s bound violations overview" % (violType.capitalize())))
       fout.write("\n" * 2)
 
-      dclKeys = self.output['ensemble']['constraintLists'].keys()
+      dclKeys = list(self.output['ensemble']['constraintLists'].keys())
       dclKeys.sort()
 
       for dclKey in dclKeys:
@@ -1330,7 +1330,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
         if verbose:
 
-          consKeys = dclDict['constraints'].keys()
+          consKeys = list(dclDict['constraints'].keys())
           consKeys.sort()
 
           for consKey in consKeys:
@@ -1539,7 +1539,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
 
     constraintListNames = []
 
-    dclKeys = self.output['ensemble']['constraintLists'].keys()
+    dclKeys = list(self.output['ensemble']['constraintLists'].keys())
     dclKeys.sort()
 
     for dclKey in dclKeys:
@@ -1708,7 +1708,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
         htmlPage.addMainTableColumn(infoTag,addText = ' class="subheading"')
       htmlPage.closeMainTableRow()
 
-      dclKeys = infoDict['constraintLists'].keys()
+      dclKeys = list(infoDict['constraintLists'].keys())
       dclKeys.sort()
 
       for dclKey in dclKeys:
@@ -1899,7 +1899,7 @@ class ViolationStatistics(ResonanceCoordinateHandler,ContactOccurrenceHandler):
       #  dclDictModel = self.output['models'][strucIndex]['constraintLists'][dclKey]
       #  numViolations = dclDictModel['violations'][violType]
 
-      consKeys = self.output['constraintInfo'][dclKey].keys()
+      consKeys = list(self.output['constraintInfo'][dclKey].keys())
       consKeys.sort()
 
       for consKey in consKeys:

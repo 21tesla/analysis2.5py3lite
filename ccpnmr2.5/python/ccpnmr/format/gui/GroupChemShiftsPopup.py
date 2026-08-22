@@ -363,7 +363,7 @@ class GroupChemShiftsPopup(BasePopup):
         #
 
         self.results = makeChemShiftSelections(self.parent, self.chains, self.shiftList)
-        resultKeys = self.results.keys()
+        resultKeys = list(self.results.keys())
         resultKeys.sort()
 
         #
@@ -430,7 +430,7 @@ class GroupChemShiftsPopup(BasePopup):
         frameRow = 0
         frame = self.resultsFrame.frame
 
-        groupKeys = groups.keys()
+        groupKeys = list(groups.keys())
         groupKeys.sort()
 
         self.groupText = {}
@@ -476,7 +476,7 @@ class GroupChemShiftsPopup(BasePopup):
         filePopup = FormatFilePopup(self, component="text")
 
         if filePopup.fileSelected:
-            groupKeys = self.groupText.keys()
+            groupKeys = list(self.groupText.keys())
             groupKeys.sort()
 
             fout = open(filePopup.file, "w")

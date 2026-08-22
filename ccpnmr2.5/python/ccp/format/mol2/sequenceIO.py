@@ -141,7 +141,7 @@ class Mol2SequenceFile(Mol2GenericFile):
         # Create molecules...
         #
 
-        chainIdList = chainIds.keys()
+        chainIdList = list(chainIds.keys())
         chainIdList.sort()
 
         for chainId in chainIdList:

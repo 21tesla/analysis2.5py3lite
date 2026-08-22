@@ -166,7 +166,7 @@ class TableExportPopup(BasePopup):
         for n in headings:
             if n != headings[0]:
                 fp.write(join)
-            fp.write(self.headings[n].encode("utf-8"))
+            fp.write(str(self.headings[n]))
         fp.write("\n")
 
         m = 0

@@ -169,7 +169,7 @@ class ShiftxChemShiftFile(ShiftxGenericFile):
         #
 
         # This should be ints
-        seqCodes = self.chemShiftsBySeqCodeAndAtomName.keys()
+        seqCodes = list(self.chemShiftsBySeqCodeAndAtomName.keys())
         seqCodes.sort()
 
         if seqCodes:

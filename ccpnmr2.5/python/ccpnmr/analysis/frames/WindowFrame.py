@@ -149,7 +149,7 @@ PEAK_FIT_TYPES = ("singly", "together")
 
 
 # internal class
-class WindowTimeoutException:
+class WindowTimeoutException(Exception):
     pass
 
 

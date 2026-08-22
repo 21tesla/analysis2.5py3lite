@@ -900,7 +900,7 @@ def analyseAssignmentCompleteness(molSystem, shiftList, residueSelection=None, e
 
     data = []
 
-    elementList = elements.keys()
+    elementList = list(elements.keys())
     elementList.sort()
     for e in elementList:
         maxNum, found, shiftData = elements[e]
@@ -944,7 +944,7 @@ def analyseAssignmentCompleteness(molSystem, shiftList, residueSelection=None, e
 
     allMaxNum = 0
     allFound = 0
-    residueList = residues.keys()
+    residueList = list(residues.keys())
     residueList.sort()
     for ccpCode in residueList:
         maxNum, found, shiftData = residues[ccpCode]

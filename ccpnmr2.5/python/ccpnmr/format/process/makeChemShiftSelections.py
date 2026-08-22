@@ -194,7 +194,7 @@ def makeChemShiftSelections(guiParent, chains, chemShiftList, verbose=0):
     #
 
     if verbose:
-        chemShiftResultClasses = results.keys()
+        chemShiftResultClasses = list(results.keys())
         chemShiftResultClasses.sort()
 
         for chemShiftClass in chemShiftResultClasses:

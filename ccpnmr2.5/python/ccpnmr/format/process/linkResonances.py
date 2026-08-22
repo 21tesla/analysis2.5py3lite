@@ -1108,7 +1108,7 @@ class linkResonances(TopShared):
             # Find the best matching format
             #
 
-            formatNamesList = formatsFound.keys()
+            formatNamesList = list(formatsFound.keys())
             formatNamesList.sort()
 
             for format in formatNamesList:
@@ -1122,7 +1122,7 @@ class linkResonances(TopShared):
                         print("  WARNING: format %s also fully matches!" % format)
 
             if not self.format:
-                matchValues = formatsFound.values()
+                matchValues = list(formatsFound.values())
                 matchValues.sort()
 
                 for format in formatNamesList:
@@ -2450,7 +2450,7 @@ class linkResonances(TopShared):
             atomToResNameKey = (nmrRes.chain.code, nmrRes.seqId, tuple(nmrAtomKey))
             atomToResNameDict[atomToResNameKey] = atomToResName
 
-        atomToResNameKeys = atomToResNameDict.keys()
+        atomToResNameKeys = list(atomToResNameDict.keys())
         atomToResNameKeys.sort()
 
         self.atomToResNameList = []
@@ -5287,14 +5287,14 @@ class linkResonances(TopShared):
 
             updateResonanceNamesDict(resonance, allResNamesDict, self.format)
 
-        allResNamesList = allResNamesDict.keys()
+        allResNamesList = list(allResNamesDict.keys())
         allResNamesList.sort()
 
         #
         # formatChainCodes = {' ': ['A','B'],...}
         #
 
-        formatChainCodeList = formatChainCodes.keys()
+        formatChainCodeList = list(formatChainCodes.keys())
         formatChainCodeList.sort()
 
         for formatChainCode in formatChainCodeList:
@@ -5303,7 +5303,7 @@ class linkResonances(TopShared):
             #
 
             origResNamesDict = self.getResNamesByFormatChain(formatChainCode, allResNamesList, allResNamesDict)
-            origResNamesList = origResNamesDict.keys()
+            origResNamesList = list(origResNamesDict.keys())
             origResNamesList.sort()
 
             #

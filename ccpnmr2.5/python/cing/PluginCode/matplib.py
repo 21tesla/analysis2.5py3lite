@@ -1995,7 +1995,7 @@ class MoleculePlotSet:
                 for item in mainOrAlt:
                     points = []
                     pointsL.append(points)
-                    itemDictKeyList = item.keys()
+                    itemDictKeyList = list(item.keys())
                     itemDictKeyList.sort()
                     for keyList in itemDictKeyList:
                         if keyList not in [ KEY_LIST_STR, KEY_LIST2_STR, KEY_LIST3_STR, KEY_LIST4_STR, KEY_LIST5_STR]:
@@ -2022,7 +2022,7 @@ class MoleculePlotSet:
                         for item in mainOrAlt:
 #                            nTdebug("item: %s" % item)
                             points = pointsL[j]
-                            itemDictKeyList = item.keys()
+                            itemDictKeyList = list(item.keys())
                             itemDictKeyList.sort()
 #                            nTdebug("itemDictKeyList: %s" % itemDictKeyList)
                             color = None

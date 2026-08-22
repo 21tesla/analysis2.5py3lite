@@ -200,7 +200,7 @@ class NoeCompleteness( NTdict ):
             # end for
         # end for
 
-        key1List = self.resDistanceHoH.keys()
+        key1List = list(self.resDistanceHoH.keys())
         key1List.sort()
         for r,residue1 in enumerate(key1List):
 #            atom1 = self.atomList[r]
@@ -219,7 +219,7 @@ class NoeCompleteness( NTdict ):
 #                nTdebug("Skipping completely missing residue1 %s" % (residue1)) # Will occur for last residue since matrix is sparse.
 #                continue
             resDistanceHash = self.resDistanceHoH[residue1]
-            key2List = resDistanceHash.keys()
+            key2List = list(resDistanceHash.keys())
             key2List.sort()
             for c,residue2 in enumerate(key2List):
 #                nTdebug("Getting precise distances starting from residue2 %s" % residue2)
@@ -294,11 +294,11 @@ class NoeCompleteness( NTdict ):
     def addTheoreticalConstraints(self):
         'Using the prehashed info getting the actual precise distances.'
         result = DistanceRestraintList('Vset')
-        key1List = self.atomDistanceHoH.keys()
+        key1List = list(self.atomDistanceHoH.keys())
         key1List.sort()
         for atom1 in key1List:
             atomDistanceHash = self.atomDistanceHoH[ atom1 ]
-            key2List = atomDistanceHash.keys()
+            key2List = list(atomDistanceHash.keys())
             key2List.sort()
             for atom2 in key2List:
                 atomDistance = atomDistanceHash[ atom2 ]

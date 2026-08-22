@@ -1584,7 +1584,7 @@ class CalcDistConstraintsPopup(BasePopup):
 
             total = 0
             msg = ""
-            groupNames = peakCategories.keys()
+            groupNames = list(peakCategories.keys())
             groupNames.sort()
             groups = []
             tipTexts = [

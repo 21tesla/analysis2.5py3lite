@@ -1331,7 +1331,7 @@ class HaddockFrame(Frame):
                     textMatrix.append([protocol['details'], None, None])
                     objectList.append(None)
 
-                    terms = protocol['terms'].keys()
+                    terms = list(protocol['terms'].keys())
                     terms.sort()
                     for term in terms:
                         energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=protocol['terms'][term])
@@ -1361,7 +1361,7 @@ class HaddockFrame(Frame):
 
             else:
                 energyTermStore = run.newHaddockEnergyTerm(code='autoDistanceRestraintWeightStore',termId=termId)
-                terms = autoDistanceRestraintWeightStore['terms'].keys()
+                terms = list(autoDistanceRestraintWeightStore['terms'].keys())
                 terms.sort()
                 for term in terms:
                     energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=autoDistanceRestraintWeightStore['terms'][term])

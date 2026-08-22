@@ -723,7 +723,7 @@ class HaddockRun:
                 protocol = eval(annealProtocolStore)
                 energyTermStore = self.run.newHaddockEnergyTerm(code=annealProtocolStore,termId=termId)
 
-                terms = protocol['terms'].keys()
+                terms = list(protocol['terms'].keys())
                 terms.sort()
                 for term in terms:
                     energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=protocol['terms'][term])

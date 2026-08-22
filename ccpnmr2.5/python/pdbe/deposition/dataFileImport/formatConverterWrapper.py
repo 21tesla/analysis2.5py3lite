@@ -325,12 +325,12 @@ class FormatConverterWrapper:
     linkingInfo = {}
 
     # Links everything, will only work for monomers at this stage
-    resonanceParents = self.newResonances.keys()
+    resonanceParents = list(self.newResonances.keys())
     resonanceParents.sort()
 
     for resonanceParent in resonanceParents:
 
-      importFormatNames = self.newResonances[resonanceParent].keys()
+      importFormatNames = list(self.newResonances[resonanceParent].keys())
       importFormatNames.sort()
 
       existingForceChainMappings = {}

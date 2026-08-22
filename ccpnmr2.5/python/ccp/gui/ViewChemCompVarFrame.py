@@ -199,7 +199,7 @@ class ViewChemCompVarFrame(ViewStructureFrame):
                     elif cAtomDict.get(key[1]) is None:
                         continue
 
-                    key.sort()
+                    key.sort(key=lambda a: a.name)
                     bonds[tuple(key)] = True
 
             self.cAtomDict = cAtomDict

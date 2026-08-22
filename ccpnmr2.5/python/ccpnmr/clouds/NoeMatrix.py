@@ -67,7 +67,7 @@ def getDataString(data, level=0):
             i += 1
 
     elif t is type({}):
-        keys = data.keys()
+        keys = list(data.keys())
         keys.sort()
         for key in keys:
             dataString += "%s %s:\n" % (spacer, key)

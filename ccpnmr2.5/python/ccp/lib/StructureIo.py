@@ -251,7 +251,7 @@ def makeStructureEnsemble(
     nOrigChCodes = len(chCodes)
     for iChCode, chCode in enumerate(chCodes):
         resDict = chainsDict[chCode]
-        seqIds = resDict.keys()
+        seqIds = list(resDict.keys())
         seqIds.sort()
 
         chemComps = []

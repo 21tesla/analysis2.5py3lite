@@ -2138,7 +2138,7 @@ class EditMoleculesPopup(BasePopup):
         for molType in self.molTypes:
             dictCC = getChemCompOverview(molType, project)
 
-            ccpCodes = dictCC.keys()
+            ccpCodes = list(dictCC.keys())
             ccpCodes.sort()
             for ccpCode in ccpCodes:
                 (code1Letter, code3Letter, name, mf) = dictCC.get(ccpCode, ("?", "Error", None, None))

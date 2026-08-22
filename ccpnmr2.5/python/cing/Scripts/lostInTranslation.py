@@ -38,7 +38,7 @@ class LostInTranslation:
             nTmessage("Writing to file: " + fileTodo)
             propMap = self.getPropMap( propFile )
             nTmessage("Found propBase [%s] %s" % ( len(propMap), repr(propMap)))
-            keyList = propBaseMap.keys()
+            keyList = list(propBaseMap.keys())
             keyList.sort()
             for key in keyList:
                 if key in propMap:

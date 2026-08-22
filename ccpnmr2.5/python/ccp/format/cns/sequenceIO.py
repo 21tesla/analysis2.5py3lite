@@ -113,7 +113,7 @@ class CnsSequenceFile(CnsGenericFile):
             (segId, chainId) = (-1, -1)
             residueName = ""
 
-            modelNums = coordinateFile.modelCoordinates.keys()
+            modelNums = list(coordinateFile.modelCoordinates.keys())
             modelNums.sort()
 
             for coordinate in coordinateFile.modelCoordinates[modelNums[0]]:

@@ -4684,14 +4684,14 @@ class DataFormat(TopShared):
 
         infoString = ""
 
-        mainCodes = self.convertCount.keys()
+        mainCodes = list(self.convertCount.keys())
         mainCodes.sort()
 
         for mainCode in mainCodes:
             mainCount = self.convertCount[mainCode][0]
 
             subCodeDict = self.convertCount[mainCode][1]
-            subCodes = subCodeDict.keys()
+            subCodes = list(subCodeDict.keys())
             subCodes.sort()
 
             subCodeStrings = ["%d %s" % (subCodeDict[subCode], subCode) for subCode in subCodes]
@@ -4743,7 +4743,7 @@ class DataFormat(TopShared):
     def printWarnings(self, fout=sys.stdout):
 
         if self.warnings:
-            warnings = self.warnings.keys()
+            warnings = list(self.warnings.keys())
             warnings.sort()
 
             for warning in warnings:
@@ -6032,7 +6032,7 @@ class DataFormat(TopShared):
         # This code not perfect - assumes that spinSystem numbering is 'sequential'. Works for now.
         #
 
-        spinSystemIds = spinSystems.keys()
+        spinSystemIds = list(spinSystems.keys())
         spinSystemIds.sort()
 
         resGroupsById = {}
@@ -6529,7 +6529,7 @@ class DataFormat(TopShared):
         moleculeBonds = {}
         molSystemBonds = {}
 
-        origMolNames = origSequenceDict.keys()
+        origMolNames = list(origSequenceDict.keys())
         origMolNames.sort()
 
         refUrl = None
@@ -6570,7 +6570,7 @@ class DataFormat(TopShared):
                     if sequenceElement.bonds:
                         for bondType in stableBondTypes:  # Don't use hydrogen or salt bonds...
                             if bondType in sequenceElement.bonds:
-                                atomNames = sequenceElement.bonds[bondType].keys()
+                                atomNames = list(sequenceElement.bonds[bondType].keys())
                                 atomNames.sort()
 
                                 for atomName in atomNames:
@@ -7375,7 +7375,7 @@ class DataFormat(TopShared):
         # Now create the molecule(s)
         #
 
-        molNames = createMoleculeDict.keys()
+        molNames = list(createMoleculeDict.keys())
         molNames.sort()
 
         for molName in molNames:
@@ -7983,7 +7983,7 @@ class DataFormat(TopShared):
                             # Set for each 'chunk' of sequential seqCodes
                             #
 
-                            seqIds = seqIdToCodeMapping.keys()
+                            seqIds = list(seqIdToCodeMapping.keys())
                             seqIds.sort()
 
                             for firstSeqId in seqIds:
@@ -8887,7 +8887,7 @@ class DataFormat(TopShared):
 
         """
 
-        molNames = createMoleculeDict.keys()
+        molNames = list(createMoleculeDict.keys())
         molNames.sort()
 
         for molName in molNames:
@@ -9090,7 +9090,7 @@ class DataFormat(TopShared):
         # Code to set bonds on either Molecule or MolSystem level!
         #
 
-        seqEls = bondDict.keys()
+        seqEls = list(bondDict.keys())
         seqEls.sort()
 
         for seqEl in seqEls:
@@ -9114,7 +9114,7 @@ class DataFormat(TopShared):
                         chemComp, chemComp.chemAtoms, self.namingSystemName
                     )
 
-                    sysAtomNames = bondDict[seqEl].keys()
+                    sysAtomNames = list(bondDict[seqEl].keys())
                     sysAtomNames.sort()
 
                     for sysAtomName in sysAtomNames:
@@ -10715,7 +10715,7 @@ class DataFormat(TopShared):
                 self.atomNamesDict[atomName] = resonanceToAtom
                 resonanceSerials[resonanceToAtom.resonance.serial] = atomName
 
-            resonanceSerialList = resonanceSerials.keys()
+            resonanceSerialList = list(resonanceSerials.keys())
             resonanceSerialList.sort()
 
             for resonanceSerial in resonanceSerialList:
@@ -10813,7 +10813,7 @@ class DataFormat(TopShared):
                 self.spinSystemToResonanceDict[spinSystem] = []
             self.spinSystemToResonanceDict[spinSystem].append(resonanceToSpinSystem)
 
-        spinSystemSerialList = spinSystemSerials.keys()
+        spinSystemSerialList = list(spinSystemSerials.keys())
         spinSystemSerialList.sort()
 
         for sss in spinSystemSerialList:
@@ -12665,7 +12665,7 @@ Cannot map atom names for export.
 
             sortDict[sortKeys].append(constraint)
 
-        sortKeysList = sortDict.keys()
+        sortKeysList = list(sortDict.keys())
         sortKeysList.sort()
 
         constraints = []
@@ -13660,7 +13660,7 @@ Cannot map atom names for export.
             if chainCode not in self.formatChains:
                 self.formatChains[chainCode] = []
 
-        modelNums = self.coordinateFile.modelCoordinates.keys()
+        modelNums = list(self.coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         badChainIdList = []
@@ -13736,7 +13736,7 @@ Cannot map atom names for export.
         if self.verbose:
             print("  Auto selecting naming system for coordinates...")
 
-        modelNums = self.coordinateFile.modelCoordinates.keys()
+        modelNums = list(self.coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         if not modelNums:
@@ -13924,13 +13924,13 @@ Cannot map atom names for export.
         if testMode:
             print(numAtoms)
 
-            nsn = namingSystemNames.keys()
+            nsn = list(namingSystemNames.keys())
             nsn.sort()
 
             for ns in nsn:
                 print("  %s: %d" % (ns, namingSystemNames[ns]))
 
-            asns = atomSysNameDict.keys()
+            asns = list(atomSysNameDict.keys())
             asns.sort()
 
             for asn in asns:
@@ -13940,10 +13940,10 @@ Cannot map atom names for export.
         # Now sort out, and print out list (temporary code)
         #
 
-        namingSystemNameList = namingSystemNames.keys()
+        namingSystemNameList = list(namingSystemNames.keys())
         namingSystemNameList.sort()
 
-        namingSystemHits = namingSystemNames.values()
+        namingSystemHits = list(namingSystemNames.values())
         namingSystemHits.sort()
         namingSystemHits.reverse()
 
@@ -13996,7 +13996,7 @@ Cannot map atom names for export.
         if self.verbose:
             print("   Mapping coordinate atoms...")
 
-        modelNums = self.coordinateFile.modelCoordinates.keys()
+        modelNums = list(self.coordinateFile.modelCoordinates.keys())
         modelNums.sort()
         modelNum = modelNums[0]
 
@@ -14416,7 +14416,7 @@ Cannot map atom names for export.
 
     def setCoordinates(self):
 
-        modelNums = self.coordinateFile.modelCoordinates.keys()
+        modelNums = list(self.coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         #
@@ -14920,7 +14920,7 @@ Cannot map atom names for export.
 
                 atomTypes[atom.atomType] += 1
 
-        atomTypeList = atomTypes.keys()
+        atomTypeList = list(atomTypes.keys())
         atomTypeList.sort()
 
         self.formula = ""

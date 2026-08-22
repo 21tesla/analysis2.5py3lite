@@ -171,7 +171,7 @@ class runCnsImporter:
                         if term.code in self.formattedparams[param]: term.value = self.formattedparams[param][term.code]
                 else:
                     energyTermStore = run.newHaddockEnergyTerm(code=param,termId=termId)
-                    terms = self.formattedparams[param].keys()
+                    terms = list(self.formattedparams[param].keys())
                     terms.sort()
                     for term in terms:
                         energyTerm = energyTermStore.newEnergyTermParameter(code=term,value=self.formattedparams[param][term])

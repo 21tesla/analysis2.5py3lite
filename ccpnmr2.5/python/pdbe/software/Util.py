@@ -410,7 +410,7 @@ class ContactOccurrenceHandler:
 
   def importContactShortDicts(self):
 
-    chainCodes = self.chainShortInfo.keys()
+    chainCodes = list(self.chainShortInfo.keys())
     chainCodes.sort()
 
     chainCodeCombs = []

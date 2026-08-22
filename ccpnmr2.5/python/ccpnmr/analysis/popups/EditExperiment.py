@@ -1689,7 +1689,7 @@ class EditExperimentPopup(BasePopup):
 
                 namesDict[name].add(refExperiment)
 
-            names = namesDict.keys()
+            names = list(namesDict.keys())
             names.sort()
             refExperimentSets = [namesDict[name] for name in names]
 

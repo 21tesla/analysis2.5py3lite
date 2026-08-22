@@ -97,7 +97,7 @@ class CosmosCoordinateFile(CosmosGenericFile):
 
         # TODO can handle multiple models?
         # TODO can handle multiple chains?
-        modelNums = self.modelCoordinates.keys()
+        modelNums = list(self.modelCoordinates.keys())
         modelNums.sort()
 
         if len(modelNums) > 1:

@@ -132,7 +132,7 @@ def getStoredContourHeader(fileName):
     fp = open(fileName, "rb")
     s = fp.read(6 * n)
     x = array.array("i")
-    x.fromstring(s)
+    x.frombytes(s)
 
     magic = x[0]
     if magic == 1789:
@@ -151,7 +151,7 @@ def getStoredContourHeader(fileName):
 
     s = fp.read((4 * ndim + 1) * n)
     x = array.array("i")
-    x.fromstring(s)
+    x.frombytes(s)
     if swap:
         x.byteswap()
 
@@ -163,7 +163,7 @@ def getStoredContourHeader(fileName):
 
     s = fp.read(nlevels * n)
     x = array.array("f")
-    x.fromstring(s)
+    x.frombytes(s)
     if swap:
         x.byteswap()
 

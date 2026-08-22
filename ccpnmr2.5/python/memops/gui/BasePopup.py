@@ -236,6 +236,8 @@ class BasePopup(Tkinter.Toplevel, Base):
 
         if self.modal:
             self.config(borderwidth=5, bg="red")
+            self.update_idletasks()
+            self.wait_visibility()
             self.do_grab()
             self.wait_variable(self.var)
         else:

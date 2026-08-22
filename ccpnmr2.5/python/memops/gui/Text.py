@@ -86,7 +86,7 @@ class Text(Tkinter.Text, Base):
         # TBD: str below is used to convert unicode to string
         # (in Tcl/Tk 8.5 it looks like everything is unicode)
         ###return str(self.get('0.0', Tkinter.END))
-        return self.get("0.0", Tkinter.END).encode("utf-8")
+        return self.get("0.0", Tkinter.END)
 
     def setText(self, text):
 

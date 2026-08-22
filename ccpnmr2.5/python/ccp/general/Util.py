@@ -638,7 +638,7 @@ class ReferenceShifts:
 
     valueDict = {}
 
-    sourceList = self.sourceDict.keys()
+    sourceList = list(self.sourceDict.keys())
     sourceList.sort()
 
     for sourceName in sourceList:
@@ -954,7 +954,7 @@ class MakeAtomSets:
                 if setOfChemAtoms not in setOfChemAtomsLengths[setOfChemAtomsLen]:
                     setOfChemAtomsLengths[setOfChemAtomsLen].append(setOfChemAtoms)
 
-            sortedSetOfChemAtomsLengths = setOfChemAtomsLengths.keys()
+            sortedSetOfChemAtomsLengths = list(setOfChemAtomsLengths.keys())
             sortedSetOfChemAtomsLengths.sort()
             sortedSetOfChemAtomsLengths.reverse()
 
@@ -1684,7 +1684,7 @@ def createNewDescriptors(chemComp, newDict, removeAtomNames, renameAtoms, saveCh
     for lct in ignoredCcvList:
         print("   %s" % lct)
 
-    linkCodeTexts = ccvBaseList.keys()
+    linkCodeTexts = list(ccvBaseList.keys())
     linkCodeTexts.sort()
 
     print()
@@ -1815,13 +1815,13 @@ def getResAtomObjectMapping(resonances, chainCodeFilter=None):
                 rsrSerialDict = {}
                 for rsr in resonanceSetResonances:
                     rsrSerialDict[rsr.serial] = rsr
-                rsrSerials = rsrSerialDict.keys()
+                rsrSerials = list(rsrSerialDict.keys())
                 rsrSerials.sort()
 
                 asNameDict = {}
                 for ass in atomSets:
                     asNameDict[ass.name] = ass
-                asNames = asNameDict.keys()
+                asNames = list(asNameDict.keys())
                 asNames.sort()
 
                 resonanceIndex = rsrSerials.index(resonance.serial)

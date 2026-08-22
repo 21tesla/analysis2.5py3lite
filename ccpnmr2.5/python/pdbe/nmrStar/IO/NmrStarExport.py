@@ -244,7 +244,7 @@ class NmrStarExport:
 
     if self.verbose:
 
-      messageKeys = self.messages.keys()
+      messageKeys = list(self.messages.keys())
       messageKeys.sort()
 
       for messageKey in messageKeys:

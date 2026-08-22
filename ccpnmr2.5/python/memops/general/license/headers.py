@@ -456,11 +456,11 @@ def showTestInfo():
         strapp("# %s" % location)
         strapp("#\n")
 
-        ll1 = dict.items()
+        ll1 = list(dict.items())
         ll1.sort()
         for paramIndex, ll2 in ll1:
             strapp("# licenseInfo set %s :\n{" % paramIndex)
-            ll3 = infoMod.licenseInfo[paramIndex].items()
+            ll3 = list(infoMod.licenseInfo[paramIndex].items())
             ll3.sort()
             for tag, val in ll3:
                 strapp("'%s' : '''%s'''," % (tag, val))

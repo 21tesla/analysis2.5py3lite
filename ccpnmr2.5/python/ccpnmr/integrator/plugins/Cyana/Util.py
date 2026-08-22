@@ -110,14 +110,15 @@ def cyanaNmrCalcRun(nmrCalcRun):
 
     # Sequence. Set RMSDresidues
     seqDataObj = nmrCalcRun.findFirstData(name="definedResidues")
-    # seqIds = seqDataObj.residueSeqIds # will not work - seqIds is empty when takingwhole chain
-    seqIds = [x.seqId for x in seqDataObj.sortedResidues()]
-    ss = intUtil.integerListExpression(seqIds, fieldSep="..")
-    nmrCalcRun.newRunParameter(name="definedResidueString", code="rmsdrange", textValue=ss)
+    if seqDataObj:
+        seqIds = [x.seqId for x in seqDataObj.sortedResidues()]
+        if seqIds:
+            ss = intUtil.integerListExpression(seqIds, fieldSep="..")
+            nmrCalcRun.newRunParameter(name="definedResidueString", code="rmsdrange", textValue=ss)
 
-    # first and last residue numbers, for one-chain web version
-    nmrCalcRun.newRunParameter(name="firstSeqId", code="firstSeqId", intValue=min(seqIds))
-    nmrCalcRun.newRunParameter(name="lastSeqId", code="lastSeqId", intValue=max(seqIds))
+            # first and last residue numbers, for one-chain web version
+            nmrCalcRun.newRunParameter(name="firstSeqId", code="firstSeqId", intValue=min(seqIds))
+            nmrCalcRun.newRunParameter(name="lastSeqId", code="lastSeqId", intValue=max(seqIds))
 
     # Spectrum tolerance
     defaultTolPoints = 1.0

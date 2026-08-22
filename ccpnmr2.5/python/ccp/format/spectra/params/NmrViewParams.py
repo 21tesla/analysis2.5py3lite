@@ -84,11 +84,10 @@ class NmrViewParams(ExternalParams):
     magicBytes.sort()
 
     def doByteSwap(self, cBuffer):
-        assert cBuffer.itemsize == 1
-        bs0 = "%02X" % ord(cBuffer[0])
-        bs1 = "%02X" % ord(cBuffer[1])
-        bs2 = "%02X" % ord(cBuffer[2])
-        bs3 = "%02X" % ord(cBuffer[3])
+        bs0 = "%02X" % (cBuffer[0] if isinstance(cBuffer[0], int) else ord(cBuffer[0]))
+        bs1 = "%02X" % (cBuffer[1] if isinstance(cBuffer[1], int) else ord(cBuffer[1]))
+        bs2 = "%02X" % (cBuffer[2] if isinstance(cBuffer[2], int) else ord(cBuffer[2]))
+        bs3 = "%02X" % (cBuffer[3] if isinstance(cBuffer[3], int) else ord(cBuffer[3]))
 
         # if __debug__:
         #  print bs0,bs1,bs2,bs3
@@ -150,11 +149,11 @@ class NmrViewParams(ExternalParams):
 
         iBuffer = array.array("i")
         fBuffer = array.array("f")
-        cBuffer = array.array("c")
+        cBuffer = s
 
-        iBuffer.fromstring(s)
-        fBuffer.fromstring(s)
-        cBuffer.fromstring(s)
+        iBuffer.frombytes(s)
+        fBuffer.frombytes(s)
+        # cBuffer is already bytes in python 3 (or string in python 2)
 
         self.checkMagic(cBuffer)
 
@@ -198,7 +197,7 @@ class NmrViewParams(ExternalParams):
 
     def checkMagic(self, bytes):
         numberMagicBytes = len(self.magicBytes)
-        inMagicBytes = list(["%02X" % ord(byte) for byte in bytes[0:numberMagicBytes]])
+        inMagicBytes = ["%02X" % (byte if isinstance(byte, int) else ord(byte)) for byte in bytes[0:numberMagicBytes]]
         inMagicBytes.sort()
 
         if inMagicBytes != self.magicBytes:
@@ -274,7 +273,7 @@ class NmrViewParams(ExternalParams):
                     # if __debug__:
                     #  print 'result',best,bestIndex,nuclei[bestIndex],currentSet
 
-                keys = bestSets.keys()
+                keys = list(bestSets.keys())
                 keys.sort()
 
                 nucleiLookup = {}

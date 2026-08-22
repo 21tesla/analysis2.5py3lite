@@ -693,7 +693,7 @@ def chemShiftRefMacro(argServer):
 
     shiftRefDict = buildSdMeanRefDict(argServer.getProject())
 
-    keys = shiftRefDict.keys()
+    keys = list(shiftRefDict.keys())
     keys.sort()
 
     for key in keys:
@@ -701,7 +701,7 @@ def chemShiftRefMacro(argServer):
 
         subDict = shiftRefDict[key]
 
-        keys2 = subDict.keys()
+        keys2 = list(subDict.keys())
         keys2.sort()
 
         for key2 in keys2:

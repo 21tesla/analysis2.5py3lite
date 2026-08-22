@@ -208,7 +208,7 @@ class ForkOff:
 
         ## Any subprocesses left
         if self.process_d:
-            key_list = self.process_d.keys()
+            key_list = list(self.process_d.keys())
             key_list.sort()
             for pid in key_list:
                 nTerror("subprocesses with fid [%s] was left behind with pid [%d]" \

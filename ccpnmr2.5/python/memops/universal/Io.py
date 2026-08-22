@@ -101,6 +101,8 @@ def normalisePath(path, makeAbsolute=None):
     Normalises the path, e.g. removes redundant .. and slashes and
     makes sure path uses '/' rather than '\\' as can happen on Windows.
     """
+    if isinstance(path, bytes):
+        path = path.decode("utf-8", "replace")
 
     dirsep = Constants.dirsep
     assert dirsep == "/", "have dirsep = '%s', not '/'" % dirsep
@@ -127,6 +129,8 @@ def unnormalisePath(path):
     """
     On Unix does nothing, on Windows replaces '/' with '\\'/
     """
+    if isinstance(path, bytes):
+        path = path.decode("utf-8", "replace")
 
     if Constants.dirsep != os.sep:
         path = path.replace(Constants.dirsep, os.sep)
@@ -138,7 +142,7 @@ def joinPath(*args):
     """
     The same as os.path.join but normalises the result.
     """
-
+    args = [arg.decode("utf-8", "replace") if isinstance(arg, bytes) else arg for arg in args]
     return normalisePath(os.path.join(*args))
 
 

@@ -370,7 +370,7 @@ def plotDihedralD1_1d():
             points = zip(x, y)
             lAttr = solidLine(color='black')
             plot.lines(points, attributes=lAttr)
-            ssTypeList = hPlot.histd1BySs0.keys()
+            ssTypeList = list(hPlot.histd1BySs0.keys())
             ssTypeList.sort() # in place sort to: space, H, S
             colorList = [ 'green', 'blue', 'yellow']
 

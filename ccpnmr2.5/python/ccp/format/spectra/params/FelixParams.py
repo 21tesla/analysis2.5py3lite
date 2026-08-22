@@ -78,8 +78,8 @@ class FelixParams(ExternalParams):
         x = array.array("i")
         y = array.array("f")
 
-        x.fromstring(s)
-        y.fromstring(s)
+        x.frombytes(s)
+        y.frombytes(s)
 
         matrix_type = x[1]
         if matrix_type != 1:

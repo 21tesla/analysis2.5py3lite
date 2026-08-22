@@ -2508,7 +2508,7 @@ def isDataBigEndian(
         if not s:
             break
 
-        x.fromstring(s)
+        x.frombytes(s)
         if not isBigEndian():
             x.byteswap()
 

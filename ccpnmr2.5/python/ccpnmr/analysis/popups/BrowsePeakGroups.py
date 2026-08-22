@@ -191,7 +191,7 @@ class BrowsePeakGroupsPopup(BasePopup):
                     key, pane, xyz = windowPosition
                     self.orthogonalDict[key] = (pane, xyz)
 
-        xyPlaneKeys = self.orthogonalDict.keys()
+        xyPlaneKeys = list(self.orthogonalDict.keys())
         xyPlaneKeys.sort()
         if xyPlaneKeys:
             index = min(self.windowPulldown.index, len(xyPlaneKeys) - 1)

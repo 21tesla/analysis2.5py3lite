@@ -85,7 +85,7 @@ def main():
         linesByEntry[ entryId ].append( row )
 
     skippedResTypes = []
-    entryIdList = linesByEntry.keys()
+    entryIdList = list(linesByEntry.keys())
     entryIdList.sort()
 
     # Do some pre filtering.
@@ -168,7 +168,7 @@ def main():
     nTmessage("Got count of values: %r" % len(value) )
     # fill FOUR types of hist.
     # TODO: filter differently for pro/gly
-    keyListSorted1 = valueBySs0AndResTypes.keys()
+    keyListSorted1 = list(valueBySs0AndResTypes.keys())
     keyListSorted1.sort()
     for isI in (True, False):
         if isI:
@@ -192,11 +192,11 @@ def main():
             nTmessage("Count %6d in valueBySs[%s]" % (sum(hist1d), ssType))
             setDeepByKeys(histd1BySs, hist1d, ssType)
 
-            keyListSorted2 = valueBySsAndResTypes[ssType].keys()
+            keyListSorted2 = list(valueBySsAndResTypes[ssType].keys())
             keyListSorted2.sort()
             for resType in keyListSorted2:
     #            nTmessage("Working on valueBySsAndResTypes for [%s][%s]" % (ssType, resType)) # nice for balancing output verbosity.
-                keyListSorted3 = valueBySsAndResTypes[ssType][resType].keys()
+                keyListSorted3 = list(valueBySsAndResTypes[ssType][resType].keys())
                 keyListSorted3.sort()
                 for prevResType in keyListSorted3:
     #                nTmessage("Working on valueBySsAndResTypes[%s][%s][%s]" % (ssType, resType, prevResType))
@@ -217,7 +217,7 @@ def main():
     for ssType in keyListSorted1:
         for resType in keyListSorted2:
 #            nTmessage("Working on valueBySsAndResTypes for [%s][%s]" % (ssType, resType)) # nice for balancing output verbosity.
-            keyListSorted3 = valueBySs0AndResTypes[ssType][resType].keys()
+            keyListSorted3 = list(valueBySs0AndResTypes[ssType][resType].keys())
             keyListSorted3.sort()
             for resTypePrev in keyListSorted3:
                 keyListSorted4 = keyListSorted3[:] # take a copy
@@ -250,10 +250,10 @@ def main():
                     setDeepByKeys( histd1CtupleBySsAndResTypes, cTuple, ssType, resType, resTypePrev, resTypeNext)
     # end for isI
 
-    keyListSorted1 = valueByResTypes.keys()
+    keyListSorted1 = list(valueByResTypes.keys())
     keyListSorted1.sort()
     for resType in keyListSorted1:
-        keyListSorted2 = valueByResTypes[resType].keys()
+        keyListSorted2 = list(valueByResTypes[resType].keys())
         keyListSorted2.sort()
         for prevResType in keyListSorted2:
             d1List = valueByResTypes[resType][prevResType]

@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
   }
 
-  baseUnitCcpCodes = modifiedCarbs.keys()
+  baseUnitCcpCodes = list(modifiedCarbs.keys())
   baseUnitCcpCodes.sort()
 
   for baseUnitCcpCode in baseUnitCcpCodes:

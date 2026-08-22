@@ -832,7 +832,7 @@ class EditSpectrumPopup(BasePopup):
         tipText = "Bytes per data point (normally 4)"
         label = Label(self.dataOptFrame, text="Bytes per word:", tipText=tipText)
         label.grid(row=0, column=2, sticky="w")
-        self.numBytesPulldown = PulldownList(self.dataOptFrame, texts=map(str, number_bytes_entries), tipText=tipText)
+        self.numBytesPulldown = PulldownList(self.dataOptFrame, texts=list(map(str, number_bytes_entries)), tipText=tipText)
         self.numBytesPulldown.grid(row=0, column=3, sticky="w")
 
         tipText = "Whether data is floating point or integer (normally floating point)"

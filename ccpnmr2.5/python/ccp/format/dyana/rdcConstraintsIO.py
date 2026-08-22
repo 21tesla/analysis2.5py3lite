@@ -174,7 +174,7 @@ class DyanaRdcConstraintFile(DyanaGenericFile):
         if not singleAtom:
             fout.write("#Orientation  Magnitude  Rhombicity  ORI residue number" + self.newline)
 
-            orientationKeys = self.orientations.keys()
+            orientationKeys = list(self.orientations.keys())
             orientationKeys.sort()
 
             for orientationKey in orientationKeys:

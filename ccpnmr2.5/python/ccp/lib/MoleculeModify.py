@@ -120,7 +120,7 @@ def addMolResidues(molecule, molType, sequence, startNum=1, isCyclic=False):
     if len(sequence) > 1 and molType in ("protein", "DNA", "RNA"):
         # linear polymer
 
-        seqInput = zip([molType] * len(sequence), sequence)
+        seqInput = list(zip([molType] * len(sequence), sequence))
         molResidues = makeLinearSequence(molecule, seqInput, seqCodeStart=startNum, isCyclic=isCyclic)
 
     else:

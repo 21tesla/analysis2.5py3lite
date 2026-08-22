@@ -77,6 +77,7 @@ if isWindowsOS():
     os.environ["PYTHONINSPECT"] = "x"
 
 top = None
+_hasStartupCrashed = False
 
 import atexit
 
@@ -99,6 +100,9 @@ def main(projectDir=None, cache_size=64, glDirect=None):
     # top.configure(cursor="crosshair")
 
     def _checkPythonQuit():
+        global _hasStartupCrashed
+        if _hasStartupCrashed:
+            return
         if top is not None and not hasattr(top, "_hasQuitNormally"):
             # # NOTE:ED - can remove the threading Thread.__delete keyError
             # #           but not sure want to remove threading module
@@ -125,10 +129,21 @@ def main(projectDir=None, cache_size=64, glDirect=None):
     top.update_idletasks()  # much faster
     top.initProject(project)
 
-    # return top
+    if sys.platform.startswith("dar") or sys.platform.startswith("darwin"):
+        pass
 
-    if isWindowsOS():
+    print("DEBUG: Checking if we should run mainloop...")
+    print(f"DEBUG: isWindowsOS() = {isWindowsOS()}")
+    print(f"DEBUG: sys.stdin.isatty() = {sys.stdin.isatty()}")
+    print(f"DEBUG: hasattr(sys.flags, 'interactive') = {hasattr(sys.flags, 'interactive')}, sys.flags.interactive = {getattr(sys.flags, 'interactive', None)}")
+    print(f"DEBUG: hasattr(sys.flags, 'inspect') = {hasattr(sys.flags, 'inspect')}, sys.flags.inspect = {getattr(sys.flags, 'inspect', None)}")
+
+    if isWindowsOS() or not sys.stdin.isatty() or not (sys.flags.interactive or sys.flags.inspect):
+        print("DEBUG: Calling root.mainloop()...")
         root.mainloop()
+        print("DEBUG: root.mainloop() EXITED!")
+    else:
+        print("DEBUG: SKIPPING root.mainloop() because interactive mode is detected.")
 
     return top
 
@@ -245,7 +260,13 @@ Continuing...
 
     try:
         main(projectDir, max_size, glDirect)
-    except Exception:
+    except Exception as e:
+        import traceback
+        _hasStartupCrashed = True
+        print("\n" + "=" * 80)
+        print("CRITICAL: Exception caught during startup in main():")
+        traceback.print_exc()
+        print("=" * 80 + "\n")
         # ignore any errors on exit
         pass
     finally:

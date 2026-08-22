@@ -92,6 +92,10 @@ class TextPipe:
 
             self.textArea.see(Tkinter.END)
 
+    def flush(self):
+        pass
+
+
 
 def getHelpUrlDir():
 

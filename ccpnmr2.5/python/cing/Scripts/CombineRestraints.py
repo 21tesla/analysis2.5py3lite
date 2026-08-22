@@ -343,7 +343,7 @@ def renameDicts(trdict, gpdict):
 def dictValues(vdict):
     '''Returns the dictionary, the sorted list of values and the length of this list.'''
     nTmessage("Starting %s" % getCallerName())
-    v = vdict.values()
+    v = list(vdict.values())
     v.sort()
     lenv = len(v)
     return(vdict, v, lenv,)

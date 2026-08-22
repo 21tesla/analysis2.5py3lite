@@ -190,7 +190,7 @@ class MarsProjectFile(MarsGenericFile):
         self.writeLine(fout, "fragSize", self.fragSize)
         fout.write(self.newline)
 
-        cutoffKeys = self.cutoffs.keys()
+        cutoffKeys = list(self.cutoffs.keys())
         cutoffKeys.sort()
 
         for cutoffKey in cutoffKeys:
@@ -212,7 +212,7 @@ class MarsProjectFile(MarsGenericFile):
         self.writeLine(fout, "pdb", pdbAvailable)
 
         # Does the order matter here? Assuming it doesn't...
-        pdbInfoKeys = self.pdbFileInfo.keys()
+        pdbInfoKeys = list(self.pdbFileInfo.keys())
         pdbInfoKeys.sort()
 
         for pdbInfoKey in pdbInfoKeys:

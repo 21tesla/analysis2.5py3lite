@@ -110,9 +110,15 @@ class NmrPipeParams(ExternalParams):
             n = 4 * nuc_index[j]
             nuc = s[n : n + 4].strip()
             # get rid of null termination
-            m = nuc.find(chr(0))
-            if m >= 0:
-                nuc = nuc[:m]
+            if isinstance(nuc, bytes):
+                m = nuc.find(b'\0')
+                if m >= 0:
+                    nuc = nuc[:m]
+                nuc = nuc.decode('utf-8', 'ignore')
+            else:
+                m = nuc.find(chr(0))
+                if m >= 0:
+                    nuc = nuc[:m]
             if nuc == "ID" or nuc == "TAU":  # TBD: do not know if this is necessary or sufficient
                 self.nuc[i] = None
             else:
@@ -133,13 +139,13 @@ def getHeader(fileName):
         raise ApiError("file shorter than expected length (%d bytes) of header (never mind data)" % head)
 
     x = array.array("f")
-    x.fromstring(s)
+    x.frombytes(s)
 
     if x[0] != 0:
         raise ApiError("first word of header = %s, should be 0" % x[0])
 
     byte_order = [0x40, 0x16, 0x14, 0x7B]
-    t = [ord(c) for c in s[8:12]]
+    t = [c if isinstance(c, int) else ord(c) for c in s[8:12]]
     if t == byte_order:
         big_endian = True
     else:

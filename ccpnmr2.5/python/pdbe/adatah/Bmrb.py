@@ -36,7 +36,7 @@ def getBmrbArchiveEntryList():
       bmrbCode = bmrbFile[3:-4]
       bmrbNumbers[int(bmrbCode)] = bmrbCode # Should this be 3:? - previous line should do that
 
-  bmrbNumberList = bmrbNumbers.keys()
+  bmrbNumberList = list(bmrbNumbers.keys())
   bmrbNumberList.sort()
 
   bmrbCodes = []

@@ -104,7 +104,7 @@ class CreateShiftListPopup(BasePopup):
 
                     self.peakListDict[peakListLabel] = peakList
 
-        peakListLabels = self.peakListDict.keys()
+        peakListLabels = list(self.peakListDict.keys())
         peakListLabels.sort()
 
         #
@@ -119,7 +119,7 @@ class CreateShiftListPopup(BasePopup):
 
             self.shiftListDict[shiftListLabel] = shiftList
 
-        shiftListLabels = self.shiftListDict.keys()
+        shiftListLabels = list(self.shiftListDict.keys())
         shiftListLabels.sort()
 
         row = 0

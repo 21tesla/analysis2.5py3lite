@@ -1373,8 +1373,9 @@ class WindowPopup(BasePopup):
     def getSpectrumViews(self):
 
         if self.activeWindowFrame:
+            from functools import cmp_to_key
             views = self.activeWindowFrame.getSpectrumViews()
-            views.sort(self.activeWindowFrame.compareViewOrder)
+            views.sort(key=cmp_to_key(self.activeWindowFrame.compareViewOrder))
         else:
             views = []
 

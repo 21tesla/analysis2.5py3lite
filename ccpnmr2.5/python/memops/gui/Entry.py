@@ -62,7 +62,7 @@ from memops.universal.Util import breakString
 
 
 class Entry(Tkinter.Entry, Base):
-    array_re = re.compile(r",?\s*")
+    array_re = re.compile(r"\s*,\s*|\s+")
     separator = ", "
     joiner = "\n"
 
@@ -135,7 +135,7 @@ class Entry(Tkinter.Entry, Base):
         # TBD: str below is used to convert unicode to string
         # (in Tcl/Tk 8.5 it looks like everything is unicode)
         ###s = str(Tkinter.Entry.get(self).strip())
-        s = Tkinter.Entry.get(self).strip().encode("utf-8")
+        s = Tkinter.Entry.get(self).strip()
         if self.isArray:
             if self.maxCharsPerLine:
                 s = s.replace(self.joiner, self.separator)
@@ -144,7 +144,16 @@ class Entry(Tkinter.Entry, Base):
             else:
                 value = []
             if self.strToVal:
-                value = [self.strToVal(v) for v in value if v]
+                new_value = []
+                for v in value:
+                    v = v.strip()
+                    if not v or v in ('.', '...'):
+                        continue
+                    try:
+                        new_value.append(self.strToVal(v))
+                    except ValueError:
+                        pass
+                value = new_value
         elif self.strToVal:
             if s:
                 try:

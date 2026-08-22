@@ -330,8 +330,8 @@ def readDataFileHeader(dataFile):
 
     x = array.array("i")  # integer
     y = array.array("H")  # unsigned short
-    x.fromstring(header)
-    y.fromstring(header)
+    x.frombytes(header)
+    y.frombytes(header)
     ebytes = x[3]
     swapped = False
     if ebytes < 1 or ebytes > 8:
@@ -430,9 +430,9 @@ def readDataBlockHeader(dataFileParams, block=0):
     x = array.array("i")  # integer
     y = array.array("H")  # unsigned short
     z = array.array("f")  # float
-    x.fromstring(header)
-    y.fromstring(header)
-    z.fromstring(header)
+    x.frombytes(header)
+    y.frombytes(header)
+    z.frombytes(header)
     if swapped:
         x.byteswap()
         y.byteswap()
@@ -459,8 +459,8 @@ def readDataBlockHeader(dataFileParams, block=0):
     if header1:
         y = array.array("H")  # unsigned short
         z = array.array("f")  # float
-        y.fromstring(header1)
-        z.fromstring(header1)
+        y.frombytes(header1)
+        z.frombytes(header1)
         if swapped:
             y.byteswap()
             z.byteswap()

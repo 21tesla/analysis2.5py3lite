@@ -79,10 +79,10 @@ class UcsfParams(ExternalParams):
                 % ucsf_file_header
             )
 
-        if s[:8] != "UCSF NMR":
+        if s[:8] not in (b"UCSF NMR", "UCSF NMR"):
             raise ApiError('first eight bytes of header = "%s", should be "UCSF NMR"' % s[:8])
 
-        ndim = self.ndim = ord(s[10])
+        ndim = self.ndim = s[10] if isinstance(s[10], int) else ord(s[10])
 
         self.head = ucsf_file_header + ndim * ucsf_dim_header
         self.big_endian = True  # UCSF files always big endian
@@ -100,8 +100,8 @@ class UcsfParams(ExternalParams):
         x = array.array("i")
         y = array.array("f")
 
-        x.fromstring(s)
-        y.fromstring(s)
+        x.frombytes(s)
+        y.frombytes(s)
 
         if self.swap:
             x.byteswap()
@@ -119,10 +119,16 @@ class UcsfParams(ExternalParams):
             self.refppm[i] = y[base + 7]
             # 27 Oct 2006: added 1.0, which seems to be the correct thing to do
             self.refpt[i] = 1.0 + 0.5 * float(self.npts[i])
-            nuc = s[4 * base : 4 * base + 6]
-            n = nuc.find(chr(0))
-            if n >= 0:
-                nuc = nuc[:n]
+            nuc = s[int(4 * base) : int(4 * base) + 6]
+            if isinstance(nuc, bytes):
+                n = nuc.find(b'\0')
+                if n >= 0:
+                    nuc = nuc[:n]
+                nuc = nuc.decode('utf-8', 'ignore')
+            else:
+                n = nuc.find(chr(0))
+                if n >= 0:
+                    nuc = nuc[:n]
             self.nuc[i] = self.standardNucleusName(nuc)
 
 

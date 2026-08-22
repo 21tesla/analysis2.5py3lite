@@ -162,7 +162,7 @@ def getFullEntryNameListForTarget(target, programHoH):
     Query the participation table for who all predicted the target.
     Does not include the Org.
     """
-    targetList = programHoH.keys()
+    targetList = list(programHoH.keys())
     targetList.sort()
     print(targetList)
     if target not in targetList:
@@ -170,7 +170,7 @@ def getFullEntryNameListForTarget(target, programHoH):
         return None
 
     mapByLab = programHoH[target]
-    labList = mapByLab.keys()
+    labList = list(mapByLab.keys())
     labList.sort()
     result = []
     for labId in labList:
@@ -180,7 +180,7 @@ def getFullEntryNameListForTarget(target, programHoH):
     return result
 
 def printCingUrls(programHoH):
-    targetList = programHoH.keys()
+    targetList = list(programHoH.keys())
     targetList.sort()
     print(targetList)
     for target in targetList:

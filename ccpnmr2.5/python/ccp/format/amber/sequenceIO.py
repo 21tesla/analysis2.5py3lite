@@ -96,7 +96,7 @@ class AmberSequenceFile(AmberGenericFile):
 
         seqInsertCode = defaultSeqInsertCode
 
-        modelNums = coordinateFile.modelCoordinates.keys()
+        modelNums = list(coordinateFile.modelCoordinates.keys())
         modelNums.sort()
 
         coordinates = coordinateFile.modelCoordinates[modelNums[0]][:]

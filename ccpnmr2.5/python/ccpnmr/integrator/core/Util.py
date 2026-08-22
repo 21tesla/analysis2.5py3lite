@@ -1088,7 +1088,7 @@ def adaptNmrCalcRun(nmrCalcRun):
             nmrCalcRun.newRunParameter(name="fileName", textValue=shiftFile, code="fileName", data=shiftListData)
 
     # copy shiftlists to main constraintstore
-    resMapDict = mainConstraintStore.quickResonances
+    from ccpnmr.analysis.core.ConstraintBasic import getFixedResonance
     for shiftList in shiftLists:
         # ll = [x for x in mainConstraintStore.constraintLists
         ll = [
@@ -1104,7 +1104,7 @@ def adaptNmrCalcRun(nmrCalcRun):
             assignStoreData.addConstraintListSerial(shiftConstraintList.serial)
             for shift in shiftList.sortedMeasurements():
                 shiftConstraintList.newChemShiftConstraint(
-                    targetValue=shift.value, error=shift.error, resonance=resMapDict[shift.resonance.serial]
+                    targetValue=shift.value, error=shift.error, resonance=getFixedResonance(mainConstraintStore, shift.resonance)
                 )
 
 

@@ -256,9 +256,12 @@ class ParameterEditor(BasePopup):
                 raise Exception("Unknown parameter type: %s for %s" % (paramType, protocolParameter))
 
             # sort them by their values
-            xx = zip(dataValues, dataObjects)
+            xx = list(zip(dataValues, dataObjects))
             xx.sort()
-            dataValues, dataObjects = zip(*xx)
+            if xx:
+                dataValues, dataObjects = list(zip(*xx))
+            else:
+                dataValues, dataObjects = [], []
 
             if clazz is ParameterTable:
                 kw["dataText"] = dataText
@@ -360,7 +363,10 @@ class ParameterEditor(BasePopup):
                     result = run.newMolResidueData(chains=molSystem.sortedChains(), **parDD)
                 elif selector is not None:
                     residues = intIo.parseResidueExpr(molSystem, selector)
-                    result = run.newMolResidueData(residues=residues, **parDD)
+                    if residues:
+                        result = run.newMolResidueData(residues=residues, **parDD)
+                    else:
+                        result = None
 
         elif paramType == "measurementList":
             measurementList = widget.getObject()
@@ -404,10 +410,10 @@ class ParameterEditor(BasePopup):
                 selector = widget.selectionEntry.get()
                 if selector == ss:
                     result = run.newConstraintStoreData(
-                        constraintLists=nmrConstraintStore.sortedConstraintLists(), **parDD
+                        nmrConstraintStore=nmrConstraintStore, constraintListSerials=[x.serial for x in nmrConstraintStore.sortedConstraintLists()], **parDD
                     )
                 else:
-                    maxClists = max(x.serial for x in nmrConstraintStore.constraintLists)
+                    maxClists = max(x.serial for x in nmrConstraintStore.constraintLists) if nmrConstraintStore.constraintLists else 0
                     clistSerials = intIo.parseNumberExpr(selector, startat=1, endat=maxClists)
                     result = run.newConstraintStoreData(
                         nmrConstraintStore=nmrConstraintStore, constraintListSerials=clistSerials, **parDD

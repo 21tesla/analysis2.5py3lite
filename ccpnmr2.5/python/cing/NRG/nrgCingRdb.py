@@ -195,7 +195,7 @@ class NrgCingRdb:
         # end if
         pdbIdDateResultDict = NTdict() # hash by entry id
         pdbIdDateResultDict.appendFromTable(pdbIdTable, 0, 0)
-        pdbIdList = pdbIdDateResultDict.keys()
+        pdbIdList = list(pdbIdDateResultDict.keys())
         pdbIdList.sort()
         pdbIdList = NTlist( *pdbIdList )
         return pdbIdList
@@ -1498,7 +1498,7 @@ e.pdb_id = s1.pdb_id;
                 color[i].append(myList[i])
             # end for
         # end for
-        entryList = perEntryRog.keys()
+        entryList = list(perEntryRog.keys())
         entryList.sort()
         nTdebug("ROG per residue calculated for number of entries: %s" % len(entryList))
     #    nTdebug("ROG per residue: %s" % m)
@@ -1580,7 +1580,7 @@ e.pdb_id = s1.pdb_id;
             # end if
             perEntryRog[k][int(row[1])] = float(row[2])
         # end for
-        entryList = perEntryRog.keys()
+        entryList = list(perEntryRog.keys())
         entryList.sort()
         nTdebug("ROG per residue calculated for number of entries: %s" % len(entryList))
         nTdebug("ROG per residue: %s" % m)

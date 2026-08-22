@@ -136,7 +136,7 @@ class ChainExportPopup(TemporaryBasePopup):
         # Setup list of ccp chains labels
         #
 
-        ccpChainLabels = self.ccpChainLabelDict.keys()
+        ccpChainLabels = list(self.ccpChainLabelDict.keys())
         ccpChainLabels.sort()
 
         #

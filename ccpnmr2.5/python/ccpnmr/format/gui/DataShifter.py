@@ -929,7 +929,7 @@ def createInProject(
                 if not toCcpnObject:
                     continue
 
-            linkNames = postponedLinkDict[fromCcpnObject].keys()
+            linkNames = list(postponedLinkDict[fromCcpnObject].keys())
             linkNames.sort()
 
             for linkName in linkNames:

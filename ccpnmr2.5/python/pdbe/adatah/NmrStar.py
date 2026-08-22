@@ -126,7 +126,7 @@ class NmrStarHandler:
 
     for molCode in sequenceInfo.keys():
 
-      seqCodeList = sequenceInfo[molCode].keys()
+      seqCodeList = list(sequenceInfo[molCode].keys())
       seqCodeList.sort()
 
       resLabelList[molCode] = []
@@ -156,7 +156,7 @@ class NmrStarHandler:
     #
 
     if len(resLabelList) == 2:
-      molCodes = resLabelList.keys()
+      molCodes = list(resLabelList.keys())
       molCodes.sort()
       if molCodes.count(defaultMolCode):
         otherMolCode = molCodes[not molCodes.index(defaultMolCode)]
@@ -250,7 +250,7 @@ class NmrStarHandler:
 
     if hasattr(self,'alignmentInfo') and self.alignmentInfo:
 
-      pdbChainCodes = self.alignmentInfo.keys()
+      pdbChainCodes = list(self.alignmentInfo.keys())
       pdbChainCodes.sort()
 
       for pdbChainCode in pdbChainCodes:

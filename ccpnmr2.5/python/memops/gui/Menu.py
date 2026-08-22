@@ -305,6 +305,14 @@ class Menu(Tkinter.Menu, Base):
             options_copy["command"] = lambda: func(self.menu_event)
             options = options_copy
 
+        if "command" in options:
+            import sys
+            if sys.platform.startswith("dar") or sys.platform.startswith("darwin"):
+                orig_func = options["command"]
+                def deferred_func(f=orig_func):
+                    self.after(50, f)
+                options["command"] = deferred_func
+
         if "tipText" in options:
             self.tipTexts[label] = options["tipText"]
             del options["tipText"]

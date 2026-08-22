@@ -191,7 +191,7 @@ def arrayOfIndex(index, cumulative):
     n = len(cumulative)
     array = n * [0]
     for i in range(n - 1, -1, -1):
-        array[i] = index / cumulative[i]
+        array[i] = int(index // cumulative[i])
         index = index % cumulative[i]
 
     return array

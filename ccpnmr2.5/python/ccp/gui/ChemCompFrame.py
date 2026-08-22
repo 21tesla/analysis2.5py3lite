@@ -367,7 +367,7 @@ class ChemCompFrame(Frame):
                 else:
                     overviewDict = chemCompStdDict[molType]
 
-                ccpCodes = overviewDict.keys()
+                ccpCodes = list(overviewDict.keys())
                 ccpCodes.sort()
 
                 for ccpCode in ccpCodes:

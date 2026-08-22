@@ -464,7 +464,13 @@ class ScrolledGraph(Frame):
         for i in range(len(dataSets)):
             N = len(dataSets[i])
             for j in range(N):
-                x, y, e = dataSets[i][j]
+                datum = dataSets[i][j]
+                x = datum[0]
+                y = datum[1]
+                if len(datum) > 2:
+                    e = datum[2]
+                else:
+                    e = 0.0
 
                 e = e or 0.0
 
@@ -582,7 +588,11 @@ class ScrolledGraph(Frame):
 
         coords = []
         coordsAppend = coords.append
-        for x, y, e in dataSet:
+        for datum in dataSet:
+            x = datum[0]
+            y = datum[1]
+            e = datum[2] if len(datum) > 2 else None
+            
             if (y is not None) and (x is not None):
                 x0 = (x - dr0) * ppvX
                 y0 = (y - dr1) * ppvY

@@ -539,7 +539,7 @@ class EditExperimentSeriesPopup(BasePopup):
         if self.expSeries and (self.expSeries.className == "Experiment"):
             names = ["delay time", "mixing time", "num delays", "pulsing frequency", "gradient strength"]
         else:
-            names = CONDITION_UNITS_DICT.keys()
+            names = list(CONDITION_UNITS_DICT.keys())
             names.sort()
 
         return names

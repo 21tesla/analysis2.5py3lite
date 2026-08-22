@@ -148,7 +148,7 @@ def getFormatConverterInfoDict():
 
     ccpnProject = Implementation.MemopsRoot(name="test")
 
-    formatNames = allFormatsDict.keys()
+    formatNames = list(allFormatsDict.keys())
     formatNames.sort()
 
     for removeFormatName in ("generic", "marvin", "regine"):
@@ -167,7 +167,7 @@ def getFormatConverterInfoDict():
 
         formatObject.IOkeywords = copy.deepcopy(formatObject.IOkeywords)
 
-        functionNames = formatObject.IOkeywords.keys()
+        functionNames = list(formatObject.IOkeywords.keys())
         functionNames.sort()
 
         subClasses = formatObject.IOkeywords["subClasses"]
@@ -250,7 +250,7 @@ def getFormatConverterInfoDict():
             if not isValidFunction:
                 continue
 
-            IOkeywords = formatObject.IOkeywords[functionName].keys()
+            IOkeywords = list(formatObject.IOkeywords[functionName].keys())
             IOkeywords.sort()
 
             numMandatory = 0
@@ -1508,7 +1508,7 @@ def setDataDimRefs(dsFreq):
 
     if protonFreq == 0:
         if otherFreqs:
-            isotopeCodes = otherFreqs.keys()
+            isotopeCodes = list(otherFreqs.keys())
             isotopeCodes.sort()
 
             for isotopeCode in isotopeCodes:

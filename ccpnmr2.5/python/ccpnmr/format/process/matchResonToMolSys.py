@@ -338,9 +338,9 @@ def matchToMolSys(resChainDict, resResidueDict, molSystem, test=0, matchMode=0):
         if test:
             print("DIFFERENT AMOUNT OF CHAINS on molSystem and Resonance level!")
 
-        unmappedCodes = chainDict.keys()
+        unmappedCodes = list(chainDict.keys())
         unmappedCodes.sort()
-        resChainCodes = resChainDict.keys()
+        resChainCodes = list(resChainDict.keys())
         resChainCodes.sort()
 
         if len(chainDict) == 1:
@@ -368,7 +368,7 @@ def matchToMolSys(resChainDict, resResidueDict, molSystem, test=0, matchMode=0):
     # [' ',' ',1,0]],   # Chain mapping: [chainCode, formatChainCode, firstSeqId, offset
     #
 
-    chainCodes = chainMappingDict.keys()
+    chainCodes = list(chainMappingDict.keys())
     chainCodes.sort()
 
     for chainCode in chainCodes:
@@ -504,7 +504,7 @@ def matchToMolSys(resChainDict, resResidueDict, molSystem, test=0, matchMode=0):
                             residueMappingDict[(chainCode, resChainCode)] = (newResId, offset)
 
     finalChainMappings = []
-    resMapDictKeys = residueMappingDict.keys()
+    resMapDictKeys = list(residueMappingDict.keys())
     resMapDictKeys.sort()
     for chainCode, resChainCode in resMapDictKeys:
         (seqId, offset) = residueMappingDict[(chainCode, resChainCode)]
@@ -515,11 +515,11 @@ def matchToMolSys(resChainDict, resResidueDict, molSystem, test=0, matchMode=0):
             del resChainDict[resChainCode]
 
     if chainDict:
-        chainCodes = chainDict.keys()
+        chainCodes = list(chainDict.keys())
         chainCodes.sort()
         print("  Warning: Did not map CCPN chain codes %s" % (chainCodes))
     if resChainDict:
-        resChainCodes = resChainDict.keys()
+        resChainCodes = list(resChainDict.keys())
         resChainCodes.sort()
         print("  Warning: Did not map resonance chain codes %s" % (resChainCodes))
         printMissingInfo(resResidueDict)
@@ -533,14 +533,14 @@ def printMissingInfo(resResidueDict):
 
     print(drawBox("Suggested mappings, based on atom names for original restraint data", indent="  "))
 
-    resChainCodes = resResidueDict.keys()
+    resChainCodes = list(resResidueDict.keys())
     resChainCodes.sort()
 
     for resChainCode in resChainCodes:
         print("    Original chain code '%s'. Higher scores below are better." % resChainCode)
         print()
 
-        resSeqCodes = resResidueDict[resChainCode].keys()
+        resSeqCodes = list(resResidueDict[resChainCode].keys())
         resSeqCodes.sort()
 
         for resSeqCode in resSeqCodes:
@@ -563,11 +563,11 @@ def printMissingInfo(resResidueDict):
                                 else:
                                     scoreList[ccpCode] *= multiplier
 
-                values = scoreList.values()
+                values = list(scoreList.values())
                 values.sort()
                 values.reverse()
 
-                ccpCodes = scoreList.keys()
+                ccpCodes = list(scoreList.keys())
                 ccpCodes.sort()
 
                 for value in values:

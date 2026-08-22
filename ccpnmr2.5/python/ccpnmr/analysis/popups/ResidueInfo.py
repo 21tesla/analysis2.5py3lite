@@ -240,7 +240,7 @@ class ResidueInfoPopup(BasePopup):
             dict[residue.molResidue.ccpCode] = residue.molResidue.molType
 
         codes = []
-        codesTemp = dict.keys()
+        codesTemp = list(dict.keys())
         codesTemp.sort()
         for code in codesTemp:
             codes.append(code)

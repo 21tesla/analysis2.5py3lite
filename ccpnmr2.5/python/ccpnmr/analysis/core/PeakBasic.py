@@ -4239,7 +4239,7 @@ def getSimplePeakAnnotation(peak, doChain=False):
                     break
 
             if doChain:
-                codes = chainCodes.keys()
+                codes = list(chainCodes.keys())
                 codes.sort()
                 aText = "/".join(codes) + aText
             aList.append(aText)
