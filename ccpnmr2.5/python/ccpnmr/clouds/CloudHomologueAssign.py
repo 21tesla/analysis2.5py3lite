@@ -97,7 +97,7 @@ def matchCloudsToHomologue(clouds, chainH, structure, threshold=3.0):
         for atom in residue.atoms:
             if (atom.name == "H") and atom.atomSet:
                 coords = getAtomSetCoords(atom.atomSet, structure)
-                amideCoords.append(coords[0], residue)
+                amideCoords.append((coords[0], residue))
                 break
 
     for resonance in amideCloud.keys():

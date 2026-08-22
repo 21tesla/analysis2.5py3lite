@@ -84,7 +84,7 @@ class TalosFormat:
         minShiftQuality = self.IOkeywords.get("minShiftQuality", 0.0)
         residues = self.residues
         if not residues:
-            residues = list(set(AssignmentUtil.getResonanceResidue(x.reaonance) for x in measurementList.measurements))
+            residues = list(set(AssignmentUtil.getResonanceResidue(x.resonance) for x in measurementList.measurements))
         if len(set(x.chain for x in residues)) != 1:
             raise Exception("Talos shifts must all be from same chain")
 

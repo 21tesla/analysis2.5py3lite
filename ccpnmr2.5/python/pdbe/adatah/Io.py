@@ -244,6 +244,7 @@ Code below from http://peerit.blogspot.com/2007/07/multipartposthandler-doesnt-w
 
 import mimetypes
 import urllib
+import urllib.parse
 import urllib.request
 import uuid
 from io import StringIO
@@ -275,7 +276,7 @@ class MultipartPostHandler(urllib.request.BaseHandler):
                 raise TypeError("not a valid non-string sequence or mapping object")
 
             if len(v_files) == 0:
-                data = urllib.urlencode(v_vars, doseq)
+                data = urllib.parse.urlencode(v_vars, doseq=doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
 
@@ -285,7 +286,7 @@ class MultipartPostHandler(urllib.request.BaseHandler):
                     print("Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data'))
                 request.add_unredirected_header('Content-Type', contenttype)
 
-            request.add_data(data)
+            request.data = data  # py3 urllib.request.Request has no add_data(); set the body attr
 
         return request
 

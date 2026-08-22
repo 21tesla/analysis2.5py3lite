@@ -78,14 +78,35 @@ cd /tmp && PYTHONPATH=$PWD/../home/logan/software/ccpnmr2.5.2-qwen/ccpnmr2.5/pyt
 
 ---
 
-### P5-2 — Bug-fix + C-ext hardening — status: PENDING
-- Fix 4 documented latent bugs (Phase 3 "observed, not fixed"):
-  - CloudHomologueAssign `append(a, b)` 2-arg TypeError
-  - Talos/Io `x.reaonance` typo
-  - BlackledgeFrame nested-fn flag without `nonlocal`
-  - adatah/Io `MultipartPostHandler` py2 `urllib2` remnants (`urllib.urlencode`, `add_data`)
-- Expand the **14 skipped** C-ext instantiation tests → real coverage.
-- Verify gates unchanged (compile 0, smoke 1646/0/83) + pytest still 0 failed.
+### P5-2 — Bug-fix + C-ext hardening — status: DONE (this bucket)
+**4 documented latent bugs fixed (verified: 4 files py_compile OK — incl. `nonlocal` binding
+validity; import_smoke 1646/0/83 unchanged):**
+- `ccpnmr/clouds/CloudHomologueAssign.py` `amideCoords.append(coords[0], residue)` →
+  `append((coords[0], residue))`. (2-arg `append` = `TypeError`: the caller immediately
+  unpacks `for (x2,y2,z2), residue in amideCoords`, so items must be a (coords, residue) pair.)
+- `ccpnmr/integrator/plugins/Talos/Io.py:87` `x.reaonance` → `x.resonance` (misspelled attr;
+  `getResonanceResidue` takes a resonance).
+- `grenoble/BlackledgeModule/BlackledgeModuleFrame.py` `findModuleExportPdbFile` +
+  `findModuleExportBackValuesFile`: nested `yes()`/`cancel()` set `modulePdbFileGood`/
+  `moduleBvFileGood` (read after `showMulti`) without binding → add `nonlocal` in both nested fns.
+- `pdbe/adatah/Io.py` `MultipartPostHandler` py2 remnants: `urllib.urlencode` → `urllib.parse.
+  urlencode(..., doseq=doseq)` (+ `import urllib.parse`); `request.add_data(data)` (py2 urllib2
+  only) → `request.data = data` (py3 `urllib.request.Request` body attr).
+
+**C-ext hardening — `tests/test_c_ext_imports.py`:** replaced the two mislabeled blanket-skip
+methods (`test_shape_file_instantiation`/`test_fit_method_instantiation`, each parametrized over all
+8 exts but skipping 7) with one `test_ext_instantiation` (8 params) that:
+- really constructs the 4 headless-buildable exts — ShapeFile(2,[10,10]) (ndim/ncomponents),
+  MemCache(2), FitMethod(1,0.1) (+ `runFit` functional check), StoreHandler(path) — using the
+  constructors discovered empirically from the py3.13 C exts (the originals' `tp_new` messages);
+- skips the 4 data/stream-dependent exts (StoreFile=block-reader, BlockFile=needs block file+
+  MemCache, PdfHandler/PsHandler=need plotting stream+output_style) WITH A SPECIFIC REASON
+  (`_HEADLESS_UNAVAILABLE`) instead of a vague blanket skip.
+Still covered by `test_module_imports` (8/8 import + attribute checks for all).
+
+**Gate delta:** pytest full **45/23/0 → 47 passed / 13 skipped / 0 failed** (C-ext file 10/14-skip
+→ 12 pass / 4 skip; 2 new real instantiations, 10 vague skips → 4 documented).
+compileall **0**; import_smoke **1646/0/83** (unchanged).
 
 ### P5-3 — Ship / productize — status: PENDING
 - `git tag v2.5.2-py3`; PyPI upload path + install doc (`pip install <wheel>` then

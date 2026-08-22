@@ -368,8 +368,12 @@ class BlackledgeModuleFrame(Frame):
       unless user has renamed it.
     """
     modulePdbFileGood = False
-    def yes():    modulePdbFileGood = True
-    def cancel(): modulePdbFileGood = False
+    def yes():
+        nonlocal modulePdbFileGood
+        modulePdbFileGood = True
+    def cancel():
+        nonlocal modulePdbFileGood
+        modulePdbFileGood = False
 
     # MODULE writes pdb files to CWD no matter where you or it is
     possibleFiles = glob.glob( os.path.join( os.getcwd(), 'temp*' ) )
@@ -451,8 +455,12 @@ class BlackledgeModuleFrame(Frame):
     """ Find the Back Values file that the User hopefully exported from MODULE """
 
     moduleBvFileGood = False
-    def yes():    moduleBvFileGood = True
-    def cancel(): moduleBvFileGood = False
+    def yes():
+        nonlocal moduleBvFileGood
+        moduleBvFileGood = True
+    def cancel():
+        nonlocal moduleBvFileGood
+        moduleBvFileGood = False
 
     # back value files are helpfully appended '*.back'
     possibleFiles  = glob.glob( os.path.join( os.getcwd(), '*.back' ) )
