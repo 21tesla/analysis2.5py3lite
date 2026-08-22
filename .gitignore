@@ -36,3 +36,9 @@ Thumbs.db
 # Python 3 migration working files
 *.migrated
 *.bak
+
+# Migration notes and tools
+_phase*
+_probe*
+_fix*
+.qwen/
