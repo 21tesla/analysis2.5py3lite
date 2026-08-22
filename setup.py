@@ -57,17 +57,32 @@ GSL = next(
 DARWIN = sys.platform == "darwin"
 
 
+def _venv_base_prefix():
+    """For venvs: the base interpreter prefix (pyvenv.cfg `home =`), or None."""
+    cfg = os.path.join(os.path.dirname(os.path.dirname(sys.executable)), "pyvenv.cfg")
+    if os.path.exists(cfg):
+        with open(cfg) as f:
+            for line in f:
+                if line.startswith("home = "):
+                    return os.path.dirname(line.split("=", 1)[1].strip())
+    return None
+
+
 def _tkinc():
-    """Find a dir containing tk.h: $CCP_TK_PREFIX/include first, then the
-    conda-style <prefix>/include of the running interpreter (conda envs ship
-    tk.h there), then the raw interpreter include dir as last resort."""
+    """Find a dir containing tk.h, in preference order: $CCP_TK_PREFIX/include,
+    the conda-style <prefix>/include of the running (or venv BASE) interpreter
+    (conda envs ship tk.h there), Homebrew tcl-tk, then the raw interpreter
+    include dir as last resort."""
     cands = []
     if os.environ.get("CCP_TK_PREFIX"):
         cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
     inc = sysconfig.get_paths()["include"]
-    cands += [os.path.join(os.path.dirname(inc), "include"),   # conda layout
-              "/opt/homebrew/opt/tcl-tk/include",              # Homebrew (Apple silicon)
-              "/usr/local/opt/tcl-tk/include",                 # Homebrew (Intel)
+    cands.append(os.path.join(os.path.dirname(inc), "include"))   # conda layout
+    base = _venv_base_prefix()
+    if base:
+        cands.append(os.path.join(base, "include"))               # venv -> base python
+    cands += ["/opt/homebrew/opt/tcl-tk/include",                 # Homebrew (Apple silicon)
+              "/usr/local/opt/tcl-tk/include",                    # Homebrew (Intel)
               inc]
     for c in cands:
         if os.path.exists(os.path.join(c, "tk.h")):
@@ -90,14 +105,17 @@ if DARWIN:
     GLX_DEFINE = ("IGNORE_GL=1",)
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
-    # -L for the Tk/Tcl prefix that supplied tk.h (conda env, Homebrew tcl-tk,
-    # or $CCP_TK_PREFIX) — Homebrew Pythons keep -ltk8.6/-ltcl8.6 out of their
-    # own LIBDIR, so an explicit search path is needed.
-    GLX_LINK = ["-L" + os.path.join(os.path.dirname(TKINC), "lib"),
-                "-L" + os.path.join(_x11p, "lib"), "-lX11"]
+    # Library search paths (must be -L library_dirs, emitted BEFORE the -ltk8.6
+    # etc. references — macOS ld resolves -l left-to-right).  Tk/Tcl live in
+    # the prefix that supplied tk.h (conda env, Homebrew tcl-tk, or
+    # $CCP_TK_PREFIX); X11 in XQuartz.
+    GLX_LIBDIRS = [os.path.join(os.path.dirname(TKINC), "lib"),
+                   os.path.join(_x11p, "lib")]
+    GLX_LINK = ["-lX11"]
 else:
     GLX_DEFINE = ()
     GLX_INC = []
+    GLX_LIBDIRS = []
     GLX_LINK = ["-l:libX11.so.6"]
 
 CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
@@ -207,23 +225,23 @@ FAM = {
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
                          f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
                         + DRAWDEPS + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"] + GU + GBLK,
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
     "PeakCluster":     ([f"{ANA}/py_peak_cluster.c", f"{ANA}/peak_cluster.c",
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/symbol.c",
                          f"{ANA}/py_peak.c", f"{G}/nonlinear_model.c",
                          f"{G}/gauss_jordan.c"]
                         + DRAWDEPS + GU + GBLK, [ANA, G] + DRAWINC_EXTRA, DRAWLIBS,
-                        (), GLX_DEFINE, GLX_LINK),
+                        GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
     "ContourFile":     ([f"{ANA}/py_contour_file.c", f"{ANA}/contour_file.c",
                          f"{ANA}/contour_data.c", f"{ANA}/contour_levels.c",
                          f"{ANA}/contour_style.c", f"{ANA}/py_contour_levels.c",
                          f"{ANA}/py_contour_style.c"]
                         + DRAWDEPS + GU + GBLK + [f"{G}/store_file.c", f"{G}/py_store_file.c",
                                                    f"{G}/contourer.c"],
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
     "SliceFile":       ([f"{ANA}/py_slice_file.c", f"{ANA}/slice_file.c"]
                         + DRAWDEPS + GU + GBLK,
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
 
     # --- ccp structure, Tier-1 (import:  ccp.c.<Name>) ----------------------
     "StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
@@ -238,7 +256,7 @@ FAM = {
                          f"{STR}/py_atom.c", f"{STR}/py_bond.c"]
                         + DRAWDEPS + [f"{G}/color.c", f"{G}/geometry.c", f"{G}/eigenvalue.c",
                                       f"{G}/linalg.c", f"{G}/sorts.c"] + GU,
-                        [STR, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
+                        [STR, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
 
     # --- cambridge bayes (import:  cambridge.c.BayesPeakSeparator) ----------
     "BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
@@ -251,11 +269,11 @@ FAM = {
     "GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
                         + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
-                        (), GLX_DEFINE, GLX_LINK),
+                        GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
     "TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
                         + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
-                        (), GLX_DEFINE, GLX_LINK),
+                        GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
 
     # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
     "Meccano":         ([f"{MEC}/pysrc/py_meccano.c",
