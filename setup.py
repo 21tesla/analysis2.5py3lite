@@ -20,6 +20,7 @@ Build filter:
 """
 import os
 import sys
+import sysconfig
 
 from setuptools import setup, Extension
 
@@ -45,17 +46,49 @@ def _gsl_usable(prefix):
 
 GSL = next(
     (p for p in (os.environ.get("CCP_GSL_PREFIX"), "/usr",
-                 "/home/logan/software/anaconda3/envs/ccpnmr-gsl")
+                 "/home/logan/software/anaconda3/envs/ccpnmr-gsl",
+                 os.environ.get("CONDA_PREFIX"))
      if _gsl_usable(p)),
     None,
 )
 
-# Tcl/Tk header prefix for the window-handler exts (GlHandler, TkHandler).
-# The project venv's Python (Anaconda base) ships tk 8.6 headers; link libs
-# resolve to the system tk8.6 (same SONAME) at import time.
-TKINC = os.path.join(os.environ.get("CCP_TK_PREFIX", "/home/logan/software/anaconda3"), "include")
-# X11 symbols are resolved via a versioned direct link (no -dev symlink needed).
-X11LINK = "-l:libX11.so.6"
+DARWIN = sys.platform == "darwin"
+
+
+def _tkinc():
+    """Find a dir containing tk.h: $CCP_TK_PREFIX/include first, then the
+    conda-style <prefix>/include of the running interpreter (conda envs ship
+    tk.h there), then the raw interpreter include dir as last resort."""
+    cands = []
+    if os.environ.get("CCP_TK_PREFIX"):
+        cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
+    inc = sysconfig.get_paths()["include"]
+    cands += [os.path.join(os.path.dirname(inc), "include"), inc]
+    for c in cands:
+        if os.path.exists(os.path.join(c, "tk.h")):
+            return c
+    return cands[-1]  # best guess; the compile error will name the missing header
+
+
+TKINC = _tkinc()
+
+# GL-context support differs per platform:
+#  * Linux: OpenGL via GLX from an X11 GL stack (freeglut/mesa provide glx.h);
+#    X11 symbols resolved via a versioned direct link (no -dev symlink needed).
+#  * macOS: there is no GLX — gl_handler.c compiles its GLX context code out
+#    under IGNORE_GL, so the GL-dependent window handlers degrade to the Tk
+#    path while the data layer, fitting and 2D drawing keep full function.
+#    glut.h (and libglut, if still referenced) come from XQuartz
+#    (/opt/X11 by default; override with CCP_X11_PREFIX) or `brew install mesa`.
+if DARWIN:
+    GLX_DEFINE = ("IGNORE_GL=1",)
+    _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
+    GLX_INC = [os.path.join(_x11p, "include")]
+    GLX_LINK = []
+else:
+    GLX_DEFINE = ()
+    GLX_INC = []
+    GLX_LINK = ["-l:libX11.so.6"]
 
 CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable"]
 
@@ -91,7 +124,7 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
             f"{G}/clipping.c"]
 DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
-DRAWINC_EXTRA = [TKINC]
+DRAWINC_EXTRA = [TKINC] + GLX_INC
 
 # ------------------------------------------------------------------ family defs
 # name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
@@ -160,23 +193,23 @@ FAM = {
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
                          f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
                         + DRAWDEPS + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"] + GU + GBLK,
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
     "PeakCluster":     ([f"{ANA}/py_peak_cluster.c", f"{ANA}/peak_cluster.c",
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/symbol.c",
                          f"{ANA}/py_peak.c", f"{G}/nonlinear_model.c",
                          f"{G}/gauss_jordan.c"]
                         + DRAWDEPS + GU + GBLK, [ANA, G] + DRAWINC_EXTRA, DRAWLIBS,
-                        (), (), [X11LINK]),
+                        (), GLX_DEFINE, GLX_LINK),
     "ContourFile":     ([f"{ANA}/py_contour_file.c", f"{ANA}/contour_file.c",
                          f"{ANA}/contour_data.c", f"{ANA}/contour_levels.c",
                          f"{ANA}/contour_style.c", f"{ANA}/py_contour_levels.c",
                          f"{ANA}/py_contour_style.c"]
                         + DRAWDEPS + GU + GBLK + [f"{G}/store_file.c", f"{G}/py_store_file.c",
                                                    f"{G}/contourer.c"],
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
     "SliceFile":       ([f"{ANA}/py_slice_file.c", f"{ANA}/slice_file.c"]
                         + DRAWDEPS + GU + GBLK,
-                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+                        [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
 
     # --- ccp structure, Tier-1 (import:  ccp.c.<Name>) ----------------------
     "StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
@@ -191,7 +224,7 @@ FAM = {
                          f"{STR}/py_atom.c", f"{STR}/py_bond.c"]
                         + DRAWDEPS + [f"{G}/color.c", f"{G}/geometry.c", f"{G}/eigenvalue.c",
                                       f"{G}/linalg.c", f"{G}/sorts.c"] + GU,
-                        [STR, G] + DRAWINC_EXTRA, DRAWLIBS, (), (), [X11LINK]),
+                        [STR, G] + DRAWINC_EXTRA, DRAWLIBS, (), GLX_DEFINE, GLX_LINK),
 
     # --- cambridge bayes (import:  cambridge.c.BayesPeakSeparator) ----------
     "BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
@@ -203,12 +236,12 @@ FAM = {
     # import:  memops.c.GlHandler / memops.c.TkHandler
     "GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
-                        + GU, [G, TKINC], ["GL", "glut", "tk8.6", "tcl8.6", "m"],
-                        (), (), [X11LINK]),
+                        + GU, [G, TKINC] + GLX_INC, ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        (), GLX_DEFINE, GLX_LINK),
     "TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
-                        + GU, [G, TKINC], ["GL", "glut", "tk8.6", "tcl8.6", "m"],
-                        (), (), [X11LINK]),
+                        + GU, [G, TKINC] + GLX_INC, ["GL", "glut", "tk8.6", "tcl8.6", "m"],
+                        (), GLX_DEFINE, GLX_LINK),
 
     # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
     "Meccano":         ([f"{MEC}/pysrc/py_meccano.c",

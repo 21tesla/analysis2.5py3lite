@@ -62,8 +62,42 @@ Build-time requirements (Linux):
   system GL (`libGL`)
 - **optional** GNU Scientific Library for Meccano (see Optional features)
 
-`pip install <sdist>` compiles the C extensions at install time (MANIFEST.in ships the
-sources). The wheel ships the compiled extensions (cp313, linux_x86_64).
+`sdist install` gives the Python tree + data model. The C extensions are built
+against the **running interpreter** via the root `setup.py` (MANIFEST.in ships
+all C sources so any checkout can build):
+
+```sh
+python setup.py build_ext --inplace   # builds every ext (Meccano if GSL is found)
+./scripts/copy_cext.sh               # places the .so files at their import sites
+```
+
+The Linux wheel ships the compiled extensions (cp313, linux_x86_64) and works
+as-is; other platforms build from source as above.
+
+### macOS
+
+The Linux wheel does not install on macOS — the C extensions must be compiled
+there (they are the only platform-compiled part):
+
+```sh
+xcode-select --install                 # one-time: cc
+# one-time: install XQuartz (https://www.xquartz.org) for glut.h, then log out/in
+conda create -n ccpnmr3 -c conda-forge python=3.13 tk tcl gsl -y
+conda activate ccpnmr3
+git clone https://github.com/21tesla/analysis2.5py3.git && cd analysis2.5py3
+python setup.py build_ext --inplace    # Meccano builds too (gsl in the active env)
+./scripts/copy_cext.sh
+./bin/analysis                          # (or any of the 8 console commands via a venv)
+```
+
+macOS notes:
+
+- macOS has no GLX: the GL window-handler extensions compile with `IGNORE_GL`
+  (2D drawing, data layer and fitting keep full function; 3D GL structure
+  rendering is off).
+- Paths are overridable: `CCP_X11_PREFIX` (XQuartz, default `/opt/X11`; or
+  `brew install mesa`), `CCP_TK_PREFIX` (prefix with `include/tk.h` +
+  `lib/libtk8.6*`), `CCP_GSL_PREFIX`.
 
 ### Optional features
 
