@@ -47,7 +47,9 @@ def _gsl_usable(prefix):
 GSL = next(
     (p for p in (os.environ.get("CCP_GSL_PREFIX"), "/usr",
                  "/home/logan/software/anaconda3/envs/ccpnmr-gsl",
-                 os.environ.get("CONDA_PREFIX"))
+                 os.environ.get("CONDA_PREFIX"),
+                 "/opt/homebrew/opt/gsl",   # Homebrew (Apple silicon)
+                 "/usr/local/opt/gsl")      # Homebrew (Intel)
      if _gsl_usable(p)),
     None,
 )
@@ -63,7 +65,10 @@ def _tkinc():
     if os.environ.get("CCP_TK_PREFIX"):
         cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
     inc = sysconfig.get_paths()["include"]
-    cands += [os.path.join(os.path.dirname(inc), "include"), inc]
+    cands += [os.path.join(os.path.dirname(inc), "include"),   # conda layout
+              "/opt/homebrew/opt/tcl-tk/include",              # Homebrew (Apple silicon)
+              "/usr/local/opt/tcl-tk/include",                 # Homebrew (Intel)
+              inc]
     for c in cands:
         if os.path.exists(os.path.join(c, "tk.h")):
             return c
@@ -85,7 +90,11 @@ if DARWIN:
     GLX_DEFINE = ("IGNORE_GL=1",)
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
-    GLX_LINK = ["-L" + os.path.join(_x11p, "lib"), "-lX11"]
+    # -L for the Tk/Tcl prefix that supplied tk.h (conda env, Homebrew tcl-tk,
+    # or $CCP_TK_PREFIX) — Homebrew Pythons keep -ltk8.6/-ltcl8.6 out of their
+    # own LIBDIR, so an explicit search path is needed.
+    GLX_LINK = ["-L" + os.path.join(os.path.dirname(TKINC), "lib"),
+                "-L" + os.path.join(_x11p, "lib"), "-lX11"]
 else:
     GLX_DEFINE = ()
     GLX_INC = []

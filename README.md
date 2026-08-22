@@ -77,17 +77,36 @@ as-is; other platforms build from source as above.
 ### macOS
 
 The Linux wheel does not install on macOS — the C extensions must be compiled
-there (they are the only platform-compiled part):
+on the Mac (they are the only platform-compiled part). `setup.py`
+auto-detects XQuartz, Homebrew (`tcl-tk`, `gsl`) and conda layouts, so a
+naive user needs **no environment variables**.
+
+**The easy way — Homebrew only, no conda/uv:**
 
 ```sh
-xcode-select --install                 # one-time: cc
-# one-time: install XQuartz (https://www.xquartz.org) for glut.h, then log out/in
+xcode-select --install                       # one-time: cc
+brew install --cask xquartz                  # one-time: X11 — log out/in after
+brew install python-tk@3.13 gsl              # Python 3.13 with Tk + GSL (Meccano)
+python3.13 -m venv ~/ccpnmr && source ~/ccpnmr/bin/activate
+pip install --upgrade pip setuptools
+pip install numpy pandas PyOpenGL Pillow olefile requests python-dateutil pytz
+
+git clone https://github.com/21tesla/analysis2.5py3.git && cd analysis2.5py3
+python setup.py build_ext --inplace          # compiles every ext (Meccano incl.)
+./scripts/copy_cext.sh                       # places the .so files at import sites
+pip install .                                # → the 8 console commands
+ccpnmr                                       # main workbench (GUI)
+```
+
+**Conda variant** (e.g. if you are already a conda user):
+
+```sh
 conda create -n ccpnmr3 -c conda-forge python=3.13 tk tcl gsl -y
 conda activate ccpnmr3
 git clone https://github.com/21tesla/analysis2.5py3.git && cd analysis2.5py3
-python setup.py build_ext --inplace    # Meccano builds too (gsl in the active env)
+python setup.py build_ext --inplace
 ./scripts/copy_cext.sh
-./bin/analysis                          # (or any of the 8 console commands via a venv)
+pip install .            # or just run ./bin/analysis straight from the tree
 ```
 
 macOS notes:
@@ -95,9 +114,9 @@ macOS notes:
 - macOS has no GLX: the GL window-handler extensions compile with `IGNORE_GL`
   (2D drawing, data layer and fitting keep full function; 3D GL structure
   rendering is off).
-- Paths are overridable: `CCP_X11_PREFIX` (XQuartz, default `/opt/X11`; or
-  `brew install mesa`), `CCP_TK_PREFIX` (prefix with `include/tk.h` +
-  `lib/libtk8.6*`), `CCP_GSL_PREFIX`.
+- Unusual layouts: override prefixes with `CCP_TK_PREFIX` (dir with
+  `include/tk.h` + `lib/libtk8.6*`), `CCP_X11_PREFIX` (default `/opt/X11`),
+  `CCP_GSL_PREFIX`.
 
 ### Optional features
 
