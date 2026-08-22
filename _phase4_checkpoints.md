@@ -174,14 +174,37 @@ grenoble/c(1 Meccano) + cing superpose — all present.
 - **Build env for C exts** (README, P4-6): system gcc (anaconda cc lacks GL/glx.h), freeglut,
   tk/tcl 8.6, libX11.so.6, python3.13 headers, GSL optional, OpenMP (superpose prebuilt).
 
-### P4-5 — GUI launch tests under Xvfb — status: TBD
-- `sudo apt-get install -y xvfb` (user approved 2026-08-21).
-- Per-app headless boot: construct the GUI main window (or its `main()` entry),
-  `root.update()` until widgets settle, then clean `destroy()`; assert no exception,
-  key window visible (winfo_exists).
-- Minimum set: ccpnmr (AnalysisGui), dangle, dataShifter, formatConverter, eci,
-  extendNmr, deposition. UpdateAuto (non-GUI) = import + main() with no-op network guard.
-- Record as a re-runnable test (xvfb-run) so a reset can re-verify without a display.
+### P4-5 — GUI launch tests under Xvfb — ✅ DONE (2026-08-21)
+**Gate: `MPLBACKEND=Agg .venv/bin/python gui_boot_test.py` — 8/8 PASS, source AND installed
+(wheel) state.** xvfb already on PATH (/usr/bin/xvfb-run). Harness = `gui_boot_test.py`
+(repo root, re-runnable): runs each app's `main()` in a subprocess under `xvfb-run -a`;
+a booted app reaches mainloop and survives until the kill timeout (PASS); early exit +
+traceback = FAIL. UpdateAuto (non-GUI, network) = import + `main()` signature check only.
+Installed-state run: copy the harness OUT of the repo (e.g. /tmp) so it doesn't inject
+the source tree onto PYTHONPATH.
+
+**11 real py3 runtime bugs found + fixed (GUI boot is where they lived — import smoke
+never exercises the Tk construction path):**
+1. memops/gui/BasePopup.py setFont — `children.values()` is a py3 view, not a list (`.extend`)
+2. memops/gui/Button.py + Scale.py determineFgs — py3 float '/' + `%x` rejects floats (`//`)
+3. memops/gui/Color.py — `getIntRgb` `rgb/256` float (py2 truncated→int: `//`); 4 more `%x`-with-float
+   sites (invertColor, inverseGrey, inverseRgb, invertColorRgb) → int() (py2 truncation)
+4. memops/gui/ScrolledMatrix.py refreshSize — `range().reverse()/.append` (py2 list-range)
+5. ccp/gui/ViewRamachandranFrame.py drawRamachandran — `range(nBins)` on py3 float (`int()`)
+6-8. setFont clones with the same children.values bug: eci/EntryCompletionGui, dangle/DangleGui,
+   memops/editor/ApplicationTemplate
+9. cambridge/dangle/DangleFrame.py — `range + [None]` list concat (`list(range(10))`)
+10. ccpnmr/format/gui/ImportExportFormatPopup.py — `string.split` (py2) → str.split
+11. ccpnmr/format/gui/FormatConverter.py — `string.capitalize` (py2) → str.capitalize;
+   utrecht/haddock/HaddockFrame.py — `dict_keys.sort()` → sorted()
+
+**Layout bug (installed state only):** 8 sites joined `getTopDirectory() + "python"` (source
+layout) for gfx/logo dirs → resolved outside site-packages. Fixed to `getPythonDirectory()`
+(the packages root in BOTH layouts): MultiWidget, FileSelect, ButtonList, memops/gui/Util,
+WindowPopup, AnalysisPopup, Tree, extendNmr/ExtendNmrGui. (Note: PartitionedSelector.py:408
+has a cwd-based `../../..`/python join — dead demo code after mainloop, left as-is.)
+Post-fix regression: source + installed smoke/pytest/boot all unchanged-green (1646/0/83,
+1637/0/83, 43/14/10 both, 8/8 boot both).
 
 ### P4-6 — README + CI polish — status: TBD
 - Real `README.md` (what it is / what works / install / run / test / scope notes

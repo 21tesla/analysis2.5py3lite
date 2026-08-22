@@ -270,7 +270,9 @@ def hexInvert(hexColor):
 def getIntRgb(widget, color):
 
     rgb = widget.winfo_rgb(color)
-    (r, g, b) = (rgb[0] / 256, rgb[1] / 256, rgb[2] / 256)
+    # py2: '/' on ints truncated to int (consumers use "%x", which py3
+    # forbids on floats) — restore with floor division.
+    (r, g, b) = (rgb[0] // 256, rgb[1] // 256, rgb[2] // 256)
     r = min(255, r)
     g = min(255, g)
     b = min(255, b)
@@ -304,7 +306,8 @@ def invertColor(widget, color):
     g = m
     b = m
 
-    return "#%02x%02x%02x" % (r * 255, g * 255, b * 255)
+    # py3: "%x" rejects floats (py2 truncated) — int() keeps py2 semantics.
+    return "#%02x%02x%02x" % (int(r * 255), int(g * 255), int(b * 255))
 
 
 def inverseGrey(color):
@@ -323,7 +326,8 @@ def inverseGrey(color):
 
     m *= 255
 
-    return "#%02x%02x%02x" % (m, m, m)
+    # py3: "%x" rejects floats (py2 truncated) — int() keeps py2 semantics.
+    return "#%02x%02x%02x" % (int(m), int(m), int(m))
 
 
 def inverseRgb(color):
@@ -334,7 +338,8 @@ def inverseRgb(color):
     g = 255 * (1 - g)
     b = 255 * (1 - b)
 
-    return "#%02x%02x%02x" % (r, g, b)
+    # py3: "%x" rejects floats (py2 truncated) — int() keeps py2 semantics.
+    return "#%02x%02x%02x" % (int(r), int(g), int(b))
 
 
 def invertColorRgb(widget, color):
@@ -342,7 +347,8 @@ def invertColorRgb(widget, color):
     rgb = widget.winfo_rgb(color)
     (r, g, b) = (255 - (rgb[0] / 256.0), 255 - (rgb[1] / 256.0), 255 - (rgb[2] / 256.0))
 
-    return "#%02x%02x%02x" % (r, g, b)
+    # py3: "%x" rejects floats (py2 truncated) — int() keeps py2 semantics.
+    return "#%02x%02x%02x" % (int(r), int(g), int(b))
 
 
 def scaleColor(widget, color, scale):

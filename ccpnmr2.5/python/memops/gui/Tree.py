@@ -6,7 +6,7 @@ from memops.gui.Canvas import Canvas
 from memops.gui.Frame import Frame
 from memops.gui.Menu import Menu
 from memops.gui.Scrollbar import Scrollbar
-from memops.universal.Io import getTopDirectory
+from memops.universal.Io import getPythonDirectory
 from memops.universal.Util import buttonPress, useWheelMouse
 
 # TBD
@@ -140,9 +140,8 @@ class Tree(Frame):
             self.rowHeight = size + 1
             self.font = "Helvetica %d" % (size / 2)
 
-            ccpnDir = getTopDirectory()
             iconDir = "%dx%d" % (size, size)
-            imageDir = path.join(ccpnDir, "python", "memops", "gui", "graphics", iconDir)
+            imageDir = path.join(getPythonDirectory(), "memops", "gui", "graphics", iconDir)
 
             files = [f for f in listdir(imageDir) if f.endswith(".gif")]
 

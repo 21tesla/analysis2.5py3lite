@@ -244,7 +244,8 @@ class FormatConverter(BasePopup):
 
         for componentType in self.components:
             menu_items.append(
-                {"kind": "cascade", "label": "%s files" % string.capitalize(componentType), "submenu": []}
+                # py3: string.capitalize (py2 module fn) removed — str method has same semantics
+                {"kind": "cascade", "label": "%s files" % componentType.capitalize(), "submenu": []}
             )
             menu_item = menu_items[-1]
 

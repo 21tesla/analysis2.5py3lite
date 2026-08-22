@@ -107,9 +107,11 @@ class Button(Tkinter.Button, Base):
         (r1, b1, g1) = getIntRgb(self, fg)
         (r2, b2, g2) = getIntRgb(self, bg)
 
-        r = (r1 + r2) / 2
-        g = (g1 + g2) / 2
-        b = (b1 + b2) / 2
+        # py3: '/' is float division and "%x" forbids floats — integer average
+        # (py2 semantics).
+        r = (r1 + r2) // 2
+        g = (g1 + g2) // 2
+        b = (b1 + b2) // 2
 
         self.enableFg = fg
         self.disableFg = "#%02x%02x%02x" % (r, g, b)

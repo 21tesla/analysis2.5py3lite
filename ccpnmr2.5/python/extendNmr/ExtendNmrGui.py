@@ -63,7 +63,7 @@ from memops.gui.Frame import Frame
 from memops.gui.Menu import Menu
 from memops.gui.MessageReporter import showError, showWarning
 from memops.gui.TabbedFrame import TabbedFrame
-from memops.universal.Io import getTopDirectory, normalisePath
+from memops.universal.Io import getPythonDirectory, normalisePath
 
 # CING
 from nijmegen.cing.CingFrame import CingFrame
@@ -217,10 +217,8 @@ class ApplicationPopup(AnalysisPopup):
 
     frames = self.tabbedFrame.frames
 
-    # Logos
-    ccpnDir = getTopDirectory()
-
-    imageDir = os.path.join(ccpnDir,'python','extendNmr','images')
+    # Logos (getPythonDirectory() = packages root in both source and installed layouts)
+    imageDir = os.path.join(getPythonDirectory(),'extendNmr','images')
 
     imageFile = os.path.join(imageDir,'Fp6Logo.gif')
     self.fp6Logo = Tkinter.PhotoImage(file=imageFile)

@@ -969,8 +969,9 @@ class ScrolledMatrix(Frame):
         extraRowList = []
         rowWidth = 0
         textRows = len(self.textMatrix)
-        columns = range(self.hOffset, len(self.headingList))
-        unseen = range(self.hOffset)
+        # py3: range is not a list (.reverse/.append below are py2 list ops)
+        columns = list(range(self.hOffset, len(self.headingList)))
+        unseen = list(range(self.hOffset))
         unseen.reverse()
         for x in unseen:
             columns.append(x)

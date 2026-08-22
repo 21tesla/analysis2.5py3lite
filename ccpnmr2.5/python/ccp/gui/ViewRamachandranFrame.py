@@ -383,7 +383,8 @@ class ViewRamachandranFrame(ScrolledCanvas):
 
         matrix = self.matrix
         canvas = self.canvas
-        nBins = 360 / self.binSize
+        # py3: '/' is float division; range() needs an int (py2 truncated).
+        nBins = int(360 / self.binSize)
         binWidth = self.binWidth = width / float(nBins)
         binHeight = self.binHeight = height / float(nBins)
         # self.cirRadius = min(5, self.binWidth/4.0)

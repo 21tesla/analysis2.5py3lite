@@ -394,8 +394,7 @@ class HaddockFrame(Frame):
         label = Label(conFrame, text='Restraint Type:')
         label.grid(row=2, column=4, sticky='w')
 
-        entries = energyTermTypes.keys()
-        entries.sort()
+        entries = sorted(energyTermTypes.keys())  # py3: dict_keys has no .sort
         self.termPullldown = PulldownMenu(conFrame, callback=None,
                                           entries=entries,
                                           selected_index=5,

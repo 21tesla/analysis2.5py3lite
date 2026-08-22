@@ -500,7 +500,7 @@ class EntryCompletionGui(BasePopup):
         if not popup:
             popup = self
 
-        childList = popup.children.values()
+        childList = list(popup.children.values())  # py3: dict view, not a list
 
         classes = [Tkinter.Button, Tkinter.Label, Tkinter.Menu, Tkinter.Entry, Tkinter.Checkbutton, Tkinter.Radiobutton]
 

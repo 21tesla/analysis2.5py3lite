@@ -184,7 +184,9 @@ class BasePopup(Tkinter.Toplevel, Base):
             font = self.font
 
         if font:
-            childList = self.children.values()
+            # py3: Widget.children.values() is a view, not a list (py2 semantics
+            # below rely on .extend) — materialize it.
+            childList = list(self.children.values())
 
             classes = [
                 Tkinter.Button,

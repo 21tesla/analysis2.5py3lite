@@ -60,9 +60,10 @@ from memops.gui.Base import getPopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import ButtonList
 from memops.gui.WebBrowser import WebBrowser
-from memops.universal.Io import getTopDirectory
+from memops.universal.Io import getPythonDirectory
 
-gfxDir = os.path.join(getTopDirectory(), "python", "memops", "gui", "graphics")
+# graphics live in the memops package (both source and installed layouts)
+gfxDir = os.path.join(getPythonDirectory(), "memops", "gui", "graphics")
 
 # creates quit button
 

@@ -65,11 +65,11 @@ from memops.gui.MessageReporter import showError
 from memops.gui.PulldownList import PulldownList
 from memops.gui.ScrolledMatrix import ScrolledMatrix
 from memops.universal.Constants import dirsep
-from memops.universal.Io import getTopDirectory, joinPath, normalisePath, splitPath
+from memops.universal.Io import getPythonDirectory, joinPath, normalisePath, splitPath
 from memops.universal.Util import isWindowsOS
 
 ICON_NAMES = ["go-previous", "go-next", "go-up", "go-top", "go-home", "folder-new", "view-refresh"]
-GFX_DIR = os.path.join(getTopDirectory(), "python", "memops", "gui", "graphics", "22x22")
+GFX_DIR = os.path.join(getPythonDirectory(), "memops", "gui", "graphics", "22x22")
 
 defaultFilter = "*"
 

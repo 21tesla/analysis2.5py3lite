@@ -98,7 +98,7 @@ class Thread(threading.Thread):
 
 def getCcpnObjects(parent, IOdefault):
 
-    ccpnObjectStrings = string.split(IOdefault, ".")
+    ccpnObjectStrings = IOdefault.split(".")  # py3: string.split (py2) removed
     ccpnObjects = [parent]
 
     for i in range(1, len(ccpnObjectStrings)):

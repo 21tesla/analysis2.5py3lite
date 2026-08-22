@@ -162,7 +162,7 @@ class DangleFrame(Frame):
 
     label = Label(frame, text='Max No. of Islands:')
     label.grid(row=0, column=4, sticky='w')
-    sizes = range(10)
+    sizes = list(range(10))  # py3: range is not a list (concatenated below)
     texts = [str(s) for s in sizes] + ['Do not reject',]
     self.rejectPulldown = PulldownList(frame, texts=texts, objects=sizes + [None,],
                                        tipText='Select the maximum allowed number of disontinuous prediction islands')

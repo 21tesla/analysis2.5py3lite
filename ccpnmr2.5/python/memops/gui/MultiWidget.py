@@ -58,7 +58,7 @@ import tkinter as Tkinter
 from memops.gui.Button import Button
 from memops.gui.Frame import Frame
 from memops.gui.Label import Label
-from memops.universal.Io import getTopDirectory
+from memops.universal.Io import getPythonDirectory
 
 blueColor = "#D0D0FF"
 
@@ -92,7 +92,9 @@ class MultiWidget(Frame):
         # Widget types currently: Entries, Pulldown, Checkbutton
 
         if useImages:
-            gfxDir = path.join(getTopDirectory(), "python", "memops", "gui", "graphics")
+            # getPythonDirectory() = the packages root in BOTH layouts (source
+            # tree and installed site-packages) — no layout-specific segment.
+            gfxDir = path.join(getPythonDirectory(), "memops", "gui", "graphics")
             self.crossImage = Tkinter.PhotoImage(file=path.join(gfxDir, "cross.gif"))
             self.tickImage = Tkinter.PhotoImage(file=path.join(gfxDir, "tick.gif"))
             self.plusImage = Tkinter.PhotoImage(file=path.join(gfxDir, "plus.gif"))

@@ -58,7 +58,7 @@ from memops.gui.CheckButton import CheckButton
 from memops.gui.Label import Label
 from memops.gui.PartitionedSelector import PartitionedSelector
 from memops.gui.ScrolledFrame import ScrolledFrame
-from memops.universal.Io import getTopDirectory
+from memops.universal.Io import getPythonDirectory
 
 TOP_BAR_TIP_TEXTS = {
     "Spectra": "Opens a panel toggle the display of individual spectra on or off",
@@ -433,7 +433,7 @@ class WindowPopup(BasePopup):
     def body(self, master):
 
         path = os.path
-        gfxDir = path.join(getTopDirectory(), "python", "memops", "gui", "graphics")
+        gfxDir = path.join(getPythonDirectory(), "memops", "gui", "graphics")
         MakeImage = Tkinter.PhotoImage
         self.upArrow = MakeImage(file=path.join(gfxDir, "arrowUp.gif"))
         self.downArrow = MakeImage(file=path.join(gfxDir, "arrowDown.gif"))

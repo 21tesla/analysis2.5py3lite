@@ -62,9 +62,9 @@ from memops.gui.Frame import Frame
 from memops.gui.MessageReporter import showInfo
 from memops.gui.Spacer import Spacer
 from memops.gui.WebBrowser import WebBrowser
-from memops.universal.Io import getTopDirectory
+from memops.universal.Io import getPythonDirectory
 
-GFX_DIR = os.path.join(getTopDirectory(), "python", "memops", "gui", "graphics")
+GFX_DIR = os.path.join(getPythonDirectory(), "memops", "gui", "graphics")
 
 STRING_TYPE = str
 UNICODE_TYPE = str

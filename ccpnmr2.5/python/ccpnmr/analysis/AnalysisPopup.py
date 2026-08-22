@@ -148,7 +148,7 @@ from memops.gui.FontMenu import FontMenu
 from memops.gui.Menu import Menu
 from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
 from memops.gui.WebBrowser import WebBrowser
-from memops.universal.Io import getTopDirectory, joinPath
+from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
 from nijmegen.cing.CingPopup import CingPopup
 from paris.aria.AriaExtendNmrFrame import AriaPopup
 from rutgers.rpf.PyRPF import PyRpfPopup
@@ -186,7 +186,7 @@ window_popup_prefix = "window_"
 after_delay = 10  # msec
 
 DEFAULT_FONT = "Helvetica 10"
-GFX_DIR = os.path.join(getTopDirectory(), "python", "memops", "gui", "graphics", "16x16")
+GFX_DIR = os.path.join(getPythonDirectory(), "memops", "gui", "graphics", "16x16")
 ICON_FILES = [
     "preferences-system",
     "emblem-system",
