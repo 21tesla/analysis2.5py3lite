@@ -68,6 +68,10 @@ points (`ccpnmr-extend-nmr`, `ccpnmr-deposition`, `ccpnmr-eci`).
    commit (keeps the "one commit per stage" revert unit intact). Rationale:
    sessions hit token limits; pushed checkpoints make a fresh session's
    resume trivial and no completed stage work is ever lost.
+   **Push gotcha (hit 2026-08-24):** local branch is `master`, remote
+   default is `main` — push with
+   `git push <url> refs/heads/master:refs/heads/main` (one-shot URL-embedded
+   token auth), not a bare `git push`, and keep the remote single-branch.
 
 ## Hazards (verified 2026-08-24 against source)
 
