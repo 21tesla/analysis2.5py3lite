@@ -134,7 +134,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 3 | ARIA: `paris/` + menu + methods | ✅ 2026-08-24 |
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ✅ 2026-08-24 |
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ✅ 2026-08-24 |
-| 6 | HADDOCK: `utrecht/` | ⬜ pending |
+| 6 | HADDOCK: `utrecht/haddock/` + menu + method | ✅ 2026-08-24 |
 | 7 | MECCANO: `grenoble/meccano/` + C sources + `setup.py` GSL block | ⬜ pending |
 | 8 | PyRPF: `rutgers/` | ⬜ pending |
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ⬜ pending |
@@ -332,4 +332,41 @@ decision 4.
   - `import_smoke.py` exit 0 — TOTAL **1658** (1668−10, exactly the 10 removed
     `.py` modules), OK 1542, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **5/5** (as predicted: 6/6 − the removed `dangle` app).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 6 — HADDOCK (utrecht/haddock, menu, method) — ✅ 2026-08-24**
+Recon (verified pre-edit): the HADDOCK **feature** is
+`ccpnmr2.5/python/utrecht/haddock/` = 17 tracked files (16 popups/API frames +
+`__init__.py`, 10056 lines total: `HaddockPopup`, `HaddockFrame`, `HaddockApi`,
+`HaddockBasic`, `HaddockDaniPopup`, `HaddockRdcPopup`, `EditSymmetryPopup`,
+`SymmetryPopup`, `HaddockDnaRnaRest`, `HaddockExport{Classic,Param,Param_new}`,
+`HaddockImportRunCns`, `HaddockLocal`, `HaddockServerUpload`, `APIexample`).
+Single external importer: `ccpnmr/analysis/AnalysisPopup.py` (import + one
+popup instantiation). No `ccpnmr/analysis/popups/Haddock*` files exist (the
+popups live inside `utrecht/haddock/` itself), no `ccpnmr/workflow/Haddock*`
+workflow module, no integrator plugin, no data/ protocol JSONs, no
+`ccpnmr-haddock` console script, no `bin/` launcher, no `scripts/` or
+`gui_boot_test.py` / `import_smoke.py` entries.
+KEPT per decision 4 (verified live consumer): `utrecht/__init__.py`,
+`utrecht/api/` (`Haddock.py` metamodel + `doc/` API HTML — same category as
+Stage 5 keeping `cambridge/api/doc/`), `utrecht/xml/Haddock.py`
+(`memops/xml/Implementation.py:282` does `import utrecht.xml.Haddock`),
+`ccpnmr2.5/model/utrecht/xml/Haddock/`. Because the `utrecht` package
+survives, `pyproject.toml`'s `utrecht*` package-include + isort `utrecht`
+first-party entry STAY (unlike Stage 5, no pyproject change here).
+- Deleted: `ccpnmr2.5/python/utrecht/haddock/` (17 files, 10056 lines).
+- `AnalysisPopup.py`: removed `from utrecht.haddock.HaddockPopup import
+  HaddockPopup`, the "HADDOCK: Structure Docking" Structure-menu
+  `add_command` block (shortcut "K"), the `"HADDOCK: Structure Docking"`
+  `menu_items[StructureMenu]` entry (list feeds `setMenuState`'s entry-count
+  loop), and the `startHaddock` method.
+- Residual (by design, Stage 12 sweep): `ccpnmr/workflow/Constants.py`
+  `programList` still contains the string `"Haddock"` — generic external
+  program-name dropdown list (Stage 3 left `"Aria"` in it for the same reason);
+  `memops/xml/Implementation.py` keeps its `import utrecht.xml.Haddock`
+  (metamodel, decision 4).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1641** (1658−17, exactly the 17 removed
+    `.py` modules), OK 1524, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **5/5** (unchanged — no HADDOCK app entry ever).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

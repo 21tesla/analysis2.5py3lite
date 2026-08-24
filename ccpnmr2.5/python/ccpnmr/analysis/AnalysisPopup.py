@@ -148,7 +148,6 @@ from memops.gui.WebBrowser import WebBrowser
 from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
 from nijmegen.cing.CingPopup import CingPopup
 from rutgers.rpf.PyRPF import PyRpfPopup
-from utrecht.haddock.HaddockPopup import HaddockPopup
 
 try:
     HAVE_NUMPY = True
@@ -1579,14 +1578,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 tipText='Predict protein secondary structure using chemical shifts')
 
         menu.add_command(
-            label="HADDOCK: Structure Docking",
-            shortcut="K",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startHaddock,
-            tipText="Generate structures of complexes using high-ambiguity driven biomolecular docking",
-        )
-        menu.add_command(
             label="MECCANO: Structures from RDCs",
             shortcut="M",
             image=self.iconSpecialTool,
@@ -1646,7 +1637,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "Make Distance Restraints",
             "Make H Bond Restraints",
             "DANGLE: Predict Dihedrals",
-            "HADDOCK: Structure Docking",
             "MECCANO: Structures from RDCs",
             "CING: Validate Structures",
             "ECI: Database Deposition",
@@ -2521,10 +2511,6 @@ class AnalysisPopup(BasePopup, Analysis):
     # def startD2D(self):
 
     #  self.popups['d2d'] = SecStructurePredictPopup(self, project=self.project)
-
-    def startHaddock(self):
-
-        self.popups["haddock"] = HaddockPopup(self, self.project)
 
     def startPyRPF(self):
 
