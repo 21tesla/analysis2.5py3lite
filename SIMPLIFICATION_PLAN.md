@@ -62,6 +62,12 @@ points (`ccpnmr-extend-nmr`, `ccpnmr-deposition`, `ccpnmr-eci`).
    `ccpnmr2.5/model/utrecht/xml/Haddock/`) — generated `ccp.api.*` and
    `molsim` code lazily references them; removing them requires scrubbing
    hundreds of generated lines.
+5. **Per-stage checkpoint policy (user, 2026-08-24):** every stage MUST end
+   with a commit + push checkpoint before work on the next stage starts —
+   code change and the `SIMPLIFICATION_PLAN.md` status/log update in ONE
+   commit (keeps the "one commit per stage" revert unit intact). Rationale:
+   sessions hit token limits; pushed checkpoints make a fresh session's
+   resume trivial and no completed stage work is ever lost.
 
 ## Hazards (verified 2026-08-24 against source)
 
@@ -120,7 +126,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | # | Scope | Status |
 |---|---|---|
 | 1 | Data Analysis: NOE, 3J, PALES, MODULE | ✅ 2026-08-24 |
-| 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ⬜ pending |
+| 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ✅ 2026-08-24 |
 | 3 | ARIA: `paris/` + menu + methods | ⬜ pending |
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ⬜ pending |
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ⬜ pending |
@@ -192,3 +198,27 @@ here, Stage 2 continues in the next session)**
   33 baseline import-failures → no new failures expected.
 - Expected gate deltas: import_smoke TOTAL ~1719 → ~1683 (−~36 modules),
   FAILED unchanged (33); gui_boot_test 8/8 → 6/6; pytest unchanged.
+
+**Stage 2 — Standalone apps (extendNmr, cambridge/wms, pdbe/deposition) — ✅ 2026-08-24**
+Recon re-verified pre-edit, identical to above: only external importers are
+the already-broken `nijmegen/CASD/casdPipeLine.py` and in-dir cross-imports;
+`cambridge/__init__.py` + `pdbe/__init__.py` are bare `pass`; no other
+references in py/toml/cfg/in/sh/md (outside `dist/`+`build/`, which are
+git-ignored stale copies — left untouched).
+- Deleted (49 files, 9393 lines): `ccpnmr2.5/python/extendNmr/` (14),
+  `ccpnmr2.5/python/cambridge/wms/` (30),
+  `ccpnmr2.5/python/pdbe/deposition/` (5). Rest of `pdbe/` and `cambridge/`
+  kept as planned.
+- `pyproject.toml`: dropped scripts `ccpnmr-deposition` +
+  `ccpnmr-extend-nmr`, package include `extendNmr*`, isort first-party
+  `extendNmr`.
+- `gui_boot_test.py`: dropped APPS entries `deposition` + `extend-nmr`.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1683** (1719−36, exactly as
+    predicted), OK 1567, FAILED **33 unchanged** (30× cing `Sql`,
+    2× `cherrypy`, 1× `psycopg2` — pre-existing classes), BY-DESIGN 83.
+  - `gui_boot_test.py` **6/6** (8/8 − the 2 removed apps).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+- Residual (by design): `nijmegen/CASD/casdPipeLine.py` still imports the
+  now-deleted `pdbe.deposition.*` — already among the 33 import failures, so
+  no new failures; goes away with the CING removal in Stage 9.

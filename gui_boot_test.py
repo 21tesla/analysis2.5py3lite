@@ -35,10 +35,6 @@ APPS = [
      "import cambridge.dangle.DangleGui as M; M.main([])"),
     ("data-shifter",
      "import ccpnmr.format.gui.DataShifter as M; M.main([])"),
-    ("deposition",
-     "import pdbe.deposition.dataFileImport.dataFileImportGui as M; M.main([])"),
-    ("extend-nmr",
-     "import extendNmr.ExtendNmrGui as M; M.main([])"),
     ("format-converter",
      "import ccpnmr.format.gui.FormatConverter as M; M.main([])"),
 ]

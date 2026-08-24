@@ -66,8 +66,6 @@ ccpnmr = "ccpnmr.analysis.AnalysisGui:main"
 ccpnmr-eci = "ccpnmr.eci.EntryCompletionGui:main"
 ccpnmr-dangle = "cambridge.dangle.DangleGui:main"
 ccpnmr-data-shifter = "ccpnmr.format.gui.DataShifter:main"
-ccpnmr-deposition = "pdbe.deposition.dataFileImport.dataFileImportGui:main"
-ccpnmr-extend-nmr = "extendNmr.ExtendNmrGui:main"
 ccpnmr-format-converter = "ccpnmr.format.gui.FormatConverter:main"
 ccpnmr-update = "ccpnmr.update.UpdateAuto:main"
 
@@ -93,7 +91,6 @@ include = [
     "cambridge*",
     "cing*",
     "cyana2ccpn*",
-    "extendNmr*",
     "gothenburg*",
     "grenoble*",
     "molsim*",
@@ -161,7 +158,6 @@ known-first-party = [
     "ccpnmr",
     "cambridge",
     "cing",
-    "extendNmr",
     "gothenburg",
     "grenoble",
     "molsim",
