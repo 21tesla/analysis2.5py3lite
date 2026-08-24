@@ -75,8 +75,6 @@ from ccpnmr.analysis.popups.BrowsePeakGroups import BrowsePeakGroupsPopup
 from ccpnmr.analysis.popups.BrowseReferenceShifts import BrowseReferenceShiftsPopup
 from ccpnmr.analysis.popups.BrowseResonances import BrowseResonancesPopup, ResonanceInfoPopup
 from ccpnmr.analysis.popups.CalcDistConstraints import CalcDistConstraintsPopup
-from ccpnmr.analysis.popups.CalcHeteroNoe import CalcHeteroNoePopup
-from ccpnmr.analysis.popups.CalcHnHaCoupling import CalcHnHaCouplingPopup
 from ccpnmr.analysis.popups.CalcRates import CalcRatesPopup
 from ccpnmr.analysis.popups.CalcShiftDifference import CalcShiftDifferencePopup
 from ccpnmr.analysis.popups.ConfirmSeqSpinSystems import ConfirmSeqSpinSystemsPopup
@@ -280,11 +278,7 @@ class AnalysisPopup(BasePopup, Analysis):
             "calc_rates": self.calcRates,
             "calc_shift_difference": self.calcShiftDifferences,
             "follow_shift_changes": self.followShiftChanges,
-            "calc_hnha_coupling": self.calcHnHaCoupling,
-            "calc_hetero_noe": self.calcHeteroNoe,
             "edit_calculation": self.editCalculation,
-            "pales": self.pales,
-            "blackledge_module": self.blackledge_module,
             "view_widget_count": self.viewWidgetCount,
             "backup_project": self.backupProject,
             "save_project": self.askSaveFile,
@@ -1508,22 +1502,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.calcShiftDifferences,
             tipText="Tools to calculate chemical shift differences between peak lists & shift lists",
         )
-        menu.add_command(
-            label="Heteronuclear NOE",
-            shortcut="H",
-            image=self.iconTool,
-            compound="left",
-            command=self.calcHeteroNoe,
-            tipText="A tool to quickly calculate heteronuclear NOE values by peak intensity comparison",
-        )
-        menu.add_command(
-            label="3J H-H\u03b1 Coupling",
-            shortcut="C",
-            image=self.iconTool,
-            compound="left",
-            command=self.calcHnHaCoupling,
-            tipText="A tool to extract amide H to alpha H 3J coupling and predict phi angles using HNHA experiments",
-        )
         menu.add_separator()
         menu.add_command(
             label="Follow Intensity Changes",
@@ -1541,22 +1519,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.followShiftChanges,
             tipText="Fit peak position changes to graphs to estimate binding constants etc.",
         )
-        menu.add_command(
-            label="PALES: Alignment and RDCs",
-            shortcut="P",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.pales,
-            tipText="Use PALES to determine alignment and analyse RDCs",
-        )
-        menu.add_command(
-            label="MODULE: Alignment and RDCs",
-            shortcut="M",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.blackledge_module,
-            tipText="Use MODULE to determine alignment and analyse RDCs",
-        )
 
         self.menubar.add_cascade(label=DataMenu, shortcut="D", menu=menu)
 
@@ -1565,12 +1527,8 @@ class AnalysisPopup(BasePopup, Analysis):
             "Measurement Lists",
             "NMR Series",
             "Shift Differences",
-            "Heteronuclear NOE",
-            "3J H-H\u03b1 Coupling",
             "Follow Intensity Changes",
             "Follow Shift Changes",
-            "PALES: Alignment and RDCs",
-            "MODULE: Alignment and RDCs",
         ]
 
     def setStructureMenu(self):
@@ -2574,29 +2532,6 @@ class AnalysisPopup(BasePopup, Analysis):
     #  popup = self.popups['auto_backbone_assign']
     #  popup.activateMars()
 
-    # def activatePales(self):
-    #  #if self.project:
-    #  menu = self.menus[DataMenu]
-    #  menu.add_command(label='PALES: Reduced Dipolar Couplings', shortcut='P',
-    #                   image=self.iconSpecialTool, compound='left',
-    #                   command=self.pales)
-    #  #self.pales()
-
-    #  #else:
-    #  #  print 'PALES cannot be started without an open project'
-
-    # def activateModule(self):
-
-    #  #if self.project:
-    #  menu = self.menus[DataMenu]
-    #  menu.add_command(label='MODULE: Rigid Body Modelling using RDCs', shortcut='M',
-    #                   image=self.iconSpecialTool, compound='left',
-    #                   command=self.blackledge_module)
-    #  #self.blackledge_module()
-
-    #  #else:
-    #  #  print 'MODULE cannot be started without an open project'
-
     def chemShiftsTable(self):
 
         self.openPopup("view_chem_shifts", ViewChemicalShiftsPopup)
@@ -2748,27 +2683,9 @@ class AnalysisPopup(BasePopup, Analysis):
 
         self.openPopup("follow_shift_changes", FollowShiftChangesPopup)
 
-    def calcHnHaCoupling(self):
-
-        self.openPopup("calc_hnha_coupling", CalcHnHaCouplingPopup)
-
-    def calcHeteroNoe(self):
-
-        self.openPopup("calc_hetero_noe", CalcHeteroNoePopup)
-
     def editCalculation(self):
 
         self.openPopup("edit_calculation", EditCalculationPopup)
-
-    def pales(self):
-        from gottingen.PalesPopup import PalesPopup
-
-        self.openPopup("pales", PalesPopup)
-
-    def blackledge_module(self):
-        from grenoble.BlackledgeModule.BlackledgeModulePopup import BlackledgeModulePopup
-
-        self.openPopup("blackledge_module", BlackledgeModulePopup)
 
     def meccano(self):
         try:

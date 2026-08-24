@@ -119,7 +119,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 
 | # | Scope | Status |
 |---|---|---|
-| 1 | Data Analysis: NOE, 3J, PALES, MODULE | ⬜ pending |
+| 1 | Data Analysis: NOE, 3J, PALES, MODULE | ✅ 2026-08-24 |
 | 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ⬜ pending |
 | 3 | ARIA: `paris/` + menu + methods | ⬜ pending |
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ⬜ pending |
@@ -153,3 +153,20 @@ importers, **then** delete remaining `ccpnmr/eci/*`.
 
 Each stage is exactly one commit on the new repo → `git revert <sha>` restores
 it cleanly.
+
+## Stage log
+
+**Stage 1 — Data Analysis (NOE, 3J, PALES, MODULE) — ✅ 2026-08-24**
+- `AnalysisPopup.py`: removed top imports (CalcHeteroNoe, CalcHnHaCoupling),
+  4 popupActions entries, 4 `menu.add_command` blocks, 4 `menu_items`
+  entries, 4 command methods, and the dead commented
+  `activatePales`/`activateModule` blocks.
+- Deleted: `popups/CalcHeteroNoe.py`, `popups/CalcHnHaCoupling.py`,
+  `gottingen/` (4 files), `grenoble/BlackledgeModule/` (4 files).
+- `pyproject.toml`: dropped `gottingen*` package include + isort entry.
+- Gates: import_smoke exit 0 (1719 modules; pre-existing 33 failures unchanged),
+  gui_boot_test 8/8, pytest 45 passed / 4 skipped.
+- Pitfall for later stages: labels like the former "3J H-Hα" hold a
+  **literal** `\u03b1` escape in source; the edit tool's escaping pipeline
+  can't reproduce it — use an assert-protected index-based Python deletion
+  for such lines instead.
