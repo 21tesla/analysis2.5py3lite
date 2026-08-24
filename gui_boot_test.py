@@ -15,7 +15,7 @@ updates with os._exit(0), so it is checked differently: module import +
 
 Usage:
     .venv/bin/python gui_boot_test.py                 # all apps, project venv
-    .venv/bin/python gui_boot_test.py --apps ccpnmr,eci
+    .venv/bin/python gui_boot_test.py --apps ccpnmr,data-shifter
     /tmp/ccp-dist-venv/bin/python gui_boot_test.py    # installed-state run
 Requires: xvfb-run on PATH (apt: xvfb / conda-forge: xvfb).
 """
@@ -29,8 +29,6 @@ APPS = [
     # (name, call expression executed inside the app's python process)
     ("ccpnmr",
      "import ccpnmr.analysis.AnalysisGui as M; M.main()"),
-    ("eci",
-     "import ccpnmr.eci.EntryCompletionGui as M; M.main([])"),
     ("data-shifter",
      "import ccpnmr.format.gui.DataShifter as M; M.main([])"),
     ("format-converter",

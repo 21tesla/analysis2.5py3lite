@@ -123,8 +123,8 @@ from ccpnmr.analysis.popups.ViewQualityReports import ViewQualityReportsPopup
 from ccpnmr.analysis.popups.ViewRamachandran import ViewRamachandranPopup
 from ccpnmr.analysis.popups.ViewStructure import ViewStructurePopup
 from ccpnmr.analysis.popups.WindowPopup import WindowPopup
-from ccpnmr.eci.ReadPdb import ReadPdb
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
+from ccpnmr.format.converters.ReadPdb import ReadPdb
 from ccpnmr.nexus.AutoBackbonePopup import AutoBackbonePopup
 
 # NB new
@@ -290,7 +290,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "setup_cloud_threader": self.setupCloudThreading,
             "setup_cloud_homologue": self.setupCloudHomologue,
             "run_format_converter": self.runFormatConverter,
-            "entry_completion_interface": self.startECI,
             "edit_contour_levels": self.editContourLevels,
             "edit_contour_files": self.editContourFiles,
             "register_analysis": self.registerAnalysis,
@@ -1576,15 +1575,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 tipText='Predict protein secondary structure using chemical shifts')
 
         menu.add_command(
-            label="ECI: Database Deposition",
-            shortcut="E",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startECI,
-            tipText="Collate information form CCPN project for deposition to PDB & BMRB databases",
-        )
-        menu.add_separator()
-        menu.add_command(
             label="Secondary Structure Chart",
             shortcut="e",
             image=self.iconChart,
@@ -1611,7 +1601,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "Make Distance Restraints",
             "Make H Bond Restraints",
             "DANGLE: Predict Dihedrals",
-            "ECI: Database Deposition",
             "Secondary Structure Chart",
             "Ramachandran Plot",
         ]
@@ -3065,12 +3054,6 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         popup.initProject(self.project)
         popup.protocol("WM_DELETE_WINDOW", popup.close)
-
-    def startECI(self):
-
-        from ccpnmr.eci.EntryCompletionPopup import EntryCompletionPopup
-
-        popup = self.openPopup("entry_completion_interface", EntryCompletionPopup)
 
     def editContourLevels(self, spectrum=None):
 

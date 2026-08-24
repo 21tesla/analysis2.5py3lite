@@ -138,7 +138,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 7 | MECCANO: `grenoble/` + `c/other/meccano/` + `setup.py` GSL/Meccano blocks | ✅ 2026-08-24 |
 | 8 | PyRPF: `rutgers/` | ✅ 2026-08-24 |
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ✅ 2026-08-24 |
-| 10 | ECI: `ccpnmr/eci/` (relocate `ReadPdb.py` first) + `ccpnmr-eci` | ⬜ pending |
+| 10 | ECI: `ccpnmr/eci/` (relocated `ReadPdb.py` to `ccpnmr/format/converters/`) + `ccpnmr-eci` | ✅ 2026-08-24 |
 | 11 | Structure Viewer + Make H Bond Restraints popups + remove 3 kept callers | ⬜ pending |
 | 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ⬜ pending |
 
@@ -512,3 +512,77 @@ data/ protocol JSONs, no setup.py/MANIFEST.in/gui_boot_test entries, no
     `ccpnmr/format/webServer/*` remain), BY-DESIGN **10** (83−73).
   - `gui_boot_test.py` **5/5** (unchanged — no CING app entry ever).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 10 — ECI (ccpnmr/eci/, menu, script, boot entry) — ✅ 2026-08-24**
+Recon (verified pre-edit): `ccpnmr2.5/python/ccpnmr/eci/` = 12 tracked files
+(`AditMandFields`, `CompletenessCheck`, `EciShiftAnalysis`,
+`EntryCompletion{Frame,Gui,Popup}`, `IsotopeLabeling`, `ReadPdb`,
+`__init__` (bare `pass`), `_licenseInfo`, `makeAditMandDict`,
+`nmrStarDictNew`). **Hazard 1 verified:** `ReadPdb.py` (1679 lines) powers the
+KEPT "Import PDB 3.20" feature (`AnalysisPopup.py` top-level import at L126 +
+`return ReadPdb(...)` at L2713) and is the ONLY eci module used by kept code.
+Key finding: **zero `ccpnmr.eci.*` sibling imports** inside `ReadPdb.py` — all
+its imports are kept packages (`ccp.api.general`, `ccp.format.pdb`,
+`ccp.general.Io`, `ccpnmr.format.converters.PdbFormat`,
+`ccpnmr.format.process.matchResonToMolSys`, `memops.api.Implementation`,
+`memops.universal.Util`) → relocatable with **zero content change**;
+git records the `git mv` as a rename. Verified: `PdbFormat.py` does NOT import
+ReadPdb (it's a consumer, not a dependee — the hazard-1 "chain" is the
+feature path, not an import edge). External refs to the rest of the package:
+`AnalysisPopup.startECI` (lazy import) + the config/doc items below.
+No `import_smoke.py` allowlist entries (grep-verified), no pyproject
+package-include/isort entries (eci is a subpackage of KEPT `ccpnmr`), no
+MANIFEST.in/setup.py references. KEPT (verified): `memops/general/license/
+headers.py` `_licenseInfo` mentions are the generic license-strip mechanism
+(not eci-specific).
+- Relocated: `ccpnmr/eci/ReadPdb.py` → **`ccpnmr/format/converters/ReadPdb.py`**
+  (plan's "relocate to `ccpnmr/format/`" — placed alongside `PdbFormat.py`,
+  the class it wraps; all converter readers live there). Repointed
+  `AnalysisPopup.py:126` to `from ccpnmr.format.converters.ReadPdb import
+  ReadPdb` (kept isort order: after `NmrStarFormat`, before `ccpnmr.nexus`).
+  The kept "Import PDB 3.20" call site (L2713) is untouched. **Hazard 1
+  CLOSED.**
+- Deleted: the remaining 11 `ccpnmr/eci/*` files (incl. `__init__.py`,
+  `_licenseInfo.py`) + untracked `__pycache__` residue; `ccpnmr/eci/` dir
+  gone.
+- `AnalysisPopup.py`: removed the `popupActions` entry
+  `"entry_completion_interface": self.startECI`, the "ECI: Database
+  Deposition" Structure-menu `add_command` block (shortcut "E") + its
+  trailing `menu.add_separator()` (the preceding separator kept — menu now
+  reads `... H Bond | separator | Secondary Structure Chart, Ramachandran`),
+  the `menu_items[StructureMenu]` "ECI: Database Deposition" entry (S6
+  precedent; "DANGLE": Predict Dihedrals" string stays — S5 residual), and
+  the `startECI` method.
+- `pyproject.toml`: dropped the `ccpnmr-eci` console script.
+- `gui_boot_test.py`: dropped the APPS entry `eci` and fixed the docstring
+  usage example (`--apps ccpnmr,eci` → `--apps ccpnmr,data-shifter`).
+- Residuals (by design, Stage-12 sweep): `bin/eci2.5` launcher (S5
+  `bin/dangle*` precedent), `scripts/{linux,macos}_release.sh` `need` sets
+  still list `ccpnmr-eci` (same stale bucket as the S2/S5/S9 deferrals),
+  doc links `ccpnmr/analysis/doc/source/menu/Structure.rst:23` +
+  `.../other/ImportProject.rst:47` (S8 `Structure.rst` precedent),
+  `EditExperiment.py:292,331` help link def (S5 precedent),
+  `Ccpn2NmrStar.py:224,245` EBI-docs URL docstrings (inert text),
+  `survey.md:315` snapshot line.
+- Env note (pre-existing, NOT repo state): the anaconda env
+  (`/home/logan/software/anaconda3`) still contains a **stale installed
+  `ccpnmr` copy** in site-packages (dated May 2026, still has `cci/`, lacks
+  the relocated `ReadPdb.py`). All three gates resolve to the source tree
+  (import_smoke `ROOT` insert, gui_boot `PYTHONPATH=source-tree`,
+  `tests/conftest.py` path insert) — verified this stage; but a bare
+  `python -c "import ccpnmr..."` from a cwd without a `cci` sibling package
+  silently imports the stale copy. Refresh that install (or note it) before
+  any installed-state Phase-4 smoke run in THIS env.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1279** (1290−11, exactly the 11
+    removed eci `.py` modules; the relocated ReadPdb is still walked as
+    `ccpnmr.format.converters.ReadPdb`), OK **1267** (1278−11),
+    FAILED **2 unchanged** (2× `cherrypy` in KEPT `ccpnmr/format/webServer/*`),
+    BY-DESIGN **10 unchanged**.
+  - `gui_boot_test.py` **4/4** (5/5 − the removed `cci` app, exactly as
+    predicted).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - Direct check: `from ccpnmr.format.converters.ReadPdb import ReadPdb`
+    OK from the source tree; zero `ccpnmr.eci` refs anywhere in
+    AnalysisPopup.py; repo-wide `ccpnmr.eci` grep clean outside
+    `dist/`/`build/`/Stage-12 buckets.
