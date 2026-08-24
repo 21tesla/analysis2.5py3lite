@@ -1708,13 +1708,6 @@ class WindowFrame(Frame, WindowDraw):
             },
             {
                 "kind": "command",
-                "label": "Structure connections",
-                "tipText": "Show any non-onebond connections described by the resonance assignments of the cursor peak in a graphical structure display",
-                "command": self.showStructConnections,
-                "shortcut": "c",
-            },
-            {
-                "kind": "command",
                 "label": "Re-reference to this peak",
                 "tipText": "Re-reference the points to ppm relationship for the spectra of the selected peaks by aligning peak positions; cursor peak is the reference",
                 "command": self.translatePeak,
@@ -6573,24 +6566,6 @@ class WindowFrame(Frame, WindowDraw):
 
         if peaks:
             displayPeakStrips(self.topPopup, peaks, self.windowPane)
-
-    def showStructConnections(self, *event):
-
-        peaks = []
-        if self.topPopup.currentPeaks:
-            peaks = self.topPopup.currentPeaks
-        elif self.menuPeak:
-            peaks = [
-                self.menuPeak,
-            ]
-
-        if peaks:
-            self.topPopup.viewStructure()
-            popup = self.topPopup.popups["view_structure"]
-            popup.clearConnections()
-            for peak in peaks:
-                popup.showPeakConnection(peak)
-            popup.updateAfter()
 
     def gotoOrthogonalAllPlanes(self, windowZplanes):
 

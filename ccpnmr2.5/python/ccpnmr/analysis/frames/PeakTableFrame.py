@@ -343,7 +343,6 @@ class PeakTableFrame(Frame):
             "Deassign a specified dimension of the selected peaks",
             "Recalculate the center, height and line width of the selected peaks",
             "Recalculate the volume of the selected peaks",
-            "Show the assignment connections of the selected peaks on the selected structure",
             "Spread the resonance assignments of the peak last selected to all selected peaks",
             "Copy the merit value of the last selected peak to all selected peaks",
             "Copy the details of the last selected peak to all selected peaks",
@@ -353,7 +352,6 @@ class PeakTableFrame(Frame):
             "Deassign Dim",
             "Recalc Fit",
             "Recalc Volume",
-            "Show On Structure",
             "Propagate Assign",
             "Propagate Merit",
             "Propagate Details",
@@ -363,7 +361,6 @@ class PeakTableFrame(Frame):
             self.dimDeassign,
             self.recalcPeakFit,
             self.recalcPeakVolume,
-            self.showStructConnections,
             self.propagatePeakAssign,
             self.propagateMerit,
             self.propagateDetails,
@@ -516,31 +513,6 @@ class PeakTableFrame(Frame):
 
             windowFrame = windowPane.getWindowFrame()
             windowFrame.gotoPosition(position=positions[index])
-
-    def showStructConnections(self):
-
-        peaks = list(self.scrolledMatrix.currentObjects)
-        if peaks:
-            self.analysisApp.viewStructure(self.structure)
-            popup = self.analysisApp.popups["view_structure"]
-            popup.clearConnections()
-
-            for peak in peaks:
-                popup.showPeakConnection(peak)
-
-    def showAllStructConnections(self):
-
-        if self.peakList or self.peaks:
-            if self.peakList and self.nmrProject:
-                peaks = self.peakList.peaks
-            else:
-                peaks = self.peaks
-
-            self.analysisApp.viewStructure(self.structure)
-            popup = self.analysisApp.popups["view_structure"]
-            popup.clearConnections()
-            for peak in peaks:
-                popup.showPeakConnection(peak)
 
     def updateStructures(self, *obj):
 
@@ -1004,9 +976,6 @@ class PeakTableFrame(Frame):
         if self.peak:
             for i in range(1, n):
                 buttons[i].enable()
-
-            if not self.structure:
-                buttons[12].disable()
 
             self.windowLabel.config(fg="black")
             # self.windowPulldown.activate()

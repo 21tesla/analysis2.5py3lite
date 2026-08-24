@@ -522,7 +522,6 @@ class BrowseConstraintsPopup(BasePopup):
             "If present in the table, highlight the rows of the restraints derived from peaks selected in spectrum windows",
             "Update the items (assignment possibilities) for a restraint from any linked CCPN peak",
             "Show a table of peaks from which the selected restraints were derived",
-            "Show the connections of the selected restraints on a graphical structure display",
             "Assign the peak from which a restraint is derived",
         ]
         texts = [
@@ -531,7 +530,6 @@ class BrowseConstraintsPopup(BasePopup):
             "Show Restraints for\nSelected Peaks",
             "Update Assignment\nFrom Peak",
             "Show\nPeaks",
-            "Show Selected\nOn Structure",
             "Assign\nPeak",
         ]
         commands = [
@@ -540,7 +538,6 @@ class BrowseConstraintsPopup(BasePopup):
             self.viewForPeakSelection,
             self.updateAssignFromPeak,
             self.viewPeaks,
-            self.showStructConnections,
             self.assignRestraintPeak,
         ]
         self.restraintButtons = ButtonList(
@@ -2265,28 +2262,6 @@ class BrowseConstraintsPopup(BasePopup):
             delta = len(self.nmrProject.resonances)
 
             showInfo("Done", "Made %d new resonances from restraints" % (delta,), parent=self)
-
-    def showStructConnections(self):
-
-        items = list(self.constraintsMatrix.currentObjects)
-
-        if self.structure and items:
-            self.guiParent.viewStructure(self.structure)
-            popup = self.guiParent.popups["view_structure"]
-            popup.clearConnections()
-
-            if self.constraintListB.className == "DihedralConstraintList":
-                constrDict = {}
-                for item in items:
-                    constrDict[item.constraint] = None
-
-                for constraint in constrDict.keys():
-                    popup.showResonancesDihedral(constraint.resonances)
-
-            else:
-                for item in items:
-                    resonances = list(item.resonances)
-                    popup.showResonancesConnection(resonances[0], resonances[1])
 
     # # # Format IO
 

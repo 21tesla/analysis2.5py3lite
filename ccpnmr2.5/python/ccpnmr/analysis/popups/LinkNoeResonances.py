@@ -247,16 +247,8 @@ class LinkNoeResonancesPopup(BasePopup):
         subFrame = Frame(frame, grid=(1, 0), gridSpan=(1, 6), sticky="ew")
         subFrame.grid_columnconfigure(4, weight=1)
 
-        label = Label(subFrame, text="Structure Display:", grid=(0, 0))
-        tipText = (
-            "Selects which kind of assignment possibilities, for a peak, to display on a graphical structure display"
-        )
-        self.strucDispPulldown = PulldownList(
-            subFrame, texts=["All", "Assigned", "None"], index=2, grid=(0, 1), tipText=tipText
-        )
-
         label = Label(subFrame, text=" Structure:", grid=(0, 2), sticky="e")
-        tipText = "Selects which structure ensemble will be used for calculating atomic distances within the graphical structure display"
+        tipText = "Selects which structure ensemble will be used for calculating atomic distances"
         self.structurePulldown = PulldownList(subFrame, callback=self.changeStructure, grid=(0, 3), tipText=tipText)
 
         subFrame = Frame(frame, grid=(0, 0))
@@ -266,12 +258,6 @@ class LinkNoeResonancesPopup(BasePopup):
         label = Label(subFrame, text="Aliased Possible:", grid=(0, 0))
         tipText = "Sets whether the peaks could be caused by aliased resonances; not at their real ppm value, but a whole number of sweep widths away"
         self.aliasSelect = CheckButton(subFrame, callback=None, grid=(0, 1), selected=True, tipText=tipText)
-
-        label = Label(subFrame, text="Focus Structure:", grid=(0, 2))
-        tipText = (
-            "Sets whether to rotate the graphical structure display to focus on the current assignment possibilities"
-        )
-        self.focusSelect = CheckButton(subFrame, callback=None, grid=(0, 3), selected=True, tipText=tipText)
 
         label = Label(subFrame, text="Mark Peak:", grid=(0, 4))
         tipText = "Sets whether to mark the selected peak position, as displayed in the selected navigation windows"
@@ -1198,16 +1184,6 @@ class LinkNoeResonancesPopup(BasePopup):
         distThreshold = self.distThresholdEntry.get() or 8.0
         noeSum = 0.0
 
-        if self.structure:
-            showConn = self.strucDispPulldown.getText()
-        else:
-            showConn = "None"
-
-        if showConn != "None":
-            self.guiParent.viewStructure(self.structure)
-            popup = self.guiParent.popups["view_structure"]
-            popup.clearConnections()
-
         if self.peak:
             numDim = len(self.peak.peakDims)
             dimRange = range(numDim)
@@ -1225,7 +1201,6 @@ class LinkNoeResonancesPopup(BasePopup):
             tolerances, assignments = self.getPossibleAssignments()
 
             sortedData = []
-            atoms = {}
             dimH1, dimH2 = self.hydroDims
             dimX1, dimX2 = self.heterDims
             for shiftData in assignments:
@@ -1235,16 +1210,6 @@ class LinkNoeResonancesPopup(BasePopup):
                 if self.structure:
                     resonanceSet1 = resonance1.resonanceSet
                     resonanceSet2 = resonance2.resonanceSet
-
-                    if resonanceSet1:
-                        for atomSet in resonanceSet1.atomSets:
-                            for atom in atomSet.atoms:
-                                atoms[atom] = atoms.get(atom, 0) + 1
-
-                    if resonanceSet2:
-                        for atomSet in resonanceSet2.atomSets:
-                            for atom in atomSet.atoms:
-                                atoms[atom] = atoms.get(atom, 0) + 1
 
                     if resonanceSet1 and resonanceSet2:
                         dist = getAtomSetsDistance(resonanceSet1.atomSets, resonanceSet2.atomSets, self.structure)
@@ -1283,23 +1248,6 @@ class LinkNoeResonancesPopup(BasePopup):
                         noeSum += dist**-6.0
 
                 sortedData.append((score, shiftData, dist, sqrt(shiftDist)))
-
-            coordAtom = None
-            if self.focusSelect.get():
-                atoms = [(atoms[atom], atom) for atom in atoms.keys()]
-                if atoms:
-                    atoms.sort()
-                    atom = atoms[-1][1]
-                    residue = atom.residue
-                    chain = residue.chain
-
-                    coordChain = self.structure.findFirstCoordChain(chain=chain)
-
-                    if coordChain:
-                        coordResidue = coordChain.findFirstResidue(residue=residue)
-
-                        if coordResidue:
-                            coordAtom = coordResidue.findFirstAtom(atom=atom)
 
             sortedData.sort()
 
@@ -1368,24 +1316,6 @@ class LinkNoeResonancesPopup(BasePopup):
                 objectList.append([score, resonances, dist])
                 colorMatrix.append(colors)
                 i += 1
-
-                resonance1 = resonances[self.hydroDims[0] - 1]
-                resonance2 = resonances[self.hydroDims[1] - 1]
-
-                if showConn == "All":
-                    if coordAtom:
-                        popup.structFrame.focusOnAtom(coordAtom)
-
-                    popup.showResonancesConnection(resonance1, resonance2)
-
-                elif showConn == "Assigned":
-                    if (resonance1 in dimResonances[0]) and (resonance2 in dimResonances[1]):
-                        # Must be from same peakContrib really...
-
-                        if coordAtom:
-                            popup.structFrame.focusOnAtom(coordAtom)
-
-                        popup.showResonancesConnection(resonance1, resonance2)
 
         elif self.peakList:
             headingList, tipTexts = self.getHeadingList(self.peakList.dataSource.numDim)

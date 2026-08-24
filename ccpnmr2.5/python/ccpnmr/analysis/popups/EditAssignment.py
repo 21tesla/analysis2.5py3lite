@@ -44,7 +44,7 @@ import re
 from ccp.api.nmr import Nmr
 from ccpnmr.analysis.core import AssignmentBasic, CouplingBasic
 from ccpnmr.analysis.core.ChemicalShiftBasic import getChemAtomNmrRef, lookupAtomProbability
-from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs, getThroughSpaceDataDims
+from ccpnmr.analysis.core.ExperimentBasic import getOnebondExpDimRefs
 from ccpnmr.analysis.core.MoleculeBasic import areResonancesBound, getResidueCode
 from ccpnmr.analysis.core.PeakBasic import pickPeak
 from ccpnmr.analysis.core.UnitConverter import ppm2pnt
@@ -336,7 +336,6 @@ class EditAssignmentPopup(BasePopup):
         row += 1
         tipTexts = [
             "Set all resonances assigned to the peak dimensions to be in the same spin system",
-            "Show any atomic connectivities on a graphical structure display. If the peak is assigned the assigned connections are used, otherwise potential possibilities are displayed",
             "Show a table of all the peaks currently assigned to the selected resonance",
             "Merge the selected resonance with the others assigned to the same peak dimension",
             "Show a table of information for the selected resonance, including the shifts of all the peaks it is linked to",
@@ -344,7 +343,6 @@ class EditAssignmentPopup(BasePopup):
         ]
         commands = [
             self.addSpinSystem,
-            self.showStructConnections,
             self.showPeaks,
             self.mergeResonances,
             self.resonanceInfo,
@@ -352,7 +350,6 @@ class EditAssignmentPopup(BasePopup):
         ]
         texts = [
             "Set Same\nSpin System",
-            "Show On\nStructure",
             "Show\nPeaks",
             "Merge\nResonances",
             "Resonance\nInfo",
@@ -361,11 +358,10 @@ class EditAssignmentPopup(BasePopup):
         bottomButtons = ButtonList(guiFrame, commands=commands, texts=texts, tipTexts=tipTexts, grid=(row, 0))
 
         self.ssystButton = bottomButtons.buttons[0]
-        self.structButton = bottomButtons.buttons[1]
-        self.peaksButton = bottomButtons.buttons[2]
-        self.mergeButton = bottomButtons.buttons[3]
-        self.infoButton = bottomButtons.buttons[4]
-        self.predictButton = bottomButtons.buttons[5]
+        self.peaksButton = bottomButtons.buttons[1]
+        self.mergeButton = bottomButtons.buttons[2]
+        self.infoButton = bottomButtons.buttons[3]
+        self.predictButton = bottomButtons.buttons[4]
 
         self.updateStructures()  # calls updateAfter - but not always (only of struc new or changed)
         self.updateLabellingSchemes()
@@ -972,72 +968,6 @@ class EditAssignmentPopup(BasePopup):
                 experiment.editAssignmentPopupStructure = structure
 
             self.updateAfter()
-
-    def haveCommonPeakContrib(self, resonance1, resonance2):
-
-        peakDimContribs1 = resonance1.peakDimContribs
-        if not peakDimContribs1:
-            return True  # not sure if this is correct
-
-        peakDimContribs2 = resonance2.peakDimContribs
-        if not peakDimContribs2:
-            return True  # not sure if this is correct
-
-        peakContribs1 = set()
-        for peakDimContrib in peakDimContribs1:
-            peakContribs1 |= peakDimContrib.peakContribs
-        if not peakContribs1:
-            return True  # not sure if this is correct
-
-        peakContribs2 = set()
-        for peakDimContrib in peakDimContribs2:
-            peakContribs2 |= peakDimContrib.peakContribs
-        if not peakContribs2:
-            return True  # not sure if this is correct
-
-        return peakContribs1 & peakContribs2
-
-    def showStructConnections(self):
-
-        if self.peak:
-            self.guiParent.viewStructure(self.structure)
-            popup = self.guiParent.popups["view_structure"]
-            popup.clearConnections()
-
-            spectrum = self.peak.peakList.dataSource
-            dims = [dd.dim for dd in getThroughSpaceDataDims(spectrum)]
-
-            if dims:
-                assigned = {}
-                for peakDim in self.peak.peakDims:
-                    resonances = []
-
-                    if peakDim.dataDimRef:
-                        for contrib in peakDim.peakDimContribs:
-                            if contrib.resonance.resonanceSet:
-                                resonances.append(contrib.resonance)
-
-                    assigned[peakDim.dim] = resonances
-
-                dim1, dim2 = dims[:2]
-                resonances1 = assigned[dim1]
-                resonances2 = assigned[dim2]
-
-                if not resonances1:
-                    resonances1 = self.resonancePanels[dim1 - 1].resonances
-
-                if not resonances2:
-                    resonances2 = self.resonancePanels[dim2 - 1].resonances
-
-                for r1 in resonances1:
-                    if r1:
-                        for r2 in resonances2:
-                            if r2 and self.haveCommonPeakContrib(r1, r2):
-                                popup.showResonancesConnection(r1, r2)
-
-            else:
-                # For non-through-space spectra there are no connections, but the atoms are highlighted anyhow.
-                popup.showPeakConnection(self.peak)
 
     def close(self):
 
@@ -1896,7 +1826,6 @@ class EditAssignmentPopup(BasePopup):
         self.deassButton.disable()
         self.deassButtonS.disable()
         self.clearButton.disable()
-        self.structButton.disable()
         self.mergeButton.disable()
         self.peaksButton.disable()
         self.ssystButton.disable()
@@ -1929,8 +1858,6 @@ class EditAssignmentPopup(BasePopup):
         if peak:
             self.ssystButton.enable()
             self.updateStructures()
-            if self.structure:
-                self.structButton.enable()
 
             peakContribs = [pc for pc in peak.sortedPeakContribs() if pc.peakDimContribs]
             annotation = ""

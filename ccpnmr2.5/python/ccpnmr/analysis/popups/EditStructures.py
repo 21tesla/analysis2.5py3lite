@@ -422,20 +422,16 @@ class EditStructuresPopup(BasePopup):
 
         tipTexts = [
             "Superpose the conformational models of the selected structure and calculate per-residue and overall RMSD values",
-            "Open a graphical structure display and label/highlight the selected residue",
-            "Show the selected set of validation parameters as colors on a graphical structure display",
             "Delete the selected set of structure validation parameters",
         ]
-        texts = ["Calculate\nRMSDs", "View Residue", "Display\nParams", "Delete\nParams"]
-        commands = [self.alignEnsembleR, self.viewResidue, self.displayStrucParams, self.deleteStrucParams]
+        texts = ["Calculate\nRMSDs", "Delete\nParams"]
+        commands = [self.alignEnsembleR, self.deleteStrucParams]
 
         self.resButtons = ButtonList(resFrame, texts=texts, tipTexts=tipTexts, commands=commands, grid=(3, 0))
 
         label = Label(resFrame, text="Validation\nParameter:", grid=(3, 1))
 
-        tipText = (
-            "Selects a structure validation parameter to consider; on a graphical structure display of for deletion"
-        )
+        tipText = "Selects a structure validation parameter to delete"
         self.strucParamPulldown = PulldownList(resFrame, grid=(3, 2), tipText=tipText)
 
         # Coords
@@ -511,21 +507,6 @@ class EditStructuresPopup(BasePopup):
         )
 
         # Main
-
-        tipTexts = [
-            "Open a graphical display of the current structure",
-        ]
-        texts = ["Viewer"]
-        commands = [self.viewStruct]
-        self.bottomButtons = UtilityButtonList(
-            tabbedFrame.sideFrame,
-            helpUrl=self.help_url,
-            commands=commands,
-            texts=texts,
-            grid=(0, 0),
-            sticky="e",
-            tipTexts=tipTexts,
-        )
 
         self.updateMolSystems()
         self.updateMolSystems2()
@@ -645,16 +626,6 @@ class EditStructuresPopup(BasePopup):
 
                 if validStore:
                     self.alignEnsembleM(ensemble)
-
-    def displayStrucParams(self):
-
-        paramKey = self.strucParamPulldown.getObject()
-
-        if self.structure and paramKey:
-            context, keyword, validStore = paramKey
-            self.parent.viewStructure(self.structure)
-            popup = self.parent.popups["view_structure"]
-            popup.displayResidueParams(validStore, context, keyword)
 
     def deleteStrucParams(self):
 
@@ -1427,42 +1398,10 @@ class EditStructuresPopup(BasePopup):
             for n in (0, 2, 3, 5, 6):
                 buttons[n].disable()
 
-        if self.structure:
-            self.bottomButtons.buttons[0].enable()
-        else:
-            self.bottomButtons.buttons[0].disable()
-
         if multiple:
             buttons[4].enable()
         else:
             buttons[4].disable()
-
-    def viewResidue(self):
-
-        if self.residue:
-            molType = self.residue.residue.molType
-            atom = (
-                self.residue.findFirstAtom(name="CA")
-                or self.residue.findFirstAtom(name="C1")
-                or self.residue.findFirstAtom()
-            )
-
-            self.viewStruct()
-
-            popup = self.parent.popups.get("view_structure")
-
-            structFrame = popup.structFrame
-            structFrame.highlightResidue(atom)
-            structFrame.focusOnAtom(atom)
-
-    def viewStruct(self):
-
-        index = self.tabbedFrame.selected
-
-        if index == 3 and self.model:
-            self.parent.viewStructure(self.model.structureEnsemble)
-        elif self.structure:
-            self.parent.viewStructure(self.structure)
 
     def compareEnsembles(self):
 

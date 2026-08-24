@@ -106,7 +106,6 @@ from ccpnmr.analysis.popups.IsotopeSchemeEditor import IsotopeSchemeEditor
 from ccpnmr.analysis.popups.LinkNoeResonances import LinkNoeResonancesPopup
 from ccpnmr.analysis.popups.LinkPeakLists import LinkPeakListsPopup
 from ccpnmr.analysis.popups.LinkSeqSpinSystems import LinkSeqSpinSystemsPopup
-from ccpnmr.analysis.popups.MakeHbondRestraints import MakeHbondRestraintsPopup
 from ccpnmr.analysis.popups.NewWindow import NewWindowPopup
 from ccpnmr.analysis.popups.OpenSpectrum import OpenSpectrumPopup
 from ccpnmr.analysis.popups.PrintWindow import PrintWindowPopup
@@ -121,7 +120,6 @@ from ccpnmr.analysis.popups.ViewChemicalShifts import ViewChemicalShiftsPopup
 from ccpnmr.analysis.popups.ViewNoeMatrix import ViewNoeMatrix
 from ccpnmr.analysis.popups.ViewQualityReports import ViewQualityReportsPopup
 from ccpnmr.analysis.popups.ViewRamachandran import ViewRamachandranPopup
-from ccpnmr.analysis.popups.ViewStructure import ViewStructurePopup
 from ccpnmr.analysis.popups.WindowPopup import WindowPopup
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
 from ccpnmr.format.converters.ReadPdb import ReadPdb
@@ -261,10 +259,8 @@ class AnalysisPopup(BasePopup, Analysis):
             "view_noe_matrix": self.viewNoeMatrix,
             "edit_structures": self.editStructures,
             "plot_ramachandran": self.plotRamachandran,
-            "view_structure": self.viewStructure,
             "calc_dist_constraints": self.calDistConstraints,
             "browse_restraints": self.browseConstraints,
-            "make_hydrogen_bonds": self.makeHbonds,
             #'d2d': self.startD2D,
             "edit_peak_draw_params": self.peakDrawParams,
             "edit_peak_find_params": self.peakFindParams,
@@ -1545,28 +1541,12 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         menu.add_separator()
         menu.add_command(
-            label="Structure Viewer",
-            shortcut="V",
-            image=self.iconTool,
-            compound="left",
-            command=self.viewStructure,
-            tipText="A simple graphical view of structures to display NMR restraints etc.",
-        )
-        menu.add_command(
             label="Make Distance Restraints",
             shortcut="M",
             image=self.iconTool,
             compound="left",
             command=self.calDistConstraints,
             tipText="Tools to make distance restraints from NOEs etc. Includes peak-shift matching.",
-        )
-        menu.add_command(
-            label="Make H Bond Restraints",
-            shortcut="H",
-            image=self.iconTool,
-            compound="left",
-            command=self.makeHbonds,
-            tipText="Tools to make H-bond distance restraints",
         )
         menu.add_separator()
         # menu.add_command(label='D2D: Predict Secondary Structure', shortcut='2',
@@ -1597,9 +1577,7 @@ class AnalysisPopup(BasePopup, Analysis):
         self.menu_items[StructureMenu] = [
             "Restraints and Violations",
             "Structures",
-            "Structure Viewer",
             "Make Distance Restraints",
-            "Make H Bond Restraints",
             "DANGLE: Predict Dihedrals",
             "Secondary Structure Chart",
             "Ramachandran Plot",
@@ -2477,12 +2455,6 @@ class AnalysisPopup(BasePopup, Analysis):
 
         self.popups["prodecomp"] = ProdecompPopup(self, self.project)
 
-    def viewStructure(self, structure=None):
-
-        popup = self.openPopup("view_structure", ViewStructurePopup)
-        if structure:
-            popup.update(structure)
-
     def calDistConstraints(self):
 
         self.openPopup("calc_dist_constraints", CalcDistConstraintsPopup)
@@ -2493,10 +2465,6 @@ class AnalysisPopup(BasePopup, Analysis):
 
         if constraintList:
             popup.update(constraintList)
-
-    def makeHbonds(self):
-
-        popup = self.openPopup("make_hydrogen_bonds", MakeHbondRestraintsPopup)
 
     def peakDrawParams(self):
 

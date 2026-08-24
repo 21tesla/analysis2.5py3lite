@@ -339,10 +339,9 @@ class CalcShiftDifferencePopup(BasePopup):
             "Show a table of peaks corresponding/assigned to the selected rows",
             "Force a manual refresh of the shift difference calculation",
             "Save the results in the CCPN project as a data list",
-            "Show the shift difference results on a graphical structure display",
         ]
-        texts = ["Show Peaks", "Update", "Make Shift Difference List", "Show On Structure"]
-        commands = [self.showPeaks, self.updateAfter, self.makeDifferenceList, self.showStructure]
+        texts = ["Show Peaks", "Update", "Make Shift Difference List"]
+        commands = [self.showPeaks, self.updateAfter, self.makeDifferenceList]
         bottomButtons = ButtonList(guiFrame, commands=commands, grid=(row, 0), texts=texts, tipTexts=tipTexts)
         self.showPeakButton = bottomButtons.buttons[0]
 
@@ -457,68 +456,6 @@ class CalcShiftDifferencePopup(BasePopup):
                 showWarning("Warning", msg, parent=self)
 
             self.guiParent.editMeasurements(measurementList=sdList)
-
-    def showStructure(self):
-
-        index = self.tabbedFrame.selected
-        self.guiParent.viewStructure()
-        popup = self.guiParent.popups.get("view_structure")
-        popup.update_idletasks()
-        if popup.structure:
-            atomValues = []
-
-            if index == 0:
-                textMatrix = self.peakCompTable.textMatrix
-
-                for i, (data1, data2) in enumerate(self.peakCompTable.objectList):
-                    value = textMatrix[i][-2]
-                    if value is None:
-                        continue
-
-                    r1 = data1[0]
-                    r2 = data2[0]
-
-                    atoms = []
-                    if r1 is not None:
-                        rs1 = r1.resonanceSet
-
-                        if rs1:
-                            atoms.extend(rs1.findFirstAtomSet().atoms)
-
-                    if r2 is not None:
-                        rs2 = r2.resonanceSet
-
-                        if rs2:
-                            atoms.extend(rs2.findFirstAtomSet().atoms)
-
-                    if atoms:
-                        atomValues.append((value, atoms))
-
-            elif index == 1:
-                textMatrix = self.shiftCompTable.textMatrix
-
-                for i, (shift1, shift2) in enumerate(self.shiftCompTable.objectList):
-                    value = textMatrix[i][-1]
-                    if value is None:
-                        continue
-
-                    r1 = shift1.resonance
-                    r2 = shift2.resonance
-
-                    rs1 = r1.resonanceSet
-                    rs2 = r2.resonanceSet
-
-                    atoms = []
-                    if rs1:
-                        atoms.extend(rs1.findFirstAtomSet().atoms)
-                    if rs2:
-                        atoms.extend(rs2.findFirstAtomSet().atoms)
-                    else:
-                        continue
-
-                    atomValues.append((value, atoms))
-
-            popup.displayAtomParamsList(atomValues, size=1.0)
 
     def showPeaks(self):
 

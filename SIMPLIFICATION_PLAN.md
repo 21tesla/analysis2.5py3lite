@@ -139,7 +139,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 8 | PyRPF: `rutgers/` | ✅ 2026-08-24 |
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ✅ 2026-08-24 |
 | 10 | ECI: `ccpnmr/eci/` (relocated `ReadPdb.py` to `ccpnmr/format/converters/`) + `ccpnmr-eci` | ✅ 2026-08-24 |
-| 11 | Structure Viewer + Make H Bond Restraints popups + remove 3 kept callers | ⬜ pending |
+| 11 | Structure Viewer + Make H Bond Restraints popups + remove kept-caller buttons (7 files) | ✅ 2026-08-24 |
 | 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ⬜ pending |
 
 ### Stage checklist detail
@@ -591,3 +591,73 @@ headers.py` `_licenseInfo` mentions are the generic license-strip mechanism
     OK from the source tree; zero `ccpnmr.eci` refs anywhere in
     AnalysisPopup.py; repo-wide `ccpnmr.eci` grep clean outside
     `dist/`/`build/`/Stage-12 buckets.
+
+**Stage 11 — Structure Viewer + Make H Bond Restraints (popups, menu, kept callers) — ✅ 2026-08-24**
+Recon (verified pre-edit): popups `ccpnmr/analysis/popups/ViewStructure.py`
+(959 lines) + `MakeHbondRestraints.py` (2357 lines) = 3316 lines total.
+External touch points: `AnalysisPopup.py` (2 imports + popupActions ×2 +
+2 menu blocks + menu_items ×2 + `viewStructure`/`makeHbonds` methods) and
+**7 kept caller files**. Locked decision 2 named 3 of them (PeakTableFrame,
+WindowFrame, CalcShiftDifference); recon found 4 more (EditAssignment,
+EditStructures, LinkNoeResonances, BrowseConstraints) — each opens the
+viewer via `guiParent.viewStructure(...)` + `popups["view_structure"]` and
+draws connections/highlights; leaving them would crash kept GUIs with
+AttributeError/KeyError (gates are import-time only, so they'd ship broken)
+→ removed in the same mode as the named 3.
+- `PeakTableFrame.py`: "Show On Structure" button (tip/texts/commands) +
+  `showStructConnections` + `showAllStructConnections` + the
+  `updateButtons` `buttons[12].disable()` gate (index verified = that
+  button: bottomButtons1 has 9, so index 12 = 4th of bottomButtons2).
+  KEPT: `structPulldown`/`self.structure`/`updateStructures` — they feed
+  the peak-table distance column too (`getDistanceDimensions`).
+- `WindowFrame.py`: "Structure connections" context-menu entry (shortcut
+  "c") + `showStructConnections` method.
+- `CalcShiftDifference.py`: "Show On Structure" button entry +
+  `showStructure` method (`displayAtomParamsList`).
+- `EditAssignment.py`: "Show On Structure" button entry +
+  `showStructConnections` + its sole helper `haveCommonPeakContrib`;
+  dropped `getThroughSpaceDataDims` from the shared import (kept
+  `getOnebondExpDimRefs`, still used); removed `structButton` ×3 refs and
+  re-indexed `peaksButton`/`mergeButton`/`infoButton`/`predictButton`
+  (button shifted left by one). KEPT: `structurePulldown`/`structure`
+  machinery (used by non-viewer resonance handling at L2019/2035/2203).
+- `EditStructures.py`: residue-tab "View Residue" + "Display Params" buttons
+  + `viewResidue`/`displayStrucParams`/`viewStruct` methods + "Viewer"
+  side-tab ButtonList + its `updateButtons` enable block;
+  `strucParamPulldown` tip reworded to deletion-only (pulldown +
+  `deleteStrucParams` KEPT). `structButtons` row verified viewer-unrelated.
+- `LinkNoeResonances.py`: "Structure Display:" pulldown + "Focus
+  Structure:" checkbox + `updateAssignments` `showConn` open/draw blocks +
+  `coordAtom` compute (incl. the per-assignment atom-count loop — verified
+  its only consumer) — all viewer-specific. KEPT: `structurePulldown`/
+  `self.structure` (atomic distances feed the table) + unrelated
+  `focusSelectC/H` in the spin-systems popup.
+- `BrowseConstraints.py`: "Show Selected On Structure" button entry +
+  `showStructConnections` method. KEPT: `self.structure` (violations) +
+  L274 help-link def (below).
+KEPT (hazard 3 re-verified live): `ccp/gui/ViewStructureFrame.py` —
+`ViewIsotopomerFrame.py:43` still imports `symbolMultiplier` from it (also
+`ViewChemCompVarFrame` subclass). No import_smoke allowlist, pyproject,
+gui_boot, tests, `bin/`, or `scripts/` references.
+- Deleted: `popups/ViewStructure.py` + `popups/MakeHbondRestraints.py`
+  (3316 lines) + `__pycache__` residue.
+- `AnalysisPopup.py`: removed 2 imports, popupActions
+  `view_structure` + `make_hydrogen_bonds`, "Structure Viewer" (V) +
+  "Make H Bond Restraints" (H) menu blocks, menu_items ×2, `viewStructure`
+  + `makeHbonds` methods. Structure menu now reads: … Structures | Make
+  Distance Restraints | Secondary Structure Chart, Ramachandran.
+- Residuals (by design, Stage-12 sweep): doc menu links
+  `Structure.rst:14,16` (ViewStructurePopup/MakeHbondRestraintsPopup —
+  the rst target files don't exist, links already dangling),
+  `Changes.html:1279` changelog line, `BrowseConstraints.py:274` help-link
+  def (S5 precedent).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1277** (1279−2, exactly the 2
+    removed popup modules), OK **1265** (1267−2), FAILED **2 unchanged**
+    (2× `cherrypy` in KEPT webServer), BY-DESIGN **10 unchanged**.
+  - `gui_boot_test.py` **4/4** (unchanged).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - Direct checks: repo-wide `view_structure`/`make_hydrogen_bonds`/
+    popup-class-name grep clean (only the 3 Stage-12 residuals above);
+    `py_compile` clean on all 9 edited files; diff = 12+/391− across the
+    8 edited files + 3316 lines in the 2 deleted popups.
