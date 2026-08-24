@@ -41,24 +41,12 @@ OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', '
 # Modules that are NON-IMPORTABLE BY DESIGN (NOT code regressions).
 # Phase 2c, 2026-08-22: each of the remaining import failures was surveyed and
 # given a concrete reason. Categories:
-#   INTERACTIVE — IPython session script: runs module-level code against session
-#                 vars (p/project/pTree/cgiDir) that only exist inside an
-#                 interactive CCPN/CING session (e.g. `p = None  # for pylint`
-#                 sentinels). Not importable under py2 either.
-#   DATA   — one-off analysis/batch script that requires a local dataset or a
-#            hardcoded per-machine path (/Users/..., /Library/WebServer/...,
-#            CASD/CASP data dirs), or the full historical ProjectTree API that
-#            is not shipped with this distribution.
 #   ENV    — needs an environment variable (CASD_HOME, ISD_ROOT) or live
 #            network access at import time.
 #   EXTERNAL — optional third-party software NOT bundled in the 2.5.2
 #            distribution: py2-only packages (PyMC2, sans), commercial tools
 #            (YASARA, PyMOL C++ engine), or internal sub-repos absent here
 #            (Refine/protocol/UtilsAnalysis/pdbe-analysis/memops.scripts/...).
-#   PLUGIN — cing PluginCode / external-tool wrapper that raises ImportWarning
-#            BY DESIGN when the tool/service/platform is absent (macOS-only
-#            x3dna, Wattos, DSSP, Vasco, NIH, PROCHECK, SHIFTx, Molgrap...).
-#   VENDOR — vendored third-party tool / self-skipping test, not an app module.
 # If any of these ever starts importing cleanly, smoke prints a NOTE and the
 # entry should be DELETED (a successful import then counts as OK).
 KNOWN_NON_IMPORTABLE = {
@@ -66,91 +54,14 @@ KNOWN_NON_IMPORTABLE = {
     "cambridge.bayes.PeakSeparatorPyMC": "EXTERNAL: PyMC2 — py2-only package, no py3 port",
     "ccp.lib.Bmrb.bmrb": "EXTERNAL: `sans` — py2-only SOAP stack",
     "ccp.util.V2Upgrade": "EXTERNAL: `ccpncore` — CCPN v2 internal core, not in this distribution",
-    "cing.PluginCode.xplor": "EXTERNAL: XplorNIH `Refine` sub-repo not shipped here",
-    "cing.PluginCode.test.test_xplor": "EXTERNAL: xplor test (Refine sub-repo missing)",
-    "cing.PluginCode.test.cingTest": "EXTERNAL: XplorNIH `protocol` module not in this distribution",
-    "cing.PluginCode.test.test_Yasara": "EXTERNAL: YASARA — commercial tool, not bundled",
-    "cing.PluginCode.test.test_sqlAlchemy": "EXTERNAL: py2-era SQLAlchemy 0.5 API (`orm.relation`) removed in modern SQLAlchemy",
-    "cing.PluginCode.test.parametersTest": "EXTERNAL/INTERACTIVE: test harness assuming a cing session (refineParameters star-import)",
-    "cing.Scripts.XplorNIH.anneal2": "EXTERNAL: XplorNIH `protocol` module not in this distribution",
-    "cing.Scripts.Analysis.mouseBuffer": "EXTERNAL: CING `UtilsAnalysis` sub-repo not shipped here",
-    "cing.Scripts.FC.vascoCingRefCheck": "EXTERNAL: `pdbe2` sub-repo not in this distribution",
     "pdbe.software.vascoReferenceCheck": "EXTERNAL: `pdbe.analysis` sub-repo not in this distribution",
     "pdbe.chemComp.export.setLicenses": "EXTERNAL: `memops.scripts` sub-package not in this distribution",
-    "cing.Scripts.PyMol.createProtein": "EXTERNAL: PyMOL — optional C++/GUI tool, never bundled, headless-incompatible",
-    "cing.Scripts.PyMol.CreateSecondaryStructures": "EXTERNAL: PyMOL (optional, not bundled)",
-    "cing.Scripts.PyMol.mouseBuffer": "EXTERNAL: PyMOL (optional, not bundled)",
-    "cing.Scripts.pyMolWorks": "EXTERNAL: PyMOL — module-level `finish_launching()` C++ engine start",
-    "cing.Scripts.getPhiPsi": "EXTERNAL: YASARA — commercial, not bundled",
-    "cing.Scripts.getPhiPsiWrapperYasara": "EXTERNAL: YASARA (commercial)",
-    "cing.Scripts.rotateLeucines": "EXTERNAL: YASARA (commercial)",
-    "cing.Scripts.test.test_RotateLeucines": "EXTERNAL: YASARA test",
-    "cing.Scripts.test.test_combineRestraints": "EXTERNAL: YASARA test",
-    "cing.Scripts.Yasara.handyCommands": "EXTERNAL: YASARA (commercial)",
-    # --- PLUGIN: by-design ImportWarning wrappers (tool/service/platform absent) ---
-    "cing.PluginCode.Wattos": "PLUGIN: Wattos NLP server not available — raises ImportWarning by design",
-    "cing.PluginCode.test.test_Wattos": "PLUGIN: Wattos test (server absent)",
-    "cing.PluginCode.dssp": "PLUGIN: DSSP binary not installed — raises ImportWarning by design",
-    "cing.Scripts.smallScriptCollection": "PLUGIN: depends on the dssp plugin wrapper",
-    "cing.PluginCode.Vasco": "PLUGIN: Vasco service not available — ImportWarning by design",
-    "cing.PluginCode.nih": "PLUGIN: NIH tooling absent — ImportWarning by design",
-    "cing.PluginCode.procheck": "PLUGIN: PROCHECK absent — ImportWarning by design",
-    "cing.PluginCode.shiftx": "PLUGIN: SHIFTx absent — ImportWarning by design",
-    "cing.PluginCode.molgrap": "PLUGIN: Molgrap absent — ImportWarning by design",
-    "cing.PluginCode.x3dna": "PLUGIN: macOS-only plugin (Mac binaries) — ImportWarning by design on other OS",
-    "cing.PluginCode.yasaraPlugin": "PLUGIN: YASARA absent — ImportWarning by design",
-    # --- INTERACTIVE: IPython session scripts (module-level code on session vars) ---
-    "cing.Scripts.interactive.analyzeCb2": "INTERACTIVE: uses session var `p` (module-level, `%run` script)",
-    "cing.Scripts.interactive.contactDifference": "INTERACTIVE: uses session var `p`",
-    "cing.Scripts.interactive.mouseBuffer": "INTERACTIVE: one-off session script (SystemExit guard)",
-    "cing.Scripts.interactive.mouseBuffer2": "INTERACTIVE: session script (matplotlib state on session data)",
-    "cing.Scripts.interactive.mouseBuffer3": "INTERACTIVE: session script (unpacks session state)",
-    "cing.Scripts.interactive.mouseBuffer5": "INTERACTIVE: session script (session `project` + pyplot state)",
-    "cing.Scripts.interactive.mouseBuffer6": "INTERACTIVE: `p = None` sentinel — session var bound by IPython",
-    "cing.Scripts.interactive.nmr_redo_compareProjects": "INTERACTIVE: needs full historical ProjectTree + session projects",
-    "cing.Scripts.compareShifts": "INTERACTIVE: session `projectA` from a live cing session",
-    "cing.Scripts.doValidateiCing": "INTERACTIVE: session var `project`",
-    "cing.Scripts.printResonances": "INTERACTIVE: `from cing.main import project` — None until a project loads",
-    "cing.Scripts.FC.mergeNrgBmrbShifts": "INTERACTIVE: session var `cgiDir` (never imported)",
-    "cing.NRG.doAnnotateNrgCing": "INTERACTIVE/DATA: session var `cgiDir` + NRG batch data",
-    # --- DATA: one-off batch scripts needing local datasets / per-machine paths ---
-    "cing.NRG.CasdNmrCing": "DATA: CASD-NMR batch script (data root None without CASD dirs)",
-    "cing.NRG.CasdNmrMassageCcpnProject": "DATA: CASD-NMR batch script",
-    "cing.NRG.CasdScripts": "DATA: CASD-NMR batch script",
-    "cing.NRG.doAnnotateCasdNmr": "DATA: CASD-NMR batch script",
-    "cing.NRG.doAnnotateCasdNmrLoop": "DATA: CASD-NMR batch script",
-    "cing.NRG.validateEntryForCasd": "DATA: CASD-NMR batch script",
-    "cing.NRG.validateForCASD_NMR": "DATA: CASD-NMR batch script",
-    "cing.NRG.runQueenyAll": "DATA: hardcoded /Library/WebServer data dir",
-    "cing.NRG.runQueenyEntry": "DATA: CASD-NMR entry batch (indexes into missing data)",
-    "cing.NRG.validateForCASP_NMR": "DATA: hardcoded /Library/WebServer data dir",
-    "cing.NRG.doAnnotateCaspNmrLoop": "DATA: hardcoded /Users/wim data dir",
-    "cing.Scripts.CASD.casd2": "DATA: full historical ProjectTree API + CASD data, not shipped here",
-    "cing.Scripts.CASD.casd3": "DATA: hardcoded /Users/geerten CASD data root",
-    "cing.Scripts.CASP.casp": "DATA: CASP batch script (sys.exit guard on missing data)",
-    "cing.Scripts.CING_paper_queries": "DATA: requires cing data files not in the repo",
-    "cing.Scripts.d1d2plot": "DATA: requires cing data files not in the repo",
-    "cing.Scripts.interactive.getDatesIcingRuns": "DATA: hardcoded /Library/WebServer paths",
-    "cing.Scripts.publishVC": "DATA: hardcoded /Users/jd path",
-    "cing.Scripts.validateForNmrCmbi": "DATA: hardcoded /Users/jd/entryCodeList.csv",
-    "cing.Scripts.validateForExercises": "DATA: /Library/WebServer Education data dir",
-    "cing.Scripts.validateForProteinsDotDynDnsDotOrg": "DATA: /Library/WebServer data dir",
-    "cing.Scripts.pdbj_mine": "DATA: one-off mining script (indexes into missing data)",
-    "cing.Database.Scripts.addCYANA2": "DATA: needs CYANA name-convention data table",
-    "cing.Database.Scripts.addSHIFTS": "DATA: needs SHIFTS data content (ARG+ residue)",
-    "cing.Database.Scripts.dbTableUpdate290908": "DATA: one-off DB update script (sys.exit on missing preconditions)",
     # --- ENV: env vars / live network ---
     "cambridge.isd.isd_project_template": "ENV: ISD_ROOT environment variable",
     "nijmegen.CASD.Constants": "ENV: CASD_HOME environment variable",
     "nijmegen.CASD.Util": "ENV: CASD_HOME environment variable",
     "nijmegen.CASD.casdPipeLine": "ENV: CASD_HOME environment variable",
     "nijmegen.CASD.convertCasdNmrToCcpn": "ENV: CASD_HOME environment variable",
-    "cing.NRG.getRCSB_PDB": "ENV: live RCSB HTTP request at import time",
-    "cing.NRG.test.RESTfulExample": "ENV: live REST example (HTTP at import)",
-    # --- VENDOR: vendored tooling / self-skipping tests ---
-    "cing.Libs.cython.compile": "VENDOR: Cython build helper script (runs setup()), not a module",
-    "cing.Scripts.noseTestCing": "VENDOR: nose test-runner entry point (nose intentionally uninstalled)",
-    "cing.Libs.test.test_Imagery": "VENDOR: self-skipping nose-era test (SkipTest at import)",
 }
 
 # Modules we can't expect to import cleanly in a headless/no-GUI env (GUI entry points, etc.)

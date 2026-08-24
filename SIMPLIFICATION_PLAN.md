@@ -137,7 +137,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 6 | HADDOCK: `utrecht/haddock/` + menu + method | ✅ 2026-08-24 |
 | 7 | MECCANO: `grenoble/` + `c/other/meccano/` + `setup.py` GSL/Meccano blocks | ✅ 2026-08-24 |
 | 8 | PyRPF: `rutgers/` | ✅ 2026-08-24 |
-| 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ⬜ pending |
+| 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ✅ 2026-08-24 |
 | 10 | ECI: `ccpnmr/eci/` (relocate `ReadPdb.py` first) + `ccpnmr-eci` | ⬜ pending |
 | 11 | Structure Viewer + Make H Bond Restraints popups + remove 3 kept callers | ⬜ pending |
 | 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ⬜ pending |
@@ -449,4 +449,66 @@ allowlist entries, no `gui_boot_test.py` APPS entry, no tests.
   - `import_smoke.py` exit 0 — TOTAL **1634** (1637−3, exactly the 3 removed
     `rutgers` `.py` modules), OK 1518, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **5/5** (unchanged — no PyRPF app entry ever).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 9 — CING (cijermen, nijmegen/cijermen, menu, smoke allowlist) — ✅ 2026-08-24**
+Recon (verified pre-edit): `ccpnmr2.5/python/cijermen/` = 340 tracked .py
+(+213 data files; 553 tracked) and `nijmegen/cijermen/` = 4 tracked (.py:
+`CingPopup`, `CingFrame`, `iCingRobot`, `__init__`) — 557 tracked files total.
+Single external importer: `AnalysisPopup.py` (top import `from
+nijmegen.cijermen.CingPopup import CingPopup` + menu + `submitCing` +
+`menu_items` entry). `ccpnmr/workflow/Cijmegen.py` (WebCing/CijmegenWorkFlow
+— remote CING web-service client via HTTP) **KEPT**: Stage-3 precedent
+(`workflow/Aria.py` survived ARIA removal), zero importers, outside the
+stage-table scope. Cython `cijermen/Libs/cython/superpose` C-ext: ONLY
+consumer was `cijermen/PluginCode/queeny.py` (`Rm6dist`, dies with cing);
+kept code uses the pure-Python `memops/universal/Geometry.
+superposeNewVectorsOnOld` (importers `pdbe/chemComp/.../addSubstituent.py`,
+`ccp/util/Molecule.py` — verified). The release-script `[2/4]` superpose
+build step (`CY=.../cijermen/Libs/cython` + Cython pip-install) now points
+at a dead path — RESIDUAL for the Stage-12 release-script sweep (same
+bucket as the S2/S5 deferrals; those scripts were already stale: their
+FAILED=0 gate predates the 33-failure baseline and their `need` console-set
+lists 4 since-deleted apps). `ccpnmr/format/webServer/{Util,webFc}.py` KEPT
+(cherrypy consumers, not on the removal list — they ARE the 2 remaining
+FAILED entries). KEPT (verified) inert strings: `nijmegen/CASD/*` `CING`
+task-name strings (CASD pipeline, decisions 4/6),
+`ccpnmr/workflow/Constants.py` programList "Cing" (S3/S6 precedent),
+`ccp/util/Validation.py` `storeRogScores(context="CING")` +
+`ViewStructure.py` `context == "CING"` ROG-score handling (kept feature),
+`pdbe/adatah/Cijmegen.py` (kept pdbe module), `ccp/util/NmrCijmegen.py:4`
+stale consumer docstring (S1/S7 precedent). No integrator plugin, no
+data/ protocol JSONs, no setup.py/MANIFEST.in/gui_boot_test entries, no
+`bin/` launchers, no tests.
+- Deleted: `ccpnmr2.5/python/cijermen/` (340 .py + data) +
+  `ccpnmr2.5/python/nijmegen/cijermen/` (4) — 557 tracked files +
+  `__pycache__` residue. Includes the S8 PyRPF leftovers
+  (`PluginCode/RPF.py`, `Scripts/Analysis/PyRPF.py`) and the S4 CYANA
+  allowlist entry (`Database.Scripts.addCYANA2`).
+- `AnalysisPopup.py`: removed the `from nijmegen.cijermen.CingPopup import
+  CingPopup` import, the "CING: Validate Structures" Structure-menu block
+  (shortcut "C"), the `submitCing` method, and the
+  `menu_items[StructureMenu]` entry (`setMenuState` uses the list only as a
+  `len(...)+4` try/except loop bound — inert; S6 dropped the HADDOCK entry
+  the same way). KEPT in that list: "DANGLE: Predict Dihedrals" string (S5
+  residual, Stage 12).
+- `import_smoke.py`: removed **73** `cijermen.*` entries from
+  KNOWN_NON_IMPORTABLE (EXTERNAL 19, PLUGIN 11, INTERACTIVE 14, DATA 25,
+  ENV 2, VENDOR 3 — the PLUGIN/INTERACTIVE/DATA/VENDOR sections went empty
+  and their category-legend comment lines were dropped too). **Hazard 7
+  CLOSED.** 10 entries remain: cambridge.bayes, ccp.lib.Bmrb.bmrb,
+  ccp.util.V2Upgrade, pdbe.software.vascoReferenceCheck,
+  pdbe.chemComp.export.setLicenses, cambridge.isd, nijmegen.CASD×4.
+- `pyproject.toml`: dropped package include `cijermen*` + isort first-party
+  `cijermen` (package fully gone). KEPT: `nijmegen*`/`nijmegen` (CASD
+  survives), the `[project.optional-dependencies] optional` block (Stage-12
+  "extras" bucket — cherrypy/mako still consumed by kept webServer;
+  sqlalchemy/psycopg2-binary/decorator now orphaned by kept code) and its
+  "used by cing / web-server" comment (Stage 12).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1290** (1634−344, exactly the 344
+    removed modules), OK **1278**, FAILED **2** (33−31: the 30× `Sql`
+    ImportWarnings + cing's `psycopg2` all gone; 2× `cherrypy` in KEPT
+    `ccpnmr/format/webServer/*` remain), BY-DESIGN **10** (83−73).
+  - `gui_boot_test.py` **5/5** (unchanged — no CING app entry ever).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

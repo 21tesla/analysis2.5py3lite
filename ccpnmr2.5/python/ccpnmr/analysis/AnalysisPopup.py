@@ -146,7 +146,6 @@ from memops.gui.Menu import Menu
 from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
 from memops.gui.WebBrowser import WebBrowser
 from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
-from nijmegen.cing.CingPopup import CingPopup
 
 try:
     HAVE_NUMPY = True
@@ -1577,14 +1576,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 tipText='Predict protein secondary structure using chemical shifts')
 
         menu.add_command(
-            label="CING: Validate Structures",
-            shortcut="C",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.submitCing,
-            tipText="Check structures and NMR data for quality and errors",
-        )
-        menu.add_command(
             label="ECI: Database Deposition",
             shortcut="E",
             image=self.iconSpecialTool,
@@ -1620,7 +1611,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "Make Distance Restraints",
             "Make H Bond Restraints",
             "DANGLE: Predict Dihedrals",
-            "CING: Validate Structures",
             "ECI: Database Deposition",
             "Secondary Structure Chart",
             "Ramachandran Plot",
@@ -2497,10 +2487,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def startProdecomp(self):
 
         self.popups["prodecomp"] = ProdecompPopup(self, self.project)
-
-    def submitCing(self):
-
-        self.popups["cing"] = CingPopup(self)
 
     def viewStructure(self, structure=None):
 
