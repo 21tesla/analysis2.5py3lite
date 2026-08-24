@@ -132,7 +132,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 1 | Data Analysis: NOE, 3J, PALES, MODULE | ✅ 2026-08-24 |
 | 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ✅ 2026-08-24 |
 | 3 | ARIA: `paris/` + menu + methods | ✅ 2026-08-24 |
-| 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ⬜ pending |
+| 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ✅ 2026-08-24 |
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ⬜ pending |
 | 6 | HADDOCK: `utrecht/` | ⬜ pending |
 | 7 | MECCANO: `grenoble/meccano/` + C sources + `setup.py` GSL block | ⬜ pending |
@@ -257,4 +257,46 @@ entries in `gui_boot_test.py`, no references in `setup.py`, `MANIFEST.in`,
   - `import_smoke.py` exit 0 — TOTAL **1678** (1683−5, exactly the 5 removed
     `paris` modules), OK 1562, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **6/6** (no ARIA app entry — unchanged).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 4 — CYANA (cyana2ccpn, MultiStructure, Cyana plugin, Io.py) — ✅ 2026-08-24**
+Recon (verified pre-edit): hazard 2 confirmed — `ccpnmr/integrator/core/Io.py:68`
+top-level `from cyana2ccpn.cyana2ccpn import importFromCyana` plus 6 CYANA-only
+helpers calling it. `macros/MultiStructure.py` looked mixed (it also wraps
+ROSETTA/UNIO/ASDP protocols) but ALL of its functions have zero callers repo-wide
+(grep-verified) → whole file removable. Plugin discovery is LAZY per protocol
+name (`intUtil.getIntegratorPlugin(protocolName)` — no startup dir scan), so
+deleting `plugins/Cyana/` can't break the 9 kept plugins (Aria, Asdp, Cosmos, Isd,
+MultiStruc, NmrStar, Rosetta, Talos, Unio). Protocol JSONs are reached only via
+the deleted menu/MultiStructure paths (protocol names `CYANA_SS4`/
+`CYANA_PEAKLIST`/`CYANA_SS1` appear nowhere else) → 3 JSONs removed. Other
+"Cyana" hits in the tree are atom-naming-system names (`CYANA2.1` in ChemComp
+data, `ccp/format/cyana/` format parser, `CyanaFormat.py` converter) — KEPT
+features, same category as `ccp/format/aria/`.
+- Deleted (13 tracked files): `ccpnmr2.5/python/cyana2ccpn/` (5: `__init__`,
+  `cyana2ccpn.py`, `classes4.py`, `CyanaParser/{__init__,CyanaParser}`),
+  `ccpnmr/analysis/macros/MultiStructure.py`, `ccpnmr/integrator/plugins/Cyana/`
+  (4: `__init__`, `read.py`, `Util.py`, `write.py`), protocol JSONs
+  `data/ccpnmr/integrator/{Cyana_SS4,CyanaWF,CyanaWF_SS}.json`.
+- `ccpnmr/integrator/core/Io.py`: removed the top-level cyana2ccpn import and
+  the contiguous 6-function CYANA block `runCyana2Ccpn`,
+  `setupCyana2CcpnDialogue`, `runCyana2CcpnDialogue`,
+  `setupPreviousCalculation` + `runPreviousCalculation` (the latter calls
+  `importFromCyana` — hard break if kept; only caller was the deleted
+  MultiStructure with protocolName CYANA_SS4), `importDataFromCyana`.
+  Left untouched: `writeExecuteScript` (shared plugin template; its
+  `cyanatable.txt` line is inert legacy for non-Cyana protocols).
+- `AnalysisPopup.py`: removed Cyana submenu (3 items: Setup/Import/Run CYANA)
+  + the `menu.add_cascade(label="Cyana")` line + methods
+  `setupCyanaCalculation`, `importCyanaData`, `runCyana2Ccpn`.
+- `pyproject.toml`: dropped package include `cyana2ccpn*` (no isort/scripts/
+  smoke-test entries existed).
+- Residuals (by design): `data/ccp/cyana/{cyana,cyana2.1}.lib` KEPT — read by
+  kept `ccp/format/cyana/cyanaLibParser.py` (format converter). `import_smoke.py`
+  has 1 CYANA allowlist entry under `cing.Database.Scripts.addCYANA2` — dies
+  with cing in Stage 9.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1668** (1678−10, exactly the 10 removed
+    `.py` modules), OK 1552, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **6/6** (unchanged).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

@@ -1533,29 +1533,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def setStructureMenu(self):
 
         menu = Menu(self.menubar, tearoff=0)
-        cyanaSubmenu = Menu(self.menubar, tearoff=0)
-        cyanaSubmenu.add_command(
-            label="Setup CYANA calculation",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.setupCyanaCalculation,
-            tipText="Setup CYANA calculation to iteratively assign NOEs and calculate structures",
-        )
-        cyanaSubmenu.add_command(
-            label="Import CYANA calculation results",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.importCyanaData,
-            tipText="Import output data from a CYANA calculation into project",
-        )
-        cyanaSubmenu.add_command(
-            label="Run CYANA calculation",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.runCyana2Ccpn,
-            tipText="Setup and Run CYANA calculation and import calculation results",
-        )
-
         menu.add_command(
             label="Restraints and Violations",
             shortcut="R",
@@ -1610,7 +1587,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 image=self.iconSpecialTool, compound='left',
         #                 command=self.startD2D,
         #                 tipText='Predict protein secondary structure using chemical shifts')
-        menu.add_cascade(label="Cyana", shortcut="y", image=self.iconSpecialTool, compound="left", menu=cyanaSubmenu)
 
         menu.add_command(
             label="HADDOCK: Structure Docking",
@@ -2575,38 +2551,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def submitCing(self):
 
         self.popups["cing"] = CingPopup(self)
-
-    def setupCyanaCalculation(self):
-
-        from ccpnmr.analysis.macros.MultiStructure import setupCyanaCalculationDialogue
-
-        setupCyanaCalculationDialogue(self.argumentServer)
-
-    def importCyanaData(self, calculationData=None):
-
-        from ccpnmr.analysis.macros.MultiStructure import importDataFromCyana
-
-        if calculationData == None:
-            dataSources = importDataFromCyana(self.argumentServer)
-        else:
-            from cyana2ccpn.cyana2ccpn import importFromCyana
-
-            dataSources = importFromCyana(calculationData[0], calculationData[1])
-        for dataSource in dataSources:
-            # self.finishInitSpectrum(dataSource)
-            Analysis.finishInitSpectrum(self, dataSource)
-        print("DONE")
-
-    def runCyana2Ccpn(self):
-
-        from ccpnmr.analysis.macros.MultiStructure import runCyana2CcpnDialogue
-
-        calculationData = runCyana2CcpnDialogue(self.argumentServer)
-        yy = self.argumentServer.askYesNo("Import Calculation Results")
-        print("calcData", calculationData)
-        if yy:
-            print(calculationData)
-            self.importCyanaData(calculationData=calculationData)
 
     def viewStructure(self, structure=None):
 

@@ -65,7 +65,6 @@ import traceback
 
 from ccpnmr.integrator.core import ParameterEditor
 from ccpnmr.integrator.core import Util as intUtil
-from cyana2ccpn.cyana2ccpn import importFromCyana
 from memops.general import Io as genIo
 from memops.universal import Io as uniIo
 
@@ -1083,109 +1082,6 @@ def runSingleInteractive(argServer, protocolName, prelimProtocolName=None, maste
             convert(project, targetDir)
     else:
         print("CCPN not executing %s - no script generated" % protocolName)
-
-
-def runCyana2Ccpn(argServer, protocolName, prelimProtocolName=None, masterRun=None):
-    nmrCalcRun = initRunInteractive(
-        argServer, protocolName=protocolName, prelimProtocolName=prelimProtocolName, masterRun=masterRun
-    )
-
-    executeScript = prepareSingleRun(nmrCalcRun, protocolName)
-
-    if executeScript:
-        process = subprocess.call(["python", executeScript])
-        # print 'CCPN executing %s process: %s' % (protocolName,pid)
-        # process.poll()
-        #
-        # if process.returncode is not None:
-        targetDir = nmrCalcDir(nmrCalcRun)
-        importFromCyana(nmrCalcRun, targetDir)
-    else:
-        print("CCPN not executing %s - no script generated" % protocolName)
-
-
-def setupCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None, masterRun=None):
-    nmrCalcRun = setupSingleDialogue(
-        argServer, protocolName=protocolName, prelimProtocolName=prelimProtocolName, masterRun=masterRun
-    )
-
-    if nmrCalcRun is not None:
-        executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
-
-
-def runCyana2CcpnDialogue(argServer, protocolName, prelimProtocolName=None, masterRun=None):
-    nmrCalcRun = setupSingleDialogue(
-        argServer, protocolName=protocolName, prelimProtocolName=prelimProtocolName, masterRun=masterRun
-    )
-
-    if nmrCalcRun is not None:
-        executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=True)
-
-    xx = argServer.askYesNo("Run Calculation")
-    if xx:
-        if executeScript:
-            process = subprocess.call([sys.executable, executeScript])
-            # print 'CCPN executing %s process: %s' % (protocolName,pid)
-            # process.poll()
-            #
-            # if process.returncode is not None:
-            # yy = argServer.showInfo("Calculation complete")
-            # if yy:
-            targetDir = nmrCalcDir(nmrCalcRun)
-            #   importFromCyana(nmrCalcRun,targetDir)
-            calculationData = (nmrCalcRun, targetDir)
-
-        else:
-            print("CCPN not executing %s - no script generated" % protocolName)
-    else:
-        pass
-    print("calculationData", calculationData)
-    return calculationData
-
-
-def setupPreviousCalculation(argServer, protocolName, prelimProtocolName=None, masterRun=None):
-
-    currentProject = argServer.getProject()
-    currentNmrCalcStore = currentProject.findFirstNmrCalcStore()
-    masterRun = currentNmrCalcStore.sortedRuns()[-1]
-
-    nmrCalcRun = intUtil.makeDerivedRun(masterRun)
-
-    prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=False)
-
-
-def runPreviousCalculation(argServer, protocolName, prelimProtocolName=None, masterRun=None):
-
-    currentProject = argServer.getProject()
-    currentNmrCalcStore = currentProject.findFirstNmrCalcStore()
-    masterRun = currentNmrCalcStore.sortedRuns()[-1]
-
-    nmrCalcRun = intUtil.makeDerivedRun(masterRun)
-
-    executeScript = prepareSingleRun(nmrCalcRun, protocolName, doGeneralAdapt=False)
-
-    if executeScript:
-        process = subprocess.call(["python", executeScript])
-        # print 'CCPN executing %s process: %s' % (protocolName,pid)
-        # process.poll()
-        #
-        # if process.returncode is not None:
-        targetDir = nmrCalcDir(nmrCalcRun)
-        importFromCyana(nmrCalcRun, targetDir)
-    else:
-        print("CCPN not executing %s - no script generated" % protocolName)
-
-
-def importDataFromCyana(argServer):
-
-    targetFile = argServer.getFile()
-    jsonObj = json.load(open(targetFile))
-    currentProject = argServer.getProject()
-    nmrCalcId = jsonObj["CCPN.nmrCalcId"]
-    nmrCalcRun = getNmrCalcRunFromId(currentProject, nmrCalcId)
-    targetDir = nmrCalcDir(nmrCalcRun)
-    dataSources = importFromCyana(nmrCalcRun, targetDir)
-    return dataSources
 
 
 def setupSingleInteractive(argServer, protocolName, prelimProtocolName=None, masterRun=None):

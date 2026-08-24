@@ -90,7 +90,6 @@ include = [
     "ccpnmr*",
     "cambridge*",
     "cing*",
-    "cyana2ccpn*",
     "gothenburg*",
     "grenoble*",
     "molsim*",
