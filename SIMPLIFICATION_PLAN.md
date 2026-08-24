@@ -565,14 +565,19 @@ headers.py` `_licenseInfo` mentions are the generic license-strip mechanism
   `Ccpn2NmrStar.py:224,245` EBI-docs URL docstrings (inert text),
   `survey.md:315` snapshot line.
 - Env note (pre-existing, NOT repo state): the anaconda env
-  (`/home/logan/software/anaconda3`) still contains a **stale installed
-  `ccpnmr` copy** in site-packages (dated May 2026, still has `cci/`, lacks
-  the relocated `ReadPdb.py`). All three gates resolve to the source tree
+  (`/home/logan/software/anaconda3`) contained a **stale installed `cci`
+  copy** in site-packages (legacy egg 2.5.2, dated May 2026 — still had
+  `cci/`, lacked the relocated `ReadPdb.py`; also owned `ccp`, `memops`,
+  `cambridge`, `cijermen`, ... + site-packages-root `data/` `doc/`
+  `model/` `license/` trees). All three gates resolve to the source tree
   (import_smoke `ROOT` insert, gui_boot `PYTHONPATH=source-tree`,
-  `tests/conftest.py` path insert) — verified this stage; but a bare
-  `python -c "import ccpnmr..."` from a cwd without a `cci` sibling package
-  silently imports the stale copy. Refresh that install (or note it) before
-  any installed-state Phase-4 smoke run in THIS env.
+  `tests/conftest.py` path insert), but a bare `python -c "import
+  ccpnmr..."` from a cwd silently imported the stale copy. **RESOLVED
+  2026-08-24:** `pip uninstall ccpnmr` removed exactly the egg's registry
+  footprint — `import ccpnmr` now fails cleanly, no stray top-level
+  packages remain (`pdbeccdutils`, an unrelated package, intact); all
+  three gates re-verified green afterwards (TOTAL 1279 / OK 1267 /
+  FAILED 2 / BY-DESIGN 10; gui 4/4; pytest 45 passed / 4 skipped).
 - Gates (all green):
   - `import_smoke.py` exit 0 — TOTAL **1279** (1290−11, exactly the 11
     removed eci `.py` modules; the relocated ReadPdb is still walked as
