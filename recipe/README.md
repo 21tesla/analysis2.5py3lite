@@ -13,11 +13,7 @@ Python 3.13 port of ccpnmr 2.5.2. It is **not** yet a complete, CI-ready package
    - the `extra.recipe-maintainers` handle(s).
 3. Open a PR from `staged-recipes/` into `recipes/ccpnmr/`.
 4. Make sure the conda-forge build environment can satisfy the **C-extension**
-   build deps: a C/C++ compiler, GL, Tk, and (optional) GSL for the Meccano
-   extension. If any of those are unavailable in the conda-forge env, the
-   `gsl` host dep is the one to drop — `setup.py` will skip the Meccano ext and
-   emit a warning rather than hard-fail (the same "optional" behavior exposed
-   on the PyPI path).
+   build deps: a C/C++ compiler, GL, and Tk.
 
 ## Why this is optional
 

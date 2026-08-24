@@ -140,7 +140,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ✅ 2026-08-24 |
 | 10 | ECI: `ccpnmr/eci/` (relocated `ReadPdb.py` to `ccpnmr/format/converters/`) + `ccpnmr-eci` | ✅ 2026-08-24 |
 | 11 | Structure Viewer + Make H Bond Restraints popups + remove kept-caller buttons (7 files) | ✅ 2026-08-24 |
-| 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ⬜ pending |
+| 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ✅ 2026-08-24 |
 
 ### Stage checklist detail
 
@@ -661,3 +661,84 @@ gui_boot, tests, `bin/`, or `scripts/` references.
     popup-class-name grep clean (only the 3 Stage-12 residuals above);
     `py_compile` clean on all 9 edited files; diff = 12+/391− across the
     8 edited files + 3316 lines in the 2 deleted popups.
+
+**Stage 12 — Cross-cutting sweep (LAST stage) — ✅ 2026-08-24**
+
+Final verification of 1—11; removed every residual reference to the 14
+legacy tools + their orphaned third-party deps. PLAN CLOSED (all 12 stages
+done, gates green, pushed).
+- `bin/`: deleted 12 dead launchers — `dangle{,2,2.5}`, `eci{,2,2.5}`,
+  `extendNmr{,2,2.5}`, `depositionFileImporter{,2,2.5}` (all pointed at
+  deleted `python/<pkg>/…Gui.py` targets). KEPT and re-verified live:
+  `pipe2azara*` + `xeasy2azara*` (targets `ccp/format/spectra/params/
+  {NmrPipeData,XeasyData}.py` still exist) and the 6 live app launchers.
+- `pyproject.toml` `optional` extras — recon by whole-tree grep (0 importers
+  of a package = orphan, since the smoke gate requires kept importers to be
+  importable in a clean install-venv):
+  - REMOVED (zero importers in the live tree): `scipy`, `sqlalchemy`,
+    `psycopg2-binary`; also dropped the stale `# used by cing / web-server /
+    advanced I/O` comment and the now-pointless pycurl comment line (pycurl
+    too has ZERO importers).
+  - KEPT with importers (each verified): `matplotlib`
+    (pdbe/software/violationStatistics.py + cambridge/bayes/kmeans.py, both
+    by-design-kept), `cherrypy` + `mako` (kept webServer), `decorator` —
+    **deviation from the stage checklist**: `ccpnmr/v2io/TestNefIo.py`
+    (kept reference package, by-design) does a TOP-LEVEL `import decorator`;
+    dropping it would break the clean-venv release gate (FAILED must be 0)
+    and the v2io test, so it stays.
+- Release scripts (`linux_release.sh`, `macos_release.sh`,
+  `make_standalone_release.sh`): removed the dead superpose C-ext build step
+  (`ccpnmr2.5/python/cing/Libs/cython` — deleted in S9), the Cython
+  prerequisite install, and the `scipy sqlalchemy psycopg2-binary pycurl`
+  optional-stack pip line (now `matplotlib cherrypy decorator mako`);
+  `need` entry-point sets 8→4 (`ccpnmr-eci/-dangle/-deposition/-extend-nmr`
+  were removed as `[project.scripts]` in S5/S10); step labels [n/4]→[n/3];
+  "8 console entry points" → 4. `bash -n` clean on all three; zero
+  superpose/Libs/cing/scipy/psycopg residue. `copy_cext.sh`/`publish.sh`
+  already clean (S7).
+- Docs/help-links (all listed residuals): `Structure.rst` toctree 8 lines
+  (Viewer, MakeHbond, DANGLE, ARIA, HADDOCK, PyRPF, CING, ECI — the
+  `source/popups/` dir doesn't even exist, so all were dangling);
+  `ImportProject.rst` 2× "viewed via the ECI_ option" phrases + the
+  `.. _ECI:` link target; `Changes.html` external-programs `<li>` (PALES/
+  MODULE2/MECCANO) + the ViewStructurePopup `<LI>` block;
+  `EditExperiment.py` "; initially using the str(CcpNmr ECI)_" + its link
+  def; `BrowseConstraints.py` MakeHbond/DANGLE/3J-Coupling help text +
+  3 link defs (3J popup died S1 — same category); `Ccpn2NmrStar.py` 2×
+  "use ECI (http://…eci.html)" error strings → neutral wording;
+  `survey.md` `ccpnmr-eci` sample line; `NmrCalc.py` stale "Used in
+  paris/aria, nijmegen/cing, grenoble/BlackledgeModule" docstring →
+  current importers (memops/api/Implementation, ccp/api, cambridge/isd,
+  EditCalculation). `NmrCijmegen.py:4` residual from the checklist: file no
+  longer exists (removed during an earlier stage) — nothing to do.
+- RECON FINDINGS beyond the checklist (same category, swept):
+  - `README.md`: Phase-4-era doc — refreshed the "What works" gate table to
+    current numbers (1277/1265/2/10, 45/4, 4/4), console-command table 8→4,
+    optional-stack install line (dropped scipy/sqlalchemy/psycopg2/pycurl),
+    ALL GSL/Meccano build instructions (gone since S7), `CCP_GSL_PREFIX`,
+    "C/Cython" → "C" (superpose gone S9), wrong clone URL
+    (`21tesla/analysis2.5py3` → `21tesla/analysis2.5py3lite` per locked
+    decision 1), layout list (dropped `cing`, "30 C extensions" count),
+    cing scope note → 14-tools-removed note pointing at this plan,
+    by-design count 83→10.
+  - `docs/PUBLISHING.md`: optional-extras comment, 8→4 console list, GSL
+    paragraph, `-> 8`/`8/8 booted` gate comments, GSL/cython recipe line.
+  - `INSTALL.md`: 4 launcher bullets for removed apps (ECI/DANGLE/
+    deposition/EXTEND-NMR) — data-shifter/format-converter/update kept.
+  - `recipe/meta.yaml` + `recipe/README.md`: GSL + cython host deps,
+    Meccano-optional prose.
+  - Historical records deliberately UNTOUCHED: `Changes.html` other legacy
+    entries (changelog), `MACOS_3.13_BUILD_FIXES.md` (build log),
+    `_phase*_checkpoints.md`, `.aider.chat.history.md`,
+    `SIMPLIFICATION_PLAN.md`'s own earlier log entries.
+- Gates (all green, floors held):
+  - `import_smoke.py` exit 0 — TOTAL **1277**, OK **1265**, FAILED **2**
+    (2× `cherrypy`, unchanged), BY-DESIGN **10** (unchanged).
+  - `xvfb-run -a python gui_boot_test.py` **4/4** (unchanged).
+  - `python -m pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped**
+    (unchanged).
+  - Whole-tree grep for the 4 removed entry-point names + `entrycompletion`
+    + `meccano`/`blackledge`: clean outside the historical records above.
+
+**PLAN COMPLETE (2026-08-24): 12/12 stages done and pushed to
+`21tesla/analysis2.5py3lite:main`.**

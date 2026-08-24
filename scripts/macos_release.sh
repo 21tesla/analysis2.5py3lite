@@ -2,10 +2,10 @@
 # ============================================================================
 # macOS release builder for CCPNMR Analysis 2.5.2 (Python 3).
 #
-# Builds the full C-extension set (memops backbone + per-package FAM exts,
-# plus the Cython cing superpose), packages the wheel, and verifies it the same way
-# the Linux wheel was shipped: clean venv -> pip install -> pip check ->
-# 8 console entry points -> whole-tree import smoke (FAILED must be 0).
+# Builds the full C-extension set (memops backbone + per-package FAM exts),
+# packages the wheel, and verifies it the same way the wheel was shipped:
+# clean venv -> pip install -> pip check -> 4 console entry points ->
+# whole-tree import smoke (FAILED must be 0).
 #
 # Usage:
 #   ./scripts/macos_release.sh                  # build + verify the wheel
@@ -62,11 +62,10 @@ command -v cc >/dev/null || die "cc not found — run: xcode-select --install"
 "$PYTHON" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3,13) else 1)' \
   || die "$PYTHON is not Python 3.13+ — try: PYTHON=python3.13 ./scripts/macos_release.sh"
 
-# pip (uv-created venvs may lack it) + setuptools (build) + Cython (cing superpose)
+# pip (uv-created venvs may lack it) + setuptools (build)
 "$PYTHON" -m pip --version >/dev/null 2>&1 || "$PYTHON" -m ensurepip --upgrade >/dev/null 2>&1 \
   || die "pip (and ensurepip) unavailable in $PYTHON — use a standard python"
 "$PYTHON" -c 'import setuptools' 2>/dev/null || "$PYTHON" -m pip install --quiet setuptools
-"$PYTHON" -c 'import Cython'    2>/dev/null || "$PYTHON" -m pip install --quiet cython
 
 # Tk headers — same candidate order as setup.py::_tkinc()
 "$PYTHON" -c "
@@ -108,15 +107,10 @@ echo
 # ---------------------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------------------
-echo "=== [1/4] building C extensions ==="
+echo "=== [1/3] building C extensions ==="
 "$PYTHON" setup.py build_ext --inplace
 
-CY="$ROOT/ccpnmr2.5/python/cing/Libs/cython"
-echo "=== [2/4] building Cython superpose (cing) ==="
-( cd "$CY" && "$PYTHON" compile.py build_ext --inplace )
-ls "$CY"/superpose*.so >/dev/null || die "superpose build produced no .so in $CY"
-
-echo "=== [3/4] wheel ==="
+echo "=== [2/3] wheel ==="
 ./scripts/copy_cext.sh
 "$PYTHON" -m pip wheel . --no-deps -w dist --quiet
 WHEEL="$(ls -t dist/ccpnmr-2.5.2-*.whl 2>/dev/null | head -1 || true)"
@@ -130,26 +124,24 @@ echo
 VERIFY="$ROOT/build/release-verify-venv"
 mkdir -p "$ROOT/build"
 rm -rf "$VERIFY"
-echo "=== [4/4] verification (clean venv: install + gates) ==="
+echo "=== [3/3] verification (clean venv: install + gates) ==="
 "$PYTHON" -m venv "$VERIFY"
 VP="$VERIFY/bin/python"
 "$VP" -m pip install --quiet --upgrade pip
 # Core distribution deps (what a naive user installs), then the optional
-# cing/NRG/web stack — the release gate (import-smoke FAILED=0) matches the
+# web/plotting extras — the release gate (import-smoke FAILED=0) matches the
 # Phase-4 installed-state gate, which ran green with the full stack.
 "$VP" -m pip install --quiet "$WHEEL" numpy pandas PyOpenGL Pillow olefile requests python-dateutil pytz
-"$VP" -m pip install --quiet scipy matplotlib sqlalchemy cherrypy decorator mako psycopg2-binary pycurl
+"$VP" -m pip install --quiet matplotlib cherrypy decorator mako
 "$VP" -m pip check && echo "ok: pip check clean"
 
 "$VP" - <<'EOF'
 from importlib.metadata import entry_points
-need = {"ccpnmr", "ccpnmr-eci", "ccpnmr-dangle", "ccpnmr-data-shifter",
-        "ccpnmr-deposition", "ccpnmr-extend-nmr", "ccpnmr-format-converter",
-        "ccpnmr-update"}
+need = {"ccpnmr", "ccpnmr-data-shifter", "ccpnmr-format-converter", "ccpnmr-update"}
 have = {e.name for e in entry_points(group="console_scripts")}
 missing = need - have
 assert not missing, f"missing console entry points: {sorted(missing)}"
-print("ok: all 8 console entry points present")
+print("ok: all 4 console entry points present")
 EOF
 
 SP="$("$VP" -c 'import site; print(site.getsitepackages()[0])')"

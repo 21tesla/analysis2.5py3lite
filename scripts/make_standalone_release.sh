@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ============================================================================
 # Creates a standalone pre-built tar.gz release of the repository.
-# This builds the C and Cython extensions, then packages the files needed
-# to run the application natively without needing `pip install`.
+# This builds the C extensions, then packages the files needed to run the
+# application natively without needing `pip install`.
 #
 # Usage:
 #   ./scripts/make_standalone_release.sh
@@ -27,14 +27,6 @@ fi
 
 echo "=== Building C extensions ==="
 "$PYTHON" setup.py build_ext --inplace
-
-CY="$ROOT/ccpnmr2.5/python/cing/Libs/cython"
-echo "=== Building Cython superpose (cing) ==="
-if [ -d "$CY" ] && [ -f "$CY/compile.py" ]; then
-    ( cd "$CY" && "$PYTHON" compile.py build_ext --inplace )
-else
-    echo "Warning: Cython superpose path not found ($CY)"
-fi
 
 echo "=== Copying C extensions to target directories ==="
 if [ -f "./scripts/copy_cext.sh" ]; then

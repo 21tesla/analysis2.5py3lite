@@ -5,13 +5,12 @@
 # you must:
 #   * open a PR to conda-forge containing this recipe dir,
 #   * fill in `sha256` (of the sdist tarball) and the correct source URL,
-#   * confirm the C-extension build deps (compiler, GL, Tk, optional GSL) are
+#   * confirm the C-extension build deps (compiler, GL, Tk) are
 #     satisfiable in the conda-forge build environment,
 #   * follow conda-forge style (see conda-forge.org docs / check-recipes).
 #
 # The package ships C extensions (see setup.py `ext_modules`); the sdist is
-# used so they compile at build time. Meccano/GSL is optional (setup.py skips
-# that ext and warns when GSL is absent).
+# used so they compile at build time.
 # -----------------------------------------------------------------------------
 {% set name = "ccpnmr" %}
 {% set version = "2.5.2" %}
@@ -39,7 +38,6 @@ requirements:
   host:
     - python
     - pip
-    - cython
     - numpy
     - pandas
     - py-opengl
@@ -48,7 +46,6 @@ requirements:
     - requests
     - python-dateutil
     - pytz
-    - gsl  # optional: enables the grenoble Meccano ext (setup.py skips gracefully if absent)
   run:
     - python
     - numpy

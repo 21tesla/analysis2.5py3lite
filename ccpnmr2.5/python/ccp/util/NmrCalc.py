@@ -1,8 +1,8 @@
 """NmrCalc related handler functions.
 Mostly contain only 2-3 lines of obvious code (Rasmus: ah well).
-Used (as per Oct 2012) in
-paris/aria, nijmegen/cing/CingFrame.py,
-grenoble/BlackledgeModule/BlackledgeModuleFrame.py
+Used in memops/api/Implementation.py, ccp/api (molecule/Validation.py,
+nmr/Nmr.py), cambridge/isd/NmrCalcExchange.py and
+ccpnmr/analysis/popups/EditCalculation.py.
 
 November 2012: Removed references to groupId
 """

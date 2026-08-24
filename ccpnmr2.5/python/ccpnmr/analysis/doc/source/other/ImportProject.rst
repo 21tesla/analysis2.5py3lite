@@ -20,14 +20,13 @@ NMR-STAR; the textual NMR depostion format. Virtually everything present in the
 NMR-STAR file will be imported, i.e. any chemical shift lists, molecular information,
 peak lists, citations, sample preparation etc. Because the BMRB data is normally
 considered as part of an NMR database deposition the imported information will be
-linked into an "Entry" record that may be viewed via the ECI_ option.
+linked into an "Entry" record.
 
 Well-formatted, official PDB version 3.20 formated files containing structural
 coordinate data and header information may be loaded into the CCPN project by
 seleting the "PDB 3.20" option. Using this option not only enters atomic
 coordinate data into the CCPN project but also all of the header information that
 was specified when the PDB entry was deposited; sample specification, citations etc.
-Such deposition data may be viewed via the ECI_ option.
 
 Non-standard PDB-style files may be loaded with the "Coordinates" option. This does
 not consider any header information, only the ATOM records, and thus only loads the
@@ -43,5 +42,3 @@ not directly listed in the menu. Please note that Format Converter documentation
 is not currently covered in these pages.
 
 .. _`Open Spectra`: ../popups/OpenSpectrumPopup.html
-
-.. _ECI: ../popups/EntryCompletionPopup.html

@@ -312,7 +312,6 @@ Manual smoke tests:
     ```toml
     [project.scripts]
     ccpnmr-analysis = "ccpnmr.analysis.AnalysisGui:main"
-    ccpnmr-eci = "ccpnmr.eci.EntryCompletionGui:main"
     ccpnmr-format-converter = "ccpnmr.format.gui.FormatConverter:main"
     ```
   - `[build-system]` — `meson-python` (replaces `Makefile` for C ext)

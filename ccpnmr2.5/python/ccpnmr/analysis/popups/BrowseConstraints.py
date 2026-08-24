@@ -93,10 +93,8 @@ class BrowseConstraintsPopup(BasePopup):
     themselves. Structural restraints may be imported into CCPN via the
     FormatConverter_ or they may be created with various various dedicated
     components available in CCPN software. For example distance restraints may be
-    made via the str(Make Distance Restraints)_ (using through space experiments like
-    NOESY) and str(Make H Bond Restraints)_ options. Dihedral angle restraints can be
-    made from chemical shift information using DANGLE_ and from scalar couplings
-    using the str(3J H-Ha Coupling)_ option.
+    made via the str(Make Distance Restraints)_ option (using through space
+    experiments like NOESY).
 
     **Restraint Sets**
 
@@ -271,9 +269,6 @@ class BrowseConstraintsPopup(BasePopup):
 
     .. _FormatConverter: FormatConverter.html
     .. _str(Make Distance Restraints): CalcDistConstraintsPopup.html
-    .. _str(Make H Bond Restraints): MakeHbondRestraintsPopup.html
-    .. _DANGLE: DangleGui.html
-    .. _str(3J H-Ha Coupling): CalcHnHaCouplingPopup.html
 
     """
 

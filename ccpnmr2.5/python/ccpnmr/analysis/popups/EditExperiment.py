@@ -288,8 +288,7 @@ class EditExperimentPopup(BasePopup):
     any influence on resonance assignment or NMR data analysis, although spinning
     information may be used for solid-state spectra at some point. However, any
     experimental details entered into the CCPN project will be present when
-    submissions to the BioMagResBank database are made; initially using the
-    str(CcpNmr ECI)_.
+    submissions to the BioMagResBank database are made.
 
     The "Shift References" table is use to enter chemical shift reference
     information into the CCPN project. This may them be linked to experiments via
@@ -328,7 +327,6 @@ class EditExperimentPopup(BasePopup):
     .. _str(experiment nomenclature paper):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
     .. _str(link):  http://www.ncbi.nlm.nih.gov/pubmed/17031528
     .. _str(Assignment Panel): EditAssignmentPopup.html
-    .. _str(CcpNmr ECI): EntryCompletionPopup.html
     """
 
     def __init__(self, parent, isModal=False, *args, **kw):

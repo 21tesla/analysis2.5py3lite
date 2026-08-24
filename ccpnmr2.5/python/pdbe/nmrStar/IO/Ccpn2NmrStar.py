@@ -221,8 +221,7 @@ if __name__ == '__main__':
 
   if not project.currentNmrEntryStore:
     errString = """No CCPN nmrEntryStore/Entry defined - \n
-  use ECI (http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html)\n
-  to create one within your project, then upload again.\n"""
+  create an Entry within your project, then upload again.\n"""
     errValue = -4
 
     mailErrorAndExit(errValue, errString)
@@ -242,8 +241,7 @@ if __name__ == '__main__':
 
   if not ccpnEntries:
     errString = """No CCPN Entry defined - \n
-  use ECI (http://www.ebi.ac.uk/pdbe/docs/pdbe_nmr_deposition/eci.html)\n
-  to create one within your project, then upload again.\n"""
+  create an Entry within your project, then upload again.\n"""
     errValue = -6
 
     mailErrorAndExit(errValue, errString)

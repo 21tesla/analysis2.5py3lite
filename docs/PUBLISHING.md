@@ -17,7 +17,7 @@ The verified install options, best-first:
 ### a) From a source-built wheel (most robust)
 ```bash
 pip install <path>/ccpnmr-2.5.2-cp313-*-linux_x86_64.whl
-# for full cing / web-server / advanced-I/O coverage (optional third-party):
+# optional web/plotting third-party:
 pip install "ccpnmr[optional]"
 ```
 
@@ -30,12 +30,11 @@ This builds the C extensions locally — it needs the build dependencies below.
 ### c) From PyPI (once the release is published)
 ```bash
 pip install "ccpnmr>=2.5.2"
-pip install "ccpnmr[optional]"   # optional third-party (scipy, matplotlib, sqlalchemy, ...)
+pip install "ccpnmr[optional]"   # optional third-party (matplotlib, cherrypy, decorator, mako)
 ```
 
-The 8 console commands become available on `PATH`:
-`ccpnmr`, `ccpnmr-eci`, `ccpnmr-dangle`, `ccpnmr-data-shifter`, `ccpnmr-deposition`,
-`ccpnmr-extend-nmr`, `ccpnmr-format-converter`, `ccpnmr-update`.
+The 4 console commands become available on `PATH`:
+`ccpnmr`, `ccpnmr-data-shifter`, `ccpnmr-format-converter`, `ccpnmr-update`.
 
 ---
 
@@ -51,10 +50,6 @@ export CC=/usr/bin/gcc CXX=/usr/bin/g++
 System packages (Linux): `build-essential`, `python3-dev`, `python3-tk`, `libgl1-mesa-dev`,
 `freeglut3-dev`, `tk-dev`, `libx11-dev`. Python 3.13 headers present in the venv.
 
-**GSL is optional** (enables the grenoble *Meccano* C extension). Without it the build
-succeeds and a warning is printed; with it set `CCP_GSL_PREFIX` (conda `gsl` from the
-`ccpnmr-gsl` env, or `apt install libgsl-dev`).
-
 ### 2.2 Build
 ```bash
 CC=/usr/bin/gcc CXX=/usr/bin/g++ uv build     # -> dist/ccpnmr-2.5.2-*.whl + dist/ccpnmr-2.5.2.tar.gz
@@ -66,11 +61,11 @@ CC=/usr/bin/gcc CXX=/usr/bin/g++ uv build     # -> dist/ccpnmr-2.5.2-*.whl + dis
 uv venv --seed --python 3.13 /tmp/ccpnmr-pub
 uv pip install --python /tmp/ccpnmr-pub/bin/python dist/ccpnmr-2.5.2-cp313-*.whl
 /tmp/ccpnmr-pub/bin/pip check                     # -> No broken requirements
-ls /tmp/ccpnmr-pub/bin | grep -c '^ccpnmr'        # -> 8 (the console scripts)
+ls /tmp/ccpnmr-pub/bin | grep -c '^ccpnmr'        # -> 4 (the console scripts)
 CCP_SMOKE_ROOT=/tmp/ccpnmr-pub/lib/python3.13/site-packages MPLBACKEND=Agg \
   /tmp/ccpnmr-pub/bin/python import_smoke.py      # -> FAILED: 0
 cd /tmp && /tmp/ccpnmr-pub/bin/python -m pytest --pyargs ccpnmr -q   # -> 0 failures
-xvfb-run -a /tmp/ccpnmr-pub/bin/python gui_boot_test.py              # -> 8/8 booted
+xvfb-run -a /tmp/ccpnmr-pub/bin/python gui_boot_test.py              # -> 4/4 booted
 ```
 
 ### 2.4 Upload
@@ -97,7 +92,6 @@ bash scripts/publish.sh --upload        # ... then twine upload
 ## 3. Conda-forge (optional)
 
 `recipe/` holds a **starting-point** conda-forge recipe (`meta.yaml`) that builds from the
-sdist with the C compiler + numpy/cython host deps. To publish to conda-forge you must open a
+sdist with the C compiler + the host deps. To publish to conda-forge you must open a
 `conda-forge` PR that includes `recipe/`, fill in the `sha256`, and ensure the system
-GL/Tk/GSL deps are available in the conda-forge build env (see `recipe/README.md`).
-GSL / Meccano remains optional there.
+GL/Tk deps are available in the conda-forge build env (see `recipe/README.md`).

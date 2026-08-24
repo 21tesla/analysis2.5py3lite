@@ -40,25 +40,9 @@ Use the provided `./run-ccpnmr.sh` launcher script. It will verify XQuartz is ac
 ### 2. Launch other CCPN Utilities
 The single launcher wrapper also serves all other sub-applications by passing a command argument:
 
-* **Entry Completion Interface (ECI):**
-  ```bash
-  ./run-ccpnmr.sh eci
-  ```
-* **DANGLE side-chain validation:**
-  ```bash
-  ./run-ccpnmr.sh dangle
-  ```
 * **Project Data Shifter:**
   ```bash
   ./run-ccpnmr.sh data-shifter
-  ```
-* **PDB/PDBe Deposition Importer:**
-  ```bash
-  ./run-ccpnmr.sh deposition
-  ```
-* **EXTEND-NMR:**
-  ```bash
-  ./run-ccpnmr.sh extend-nmr
   ```
 * **Project Format Converter:**
   ```bash
