@@ -1,0 +1,155 @@
+# Codebase Simplification Plan — CCPN 2.5 py3-lite
+
+Status: **IN PROGRESS** (started 2026-08-24)
+Target repo: **`github.com/21tesla/analysis2.5py3lite`** (new repo — one commit + push per stage)
+Source repo (read-only reference, local remote `original`): `github.com/21tesla/analysis2.5py3`
+
+## Goal
+
+Strip 14 legacy/tool modules out of the CCPN analysis app (already migrated
+py2→py3) and everything that only exists to support them, without breaking the
+kept core (peak analysis, assignment, resonance, format conversion, ISD,
+prodecomp, auremol, memops, tests).
+
+**Remove (menu items + underlying code):**
+
+| Menu | Item | Command (AnalysisPopup.py) | Implementation |
+|---|---|---|---|
+| Data Analysis | Heteronuclear NOE | `calcHeteroNoe` | `ccpnmr/analysis/popups/CalcHeteroNoe.py` |
+| Data Analysis | 3J H-Hα Coupling | `calcHnHaCoupling` | `ccpnmr/analysis/popups/CalcHnHaCoupling.py` |
+| Data Analysis | PALES: Alignment and RDCs | `pales` | `gottingen/` (4 files) |
+| Data Analysis | MODULE: Alignment and RDCs | `blackledge_module` | `grenoble/BlackledgeModule/` (4 files) |
+| Structure | Structure Viewer | `viewStructure` | `ccpnmr/analysis/popups/ViewStructure.py` |
+| Structure | Make H Bond Restraints | `makeHbonds` | `ccpnmr/analysis/popups/MakeHbondRestraints.py` |
+| Structure | DANGLE: Predict Dihedrals | `startDangle` | `cambridge/dangle/` (+670 data files) |
+| Structure | ARIA: Structure calculation | `startAria` (already `pass` stub) | `paris/aria/` |
+| Structure | CYANA (3 items + Cyana submenu) | `setupCyanaCalculation` / `importCyanaData` / `runCyana2Ccpn` | `cyana2ccpn/`, `ccpnmr/analysis/macros/MultiStructure.py`, `ccpnmr/integrator/plugins/Cyana/` |
+| Structure | HADDOCK: Structure Docking | `startHaddock` | `utrecht/` |
+| Structure | MECCANO: Structures from RDCs | `meccano` | `grenoble/meccano/` + C ext `ccpnmr2.5/c/other/meccano/` + `Meccano*.so` |
+| Structure | PyRPF: Validate Peaks vs Structure | `startPyRPF` | `rutgers/` (2 files) |
+| Structure | CING: Validate Structures | `submitCing` | `cing/` (340 .py) + `nijmegen/cing/` (4 files) |
+| Structure | ECI: Database Deposition | `startECI` | `ccpnmr/eci/` (12 files, **except ReadPdb.py — see hazards**) |
+| Structure | Secondary Structure Chart *(dup of Chart menu)* | `secStructureGraph` (kept — Chart menu still uses it) | menu entry only |
+| Structure | Ramachandran Plot *(dup of Chart menu)* | `plotRamachandran` (kept — Chart menu still uses it) | menu entry only |
+
+Note: "Secondary Structure Chart" and "Ramachandran Plot" entries in the
+**Structure** menu are removed, but `secStructureGraph`/`plotRamachandran`
+methods and `SecStructureGraph.py` / `ViewRamachandran.py` stay — the **Chart**
+menu still uses them.
+
+Also removed (user decision 2026-08-24): the standalone apps
+`extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` and their console entry
+points (`ccpnmr-extend-nmr`, `ccpnmr-deposition`, `ccpnmr-eci`).
+
+## Locked decisions (2026-08-24, with user)
+
+1. **Workflow:** new GitHub repo `analysis2.5py3lite`; one commit + push per
+   stage; no pushes to the original `analysis2.5py3` repo.
+2. **Structure Viewer buttons:** `viewStructure` is called from 3 KEPT
+   places — `ccpnmr/analysis/frames/PeakTableFrame.py`
+   (`showStructConnections`, `showAllStructConnections`),
+   `ccpnmr/analysis/frames/WindowFrame.py` (~L6588),
+   `ccpnmr/analysis/popups/CalcShiftDifference.py` (~L464). → **remove those
+   buttons/call sites** with the module.
+3. **Standalone apps:** `extendNmr/`, `cambridge/wms/`,
+   `pdbe/deposition/` — **remove entirely** (they hard-import CING, ARIA,
+   ECI, HADDOCK).
+4. **Not on the removal list — keep by default:** `nijmegen/CASD/`
+   (orphaned by CING removal) and the Dangle/Haddock **metamodel** files
+   (`cambridge/api/Dangle.py`, `cambridge/xml/Dangle.py`,
+   `utrecht/api/Haddock.py`, `utrecht/xml/Haddock.py`,
+   `ccpnmr2.5/model/cambridge/xml/Dangle/`,
+   `ccpnmr2.5/model/utrecht/xml/Haddock/`) — generated `ccp.api.*` and
+   `molsim` code lazily references them; removing them requires scrubbing
+   hundreds of generated lines.
+
+## Hazards (verified 2026-08-24 against source)
+
+1. **`ccpnmr/eci/ReadPdb.py` is a KEPT feature** — powers
+   *"Import PDB 3.20"* (`AnalysisPopup.py:129` import, `:2944` use) and
+   `ccpnmr/format/converters/PdbFormat.py` chain. Relocate it **before**
+   deleting `ccpnmr/eci/` (Stage 10).
+2. **`ccpnmr/integrator/core/Io.py:68`** top-level
+   `from cyana2ccpn.cyana2ccpn import importFromCyana` — hard break; plus
+   CYANA-only helpers ~L1088-1130 (Stage 4).
+3. **Shared KEPT code used by removed modules — do NOT delete:**
+   `ccp/util/NmrCalc.py` (kept importers: `EditCalculation.py`,
+   `cambridge/isd/NmrCalcExchange.py`),
+   `ccpnmr/analysis/popups/EditCalculation.py`,
+   `ccp/gui/ViewStructureFrame.py` (subclassed by kept `ViewChemCompVarFrame`,
+   `ViewIsotopomerFrame`),
+   `ccpnmr/format/converters/{CnsFormat,PdbFormat}.py`,
+   `ccp/lib/{MoleculeQuery,StructureIo}.py`, `ccpnmr/analysis/core/*`, all of
+   `ccp/api`, `memops`.
+4. **Name-collision traps:** KEPT `ccp/format/aria/` (format parser, used by
+   `ccpnmr/format/converters/AriaXmlFormat.py`) and KEPT
+   `ccpnmr/integrator/plugins/Aria/` are **not** the removed `paris/aria`
+   feature — leave them.
+5. **`cambridge/` keeps most content:** only `dangle/` (and its data) is
+   removed; `api/`, `bayes/`, `isd/`, `c/`, `xml/` stay.
+6. **`nijmegen/` keeps `CASD/`** (decision 4); only `cing/` subdir removed.
+7. **`import_smoke.py` allowlist:** ~45 `cing.*` "by design" entries die with
+   the package (Stage 9) — remove them then or they become dangling.
+8. **`setup.py`:** Meccano C-ext + GSL resolver logic must go in Stage 7,
+   else builds referencing `c/other/meccano/` break. Release scripts
+   (`scripts/*release*.sh`) gate on GSL/Meccano.
+9. **`gui_boot_test.py` APPS list:** `cci`, `dangle`, `deposition`,
+   `extend-nmr` entries must be removed in their stages or the gate fails.
+10. **`pyproject.toml`:** `[project.scripts]` (`ccpnmr-eci`,
+    `ccpnmr-dangle`, `ccpnmr-deposition`, `ccpnmr-extend-nmr`),
+    `[tool.setuptools.packages.find] include`
+    (`cing*`, `cyana2ccpn*`, `gottingen*`, `grenoble*`, `paris*`, `rutgers*`,
+    `utrecht*`, `extendNmr*`, `nijmegen*`), and
+    `[tool.ruff.lint.isort] known-first-party` references removed packages.
+
+## Baseline (recorded 2026-08-24, pre-removal)
+
+| Gate | Result |
+|---|---|
+| `python import_smoke.py` | exit 0 — **1729 modules**, 33 pre-existing "unexpected" (most are missing-optional-dep in `cing/*`, `cambridge/isd`, `cambridge/bayes`, `nijmegen/CASD`, `ccp/lib/Bmrb`, `ccp/util/V2Upgrade` + webServer `cherrypy`) |
+| `python gui_boot_test.py` | **8/8 apps boot** (ccpnmr, eci, dangle, data-shifter, deposition, extend-nmr, format-converter, update) |
+| `python -m pytest ccpnmr2.5/python/tests/` | **45 passed, 4 skipped** |
+
+After each stage: `import_smoke` must stay exit 0 with **no NEW** unexpected
+failures (counts may drop as we delete); `gui_boot_test` must stay green with
+the app list shrinking as expected; pytest must not regress.
+Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
+
+## Stages & status
+
+| # | Scope | Status |
+|---|---|---|
+| 1 | Data Analysis: NOE, 3J, PALES, MODULE | ⬜ pending |
+| 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ⬜ pending |
+| 3 | ARIA: `paris/` + menu + methods | ⬜ pending |
+| 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ⬜ pending |
+| 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ⬜ pending |
+| 6 | HADDOCK: `utrecht/` | ⬜ pending |
+| 7 | MECCANO: `grenoble/meccano/` + C sources + `setup.py` GSL block | ⬜ pending |
+| 8 | PyRPF: `rutgers/` | ⬜ pending |
+| 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ⬜ pending |
+| 10 | ECI: `ccpnmr/eci/` (relocate `ReadPdb.py` first) + `ccpnmr-eci` | ⬜ pending |
+| 11 | Structure Viewer + Make H Bond Restraints popups + remove 3 kept callers | ⬜ pending |
+| 12 | Cross-cutting sweep: `pyproject.toml`, `bin/`, release scripts, docs, extras, final verification | ⬜ pending |
+
+### Stage checklist detail
+
+**Stage 1 — Data Analysis (NOE / 3J / PALES / MODULE)**
+- `AnalysisPopup.py`: remove top imports L78-79; popupActions entries
+  `calc_hnha_coupling`, `calc_hetero_noe`, `pales`, `blackledge_module`;
+  `setDataMenu` 4 `add_command` blocks + 4 `menu_items` entries; method
+  definitions `calcHnHaCoupling`, `calcHeteroNoe`, `pales`,
+  `blackledge_module`.
+- Delete: `popups/CalcHeteroNoe.py`, `popups/CalcHnHaCoupling.py`,
+  `gottingen/` (4 files), `grenoble/BlackledgeModule/` (4 files; keep
+  `grenoble/` itself — meccano stays until Stage 7).
+- `pyproject.toml`: drop `gottingen*` include; isort first-party `gottingen`.
+
+**Stage 10 — ECI** (highest risk): relocate `ccpnmr/eci/ReadPdb.py` to
+`ccpnmr/format/` (or `popups/`), repoint `AnalysisPopup.py:129` + any other
+importers, **then** delete remaining `ccpnmr/eci/*`.
+
+### Rollback
+
+Each stage is exactly one commit on the new repo → `git revert <sha>` restores
+it cleanly.
