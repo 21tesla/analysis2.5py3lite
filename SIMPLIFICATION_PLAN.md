@@ -747,7 +747,7 @@ done, gates green, pushed).
 
 # Menu Removal Plan — Stages 13-16 (added 2026-08-24)
 
-Status: **IN PROGRESS** — Stage 13 ✅ committed + pushed 2026-08-24; Stage 14 next
+Status: **IN PROGRESS** — Stage 14 ✅ committed + pushed 2026-08-24; Stage 15 next
 Same repo, same checkpoint policy: ONE commit per stage (code + this log
 update in the same commit) + push to `main`. Python: anaconda `python`
 3.13.5; `xvfb-run` available.
@@ -843,7 +843,7 @@ NON_GUI check is deleted); pytest floors held; `ruff check` on edited files
 | # | Scope | Status |
 |---|---|---|
 | 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ✅ 2026-08-24 |
-| 14 | Macro menu (menu layer only) | ⬜ not started |
+| 14 | Macro menu (menu layer only) | ✅ 2026-08-24 |
 | 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ⬜ not started |
 | 16 | Project ▶ Help (Version/About/Help) | ⬜ not started |
 
@@ -986,3 +986,66 @@ L322/324).
     AnalysisPopup UP031 19→17 (the two removed %-format strings live in the
     deleted code), all other rules unchanged (F841 11, E722 10, E731 2,
     W293 1, F811 1, E721 1); `gui_boot_test.py` identical (UP031 8).
+
+**Stage 14 — Macro menu (menu layer only) — ✅ 2026-08-24**
+Recon (verified pre-edit): `AnalysisPopup.py` targets at (line numbers post
+Stage 13): `MacroMenu = "Macro"` L167; `self.setMacroMenu()` in `__init__`
+L392 and `initProject` L1925; two `notify(self.setMacroMenu,
+"ccpnmr.AnalysisProfile.Macro", "delete"/"setName")` hooks in
+`curatePopupNotifiers` L648-649; contiguous block `setMacroMenu` L1731 /
+`reloadMenuMacros` L1774 / `runMacro` L1780 (immediately before
+`setOtherMenu`); `editMacros` L2919 (one-liner `popupEditProfiles(tab=1)`).
+Checklist's "verify first" on the `Command` import (L49): case-sensitive
+` Command(` shows `runMacro` (L1784) is the ONLY user (every other `command`
+hit is the `add_command`/`command=` keyword) → import dropped. `iconRefresh`
+(L305): sole usage was `setMacroMenu`'s "Reload Menu Macros" item (L1753) —
+the Stage 13 log's "still used" note pointed exactly at this macro code, and
+grep confirms no other user in the tree → assignment dropped as orphan of
+this stage (the other macro-menu icon `iconTable` has 20+ live uses — kept).
+`sys` (L44) + `Util` imports both have other users (`sys.exit` L3036;
+`Util.setTopObjectAnalysisSaveTime`, `Util.getFormatConverterThreading`) →
+kept. Cross-file: ONLY `EditProfiles.py:1173`
+(`self.parent.setMacroMenu()` inside `toggleMacroInMenu`) — the AttributeError
+hazard the checklist names; `WindowFrame.py` macro paths use
+`isInMouseMenu` + `Util.runMacro`/`Util.reloadMacro` (KEPT, untouched);
+`OpenMacro.py` clean; no `fixedActiveMenus`/`menu_items` entries for Macro
+(`setMenuState` iterates `self.menus` generically — the Macro key simply
+stops existing). EditProfiles macro table had 9 columns with col 3
+"In main\nmenu?" (get=`toggleMacroInMenu`, set=None); `updateMacros` built 9
+tuples, `blankColors = [None] * 9`, colored col 3 (in-menu Yes) + col 4
+(in-mouse Yes). KEPT per locked decision 1: the Macros tab itself, the
+"In mouse\nmenu?" column + `toggleMacroInMouseMenu`, the
+`from ccpnmr.analysis.core.Util import reloadMacro, runMacro` import (live in
+`reloadSelectedMacro`/`runSelectedMacro` + WindowFrame), the
+`ccpnmr/analysis/macros/` engine, generated `Macro` API/model incl. the
+`isInMenu` attribute (now unsurfaced from UI but still valid model state),
+and the generic `administerNotifiers` Macro subscription (L681 — serves
+`updateMacrosAfter`).
+- `AnalysisPopup.py` (−70 lines): removed `from ccp.general.Command import
+  Command`; `MacroMenu = "Macro"`; `iconRefresh` assignment; the `__init__`
+  `self.setMacroMenu()` call; the two `AnalysisProfile.Macro` notify hooks in
+  `curatePopupNotifiers`; the `setMacroMenu` + `reloadMenuMacros` + `runMacro`
+  method block; the `initProject` `self.setMacroMenu()` call; the `editMacros`
+  method.
+- `EditProfiles.py` (−19/+12): removed `toggleMacroInMenu` + the "In main
+  \nmenu?" column from `headingList`, its tipText, and the three per-column
+  lists (`editWidgets`/`editGetCallbacks`/`editSetCallbacks` — each 9→8);
+  `updateMacros` now builds 8-element rows, `blankColors = [None] * 8`,
+  dropped the `macro.isInMenu` text cell + `colors[3]` highlight, and the
+  mouse-menu highlight moved col 4 → col 3.
+- Grep-verified clean: `\b(setMacroMenu|reloadMenuMacros|editMacros|
+  MacroMenu|toggleMacroInMenu)\b` → zero matches in `**/python/**/*.py`;
+  `isInMenu` no longer appears in EditProfiles.py (remains only in generated
+  `ccpnmr/api` / `ccpnmr/xml` / `model` — KEPT); `python -m py_compile` OK on
+  both files.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1271** (unchanged — no `.py` removed,
+    exactly as planned), FAILED **2** unchanged (2× `cherrypy`), BY-DESIGN
+    **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `__init__` menu-construction path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check` worktree vs HEAD: AnalysisPopup 43 = 43 (E722 10,
+    F841 11, UP031 17, E731 2, E721 1, F811 1, W293 1 — identical mix),
+    EditProfiles 10 = 10 (UP031 6, F841 3, E722 1 — identical mix) — zero
+    NEW violations.

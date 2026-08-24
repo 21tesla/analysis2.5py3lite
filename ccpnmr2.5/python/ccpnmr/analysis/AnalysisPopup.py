@@ -46,7 +46,6 @@ import tkinter as Tkinter
 import traceback
 
 from ccp.api.nmr import Nmr
-from ccp.general.Command import Command
 from ccp.gui.Io import loadProject
 from ccp.gui.NmrExpPrototypeEditor import NmrExpPrototypePopup
 from ccpnmr.analysis import Copyright
@@ -164,7 +163,6 @@ DataMenu = "Data Analysis"
 OtherMenu = "Other"
 PeaksMenu = "Peak"
 MoleculeMenu = "Molecule"
-MacroMenu = "Macro"
 AssignMenu = "Assignment"
 ResonanceMenu = "Resonance"
 ChartMenu = "Chart"
@@ -302,7 +300,6 @@ class AnalysisPopup(BasePopup, Analysis):
         self.iconHelp = self.icons["help-browser"]
         self.iconTable = self.icons["document-properties"]
         self.iconChart = self.icons["chart"]
-        self.iconRefresh = self.icons["view-refresh"]
         self.iconClouds = self.icons["weather-overcast"]
         self.iconPrint = self.icons["printer"]
         self.iconNewWindow = self.icons["window-new"]
@@ -389,7 +386,6 @@ class AnalysisPopup(BasePopup, Analysis):
         self.setDataMenu()
         self.setStructureMenu()
         self.setChartMenu()
-        self.setMacroMenu()
         self.setOtherMenu()
         self.setMenuState()  # need to do it again because of OtherMenu state
 
@@ -645,8 +641,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def curatePopupNotifiers(self, notify):
 
         notify(self.changeFont, "ccpnmr.AnalysisProfile.AnalysisProfile", "setFont")
-        notify(self.setMacroMenu, "ccpnmr.AnalysisProfile.Macro", "delete")
-        notify(self.setMacroMenu, "ccpnmr.AnalysisProfile.Macro", "setName")
         notify(self.changedSpectrum, "ccp.nmr.Nmr.DataSource", "__init__")
         notify(self.deletedSpectrum, "ccp.nmr.Nmr.DataSource", "delete")
         notify(self.initSpectrumWindow, "ccpnmr.Analysis.SpectrumWindow", "__init__")
@@ -1728,64 +1722,6 @@ class AnalysisPopup(BasePopup, Analysis):
                 command = lambda selected=window: self.openWindow(selected)
                 menu.add_command(label=name, command=command)
 
-    def setMacroMenu(self, *opt):
-
-        menu = self.menus.get(MacroMenu)
-        if menu:
-            menu.delete(0, Tkinter.END)
-
-        else:
-            menu = Menu(self.menubar, tearoff=1)
-            self.menubar.add_cascade(label=MacroMenu, shortcut="M", menu=menu)
-            self.menus[MacroMenu] = menu
-
-        menu.add_command(
-            label="Organise Macros",
-            shortcut="O",
-            image=self.iconTable,
-            compound="left",
-            command=self.editMacros,
-            tipText="Curate and manage Python macro scripts",
-        )
-        menu.add_command(
-            label="Reload Menu Macros",
-            shortcut="R",
-            image=self.iconRefresh,
-            compound="left",
-            command=self.reloadMenuMacros,
-            tipText="Refresh the macro scripts listed below from disk versions",
-        )
-        self.menu_items[MacroMenu] = ["Organise  Macros", "Reload Menu Macros"]
-
-        macros = []
-        if self.project:
-            for macro in self.analysisProfile.macros:
-                if macro.isInMenu:
-                    macros.append((macro.name, macro))
-
-            if len(macros) > 0:
-                menu.add_separator()
-
-            macros.sort()
-            for name, macro in macros:
-                menu.add_command(label=name, command=lambda m=macro: self.runMacro(m))
-                self.menu_items[MacroMenu].append(name)
-
-    def reloadMenuMacros(self):
-
-        for macro in self.project.currentAnalysisProfile.macros:
-            if macro.isInMenu:
-                Util.reloadMacro(macro, self.argServer)
-
-    def runMacro(self, macro):
-
-        sys.path.append(macro.path)
-        try:
-            command = Command(self.argServer, macro.name, macro.module, macro.function)
-        finally:
-            del sys.path[-1]
-        command.run()
-
     def setOtherMenu(self):
 
         cloudsMenu = Menu(self.menubar, tearoff=1)
@@ -1921,8 +1857,6 @@ class AnalysisPopup(BasePopup, Analysis):
             self.openActiveWindows()
             self.openActivePopups()
             # self.after_idle(self.drawWindowPopups)
-
-            self.setMacroMenu()
 
             # First time reference experiments
             experiments = []
@@ -2915,10 +2849,6 @@ class AnalysisPopup(BasePopup, Analysis):
         popup = self.popupEditProfiles(tab=0)
 
         return popup
-
-    def editMacros(self):
-
-        self.popupEditProfiles(tab=1)
 
     def editColorSchemes(self):
 

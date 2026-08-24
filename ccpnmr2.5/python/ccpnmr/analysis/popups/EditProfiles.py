@@ -317,7 +317,6 @@ class EditProfilesPopup(BasePopup):
             "The serial number of the macro, within the current profile",
             "A short textual name for the macro script which will appear in menus",
             "The keyboard shortcut used to invoke this macro function",
-            'Whether the macro is visible and callable from the "Macro" section of the main menu',
             "Whether the macro is visible and callable from the right-mouse-button spectrum window menu; required for macros that use spectru, coordinates etc.",
             "A priority based raking of macros to enable use-configurable sorting and grouping",
             "The name of the Python module in which the macro (a Python function) resides",
@@ -328,7 +327,6 @@ class EditProfilesPopup(BasePopup):
             "#",
             "Name",
             "Shortcut",
-            "In main\nmenu?",
             "In mouse\nmenu?",
             "Priority",
             "Module",
@@ -345,7 +343,6 @@ class EditProfilesPopup(BasePopup):
             self.editMacroNameEntry,
             self.editMacroShortcutMenu,
             None,
-            None,
             self.editMacroPriorityEntry,
             None,
             None,
@@ -355,7 +352,6 @@ class EditProfilesPopup(BasePopup):
             None,
             self.getMacroName,
             self.getMacroShortcut,
-            self.toggleMacroInMenu,
             self.toggleMacroInMouseMenu,
             self.getMacroPriority,
             None,
@@ -366,7 +362,6 @@ class EditProfilesPopup(BasePopup):
             None,
             self.setMacroName,
             self.setMacroShortcut,
-            None,
             None,
             self.setPriority,
             None,
@@ -1166,13 +1161,6 @@ class EditProfilesPopup(BasePopup):
                 self.macro.delete()
                 self.macro = None
 
-    def toggleMacroInMenu(self, macro):
-
-        if macro:
-            macro.isInMenu = not macro.isInMenu
-            self.parent.setMacroMenu()
-            self.updateMacros()
-
     def toggleMacroInMouseMenu(self, macro):
 
         if macro:
@@ -1247,7 +1235,7 @@ class EditProfilesPopup(BasePopup):
         textMatrix = []
         colorMatrix = []
         macros = self.profile.sortedMacros()
-        blankColors = [None] * 9
+        blankColors = [None] * 8
 
         if self.profile:
             for macro in macros:
@@ -1255,7 +1243,6 @@ class EditProfilesPopup(BasePopup):
                     macro.serial,
                     macro.name,
                     macro.shortcut,
-                    macro.isInMenu and "Yes" or "No",
                     macro.isInMouseMenu and "Yes" or "No",
                     macro.ordering,
                     macro.module,
@@ -1264,10 +1251,8 @@ class EditProfilesPopup(BasePopup):
                 ]
 
                 colors = blankColors[:]
-                if macro.isInMenu:
-                    colors[3] = "#B0FFB0"
                 if macro.isInMouseMenu:
-                    colors[4] = "#B0B0FF"
+                    colors[3] = "#B0B0FF"
 
                 textMatrix.append(text)
                 colorMatrix.append(colors)
