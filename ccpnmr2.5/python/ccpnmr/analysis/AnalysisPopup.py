@@ -45,7 +45,6 @@ import sys
 import tkinter as Tkinter
 import traceback
 
-from cambridge.dangle.DangleGui import DangleGui
 from ccp.api.nmr import Nmr
 from ccp.general.Command import Command
 from ccp.gui.Io import loadProject
@@ -269,7 +268,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "calc_dist_constraints": self.calDistConstraints,
             "browse_restraints": self.browseConstraints,
             "make_hydrogen_bonds": self.makeHbonds,
-            "dangle": self.startDangle,
             #'d2d': self.startD2D,
             "edit_peak_draw_params": self.peakDrawParams,
             "edit_peak_find_params": self.peakFindParams,
@@ -1575,14 +1573,6 @@ class AnalysisPopup(BasePopup, Analysis):
             tipText="Tools to make H-bond distance restraints",
         )
         menu.add_separator()
-        menu.add_command(
-            label="DANGLE: Predict Dihedrals",
-            shortcut="D",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startDangle,
-            tipText="Predict protein backbone dihedral angles using chemical shifts",
-        )
         # menu.add_command(label='D2D: Predict Secondary Structure', shortcut='2',
         #                 image=self.iconSpecialTool, compound='left',
         #                 command=self.startD2D,
@@ -2527,10 +2517,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def plotRamachandran(self):
 
         self.openPopup("plot_ramachandran", ViewRamachandranPopup)
-
-    def startDangle(self):
-
-        self.popups["dangle"] = DangleGui(self, project=self.project)
 
     # def startD2D(self):
 

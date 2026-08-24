@@ -133,7 +133,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ✅ 2026-08-24 |
 | 3 | ARIA: `paris/` + menu + methods | ✅ 2026-08-24 |
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ✅ 2026-08-24 |
-| 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ⬜ pending |
+| 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ✅ 2026-08-24 |
 | 6 | HADDOCK: `utrecht/` | ⬜ pending |
 | 7 | MECCANO: `grenoble/meccano/` + C sources + `setup.py` GSL block | ⬜ pending |
 | 8 | PyRPF: `rutgers/` | ⬜ pending |
@@ -299,4 +299,37 @@ features, same category as `ccp/format/aria/`.
   - `import_smoke.py` exit 0 — TOTAL **1668** (1678−10, exactly the 10 removed
     `.py` modules), OK 1552, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **6/6** (unchanged).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 5 — DANGLE (cambridge/dangle, menu, script, boot entry) — ✅ 2026-08-24**
+Recon (verified pre-edit): `cambridge/dangle/` = 680 tracked files (10 `.py` +
+670 data files — `.tab`, `Plot_*.int` etc., 918k lines total). All
+`DangleGui`/`DangleFrame`/`cambridge.dangle.*` references are either in-package
+or the 5 external touch points below. Pure-Python predictor (no external
+binaries; no `ccpnmr/workflow/Dangle*`, no `cambridge/c/` dangle ext, no
+MANIFEST.in entries). Dangle metamodel files (`cambridge/api/Dangle.py`,
+`cambridge/xml/Dangle.py`, `ccpnmr2.5/model/cambridge/xml/Dangle/`) KEPT per
+decision 4.
+- Deleted: `ccpnmr2.5/python/cambridge/dangle/` (680 files — `DangleGui`,
+  `DangleFrame`, `neuralNet/{DangleNN,NeuralNetwork}`, `src/{Predictor,Protein,
+  Reference,dangle}` + inits + 670 data files).
+- `AnalysisPopup.py`: removed top import `from cambridge.dangle.DangleGui
+  import DangleGui`, popupActions entry `"dangle": self.startDangle`, the
+  "DANGLE: Predict Dihedrals" Structure-menu block (shortcut "D"), and the
+  `startDangle` method.
+- `pyproject.toml`: dropped script `ccpnmr-dangle`.
+- `gui_boot_test.py`: dropped APPS entry `dangle` (+ fixed the usage example in
+  the module docstring `--apps ccpnmr,dangle` → `--apps ccpnmr,eci`).
+- Residuals (by design, for Stage 12 cross-cutting sweep): `bin/dangle`,
+  `bin/dangle2`, `bin/dangle2.5` shell launchers (plan puts `bin/` in Stage 12;
+  note Stages 1-2 also left `bin/extendNmr*` + `bin/depositionFileImporter*`,
+  and the release-script `need` sets in `scripts/{linux,macos}_release.sh`
+  still list `ccpnmr-dangle` + `ccpnmr-deposition`/`ccpnmr-extend-nmr`);
+  help-docstring link defs `.. _DANGLE: DangleGui.html` in
+  `BrowseConstraints.py:275` + `MakeHbondRestraints.py:201` (inert text, Stage 1
+  left the same for removed popups).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1658** (1668−10, exactly the 10 removed
+    `.py` modules), OK 1542, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **5/5** (as predicted: 6/6 − the removed `dangle` app).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

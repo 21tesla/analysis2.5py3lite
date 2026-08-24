@@ -64,7 +64,6 @@ dev = [
 [project.scripts]
 ccpnmr = "ccpnmr.analysis.AnalysisGui:main"
 ccpnmr-eci = "ccpnmr.eci.EntryCompletionGui:main"
-ccpnmr-dangle = "cambridge.dangle.DangleGui:main"
 ccpnmr-data-shifter = "ccpnmr.format.gui.DataShifter:main"
 ccpnmr-format-converter = "ccpnmr.format.gui.FormatConverter:main"
 ccpnmr-update = "ccpnmr.update.UpdateAuto:main"
