@@ -157,8 +157,6 @@ except:
     print("")
 
 
-from ccpnmr.update.UpdatePopup import UpdatePopup
-
 ProjectMenu = "Project"
 ExperimentMenu = "Experiment"
 WindowMenu = "Window"
@@ -662,17 +660,6 @@ class AnalysisPopup(BasePopup, Analysis):
         notify(self.changedNumPoints, "ccp.nmr.Nmr.FreqDataDim", "setNumPoints")
 
     def setProjectMenu(self):
-        """
-        from ccpnmr.update.UpdateAgent import getNumUninstalledUpdates
-        numUpdates = getNumUninstalledUpdates()
-        """
-        numUpdates = None  # TBD
-
-        if numUpdates:
-            updateText = "Updates * %d available *" % numUpdates
-        else:
-            updateText = "Updates"
-
         # Imports submenu
 
         importsMenu = Menu(self.menubar, tearoff=False)
@@ -852,14 +839,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.archiveProject,
             tipText="Save the current CCPN project in an archived form, e.g. tar gzipped",
         )
-        menu.add_command(
-            label=updateText,
-            shortcut="U",
-            image=self.iconRefresh,
-            compound="left",
-            command=self.updateAnalysis,
-            tipText="Get any new patches and updates to the Analysis program",
-        )
         menu.add_separator()
         menu.add_cascade(label="Help", shortcut="H", image=self.iconHelp, compound="left", menu=helpMenu)
 
@@ -881,13 +860,12 @@ class AnalysisPopup(BasePopup, Analysis):
             "Validate",
             "Backup",
             "Archive",
-            updateText,
             "Help",
         ]
 
         # Menus that area active in absence of a project
         # for ii in (0,1,2,7,15,17):
-        for ii in (0, 1, 2, 3, 8, 16, 18):
+        for ii in (0, 1, 2, 3, 8, 17):
             self.fixedActiveMenus[(ProjectMenu, ii)] = True
 
     def openWindowGroup(self, spectrumWindowGroup=None):
@@ -3144,27 +3122,6 @@ class AnalysisPopup(BasePopup, Analysis):
             showError(
                 "Registration not yet active", "Registration is not active until next release of software", parent=self
             )
-
-    def updateAnalysis(self):
-
-        popup = self.popups.get("update_analysis")
-
-        if popup:
-            popup.open()
-
-        else:
-            topDir = getTopDirectory()
-            url = "file:" + topDir + LOCAL_HELP_DOC_DIR + "/popups/UpdatePopup.html"
-            version = Copyright.version
-            serverDirectory = "ccpNmrUpdate%d.%d" % (version.major, version.minor)
-            popup = UpdatePopup(
-                self,
-                serverLocation="www2.ccpn.ac.uk",
-                serverDirectory=serverDirectory,
-                dataFile="__UpdateAgentData.db",
-                helpUrl=url,
-            )
-            self.popups["update_analysis"] = popup
 
     def showVersion(self):
 

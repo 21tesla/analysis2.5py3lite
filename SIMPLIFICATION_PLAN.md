@@ -747,7 +747,7 @@ done, gates green, pushed).
 
 # Menu Removal Plan — Stages 13-16 (added 2026-08-24)
 
-Status: **QUEUED** (plan authored 2026-08-24; Stage 13 not started)
+Status: **IN PROGRESS** — Stage 13 ✅ committed + pushed 2026-08-24; Stage 14 next
 Same repo, same checkpoint policy: ONE commit per stage (code + this log
 update in the same commit) + push to `main`. Python: anaconda `python`
 3.13.5; `xvfb-run` available.
@@ -842,7 +842,7 @@ NON_GUI check is deleted); pytest floors held; `ruff check` on edited files
 
 | # | Scope | Status |
 |---|---|---|
-| 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ⬜ not started |
+| 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ✅ 2026-08-24 |
 | 14 | Macro menu (menu layer only) | ⬜ not started |
 | 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ⬜ not started |
 | 16 | Project ▶ Help (Version/About/Help) | ⬜ not started |
@@ -940,4 +940,49 @@ Each stage is exactly one commit → `git revert <sha>` restores it cleanly.
 
 ## Stage log (Menu Removal)
 
-_(entries appended as each stage lands)_
+**Stage 13 — Project ▶ Updates menu + `ccpnmr/update/` removal — ✅ 2026-08-24**
+Recon (verified pre-edit): `ccpnmr2.5/python/ccpnmr/update/` = 7 tracked
+files: the 6 `.py` (`__init__` (bare `pass`), `_licenseInfo`,
+`UpdateAdministratorPopup`, `UpdateAgent`, `UpdateAuto`, `UpdatePopup`) plus
+`uploadFile` — a py-2 CGI script for the dead update server
+(`except Exception, e:` syntax; not importable, zero inbound references) that
+the plan's "6 files" count missed (+ untracked `__pycache__` residue).
+External refs: only `AnalysisPopup.py` (the L160 `UpdatePopup` import, the
+`setProjectMenu` docstring-comment import + `numUpdates`/`updateText` block,
+the Updates `add_command` block, the `menu_items` entry, and the
+`updateAnalysis` method), the `pyproject.toml` `ccpnmr-update` script, and
+the `gui_boot_test.py` NON_GUI entry. Kept: `iconRefresh` (still used at
+L1775), `LOCAL_HELP_DOC_DIR`/`getTopDirectory` imports (used by
+`showAbout`/`showHelp` until Stage 16), `Copyright` import (`__init__`
+L322/324).
+- `AnalysisPopup.py`: dropped the `UpdatePopup` import (L160); dropped the
+  `setProjectMenu` docstring (UpdateAgent comment) + the
+  `numUpdates`/`updateText` block; dropped the `Updates`
+  `menu.add_command` block (the following separator KEPT — now separates
+  Archive from Help); dropped the `updateText` entry from
+  `menu_items[ProjectMenu]` (17 → 16); `fixedActiveMenus[(ProjectMenu, …)]`
+  → `(0,1,2,3,8,17)` (old 17/18 shift down one — separator counts as
+  index, so Help is now index 17); deleted the `updateAnalysis` method.
+- Deleted `ccpnmr2.5/python/ccpnmr/update/` entirely (7 tracked files +
+  `__pycache__`).
+- `pyproject.toml`: dropped `ccpnmr-update = "ccpnmr.update.UpdateAuto:main"`.
+- `gui_boot_test.py`: emptied the NON_GUI `update` entry
+  (`NON_GUI = []`; generic loop + `total` computation unchanged, now a no-op)
+  + removed the UpdateAuto docstring paragraph.
+- Grep-verified: repo-wide `ccpnmr.update|ccpnmr/update|ccpnmr-update` clean
+  outside the gitignored `dist/` build snapshot, `.aider.chat.history.md`
+  chat history, and this plan doc; the only remaining
+  `updateAnalysis*` matches are the UNRELATED `updateAnalysisSpectra*` /
+  `updateAnalysisPeakList` methods in `EditSpectrum.py` / `EditPeakLists.py`
+  (different symbols).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1271** (1277−6, exactly the 6 removed
+    `.py` modules), OK **1259** (1265−6), FAILED **2 unchanged** (2×
+    `cherrypy`), BY-DESIGN **10 unchanged**.
+  - `gui_boot_test.py` **3/3** (4/4 − the removed `update` entry, exactly as
+    planned; no update line in the output).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `ruff check` on both edited `.py` files: zero NEW violations vs HEAD —
+    AnalysisPopup UP031 19→17 (the two removed %-format strings live in the
+    deleted code), all other rules unchanged (F841 11, E722 10, E731 2,
+    W293 1, F811 1, E721 1); `gui_boot_test.py` identical (UP031 8).

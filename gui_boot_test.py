@@ -9,10 +9,6 @@ An app that raises during import/construct exits early with a non-zero code and
 a traceback — counted as FAILED (those are the real py3 runtime bugs this gate
 exists to catch).
 
-UpdateAuto (ccpnmr-update) is NOT a GUI app and main() performs network
-updates with os._exit(0), so it is checked differently: module import +
-`main()` presence/signature only (no call).
-
 Usage:
     .venv/bin/python gui_boot_test.py                 # all apps, project venv
     .venv/bin/python gui_boot_test.py --apps ccpnmr,data-shifter
@@ -34,13 +30,7 @@ APPS = [
     ("format-converter",
      "import ccpnmr.format.gui.FormatConverter as M; M.main([])"),
 ]
-NON_GUI = [
-    ("update (non-GUI; import + main() signature only)",
-     "import inspect, ccpnmr.update.UpdateAuto as M; "
-     "sig = inspect.signature(M.main); "
-     "assert 'argv' in sig.parameters, sig; "
-     "print('UpdateAuto.main', sig)"),
-]
+NON_GUI = []
 
 # SOURCE-STATE support: when this script sits next to the source tree, put that
 # tree on the app subprocesses' PYTHONPATH (installed-state runs find the
