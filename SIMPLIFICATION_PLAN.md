@@ -170,3 +170,25 @@ it cleanly.
   **literal** `\u03b1` escape in source; the edit tool's escaping pipeline
   can't reproduce it — use an assert-protected index-based Python deletion
   for such lines instead.
+
+**Stage 2 — Recon recorded 2026-08-24 (edits NOT yet made; session ended
+here, Stage 2 continues in the next session)**
+- Delete: `extendNmr/` (14 files: `ExtendNmrGui.py`, `__init__.py`,
+  `images/`), `cambridge/wms/` (30 files), `pdbe/deposition/` (5 files).
+- **Keep the rest of `pdbe/`** — `pdbe.nmrStar`, `pdbe.adatah`,
+  `pdbe.chemComp`, `pdbe.software`, `pdbe.general`, `pdbe.xml` are imported
+  by KEPT modules (`ccp/format/nmrStar/generalIO.py`,
+  `ccpnmr/integrator/plugins/NmrStar/Io.py`,
+  `ccpnmr/format/general/Conversion.py`, `ccpnmr/workflow/{Aria,Cing}.py`,
+  `ccpnmr/format/process/sequenceCompare.py`, `ccp/examples/help_doc/`, and
+  `ccpnmr/eci/*` until Stage 10). In pyproject: drop only `extendNmr*`
+  include + `extendNmr` isort entry + scripts `ccpnmr-extend-nmr` and
+  `ccpnmr-deposition`; keep `pdbe*`, `cambridge*`, `nijmegen*`.
+- Nothing outside those dirs imports `extendNmr` or `cambridge.wms`
+  (grep-verified 2026-08-24) except `gui_boot_test.py` APPS entries
+  `deposition` + `extend-nmr` (drop them → expect 6/6 apps to boot).
+- `nijmegen/CASD/casdPipeLine.py:21` imports to-deleted
+  `pdbe.deposition...FormatConverterWrapper`; that file is already in the
+  33 baseline import-failures → no new failures expected.
+- Expected gate deltas: import_smoke TOTAL ~1719 → ~1683 (−~36 modules),
+  FAILED unchanged (33); gui_boot_test 8/8 → 6/6; pytest unchanged.
