@@ -747,7 +747,7 @@ done, gates green, pushed).
 
 # Menu Removal Plan — Stages 13-16 (added 2026-08-24)
 
-Status: **IN PROGRESS** — Stage 14 ✅ committed + pushed 2026-08-24; Stage 15 next
+Status: **IN PROGRESS** — Stage 15 ✅ committed + pushed 2026-08-24; Stage 16 next
 Same repo, same checkpoint policy: ONE commit per stage (code + this log
 update in the same commit) + push to `main`. Python: anaconda `python`
 3.13.5; `xvfb-run` available.
@@ -844,7 +844,7 @@ NON_GUI check is deleted); pytest floors held; `ruff check` on edited files
 |---|---|---|
 | 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ✅ 2026-08-24 |
 | 14 | Macro menu (menu layer only) | ✅ 2026-08-24 |
-| 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ⬜ not started |
+| 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ✅ 2026-08-24 |
 | 16 | Project ▶ Help (Version/About/Help) | ⬜ not started |
 
 ## Stage checklist detail
@@ -1049,3 +1049,76 @@ and the generic `administerNotifiers` Macro subscription (L681 — serves
     F841 11, UP031 17, E731 2, E721 1, F811 1, W293 1 — identical mix),
     EditProfiles 10 = 10 (UP031 6, F841 3, E722 1 — identical mix) — zero
     NEW violations.
+
+**Stage 15 — Other ▶ Prodecomp + CLOUDS menus + orphan removal — ✅ 2026-08-24**
+Recon (verified pre-edit): `AnalysisPopup.py` targets at (line numbers post
+Stage 14): `ProdecompPopup` import L129 under a one-off `# NB new` marker
+(unique in the file — dropped with the import); 7 `self.popups` entries
+L277-283 (NO pre-existing `"prodecomp"` entry — `startProdecomp` creates
+it at call time, L2368); `self.iconClouds` assignment L303 (sole other use
+is the CLOUDS cascade itself); `setOtherMenu` L1725-1809 — the whole
+`cloudsMenu` 6-command build + a commented-out `entryconfig` stub, the
+Prodecomp `add_command` block, the `add_cascade(CLOUDS)` line, and
+`menu_items[OtherMenu]` 5→3 items; `startProdecomp` L2366-2368; 7 `setup*`
+methods L2881-2921 (each: local popup import + `openPopup`).
+`gothenburg/prodecomp/` = 7 tracked `.py` (CcpnProdecomp, generateInterval,
+PeaksToInterval, ProdecompFrame, Projection, prodecomp, `__init__`) +
+`__pycache__` residue; parent `gothenburg/` KEEPS `mdd/` + `__init__.py`,
+so the two `gothenburg` package entries in `pyproject.toml` (L86
+`gothenburg*` data dir, L149 first-party list) stay. `ccpnmr/clouds/` =
+20 tracked `.py`; the 6 KEPT modules' cross-imports verified:
+`ResonanceIdentification` → `CloudBasic` + `PseudoResonances` (both KEPT),
+`FilterClouds` → `CloudBasic` (KEPT); the only relative imports reaching
+deleted modules (`from .HydrogenDynamics`, `from .NoeRelaxation`) sit in
+`Clouds.py` itself (removed); repo-wide `openPopup("setup_*")` +
+`self.popups["prodecomp"]` writers are ONLY the 9 methods removed; the only
+cross-file importers of the 14 removed modules are the 7 `setup*` methods
+(`EditResStructures.py` → `FilterClouds` KEPT, `CalcDistConstraints.py` →
+`ResonanceIdentification` KEPT). REVIEWED + DEFERRED (consistent with
+Stage 14, which left `menu/Macro.rst` in place): `doc/source/menu/Clouds.rst`
++ the `menu/Other.rst` toctree line now dangle (the doc tree's `popups/`
+target dir doesn't exist — most menu doc links are already dead);
+`EditSpectrum.py:238`, `Nmr.py:31183`, `BrukerParams.py:189/194` mention
+"Prodecomp/PRODECOMP" as the third-party program name in docstrings/
+comments (not the removed package; no imports); `setup.py:29,156` +
+`linkSharedObjs`/`copySharedObjsMac` reference `c/ccpnmr/clouds/` — the C
+extension build dir, out of scope.
+- `AnalysisPopup.py` (1+/104−): dropped the `gothenburg.prodecomp` import
+  + `# NB new` marker (the blank line ruff's single first-party isort group
+  left behind was folded back — otherwise one NEW I001); 7 `self.popups`
+  entries; the `iconClouds` assignment; in `setOtherMenu`: the whole
+  `cloudsMenu` build + commented stub, the Prodecomp `add_command` block,
+  the `CLOUDS` cascade; `menu_items[OtherMenu]` → `["NMR Calculations",
+  "Widget Counter", "Format Converter"]` (`fixedActiveMenus[(OtherMenu, 2)]`
+  stays valid); `startProdecomp`; the 7 `setup*` methods; and the
+  "NMR Calculations" tipText — `"sent o external programs like, CING or
+  ARIA"` (dead CING/ARIA + typo) → `"Curate and manage calculation jobs
+  dispatched to external programs"` per the checklist.
+- Deleted `gothenburg/prodecomp/` (7 tracked + `__pycache__`) and the 14
+  `ccpnmr/clouds/*.py` (BacusPopup, Clouds, CloudsPopup,
+  CloudHomologueAssign, CloudHomologueAssignPopup, CloudThreader,
+  CloudThreaderPopup, FileIO, FilterCloudsPopup, HcloudsMdPopup,
+  HydrogenDynamics, MidgePopup, NoeMatrix, NoeRelaxation) + clouds
+  `__pycache__` + stale `gothenburg/__pycache__`.
+- Grep-verified clean: `gothenburg\.prodecomp|ProdecompPopup|
+  startProdecomp|iconClouds|cloudsMenu|setup_clouds|setup_bacus|setup_midge|
+  setup_hcloudsmd|setup_filter_clouds|setup_cloud_threader|
+  setup_cloud_homologue` → zero matches in code (only this plan doc);
+  `from ccpnmr.clouds` outside the package → exactly `CalcDistConstraints.py`
+  + `EditResStructures.py` (plus one pre-existing COMMENT line for the C
+  class `AtomCoordList` — unrelated); repo-wide `NoeMatrix` hits are the
+  DIFFERENT kept module `ccpnmr.analysis.frames.NoeMatrix` (and the
+  `ViewNoeMatrix` popup) — not the removed `ccpnmr.clouds.NoeMatrix`.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1250** = 1271−**21** (7 prodecomp +
+    14 clouds — exactly the 21 removed `.py` files; the checklist's "1247
+    (−7−14 = −24)" was an arithmetic slip, 7+14=21), OK **1238**
+    (1259−21), FAILED **2 unchanged** (2× `cherrypy`), BY-DESIGN **10
+    unchanged** (5 ENV + 5 EXTERNAL).
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setOtherMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check` worktree vs HEAD: AnalysisPopup 43 = 43 (UP031 17,
+    F841 11, E722 10, E731 2, E721 1, F811 1, W293 1 — identical mix; the
+    transient I001 from the import removal was fixed by folding the blank
+    line) — zero NEW violations. `python -m py_compile` OK.

@@ -123,9 +123,6 @@ from ccpnmr.analysis.popups.WindowPopup import WindowPopup
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
 from ccpnmr.format.converters.ReadPdb import ReadPdb
 from ccpnmr.nexus.AutoBackbonePopup import AutoBackbonePopup
-
-# NB new
-from gothenburg.prodecomp.ProdecompFrame import ProdecompPopup
 from memops.api import Implementation as Impl
 from memops.editor.ArchiveProjectPopup import ArchiveProjectPopup
 from memops.editor.OpenProjectPopup import OpenProjectPopup
@@ -274,13 +271,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "edit_profiles": self.popupEditProfiles,
             "edit_axis_panel": self.editAxisPanel,
             "edit_marks": self.editMarks,
-            "setup_clouds": self.setupClouds,
-            "setup_bacus": self.setupBacus,
-            "setup_midge": self.setupMidge,
-            "setup_hcloudsmd": self.setupHcloudsMd,
-            "setup_filter_clouds": self.setupFilterClouds,
-            "setup_cloud_threader": self.setupCloudThreading,
-            "setup_cloud_homologue": self.setupCloudHomologue,
             "run_format_converter": self.runFormatConverter,
             "edit_contour_levels": self.editContourLevels,
             "edit_contour_files": self.editContourFiles,
@@ -300,7 +290,6 @@ class AnalysisPopup(BasePopup, Analysis):
         self.iconHelp = self.icons["help-browser"]
         self.iconTable = self.icons["document-properties"]
         self.iconChart = self.icons["chart"]
-        self.iconClouds = self.icons["weather-overcast"]
         self.iconPrint = self.icons["printer"]
         self.iconNewWindow = self.icons["window-new"]
         self.iconFont = self.icons["font-x-generic"]
@@ -1724,39 +1713,6 @@ class AnalysisPopup(BasePopup, Analysis):
 
     def setOtherMenu(self):
 
-        cloudsMenu = Menu(self.menubar, tearoff=1)
-        cloudsMenu.add_command(
-            label="Resonance Disambiguation",
-            command=self.setupBacus,
-            tipText="CCPN implementation of the program BACUS",
-        )
-        cloudsMenu.add_command(
-            label="Relaxation Matrix Optimisation",
-            command=self.setupMidge,
-            tipText="CCPN implementation of the program MIDGE",
-        )
-        cloudsMenu.add_command(
-            label="Proton Molecular Dynamics",
-            command=self.setupHcloudsMd,
-            tipText="Create anonymous proton cloud structures using distance restraints",
-        )
-        cloudsMenu.add_command(
-            label="Filter Clouds", command=self.setupFilterClouds, tipText="Quality control for proton cloud structures"
-        )
-        cloudsMenu.add_command(
-            label="Cloud Threading",
-            command=self.setupCloudThreading,
-            tipText="Thread a sequence through a proton cloud to assign",
-        )
-        cloudsMenu.add_command(
-            label="Cloud Homologue Assign",
-            command=self.setupCloudHomologue,
-            tipText="Assign a sequence by aligning a proton cloud with an homologous structure ",
-        )
-
-        # for i in (1,):
-        #  cloudsMenu.entryconfig(i, state=Tkinter.DISABLED)
-
         menu = Menu(self.menubar, tearoff=0)
         menu.add_command(
             label="NMR Calculations",
@@ -1764,7 +1720,7 @@ class AnalysisPopup(BasePopup, Analysis):
             image=self.iconTable,
             compound="left",
             command=self.editCalculation,
-            tipText="Curate and manage calculation jobs sent o external programs like, CING or ARIA",
+            tipText="Curate and manage calculation jobs dispatched to external programs",
         )
         menu.add_command(
             label="Widget Counter",
@@ -1783,17 +1739,6 @@ class AnalysisPopup(BasePopup, Analysis):
             tipText="Export and import CCPN project data to and from a multitude of textual NMR formats",
         )
 
-        menu.add_command(
-            label="Prodecomp",
-            shortcut="P",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startProdecomp,
-            tipText="PRODECOMP: Process sets of projection spectra by decomposition",
-        )
-
-        menu.add_cascade(label="CLOUDS", shortcut="C", image=self.iconClouds, compound="left", menu=cloudsMenu)
-
         self.menubar.add_cascade(label=OtherMenu, shortcut="O", menu=menu)
 
         self.menus[OtherMenu] = menu
@@ -1801,8 +1746,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "NMR Calculations",
             "Widget Counter",
             "Format Converter",
-            "Prodecomp",
-            "CLOUDS",
         ]
 
         # FormatConverter always active
@@ -2363,10 +2306,6 @@ class AnalysisPopup(BasePopup, Analysis):
 
     #  self.popups['d2d'] = SecStructurePredictPopup(self, project=self.project)
 
-    def startProdecomp(self):
-
-        self.popups["prodecomp"] = ProdecompPopup(self, self.project)
-
     def calDistConstraints(self):
 
         self.openPopup("calc_dist_constraints", CalcDistConstraintsPopup)
@@ -2877,48 +2816,6 @@ class AnalysisPopup(BasePopup, Analysis):
         from cambridge.bayes.PeakSeparatorGui import PeakSeparatorGui
 
         self.openPopup("edit_peak_separator_params", PeakSeparatorGui)
-
-    def setupClouds(self):
-
-        from ccpnmr.clouds.CloudsPopup import CloudsPopup
-
-        self.openPopup("setup_clouds", CloudsPopup)
-
-    def setupBacus(self):
-
-        from ccpnmr.clouds.BacusPopup import BacusPopup
-
-        self.openPopup("setup_bacus", BacusPopup)
-
-    def setupMidge(self):
-
-        from ccpnmr.clouds.MidgePopup import MidgePopup
-
-        self.openPopup("setup_midge", MidgePopup)
-
-    def setupHcloudsMd(self):
-
-        from ccpnmr.clouds.HcloudsMdPopup import HcloudsMdPopup
-
-        self.openPopup("setup_hcloudsmd", HcloudsMdPopup)
-
-    def setupFilterClouds(self):
-
-        from ccpnmr.clouds.FilterCloudsPopup import FilterCloudsPopup
-
-        self.openPopup("setup_filter_clouds", FilterCloudsPopup)
-
-    def setupCloudThreading(self):
-
-        from ccpnmr.clouds.CloudThreaderPopup import CloudThreaderPopup
-
-        self.openPopup("setup_cloud_threader", CloudThreaderPopup)
-
-    def setupCloudHomologue(self):
-
-        from ccpnmr.clouds.CloudHomologueAssignPopup import CloudHomologueAssignPopup
-
-        self.openPopup("setup_cloud_homologue", CloudHomologueAssignPopup)
 
     def runFormatConverter(self):
 
