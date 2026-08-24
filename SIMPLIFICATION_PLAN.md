@@ -742,3 +742,202 @@ done, gates green, pushed).
 
 **PLAN COMPLETE (2026-08-24): 12/12 stages done and pushed to
 `21tesla/analysis2.5py3lite:main`.**
+
+---
+
+# Menu Removal Plan — Stages 13-16 (added 2026-08-24)
+
+Status: **QUEUED** (plan authored 2026-08-24; Stage 13 not started)
+Same repo, same checkpoint policy: ONE commit per stage (code + this log
+update in the same commit) + push to `main`. Python: anaconda `python`
+3.13.5; `xvfb-run` available.
+
+## Goal
+
+Remove 4 menus/methods from the main (Project) window
+(`ccpnmr2.5/python/ccpnmr/analysis/AnalysisPopup.py`) — the CCPN server that
+served program updates is dead, macros are out of scope for this py3-lite
+build, and Prodecomp/CLOUDS are no longer offered — plus the orphaned code
+that becomes unreachable (stages 1-12 pattern).
+
+| # | Menu item | Builder (AnalysisPopup.py) | Command method(s) | Orphan code removed with it |
+|---|---|---|---|---|
+| 1 | Project ▶ **Updates** | `setProjectMenu` | `updateAnalysis` | `ccpnmr/update/` (6 files) + `ccpnmr-update` script + gui_boot_test NON_GUI entry |
+| 2 | **Macro** (top-level) | `setMacroMenu` (+2 notify hooks) | `setMacroMenu`, `reloadMenuMacros`, `runMacro`, `editMacros` | — (see locked decision 1: core engine KEPT) |
+| 3 | Other ▶ **Prodecomp** + **CLOUDS** | `setOtherMenu` | `startProdecomp`; `setupClouds`/`setupBacus`/`setupMidge`/`setupHcloudsMd`/`setupFilterClouds`/`setupCloudThreading`/`setupCloudHomologue` | `gothenburg/prodecomp/` (7 files) + 14 `ccpnmr/clouds/` modules |
+| 4 | Project ▶ **Help** (Version/About/Help) | `setProjectMenu` | `showVersion`, `showAbout`, `showHelp` | — |
+
+## Locked decisions (2026-08-24, with user)
+
+1. **Macro = menu layer ONLY.** Remove the top-level Macro menu + its four
+   methods + the 2 `notify(self.setMacroMenu, "ccpnmr.AnalysisProfile.Macro", …)`
+   hooks + the dangling "In Menu" toggle in the EditProfiles Macros tab.
+   **KEEP:** the EditProfiles "Macros" tab itself (and its "In Mouse Menu"
+   column), the window right-click "Macros" submenu (`WindowFrame.py`),
+   the `ccpnmr/analysis/macros/` engine (ArgumentServer, …), the generated
+   `Macro` API/model class. `EditProfiles.py` keeps its
+   `from ccpnmr.analysis.core.Util import … reloadMacro, runMacro` import
+   (still used by `reloadSelectedMacro` + the WindowFrame mouse menu).
+2. **Remove orphan code too** (stages 1-12 pattern): `ccpnmr/update/`
+   fully (all external references: AnalysisPopup L160 import, L666
+   commented import, L3164 `dataFile` in the `updateAnalysis` method,
+   `gui_boot_test.py` NON_GUI entry, `pyproject.toml` script);
+   `gothenburg/prodecomp/` fully (sole external import: AnalysisPopup L129
+   `ProdecompPopup` import + `startProdecomp` method); `ccpnmr/clouds/`
+   **partially** (see decision 3 — two of its modules are LIVE).
+3. **`ccpnmr/clouds/` — KEEP (verified live importers, grep-verified
+   2026-08-24):** `ResonanceIdentification.py` (imported by KEPT
+   `popups/CalcDistConstraints.py:907` `makeNoeAdcs`), `FilterClouds.py`
+   (imported by KEPT `popups/EditResStructures.py:247,261`),
+   `PseudoResonances.py` + `CloudBasic.py` (their dependencies),
+   `__init__.py`, `_licenseInfo.py`. **REMOVE (14 files):** the 7 GUI
+   popups `BacusPopup`, `CloudsPopup`, `HcloudsMdPopup`, `MidgePopup`,
+   `FilterCloudsPopup`, `CloudThreaderPopup`, `CloudHomologueAssignPopup`,
+   plus the helpers only they reach: `Clouds`, `CloudHomologueAssign`,
+   `CloudThreader`, `FileIO`, `HydrogenDynamics`, `NoeMatrix`,
+   `NoeRelaxation`. (Re-verify `FileIO`/`NoeRelaxation` consumers with a
+   broad grep at implementation time — both map to deleted popups only.)
+4. **Help = main window only.** The FormatConverter window keeps its own
+   top-level Help menu (Glossary/Menus/Quick Start/Tutorial/About/Version).
+5. **Registration stays — user: out of scope.** Do NOT touch
+   `ccpnmr/analysis/core/Register.py`, `popups/Register.py`,
+   `registerAnalysis` / `checkRegistration`, the "Register" Project-menu
+   item — even though `updateRegister` POSTs to dead
+   `http://www.ccpn.ac.uk/cgi-bin/register/register`.
+
+## Menu-index bookkeeping (Tkinter `entryconfig` — separators COUNT)
+
+Project menu construction order (current):
+`0 New, 1 Open Project, 2 Open Spectra, 3 Load Nef, 4 Save, 5 Save As,
+6 Import, 7 Close, 8 Quit, 9 sep, 10 Summary, 11 Preferences, 12 Register,
+13 Validate, 14 Backup, 15 Archive, 16 Updates, 17 sep, 18 Help`.
+Current `fixedActiveMenus[(ProjectMenu,…)] = (0,1,2,3,8,16,18)` (items that
+stay enabled with no project open).
+- After **Stage 13** (Updates removed; its separator stays and now separates
+  Archive from Help): items 17/18 shift down by one →
+  `fixedActiveMenus = (0,1,2,3,8,17)`.
+- After **Stage 16** (Help + that separator removed):
+  `fixedActiveMenus = (0,1,2,3,8)`.
+`menu_items[ProjectMenu]` (17 entries incl. `updateText` + `"Help"`):
+Stage 13 drops `updateText` → 16 entries; Stage 16 drops `"Help"` → 15.
+`Other` menu after **Stage 15**: `0 NMR Calculations, 1 Widget Counter,
+2 Format Converter` → `fixedActiveMenus[(OtherMenu, 2)] = True` (Format
+Converter) stays correct as-is.
+
+## Baseline (from Stage 12 close, 2026-08-24)
+
+| Gate | Result |
+|---|---|
+| `python import_smoke.py` | exit 0 — TOTAL **1277**, OK 1265, FAILED **2** (2× `cherrypy`), BY-DESIGN **10** |
+| `xvfb-run -a python gui_boot_test.py` | **4/4** (ccpnmr, data-shifter, format-converter + NON_GUI `ccpnmr-update`) |
+| `python -m pytest ccpnmr2.5/python/tests/` | **45 passed, 4 skipped** |
+
+Per-stage rules: import_smoke exit 0, no NEW unexpected failures, TOTAL
+drops by exactly the count of removed `.py` modules when packages go;
+gui_boot_test green (−1 entry in Stage 13 when the `ccpnmr-update`
+NON_GUI check is deleted); pytest floors held; `ruff check` on edited files
+(F401 is project-ignored but dead imports still get deleted).
+
+## Stages & status
+
+| # | Scope | Status |
+|---|---|---|
+| 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ⬜ not started |
+| 14 | Macro menu (menu layer only) | ⬜ not started |
+| 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ⬜ not started |
+| 16 | Project ▶ Help (Version/About/Help) | ⬜ not started |
+
+## Stage checklist detail
+
+**Stage 13 — Updates menu + `ccpnmr/update/` removal**
+- `AnalysisPopup.py`
+  - `setProjectMenu`: drop the docstring-commented `UpdateAgent` import +
+    the `numUpdates` / `updateText` block (L664-673); remove the
+    `menu.add_command(label=updateText, shortcut="U", …,
+    command=self.updateAnalysis, …)` block and keep the following
+    separator (it now separates Archive from Help); remove the
+    `updateText` entry from `menu_items[ProjectMenu]`.
+  - `fixedActiveMenus[(ProjectMenu, …)]` → `(0,1,2,3,8,17)`.
+  - Delete the `updateAnalysis` method; delete the
+    `from ccpnmr.update.UpdatePopup import UpdatePopup` import (L160).
+  - `LOCAL_HELP_DOC_DIR` / `getTopDirectory` imports stay until Stage 16
+    (still used by `showAbout`/`showHelp`).
+- Delete `ccpnmr2.5/python/ccpnmr/update/` (6 files: `__init__`,
+  `_licenseInfo`, `UpdateAdministratorPopup`, `UpdateAgent`, `UpdateAuto`,
+  `UpdatePopup`) + `__pycache__` residue.
+- `pyproject.toml`: drop `ccpnmr-update = "ccpnmr.update.UpdateAuto:main"`.
+- `gui_boot_test.py`: drop the NON_GUI `update` entry + the docstring
+  paragraph about UpdateAuto.
+- Gates expected: TOTAL 1277→**1271** (−6), FAILED 2, BY-DESIGN 10,
+  gui_boot_test 3/3 (GUI apps) with no update line, pytest unchanged.
+- Commit + push; stage log; mark ✅.
+
+**Stage 14 — Macro menu (menu layer only)**
+- `AnalysisPopup.py`: delete the `MacroMenu = "Macro"` constant; the two
+  `self.setMacroMenu()` calls (`__init__` L394, `initProject` L1947); the
+  two `notify(self.setMacroMenu, "ccpnmr.AnalysisProfile.Macro", …)`
+  lines in `curatePopupNotifiers` (L650-651); the `setMacroMenu`,
+  `reloadMenuMacros`, `runMacro`, `editMacros` methods.
+  If the `Command` import (L49 `from ccp.general.Command import Command`)
+  is used nowhere else, drop it (verify first — `runMacro` was its only
+  known user).
+- `EditProfiles.py`: delete `toggleMacroInMenu` (it calls
+  `self.parent.setMacroMenu()` — would AttributeError) + its "In Menu"
+  column wiring in the macro table (de-index the remaining columns; the
+  "In Mouse Menu" column + `toggleMacroInMouseMenu` STAY).
+- Grep-verify zero remaining `setMacroMenu|editMacros|MacroMenu|
+  reloadMenuMacros|AnalysisProfile.Macro.*delete/setName` notify hooks.
+- Gates: unchanged floors; TOTAL still 1271 (no `.py` deleted);
+  gui_boot_test 3/3. Commit + push; stage log; mark ✅.
+
+**Stage 15 — Prodecomp + CLOUDS menus + orphan removal**
+- `AnalysisPopup.py`
+  - `setOtherMenu`: remove the whole `cloudsMenu` construction (6
+    commands), the Prodecomp `menu.add_command` block, the
+    `menu.add_cascade(label="CLOUDS", …)` line; `menu_items[OtherMenu]`
+    → `["NMR Calculations", "Widget Counter", "Format Converter"]` (the
+    `fixedActiveMenus[(OtherMenu, 2)] = True` line stays valid).
+  - Delete methods `startProdecomp`, `setupClouds`, `setupBacus`,
+    `setupMidge`, `setupHcloudsMd`, `setupFilterClouds`,
+    `setupCloudThreading`, `setupCloudHomologue`.
+  - Remove the 7 clouds entries from the `self.popups` dict
+    (`setup_clouds`, `setup_bacus`, `setup_midge`, `setup_hcloudsmd`,
+    `setup_filter_clouds`, `setup_cloud_threader`, `setup_cloud_homologue`).
+  - Delete `from gothenburg.prodecomp.ProdecompFrame import ProdecompPopup`
+    (L129) + the `self.iconClouds = self.icons["weather-overcast"]` line.
+    (Tip: the "NMR Calculations" tipText still names the removed CING/ARIA
+    — reword to neutral "dispatch calculation jobs to external programs"
+    as part of this menu touch.)
+- Delete `ccpnmr2.5/python/gothenburg/prodecomp/` (7 files) and the 14
+  `ccpnmr/clouds/` modules per locked decision 3 (KEEP the 6). Re-verify
+  with a broad grep that the 7 KEEPED modules have no import of a deleted
+  one (`ResonanceIdentification` → CloudBasic/PseudoResonances only ✓).
+- Gates expected: TOTAL 1271→**1247** (−7−14 = −24), FAILED 2,
+  BY-DESIGN 10, gui_boot_test 3/3, pytest unchanged; grep
+  `ccpnmr\.clouds` outside the package → exactly
+  `CalcDistConstraints.py` + `EditResStructures.py`; grep
+  `gothenburg.prodecomp|ProdecompPopup|startProdecomp|setupBacus|setupMidge|
+  setupHcloudsMd|setupFilterClouds|setupCloudThreading|setupCloudHomologue`
+  → clean. Commit + push; stage log; mark ✅.
+
+**Stage 16 — Help menu (Project)**
+- `AnalysisPopup.py`: delete the `helpMenu` construction (Version/About/
+  Help commands), the `menu.add_cascade(label="Help", …)` line + the
+  separator immediately before it, the `"Help"` `menu_items[ProjectMenu]`
+  entry; `fixedActiveMenus[(ProjectMenu, …)]` → `(0,1,2,3,8)`; delete
+  `showVersion`, `showAbout`, `showHelp` methods; delete
+  `self.iconHelp = self.icons["help-browser"]` (only other use is the
+  deleted cascade); if now unused, drop `LOCAL_HELP_DOC_DIR` from the
+  Analysis import (L53) and `getTopDirectory` from the
+  `memops.universal.Io` import (L146) — verify no other users in-file.
+- Gates: unchanged floors; TOTAL still 1247; gui_boot_test 3/3.
+- Commit + push; stage log; mark the Menu Removal Plan **COMPLETE**
+  (16/16 across both plans) in the status line + this stage's log entry.
+
+## Rollback
+
+Each stage is exactly one commit → `git revert <sha>` restores it cleanly.
+
+## Stage log (Menu Removal)
+
+_(entries appended as each stage lands)_
