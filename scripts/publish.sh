@@ -14,8 +14,6 @@ cd "$(git rev-parse --show-toplevel)"
 # Use a real C compiler (the Anaconda-provided cc lacks GL/glx.h — see P4-4a).
 export CC="${CC:-/usr/bin/gcc}"
 export CXX="${CXX:-/usr/bin/g++}"
-# Optional: Meccano/GSL. Uncomment to build the grenoble Meccano C ext.
-# export CCP_GSL_PREFIX="${CCP_GSL_PREFIX:-/opt/conda/envs/ccpnmr-gsl}"
 
 echo "==> Building sdist + wheel"
 python -m build   # -> dist/ccpnmr-2.5.2-*.whl + dist/ccpnmr-2.5.2.tar.gz

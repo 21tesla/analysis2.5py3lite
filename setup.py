@@ -31,28 +31,6 @@ DYN   = "ccpnmr2.5/c/ccpnmr/dynamics"
 ANA   = "ccpnmr2.5/c/ccpnmr/analysis"
 STR   = "ccpnmr2.5/c/ccp/structure"
 BAYES = "ccpnmr2.5/c/other/cambridge/bayes"
-MEC   = "ccpnmr2.5/c/other/meccano"
-
-# GSL (GNU Scientific Library) prefix for the Meccano ext.  Meccano is
-# OPTIONAL: if no usable GSL is found the whole distribution still builds
-# and Meccano is omitted with a warning (grenoble.c.Meccano import then fails
-# with an actionable message).  Resolution order: $CCP_GSL_PREFIX, /usr,
-# isolated conda env (conda create -n ccpnmr-gsl -c conda-forge gsl).
-def _gsl_usable(prefix):
-    if not prefix or not os.path.isdir(os.path.join(prefix, "include", "gsl")):
-        return False
-    libdir = os.path.join(prefix, "lib")
-    return os.path.isdir(libdir) and any(n.startswith("libgsl") for n in os.listdir(libdir))
-
-GSL = next(
-    (p for p in (os.environ.get("CCP_GSL_PREFIX"), "/usr",
-                 "/home/logan/software/anaconda3/envs/ccpnmr-gsl",
-                 os.environ.get("CONDA_PREFIX"),
-                 "/opt/homebrew/opt/gsl",   # Homebrew (Apple silicon)
-                 "/usr/local/opt/gsl")      # Homebrew (Intel)
-     if _gsl_usable(p)),
-    None,
-)
 
 DARWIN = sys.platform == "darwin"
 
@@ -288,18 +266,6 @@ FAM = {
                          f"{G}/clipping.c"]
                         + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
                         GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
-
-    # --- grenoble Meccano (import:  grenoble.c.Meccano; needs GSL) ----------
-    "Meccano":         ([f"{MEC}/pysrc/py_meccano.c",
-                        f"{MEC}/meccano2_stat_ramaDB_fwd/meccano2_stat_ramaDB_fwd.c",
-                        f"{MEC}/src/myRDC.c", f"{MEC}/src/myGEOMETRY.c",
-                        f"{MEC}/src/mySTRUCT.c", f"{MEC}/src/myDAT.c",
-                        f"{MEC}/src/myRAMACHANDRAN.c", f"{MEC}/src/myHBSC.c",
-                        f"{MEC}/src/myJUNC.c", f"{MEC}/src/myMINIMISATION.c",
-                        f"{MEC}/src/myPPGEO.c", f"{MEC}/src/gradient.c"]
-                        + GU, [f"{MEC}/inc", G, f"{GSL}/include"],
-                        ["gsl", "gslcblas", "m"], [f"{GSL}/lib"], (),
-                        [f"-Wl,-rpath,{GSL}/lib"]),
 }
 
 # ---------------------------------------------------------------------------
@@ -332,14 +298,6 @@ BACKBONE = [
 
 # ---------------------------------------------------------------------------
 all_exts = list(BACKBONE)
-# Meccano is the one OPTIONAL ext: needs GSL (see resolution above).
-if "Meccano" in FAM and GSL is None:
-    print("WARNING: no usable GSL found ($CCP_GSL_PREFIX, /usr, conda envs) — "
-          "skipping OPTIONAL ext 'Meccano'. The distribution builds without it; "
-          "grenoble.c.Meccano imports fail with an actionable hint. Install GSL "
-          "(e.g. conda install -c conda-forge gsl / apt install libgsl-dev) and "
-          "rebuild to enable Meccano.", file=sys.stderr)
-    FAM = {n: s for n, s in FAM.items() if n != "Meccano"}
 # FAM specs are (srcs, inc, libs) or extended (srcs, inc, libs, libdirs, define, link)
 all_exts += [mk(name, *spec) for name, spec in FAM.items()]
 

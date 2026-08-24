@@ -135,7 +135,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ✅ 2026-08-24 |
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ✅ 2026-08-24 |
 | 6 | HADDOCK: `utrecht/haddock/` + menu + method | ✅ 2026-08-24 |
-| 7 | MECCANO: `grenoble/meccano/` + C sources + `setup.py` GSL block | ⬜ pending |
+| 7 | MECCANO: `grenoble/` + `c/other/meccano/` + `setup.py` GSL/Meccano blocks | ✅ 2026-08-24 |
 | 8 | PyRPF: `rutgers/` | ⬜ pending |
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ⬜ pending |
 | 10 | ECI: `ccpnmr/eci/` (relocate `ReadPdb.py` first) + `ccpnmr-eci` | ⬜ pending |
@@ -367,6 +367,53 @@ first-party entry STAY (unlike Stage 5, no pyproject change here).
   (metamodel, decision 4).
 - Gates (all green):
   - `import_smoke.py` exit 0 — TOTAL **1641** (1658−17, exactly the 17 removed
-    `.py` modules), OK 1524, FAILED **33 unchanged**, BY-DESIGN 83.
+    `.py` modules), OK 1525, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **5/5** (unchanged — no HADDOCK app entry ever).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 7 — MECCANO (grenoble/, C sources, setup.py GSL) — ✅ 2026-08-24**
+Recon (verified pre-edit): after Stage 1 (BlackledgeModule removed)
+`ccpnmr2.5/python/grenoble/` was MECCANO-only: 8 tracked files
+(`__init__`×3, `MeccanoPopup.py`, `c/{copySharedObjs,copySharedObjs.bat,
+linkSharedObjs}`, `meccano/data/phi_psi_database_loop_glysymm` — a 41,308-line
+phi/psi data file). C sources: `ccpnmr2.5/c/other/meccano/` = 28 tracked
+files (13 headers, 11 `src/*.c`, `pysrc/py_meccano.c`, 2 `meccano2_stat_ramaDB_fwd/*.c`,
+3 Makefiles) — 36 files/48,654 lines total deleted. Single external
+importer: `AnalysisPopup.py` `meccano()` method (lazy import inside a
+try/except — no top-level import line). KEPT (verified): `ccpnmr/v2io/
+Constants.py` `"GSL": ("other", "Gsl")` entries are **file-extension**
+constants (unrelated to GNU GSL); `c/environment*.txt` `LINK_LIBRARIES/COPY_
+LIBRARIES = ...SharedObjs` vars + `UpdateAgent.py` references are per-package
+build helpers shared with KEPT `cambridge/c` (which has its own copies —
+untouched); `ccp/util/NmrCalc.py:5` docstring lists
+`grenoble/BlackledgeModule` (stale historical note, Stage-1/3 precedent);
+`workflow/Constants.py` `programList` has no "Meccano" string; `c/Makefile`
+has no meccano target; no import_smoke allowlist entries, no gui_boot APPS
+entry, no tests, no `bin/` launcher, no integrator plugin, no data/ protocols.
+- Deleted: `ccpnmr2.5/python/grenoble/` (8) + `ccpnmr2.5/c/other/meccano/`
+  (28) + untracked build residue (`grenoble/c/Meccano*.so`, `__pycache__`).
+  `c/other/` now contains only `cambridge/`.
+- `AnalysisPopup.py`: removed "MECCANO: Structures from RDCs" menu block
+  (shortcut "M"), the `menu_items[StructureMenu]` entry, and the `meccano()`
+  method (incl. its lazy `from grenoble.meccano.MeccanoPopup import ...`).
+- `setup.py`: removed `MEC` path const, the GSL resolver (`_gsl_usable` +
+  `GSL = next(...)`), the FAM `"Meccano"` ext entry (last FAM member), and
+  the "Meccano is the one OPTIONAL ext" skip-block. No GSL/MEC/meccano
+  residue; parses clean. (hazard 8 closed — builds no longer reference
+  `c/other/meccano/`.)
+- `pyproject.toml`: dropped package include `grenoble*` + isort first-party
+  `grenoble` (package fully gone — unlike `utrecht`, which kept living).
+- `scripts/copy_cext.sh`: dropped `Meccano)` → `grenoble/c` case branch.
+- `scripts/{linux,macos}_release.sh`: removed the `die`-gated GSL resolution
+  block (loop + `CCP_GSL_PREFIX` export) + GSL prereq/prefix lines +
+  "(incl. Meccano)" build echoes + header comment lines. `bash -n` clean.
+  (hazard 8's release-gate part closed — no more hard GSL requirement.)
+- `scripts/publish.sh`: dropped the 2 commented Meccano/GSL lines.
+- Residual (by design, Stage-12 docs sweep): historical changelog line
+  `ccpnmr/analysis/doc/Changes.html:145` ("distribute the C code... install
+  GSL") — past release note, left untouched.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1637** (1641−4, exactly the 4 removed
+    `grenoble` `.py` modules), OK 1521, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **5/5** (unchanged — no MECCANO app entry ever).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

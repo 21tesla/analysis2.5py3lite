@@ -3,8 +3,7 @@
 # Linux release builder for CCPNMR Analysis 2.5.2 (Python 3).
 #
 # Builds the full C-extension set (memops backbone + per-package FAM exts,
-# incl. the optional Meccano ext which the release gate REQUIRES, plus the
-# Cython cing superpose), packages the wheel, and verifies it the same way
+# plus the Cython cing superpose), packages the wheel, and verifies it the same way
 # the Linux wheel was shipped: clean venv -> pip install -> pip check ->
 # 8 console entry points -> whole-tree import smoke (FAILED must be 0).
 #
@@ -16,8 +15,8 @@
 #
 # Prereqs (auto-detected, no env vars needed normally):
 #   Linux, gcc (cc), Python >=3.13 with Tk/Tcl development packages,
-#   X11 libraries, OpenGL/Mesa + GLUT development packages, GSL.
-#   Prefix overrides: CCP_TK_PREFIX, CCP_GSL_PREFIX.
+#   X11 libraries, OpenGL/Mesa + GLUT development packages.
+#   Prefix overrides: CCP_TK_PREFIX.
 # ============================================================================
 set -euo pipefail
 
@@ -127,25 +126,12 @@ if [ "$(uname -s)" = "Linux" ]; then
   echo "ok: OpenGL/glut libs found in $GL_LIB"
 fi
 
-# GSL — REQUIRED: grenoble.c.Meccano is not on the smoke allowlist, so the
-# release gate (FAILED=0) needs the Meccano ext in the wheel.
-GSLP=""
-for p in "${CCP_GSL_PREFIX:-}" "/usr" "${CONDA_PREFIX:-}" \
-         "/home/logan/software/anaconda3/envs/ccpnmr-gsl" \
-         "/opt/homebrew/opt/gsl" "/usr/local/opt/gsl"; do
-  if [ -n "$p" ] && [ -d "$p/include/gsl" ] && ls "$p"/lib/libgsl* >/dev/null 2>&1; then
-    GSLP="$p"; break
-  fi
-done
-[ -n "$GSLP" ] || die "GSL not found (Meccano ext — required for a green release gate). Install: apt install libgsl-dev (or conda: conda install -c conda-forge gsl)"
-export CCP_GSL_PREFIX="$GSLP"
-echo "ok: GSL at $GSLP"
 echo
 
 # ---------------------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------------------
-echo "=== [1/4] building C extensions (incl. Meccano) ==="
+echo "=== [1/4] building C extensions ==="
 "$PYTHON" setup.py build_ext --inplace
 
 CY="$ROOT/ccpnmr2.5/python/cing/Libs/cython"

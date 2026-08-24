@@ -20,8 +20,6 @@ get_target_dir() {
       echo "ccpnmr2.5/python/ccp/c" ;;
     BayesPeakSeparator)
       echo "ccpnmr2.5/python/cambridge/c" ;;
-    Meccano)
-      echo "ccpnmr2.5/python/grenoble/c" ;;
     ShapeFile|MemCache|BlockFile|FitMethod|StoreFile|StoreHandler|PdfHandler|PsHandler|GlHandler|TkHandler)
       echo "ccpnmr2.5/python/memops/c" ;;
     *)

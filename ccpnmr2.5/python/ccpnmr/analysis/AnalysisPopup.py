@@ -1578,14 +1578,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 tipText='Predict protein secondary structure using chemical shifts')
 
         menu.add_command(
-            label="MECCANO: Structures from RDCs",
-            shortcut="M",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.meccano,
-            tipText="Use MECCANO to determine structures from backbone RDCs",
-        )
-        menu.add_command(
             label="PyRPF: Validate Peaks vs Structure",
             shortcut="F",
             image=self.iconSpecialTool,
@@ -1637,7 +1629,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "Make Distance Restraints",
             "Make H Bond Restraints",
             "DANGLE: Predict Dihedrals",
-            "MECCANO: Structures from RDCs",
             "CING: Validate Structures",
             "ECI: Database Deposition",
             "Secondary Structure Chart",
@@ -2584,16 +2575,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def editCalculation(self):
 
         self.openPopup("edit_calculation", EditCalculationPopup)
-
-    def meccano(self):
-        try:
-            from grenoble.meccano.MeccanoPopup import MeccanoPopup
-        except Exception as e:
-            showWarning("Meccano exception", str(e), parent=self)
-            print(e)
-            return
-
-        self.openPopup("meccano", MeccanoPopup)
 
     def viewWidgetCount(self):
 
