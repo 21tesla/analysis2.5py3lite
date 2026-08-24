@@ -136,7 +136,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ✅ 2026-08-24 |
 | 6 | HADDOCK: `utrecht/haddock/` + menu + method | ✅ 2026-08-24 |
 | 7 | MECCANO: `grenoble/` + `c/other/meccano/` + `setup.py` GSL/Meccano blocks | ✅ 2026-08-24 |
-| 8 | PyRPF: `rutgers/` | ⬜ pending |
+| 8 | PyRPF: `rutgers/` | ✅ 2026-08-24 |
 | 9 | CING: `cing/` + `nijmegen/cing/` + smoke allowlist | ⬜ pending |
 | 10 | ECI: `ccpnmr/eci/` (relocate `ReadPdb.py` first) + `ccpnmr-eci` | ⬜ pending |
 | 11 | Structure Viewer + Make H Bond Restraints popups + remove 3 kept callers | ⬜ pending |
@@ -416,4 +416,37 @@ entry, no tests, no `bin/` launcher, no integrator plugin, no data/ protocols.
   - `import_smoke.py` exit 0 — TOTAL **1637** (1641−4, exactly the 4 removed
     `grenoble` `.py` modules), OK 1521, FAILED **33 unchanged**, BY-DESIGN 83.
   - `gui_boot_test.py` **5/5** (unchanged — no MECCANO app entry ever).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+
+**Stage 8 — PyRPF (rutgers/, menu, method) — ✅ 2026-08-24**
+Recon (verified pre-edit): `ccpnmr2.5/python/rutgers/` = **3** tracked files
+(the plan table said "2"; actual = `__init__.py`×2 + `rpf/PyRPF.py`, 2927
+lines total — `PyRpfPopup(BasePopup)` RPF quality popup + `pyRpfMacro` /
+`pyRpfApp` helpers). Single external importer: `AnalysisPopup.py` — a
+**top-level** `from rutgers.rpf.PyRPF import PyRpfPopup` (NOT lazy like
+Stage-7's meccano), the "PyRPF..." menu block, and the `startPyRPF` method.
+No `popupActions` entry, no `menu_items[StructureMenu]` entry (simpler than
+Stage 6). The `cing/` `PyRPF`/`RPF` files (`cing/PluginCode/RPF.py`,
+`cing/Scripts/Analysis/PyRPF.py` + its test) are Stage-9 territory — kept.
+KEPT (verified): `ccpnmr2.5/doc/acknowledgements.html:106` "Cathy Lawson
+(Rutgers)" is a **person's name**, not the package; `pdbe/adatah/CasdNmr.py:48`
+matches legacy data-file name strings (inert text, not an import). No
+metamodel / `model/` / `ccp/api` / `ccpnmr/api` references, no `bin/`
+launcher, no `scripts/`, no MANIFEST.in entries, no `import_smoke.py`
+allowlist entries, no `gui_boot_test.py` APPS entry, no tests.
+- Deleted: `ccpnmr2.5/python/rutgers/` (3 files, 2927 lines) +
+  untracked `__pycache__` residue.
+- `AnalysisPopup.py`: removed the `rutgers.rpf.PyRPF` top import, the
+  "PyRPF: Validate Peaks vs Structure" Structure-menu `add_command` block
+  (shortcut "F"), and the `startPyRPF` method.
+- `pyproject.toml`: dropped package include `rutgers*` + isort first-party
+  `rutgers` (package fully gone — Stage-7 rule).
+- Residuals (by design, Stage-12 docs sweep): `Structure.rst` menu-doc line
+  `PyRPF: Validate Peaks vs Structure <../popups/PyRpfPopup.rst>` (Stages
+  3/5/6 left the DANGLE/ARIA/HADDOCK lines there too);
+  `ccpnmr/analysis/doc/Changes.html:89` historical changelog line.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1634** (1637−3, exactly the 3 removed
+    `rutgers` `.py` modules), OK 1518, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **5/5** (unchanged — no PyRPF app entry ever).
   - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).

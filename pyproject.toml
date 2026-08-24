@@ -94,7 +94,6 @@ include = [
     "nijmegen*",
     "pdbe*",
     "regensburg*",
-    "rutgers*",
     "utrecht*",
     "model*",
     "data*",
@@ -159,7 +158,6 @@ known-first-party = [
     "nijmegen",
     "pdbe",
     "regensburg",
-    "rutgers",
     "utrecht",
 ]
 

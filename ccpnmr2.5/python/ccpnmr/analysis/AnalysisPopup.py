@@ -147,7 +147,6 @@ from memops.gui.MessageReporter import showError, showInfo, showWarning, showYes
 from memops.gui.WebBrowser import WebBrowser
 from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
 from nijmegen.cing.CingPopup import CingPopup
-from rutgers.rpf.PyRPF import PyRpfPopup
 
 try:
     HAVE_NUMPY = True
@@ -1578,14 +1577,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 tipText='Predict protein secondary structure using chemical shifts')
 
         menu.add_command(
-            label="PyRPF: Validate Peaks vs Structure",
-            shortcut="F",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startPyRPF,
-            tipText="Compare through-space peak lists with structure distances to find missing and unexplained peak locations",
-        )
-        menu.add_command(
             label="CING: Validate Structures",
             shortcut="C",
             image=self.iconSpecialTool,
@@ -2502,10 +2493,6 @@ class AnalysisPopup(BasePopup, Analysis):
     # def startD2D(self):
 
     #  self.popups['d2d'] = SecStructurePredictPopup(self, project=self.project)
-
-    def startPyRPF(self):
-
-        self.popups["rpf"] = PyRpfPopup(self, self.project)
 
     def startProdecomp(self):
 
