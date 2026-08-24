@@ -49,7 +49,7 @@ from ccp.api.nmr import Nmr
 from ccp.gui.Io import loadProject
 from ccp.gui.NmrExpPrototypeEditor import NmrExpPrototypePopup
 from ccpnmr.analysis import Copyright
-from ccpnmr.analysis.Analysis import LOCAL_HELP_DOC_DIR, Analysis
+from ccpnmr.analysis.Analysis import Analysis
 from ccpnmr.analysis.core import Util
 from ccpnmr.analysis.core.ErrorHandler import ErrorHandler
 from ccpnmr.analysis.core.ExperimentBasic import isSpectrum
@@ -139,7 +139,7 @@ from memops.gui.FontMenu import FontMenu
 from memops.gui.Menu import Menu
 from memops.gui.MessageReporter import showError, showInfo, showWarning, showYesNo
 from memops.gui.WebBrowser import WebBrowser
-from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
+from memops.universal.Io import getPythonDirectory, joinPath
 
 try:
     HAVE_NUMPY = True
@@ -287,7 +287,6 @@ class AnalysisPopup(BasePopup, Analysis):
         self.iconTool = self.icons["emblem-system"]
         self.iconSpecialTool = self.icons["applications-system"]
         self.iconPrefs = self.icons["preferences-system"]
-        self.iconHelp = self.icons["help-browser"]
         self.iconTable = self.icons["document-properties"]
         self.iconChart = self.icons["chart"]
         self.iconPrint = self.icons["printer"]
@@ -697,15 +696,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.editProfiles,
         )
 
-        # Help Submenu
-
-        helpMenu = Menu(self.menubar, tearoff=0)
-        helpMenu.add_command(label="Version", shortcut="V", command=self.showVersion)
-        helpMenu.add_command(label="About", shortcut="A", command=self.showAbout)
-        helpMenu.add_command(label="Help", shortcut="H", command=self.showHelp)
-
-        #
-
         menu = Menu(self.menubar, tearoff=0)
         menu.add_command(
             label="New",
@@ -822,9 +812,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.archiveProject,
             tipText="Save the current CCPN project in an archived form, e.g. tar gzipped",
         )
-        menu.add_separator()
-        menu.add_cascade(label="Help", shortcut="H", image=self.iconHelp, compound="left", menu=helpMenu)
-
         self.menubar.add_cascade(label=ProjectMenu, shortcut="j", menu=menu)
         self.menus[ProjectMenu] = menu
         self.menu_items[ProjectMenu] = [
@@ -843,12 +830,11 @@ class AnalysisPopup(BasePopup, Analysis):
             "Validate",
             "Backup",
             "Archive",
-            "Help",
         ]
 
         # Menus that area active in absence of a project
         # for ii in (0,1,2,7,15,17):
-        for ii in (0, 1, 2, 3, 8, 17):
+        for ii in (0, 1, 2, 3, 8):
             self.fixedActiveMenus[(ProjectMenu, ii)] = True
 
     def openWindowGroup(self, spectrumWindowGroup=None):
@@ -2949,22 +2935,6 @@ class AnalysisPopup(BasePopup, Analysis):
             showError(
                 "Registration not yet active", "Registration is not active until next release of software", parent=self
             )
-
-    def showVersion(self):
-
-        showInfo("Version", self.versionInfo, parent=self)
-
-    def showAbout(self):
-
-        topDir = getTopDirectory()
-        url = "file:" + topDir + LOCAL_HELP_DOC_DIR + "/about.html"
-        self.webBrowser.open(url)
-
-    def showHelp(self):
-
-        topDir = getTopDirectory()
-        url = "file:" + topDir + LOCAL_HELP_DOC_DIR + "/index.html"
-        self.webBrowser.open(url)
 
     def gotoPeak(self, window_name, peak, row=0, col=0):
         # Function appears to be deprecated

@@ -747,7 +747,8 @@ done, gates green, pushed).
 
 # Menu Removal Plan — Stages 13-16 (added 2026-08-24)
 
-Status: **IN PROGRESS** — Stage 15 ✅ committed + pushed 2026-08-24; Stage 16 next
+Status: **COMPLETE (2026-08-24)** — all 4 menu-removal stages (13-16) done;
+16/16 across both plans (12/12 Simplification + 4/4 Menu Removal), all pushed
 Same repo, same checkpoint policy: ONE commit per stage (code + this log
 update in the same commit) + push to `main`. Python: anaconda `python`
 3.13.5; `xvfb-run` available.
@@ -845,7 +846,7 @@ NON_GUI check is deleted); pytest floors held; `ruff check` on edited files
 | 13 | Project ▶ Updates + delete `ccpnmr/update/` + `ccpnmr-update` script + boot-test entry | ✅ 2026-08-24 |
 | 14 | Macro menu (menu layer only) | ✅ 2026-08-24 |
 | 15 | Other ▶ Prodecomp + CLOUDS + delete orphan `gothenburg/prodecomp/` (7) + 14 `ccpnmr/clouds/` modules | ✅ 2026-08-24 |
-| 16 | Project ▶ Help (Version/About/Help) | ⬜ not started |
+| 16 | Project ▶ Help (Version/About/Help) | ✅ 2026-08-24 |
 
 ## Stage checklist detail
 
@@ -1122,3 +1123,54 @@ extension build dir, out of scope.
     F841 11, E722 10, E731 2, E721 1, F811 1, W293 1 — identical mix; the
     transient I001 from the import removal was fixed by folding the blank
     line) — zero NEW violations. `python -m py_compile` OK.
+
+**Stage 16 — Project ▶ Help menu (Version/About/Help) — ✅ 2026-08-24**
+Recon (verified pre-edit, line numbers pre-Stage-16): `AnalysisPopup.py`
+targets: L52 `LOCAL_HELP_DOC_DIR` import; L142 `getTopDirectory` (same
+import line also carries `getPythonDirectory` + `joinPath`); L290
+`self.iconHelp` assignment; L701-705 the `# Help Submenu` + 3-command
+`helpMenu` build (followed by a stray lone-`#` leftover line); L824-825
+separator + `menu.add_cascade(label="Help", …)`; L848 `"Help"` in
+`menu_items[ProjectMenu]` (16 entries); L854 `fixedActiveMenus` loop
+`(0, 1, 2, 3, 8, 17)`; L2953-2967 `showVersion`/`showAbout`/`showHelp`.
+Orphan checks (grep, in-file + repo-wide): `LOCAL_HELP_DOC_DIR` and
+`getTopDirectory` used ONLY by `showAbout`/`showHelp` → both dropped;
+`getPythonDirectory` (L173 `GFX_DIR`) + `joinPath` (L2569) still live →
+import line keeps them; `showInfo` still used at L2468/2496/2562 → import
+KEPT; `self.versionInfo` only READ by `showVersion` here (assigned in
+parent `Analysis` — out of scope, untouched); `iconHelp` other uses =
+none after the cascade drops; zero repo-wide external callers of
+`.showVersion(`/`.showAbout(`/`.showHelp(` (the memops editor's own
+`showVersion` and `memops.gui.HelpPopup.showHelp*` are unrelated symbols
+in other files — KEPT, as is the FormatConverter window's own Help menu
+per locked decision 4).
+- `AnalysisPopup.py` (3+/33−, net −30 lines): dropped `LOCAL_HELP_DOC_DIR`
+  from the `ccpnmr.analysis.Analysis` import; `getTopDirectory` from the
+  `memops.universal.Io` import; the `iconHelp` assignment; the whole
+  `helpMenu` build (`# Help Submenu` comment + Version/About/Help commands
+  + the stray lone-`#` leftover line between it and `menu = Menu(…)`); the
+  `menu.add_separator()` + `menu.add_cascade(label="Help", …)` pair (the
+  separator Stage 13 kept to separate Archive from Help — now both
+  dropped; the Project menu ends at "Archive"); the `"Help"`
+  `menu_items[ProjectMenu]` entry (16 → 15); `fixedActiveMenus` loop
+  `(0, 1, 2, 3, 8, 17)` → `(0, 1, 2, 3, 8)`; the `showVersion`,
+  `showAbout`, `showHelp` methods. Kept the historical
+  `# for ii in (0,1,2,7,15,17):` comment line (pre-existing, unrelated
+  text).
+- Grep-verified clean in-file: `showVersion|showAbout|showHelp|iconHelp|
+  helpMenu|LOCAL_HELP_DOC_DIR|getTopDirectory` → zero matches;
+  `python -m py_compile` OK.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1250** (unchanged — no `.py`
+    removed, exactly as planned), OK **1238**, FAILED **2 unchanged**
+    (2× `cherrypy`), BY-DESIGN **10 unchanged** (5 ENV + 5 EXTERNAL).
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setProjectMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check --statistics`: AnalysisPopup 43 = 43 (UP031 17, F841
+    11, E722 10, E731 2, E721 1, F811 1, W293 1 — identical mix to the
+    Stage 13/14/15 baseline; the three dropped methods carried no
+    %-format strings, so UP031 is flat) — zero NEW violations.
+- **MENU REMOVAL PLAN COMPLETE — 16/16** (Simplification 1-12 + Menu
+  Removal 13-16), all stages committed + pushed to
+  `21tesla/analysis2.5py3lite:main`.
