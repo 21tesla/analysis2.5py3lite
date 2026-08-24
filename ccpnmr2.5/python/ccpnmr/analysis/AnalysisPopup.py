@@ -148,7 +148,6 @@ from memops.gui.MessageReporter import showError, showInfo, showWarning, showYes
 from memops.gui.WebBrowser import WebBrowser
 from memops.universal.Io import getPythonDirectory, getTopDirectory, joinPath
 from nijmegen.cing.CingPopup import CingPopup
-#from paris.aria.AriaExtendNmrFrame import AriaPopup
 from rutgers.rpf.PyRPF import PyRpfPopup
 from utrecht.haddock.HaddockPopup import HaddockPopup
 
@@ -1611,14 +1610,6 @@ class AnalysisPopup(BasePopup, Analysis):
         #                 image=self.iconSpecialTool, compound='left',
         #                 command=self.startD2D,
         #                 tipText='Predict protein secondary structure using chemical shifts')
-        menu.add_command(
-            label="ARIA: Structure calculation",
-            shortcut="A",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.startAria,
-            tipText="Use ARIA to iteratively assign NOEs and calculate structures",
-        )
         menu.add_cascade(label="Cyana", shortcut="y", image=self.iconSpecialTool, compound="left", menu=cyanaSubmenu)
 
         menu.add_command(
@@ -2584,15 +2575,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def submitCing(self):
 
         self.popups["cing"] = CingPopup(self)
-
-    def activateAriaSetup(self):
-        # Leave for a bit so old tutorial script works.
-
-        pass #self.openPopup("aria_setup", AriaPopup)
-
-    def startAria(self):
-
-        pass #self.openPopup("aria_setup", AriaPopup)
 
     def setupCyanaCalculation(self):
 

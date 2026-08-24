@@ -131,7 +131,7 @@ Python: anaconda `python` 3.13.5 (no `.venv`); `xvfb-run` available.
 |---|---|---|
 | 1 | Data Analysis: NOE, 3J, PALES, MODULE | ✅ 2026-08-24 |
 | 2 | Standalone apps: `extendNmr/`, `cambridge/wms/`, `pdbe/deposition/` + scripts + boot entries | ✅ 2026-08-24 |
-| 3 | ARIA: `paris/` + menu + methods | ⬜ pending |
+| 3 | ARIA: `paris/` + menu + methods | ✅ 2026-08-24 |
 | 4 | CYANA: `cyana2ccpn/` + `macros/MultiStructure.py` + integrator `Cyana/` + `Io.py` import | ⬜ pending |
 | 5 | DANGLE: `cambridge/dangle/` + `ccpnmr-dangle` | ⬜ pending |
 | 6 | HADDOCK: `utrecht/` | ⬜ pending |
@@ -226,3 +226,35 @@ git-ignored stale copies — left untouched).
 - Residual (by design): `nijmegen/CASD/casdPipeLine.py` still imports the
   now-deleted `pdbe.deposition.*` — already among the 33 import failures, so
   no new failures; goes away with the CING removal in Stage 9.
+
+**Stage 3 — ARIA (paris/, menu, methods) — ✅ 2026-08-24**
+Recon (verified pre-edit): `paris/` = 5 tracked files (`paris/__init__.py`,
+`paris/aria/__init__.py`, `AriaExtendNmrFrame.py`, `AriaRunFrame.py`,
+`CcpnToAriaXml.py`, 1841 lines total incl. headers). Zero external importers
+of any `paris.aria` symbol — the only external references were inside
+`AnalysisPopup.py` (one commented import + two `pass` stubs). KEPT-by-design
+and verified untouched: `ccp/format/aria/` (format parser),
+`ccpnmr/integrator/plugins/Aria/`, `ccpnmr/workflow/Aria.py` (imports only
+`ccpnmr.workflow.Util` — hazard 4 confirmed, no `paris` import). No `aria`/`paris`
+entries in `gui_boot_test.py`, no references in `setup.py`, `MANIFEST.in`,
+`import_smoke.py`, `bin/`, or `scripts/`.
+- `AnalysisPopup.py`: removed commented import
+  `#from paris.aria.AriaExtendNmrFrame import AriaPopup`, the
+  "ARIA: Structure calculation" `menu.add_command` block (shortcut "A"),
+  and both stub methods `activateAriaSetup` + `startAria` (each a
+  `pass #self.openPopup("aria_setup", AriaPopup)`). `activateAriaSetup` was
+  kept only "so old tutorial script works" — no tutorial script exists in
+  the repo (grep-verified), and the plan removes the ARIA feature entirely.
+- Deleted: `ccpnmr2.5/python/paris/` (5 tracked files; untracked
+  `__pycache__` residue removed with the dir).
+- `pyproject.toml`: dropped package include `paris*` and isort first-party
+  `paris`.
+- Residual (by design): `ccp/util/NmrCalc.py` header docstring still lists
+  "paris/aria" among Oct-2012 consumers — stale historical note (it also
+  lists Stage-1-removed BlackledgeModule); left untouched per "don't edit
+  unrelated comments".
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1678** (1683−5, exactly the 5 removed
+    `paris` modules), OK 1562, FAILED **33 unchanged**, BY-DESIGN 83.
+  - `gui_boot_test.py` **6/6** (no ARIA app entry — unchanged).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
