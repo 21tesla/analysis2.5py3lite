@@ -2702,3 +2702,61 @@ Recon (verified 2026-08-24):
     import inside the varian path), the test, pyproject `[export]`, and
     uv.lock; zero new references in live app code.
 
+**Stage 34 — restore the S31-removed version-compat island (user-reported
+data-compat break) — ✅ 2026-08-25**
+
+- **User report:** opening the existing `sswt` project (and the
+  NmrExpPrototype refresh it triggers when opening an NMRpipe spectrum)
+  crashed with `ModuleNotFoundError: No module named
+  'memops.format.compatibility'` plus an "Error loading file for" cascade
+  on the 2.0.5 ChemComp, the MolSystem and the NmrProject. This is the
+  S31-signed "DATA-COMPAT BREAK for old saved projects" going live: S31
+  (`378313dc`) deleted `memops/format/compatibility` (78 files) +
+  `memops/format/xml/XmlGen.py` while leaving the three version-gated
+  branches in the generated parser (left under the no-edits-on-generated-
+  files convention) — any file with `release != 2.1.2` hits them:
+  - `memops/xml/Implementation.py:316` — `modifyIoMap` at mapping setup
+    (fails the FIRST old-version file in a process, parser state
+    "starting"; the half-built per-version map stays cached, so LATER
+    old-version files instead fail post-parse),
+  - `memops/xml/Implementation.py:5565` — `Converters1.minorPostProcess`
+    (state "handling version compatibility"),
+  - `memops/general/Util.py:624` — `minorPostProcess` on the save path.
+- **Fix (restoration, zero other edits):** `git checkout 378313dc^ --`
+  `ccpnmr2.5/python/memops/format/compatibility/` (78 files) +
+  `memops/format/xml/XmlGen.py` (lazy import `from memops.format.xml import
+  XmlGen` inside Converters1 — sole importer = the island). All island
+  imports verified against the current tree (memops.api/general/
+  metamodel/universal/xml + stdlib only). `memops/format/xml/
+  Compatibility.py` stayed removed (zero importers, incl. the island —
+  import-scan verified). Packaging needs no change (setuptools
+  auto-discovery covers `memops*`). Reverses ONLY the compat-island part
+  of S31; the S31 macro-module removals stand. Data-compat for
+  pre-2.1.2 saved projects (ChemComp/NmrExpPrototype reference files,
+  old user projects) is back.
+- **Verification (the user's actual project, app code path):**
+  - Headless `memops.general.Io.loadProject('/home/logan/NMR/sswt')`
+    (the very call `openProject` makes) now loads cleanly:
+    MolSystem MS1 → Chain → Molecule resolve; **196 ChemComps** from the
+    2.0.5 legacy reference files (previously: ModuleNotFoundError at
+    :316); **277 NmrExpPrototypes** via `root.sortedNmrExpPrototypes()`
+    (previously: ModuleNotFoundError at :5565 in `refreshTopObjects`)
+    with **1173 refExperiments** (`y.sortedRefExperiments()` — the exact
+    expression of the GUI crash path
+    `ExperimentBasic.getPossibleRefExperiments`); NmrProject AtomSet
+    exo-links resolve to real `MolSystem.Atom ['MS1','A',64,'H']` objects
+    (previously: "Linked-to object with ID not found" / "No active
+    repository found for TopObject MS1").
+  - `import_smoke.py` — TOTAL **910** (831+79, 1:1), OK **909**, FAILED
+    **0** (unchanged from S33), BY-DESIGN **1** (unchanged, PyMC bayes).
+  - `pytest` — **39 passed, 4 skipped** (identical to S33 baseline).
+  - `uvx ruff check` (0.16.3) on the restored set: 86 findings (F841 48,
+    UP031 30, E402 7, E722 1) — byte-identical to the S30-baseline code,
+    i.e. pre-existing for that code; zero live files edited this stage.
+- **Note for future lean-down passes:** this island is NOT dead — it is
+  the runtime data-compat layer for every saved file with
+  `release < currentModelVersion`, exercised on ANY project open that
+  touches pre-2.1.2 data (bundled ChemComp/NmrExpPrototype reference
+  files are 2.0.5). "Zero importers in live code" was the wrong lens:
+  its importers are version-gated branches in generated files.
+
