@@ -32,6 +32,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Modern NMR spectrum/peak-list exporters (ccpnmr.exportNmrData).
+# nmrglue pulls in scipy, so it is NOT a core dependency: install for the
+# 'varian' binary spectrum output (the other formats are dependency-free):
+#   pip install ccpnmr[export]
+export = [
+    "nmrglue>=0.12",
+]
 gui = [
     "PyOpenGL>=3.1.9",
     "Pillow>=10.0",

@@ -2640,3 +2640,65 @@ Recon (verified 2026-08-24):
   anchors (the `ccp`-package side). **Next planned (Stage 33):** add
   `nmrglue` dependency + a minimal export module (1D spectrum + Sparky
   peak list → Bruker/Varian/UNF/Sparky).
+
+**Stage 33 — nmrglue + basic spectrum/peak-list export module — ✅ 2026-08-25**
+- Scope (the S32 follow-up, user-asked): add the `nmrglue` dependency +
+  a minimal EXPORT module (1D spectrum + 1D peak list → Bruker/Varian/
+  UNF/Sparky) to replace the file-I/O the removed FormatConverter app
+  provided. New files only (pure addition; zero live-file edits).
+- New: `ccpnmr2.5/python/ccpnmr/exportNmrData.py` (public API
+  `export_spectrum_1d(intensities, freq, fmt, path, obs=None)` +
+  `export_peak_list(peaks, fmt, path, obs=None)`; model-free: plain arrays
+  / (freq_hz, intensity) pairs — no GUI/model imports, lazy nmrglue).
+  Per-format outputs (verified choices — see evidence below):
+  - **bruker**: `<dir>/f` (JCAMP-DX `##XY=`, F Hz / I, written by hand) +
+    `<dir>/procs` (`##$` text: SF/CARF/SPW1/NS/NSC=0/PPARMOD=0/...) —
+    classic real-1D TopSpin set; dependency-free.
+  - **varian**: `<dir>/fid` (S_SPEC=1 binary, float32, I=0 pairs) +
+    `<dir>/procpar` via nmrglue `fileio.varian.write_fid`/
+    `write_procpar` (obs in MHz, sw in MHz, sfo1 Hz, unit=hertz). NOTE:
+    nmrglue's `dic2fileheader` copies `dic["status"]` verbatim ("does not
+    repack status from bit flags") — the module sets `status =
+    S_DATA|S_SPEC|S_FLOAT|S_ACQPAR = 75` directly; the `S_SPEC` dict key
+    alone has NO effect (verified empirically).
+  - **unf**: hand-written UNF v2.1 binary (512-B header, records,
+    float32 data, 4-byte alignment). Spectrum = 1-D real; peak list =
+    2-D (N,2) [freq Hz, intensity]. **No published nmrglue release ships
+    a UNF module** (grep-verified the 0.9/0.11/0.12 site-packages trees —
+    the `nmrglue.unf` common in NMR tooling does not exist in any of
+    them; UNF interop must be self-written or NMRML).
+  - **sparky**: spectrum = 2-column text (nmrglue 0.12 `sparky.write`
+    raises `unknown dimensionality: 1` for 1D — verified; its 2D/3D/4D
+    writers remain available for future multi-dim work); peak list =
+    `.lst` text (`N 1` header + `serial freq intensity`).
+  - Convention: frequencies ABSOLUTE HZ; intensities as given; `path` is
+    a DIRECTORY for bruker/varian spectrum, a FILE otherwise; obs (MHz)
+    recorded where the format has a field (procs SF, procpar ob, UNF OBS).
+- `pyproject.toml`: `nmrglue>=0.12` added as **optional extra
+  `[export]`** (NOT core — it hard-depends on scipy, which the S28/c33a9dae
+  cleanup had deliberately pruned; core stays lean; the 3 non-varian
+  spectrum formats + all 4 peak-list formats are dependency-free).
+  `uv lock` updated (nmrglue 0.12 + scipy re-enter the lock, marker
+  `extra == 'export'`); venv synced with `--extra export --extra testing`.
+- Version findings (why 0.12, pinned `>=0.12`): **0.9/0.11 are BROKEN on
+  numpy 2** (`np.dtype('a8')` in tecmag.py — TypeError at import; our floor
+  is numpy>=2.0), and 0.12 is the numpy-2/py3.13-clean modern layout
+  (`nmrglue.fileio.*`).
+- Gates (all green):
+  - `import_smoke.py` — TOTAL **831** (829+2 new .py: the module + its
+    test, 1:1), OK **830**, FAILED **0**, BY-DESIGN **1** (unchanged,
+    `cambridge.bayes.PeakSeparatorPyMC`).
+  - `gui_boot_test.py` **1/1** (ccpnmr boots; the new module is
+    dependency-free of the GUI layer and no live code imports it).
+  - `pytest ccpnmr2.5/python/tests/` **39 passed, 4 skipped** — 14 new
+    (test_exportNmrData: per-format round-trips with independent parsers:
+    text-column checks, a from-scratch UNF v2.1 binary reader, and an
+    nmrglue `varian.read` round-trip gated on `pytest.importorskip`),
+    25 pre-existing unchanged (incl. `test_project_lifecycle` 8/8).
+  - `uvx ruff check` on both new files: **0 findings** (initial 23× UP031
+    `%`-formatting converted to f-strings; pre-existing 38-mix in
+    unchanged files untouched).
+  - Residual sweep: `nmrglue` referenced ONLY in exportNmrData.py (lazy
+    import inside the varian path), the test, pyproject `[export]`, and
+    uv.lock; zero new references in live app code.
+
