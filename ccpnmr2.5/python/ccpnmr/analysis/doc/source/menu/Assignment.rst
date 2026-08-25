@@ -10,7 +10,6 @@ Menu contents:
 
    Assignment Panel <../popups/EditAssignmentPopup.rst>
    Copy Assignments <../popups/CopyAssignmentsPopup.rst>
-   Spin System Typing <../popups/SpinSystemTypingPopup.rst>
 
    Assignment Graph <../popups/ViewAssignmentPopup.rst>
    Quality Reports <../popups/ViewQualityReportsPopup.rst>

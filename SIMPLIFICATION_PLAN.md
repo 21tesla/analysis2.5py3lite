@@ -1616,7 +1616,7 @@ plan doc and the gitignored `dist/` snapshot.
 | # | Scope | Status |
 |---|---|---|
 | 22 | Molecule menu ▶ "Isotope Labelling" + "Reference Isotope Schemes" + `popups/{EditMolLabelling,IsotopeSchemeEditor}.py` + doc lines | ✅ 2026-08-24 |
-| 23 | Assignment menu ▶ "Spin System Typing" + `SpinSystemTypingPopup`/`TypingEnsemblePopup` classes + `core/SpinSystemTyping.py` + doc line (`SpinSystemTypeScoresPopup` KEPT — live callers below) | ⏳ pending |
+| 23 | Assignment menu ▶ "Spin System Typing" + `SpinSystemTypingPopup`/`TypingEnsemblePopup` classes + `core/SpinSystemTyping.py` + doc line (`SpinSystemTypeScoresPopup` KEPT — live callers below) | ✅ 2026-08-24 |
 
 ### Stage 22 — Molecule menu: Isotope Labelling + Reference Isotope Schemes
 
@@ -1743,3 +1743,58 @@ Recon (verified 2026-08-24):
   - `uvx ruff check AnalysisPopup.py --statistics`: 39→**39** — IDENTICAL
     mix (UP031 17 / E722 10 / F841 7 / E731 2 / E721 1 / F811 1 / W293 1) —
     zero NEW. `python -m py_compile` OK.
+
+**Stage 23 — Assignment menu: Spin System Typing — ✅ 2026-08-24**
+- `AnalysisPopup.py` (−15 lines, 2910→2895): trimmed the import (pre
+  L112: `SpinSystemTypeScoresPopup, SpinSystemTypingPopup` →
+  `SpinSystemTypeScoresPopup` ONLY); dropped the `popupActions` entry
+  `"type_spin_systems"` (pre L233; `"type_spin_system"` KEPT); dropped the
+  "Spin System Typing" `add_command` block (label + shortcut "T" +
+  `menuNames.append`); dropped the `typeSpinSystems` method (pre
+  L2147-2149 — its unused `popup =` carried the F841 this stage removed).
+  Assignment menu is now `0 Assignment Panel, 1 Copy Assignments, 2 sep,
+  3 Assignment Graph, 4 Quality Reports` — no adjacent separators.
+- `popups/SpinSystemTyping.py` (1300→687, −613): removed
+  `class SpinSystemTypingPopup` (pre L698-1223) + `class
+  TypingEnsemblePopup` (pre L1225-1300, ended the file) via an
+  assert-guarded line-range truncation (boundary verified: exactly two
+  blank lines after the KEPT scores popup's `BasePopup.destroy(self)`);
+  dropped `COLOR_DICT` (pre L68 — only use L825, inside the removed
+  class); dropped the 7 now-orphan imports: `core.SpinSystemTyping.
+  getSpinSystemTypes`; `MoleculeBasic.getResidueCode` (`DEFAULT_ISOTOPES`
+  on the same line KEPT — still used at scores-popup L284/L302);
+  `memops.gui.{CheckButton,FloatEntry,IntEntry,PartitionedSelector,
+  ProgressBar,ScrolledGraph}`. `SpinSystemTypeScoresPopup` (pre
+  L71-696) intact — now the file's only class. Its KEPT callers
+  `EditSpinSystem.predictType` (L606) + `WindowFrame.
+  predictSpinSystemType` (L6510) both route through `AnalysisPopup.
+  typeSpinSystem` (singular, kept).
+- `git rm` `ccpnmr2.5/python/ccpnmr/analysis/core/SpinSystemTyping.py`
+  (541 lines — `getSpinSystemTypes` had no importer beyond the removed
+  popup class; `core/__init__.py` is empty — no re-exports to clean).
+- `doc/source/menu/Assignment.rst` (−1): dropped the "Spin System
+  Typing" toctree line (first group 3→2 lines). "Components available
+  indirectly → Spin System Type Scores" section KEPT in both
+  `Assignment.rst` and `Resonance.rst` (popup still live); `Changes.html`
+  mentions are changelog history (locked decision 6).
+- Grep-verified post-edit:
+  `SpinSystemTypingPopup|TypingEnsemblePopup|typeSpinSystems|
+  core.SpinSystemTyping|getSpinSystemTypes|type_spin_systems` across
+  `ccpnmr/**/*.py` + `**/*.rst` → ZERO hits (pycache aside); the
+  kept-surface grep shows exactly the 6 expected live refs (class def,
+  the two frame/popup callers, the AnalysisPopup import + method).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1236** (1237−1, exactly the one
+    removed module), OK **1224**, FAILED **2** unchanged (2× `cherrypy`),
+    BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check AnalysisPopup.py --statistics`: 39→**38** (F841 7→6 —
+    the removed unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 /
+    F811 1 / W293 1 flat) — zero NEW. `popups/SpinSystemTyping.py` (newly
+    in gate scope, KEPT portion only): 10 PRE-EXISTING (UP031 9 / F841 1)
+    — zero NEW, no F401 (import scrub complete). `python -m py_compile`
+    OK (both files).
+- **MENU REMOVAL ROUND 2 COMPLETE — 2/2** (Stages 22-23), both stages
+  committed + pushed to `21tesla/analysis2.5py3lite:main`.

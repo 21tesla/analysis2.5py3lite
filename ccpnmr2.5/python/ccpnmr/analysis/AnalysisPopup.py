@@ -107,7 +107,7 @@ from ccpnmr.analysis.popups.Register import RegisterPopup
 from ccpnmr.analysis.popups.ReportError import ReportErrorPopup
 from ccpnmr.analysis.popups.ResidueInfo import ResidueInfoPopup
 from ccpnmr.analysis.popups.SecStructureGraph import SecStructureGraphPopup
-from ccpnmr.analysis.popups.SpinSystemTyping import SpinSystemTypeScoresPopup, SpinSystemTypingPopup
+from ccpnmr.analysis.popups.SpinSystemTyping import SpinSystemTypeScoresPopup
 from ccpnmr.analysis.popups.ViewAssignment import ViewAssignmentPopup
 from ccpnmr.analysis.popups.ViewChemicalShifts import ViewChemicalShiftsPopup
 from ccpnmr.analysis.popups.ViewNoeMatrix import ViewNoeMatrix
@@ -226,7 +226,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "selected_resonances": self.viewSelectedResonances,
             "edit_spin_system": self.editSpinSystems,
             "confirm_seq_spin_systems": self.confirmSeqSpinSystems,
-            "type_spin_systems": self.typeSpinSystems,
             "type_spin_system": self.typeSpinSystem,
             "edit_assignment": self.assignmentPanel,
             "quality_reports": self.qualityReports,
@@ -1152,16 +1151,6 @@ class AnalysisPopup(BasePopup, Analysis):
             compound="left",
             command=self.copyAssignments,
             tipText="Tools to copy assignments between molecules and peak lists",
-        )
-        menuNames.append(label)
-        label = "Spin System Typing"
-        menu.add_command(
-            label=label,
-            shortcut="T",
-            image=self.iconTool,
-            compound="left",
-            command=self.typeSpinSystems,
-            tipText="Tools to predict the residue types of resonance spin systems",
         )
         menuNames.append(label)
         menu.add_separator()
@@ -2113,10 +2102,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def confirmSeqSpinSystems(self):
 
         popup = self.openPopup("confirm_seq_spin_systems", ConfirmSeqSpinSystemsPopup)
-
-    def typeSpinSystems(self):
-
-        popup = self.openPopup("type_spin_systems", SpinSystemTypingPopup)
 
     def typeSpinSystem(self, spinSystem=None, shiftList=None):
 
