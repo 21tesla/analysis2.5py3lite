@@ -63,8 +63,6 @@ ccpnmr/                            top level directory
 
         clouds/                    CcpNmr Clouds code
 
-        nexus/                     CcpNmr Nexus code
-
         eci/                       CcpNmr ECI code
 
         format/                    CcpNmr format conversion code

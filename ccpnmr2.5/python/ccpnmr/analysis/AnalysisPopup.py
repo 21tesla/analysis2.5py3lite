@@ -119,7 +119,6 @@ from ccpnmr.analysis.popups.ViewRamachandran import ViewRamachandranPopup
 from ccpnmr.analysis.popups.WindowPopup import WindowPopup
 from ccpnmr.format.converters.NmrStarFormat import NmrStarFormat
 from ccpnmr.format.converters.ReadPdb import ReadPdb
-from ccpnmr.nexus.AutoBackbonePopup import AutoBackbonePopup
 from memops.api import Implementation as Impl
 from memops.editor.ArchiveProjectPopup import ArchiveProjectPopup
 from memops.editor.OpenProjectPopup import OpenProjectPopup
@@ -237,8 +236,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "type_spin_system": self.typeSpinSystem,
             "edit_assignment": self.assignmentPanel,
             "quality_reports": self.qualityReports,
-            "auto_backbone_assign": self.autoBackboneAssign,
-            #'auto_backbone_assign': self.activateMars,
             "view_chem_shifts": self.chemShiftsTable,
             #'sequence_shift_predict': self.sequenceShiftPredict,
             "view_assignment": self.assignmentGraph,
@@ -1192,16 +1189,6 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         menuNames.append(label)
         menu.add_separator()
-        label = "Automated Seq. Assignment"
-        menu.add_command(
-            label=label,
-            shortcut="u",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.autoBackboneAssign,
-            tipText="Automatic protein sequence assignment",
-        )
-        menuNames.append(label)
         label = "NOE Contributions"
         menu.add_command(
             label=label,
@@ -2193,23 +2180,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def qualityReports(self):
 
         self.openPopup("quality_reports", ViewQualityReportsPopup)
-
-    def autoBackboneAssign(self):
-
-        if not HAVE_NUMPY:
-            msg = "You must have the NumPy Python module installed to run"
-            msg += " the CcpNmr automatic assignment routines."
-            showWarning("Cannot launch", msg, parent=self)
-
-        self.openPopup("auto_backbone_assign", AutoBackbonePopup, title="Assignment : Automated Seq. Assignment")
-
-    # def activateMars(self):
-
-    #  self.openPopup('auto_backbone_assign', AutoBackbonePopup,
-    #                 title='Assignment : Automated Seq. Assignment')
-
-    #  popup = self.popups['auto_backbone_assign']
-    #  popup.activateMars()
 
     def chemShiftsTable(self):
 

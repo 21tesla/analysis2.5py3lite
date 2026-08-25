@@ -12,7 +12,6 @@ Menu contents:
    Copy Assignments <../popups/CopyAssignmentsPopup.rst>
    Spin System Typing <../popups/SpinSystemTypingPopup.rst>
 
-   Automated Seq. Assignment <../popups/AutoBackbonePopup>
    NOE Contributions <../popups/LinkNoeResonancesPopup.rst>
    
    Assignment Graph <../popups/ViewAssignmentPopup.rst>

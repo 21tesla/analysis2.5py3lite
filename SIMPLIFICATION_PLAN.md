@@ -1272,7 +1272,7 @@ TOTAL dropping by exactly the removed-module count; gui_boot_test green
 | 17 | Assignment ▶ Initialise Root Resonances + `popups/InitRootAssignments.py` + doc line | ✅ 2026-08-24 |
 | 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ✅ 2026-08-24 |
 | 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ✅ 2026-08-24 |
-| 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ⬜ |
+| 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ✅ 2026-08-24 |
 | 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ⬜ |
 
 ## Stage checklist detail
@@ -1491,3 +1491,62 @@ no role ref, KEPT), this plan doc, and the gitignored `dist/` snapshot.
     unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
     flat) — zero NEW. `python -m py_compile` OK (AnalysisPopup +
     EditSpinSystem).
+**Stage 20 — Automated Seq. Assignment (Nexus/MARS/PSIPRED) — ✅ 2026-08-24**
+Recon (verified pre-edit): `ccpnmr/nexus/` (5 files, 3428 lines —
+`__init__` 1 / `_licenseInfo` 62 / `NexusBasic` 806 / `AutoBackboneNexus` 639
+/ `AutoBackbonePopup` 1920) — `AutoBackbonePopup(BasePopup)` (title
+"Assignment : Automated Seq. Assignment"); imports `ccpnmr.analysis.wrappers.
+Mars.runMars` (L56) + `ccpnmr.nexus.NexusBasic` (L57) + lazy
+`AutoBackboneNexus.autoBackboneNexus` (L33). With the S19 removal of
+`LinkSeqSpinSystems` (its L70 `NexusBasic` import), `AutoBackbonePopup` was
+`NexusBasic`'s LAST consumer (locked decision 1) → `nexus/` dies here. No
+`argServer` macro inside `nexus/` (grep-verified). `wrappers/Mars.py` (507):
+SOLE importer `AutoBackbonePopup` (`runMars`); carries the `tesMars`
+`argServer` macro (L81) — a standalone in-file entry point, no registration
+table to update (Stage-14 precedent); `__main__` self-test at L88.
+`wrappers/Psipred.py` (188): SOLE importer `Mars.py`'s lazy `psipredCcpn`
+(L223); carries the `testCcpnPsipred` `argServer` macro (L54) — same
+standalone-macro pattern. Repo-wide grep (`AutoBackbone|auto_backbone_
+assign|NexusBasic|AutoBackboneNexus|runMars|Psipred|psipred|ccpnmr\.nexus`):
+beyond these files, only `AnalysisPopup.py` (the 5 items below), the two
+doc lines, untracked/generated `build/`+`dist/`+`ccpnmr.egg-info/` snapshots
+(untracked — `git ls-files | grep -c egg-info` = 0 — same as S17-19, no
+stage-commit scope), and the unrelated `cambridge/dangle` commented-out path
++ `memops/general/license` `_licenseInfo` machinery (a DIFFERENT
+`_licenseInfo` concept — the memops license generator). `wrappers/{CamCoil,
+D2D,Shiftx}.py` + `wrappers/__init__.py` KEPT (locked decision 2 — CamCoil
+→ `SequenceShiftPredict` and D2D → `SecStructurePredict` are kept popups).
+- `AnalysisPopup.py` (−30 lines, 2987→2957): dropped the
+  `ccpnmr.nexus.AutoBackbonePopup` import; the `"auto_backbone_assign":
+  self.autoBackboneAssign` popupActions entry + the commented
+  `#'auto_backbone_assign': self.activateMars` line; the "Automated Seq.
+  Assignment" add_command block (label + 6-arg block + `menuNames.append`) —
+  the preceding `menu.add_separator()` KEPT (after S21 the two separators
+  around the removed middle block sit adjacent; Stage 21 collapses the pair,
+  per the menu-index bookkeeping); the `autoBackboneAssign` method + the
+  commented `activateMars` block after it (7 commented lines incl. the
+  commented `popup = self.popups['auto_backbone_assign']`). `HAVE_NUMPY` KEPT
+  (locked decision 5 — `peakSeparatorParams` uses it); `showWarning` KEPT
+  (6 remaining uses in-file).
+- `git rm` (7 files, 4123 lines): `ccpnmr/nexus/{__init__,_licenseInfo,
+  NexusBasic,AutoBackboneNexus,AutoBackbonePopup}.py` (3428) +
+  `ccpnmr/analysis/wrappers/{Mars,Psipred}.py` (507+188).
+- `doc/source/menu/Assignment.rst` (−1): dropped the toctree line (middle
+  group 2 → 1 line — "NOE Contributions" now stands alone; blank-line
+  grouping preserved; its line dies in S21).
+- `ccpnmr/analysis/doc/Readme.txt` (−2): dropped the `nexus/` layout line +
+  its separating blank line. (Observation, out of scope: the `clouds/`
+  line in the same block survived S15 — pre-existing, untouched.)
+- Grep-verified post-edit: zero `AutoBackbone|auto_backbone|autoBackbone|
+  activateMars|nexus` references in `AnalysisPopup.py`.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1240** (1247−7: 5 nexus + 2 wrappers,
+    exactly as predicted), OK **1228**, FAILED **2** unchanged (2×
+    `cherrypy`), BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check AnalysisPopup.py --statistics`: 40→**40** — IDENTICAL
+    mix (UP031 17 / E722 10 / F841 8 / E731 2 / E721 1 / F811 1 / W293 1) —
+    zero NEW (no F841 delta: the removed method had no unused `popup =`,
+    and no import became orphaned). `python -m py_compile` OK.
