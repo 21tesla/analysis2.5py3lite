@@ -100,7 +100,6 @@ from ccpnmr.analysis.popups.EditSpinSystem import EditSpinSystemPopup
 from ccpnmr.analysis.popups.EditStructures import EditStructuresPopup
 from ccpnmr.analysis.popups.EditWindow import EditWindowPopup
 from ccpnmr.analysis.popups.FollowShiftChanges import FollowShiftChangesPopup
-from ccpnmr.analysis.popups.InitRootAssignments import InitRootAssignmentsPopup
 from ccpnmr.analysis.popups.IsotopeSchemeEditor import IsotopeSchemeEditor
 from ccpnmr.analysis.popups.LinkNoeResonances import LinkNoeResonancesPopup
 from ccpnmr.analysis.popups.LinkPeakLists import LinkPeakListsPopup
@@ -234,7 +233,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "browse_resonances": self.browseResonances,
             "selected_resonances": self.viewSelectedResonances,
             "edit_spin_system": self.editSpinSystems,
-            "initialise_root_spectra": self.initialiseRootSpectra,
             "link_peaklists": self.linkPeakLists,
             "link_seq_spin_systems": self.linkSeqSpinSystems,
             "link_noe_resonances": self.linkNoeResonances,
@@ -1198,16 +1196,6 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         menuNames.append(label)
         menu.add_separator()
-        label = "Initialise Root Resonances"
-        menu.add_command(
-            label=label,
-            shortcut="I",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.initialiseRootSpectra,
-            tipText="Add initial resonance and spin system numbers to HQSC & HNCO peaks",
-        )
-        menuNames.append(label)
         label = "Pick & Assign From Roots"
         menu.add_command(
             label=label,
@@ -2201,10 +2189,6 @@ class AnalysisPopup(BasePopup, Analysis):
         popup = self.openPopup("edit_spin_system", EditSpinSystemPopup)
         if doClear:
             popup.update(doClear)
-
-    def initialiseRootSpectra(self):
-
-        popup = self.openPopup("initialise_root_spectra", InitRootAssignmentsPopup)
 
     def linkPeakLists(self, doClear=False):
 

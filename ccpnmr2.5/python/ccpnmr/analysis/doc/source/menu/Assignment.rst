@@ -12,7 +12,6 @@ Menu contents:
    Copy Assignments <../popups/CopyAssignmentsPopup.rst>
    Spin System Typing <../popups/SpinSystemTypingPopup.rst>
 
-   Initialise Root Resonances <../popups/InitRootAssignmentsPopup.rst>
    Pick & Assign From Roots <../popups/LinkPeakListsPopup.rst>
    Protein Sequence Assignment <../popups/LinkSeqSpinSystemsPopup.rst>
    Automated Seq. Assignment <../popups/AutoBackbonePopup>

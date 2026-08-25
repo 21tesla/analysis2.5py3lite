@@ -1174,3 +1174,225 @@ per locked decision 4).
 - **MENU REMOVAL PLAN COMPLETE — 16/16** (Simplification 1-12 + Menu
   Removal 13-16), all stages committed + pushed to
   `21tesla/analysis2.5py3lite:main`.
+
+---
+
+# Assignment Menu Removal Plan — Stages 17-21 (added 2026-08-24)
+
+Status: **IN PROGRESS** (started 2026-08-24)
+Same repo, same checkpoint policy: ONE commit per stage (code + this log
+update in the same commit) + push to `main`. Python: anaconda `python`
+3.13.5; `xvfb-run` available.
+
+## Goal
+
+Remove 5 items from the Assignment menu (`setAssignMenu` in
+`ccpnmr2.5/python/ccpnmr/analysis/AnalysisPopup.py`) plus their popup
+modules and the orphan code that becomes unreachable (stages 1-16 pattern).
+Per user request (2026-08-24).
+
+| # | Menu item | Command method (AnalysisPopup.py) | Popup/module removed | Orphans removed with it |
+|---|---|---|---|---|
+| 17 | Assignment ▶ **Initialise Root Resonances** | `initialiseRootSpectra` | `popups/InitRootAssignments.py` (756) | — |
+| 18 | Assignment ▶ **Pick & Assign From Roots** | `linkPeakLists` | `popups/LinkPeakLists.py` (1356) | the S17 cross-references inside it |
+| 19 | Assignment ▶ **Protein Sequence Assignment** | `linkSeqSpinSystems` | `popups/LinkSeqSpinSystems.py` (3173) | `EditSpinSystem.py:165` dangling help link |
+| 20 | Assignment ▶ **Automated Seq. Assignment** (Nexus/MARS/PSIPRED) | `autoBackboneAssign` | `ccpnmr/nexus/` (5 files, 3538 lines) | `wrappers/Mars.py` (507) + `wrappers/Psipred.py` (188) |
+| 21 | Assignment ▶ **NOE Contributions** | `linkNoeResonances` | `popups/LinkNoeResonances.py` (1419) | — |
+
+Kept in the Assignment menu: Assignment Panel, Copy Assignments,
+Spin System Typing, Assignment Graph, Quality Reports.
+
+## Locked decisions (2026-08-24)
+
+1. **One stage per menu item, menu order 17→21.** `NexusBasic.py` is shared
+   by `LinkSeqSpinSystems` (S19) and `AutoBackbonePopup` (S20) — it goes with
+   S20, the stage that removes its LAST consumer.
+2. **`wrappers/` — remove `Mars.py` + `Psipred.py` only** (S20): `Mars.py`'s
+   sole importer is `AutoBackbonePopup` (`runMars`); `Psipred.py`'s sole
+   importer is `Mars.py` (lazy `psipredCcpn`). KEPT: `wrappers/CamCoil.py`
+   (imported by KEPT `popups/SequenceShiftPredict.py:44`), `wrappers/D2D.py`
+   (imported by KEPT `popups/SecStructurePredict.py:44`); `wrappers/Shiftx.py`
+   has no external importers but is a separate SHIFTX-prediction wrapper (an
+   `argServer` macro entry point), NOT one of the 5 requested items — kept
+   (recorded as observation).
+3. **`macros/AssignmentMacros.py` KEPT** (Stage-14 precedent: macro surface
+   outlives menu removal). Its `initialiseHSQC` /
+   `initialiseHNCOorHNCOCA` / `pickAssignSpecFrom*` are standalone
+   `argServer` user-macro entry points duplicating (not shared with) the
+   removed popups; the file also holds 10+ generic assignment macros. The
+   KEPT core `ccpnmr.analysis.core.AssignmentAdvanced` (incl. its
+   `pickAssignSpecFromRoot` / `assignSpecNonRootResonances` used by
+   `LinkPeakLists`) stays either way.
+4. **Generated API attributes `AnalysisProject.linkPeakListsData` /
+   `linkSeqSpinSystemsData` KEPT** (`ccpnmr/api` + `ccpnmr/xml` +
+   `memops/api` + `ccpnmr2.5/model` — Stage-14 precedent: generated model
+   keeps attributes after their UI is removed; plain project data fields).
+5. **`HAVE_NUMPY` (AnalysisPopup L145-148) KEPT** — also used by the KEPT
+   `peakSeparatorParams` method. KEPT: `showWarning` (many users),
+   `confirm_seq_spin_systems` / `type_spin_systems` / `edit_assignment` /
+   `quality_reports` popupActions + methods (their menu items stay).
+6. **Docs:** each stage drops its own `doc/source/menu/Assignment.rst`
+   toctree line (targets are already dangling — the `source/popups/` dir
+   doesn't exist; Stage-12 precedent); `doc/Changes.html` changelog history
+   UNTOUCHED (Stage-12 precedent); `doc/Readme.txt:66` (`nexus/` layout line)
+   dropped in S20.
+
+## Menu-index bookkeeping
+
+Assignment menu construction order (current, separators count):
+`0 Assignment Panel, 1 Copy Assignments, 2 Spin System Typing, 3 sep,
+4 Initialise Root Resonances, 5 Pick & Assign From Roots,
+6 Protein Sequence Assignment, 7 Automated Seq. Assignment,
+8 NOE Contributions, 9 sep, 10 Assignment Graph, 11 Quality Reports`.
+No `fixedActiveMenus` entry for AssignMenu (grep-verified: only Project /
+Experiment / Other have them) → no re-indexing needed. `menu_items[AssignMenu]`
+is built via `menuNames.append` and `setMenuState` (L1871+) iterates it
+generically (Stage-14 precedent) → only the entries for the 5 items disappear.
+After S21: `0 Assignment Panel, 1 Copy Assignments, 2 Spin System Typing,
+3 sep, 4 Assignment Graph, 5 Quality Reports` (S21 collapses the pair of
+separators left adjacent after the 5 items are gone).
+
+## Baseline (from Stage 16 close, 2026-08-24)
+
+| Gate | Result |
+|---|---|
+| `python import_smoke.py` | exit 0 — TOTAL **1250**, OK 1238, FAILED **2** (2× `cherrypy`), BY-DESIGN **10** |
+| `xvfb-run -a python gui_boot_test.py` | **3/3** (ccpnmr, data-shifter, format-converter) |
+| `python -m pytest ccpnmr2.5/python/tests/` | **45 passed, 4 skipped** |
+| `ruff check AnalysisPopup.py` | **43** (UP031 17, F841 11, E722 10, E731 2, E721 1, F811 1, W293 1) |
+
+Per-stage rules: import_smoke exit 0 with no NEW unexpected failures and
+TOTAL dropping by exactly the removed-module count; gui_boot_test green
+(3/3 throughout); pytest floors held; `uvx ruff check` zero NEW.
+
+## Stages & status
+
+| # | Scope | Status |
+|---|---|---|
+| 17 | Assignment ▶ Initialise Root Resonances + `popups/InitRootAssignments.py` + doc line | ✅ 2026-08-24 |
+| 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ⬜ |
+| 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ⬜ |
+| 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ⬜ |
+| 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ⬜ |
+
+## Stage checklist detail
+
+**Stage 17 — Initialise Root Resonances**
+- `AnalysisPopup.py`: `InitRootAssignments` import (pre-edit L103);
+  `popupActions` entry `"initialise_root_spectra"` (L237); the
+  "Initialise Root Resonances" `add_command` block (shortcut "I") +
+  its `menuNames.append`; the `initialiseRootSpectra` method.
+- Delete `ccpnmr2.5/python/ccpnmr/analysis/popups/InitRootAssignments.py`
+  (756 lines, incl. `testInitialiseRootPeakListPopup` argServer macro).
+- `doc/source/menu/Assignment.rst`: drop the "Initialise Root Resonances"
+  toctree line.
+- Gates expected: TOTAL 1250→**1249** (−1), FAILED 2, BY-DESIGN 10,
+  gui 3/3, pytest unchanged, ruff zero NEW.
+- Commit + push; stage log; mark ✅.
+
+**Stage 18 — Pick & Assign From Roots**
+- `AnalysisPopup.py`: `LinkPeakLists` import (pre-edit L106); `popupActions`
+  `"link_peaklists"` (L238); menu block (shortcut "P"); `linkPeakLists`
+  method.
+- Delete `popups/LinkPeakLists.py` (1356 lines — contains the S17
+  cross-references at L104/L178).
+- `doc/source/menu/Assignment.rst`: drop the "Pick & Assign From Roots" line.
+- Gates expected: TOTAL 1249→**1248** (−1).
+- Commit + push; stage log; mark ✅.
+
+**Stage 19 — Protein Sequence Assignment**
+- `AnalysisPopup.py`: `LinkSeqSpinSystems` import (pre-edit L107);
+  `popupActions` `"link_seq_spin_systems"` (L239); menu block (shortcut "S");
+  `linkSeqSpinSystems` method.
+- Delete `popups/LinkSeqSpinSystems.py` (3173 lines — its L220-221 help-link
+  defs to AutoBackbone/LinkPeakLists die with it; incl.
+  `LinkSeqSpinSystemsTestMacro`).
+- `popups/EditSpinSystem.py`: drop `.. _str(Protein Sequence Assignment):
+  LinkSeqSpinSystemsPopup.html` (L165) + the docstring sentence using
+  `str(Protein Sequence Assignment)_` (L117 region — verify exact text) if it
+  becomes dangling (Stage-12 sweep precedent; keep the rest of the docstring).
+- `doc/source/menu/Assignment.rst`: drop the "Protein Sequence Assignment"
+  line.
+- Gates expected: TOTAL 1248→**1247** (−1).
+- Commit + push; stage log; mark ✅.
+
+**Stage 20 — Automated Seq. Assignment (Nexus/MARS/PSIPRED)**
+- `AnalysisPopup.py`: `AutoBackbonePopup` import (pre-edit L125);
+  `popupActions` "auto_backbone_assign" (L246) + the commented
+  `#'auto_backbone_assign': self.activateMars` line (L247); menu block
+  (shortcut "u"); `autoBackboneAssign` method + the commented `activateMars`
+  block after it.
+- Delete `ccpnmr2.5/python/ccpnmr/nexus/` (5 files: `__init__` (bare pass),
+  `_licenseInfo`, `NexusBasic` 806, `AutoBackboneNexus` 639,
+  `AutoBackbonePopup` 1920 — the last `NexusBasic` consumers,
+  `LinkSeqSpinSystems` L70 and `AutoBackbonePopup` L57/L33, are both gone by
+  then).
+- Delete `ccpnmr2.5/python/ccpnmr/analysis/wrappers/Mars.py` (507; sole
+  importer was `AutoBackbonePopup`) + `wrappers/Psipred.py` (188; sole
+  importer was `Mars.py`). `wrappers/__init__.py` + `CamCoil` + `D2D` +
+  `Shiftx` stay.
+- `doc/source/menu/Assignment.rst`: drop the "Automated Seq. Assignment"
+  line; `ccpnmr/analysis/doc/Readme.txt:66`: drop the `nexus/` layout line.
+- Gates expected: TOTAL 1247→**1240** (−7: 5 nexus + 2 wrappers).
+- Commit + push; stage log; mark ✅.
+
+**Stage 21 — NOE Contributions**
+- `AnalysisPopup.py`: `LinkNoeResonances` import (pre-edit L105);
+  `popupActions` `"link_noe_resonances"` (L240); menu block (shortcut "N");
+  `linkNoeResonances` method; collapse the TWO now-adjacent
+  `menu.add_separator()` calls left between "Spin System Typing" and
+  "Assignment Graph" into one.
+- Delete `popups/LinkNoeResonances.py` (1419 lines; its stage-11
+  `viewStructure` call site was already removed in Stage 11).
+- `doc/source/menu/Assignment.rst`: drop the "NOE Contributions" line.
+- Gates expected: TOTAL 1240→**1239** (−1).
+- Commit + push; stage log; mark the plan **COMPLETE** (21/21 across all
+  three plans).
+
+## Rollback
+
+Each stage is exactly one commit on the new repo → `git revert <sha>` restores
+it cleanly.
+
+## Stage log (Assignment Menu Removal)
+
+**Stage 17 — Initialise Root Resonances — ✅ 2026-08-24**
+Recon (verified pre-edit): `popups/InitRootAssignments.py` (756 lines) —
+`InitRootAssignmentsPopup(BasePopup)` "Initialise Root Resonances" + the
+`testInitialiseRootPeakListPopup` argServer macro inside it. Sole external
+importer: `AnalysisPopup.py` (import, popupActions entry, menu block
+shortcut "I", 3-line `initialiseRootSpectra` method). The in-file test macro
+is a standalone `argServer` entry point — no registration table to update
+(Stage-14 precedent: macro surface lives in the module). Cross-references in
+`LinkPeakLists.py:104,178` (docstring usage sentence + help-link def) die
+with that file in Stage 18. `doc/source/menu/Assignment.rst:15` toctree line
+(the `source/popups/` target dir doesn't exist — link already dangling).
+Zero references in pyproject/MANIFEST/import_smoke/gui_boot_test/bin/,
+scripts/, README, INSTALL (grep-verified). `AnalysisProject` model has NO
+`initRoot*` data field (unlike LinkPeakLists/LinkSeqSpinSystems — the
+`linkPeakListsData` / `linkSeqSpinSystemsData` fields are KEPT, locked
+decision 4).
+- `AnalysisPopup.py` (−18 lines): dropped the
+  `ccpnmr.analysis.popups.InitRootAssignments` import; the
+  `"initialise_root_spectra"` popupActions entry; the "Initialise Root
+  Resonances" add_command block (label + 6-arg block + `menuNames.append`);
+  the `initialiseRootSpectra` method (its `popup =` line is the F841 the
+  ruff baseline carried).
+- Deleted `ccpnmr2.5/python/ccpnmr/analysis/popups/InitRootAssignments.py`
+  (756 lines).
+- `doc/source/menu/Assignment.rst`: dropped the toctree line (8 → 7 lines in
+  the middle block).
+- Grep-verified: repo-wide `InitRootAssignments|initialiseRootSpectra|
+  initialise_root_spectra|Initialise Root Resonances` → only the two S18
+  cross-references in LinkPeakLists.py (dies next stage) + this plan doc +
+  the gitignored `dist/` snapshot.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1249** (1250−1, exactly the one
+    removed module), OK **1237**, FAILED **2** unchanged (2× `cherrypy`),
+    BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check`: AnalysisPopup 43→**42** (F841 11→10 — the removed
+    unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
+    all flat) — zero NEW. `python -m py_compile` OK.
