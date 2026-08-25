@@ -88,7 +88,6 @@ from ccpnmr.analysis.popups.EditExperimentSeries import EditExperimentSeriesPopu
 from ccpnmr.analysis.popups.EditMarks import EditMarksPopup
 from ccpnmr.analysis.popups.EditMeasurementLists import EditMeasurementListsPopup
 from ccpnmr.analysis.popups.EditMolecules import EditMoleculesPopup
-from ccpnmr.analysis.popups.EditMolLabelling import EditMolLabellingPopup
 from ccpnmr.analysis.popups.EditPeak import EditPeakPopup
 from ccpnmr.analysis.popups.EditPeakAliasing import EditPeakAliasingPopup
 from ccpnmr.analysis.popups.EditPeakDrawParams import EditPeakDrawParamsPopup
@@ -100,7 +99,6 @@ from ccpnmr.analysis.popups.EditSpinSystem import EditSpinSystemPopup
 from ccpnmr.analysis.popups.EditStructures import EditStructuresPopup
 from ccpnmr.analysis.popups.EditWindow import EditWindowPopup
 from ccpnmr.analysis.popups.FollowShiftChanges import FollowShiftChangesPopup
-from ccpnmr.analysis.popups.IsotopeSchemeEditor import IsotopeSchemeEditor
 from ccpnmr.analysis.popups.NewWindow import NewWindowPopup
 from ccpnmr.analysis.popups.OpenSpectrum import OpenSpectrumPopup
 from ccpnmr.analysis.popups.PrintWindow import PrintWindowPopup
@@ -222,8 +220,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "copy_assignments": self.copyAssignments,
             "browse_atoms": self.browseAtoms,
             "browse_reference_shifts": self.browseReferenceShifts,
-            "isotope_scheme_editor": self.isotopomerEditor,
-            "isotope_labelling": self.editIsotopeLabelling,
             "browse_residue_info": self.browseResidueInfo,
             "browse_resonance_info": self.browseResonanceInfo,
             "browse_resonances": self.browseResonances,
@@ -1079,22 +1075,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.editMolSystems,
             tipText="Setup the polymer chains, small molecules and sequences within the project",
         )
-        menu.add_command(
-            label="Isotope Labelling",
-            shortcut="L",
-            image=self.iconTable,
-            compound="left",
-            command=self.editIsotopeLabelling,
-            tipText="Setup the isotope labelling patterns of molecules",
-        )
-        menu.add_command(
-            label="Reference Isotope Schemes",
-            shortcut="I",
-            image=self.iconTable,
-            compound="left",
-            command=self.isotopomerEditor,
-            tipText="Curate and manage per-residue isotope labelling schemes",
-        )
         menu.add_separator()
         menu.add_command(
             label="Atom Browser",
@@ -1126,8 +1106,6 @@ class AnalysisPopup(BasePopup, Analysis):
         self.menus[MoleculeMenu] = menu
         self.menu_items[MoleculeMenu] = [
             "Molecules",
-            "Isotope Labelling",
-            "Reference Isotope Schemes",
             "Atom Browser",
             "Add Sequence",
             "Residue Information",
@@ -2098,14 +2076,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def browseReferenceShifts(self):
 
         self.openPopup("browse_reference_shifts", BrowseReferenceShiftsPopup)
-
-    def isotopomerEditor(self):
-
-        self.openPopup("isotope_scheme_editor", IsotopeSchemeEditor)
-
-    def editIsotopeLabelling(self):
-
-        self.openPopup("isotope_labelling", EditMolLabellingPopup)
 
     def browseResidueInfo(self):
 

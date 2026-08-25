@@ -1610,3 +1610,136 @@ plan doc and the gitignored `dist/` snapshot.
 - **ASSIGNMENT MENU REMOVAL PLAN COMPLETE — 21/21** (Simplification 1-12
   + Menu Removal 13-16 + Assignment Menu 17-21), all stages committed +
   pushed to `21tesla/analysis2.5py3lite:main`.
+
+## Menu Removal Round 2 (Stages 22–23) — requested 2026-08-24
+
+| # | Scope | Status |
+|---|---|---|
+| 22 | Molecule menu ▶ "Isotope Labelling" + "Reference Isotope Schemes" + `popups/{EditMolLabelling,IsotopeSchemeEditor}.py` + doc lines | ✅ 2026-08-24 |
+| 23 | Assignment menu ▶ "Spin System Typing" + `SpinSystemTypingPopup`/`TypingEnsemblePopup` classes + `core/SpinSystemTyping.py` + doc line (`SpinSystemTypeScoresPopup` KEPT — live callers below) | ⏳ pending |
+
+### Stage 22 — Molecule menu: Isotope Labelling + Reference Isotope Schemes
+
+Recon (verified 2026-08-24):
+- `AnalysisPopup.py` items: `EditMolLabellingPopup` import (L91);
+  `IsotopeSchemeEditor` import (L103); `popupActions` `"isotope_scheme_editor"`
+  (L225) + `"isotope_labelling"` (L226); the two `setMoleculeMenu`
+  `add_command` blocks ("Isotope Labelling" L1082-1089 with shortcut "L",
+  "Reference Isotope Schemes" L1090-1097 with shortcut "I"); the two
+  `menu_items[MoleculeMenu]` entries (L1129-1130); the `isotopomerEditor`
+  (L2102-2104) + `editIsotopeLabelling` (L2106-2108) methods.
+- `popups/EditMolLabelling.py` (1860 lines): `EditMolLabellingPopup` + 4
+  module-level helpers (`getMolLabelFromScheme`, `updateResLabelFractions`,
+  `setResLabelNaturalAbundance`, `getMolLabelMass`) — each used ONLY
+  in-file (grep-verified, `ccpnmr/` + `memops/`, .py, minus pycache).
+- `popups/IsotopeSchemeEditor.py` (1304 lines): `IsotopeSchemeEditor` +
+  helpers `getSortedIsotopes` (sole importer `EditMolLabelling` L82/L798/
+  L1093 — dead pair), `getPrimaryIsotope` + `isSchemeEditable` (in-file
+  only); the `testChemCompLabelEditorMacro` `argServer` macro (L79) and the
+  `__main__` self-test (L1269) die with the file (standalone-macro
+  precedent, no registration table to update).
+- `doc/source/menu/Molecule.rst` L12-13: two toctree lines (target dir
+  `source/popups/` doesn't exist — links already dangling; S17-21
+  precedent).
+- Grep-verified: repo-wide
+  `isotopomerEditor|editIsotopeLabelling|isotope_labelling|isotope_scheme_
+  editor|EditMolLabelling|IsotopeSchemeEditor` → only the items above +
+  the two in-file docstring help-link cross-refs (L231/L236, dead pair) +
+  the gitignored `build/`/`dist/` snapshots.
+- Orphan OBSERVATION (NOT removed — locked hazard-3 "keep `ccpnmr/
+  analysis/core/*` + related frames" policy): `frames/ViewIsotopomerFrame.
+  py` (subclasses KEPT `ViewChemCompVarFrame`) loses its only importer;
+  candidate for a future stage if the policy changes.
+- Gates expected: TOTAL 1239→**1237** (−2), FAILED 2, BY-DESIGN 10, gui
+  3/3, pytest 45/4, ruff 39 flat (no F841 delta — both removed methods
+  use bare `self.openPopup(...)`, no unused `popup =`).
+- Commit + push; stage log; mark ✅.
+
+### Stage 23 — Assignment menu: Spin System Typing
+
+Recon (verified 2026-08-24):
+- `AnalysisPopup.py` items: import (L112) `from ccpnmr.analysis.popups.
+  SpinSystemTyping import SpinSystemTypeScoresPopup, SpinSystemTypingPopup`
+  → trim to `SpinSystemTypeScoresPopup` ONLY; `popupActions`
+  `"type_spin_systems"` (L233) — `"type_spin_system"` (L234) KEPT; the
+  "Spin System Typing" `add_command` block (label L1178, shortcut "T", +
+  `menuNames.append`); the `typeSpinSystems` method (L2147-2149 — its
+  unused `popup =` carries the F841 this stage removes).
+- `popups/SpinSystemTyping.py` (1300 lines): remove
+  `class SpinSystemTypingPopup` (L698-1223) + `class TypingEnsemblePopup`
+  (L1225-1300, ends the file) + `COLOR_DICT` (L68, only use L825 in the
+  removed class) + now-orphan imports: `core.SpinSystemTyping.
+  getSpinSystemTypes` (L53), `MoleculeBasic.getResidueCode` (L52 — keep
+  `DEFAULT_ISOTOPES`), `memops.gui.{CheckButton,FloatEntry,IntEntry,
+  PartitionedSelector,ProgressBar,ScrolledGraph}`. No `argServer` macro or
+  `__main__` block in-file.
+- `git rm` `core/SpinSystemTyping.py` (541 lines; `getSpinSystemTypes`
+  L121 has no importer beyond the removed popup class — grep-verified).
+- **KEPT (verified live call sites — do NOT touch):**
+  `SpinSystemTypeScoresPopup` (L71-696, the file's first class) — called
+  by KEPT `EditSpinSystem.predictType` (L606 →
+  `self.guiParent.typeSpinSystem(self.spinSystem)`) and KEPT
+  `WindowFrame.predictSpinSystemType` (L6510 →
+  `self.topPopup.typeSpinSystem(spinSystem=..., shiftList=...)`);
+  `AnalysisPopup.typeSpinSystem` (singular, L2151); `MoleculeBasic.
+  DEFAULT_ISOTOPES` (still used popup-file L284/L302); the
+  "Spin System Type Scores" toctree lines in `doc/source/menu/{
+  Assignment,Resonance}.rst` (popup still reachable); `Changes.html`
+  changelog mentions (history — locked decision 6).
+- `doc/source/menu/Assignment.rst`: drop the "Spin System Typing" toctree
+  line (L13; first group 3→2 lines).
+- Assignment-menu bookkeeping after S23: `0 Assignment Panel, 1 Copy
+  Assignments, 2 sep, 3 Assignment Graph, 4 Quality Reports` (no adjacent
+  separators created).
+- Gates expected: TOTAL 1237→**1236** (−1), FAILED 2, BY-DESIGN 10, gui
+  3/3, pytest 45/4, ruff 39→**38** (F841 7→6).
+- Commit + push; stage log; mark ✅.
+
+## Stage log (Menu Removal Round 2)
+
+**Stage 22 — Molecule menu: Isotope Labelling + Reference Isotope Schemes — ✅ 2026-08-24**
+- `AnalysisPopup.py` (−30 lines, 2940→2910): dropped the
+  `EditMolLabellingPopup` import (pre L91); the `IsotopeSchemeEditor` import
+  (pre L103); the `popupActions` entries `"isotope_scheme_editor"` +
+  `"isotope_labelling"` (pre L225-226); the two `setMoleculeMenu`
+  `add_command` blocks ("Isotope Labelling" shortcut "L" + "Reference
+  Isotope Schemes" shortcut "I") — the menu is now `Molecules | sep | Atom
+  Browser, Add Sequence | sep | Residue Information` with NO adjacent
+  separators; the two `menu_items[MoleculeMenu]` entries (6→4); the
+  `isotopomerEditor` (pre L2102-2104) + `editIsotopeLabelling` (pre
+  L2106-2108) methods (both bare `self.openPopup(...)` — zero F841 delta).
+  The `# Isotopomer scheme tidy` TBD planning comment in `setMoleculeMenu`
+  KEPT (non-functional note, minimal-scope precedent).
+- `git rm` (2 files, 3164 lines): `popups/EditMolLabelling.py` (1860 —
+  incl. the 4 in-only module helpers + the L236 `.. _str(Reference Isotope
+  Schemes)` help-link def + its `getSortedIsotopes` import, all dead with
+  the file) + `popups/IsotopeSchemeEditor.py` (1304 — incl. the
+  `testChemCompLabelEditorMacro` `argServer` macro (L79) and the `__main__`
+  self-test (L1269) — both die with the file (standalone-macro
+  precedent) — the in-only `getSortedIsotopes`/`getPrimaryIsotope`/
+  `isSchemeEditable`
+  helpers (sole importer of `getSortedIsotopes` was `EditMolLabelling` —
+  dead pair), and the L231 `.. _str(Isotope Labelling)` help-link def).
+- `doc/source/menu/Molecule.rst` (−2): dropped the two toctree lines —
+  "Molecules" now stands alone (its target dir `source/popups/` didn't
+  exist; link already dangling, S17-21 precedent); "Atom Browser / Add
+  Sequence" group intact.
+- Grep-verified post-edit: `EditMolLabelling|IsotopeSchemeEditor|
+  isotopomerEditor|editIsotopeLabelling|isotope_labelling|isotope_scheme_
+  editor` across `ccpnmr2.5/python/**/*.py` + `**/*.rst` → zero hits
+  (pycache aside).
+- Orphan OBSERVATION (NOT removed — locked core/frame-keep policy):
+  `frames/ViewIsotopomerFrame.py` (subclasses KEPT
+  `ViewChemCompVarFrame`) is now importerless (its only importer was
+  `IsotopeSchemeEditor`) — flagged as a candidate for a future stage if
+  that policy changes.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1237** (1239−2, exactly the two
+    removed modules), OK **1225**, FAILED **2** unchanged (2× `cherrypy`),
+    BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setMoleculeMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check AnalysisPopup.py --statistics`: 39→**39** — IDENTICAL
+    mix (UP031 17 / E722 10 / F841 7 / E731 2 / E721 1 / F811 1 / W293 1) —
+    zero NEW. `python -m py_compile` OK.
