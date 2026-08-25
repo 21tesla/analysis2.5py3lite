@@ -1271,7 +1271,7 @@ TOTAL dropping by exactly the removed-module count; gui_boot_test green
 |---|---|---|
 | 17 | Assignment ▶ Initialise Root Resonances + `popups/InitRootAssignments.py` + doc line | ✅ 2026-08-24 |
 | 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ✅ 2026-08-24 |
-| 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ⬜ |
+| 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ✅ 2026-08-24 |
 | 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ⬜ |
 | 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ⬜ |
 
@@ -1434,3 +1434,60 @@ generated API/xml/model, plain data attribute; its popup just stops existing).
   - `uvx ruff check`: AnalysisPopup 42→**41** (F841 10→9 — the removed
     unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
     flat) — zero NEW. `python -m py_compile` OK.
+**Stage 19 — Protein Sequence Assignment — ✅ 2026-08-24**
+Recon (verified pre-edit, cross-refs confirmed against the HEAD copy of the
+removed file): `popups/LinkSeqSpinSystems.py` (3173 lines) —
+`LinkSeqSpinSystemsPopup(BasePopup)` (title "Assignment : Protein Sequence
+Assignment") + the `LinkSeqSpinSystemsTestMacro` argServer macro (L100);
+imports `ccpnmr.nexus.NexusBasic` (L70, `linkSpinSystemInterIntraResonances`
+— the SHARED consumer; per locked decision 1 `NexusBasic` goes with S20, the
+stage removing its last consumer); reads/writes the KEPT
+`AnalysisProject.linkSeqSpinSystemsData` model field (L1231/L1341, locked
+decision 4). Sole external importer: `AnalysisPopup.py` (import, popupActions
+`"link_seq_spin_systems"`, menu block shortcut "S", 3-line
+`linkSeqSpinSystems` method). Carried the two S18 cross-references — L136
+docstring usage sentence + L221 help-link def to LinkPeakListsPopup — both
+die with the file. Orphans created by the removal: `popups/EditSpinSystem.py`
+docstring reference `str(Protein Sequence Assignment)_` (L112) + its
+`.. _str(...)` link def (L165); `doc/source/menu/Assignment.rst:15` toctree
+line (target dir `source/popups/` doesn't exist — link already dangling,
+Stage-12 precedent). Repo-wide grep: beyond the file itself + these orphans,
+only the KEPT generated `linkSeqSpinSystemsData` surface (ccpnmr/api,
+ccpnmr/xml, memops/api, model XML, generated API docs), a plain-prose phrase
+in `BrowseReferenceShifts.py` ("performing protein sequence assignment" —
+no role ref, KEPT), this plan doc, and the gitignored `dist/` snapshot.
+- `AnalysisPopup.py` (−16 lines): dropped the
+  `ccpnmr.analysis.popups.LinkSeqSpinSystems` import; the
+  `"link_seq_spin_systems"` popupActions entry; the "Protein Sequence
+  Assignment" add_command block (label + 6-arg block + `menuNames.append`) —
+  the preceding `menu.add_separator()` KEPT (after S20/S21 the two separators
+  around the removed middle block sit adjacent; Stage 21 collapses the pair,
+  per the menu-index bookkeeping); the `linkSeqSpinSystems` method (its
+  unused `popup =` line carried the F841 this stage removed).
+- Deleted `ccpnmr2.5/python/ccpnmr/analysis/popups/LinkSeqSpinSystems.py`
+  (3173 lines) via `git rm`.
+- `popups/EditSpinSystem.py` (+1/−4): dropped the dangling docstring
+  sentence "Such links are independent of a full residue assignment, and
+  usually derive from the peak matching performed by tools like the
+  str(Protein Sequence Assignment)_ option." (rest of the "Seq. Links"
+  bullet kept, per the Stage-12 sweep precedent); dropped the
+  `.. _str(Protein Sequence Assignment): LinkSeqSpinSystemsPopup.html`
+  link def (the `.. _str(Assignment Panel)` def stays — its target is a
+  KEPT popup).
+- `doc/source/menu/Assignment.rst` (−1): dropped the toctree line (second
+  group 3 → 2 lines; blank-line grouping preserved).
+- Grep-verified: repo-wide
+  `LinkSeqSpinSystems|linkSeqSpinSystems|link_seq_spin_systems` → only the
+  KEPT generated `linkSeqSpinSystemsData` attribute surface + this plan doc
+  + gitignored `dist/`.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1247** (1248−1, exactly the one
+    removed module), OK **1235**, FAILED **2** unchanged (2× `cherrypy`),
+    BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check AnalysisPopup.py`: 41→**40** (F841 9→8 — the removed
+    unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
+    flat) — zero NEW. `python -m py_compile` OK (AnalysisPopup +
+    EditSpinSystem).
