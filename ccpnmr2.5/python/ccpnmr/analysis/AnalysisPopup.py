@@ -635,11 +635,6 @@ class AnalysisPopup(BasePopup, Analysis):
         importsMenu.add_command(label="PDB 3.20", shortcut="P", command=self.importPdb)
         importsMenu.add_command(label="Coordinates (PDB-style)", shortcut="C", command=self.importCoordinates)
 
-        # # NOTE:ED not needed
-        # importsMenu.add_command(label='Nef', command=self.importNefFile)
-        # exportsMenu = Menu(self.menubar, tearoff=False)
-        # exportsMenu.add_command(label='Nef', command=self.exportNefFile)
-
         # Preferences submenu
 
         fontsMenu = FontMenu(
@@ -704,14 +699,6 @@ class AnalysisPopup(BasePopup, Analysis):
             compound="left",
             command=self.openSpectrum,
             tipText="Open spectrum data from disk, creating a default CCPN project if needed",
-        )
-
-        menu.add_command(
-            label="Load Nef",
-            image=self.iconOpenFile,
-            compound="left",
-            command=self.loadNefFile,
-            tipText="Open Nef file from disk, creating a default CCPN project if needed",
         )
 
         menu.add_command(
@@ -802,7 +789,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "New",
             "Open Project",
             "Open Spectra",
-            "Load Nef",
             "Save",
             "Save As",
             "Import",
@@ -818,7 +804,7 @@ class AnalysisPopup(BasePopup, Analysis):
 
         # Menus that area active in absence of a project
         # for ii in (0,1,2,7,15,17):
-        for ii in (0, 1, 2, 3, 8):
+        for ii in (0, 1, 2, 7):
             self.fixedActiveMenus[(ProjectMenu, ii)] = True
 
     def openWindowGroup(self, spectrumWindowGroup=None):
@@ -1895,42 +1881,6 @@ class AnalysisPopup(BasePopup, Analysis):
     def openSpectrum(self):
 
         self.openPopup("open_spectrum", OpenSpectrumPopup)
-
-    def loadNefFile(self):
-
-        from ccpnmr.v2io.NefIo import loadNefFile as _loadNefFile
-
-        if self.project:
-            if not self.closeProject():
-                return
-
-        fileTypes = [FileType("STAR", ["*.nef"]), FileType("All", ["*"])]
-
-        fileSelectPopup = FileSelectPopup(
-            self,
-            file_types=fileTypes,
-            title="Load Nef file",
-            dismiss_text="Cancel",
-            selected_file_must_exist=True,
-            multiSelect=False,
-        )
-
-        fileName = fileSelectPopup.getFile()
-
-        if fileName:
-            try:
-                project = _loadNefFile(fileName, overwriteExisting=True)
-                self.initProject(project)
-
-            except Exception as es:
-                print(str(es))
-
-    # # NOTE:ED not needed
-    # def importNefFile(self):
-    #   print '>>>Import Nef file'
-    #
-    # def exportNefFile(self):
-    #   print '>>>Export Nef file'
 
     def editSpectrum(self, spectrum=None):
 

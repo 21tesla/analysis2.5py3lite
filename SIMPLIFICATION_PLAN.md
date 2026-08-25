@@ -2108,3 +2108,92 @@ Recon (verified 2026-08-24):
     `EditNoeClassesFrame` (an unrelated SAME-NAMED class defined inside
     KEPT `NoeDistParamsFrame.py`) and the two "D2D" data strings noted
     above.
+
+**Stage 28 — Examples (47 py) + NEF import feature (menu + nef/ + v2io/ + tests) + root-helper collateral — ✅ 2026-08-24**
+- Scope: signed-off S28 "examples + nef.testing" — plus, **decided by the
+  user at stage time (2026-08-24)**: REMOVE (not hold) the "Load Nef" menu
+  entry and the whole NEF (CCPNmr v2 project file) import feature, since
+  FormatConverter already covers data import/export in mainstream formats
+  (NMR-STAR, NMRDraw, SPARKY, PDB…). Two in-stage refinements (S26/S27
+  collateral-orphan precedent, flagged): (1) the `ccpnmr/nef/` package and
+  `ccpnmr/v2io/` package die WHOLE — the signed scope named only
+  `nef/testing` + `v2io/{TestNefIo,Constants}`, but `NefIo` (the live
+  importer of `v2io.Constants`) and the `nef/` parser stack
+  (StarIo/NefImporter/…) have their entire remaining reference graph inside
+  this feature (menu method + 2 NEF tests); (2) root helpers
+  `ccpnmr/Common.py` + `ccpnmr/Constants.py` — S27 KEPT them solely because
+  their only importer (verified this stage: `NefIo.py:67-68
+  from .. import Common/Constants`) was this feature — once NefIo dies they
+  are exactly the zero-importer state of the S27-removed `SafeFilename`/
+  `_serverCheck`, so they follow them out.
+- Verification sweeps (repo-wide, outside targets): all three example/test
+  trees — ZERO importers. `NefIo` — only importers are the removed
+  `AnalysisPopup.loadNefFile` (lazy, L1901) + the 2 removed NEF tests.
+  `v2io.Constants` — sole importer `NefIo.py:70 from . import Constants`.
+  `StarIo`/`NefImporter` — importers: NefIo, TestNefIo, the 2 NEF tests.
+  `ccpnmr.Common`/`ccpnmr.Constants` — comprehensive py+xml+txt sweep:
+  ONLY NefIo. `SafeOpen`/`getSafeFilename` (nef/) — zero kept users
+  (S27 trap re-confirmed). `decorator` (py package) — sole importer
+  `TestNefIo.py:39`. NEF in the format registry
+  (`allFormatsDict`)/converters — NONE (the NEF import is a PROJECT import,
+  independent of the live FormatConverter surface). `FileType`/
+  `FileSelectPopup` (used by loadNefFile) — 6 OTHER live uses in the same
+  file (importCoordinates/importPdb/…) → imports kept. KEPT deliberately:
+  `ccp/util/V2Upgrade.py` (zero importer, BY-DESIGN `ccpncore` — signed
+  S30 `ccp.util` scope, NOT touched); `survey.md` NEF lines + 2 `data/`
+  XML comments + `ccp/format/nmrView/projectIO.py:286` comment (all inert
+  text/history — S27 precedent); `Tests` elsewhere (test_c_ext_imports,
+  test_memops_*, test_project_lifecycle) — zero NEF refs.
+- Removed (123 git-tracked files, 69 `.py`):
+  - `ccp/examples/` — 68 (41 `.py` + 27 data; workshops/help_doc — audit
+    count "35" was strong-orphans-of-41).
+  - `ccpnmr/format/examples/` — 14 (6 `.py` + 8 data).
+  - `ccpnmr/nef/` — 33 (14 `.py` incl. `testing/` 4 nose-era + parser
+    stack 10; 17 `testdata/*.nef` + README + `.gitignore`).
+  - `ccpnmr/v2io/` — 4 (NefIo, TestNefIo, Constants 36 312 ln, `__init__`).
+  - `ccpnmr/Common.py` (876) + `ccpnmr/Constants.py` (595) — NEF collateral.
+  - `tests/test_nef_import.py` (9 tests, P4-2 feature test) +
+    `tests/test_nef_parse.py` (11 tests).
+- Edited:
+  - `AnalysisPopup.py` (2895→2845, −50): removed the "Load Nef"
+    `menu.add_command` block (Project menu, between "Open Spectra" and
+    "Save"), the `"Load Nef"` `menu_items[ProjectMenu]` entry (15→14), the
+    `fixedActiveMenus` loop `(0,1,2,3,8)` → `(0,1,2,7)` (item 8 was Quit —
+    `setMenuState` maps these onto real Tk entry indices via
+    `entryconfig(n, …)`, so the Quit index shifts 8→7; New/Open Project/
+    Open Spectra/Quit stay active without a project), the `loadNefFile`
+    method (lazy `NefIo.loadNefFile` + FileSelectPopup *.nef), and the two
+    dead COMMENTED NEF stub groups (4-line imports/exports menu stub
+    "# NOTE:ED not needed"; 6-line `importNefFile`/`exportNefFile` py2
+    comment block).
+  - `pyproject.toml` (173→170, −3): `optional` extras — dropped
+    `decorator>=5.0` + its "(kept v2io test)" comment clause (sole user
+    TestNefIo is gone); `testpaths` — dropped the
+    `ccpnmr2.5/python/ccpnmr/nef/testing` line (would be a dangling dir on
+    a bare `pytest`); `python_files` — `["test_*.py","Test_*.py"]` →
+    `["test_*.py"]` (the only tracked `Test_*.py` files were the two
+    removed `nef/testing` ones).
+  - `scripts/linux_release.sh` + `scripts/macos_release.sh` (−1 each):
+    optional-stack pip line `matplotlib cherrypy decorator mako` →
+    `matplotlib cherrypy mako` (S12 had kept `decorator` specifically for
+    TestNefIo). `bash -n` clean.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1088** (1157−69, exactly the removed
+    `.py` modules), OK **1076**, FAILED **2** unchanged (2× `cherrypy`,
+    pre-existing), BY-DESIGN **10** unchanged (V2Upgrade stays — signed
+    S30 scope).
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setProjectMenu` path; data-shifter + format-converter — the
+    user-cited NEF replacement — untouched).
+  - `pytest ccpnmr2.5/python/tests/` **25 passed, 4 skipped** (45−20,
+    exactly the 9+11 removed NEF tests; the 4 skips are the non-NEF ones).
+  - `uvx ruff check AnalysisPopup.py --statistics`: **38 — IDENTICAL mix**
+    to post-S23 (UP031 17 / E722 10 / F841 6 / E731 2 / E721 1 / F811 1 /
+    W293 1) — zero NEW (the removed method's `except Exception as es:` was
+    not a flagged pattern). `python -m py_compile` OK; `bash -n` both
+    release scripts OK.
+  - Residual sweep (py/toml/sh/in/cfg, excl. dist/build/egg-info/pycache):
+    exactly ONE hit — the inert comment
+    `ccp/format/nmrView/projectIO.py:286`
+    (`#'python/ccpnmr/format/examples/data/…str'`); plus the known
+    `survey.md` history lines. Zero functional refs anywhere.

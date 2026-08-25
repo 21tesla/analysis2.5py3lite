@@ -132,7 +132,7 @@ VP="$VERIFY/bin/python"
 # web/plotting extras — the release gate (import-smoke FAILED=0) matches the
 # Phase-4 installed-state gate, which ran green with the full stack.
 "$VP" -m pip install --quiet "$WHEEL" numpy pandas PyOpenGL Pillow olefile requests python-dateutil pytz
-"$VP" -m pip install --quiet matplotlib cherrypy decorator mako
+"$VP" -m pip install --quiet matplotlib cherrypy mako
 "$VP" -m pip check && echo "ok: pip check clean"
 
 "$VP" - <<'EOF'
