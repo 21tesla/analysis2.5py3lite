@@ -46,16 +46,16 @@ OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', '
 #            (YASARA, PyMOL C++ engine), or internal sub-repos absent here
 #            (Refine/protocol/UtilsAnalysis/pdbe-analysis/memops.scripts/...).
 # (The former ENV category — CASD_HOME / ISD_ROOT import-time env checks — died
-# with the nijmegen/CASD + cambridge/isd trees at Stage 29, 2026-08-24.)
+# with the nijmegen/CASD + cambridge/isd trees at Stage 29, 2026-08-24. Four more
+# EXTERNAL entries died at Stage 30, 2026-08-25, with their removed modules:
+# ccp.lib.Bmrb.bmrb (sans), ccp.util.V2Upgrade (ccpncore),
+# pdbe.software.vascoReferenceCheck (pdbe.analysis),
+# pdbe.chemComp.export.setLicenses (memops.scripts).)
 # If any of these ever starts importing cleanly, smoke prints a NOTE and the
 # entry should be DELETED (a successful import then counts as OK).
 KNOWN_NON_IMPORTABLE = {
     # --- EXTERNAL: optional software not in the original distribution ---
     "cambridge.bayes.PeakSeparatorPyMC": "EXTERNAL: PyMC2 — py2-only package, no py3 port",
-    "ccp.lib.Bmrb.bmrb": "EXTERNAL: `sans` — py2-only SOAP stack",
-    "ccp.util.V2Upgrade": "EXTERNAL: `ccpncore` — CCPN v2 internal core, not in this distribution",
-    "pdbe.software.vascoReferenceCheck": "EXTERNAL: `pdbe.analysis` sub-repo not in this distribution",
-    "pdbe.chemComp.export.setLicenses": "EXTERNAL: `memops.scripts` sub-package not in this distribution",
 }
 
 # Modules we can't expect to import cleanly in a headless/no-GUI env (GUI entry points, etc.)

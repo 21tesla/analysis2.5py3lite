@@ -84,7 +84,6 @@ include = [
     "cambridge*",
     "molsim*",
     "pdbe*",
-    "regensburg*",
     "utrecht*",
     "model*",
     "data*",
@@ -145,7 +144,6 @@ known-first-party = [
     "cambridge",
     "molsim",
     "pdbe",
-    "regensburg",
     "utrecht",
 ]
 

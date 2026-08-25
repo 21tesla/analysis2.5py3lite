@@ -2264,3 +2264,160 @@ Recon (verified 2026-08-24):
   `pdbe/adatah` (Io/Util/Bmrb/Generic/… — `Util` has live importer
   `ccpnmr/format/process/sequenceCompare.py:4`), `ccp/util/V2Upgrade`
   (BY-DESIGN EXTERNAL).
+
+**Stage 30 — pdbe tooling + regensburg + memops/ccp helper dead modules (90 files) + allowlist shrink 5→1 — ✅ 2026-08-25**
+- Scope: signed-off S30 "pdbe tooling (chemComp, rest of adatah,
+  nmrStar/IO/Ccpn_To_NmrStar, software, xml/Util) + regensburg +
+  memops/{editor,gui,general} + ccp.{lib,util,general,gui,math}" —
+  executed with full re-verification (S24 audit artifacts wiped; fresh
+  AST import-closure over all 1,074 tracked `.py` from the 4 live app
+  roots + tests, per-module importer lists, every candidate name
+  grepped tree-wide for static/dynamic/string refs, `MANIFEST.in` /
+  `setup.py` / `scripts/` / `pyproject.toml` checked — no build-surface
+  refs to any removed tree).
+- Liveness audit (re-run for S30, supersedes S24 counts): import closure
+  from live roots (`ccpnmr.analysis.AnalysisGui`,
+  `ccpnmr.format.gui.{DataShifter,FormatConverter}`,
+  `ccpnmr.update.UpdatePopup`, `tests/`) + the format-registry dynamic
+  surface (all `ccpnmr/format/converters/*Format` via the 5 known
+  `__import__("%sFormat" % label)` sites, labels from live
+  `ccpnmr/format/general/Constants.allFormatsDict`) as live entries.
+  Per-target importer report: every module in the 14 candidate packages
+  classified; a module is removed iff unreachable AND every static
+  importer is itself in the removal set or absent (island criterion);
+  modules with ANY live/kept importer survive even if dead-anchored
+  (see KEPT list).
+- Removed (90 git-tracked files, 85 `.py` + 5 data):
+  - `pdbe/chemComp/` — WHOLE package, 25: 21 `.py` (top
+    Constants/Io/Util + carbo 5 (Constants/Util/makeAllSugars/makeFullSugar
+    +INFO) + check 2 (checkChemComps/listCcInfo) + export 2
+    (setLicenses/updateRepositoryFiles) + modify 5
+    (Constants/addLinkingToChemComp/addSubstituent/editChemComp/
+    makeAtomSets +CHANGES) + 5 `__init__` + INFO.SETUP + README). Self-
+    contained island: zero importers outside the package (`editChemComp`
+    reaches out to `ccp.gui.ChemCompEditor`, see below).
+  - `pdbe/general/` — WHOLE, 2 (Io + `__init__`) — island extension:
+    `Io.pdbeDataDir` imported ONLY by the removed
+    `pdbe/chemComp/Constants.py:5`.
+  - `pdbe/adatah/` — 8 of 10: Bmrb/Cing/Constraints/Coordinates/Generic/
+    Io/NmrRestrGrid/NmrStar. KEPT `Util` (live importer:
+    `ccpnmr/format/process/sequenceCompare.py:4`) + `Constants` (Util.py:5
+    imports it — `numCpu, pythonCommand`; S29's "Util lone survivor"
+    assumption corrected: Constants is a dependency, not an orphan) +
+    `__init__`.
+  - `pdbe/nmrStar/IO/` — 2: `Ccpn_To_NmrStar` (signed) + `Ccpn2NmrStar`
+    (per-module verify: zero importers anywhere — S29 note "Ccpn2NmrStar
+    in core? verify"). KEPT `Constants`, `Constants_ByVersion`,
+    `NmrStarExport`, `NmrStarHandler`, `Util`, `nmrStarDict` — anchored by
+    out-of-scope kept `ccpnmr/format/general/Conversion.py:1648`
+    (`NmrStarExport`) + `ccp/format/nmrStar/generalIO.py:1405`
+    (`nmrStarDict`, registry-adjacent island) + the built-in
+    `__import__("%s" % name)` dispatcher chain in `IO/Util.py` (L42/45
+    nmrStarDict, L137/142 Constants_ByVersion names) that must survive
+    intact.
+  - `pdbe/software/` — WHOLE, 6 (Constants/ReadDistanceConstraints/Util/
+    vascoReferenceCheck/violationStatistics + `__init__`). Signed
+    "software 1" (vasco); verify found a zero-importer sub-island:
+    ReadDistanceConstraints→violationStatistics→Constants chain +
+    `Util` (sole importers: removed `adatah.Constraints` +
+    violationStatistics) → whole tree out.
+  - `pdbe/xml/` — WHOLE, 2 (Util + `__init__`) — zero importers.
+  - `regensburg/` — WHOLE package, 4 (`__init__` ×2, AuremolFrame,
+    findAuremolPeaks). S24 note "IO/glue registry-live → remove Frame
+    only or nothing" corrected by verify: `findAuremolPeaks`'s ONLY
+    importer IS the Frame (zero external refs); the registry-live
+    auremol surface is the SEPARATE `ccp/format/auremol/` family +
+    `converters/AuremolFormat` — untouched.
+  - `memops/editor/` — 5: ApplicationTemplate/ObjectTable/ObjectTablePopup/
+    PopupTemplate/UrlViewerFrame (zero refs tree-wide beyond intra-island).
+  - `memops/gui/` — 9 (SIGNED COUNT EXACT): ColorChooser/EntryScale/
+    LabeledEntries/LabeledFloatEntry/LabeledLabel/LabeledScale/LinkChart/
+    Ticker/Tree (sole intra-island edge: ColorChooser→LabeledScale).
+  - `memops/general/` — 3: TextWriter (XmlModelIo keeps its INLINE copy —
+    error-string mentions inert), `baseDataTypes/DateTime`,
+    `baseDataTypes/List` (`memops/api/Implementation.py:80` imports the
+    other 8 concrete types only; `Constants.py:113` dynamic
+    `__import__` targets the package, not these two).
+  - `ccp/lib/` — 13: WHOLE `Bmrb/` tree 12 (bmrb/ciftest/ordereddict/
+    test/testNef/sans 5/README + `__init__`) + `NmrExpPrototype.py`.
+    Signed "lib(4)" ≈ {Bmrb, NmrExpPrototype, nmr, nmr.Nmr} as package
+    entries; `nmr/` + `nmr/Nmr/` `__init__` KEPT — their submodules
+    `AbstractDataDim`/`DataSource`/`Experiment` are LIVE (imported by
+    `ccpnmr/analysis/core/ExperimentBasic` + registry converters
+    `NmrViewFormat`/`XEasyFormat`).
+  - `ccp/util/` — 3 (SIGNED COUNT EXACT): Nef/Structure/V2Upgrade.
+  - `ccp/gui/` — 1 (SIGNED COUNT EXACT): ChemCompEditor (sole importer:
+    removed `chemComp/modify/editChemComp`).
+  - `ccp/general/` — **0** — every module live; the signed "general(1)"
+    resolves to `_licenseInfo.py`, KEPT by the dynamic-live family design
+    (S24/S25 precedent).
+  - `ccp/math/` — WHOLE package, 7 (fit: fitClasses/
+    FitInversionRecovery/FitKd×3 + 2 `__init__`). Zero refs tree-wide;
+    `memops/math/fit/fitClasses.py` is a SEPARATE live module (trap).
+- Edited:
+  - `import_smoke.py`: `KNOWN_NON_IMPORTABLE` 5 → **1** — deleted
+    `ccp.lib.Bmrb.bmrb` (sans), `ccp.util.V2Upgrade` (ccpncore),
+    `pdbe.software.vascoReferenceCheck` (pdbe.analysis),
+    `pdbe.chemComp.export.setLicenses` (memops.scripts) — all four
+    modules removed this stage; comment documents the shrink.
+  - `pyproject.toml` (−2): `regensburg*` out of `packages.find.include`
+    + `regensburg` out of `isort.known-first-party` (package no longer
+    exists — S29 nijmegen precedent). `pdbe*`/`ccp*`/`memops*` stay
+    (packages survive with their kept modules).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **989** (1074−85: exactly the 85
+    removed `.py` modules; 5 of the 90 files are non-Python data), OK
+    **986** (989−2−1), FAILED **2** unchanged (2× `cherrypy`,
+    pre-existing), BY-DESIGN **1** (`cambridge.bayes.
+    PeakSeparatorPyMC` — re-verified: still fails at import with
+    "Python cannot find PyMC module"; bayes tree itself LIVE —
+    `PeakSeparator` ← live AnalysisPopup ← BayesPeakSeparator `.so`).
+  - `gui_boot_test.py` **3/3** (ccpnmr / data-shifter / format-converter).
+  - `pytest ccpnmr2.5/python/tests/` **25 passed, 4 skipped** — unchanged
+    (no tests touched any removed module).
+  - `uvx ruff check AnalysisPopup.py --statistics`: **38 — IDENTICAL mix**
+    (UP031 17 / E722 10 / F841 6 / E731 2 / E721 1 / F811 1 / W293 1).
+    `python -m py_compile import_smoke.py` OK; `pyproject.toml` edits are
+    inert key-list deletions.
+  - Residual sweep (py/toml/sh/in/cfg/rst/md, excl. dist/build/
+    egg-info/pycache/venv): ZERO functional refs. Inert hits: the new
+    allowlist comment (import_smoke.py:51-53), `adatah/Util.py:5` → KEPT
+    `adatah.Constants`, `Constants_ByVersion.py` `constants_Ccpn_To_NmrStar`
+    dict names + `IO/Util.py` `getCcpn2NmrStar*` function names +
+    `NmrStarExport.py:29` comment (naming echoes, KEPT modules),
+    `memops/general/license/headers.py` `setLicenses()` function (≠ removed
+    module), `memops/math/fit/fitClasses.py` (≠ `ccp.math/fit/`),
+    `checkChemComps`/`makeAtomSetsGuiName`/`MakeAtomSets` symbols (≠
+    removed modules), `AcqProcParsEditPopup.py:752` + `ObjectButton.py:4`
+    prose/comments. Plus the known stale untracked `.venv` editable-finder
+    `regensburg`/`nijmegen`/`gothenburg` MAPPING entries (venv install
+    artifact, same S26/S29 precedent — never committed).
+- Name-collision traps cleared (do NOT re-flag):
+  `setLicenses` (license-generator function) ≠ `pdbe.chemComp.export.
+  setLicenses`; `memops.math.fit` ≠ `ccp.math.fit`; `checkChemComps`
+  (param) ≠ removed check module; `makeAtomSets` symbols ≠ removed
+  modify module; `ccp.util.NmrExpPrototype` (LIVE) ≠ removed
+  `ccp.lib.NmrExpPrototype`; `ObjectTable` in comments ≠ removed
+  memops.editor modules; `constants_Ccpn_To_NmrStar` (dict in KEPT
+  Constants_ByVersion) ≠ removed `Ccpn_To_NmrStar` module; `markNijmegen`
+  etc. remain from S29.
+- Kept deliberately (with reason):
+  - `pdbe.adatah.{Util,Constants}` — live importer chain
+    (`sequenceCompare.py:4` → `Util` → `Constants`); their UPSTREAM
+    island (`ccpnmr/format/general/Conversion.py`, 3,700+ ln, +
+    `ccpnmr/format/webServer/` both ZERO-importer, +
+    `ccp/format/nmrStar/` + `ccp/format/nmrView/` project-IO
+    islands) is OUT of S30 signed scope → remains as a dead-but-kept
+    cluster; **FOLLOW-UP CANDIDATE (needs explicit decision — same
+    data-compat sensitivity class as HELD S31)**: `Conversion.py`
+    (sole users were the now-dead vasco + zero-importer webServer),
+    `webServer/` (cherrypy; owns both pre-existing import_smoke
+    failures), `ccp/format/nmrStar`+`ccp/format/nmrView` project-IO
+    islands, `ccpnmr/format/process/{sequenceCompare,
+    stereoAssignmentSwap}` (their live importers are all in this
+    dead-kept set).
+  - ALL `_licenseInfo.py` files (dynamic-live family per
+    `memops/general/license/headers.py` — S24/S25 design; the signed
+    "memops/general(6)" count apparently included 3 of them — kept).
+  - `ccp/lib/nmr/` + `ccp/lib/nmr/Nmr/` inits + 3 live submodules.
+  - `cambridge/bayes/` whole tree (live) + its allowlist entry.
