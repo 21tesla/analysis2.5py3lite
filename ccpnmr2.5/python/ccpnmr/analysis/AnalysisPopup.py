@@ -255,7 +255,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "edit_profiles": self.popupEditProfiles,
             "edit_axis_panel": self.editAxisPanel,
             "edit_marks": self.editMarks,
-            "run_format_converter": self.runFormatConverter,
             "edit_contour_levels": self.editContourLevels,
             "edit_contour_files": self.editContourFiles,
             "register_analysis": self.registerAnalysis,
@@ -629,7 +628,6 @@ class AnalysisPopup(BasePopup, Analysis):
         # Imports submenu
 
         importsMenu = Menu(self.menubar, tearoff=False)
-        importsMenu.add_command(label="Via Format Converter", shortcut="F", command=self.runFormatConverter)
         importsMenu.add_command(label="NMR-STAR 2.1.1", command=self.importNmrStar211)
         importsMenu.add_command(label="NMR-STAR 3.1", shortcut="N", command=self.importNmrStar31)
         importsMenu.add_command(label="PDB 3.20", shortcut="P", command=self.importPdb)
@@ -1607,14 +1605,6 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.viewWidgetCount,
             tipText="A temporary developer module to keep track of graphical object creation/destruction",
         )
-        menu.add_command(
-            label="Format Converter",
-            shortcut="F",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.runFormatConverter,
-            tipText="Export and import CCPN project data to and from a multitude of textual NMR formats",
-        )
 
         self.menubar.add_cascade(label=OtherMenu, shortcut="O", menu=menu)
 
@@ -1622,11 +1612,7 @@ class AnalysisPopup(BasePopup, Analysis):
         self.menu_items[OtherMenu] = [
             "NMR Calculations",
             "Widget Counter",
-            "Format Converter",
         ]
-
-        # FormatConverter always active
-        self.fixedActiveMenus[(OtherMenu, 2)] = True
 
     def initProject(self, project=None, resizeTop=True):
 
@@ -2258,8 +2244,7 @@ class AnalysisPopup(BasePopup, Analysis):
                 nmrStarObj.readProject(fileName, minimalPrompts=True, version="2.1.1")
 
                 msg = "NMR-STAR 2.1 data loaded. If you imported resonance assignments "
-                msg += "consider running Other::FormatConverter::Process::Run linkResonances "
-                msg += "to see the original assignments in CCPN."
+                msg += "consider running linkResonances to see the original assignments in CCPN."
 
                 showInfo(self, msg, parent=self)
 
@@ -2286,8 +2271,7 @@ class AnalysisPopup(BasePopup, Analysis):
                 nmrStarObj.readProject(fileName, minimalPrompts=True, version="3.1")
 
                 msg = "NMR-STAR 3.1 data loaded. If you imported resonance assignments "
-                msg += "consider running Other::FormatConverter::Process::Run linkResonances "
-                msg += "to see the original assignments in CCPN."
+                msg += "consider running linkResonances to see the original assignments in CCPN."
 
                 showInfo(self, msg, parent=self)
 
@@ -2612,17 +2596,6 @@ class AnalysisPopup(BasePopup, Analysis):
         from cambridge.bayes.PeakSeparatorGui import PeakSeparatorGui
 
         self.openPopup("edit_peak_separator_params", PeakSeparatorGui)
-
-    def runFormatConverter(self):
-
-        from ccpnmr.format.gui.FormatConverter import FormatConverter
-
-        threading = Util.getFormatConverterThreading(self.analysisProject)
-        popup = self.openPopup(
-            "run_format_converter", FormatConverter, project=self.project, oldStyle=True, threading=threading
-        )
-        popup.initProject(self.project)
-        popup.protocol("WM_DELETE_WINDOW", popup.close)
 
     def editContourLevels(self, spectrum=None):
 

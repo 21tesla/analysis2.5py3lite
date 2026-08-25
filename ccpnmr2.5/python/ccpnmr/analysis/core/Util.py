@@ -335,37 +335,6 @@ def getAnalysisPeakList(peakList):
     return analysisPeakList
 
 
-# TBD: look at again if default value changes in data model
-def getFormatConverterThreading(analysisProject):
-
-    if isWindowsOS():
-        return False
-
-    # Added Rasmus 5/4/10 to allow starting FC without a project
-    # This effectively sets the default threading to False
-    # (which should be the less errror-prone)
-    if analysisProject is None:
-        return False
-
-    keyword = "formatConverterThreading"
-    application = analysisProject.root.application
-
-    result = application.getValue(analysisProject, keyword=keyword)
-    if result is not None:
-        application.setValue(analysisProject, keyword=keyword, value=None)
-        analysisProject.isThreadingAllowed = result
-
-    return analysisProject.isThreadingAllowed
-
-
-def setFormatConverterThreading(analysisProject, threading):
-
-    if isWindowsOS():
-        threading = False
-
-    analysisProject.isThreadingAllowed = threading
-
-
 def getBackgroundContrast(project):
 
     analysisProfile = project.currentAnalysisProfile

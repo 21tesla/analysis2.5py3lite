@@ -2544,3 +2544,99 @@ Recon (verified 2026-08-24):
   {nmrStar,nmrView}` + `ccpnmr/format/process/{sequenceCompare,
   stereoAssignmentSwap}` + `pdbe.adatah.{Util,Constants}` live-kept
   anchors) — data-compat class like S31.
+
+**Stage 32 — FormatConverter + DataShifter standalone apps + associated modules (86 files) — ✅ 2026-08-25**
+- Scope (locked with user 2026-08-25): user option "Detach + drop
+  converters" + "remove DataShifter too". The **FormatConverter** and
+  **DataShifter** standalone apps, their ~47 external-format converters,
+  the cherrypy **webServer**, the app-only `general/`/`process/` helpers,
+  the 8 app-only gui popups, and the 6 `bin/` launchers are removed.
+  User's follow-up (Stage 33, separate): add `nmrglue` + a basic
+  spectrum/peak-list export module.
+- **KEY BOUNDARY (verified before deletion — the crux of this stage):**
+  the removed "FormatConverter" does NOT own its whole engine on its own.
+  The Analysis app's built-in **Project→Imports** (NMR-STAR 2.1.1 / 3.1 /
+  PDB 3.20 / Coordinates) and `pdbe` both sit on the SAME shared core:
+  `DataFormat` (base), `NmrStarFormat`, `ReadPdb`, `PdbFormat` +
+  `general/{Constants,Util,TopShared,userInteraction,MultiDialog,Io}` +
+  `process/{linkResonances,matchResonToMolSys,makeChemShiftSelections}` +
+  the ~26 gui popups that `gui/MultiDialog` imports. Traced:
+  `NmrStarFormat(project, guiParent=self)` → `DataFormat.__init__` line
+  1430 `setupMultiDialog(guiParent)` → `userInteraction` line 98 →
+  `gui/MultiDialog` → imports ~26 popups. So the 26 popup set + `BasePopup`
+  + `ObjectButton` + `CrossLine` + `SequenceChemCompSelect` +
+  `ProcFilePopup` + `ImportExportFormatPopup` + `WindowFunctionSelect` +
+  `general.Io` (`getHelpUrlDir`, imported by ~25 kept popups) ALL STAY.
+  `nmrglue` cannot replace NMR-STAR / PDB / Pipp — only low-level
+  spectra/pick I/O — so the built-in NMR-STAR+PDB import/export of the
+  Analysis app is a load-bearing feature and was KEPT, not removed.
+- Removed (86 git-tracked files):
+  - **converters (47):** all `*Format.py` + `Tool.py` EXCEPT the 4 live —
+    `DataFormat`, `NmrStarFormat`, `ReadPdb`, `PdbFormat` (the 47 include
+    the `AriaXmlFormat` + `Tool` orphans).
+  - **gui (8):** `FormatConverter`, `DataShifter`, `AutoAssignIOCyclePopup`,
+    `AutoAssignProjectInfoPopup`, `CreateShiftListPopup`, `TextOutputPopup`,
+    `WriteMappingPopup`, `WriteBmrbChemShiftDepPopup`.
+  - **general (3):** `Conversion` (sole caller = removed webServer),
+    `Version` (sole importer = FormatConverter), `scriptHandling` (orphan).
+  - **process (8):** `CleanConstraints` (orphan),
+    `cleanProjectAppData` + `cleanResonanceAppData` (sole importers =
+    FormatConverter), `makeChemShiftsFromPeakLists` (sole importer =
+    removed CreateShiftListPopup), `sequenceCompare` (sole caller =
+    removed Conversion), `stereoAssignmentSwap` (orphan),
+    `writeBmrbChemShiftDeposition` + `writeMappingFile` (sole importers =
+    removed Write*Popups).
+  - **webServer (14):** whole `webServer/` dir (cherrypy `webFc`+`Util` +
+    `data/{css,html,images}`) — this was the last `cherrypy` importer.
+  - **bin (6):** `formatConverter{,2,2.5}` + `dataShifter{,2,2.5}`.
+- Live-file edits (4):
+  - `analysis/AnalysisPopup.py` — removed `"run_format_converter"`
+    popupAction, the "Via Format Converter" menu import-item (Project→
+    Imports), `runFormatConverter` method, the "Format Converter" Other
+    menu command + its `menu_items` entry + `fixedActiveMenus` line.
+    Reworded the two NMR-STAR import success messages that pointed at
+    "Other::FormatConverter::Process::Run linkResonances" →
+    "consider running linkResonances".
+  - `analysis/core/Util.py` — removed `getFormatConverterThreading` +
+    `setFormatConverterThreading` helpers (their sole caller was
+    `runFormatConverter`, removed above).
+  - `pyproject.toml` `[project.scripts]` — removed the
+    `ccpnmr-data-shifter` + `ccpnmr-format-converter` console entries.
+  - `gui_boot_test.py` — removed the `data-shifter` + `format-converter`
+    APPS entries (now only `ccpnmr`); docstring `--apps` example updated.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **829** (898−69: exactly the 69
+    removed `.py` modules, 1:1), OK **828**, FAILED **0** (DOWN from 2 —
+    the 2 pre-existing `cherrypy` failures lived in the now-removed
+    `webServer/` tree, so they're gone), BY-DESIGN **1** unchanged
+    (`cambridge.bayes.PeakSeparatorPyMC`).
+  - `gui_boot_test.py` **1/1** (ccpnmr) — the Analysis app boots, which
+    is the empirical proof that the kept NMR-STAR/PDB import chain is
+    intact.
+  - `pytest ccpnmr2.5/python/tests/` **25 passed, 4 skipped** — unchanged
+    (incl. `test_project_lifecycle` 8/8).
+  - `uvx ruff check AnalysisPopup.py`: **38 — IDENTICAL mix**
+    (UP031 17 / E722 10 / F841 6 / E731 2 / E721 1 / F811 1 / W293 1) —
+    zero NEW. `core/Util.py` 31 pre-existing UP031 etc., zero new from the
+    helper removal.
+  - Residual sweep — zero live (module-level) code references to any
+    removed module remain in `ccpnmr2.5/python`. The `allFormatsDict`
+    data entries in KEPT `general/Constants.py` still name removed
+    converters, but the only paths that `__import__` by label
+    (`Util.getFormatConverterInfoDict` → `Conversion.getValidExportFormats`,
+    `gui/ProcFilePopup.writeFile`) are all unreachable from the live
+    Analysis / pdbe / NMR-STAR paths (their sole call tree was the removed
+    apps) — so those registry entries are inert data.
+  - Inert references left (historical-docs convention, see Stage 12):
+    `analysis/doc/Install.txt:274-284` (manual launcher recipe),
+    `analysis/doc/source/menu/Other.rst:14` (Sphinx toctree to the removed
+    popup), `analysis/popups/{EditStructures,BrowseConstraints,
+    ViewChemicalShifts}.py` docstring mentions.
+- Status: **Stage 32 COMPLETE**. Resolves the S30/S31-flagged
+  `ccpnmr/format/general/Conversion.py` + `webServer/` + `ccpnmr/format/
+  process/{sequenceCompare, stereoAssignmentSwap}` portion of the
+  "dead-kept island". **STILL HELD** (separate decision, NOT signed here):
+  the `ccp/format/{nmrStar,nmrView}` + `pdbe.adatah.{Util,Constants}`
+  anchors (the `ccp`-package side). **Next planned (Stage 33):** add
+  `nmrglue` dependency + a minimal export module (1D spectrum + Sparky
+  peak list → Bruker/Varian/UNF/Sparky).

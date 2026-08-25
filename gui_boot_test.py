@@ -11,7 +11,7 @@ exists to catch).
 
 Usage:
     .venv/bin/python gui_boot_test.py                 # all apps, project venv
-    .venv/bin/python gui_boot_test.py --apps ccpnmr,data-shifter
+    .venv/bin/python gui_boot_test.py --apps ccpnmr
     /tmp/ccp-dist-venv/bin/python gui_boot_test.py    # installed-state run
 Requires: xvfb-run on PATH (apt: xvfb / conda-forge: xvfb).
 """
@@ -25,10 +25,6 @@ APPS = [
     # (name, call expression executed inside the app's python process)
     ("ccpnmr",
      "import ccpnmr.analysis.AnalysisGui as M; M.main()"),
-    ("data-shifter",
-     "import ccpnmr.format.gui.DataShifter as M; M.main([])"),
-    ("format-converter",
-     "import ccpnmr.format.gui.FormatConverter as M; M.main([])"),
 ]
 NON_GUI = []
 
