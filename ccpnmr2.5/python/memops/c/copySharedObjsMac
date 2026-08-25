@@ -6,5 +6,4 @@ cp ../../../c/ccpnmr/analysis/PeakCluster.so PeakCluster.so
 cp ../../../c/ccpnmr/analysis/PeakList.so PeakList.so
 cp ../../../c/ccpnmr/analysis/SliceFile.so SliceFile.so
 cp ../../../c/ccpnmr/analysis/WinPeakList.so WinPeakList.so
-cp ../../../c/ccpnmr/clouds/AtomCoordList.so .
 cp ../../../c/ccpnmr/clouds/Bacus.so .

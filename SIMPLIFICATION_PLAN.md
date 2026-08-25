@@ -2037,3 +2037,74 @@ Recon (verified 2026-08-24):
     listing (still lists extendNmr/gottingen/paris — doc history, precedent
     S22-23), (c) the S29-target CASD module (dies next-but-one), (d)
     untracked `ccpnmr.egg-info/` build metadata.
+
+**Stage 27 — Dead popups (8) + wrappers/ (4) + frames (17) + root helpers (2) + AtomCoordList chain — ✅ 2026-08-24**
+- Scope: signed-off S27 "dead popups + wrappers/Shiftx + frames + root
+  helpers" — executed with 3 in-stage refinements (all verified, all
+  flagged):
+  1. Audit's "frames 21" resolved to **17 orphan modules** (the other 10 of
+     the 28-file package are live: ExperimentList, KeysymList,
+     NoeDistParamsFrame, NoeMatrix, PeakListList, PeakTableFrame,
+     ResonanceFrame, SpectrumList, ViewResidueFrame, WindowFrame — kept).
+  2. `ccpnmr.{Common,Constants}` (S24 memory said "zero importers") are in
+     fact **LIVE** — `ccpnmr/v2io/NefIo.py:67-68
+     from .. import Common as commonUtil / from .. import Constants as
+     genConstants` → KEPT. Only `SafeFilename` + `_serverCheck` actually
+     have zero importers (audit-confirmed; grep-confirmed — the only
+     "SafeFilename" hit elsewhere is an unrelated same-named function
+     `nef/SafeOpen.getSafeFilename`).
+  3. **Scope extension (S26 precedent, flagged):** `wrappers/{CamCoil,D2D}`
+     — audit did NOT orphan them (their two importers
+     `popups/{SequenceShiftPredict,SecStructurePredict}` are S27 removals,
+     so they escaped the zero-ref test). Re-verified this stage: their only
+     other refs are COMMENTED-OUT stubs in `AnalysisPopup.py` (L241/1232/
+     1404/2151) and two DATA strings (`ccp/general/ChemCompOverview.py:28019
+     "D2D"` chem-comp code; `ccpnmr/v2io/Constants.py:15643 "D2D"` isotope
+     map) — not imports. Dead by same rule as S26 `workflow.Fc` → included.
+- Verification sweeps (outside target files): the 8 popups — ZERO refs
+  (no AnalysisPopup import, no `popups/__init__` re-export, no rst);
+  the 17 frames — zero importers, zero cross-imports from the 10 kept
+  frames (`FontList` name hits are the SEPARATE `memops.gui.FontList`);
+  AtomCoordList — sole importer was `EditResStructures.py:214` (removed
+  this stage).
+- **Removed (40 git-tracked + 2 untracked .so):**
+  - popups 8: BrowseStrucGen, CalcCouplings, EditNoeClasses,
+    EditResStructures, LinkSideChains, PredictKarplus,
+    SecStructurePredict, SequenceShiftPredict.
+  - frames 17: AxisLabelList, AxisTypeList, AxisUnitList, ChainList,
+    ColorList, ColorSchemeList, ExptSpectrumPeakList, ExptSpectrumRows,
+    FontList, MeasurementTypeList, MolSystemList, PanelTypeList,
+    ReferenceFrame, SetupStructureCalcFrame, SpectrumViewList, SymbolList,
+    ViewIsotopomerFrame (S22's importerless-kept flag now retired).
+  - `wrappers/` ENTIRE package (Shiftx, CamCoil, D2D, `__init__` — empty).
+  - root helpers 2: `ccpnmr/SafeFilename.py`, `ccpnmr/_serverCheck.py`.
+  - **AtomCoordList chain (S25 flag "decide at S27", decided — remove):**
+    its last importer (EditResStructures) is gone →
+    `c/ccpnmr/clouds/{atom_coord,py_atom_coord,atom_coord_list,
+    py_atom_coord_list}.{c,h}` (8) + `c/ccpnmr/clouds/AtomCoordList.so` +
+    the 2 untracked python bridges. `c/ccpnmr/clouds/` is now exactly the
+    Bacus surface (`{bacus,py_bacus}.{c,h}`, `Bacus.so`, `_licenseInfo.py`).
+- **Edited:** `setup.py` FAM (drop AtomCoordList — clouds section now
+  Bacus-only), `linkSharedObjs` (−1), `copySharedObjs` (−1),
+  `copySharedObjs.bat` (−1), `memops/c/copySharedObjsMac` (−1) — all now
+  `= 7 analysis lines + clouds/Bacus`; `c/ccpnmr/clouds/Makefile` →
+  `all: Bacus` only.
+- KEPT (deliberate): the "Shiftx" FORMAT (`ccp/format/shiftx/*` +
+  `Constants.py:197 "shiftx": "Shiftx"` registry entry) is independent of
+  the removed wrapper — registry-live, untouched.
+  `ccpnmr.{Common,Constants}` (NefIo importers — live, see refinement 2).
+  `AnalysisPopup.py` commented CamCoil/D2D stubs (comments only — left
+  per "don't edit what isn't code" minimalism; revert-unit safe).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1157** (1188−31, exactly the removed
+    `.py` modules), OK **1145**, FAILED **2** unchanged (cherrypy),
+    BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3**.
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped**.
+  - `uvx ruff check setup.py`: 1 PRE-EXISTING I001, zero NEW; `py_compile`
+    OK. No other `.py` modified this stage → lint state otherwise
+    structurally unchanged.
+  - Residual sweep: zero hits for any removed name except
+    `EditNoeClassesFrame` (an unrelated SAME-NAMED class defined inside
+    KEPT `NoeDistParamsFrame.py`) and the two "D2D" data strings noted
+    above.

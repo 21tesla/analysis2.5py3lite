@@ -8,34 +8,15 @@ GLOBAL_PY_UTIL_OBJS = \
 	$(GLOBAL_DIR)/utility.$(OBJ_SUFFIX) \
 	$(GLOBAL_DIR)/python_util.$(OBJ_SUFFIX)
 
-PY_ATOM_COORD_OBJS = \
-	atom_coord.$(OBJ_SUFFIX) \
-	py_atom_coord.$(OBJ_SUFFIX)
-
-PY_ATOM_COORD_LIST_OBJS = \
-	$(PY_ATOM_COORD_OBJS) \
-	atom_coord_list.$(OBJ_SUFFIX) \
-	py_atom_coord_list.$(OBJ_SUFFIX)
-
 PY_BACUS_OBJS = \
 	bacus.$(OBJ_SUFFIX) \
 	py_bacus.$(OBJ_SUFFIX)
 
-all: AtomCoordList.$(DYLIB_SUFFIX) Bacus.$(DYLIB_SUFFIX)
-
-AtomCoordList.$(DYLIB_SUFFIX): global_py_util_objects $(PY_ATOM_COORD_LIST_OBJS)
-	$(LINK) $(LINK_FLAGS) $(SHARED_FLAGS) $(OUT_NAME) \
-		$(GLOBAL_PY_UTIL_OBJS) $(PY_ATOM_COORD_LIST_OBJS) $(PYTHON_LIB_FLAGS) $(PYTHON_LIB)
+all: Bacus.$(DYLIB_SUFFIX)
 
 Bacus.$(DYLIB_SUFFIX): global_py_util_objects $(PY_BACUS_OBJS)
 	$(LINK) $(LINK_FLAGS) $(SHARED_FLAGS) $(OUT_NAME) \
 		$(GLOBAL_PY_UTIL_OBJS) $(PY_BACUS_OBJS) $(MATH_LIB) $(PYTHON_LIB_FLAGS) $(PYTHON_LIB)
-
-py_atom_coord.$(OBJ_SUFFIX): py_atom_coord.c
-	$(CC) $(CC_FLAGS) $(GLOBAL_INCLUDE_FLAGS) $(PYTHON_INCLUDE_FLAGS) $(CO_NAME)
-
-py_atom_coord_list.$(OBJ_SUFFIX): py_atom_coord_list.c
-	$(CC) $(CC_FLAGS) $(GLOBAL_INCLUDE_FLAGS) $(PYTHON_INCLUDE_FLAGS) $(CO_NAME)
 
 py_bacus.$(OBJ_SUFFIX): py_bacus.c
 	$(CC) $(CC_FLAGS) $(GLOBAL_INCLUDE_FLAGS) $(PYTHON_INCLUDE_FLAGS) $(CO_NAME)

@@ -8,5 +8,4 @@ ln -s ../../../c/ccpnmr/analysis/PeakCluster.so PeakCluster.so
 ln -s ../../../c/ccpnmr/analysis/PeakList.so PeakList.so
 ln -s ../../../c/ccpnmr/analysis/SliceFile.so SliceFile.so
 ln -s ../../../c/ccpnmr/analysis/WinPeakList.so WinPeakList.so
-ln -s ../../../c/ccpnmr/clouds/AtomCoordList.so .
 ln -s ../../../c/ccpnmr/clouds/Bacus.so .

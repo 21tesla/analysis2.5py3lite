@@ -153,9 +153,6 @@ DRAWINC_EXTRA = [TKINC] + GLX_INC
 # name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
 FAM = {
     # --- clouds (import:  ccpnmr.c.<Name>) ----------------------------------
-    "AtomCoordList":   ([f"{CLOUD}/py_atom_coord_list.c", f"{CLOUD}/atom_coord_list.c",
-                         f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c"] + GU,
-                        [CLOUD, G], []),
     "Bacus":           ([f"{CLOUD}/py_bacus.c", f"{CLOUD}/bacus.c"] + GU,
                         [CLOUD, G], ["m"]),
 

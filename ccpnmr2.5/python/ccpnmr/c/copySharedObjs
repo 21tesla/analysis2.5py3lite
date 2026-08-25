@@ -6,5 +6,4 @@ cp ..\\..\\..\\c\\ccpnmr\\analysis\\PeakCluster.pyd PeakCluster.pyd
 cp ..\\..\\..\\c\\ccpnmr\\analysis\\PeakList.pyd PeakList.pyd
 cp ..\\..\\..\\c\\ccpnmr\\analysis\\SliceFile.pyd SliceFile.pyd
 cp ..\\..\\..\\c\\ccpnmr\\analysis\\WinPeakList.pyd WinPeakList.pyd
-cp ..\\..\\..\\c\\ccpnmr\\clouds\\AtomCoordList.pyd .
 cp ..\\..\\..\\c\\ccpnmr\\clouds\\Bacus.pyd .
