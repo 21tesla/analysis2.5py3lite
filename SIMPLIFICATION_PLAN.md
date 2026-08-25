@@ -1270,7 +1270,7 @@ TOTAL dropping by exactly the removed-module count; gui_boot_test green
 | # | Scope | Status |
 |---|---|---|
 | 17 | Assignment ▶ Initialise Root Resonances + `popups/InitRootAssignments.py` + doc line | ✅ 2026-08-24 |
-| 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ⬜ |
+| 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ✅ 2026-08-24 |
 | 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ⬜ |
 | 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ⬜ |
 | 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ⬜ |
@@ -1396,3 +1396,41 @@ decision 4).
   - `uvx ruff check`: AnalysisPopup 43→**42** (F841 11→10 — the removed
     unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
     all flat) — zero NEW. `python -m py_compile` OK.
+**Stage 18 — Pick & Assign From Roots — ✅ 2026-08-24**
+Recon (verified pre-edit): `popups/LinkPeakLists.py` (1356 lines) —
+`LinkPeakListsPopup(BasePopup)` + `testPopup` argServer macro; imports
+`AssignmentAdvanced.{assignSpecNonRootResonances, pickAssignSpecFromRoot}`
+(KEPT core — hazard closed, those functions survive in core along with their
+other consumers) and the standard `core/{Assignment,Experiment,Mark,Util,
+Window}Basic` helpers (all KEPT, used by many kept popups). Sole external
+importer: `AnalysisPopup.py` (import, popupActions `"link_peaklists"`, menu
+block shortcut "P", 3-line `linkPeakLists` method). Contains the S17
+cross-references (docstring L104 + help-link def L178 to
+InitRootAssignmentsPopup — both die with the file). `doc/source/menu/
+Assignment.rst` toctree line (already-dangling target). NOTE:
+`AnalysisProject.linkPeakListsData` model field is KEPT (locked decision 4 —
+generated API/xml/model, plain data attribute; its popup just stops existing).
+- `AnalysisPopup.py` (−17 lines): dropped the `ccpnmr.analysis.popups.
+  LinkPeakLists` import; the `"link_peaklists"` popupActions entry; the
+  "Pick & Assign From Roots" add_command block + `menuNames.append`; the
+  `linkPeakLists` method (its unused `popup =` line is the F841 this stage
+  removed).
+- Deleted `ccpnmr2.5/python/ccpnmr/analysis/popups/LinkPeakLists.py`
+  (1356 lines).
+- `doc/source/menu/Assignment.rst`: dropped the toctree line (middle block
+  now 5 lines).
+- Grep-verified: repo-wide `LinkPeakLists|linkPeakLists|link_peaklists|
+  Pick & Assign From Roots` (excluding the KEPT `linkPeakListsData` API
+  attribute) → only the two S19 cross-references in LinkSeqSpinSystems.py
+  (L136 docstring usage sentence + L221 help-link def — die next stage) +
+  this plan doc + gitignored `dist/`.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1248** (1249−1, exactly as predicted),
+    OK **1236**, FAILED **2** unchanged (2× `cherrypy`), BY-DESIGN **10
+    unchanged**.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check`: AnalysisPopup 42→**41** (F841 10→9 — the removed
+    unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 / F811 1 / W293 1
+    flat) — zero NEW. `python -m py_compile` OK.

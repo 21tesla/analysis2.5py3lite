@@ -102,7 +102,6 @@ from ccpnmr.analysis.popups.EditWindow import EditWindowPopup
 from ccpnmr.analysis.popups.FollowShiftChanges import FollowShiftChangesPopup
 from ccpnmr.analysis.popups.IsotopeSchemeEditor import IsotopeSchemeEditor
 from ccpnmr.analysis.popups.LinkNoeResonances import LinkNoeResonancesPopup
-from ccpnmr.analysis.popups.LinkPeakLists import LinkPeakListsPopup
 from ccpnmr.analysis.popups.LinkSeqSpinSystems import LinkSeqSpinSystemsPopup
 from ccpnmr.analysis.popups.NewWindow import NewWindowPopup
 from ccpnmr.analysis.popups.OpenSpectrum import OpenSpectrumPopup
@@ -233,7 +232,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "browse_resonances": self.browseResonances,
             "selected_resonances": self.viewSelectedResonances,
             "edit_spin_system": self.editSpinSystems,
-            "link_peaklists": self.linkPeakLists,
             "link_seq_spin_systems": self.linkSeqSpinSystems,
             "link_noe_resonances": self.linkNoeResonances,
             "confirm_seq_spin_systems": self.confirmSeqSpinSystems,
@@ -1196,16 +1194,6 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         menuNames.append(label)
         menu.add_separator()
-        label = "Pick & Assign From Roots"
-        menu.add_command(
-            label=label,
-            shortcut="P",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.linkPeakLists,
-            tipText="Pick and assign peaks based on HSQC or HNCO peak positions",
-        )
-        menuNames.append(label)
         label = "Protein Sequence Assignment"
         menu.add_command(
             label=label,
@@ -2189,10 +2177,6 @@ class AnalysisPopup(BasePopup, Analysis):
         popup = self.openPopup("edit_spin_system", EditSpinSystemPopup)
         if doClear:
             popup.update(doClear)
-
-    def linkPeakLists(self, doClear=False):
-
-        popup = self.openPopup("link_peaklists", LinkPeakListsPopup)
 
     def linkSeqSpinSystems(self, doClear=False):
 
