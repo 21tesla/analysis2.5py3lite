@@ -40,13 +40,13 @@ OPT_MISSING = {'matplotlib', 'scipy', 'PIL', 'reportlab', 'pyproj', 'olefile', '
 # ============================================================================
 # Modules that are NON-IMPORTABLE BY DESIGN (NOT code regressions).
 # Phase 2c, 2026-08-22: each of the remaining import failures was surveyed and
-# given a concrete reason. Categories:
-#   ENV    — needs an environment variable (CASD_HOME, ISD_ROOT) or live
-#            network access at import time.
+# given a concrete reason.
 #   EXTERNAL — optional third-party software NOT bundled in the 2.5.2
 #            distribution: py2-only packages (PyMC2, sans), commercial tools
 #            (YASARA, PyMOL C++ engine), or internal sub-repos absent here
 #            (Refine/protocol/UtilsAnalysis/pdbe-analysis/memops.scripts/...).
+# (The former ENV category — CASD_HOME / ISD_ROOT import-time env checks — died
+# with the nijmegen/CASD + cambridge/isd trees at Stage 29, 2026-08-24.)
 # If any of these ever starts importing cleanly, smoke prints a NOTE and the
 # entry should be DELETED (a successful import then counts as OK).
 KNOWN_NON_IMPORTABLE = {
@@ -56,12 +56,6 @@ KNOWN_NON_IMPORTABLE = {
     "ccp.util.V2Upgrade": "EXTERNAL: `ccpncore` — CCPN v2 internal core, not in this distribution",
     "pdbe.software.vascoReferenceCheck": "EXTERNAL: `pdbe.analysis` sub-repo not in this distribution",
     "pdbe.chemComp.export.setLicenses": "EXTERNAL: `memops.scripts` sub-package not in this distribution",
-    # --- ENV: env vars / live network ---
-    "cambridge.isd.isd_project_template": "ENV: ISD_ROOT environment variable",
-    "nijmegen.CASD.Constants": "ENV: CASD_HOME environment variable",
-    "nijmegen.CASD.Util": "ENV: CASD_HOME environment variable",
-    "nijmegen.CASD.casdPipeLine": "ENV: CASD_HOME environment variable",
-    "nijmegen.CASD.convertCasdNmrToCcpn": "ENV: CASD_HOME environment variable",
 }
 
 # Modules we can't expect to import cleanly in a headless/no-GUI env (GUI entry points, etc.)

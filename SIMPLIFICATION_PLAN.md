@@ -2197,3 +2197,70 @@ Recon (verified 2026-08-24):
     `ccp/format/nmrView/projectIO.py:286`
     (`#'python/ccpnmr/format/examples/data/…str'`); plus the known
     `survey.md` history lines. Zero functional refs anywhere.
+
+**Stage 29 — Dead CASD/ISD orphan cluster (nijmegen/ whole + adatah pair + cambridge/isd whole) + allowlist shrink 10→5 — ✅ 2026-08-24**
+- Scope: signed-off S29 "CASD/ISD (+allowlist shrink)" — two whole dead
+  packages + one orphan module pair. Pre-stage verification:
+  `nijmegen/` contained ONLY `__init__.py` (empty) + `CASD/` → the package
+  dies whole, exactly the signed `nijmegen/CASD` scope. `cambridge/isd`:
+  every cross-file reference (IsdFrame↔NmrCalcExchange↔CCPNReader↔
+  isd_project_template) is inside the dir; zero external importers repo-wide
+  (`ccpnmr/analysis` has NO `isd` references at all — no menu wiring, no
+  `popupActions` entry; the `testIsdPopup(argServer)` macro-era entry point
+  is referenced by nothing). `cambridge/__init__.py` is just `pass`.
+  `pdbe.adatah.{CasdNmr,Pdb}`: sole references are TWO already-dead
+  comments inside S29-itself-removed
+  `nijmegen/CASD/convertCasdNmrToCcpn.py` (L211 `#from pdbe.adatah.Pdb …`,
+  L997 `#from pdbe.adatah.CasdNmr …`) — no live importer anywhere else.
+  `casdPipeLine.py`'s own imports prove orphan status:
+  `pdbe.deposition.dataFileImport.formatConverterWrapper` (removed in an
+  earlier stage) + `ccpnmr.workflow.Fc` (S26) + `nijmegen.CASD.Constants`
+  (raises at import if `CASD_HOME` unset — the original BY-DESIGN reason).
+  Zero tests reference any target. `memops.scripts` / `scripts/` /
+  `MANIFEST.in` / `setup.py`: no refs.
+- Removed (15 git-tracked files, 14 `.py` + 1 README):
+  - `ccpnmr2.5/python/nijmegen/` — ENTIRE package, 6: empty `__init__.py`
+    + `CASD/` 5 (`__init__`, `Constants` 46 — `raise Exception("Environment
+    variable CASD_HOME not set")` at import, `Util` 625, `casdPipeLine`
+    ~120, `convertCasdNmrToCcpn` 660).
+  - `ccpnmr2.5/python/cambridge/isd/` — ENTIRE dir, 7: `__init__`,
+    `isd_project_template` (import-time `ISD_ROOT` check — the other
+    BY-DESIGN entry), `NmrCalcExchange`, `IsdPopup`, `IsdFrame` (1200+),
+    `CCPNReader` (1200+), `README`.
+  - `ccpnmr2.5/python/pdbe/adatah/{CasdNmr,Pdb}.py` — CASD's orphan pair
+    (rest of `adatah` stays — signed S30 scope).
+- Edited:
+  - `import_smoke.py`: `KNOWN_NON_IMPORTABLE` 10 → **5** — deleted the
+    whole former ENV category (`nijmegen.CASD.{Constants,Util,casdPipeLine,
+    convertCasdNmrToCcpn}` + `cambridge.isd.isd_project_template`); the 5
+    remaining entries are all EXTERNAL (PyMC2/sans/ccpncore/pdbe-analysis/
+    memops.scripts — S30 re-verify still pending). Comment block updated to
+    note the ENV category died here.
+  - `pyproject.toml` (−2 lines): `nijmegen*` out of `packages.find.include`
+    + `nijmegen` out of `isort.known-first-party` — the package no longer
+    exists (S24 memory note: "S29's CASD removal can take `nijmegen*`" —
+    taken). `cambridge*` stays (bayes/… survive).
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1074** (1088−14: 5 `nijmegen.*` +
+    package + 5 `cambridge.isd.*` + package − dedup = exactly the 14 removed
+    modules; measured), OK **1067** (1074−2−5), FAILED **2** unchanged
+    (2× `cherrypy`, pre-existing), BY-DESIGN **5** (all EXTERNAL).
+  - `gui_boot_test.py` **3/3** (ccpnmr / data-shifter / format-converter).
+  - `pytest ccpnmr2.5/python/tests/` **25 passed, 4 skipped** — unchanged
+    (no CASD/ISD tests existed).
+  - `uvx ruff check AnalysisPopup.py --statistics`: **38 — IDENTICAL mix**
+    (UP031 17 / E722 10 / F841 6 / E731 2 / E721 1 / F811 1 / W293 1).
+    `python -m py_compile import_smoke.py` OK.
+  - Residual sweep (py/toml/sh/in/cfg, excl. dist/build/egg-info/pycache):
+    5 inert hits — `pdbe/nmrStar/IO/nmrStarDict.py:231` (`CASD$` NMR-STAR
+    data-dict string), `ccp/format/molmol/{sequenceIO:141,
+    coordinatesIO:266}` (`markNijmegen` PDB file paths — a PERSON's name,
+    same established trap as S27's "Shiftx"), `ccp/util/NmrCalc.py:4`
+    (docstring mention), `ccp/general/ChemCompOverview.py:36500` ("Isd"
+    chem-comp code); plus known `README.md:163` ("some CASD/education
+    scripts … kept in" — now stale text, same precedent as the `survey.md`
+    history lines). Zero functional refs anywhere.
+- Kept deliberately (signed S30 scope, untouched): the rest of
+  `pdbe/adatah` (Io/Util/Bmrb/Generic/… — `Util` has live importer
+  `ccpnmr/format/process/sequenceCompare.py:4`), `ccp/util/V2Upgrade`
+  (BY-DESIGN EXTERNAL).
