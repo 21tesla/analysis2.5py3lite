@@ -101,7 +101,6 @@ from ccpnmr.analysis.popups.EditStructures import EditStructuresPopup
 from ccpnmr.analysis.popups.EditWindow import EditWindowPopup
 from ccpnmr.analysis.popups.FollowShiftChanges import FollowShiftChangesPopup
 from ccpnmr.analysis.popups.IsotopeSchemeEditor import IsotopeSchemeEditor
-from ccpnmr.analysis.popups.LinkNoeResonances import LinkNoeResonancesPopup
 from ccpnmr.analysis.popups.NewWindow import NewWindowPopup
 from ccpnmr.analysis.popups.OpenSpectrum import OpenSpectrumPopup
 from ccpnmr.analysis.popups.PrintWindow import PrintWindowPopup
@@ -230,7 +229,6 @@ class AnalysisPopup(BasePopup, Analysis):
             "browse_resonances": self.browseResonances,
             "selected_resonances": self.viewSelectedResonances,
             "edit_spin_system": self.editSpinSystems,
-            "link_noe_resonances": self.linkNoeResonances,
             "confirm_seq_spin_systems": self.confirmSeqSpinSystems,
             "type_spin_systems": self.typeSpinSystems,
             "type_spin_system": self.typeSpinSystem,
@@ -1189,17 +1187,6 @@ class AnalysisPopup(BasePopup, Analysis):
         )
         menuNames.append(label)
         menu.add_separator()
-        label = "NOE Contributions"
-        menu.add_command(
-            label=label,
-            shortcut="N",
-            image=self.iconSpecialTool,
-            compound="left",
-            command=self.linkNoeResonances,
-            tipText="Assign the contributions to NOE peaks using chemical shits and structure distances",
-        )
-        menuNames.append(label)
-        menu.add_separator()
         label = "Assignment Graph"
         menu.add_command(
             label=label,
@@ -2152,10 +2139,6 @@ class AnalysisPopup(BasePopup, Analysis):
         popup = self.openPopup("edit_spin_system", EditSpinSystemPopup)
         if doClear:
             popup.update(doClear)
-
-    def linkNoeResonances(self, doClear=False):
-
-        popup = self.openPopup("link_noe_resonances", LinkNoeResonancesPopup)
 
     def confirmSeqSpinSystems(self):
 

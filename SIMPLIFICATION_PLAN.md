@@ -1179,7 +1179,9 @@ per locked decision 4).
 
 # Assignment Menu Removal Plan — Stages 17-21 (added 2026-08-24)
 
-Status: **IN PROGRESS** (started 2026-08-24)
+Status: **COMPLETE (2026-08-24)** — all 5 assignment-menu stages (17-21)
+done; 21/21 across all three plans (12/12 Simplification + 4/4 Menu
+Removal + 5/5 Assignment Menu), all pushed
 Same repo, same checkpoint policy: ONE commit per stage (code + this log
 update in the same commit) + push to `main`. Python: anaconda `python`
 3.13.5; `xvfb-run` available.
@@ -1273,7 +1275,7 @@ TOTAL dropping by exactly the removed-module count; gui_boot_test green
 | 18 | Assignment ▶ Pick & Assign From Roots + `popups/LinkPeakLists.py` + doc line | ✅ 2026-08-24 |
 | 19 | Assignment ▶ Protein Sequence Assignment + `popups/LinkSeqSpinSystems.py` + doc line + `EditSpinSystem.py` help link | ✅ 2026-08-24 |
 | 20 | Assignment ▶ Automated Seq. Assignment + `ccpnmr/nexus/` (5) + `wrappers/{Mars,Psipred}.py` + doc lines | ✅ 2026-08-24 |
-| 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ⬜ |
+| 21 | Assignment ▶ NOE Contributions + `popups/LinkNoeResonances.py` + doc line + separator collapse | ✅ 2026-08-24 |
 
 ## Stage checklist detail
 
@@ -1550,3 +1552,61 @@ D2D,Shiftx}.py` + `wrappers/__init__.py` KEPT (locked decision 2 — CamCoil
     mix (UP031 17 / E722 10 / F841 8 / E731 2 / E721 1 / F811 1 / W293 1) —
     zero NEW (no F841 delta: the removed method had no unused `popup =`,
     and no import became orphaned). `python -m py_compile` OK.
+**Stage 21 — NOE Contributions — ✅ 2026-08-24**
+Recon (verified pre-edit): `popups/LinkNoeResonances.py` (1419 lines) —
+`LinkNoeResonancesPopup(BasePopup)` (title "Assignment : NOE
+Contributions") + the `testNoePopup` `argServer` macro (L74 — standalone
+in-file entry point, no registration table to update; Stage-14
+precedent). Sole external importer: `AnalysisPopup.py` (import L104,
+popupActions `"link_noe_resonances"` L233, menu block L1191-1202 with
+shortcut "N", 2-line `linkNoeResonances` method L2156-2158). Its
+stage-11 `viewStructure` call site was already removed in Stage 11.
+`doc/source/menu/Assignment.rst:15` toctree line (target dir
+`source/popups/` doesn't exist — link already dangling; S17-20
+precedent). `doc/Changes.html` mentions (L243/L411/L437) are changelog
+history — KEPT (locked decision 6, Stage-12 precedent). Repo-wide grep
+(`LinkNoeResonances|linkNoeResonances|link_noe_resonances|NOE
+Contributions`): beyond the 5 items + doc line above + these, only this
+plan doc and the gitignored `dist/` snapshot.
+- `AnalysisPopup.py` (−17 lines, 2957→2940): dropped the
+  `ccpnmr.analysis.popups.LinkNoeResonances` import; the
+  `"link_noe_resonances"` popupActions entry; the "NOE Contributions"
+  add_command block (label + 6-arg block + `menuNames.append`); the
+  `linkNoeResonances` method (its unused `popup =` line carried the F841
+  this stage removed). **Separator collapse (S19/S20 bookkeeping):** the
+  TWO now-adjacent `menu.add_separator()` calls between "Spin System
+  Typing" and "Assignment Graph" collapsed into ONE — the Assignment menu
+  is now `0 Assignment Panel, 1 Copy Assignments, 2 Spin System Typing,
+  3 sep, 4 Assignment Graph, 5 Quality Reports`, exactly the plan's
+  "After S21" bookkeeping line.
+- Deleted `ccpnmr2.5/python/ccpnmr/analysis/popups/LinkNoeResonances.py`
+  (1419 lines) via `git rm`.
+- `doc/source/menu/Assignment.rst` (−2): dropped the "NOE Contributions"
+  toctree line + one separating blank line (it stood alone between two
+  blank lines after S20) — the toctree keeps two well-grouped sections:
+  (Assignment Panel / Copy Assignments / Spin System Typing), then
+  (Assignment Graph / Quality Reports).
+- Grep-verified post-edit: zero
+  `LinkNoeResonances|linkNoeResonances|link_noe_resonances` references in
+  any code or doc outside this plan doc.
+- ENV note (not a code regression): the venv had lost the dev/test extras
+  (`pytest`/`pytest-cov` from `testing`, `decorator` from `optional`)
+  since the S20 baseline — this session's first import_smoke run showed
+  FAILED 6 (the known 2× `cherrypy` + 3× `tests/test_*.py` on missing
+  `pytest` + `TestNefIo.py` on missing `decorator`; none of the 4 extra
+  modules relate to this stage's removal). Restored via
+  `uv pip install decorator pytest pytest-cov` (no `uv.lock` touched);
+  the gate run below is the post-restore result.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1239** (1240−1, exactly the one
+    removed module), OK **1227**, FAILED **2** unchanged (2×
+    `cherrypy`), BY-DESIGN **10** unchanged.
+  - `gui_boot_test.py` **3/3** (the CCPN main window boots through the
+    edited `setAssignMenu` path).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check AnalysisPopup.py --statistics`: 40→**39** (F841 8→7 —
+    the removed unused `popup =`; UP031 17 / E722 10 / E731 2 / E721 1 /
+    F811 1 / W293 1 flat) — zero NEW. `python -m py_compile` OK.
+- **ASSIGNMENT MENU REMOVAL PLAN COMPLETE — 21/21** (Simplification 1-12
+  + Menu Removal 13-16 + Assignment Menu 17-21), all stages committed +
+  pushed to `21tesla/analysis2.5py3lite:main`.
