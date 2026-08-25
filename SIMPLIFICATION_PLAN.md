@@ -2421,3 +2421,126 @@ Recon (verified 2026-08-24):
     "memops/general(6)" count apparently included 3 of them — kept).
   - `ccp/lib/nmr/` + `ccp/lib/nmr/Nmr/` inits + 3 live submodules.
   - `cambridge/bayes/` whole tree (live) + its allowlist entry.
+
+**Stage 31 — macro modules + memops project-version-compat surface (91 files) — ✅ 2026-08-25**
+- Scope: signed S31 "`ccpnmr/analysis/macros` 12 + `memops/format/
+  compatibility` 41 + `memops/format/xml.{Compatibility,XmlGen,XmlIO}`" —
+  executed on explicit user approval of the pending data-compat decision
+  (2026-08-25), with full re-verification in this session: per-module
+  importer lists over every candidate, tree-wide static grep, dynamic
+  `__import__`/string-ref sweep (incl. `memops/general/Constants.py:113`
+  — targets KEPT `baseDataTypes`; `Compatibility.py:155/1105` — inside
+  the removal set itself), package `__init__` checks (both bare `pass` —
+  nothing to scrub), and `pyproject.toml` (keep: `memops*` include +
+  isort entry — package survives / `ccpnmr*` likewise), `MANIFEST.in` /
+  `setup.py` / `scripts/` (zero build-surface refs to any removed tree).
+- Liveness reconciliation (signed S24-audit counts vs. reality):
+  - `ccpnmr/analysis/macros/` — signed "12" = the 12 non-`__init__`
+    modules. **`ArgumentServer.py` KEPT (LIVE)** — top-level imported by
+    live core `ccpnmr/analysis/Analysis.py:67` + `AnalysisPopup.py:66`
+    (subclass of live `ccp.general.ArgumentServer`; S30 adatah.Util/
+    Constants live-importer rule). **`Command.py` removed (DEAD shadow)**
+    — zero importers tree-wide: the LIVE `runMacro`/`reloadMacro` engine
+    (`ccpnmr/analysis/core/Util.py:1767/1781`) imports
+    `from ccp.general.Command import Command` (`:58`) — a SEPARATE module;
+    name-collision trap, same pattern as `ccp.lib.` vs `ccp.util/`
+    NmrExpPrototype. The macro FEATURE surface stays live per S14 locked
+    decision 1 (unchanged): `EditProfiles.py` Macros tab (L1143/L1148) +
+    `WindowFrame.py` right-click Macros menu (L1336/L1389/L5321) → the
+    `ccp.general.Command` engine dynamically `__import__(macro.module)`s
+    what saved Macro entities name.
+  - `memops/format/compatibility/` — signed "41"; actual **78** tracked
+    files (19 package `__init__` + 59 modules: `Converters` /
+    `Converters1` / `Converters2` + `downgrade/v_3_0_a1` ×4 + 13 upgrade
+    `v_*` ×4). Closed island: the ONLY external refs are the 3 version-
+    gated lazy branches listed under "Kept deliberately"; the
+    `Converters.{majorUpgradeToCurrent,getOldData}` entry points have
+    ZERO external callers; `Converters1.py:873`'s dynamic
+    `__import__("memops.format.compatibility.%s.v_%s")` chain targets only
+    in-island version dirs.
+  - `memops/format/xml/` — signed 3 (Compatibility/XmlGen/XmlIO):
+    **`XmlIO.py` KEPT (LIVE)** — the signed entry resolves against the
+    live-importer rule (S30 precedent): top-level import in live
+    `ccp/general/Io.py:72` with 4 uses (L129/L153 chemComp + L310/L337
+    chemCompCoord loading — feeds the `ReadPdb` / `DataFormat` /
+    `EditMolecules` / `MoleculeModify` / `DataConvertLib` / `EditSpectrum`
+    chains, 20+ live importers of `ccp.general.Io` incl. `Analysis.py:49`
+    + `Test`-free runtime chemcomp loading) plus lazy save/load uses in
+    `memops/general/Io.py:664`, `memops/api/Implementation.py` (5 sites —
+    MemopsRoot saveTo/loadFrom), `ccpnmr/format/process/*.py` (5 lazy
+    sites), `EditMolecules.py:2503`. Removing it would break
+    `import ccp.general.Io` and hence the whole app. **Removed:
+    `XmlGen.py`** (sole importer = in-island `Converters1.py:662/796`) +
+    **`Compatibility.py`** (zero .py importers anywhere, static or
+    dynamic). `Util.py` KEPT (live: `ccpnmr/analysis/core/Util.py:46`
+    top-level + `memops/general/Io.py:66` + api/Implementation lazy sites),
+    `_licenseInfo.py` KEPT (dynamic-live family, S30 design), `__init__.py`
+    KEPT.
+- Removed (91 git-tracked files, all `.py`; untracked `__pycache__`
+  residue in the removed dirs cleaned with them):
+  - `ccpnmr/analysis/macros/` — 11 of 13: AssignmentMacros (supersedes
+    S17 locked decision 3 "KEPT — macro surface outlives menu removal";
+    the S31 signed scope — later explicit decision — removes the module
+    while keeping the surface: Macros tab, mouse menu, and engine all
+    still work for custom/new macros), Command, FixProchiralSwaps,
+    MakeDecoupledPeakList, OpenProjectionSpectra, RelaxationAnalysis
+    (+`RelaxationAnalysisPopup`), RenumberChainPartSeqCodes,
+    RenumberChainSeqCodes, SetBfactorFromShiftDiff, T2Macro,
+    TutorialMacros. KEPT `__init__.py` (empty package marker) +
+    `ArgumentServer.py`.
+  - `memops/format/compatibility/` — WHOLE package, 78.
+  - `memops/format/xml/` — 2: XmlGen, Compatibility.
+- Kept deliberately (THE sanctioned data-compat break points — exactly
+  what the S31 hold was about; all version-gated, all left unedited per
+  the no-edits-on-generated-files convention, S4/S27 precedent):
+  - `memops/xml/Implementation.py:315-319` — `if oldVersionStr !=
+    newVersionStr:` → `Converters1.modifyIoMap(oldVersionStr,
+    versionMapping)`.
+  - `memops/xml/Implementation.py:5564-5567` — `if needCompatibility:` →
+    `Converters1.minorPostProcess(fileVersion, result, ...)`.
+  - `memops/general/Util.py:619-626` — `else: # backwards compatibility`
+    (copy-subtree of an OLD-version object) → `Converters1.
+    minorPostProcess(oldVersionStr, targetObj, ...)`.
+  - Each is reached ONLY when loading/saving a project stored under an
+    old memops version; they now raise `ImportError` on the removed
+    `memops.format.compatibility` — old saved projects no longer upgrade
+    (the signed break). Fresh/current-version projects never enter these
+    branches — `test_project_lifecycle` 8/8 (create→save→reload round-
+    trip through KEPT `memops.general.Io` + `XmlIO`) is the empirical
+    proof, plus gui 3/3 + import_smoke FAILED unchanged.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **898** (989−91: exactly the 91
+    removed `.py` modules, 1:1 — no init-dedup loss this time), OK **895**
+    (898−2−1), FAILED **2** unchanged (2× `cherrypy`, pre-existing in the
+    zero-importer `ccpnmr/format/webServer/` tree), BY-DESIGN **1**
+    unchanged (`cambridge.bayes.PeakSeparatorPyMC` — PyMC2 still absent).
+  - `gui_boot_test.py` **3/3** (ccpnmr / data-shifter / format-converter).
+  - `pytest ccpnmr2.5/python/tests/` **25 passed, 4 skipped** — unchanged
+    (incl. `test_project_lifecycle` 8/8; `test_memops_meta_model` +
+    `test_memops_util` green — kept `memops.general`/`memops.api` engine
+    intact).
+  - `uvx ruff check AnalysisPopup.py --statistics`: **38 — IDENTICAL mix**
+    (UP031 17 / E722 10 / F841 6 / E731 2 / E721 1 / F811 1 / W293 1) —
+    zero NEW (no live-file edits at all this stage — pure file removal).
+  - Residual sweep (py/toml/sh/in/cfg, excl. dist/build/pycache/venv/
+    egg-info): ZERO functional refs outside the 3 documented branches.
+    Inert mentions left (generated docs, Stage-12 precedent):
+    `ccpnmr2.5/doc/procedures.txt:292`,
+    `ccpnmr2.5/model/memops/xml/Implementation/*.xml` (XmlIO model
+    text — KEPT live module), `memops/api/doc/Implementation/*.html`,
+    `ccpnmr/analysis/doc/Changes.html` macro-name changelog history,
+    `BrowseReferenceShifts.py:45` COMMENTED ArgumentServer import (arg
+    still live).
+- Name-collision traps cleared (do NOT re-flag):
+  removed `ccpnmr.analysis.macros.Command` (dead shadow) ≠ LIVE
+  `ccp.general.Command` (the runMacro/reloadMacro engine);
+  KEPT `ccpnmr.analysis.macros.ArgumentServer` (live subclass) ≠ base
+  `ccp.general.ArgumentServer` (kept); KEPT `memops.format.xml.XmlIO`
+  (live) + `Util` (live) ≠ removed `XmlGen` / `Compatibility` modules.
+- Status: **deep-scan SIGN-OFF SCOPE now 7/7** (S25-S31 all committed +
+  pushed). Remaining HELD item (needs a separate explicit decision, NOT
+  part of S31): the S30-flagged dead-kept island
+  (`ccpnmr/format/general/Conversion.py` + `webServer/` + `ccp/format/
+  {nmrStar,nmrView}` + `ccpnmr/format/process/{sequenceCompare,
+  stereoAssignmentSwap}` + `pdbe.adatah.{Util,Constants}` live-kept
+  anchors) — data-compat class like S31.
