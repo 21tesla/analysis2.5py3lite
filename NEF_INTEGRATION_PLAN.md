@@ -1,6 +1,6 @@
 # NEF Integration Plan — adopt CCPNMR v3 NEF + project code into py3lite
 
-**Status: STAGE 35 IN PROGRESS** (plan + checkpoint 0 committed)
+**Status: STAGE 35 DONE** (core ported + 12/12 tests; Stage 36 in progress)
 
 ## Context (user directive 2026-08-25)
 
@@ -159,4 +159,38 @@ push. Accept: all gates ≥ baseline, zero new ruff.
 
 ## Stage log (append per stage — commit + push + memory each)
 
-<!-- Stage 35 log appended here -->
+**Stage 35 — NEF format core (model-free) + tests — ✅ 2026-08-25**
+- Ported 8 v3 modules from `ccpn/util/nef/` → `ccpnmr2.5/python/ccpnmr/nef/`:
+  `__init__` (`NEF_ROOT_PATH`), `ErrorLog`, `StarTokeniser`, `GenericStarParser`,
+  `StarIo`, `Specification`, `Validator`, `NefImporter`, `SafeOpen`. Package name
+  `ccpnmr.nef` restores the v2-era import path the v2io tests use.
+- Functional edits (only these): (1) `NefImporter` — top-level `import numpy as np`
+  removed → lazy inside `_convertToPandas` try-block (sole use site; numpy+pandas both
+  optional now); (2) `GenericStarParser` — 3 invalid `\s` escapes → raw strings
+  (SyntaxWarnings on py3.13); (3) verified ZERO `ccpn.*` external refs in all 8.
+- Bundled with package: `mmcif_nef_v1_1.dic` (141KB, validator dictionary) + 3 small
+  testdata files (`CCPN_Commented_Example`, `CCPN_XPLOR_test1`, `CCPN_Sec5Part3`;
+  the 2 H1GI 7-10MB files + docr set deliberately NOT bundled — dist weight).
+- NOT ported: `nef.py`/`CompareNef.py` (file-compare CLI, not needed), `testing/`
+  (nose-era), `NEF/` (license/charter docs).
+- Tests: new `ccpnmr2.5/python/tests/test_nef_core.py` — **12 tests**: parse all 3
+  bundled files (mandatory meta+ms frames + samefile path), ground truths (Commented:
+  104 shifts / 2 spectra [cnoesy1+dummy15d] / 235 seq residues / 9 validator errors;
+  XPLOR: no spectra (getNmrSpectra is None) / 735 dist-restraints; Sec5: 5 spectra /
+  `isValid True` with 5 informational notes), 8 categories listed, saveframe mgmt
+  (add/get/has/delete, prefixed forms), toString→fromString + saveFile→loadFile
+  round-trips, direct StarIo parse (`nef_peak` = the NEF v1.1 peak loop). API learns:
+  StarIo coerces `'1.1'`→float 1.1; `getTableNames()` hides `nef_` prefixes; loop rows
+  via `NmrLoop.data`.
+- Gates: import_smoke TOTAL **920** (=910 + 9 nef modules + 1 test file; the smoke
+  walk includes tests/) OK 919 / FAILED **0** / BY-DESIGN 1 (unchanged, PyMC bayes);
+  pytest **51 passed, 4 skipped** (39+4 baseline + 12 new, all green); ruff (0.16.3)
+  new package: 174 findings, **all pre-existing in the v3 source** (UP031 83 —
+  deferred per the user's Phase-3 "no bulk style" decision; UP032 23; I001 17; UP010
+  17; UP040 6; E402 5 [v3 standalone-bootstrap block]; E713 5; F541 3; F841 3; UP008
+  3; E722 2; ≤2 each of UP004/UP009/UP030/UP034) — ZERO live-file changes, zero new
+  on existing files; gui_boot_test untouched (no GUI edits this stage).
+- Packaging: no pyproject change needed (`ccpnmr*` include + `"*": ["*"]`
+  package-data already cover `.dic`/`.nef`).
+
+<!-- Stage 36 log appended here -->
