@@ -1915,3 +1915,63 @@ Recon (verified 2026-08-24):
   TOTAL **1236** / OK **1224** / FAILED **2** (cherrypy) / BY-DESIGN **10**;
   `gui_boot_test.py` **3/3**; `pytest ccpnmr2.5/python/tests/` **45 passed,
   4 skipped**; `uvx ruff` **0.16.4** (per-file baselines kept in S22/S23 entries).
+
+**Stage 25 — Dead C extensions: dynamics tree + CloudUtil + 5 extra dead clouds exts — ✅ 2026-08-24**
+- Scope: the signed-off S25 "dead C exts (dynamics 24 + CloudUtil)" — plus the
+  6 extra zero-importer bridges the S24 audit flagged as verify-by-grep
+  (`AtomCoord`, `DistConstraint`, `DistConstraintList`, `DistForce`, `Midge`,
+  `Dynamics` (non-Dy)) — all 13 re-verified this stage with a repo-wide
+  `grep -E` over every `*.py` (python tree, tests, import_smoke, gui_boot):
+  **zero importers** → included under the signed-off "dead C extensions" scope.
+- Verification before removal:
+  - KEPT-source `#include` check (`py_atom_coord.c`, `py_atom_coord_list.c`,
+    `py_bacus.c`, `atom_coord_list.c`): no coupling to any removed header.
+  - Build-config sweep: `setup.py` (hit — see below), `MANIFEST.in` (no
+    refs), `pyproject.toml` (no refs), `scripts/` (no refs),
+    `c/environment*.txt` (no refs). Also found: `memops/c/copySharedObjsMac`
+    (missed by the earlier 3-script sweep — trimmed).
+- **Removed (59 git-tracked files):**
+  - `ccpnmr2.5/c/ccpnmr/dynamics/` — ENTIRE tree, 31 files: 24 .c/.h sources
+    (12 pairs), `Makefile`, 6 prebuilt `Dy*.so`.
+  - `ccpnmr2.5/c/ccpnmr/clouds/` — 28 files: 7 `.so` (AtomCoord, CloudUtil,
+    DistConstraint, DistConstraintList, DistForce, Dynamics, Midge) + 21
+    sources (`py_cloud_util.c`; the py_/core `.c/.h` pairs for
+    dist_constraint, dist_constraint_list, dist_force, dynamics, midge).
+- **Removed (26 UNTRACKED local build artifacts):** the 13 dead-name `.so`
+  bridges under `ccpnmr2.5/python/ccpnmr/c/` (7 names × plain + cpython-313
+  + 6 Dy* × 2) — plain `rm`, never git-tracked (gitignored by `*.so`);
+  remaining `.so` set = exactly the 9 kept exts (AtomCoordList, Bacus,
+  ContourFile/Levels/Style, PeakList, PeakCluster, SliceFile, WinPeakList).
+- **Edited:**
+  - `setup.py` (−120, 316→196): docstring family list "clouds / dynamics /
+    analysis…" → "clouds / analysis…"; dropped `DYN =` source dir; FAM:
+    dropped all 13 dead entries (+ the `# --- dynamics` comment line). FAM
+    clouds section is now exactly `AtomCoordList` + `Bacus`.
+  - `python/ccpnmr/c/linkSharedObjs` (−13 lines): 7 analysis + `clouds/
+    AtomCoordList` + `clouds/Bacus`.
+  - `python/ccpnmr/c/copySharedObjs` (−12), `copySharedObjs.bat` (−6),
+    `memops/c/copySharedObjsMac` (−12): same 9-line kept set.
+  - `c/ccpnmr/clouds/Makefile` (150→49): `all:` = `AtomCoordList` + `Bacus`
+    only; dropped DYNAMICS_OBJS / PY_DIST_* / PY_MIDGE / PY_CLOUD_UTIL groups,
+    the `global_diag_objects` / `global_random_objects` phony targets, and the
+    dead `py_*` compile rules.
+- **KEPT (deliberate, with reason):**
+  - `c/ccpnmr/clouds/{atom_coord,py_atom_coord}.{c,h}` — BUILD DEPENDENCY of
+    the kept `AtomCoordList` ext (setup.py source list). Its sole importer is
+    `popups/EditResStructures.py` — itself a **Stage 27 removal** → when it
+    dies, the `AtomCoordList` bridge + these 4 sources also become orphans;
+    decide at S27 (flagged in S24 entry).
+  - `Bacus` (live `ccpnmr.clouds.ResonanceIdentification`), `AtomCoordList`
+    (see above).
+  - `c/ccpnmr/clouds/_licenseInfo.py` (stray in the C dir) — `_licenseInfo`
+    family is dynamic-live by design (S24 finding); out of scope.
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1236** / OK **1224** / FAILED **2**
+    unchanged (cherrypy) / BY-DESIGN **10** unchanged (no import-graph `.py`
+    touched).
+  - `gui_boot_test.py` **3/3** (all apps boot through the live C-ext set).
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check setup.py --statistics`: 1 PRE-EXISTING I001 (this diff
+    touches no import lines) — zero NEW; `python -m py_compile setup.py` OK.
+  - Residual grep (excl. `dist/` build snapshot + plan doc): ZERO references
+    to any of the 13 dead names anywhere in the tree.

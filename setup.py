@@ -6,7 +6,7 @@ Two families of C extension modules live in this tree:
      Imported flat/top-level (e.g. ``import ShapeFile``) and built into
      ``ccpnmr2.5/python/``.
 
-  2. The per-package analysis exts (clouds / dynamics / analysis / ccp-structure /
+  2. The per-package analysis exts (clouds / analysis / ccp-structure /
      cambridge) — imported as *package submodules* (``ccpnmr.c.PeakList``,
      ``ccp.c.StructAtom``, ``cambridge.c.BayesPeakSeparator``).  Each one is
      exposed through a symlink ``<pkg>/c/<Name>.so -> c/<...>/<Name>.so``.
@@ -27,7 +27,6 @@ from setuptools import setup, Extension
 # Source directories -----------------------------------------------------------------
 G     = "ccpnmr2.5/c/memops/global"          # shared helpers + the backbone exts
 CLOUD = "ccpnmr2.5/c/ccpnmr/clouds"
-DYN   = "ccpnmr2.5/c/ccpnmr/dynamics"
 ANA   = "ccpnmr2.5/c/ccpnmr/analysis"
 STR   = "ccpnmr2.5/c/ccp/structure"
 BAYES = "ccpnmr2.5/c/other/cambridge/bayes"
@@ -154,53 +153,11 @@ DRAWINC_EXTRA = [TKINC] + GLX_INC
 # name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
 FAM = {
     # --- clouds (import:  ccpnmr.c.<Name>) ----------------------------------
-    "CloudUtil":       ([f"{CLOUD}/py_cloud_util.c"], [CLOUD, G], ["m"]),
-    "AtomCoord":       ([f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c"] + GU,
-                        [CLOUD, G], []),
     "AtomCoordList":   ([f"{CLOUD}/py_atom_coord_list.c", f"{CLOUD}/atom_coord_list.c",
                          f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c"] + GU,
                         [CLOUD, G], []),
-    "DistConstraint":  ([f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c"] + GU,
-                        [CLOUD, G], []),
-    "DistConstraintList": ([f"{CLOUD}/py_dist_constraint_list.c",
-                            f"{CLOUD}/dist_constraint_list.c",
-                            f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c"] + GU,
-                        [CLOUD, G], []),
-    "DistForce":       ([f"{CLOUD}/py_dist_force.c", f"{CLOUD}/dist_force.c"] + GU,
-                        [CLOUD, G], []),
-    "Dynamics":        ([f"{CLOUD}/py_dynamics.c", f"{CLOUD}/dynamics.c",
-                         f"{CLOUD}/py_atom_coord_list.c", f"{CLOUD}/atom_coord_list.c",
-                         f"{CLOUD}/py_atom_coord.c", f"{CLOUD}/atom_coord.c",
-                         f"{CLOUD}/py_dist_constraint_list.c", f"{CLOUD}/dist_constraint_list.c",
-                         f"{CLOUD}/py_dist_constraint.c", f"{CLOUD}/dist_constraint.c",
-                         f"{CLOUD}/py_dist_force.c", f"{CLOUD}/dist_force.c"]
-                        + GU + [f"{G}/random.c"], [CLOUD, G], ["m"]),
-    "Midge":           ([f"{CLOUD}/py_midge.c", f"{CLOUD}/midge.c"]
-                        + GU + [f"{G}/diag_dbl.c"], [CLOUD, G], ["m"]),
     "Bacus":           ([f"{CLOUD}/py_bacus.c", f"{CLOUD}/bacus.c"] + GU,
                         [CLOUD, G], ["m"]),
-
-    # --- dynamics (import:  ccpnmr.c.<Name>) --------------------------------
-    "DyAtomCoord":     ([f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c"] + GU,
-                        [DYN, G], []),
-    "DyAtomCoordList": ([f"{DYN}/py_atom_coord_list.c", f"{DYN}/atom_coord_list.c",
-                         f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c"] + GU,
-                        [DYN, G], []),
-    "DyDistConstraint": ([f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c"] + GU,
-                        [DYN, G], []),
-    "DyDistConstraintList": ([f"{DYN}/py_dist_constraint_list.c",
-                            f"{DYN}/dist_constraint_list.c",
-                            f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c"] + GU,
-                        [DYN, G], []),
-    "DyDistForce":     ([f"{DYN}/py_dist_force.c", f"{DYN}/dist_force.c"] + GU,
-                        [DYN, G], []),
-    "DyDynamics":      ([f"{DYN}/py_dynamics.c", f"{DYN}/dynamics.c",
-                         f"{DYN}/py_atom_coord_list.c", f"{DYN}/atom_coord_list.c",
-                         f"{DYN}/py_atom_coord.c", f"{DYN}/atom_coord.c",
-                         f"{DYN}/py_dist_constraint_list.c", f"{DYN}/dist_constraint_list.c",
-                         f"{DYN}/py_dist_constraint.c", f"{DYN}/dist_constraint.c",
-                         f"{DYN}/py_dist_force.c", f"{DYN}/dist_force.c"]
-                        + GU + [f"{G}/random.c"], [DYN, G], ["m"]),
 
     # --- analysis, Tier-1 (import:  ccpnmr.c.<Name>) ------------------------
     "ContourLevels":   ([f"{ANA}/py_contour_levels.c", f"{ANA}/contour_levels.c"] + GU,
