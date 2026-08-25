@@ -1975,3 +1975,65 @@ Recon (verified 2026-08-24):
     touches no import lines) — zero NEW; `python -m py_compile setup.py` OK.
   - Residual grep (excl. `dist/` build snapshot + plan doc): ZERO references
     to any of the 13 dead names anywhere in the tree.
+
+**Stage 26 — Dead clusters: integrator/ (40) + workflow/ (6) + gothenburg/ (2) — ✅ 2026-08-24**
+- Scope: signed-off S26 "integrator/workflow/gothenburg" —
+  supersedes S3 "KEPT plugins/Aria" and S9-kept `workflow/Cing`, both now
+  fully orphaned (verified this stage).
+- Verification before removal (repo-wide, outside the target trees):
+  - `integrator.*`: ZERO importers — the only external hit is a COMMENT
+    (`converters/PalesFormat.py:146` mentions "workflow" in prose).
+    Note: `ccp/format/cosmos/*` + `converters/CosmosFormat.py` (registry-LIVE
+    "Cosmos" format) do NOT import the integrator — own IO stack — kept.
+  - `workflow.*`: sole importer repo-wide =
+    `nijmegen/CASD/convertCasdNmrToCcpn.py:13
+    from ccpnmr.workflow.Fc import FcWorkFlow` — an S29 removal target whose
+    module is already broken (imports deleted `pdbe.deposition`; BY-DESIGN
+    in import_smoke).
+  - `gothenburg`: sole referrer = a COMMENTED-OUT `readMdd` stub in live
+    `popups/EditExperiment.py` (string literal, never executed) whose
+    `from gothenburg import Usf3Io` references a symbol that does not exist
+    in the package (`gothenburg/` held only `__init__.py` + `mdd/__init__.py`)
+    → broken by construction.
+  - Build/config sweep: `pyproject.toml` hit (2 lines), `setup.py` /
+    `MANIFEST.in` / `import_smoke.py` / `gui_boot_test.py`: no refs.
+    Non-py data (xml/html/rst): no refs.
+- **Scope extension (flagged, within signed-off "fully-orphaned modules"
+  rule):** the audit's orphan list named only `workflow.{Aria,Cing}` —
+  `workflow.{Constants,Fc,Util,__init__}` were NOT individually flagged
+  (their sole referrer, CASD, is itself an S29 removal). Removed TOGETHER
+  with Aria/Cing this stage: their entire reference graph is dead code, and
+  leaving them would strand a package whose every importer is scheduled for
+  deletion. Kept the removal inside this stage rather than a 4th pass in S29.
+- **Removed (48 git-tracked files):**
+  - `ccpnmr/integrator/` — ENTIRE tree, 40 files (core 9: Io,
+    NmrpipeTableFormat, ParameterEditor, TabularFormat, Util,
+    jsonToNmrCalc, projectToJson, __init__×2; plugins 31: Aria 4, Asdp 4,
+    Cosmos 3, Isd 2, MultiStruc 3, NmrStar 2, Rosetta 4, Talos 4, Unio 4,
+    plugins/__init__).
+  - `ccpnmr/workflow/` — 6 files (Aria, Cing, Constants, Fc, Util, __init__).
+  - `gothenburg/` — 2 files (`__init__.py`, `mdd/__init__.py`).
+- **Edited:**
+  - `popups/EditExperiment.py` (3213→3201, −12): removed the commented-out
+    `readMdd` stub (its `from gothenburg import Usf3Io` + `Usf3Io.
+    readDataSource` call). Adjacent commented-out `editExperimentTypes`
+    stub KEPT (references live `guiParent.editExpType`).
+  - `pyproject.toml` (173→171, −2): `"gothenburg*"` (packages.find) +
+    `"gothenburg"` (isort known-first-party). (Note: stale `nijmegen*`/
+    `utrecht*`/`molsim*` include entries from S1-12 removals remain —
+    harmless: `packages.find` matches nothing; flagged for final cleanup.)
+- Gates (all green):
+  - `import_smoke.py` exit 0 — TOTAL **1188** (1236−48, exactly the removed
+    modules incl. `__init__.py`s), OK **1176**, FAILED **2** unchanged
+    (cherrypy), BY-DESIGN **10** unchanged (CASD/ISD die with S29).
+  - `gui_boot_test.py` **3/3** — `ccpnmr` app boots through the live popup
+    path including the edited `EditExperiment`.
+  - `pytest ccpnmr2.5/python/tests/` **45 passed, 4 skipped** (unchanged).
+  - `uvx ruff check popups/EditExperiment.py --statistics`: 56 PRE-EXISTING
+    (UP031 48 / F841 6 / W293 2) — the removed block was docstring interior,
+    which ruff does not lint → zero NEW. `python -m py_compile` OK.
+  - Residual grep: zero refs to any S26 name outside (a) `dist/` build
+    snapshot, (b) `ccpnmr/analysis/doc/Readme.txt:86` historic directory
+    listing (still lists extendNmr/gottingen/paris — doc history, precedent
+    S22-23), (c) the S29-target CASD module (dies next-but-one), (d)
+    untracked `ccpnmr.egg-info/` build metadata.

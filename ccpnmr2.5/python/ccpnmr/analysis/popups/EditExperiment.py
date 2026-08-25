@@ -1251,20 +1251,8 @@ class EditExperimentPopup(BasePopup):
 
     """
   def editExperimentTypes(self):
-  
-    self.guiParent.editExpType()
-  """
-    """
-  def readMdd(self):
-    from gothenburg import Usf3Io
-    from memops.gui.FileSelectPopup import FileSelectPopup
 
-    popup = FileSelectPopup(self)
-    file = popup.getFile()
-    popup.destroy()
-    
-    if file:
-      Usf3Io.readDataSource(self.nmrProject, file)
+    self.guiParent.editExpType()
   """
 
     def getName(self, experiment):
