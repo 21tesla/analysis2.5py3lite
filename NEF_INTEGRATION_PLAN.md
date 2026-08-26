@@ -585,3 +585,57 @@ spectra 5/5.
   `ccp.format.spectra.OpenSpectrum` param-module list); BMRB-deposition
   sanitising (emitted paths are a same-machine round-trip convenience).
 
+**Stage 39a — core relink module `ccpnmr/nefRelink.py` — ✅ 2026-08-26**
+- New `ccpnmr2.5/python/ccpnmr/nefRelink.py` (~290L):
+  - `scanSpectrumFiles(baseDir)` — recursive walk, parses every file with
+    `NmrPipeParams` (2048-byte header; non-NMRpipe skipped silently),
+    returns path-sorted dicts {path, stem, relDir, ndim, npts, block, sw,
+    sf, nuc, bigEndian, head, nbytes}.
+  - `matchSpectra(dataSource, candidates)` — hard gate `ndim ==
+    numDim`; rank = name score (exact stem 100 / token subset 60+ / shared
+    tokens 20+) + directory score (each experiment/project token ↔
+    directory token pair matching by substring in EITHER direction adds
+    10 — the either-direction form handles fused labels
+    `ssenoesyn`~`sse-noesyn`, found on the live run); spectrometer-
+    frequency agreement tie-break; path-sorted input makes the result
+    deterministic.
+  - `relinkSpectra(memopsRoot, baseDir)` — per unlinked DataSource:
+    match → `v2io.NefIo.addDataStore(..., fileType='NmrPipe',
+    headerSize, nByte, ...)` + `_restoreDataDims` (header npts →
+    numPoints/numPointsOrig; `valuePerPoint = sw/numPoints`, the native
+    `createSpectrum` convention — the importer left its bogus 1280/2560
+    defaults without `point_count`) → report {baseDir, candidates,
+    linked, unlinked, skipped, alreadyLinked}; DataSources > 4 dims are
+    `skipped` (NmrPipe header limit); each file consumed at most once;
+    second pass idempotent.
+- New tests `ccpnmr2.5/python/tests/test_nef_relink.py` — **7 tests**:
+  public API; synthetic-header fixture sanity (crafts the minimal
+  2048-byte header from the NmrPipeParams index constants and
+  re-reads it with NmrPipeParams); scan (mixed dir, deterministic
+  non-NMRpipe bytes rejected); exact stem + ndim gate; generic-`ftt`
+  disambiguation by experiment directory; fused-label regression
+  (`ftt_2` + experiment `ssenoesyn` → `yb-sse-noesyn`, not the
+  alphabetical-accident `yb-ssd-noesyn`); E2E (Commented import →
+  synthetic `yb-demo/noesyn/cnoesy1.ft3` → relink: dataStore
+  NmrPipe/headerSize 2048/fullPath/numPoints/blockSizes, dataDims
+  1280/2560 → 64/32/16 + valuePerPoint, dummy15d skipped, second pass
+  no-ops).
+- **Live verification (user's sswt, read-only over ~/NMR)**: fresh
+  import of ~/NMR/sswt_new.nef + relink against /home/logan/NMR →
+  **5/5** DataSources linked to the CORRECT files (sswt-298K-hsqc-1016 /
+  sswt-298K-hsqc-bigsw-1017 / sse-298K-hsqc-1012 → yb-hsqc by exact
+  stem; `ftt` (experiment `noesyn`) → yb-sswt-noesyn — matches the
+  ORIGINAL project's XML; `ftt_2` (experiment `ssenoesyn`) →
+  yb-sse-noesyn); all dataDims restored from [1280, 2560] /
+  [1280, 1280, 2560] to [427, 160] / [594, 256, 128]; 38 candidates
+  scanned, 0 warnings. The first live run exposed the fused-label
+  matching gap (ssenoesyn had mapped to yb-ssd-noesyn by path-order
+  luck) → bidirectional dir-token scoring + regression test.
+- Gates: pytest **79 passed, 4 skipped** (72+4 baseline + 7 new,
+  41s); import_smoke TOTAL **933** (=931 + nefRelink + test file)
+  FAILED **0** / BY-DESIGN 1 (unchanged); ruff **0** on both new files
+  (two first-written UP031s converted to f-strings before comparing);
+  gui_boot **1/1 PASS** (no GUI edits this milestone).
+- Left for 39b / 39c: GUI "Import NEF + relink..." + CLI `--relink`
+  (shared orchestration), exporter file-link fields.
+
