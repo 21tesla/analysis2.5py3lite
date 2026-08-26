@@ -324,3 +324,132 @@ def test_sec5_round_trip(tmp_path):
     assert len(c2['shifts']) == len(c1['shifts']) == 542
     assert _shiftValues(c1) == _shiftValues(c2)
     assert _peakPositions(c1) == _peakPositions(c2)
+
+
+def test_native_legacy_project_round_trip(tmp_path):
+    """Regression: in a NATIVE legacy project the ResonanceGroups carry
+    no name - their identity is the linked MolSystem residue - so the
+    export must derive chain/sequence from it (and fall back to the
+    reader's '@' unassigned-chain form for groups it cannot place),
+    otherwise the reader drops every peak assignment and collapses all
+    shifts into the default-chain group on reimport."""
+
+    class _Stub:
+        """Minimal attribute bag for _resonanceIdentity branch tests."""
+        def __init__(self, **kw):
+            self.__dict__.update(kw)
+
+    # branch coverage for _resonanceIdentity
+    namedGroup = _Stub(name='A.63', ccpCode='Gly', residue=None, serial=5)
+    reso = _Stub(name='H', isotopeCode='1H', serial=1, resonanceGroup=namedGroup)
+    assert nefExport._resonanceIdentity(reso) == ('A', '63', 'Gly', 'H')
+
+    chainlessGroup = _Stub(name='63', ccpCode='Gly', residue=None, serial=5)
+    reso = _Stub(name='H', isotopeCode='1H', serial=1, resonanceGroup=chainlessGroup)
+    assert nefExport._resonanceIdentity(reso) == ('@', '63', 'Gly', 'H')
+
+    unnamedGroup = _Stub(name=None, ccpCode='Val', serial=5, residue=_Stub(
+        chain=_Stub(code='A'), seqCode=100, seqInsertCode=' ', chemCompVar=None))
+    reso = _Stub(name='H', isotopeCode='1H', serial=1, resonanceGroup=unnamedGroup)
+    assert nefExport._resonanceIdentity(reso) == ('A', '100', 'Val', 'H')
+
+    unnamedGroup = _Stub(name=None, ccpCode='Ala', serial=5, residue=_Stub(
+        chain=_Stub(code='B'), seqCode=7, seqInsertCode='A',
+        chemCompVar=_Stub(chemComp=_Stub(code3Letter='ALA'))))
+    reso = _Stub(name='H', isotopeCode='1H', serial=1, resonanceGroup=unnamedGroup)
+    assert nefExport._resonanceIdentity(reso) == ('B', '7A', 'ALA', 'H')
+
+    # group the reader cannot place: pinned by the group's own serial
+    placelessGroup = _Stub(name=None, ccpCode='Gly', residue=None, serial=7)
+    reso = _Stub(name='H', isotopeCode='1H', serial=1, resonanceGroup=placelessGroup)
+    assert nefExport._resonanceIdentity(reso) == ('@', '@7', 'Gly', 'H')
+
+    # resonance without any group: pinned by the resonance serial (the atom
+    # form carries the element symbol, not the isotope code: 15N -> N@278)
+    reso = _Stub(name=None, isotopeCode='15N', serial=278, resonanceGroup=None)
+    assert nefExport._resonanceIdentity(reso) == ('@', '@278', None, 'N@278')
+
+    # no group, no serial: nothing to derive
+    reso = _Stub(name='H', isotopeCode='1H', serial=None, resonanceGroup=None)
+    assert nefExport._resonanceIdentity(reso) == (None, None, None, 'H')
+
+    # integration: strip every group name (the native-project state) and
+    # verify a lossless round trip
+    def stripRgNames(rt):
+        n = 0
+        for rg in rt.findFirstNmrProject().resonanceGroups:
+            rg.name = None
+            n += 1
+        return n
+
+    def shiftIdentityMultiset(rt):
+        """(chain, seq, residue, atom, value) -> count over the shift list.
+
+        The identity the export derives (the fix under test) is checked
+        value-for-value: the writer's 10-significant-figure float format
+        cannot perturb the 4th decimal, so quantising to 1e-4 is exact.
+        (Peak-dimension identities are NOT compared: the importer long
+        pre-dates this fix and deliberately collapses alternatives that
+        differ in a single dimension, which the round trip does not
+        preserve - a property of the reader, not of the export.)
+        """
+        from collections import Counter
+
+        def rid(reso):
+            rg = reso.resonanceGroup
+            res = rg.residue if rg is not None else None
+            chain = res.chain.code if res is not None and res.chain is not None else '?'
+            seq = str(res.seqCode) if res is not None else '?'
+            resname = (res.ccpCode if res is not None
+                       else (rg.ccpCode if rg is not None else '?')) or '?'
+            atom = reso.name if reso.name is not None else f'{reso.isotopeCode}@{reso.serial}'
+            return (chain, seq, resname, atom)
+
+        out = Counter()
+        for sl in AssignmentBasic.getShiftLists(rt.findFirstNmrProject()):
+            for s in sl.getMeasurements():
+                out[(rid(s.resonance), round(s.value, 4))] += 1
+        return out
+
+    root = _load(COMMENTED, tmp_path)
+    c1 = _counts(root)
+    assert stripRgNames(root) > 0
+
+    path = _export(root, tmp_path)
+
+    # every exported assignment row carries an interpretable identity
+    imp = NefImporterModule.NefImporter()
+    imp.loadFile(path)
+    for sf in imp.data.values():
+        if not isinstance(sf, StarIo.NmrSaveFrame):
+            continue
+        if sf['sf_category'] == 'nef_chemical_shift_list':
+            for row in sf['nef_chemical_shift'].data:
+                assert row['chain_code'] is not None, row
+                assert row['sequence_code'] is not None, row
+        elif sf['sf_category'] == 'nef_nmr_spectrum':
+            loop = sf.get('nef_peak')
+            if loop is None:
+                continue
+            for row in loop.data:
+                for col in loop.columns:
+                    if col.startswith('atom_name_') and row[col] is not None:
+                        dim = col.rsplit('_', 1)[-1]
+                        assert row[f'chain_code_{dim}'] is not None, row
+                        assert row[f'sequence_code_{dim}'] is not None, row
+                        break
+
+    # reimport: no dropped assignments, no warnings, same identities
+    reRoot = memopsIo.newProject(
+        'nativeRe', path=os.path.join(str(tmp_path), 'reimport'), removeExisting=True)
+    log = StringIO()
+    with redirect_stdout(log):
+        NefIo.loadNefFile(path, memopsRoot=reRoot)
+    assert 'Uninterpretable Peak assignment' not in log.getvalue()
+
+    c2 = _counts(reRoot)
+    assert len(c2['peaks']) == len(c1['peaks'])
+    assert len(c2['assignedPeaks']) == len(c1['assignedPeaks'])
+    assert len(c2['shifts']) == len(c1['shifts'])
+    assert shiftIdentityMultiset(root) == shiftIdentityMultiset(reRoot)
+    assert _peakPositions(c1) == _peakPositions(c2)

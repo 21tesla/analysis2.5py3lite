@@ -87,29 +87,54 @@ def _residueName(residue):
 def _resonanceIdentity(resonance):
     """Return the NEF identity 4-tuple (chainCode, sequenceCode, residueName, atomName).
 
-    Inverse of the reader's ResonanceGroup naming: RG name 'A.63' ->
+    Inverse of the reader's ResonanceGroup naming: an RG named 'A.63' ->
     chain 'A', seq '63'; an RG named without a chain prefix is exported
-    under the NEF unassigned-chain convention '@'.  For a group linked to a
-    MolResidue the standard 3-letter code is used (matching the
-    ``nef_sequence`` rows); otherwise the importer-assigned group
-    ``ccpCode`` is kept."""
+    under the NEF unassigned-chain convention '@'.  In a native legacy
+    project a ResonanceGroup has no name at all - its identity is the
+    MolSystem residue it is assigned to, so chain and sequence are then
+    taken from ``residue.chain.code`` / ``residue.seqCode`` (the same
+    convention as the ``nef_sequence`` rows).  For groups a reader cannot
+    place (no name, no residue) or for resonances with no group at all,
+    the unassigned-chain form chain '@' + sequence '@<serial>' is written
+    (the serial-pinned '@' form the reader's fetchResidueMap resolves to a
+    dedicated ResonanceGroup).  Without such a fallback the exported rows
+    carry no chain/sequence and the reader drops the assignment on
+    reimport.  For a group linked to a residue the standard 3-letter code
+    is used (matching the ``nef_sequence`` rows); otherwise the
+    importer-assigned group ``ccpCode`` is kept."""
     rg = getattr(resonance, 'resonanceGroup', None)
-    if rg is not None:
-        name = rg.name
-        if name and '.' in name:
-            chainCode, sequenceCode = name.split('.', 1)
-        elif name:
-            chainCode, sequenceCode = '@', name
+    residue = getattr(rg, 'residue', None) if rg is not None else None
+    name = getattr(rg, 'name', None) if rg is not None else None
+    if rg is not None and name and '.' in name:
+        chainCode, sequenceCode = name.split('.', 1)
+    elif rg is not None and name:
+        chainCode, sequenceCode = '@', name
+    elif residue is not None:
+        # Native legacy projects: unnamed groups, identity on the residue
+        chain = getattr(residue, 'chain', None)
+        chainCode = getattr(chain, 'code', None)
+        seqCode = getattr(residue, 'seqCode', None)
+        insertCode = (getattr(residue, 'seqInsertCode', None) or '').strip()
+        if chainCode is not None and seqCode is not None:
+            sequenceCode = (f'{seqCode}{insertCode}') if insertCode else str(seqCode)
         else:
             chainCode, sequenceCode = None, None
+    elif rg is not None and getattr(rg, 'serial', None) is not None:
+        # Group the reader cannot place: pin it by the group's own serial
+        chainCode, sequenceCode = '@', f'@{rg.serial}'
+    elif getattr(resonance, 'serial', None) is not None:
+        # Resonance without any group: pin it by the resonance serial
+        chainCode, sequenceCode = '@', f'@{resonance.serial}'
+    else:
+        chainCode, sequenceCode = None, None
+    if rg is not None:
         residueName = getattr(rg, 'ccpCode', None)
-        residue = getattr(rg, 'residue', None)
         if residue is not None:
             candidate = _residueName(residue)
             if candidate != 'UNK':
                 residueName = candidate
     else:
-        chainCode = sequenceCode = residueName = None
+        residueName = None
     atomName = resonance.name
     if not atomName:
         # The importer deliberately names resonances None for the reserved
