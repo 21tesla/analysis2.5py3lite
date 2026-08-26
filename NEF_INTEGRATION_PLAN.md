@@ -1,6 +1,6 @@
 # NEF Integration Plan — adopt CCPNMR v3 NEF + project code into py3lite
 
-**Status: STAGE 36 DONE** (import path restored + 8/8 tests; Stage 37 next = export)
+**Status: STAGE 37 DONE** (export round-trip green on all 3 testdata; Stage 38 next = app wiring)
 
 ## Context (user directive 2026-08-25)
 
@@ -256,4 +256,86 @@ push. Accept: all gates ≥ baseline, zero new ruff.
 - Left for Stage 37 (scope: export): `ccpnmr/nefExport.py` (555-line WIP on
   disk from the aborted session, untracked, imports cleanly — NOT part of
   this commit).
+
+**Stage 37 — NEF export ← legacy model + round-trip — ✅ 2026-08-25**
+- `ccpnmr2.5/python/ccpnmr/nefExport.py` (the WIP from the aborted session,
+  now complete — 623 lines, tracked from this commit):
+  `makeNefDataBlock(memopsRoot)` → `ccpnmr.nef.StarIo.NmrDataBlock`
+  (contemporary NEF v1.1) + `exportProject(memopsRoot, fileName)` (+ a
+  small CLI under `__main__`). Saveframes in the
+  `v2io.NefIo.saveFrameReadingOrder` order: meta, molecular_system
+  (`nef_sequence`), one chemical-shift-list per ShiftList, restraint lists
+  (distance / hbond / rdc / dihedral + `ccpn_restraint_list` for
+  JCoupling / ChemShift / Csa), one spectrum per DataSource (dimensions +
+  transfers + `nef_peak` rows, incl. the multi-row alternative-assignment
+  form), `nef_peak_restraint_links` (only when constraints reference
+  peaks). Column sets mirror a real CCPN-exported NEF v1.1 file.
+- Fixed 5 bugs in the WIP (each root-caused by probing the live imported
+  model before editing):
+  1. `residue_name` — WIP wrote the legacy `residue.ccpCode` (title-case
+     'Ala'…; 'T' for nucleic acids), which is NOT a key of
+     `v2io.Constants.residueName2chemCompId` (reimport died with
+     `ValueError: Unknown residueName T`). Now writes the standard
+     3-letter code from
+     `residue.chemCompVar.chemComp.code3Letter` — verified to reproduce
+     231/235 of the original file's names exactly (the other 4 = the
+     dummy-linker residues the IMPORT side already fell back to `UNK`;
+     `'UNK'` is a valid map key, so they re-import fine). Resonance
+     identity rows use the same code when the group is linked to a
+     MolResidue, else keep the importer-assigned `rg.ccpCode`
+     (preserves e.g. the 'Glx' wildcard on unassigned chains).
+  2. `sequence_code` trailing space — the model default for
+     `seqInsertCode` is a bare `' '`; now stripped (insert codes like
+     `24B` and negative seq codes `-3` round-trip; both sides parse with
+     `ccpnmr.Common.parseSequenceCode`).
+  3. `%`-atom shift rows — ONE NEF shift row may back several Shift
+     objects: an ambiguous atom set (e.g. `HG%`) expands to one resonance
+     per atom set on import, so the row's shifts carry different name
+     spellings (`HG%`, `Hg*`) of the same atom; one-row-per-shift re-
+     expanded on reimport (+4 shifts on Commented). Rows are now grouped
+     by (chain, seq, normalized atom, isotope, value); multi-spelling
+     groups are written ONCE in the canonical upper-case '%' form,
+     same-spelling duplicates (genuine duplicate file rows, e.g. the W.2
+     2H ones) are kept.
+  4. `element@serial` atom names — the importer deliberately creates
+     `name=None` resonances for the reserved `element@serial` atom form
+     (Sec5's unassigned-chains, e.g. `H@349`); the exporter now recreates
+     `{element}@{resonance.serial}` or reimport crashed with
+     `AtomName must be given`.
+  5. One row per DIHEDRAL item — dihedral limits live on the items and
+     the importer creates exactly one item per row; the WIP wrote one row
+     per constraint, silently dropping items 2..N (Commented L2 has
+     6 dihedrals with 11 items: 1+4+2+2+1+1 → 11 exported rows, values
+     now round-trip). Pairwise restraints stay one row per constraint
+     (the importer derives the item product from the row's resonances).
+- Round-trip ground truths (import → export → reimport; counts, then
+  value multisets — all GREEN):
+  - Commented: 235 residues / 15 chains; experiments `('15N NOESY-HSQC',
+    3)` + `('HNCCCCCCCCCCCCC', 15)`; 2 DataSources / 2 PeakLists; 6 peaks
+    all assigned (positions equal); 2 ShiftLists / 108 shifts (values
+    equal; 104 exported rows = the original file's row count, 93+11);
+    constraint lists Dihedral(6) / Distance(3) / HBond(4) / Rdc(2),
+    per-constraint target/limits equal.
+  - XPLOR: 58 residues; no spectra / no shifts; 735 Dist / 161 Dih /
+    147+152 Rdc (two lists); 1195 per-constraint values equal.
+  - Sec5: 95 residues; 5 spectra; 891 peaks (positions equal, 813
+    assigned); 542 shifts (values equal; exercises the
+    `element@serial` rows).
+- New tests `ccpnmr2.5/python/tests/test_nef_export.py` — **5 tests**:
+  public API surface; exported-file structure (saveframe set + row
+  counts, incl. the 93/11 shift-list split and the 11-row L2); and
+  import→export→reimport round-trip count + value tests (shift-value /
+  peak-position / constraint-value multisets) for all 3 bundled files —
+  mirroring `test_v2io_nef.py` style (`_load` via
+  `memopsIo.newProject` + `NefIo.loadNefFile` under `redirect_stdout`).
+- Gates: import_smoke TOTAL **929** (=928 + 1 test file) FAILED **0** /
+  BY-DESIGN 1 (unchanged, PyMC bayes); pytest **64 passed, 4 skipped**
+  (59+4 baseline + 5 new, all green); ruff: `nefExport.py` **0**
+  (WIP entered with 17 findings: 16×UP031 + 1×UP004 — all converted to
+  f-strings / bare class), test file **0**; gui_boot **1/1** (NO GUI
+  edits this stage — the menu wiring is Stage 38).
+- Left for Stage 38: GUI "Load NEF…" / "Export NEF…" Project-menu items
+  (via `ccp.gui.Io` → `NefIo.loadProject` / `nefExport.exportProject`),
+  CLI console entry (check pyproject `[project.scripts]` style),
+  README/INSTALL NEF section, final gates + plan COMPLETE + push.
 
