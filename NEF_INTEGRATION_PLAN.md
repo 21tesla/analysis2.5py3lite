@@ -457,3 +457,57 @@ push. Accept: all gates ≥ baseline, zero new ruff.
   ruff zero-new — AnalysisPopup **38**=38, NefIo **40**=40, nefExport
   **0**=0, test files **0**; gui_boot **1/1 PASS**.
 
+**Post-38 fix round 2 — RG-identity loss on native-legacy export (user's
+2nd sswt report) — ✅ 2026-08-26**
+- **Symptom.** User exported ~/NMR/sswt again, then loaded the NEF in a new
+  session: 1183 × "Uninterpretable Peak assignment … (None, None, 'RES',
+  'X@n'). Set to None" warnings (+ 5 × "data file None not accessible").
+  **All peak assignments were lost; the shift list collapsed into the
+  default ResonanceGroup.**
+- **Root cause.** In *native* legacy projects `ResonanceGroup.name` is
+  **None** (verified live: the XML has no `<NMR.ResonanceGroup.name>`; the
+  identity lives on the links: `ccpCode` + `residue` + `serial`).
+  `nefExport._resonanceIdentity` derived chain/seq ONLY from `rg.name` →
+  every peak + shift row was exported with `.` chain_code/sequence_code;
+  the reader can't interpret `(None, None, res, atom)` rows
+  (`load_nef_peak` needs seq AND atom → the assignment was dropped), and
+  the shift rows collapsed into `defaultNmrChainCode '@-'` /
+  `defaultNmrResidueCode '@'`.
+- **Fix (nefExport.py only)** — `_resonanceIdentity` fallback chain:
+  (1) name `A.63` → split (unchanged); (2) name without a dot →
+  `('@', name)` (unchanged); (3) **name None + `rg.residue`** → real
+  chain/seq from the linked MolSystem residue (`.chain.code` / `.seqCode`
+  + `.seqInsertCode` — same convention as the nef_sequence rows);
+  (4) no name / no residue → `('@', '@<rg.serial>')`; (5) no RG at all →
+  `('@', '@<resonance.serial>')`. The `@N` serial-pinned form is readable
+  by the importer: `parseSequenceCode('@N')` → `fetchResidueMap`
+  `useSerial=N` → dedicated serial-pinned RG (the Sec5 testdata uses the
+  same '@' convention).
+- **The 5 "data file None not accessible" warnings are BY DESIGN** — NEF
+  carries peaks/shifts/restraints/metadata, never raw spectrum matrices;
+  the GUI warns when it tries to render a spectrum with no data block.
+  Re-link the original NMRpipe files (~/NMR/yb-*) via the GUI for plots.
+- **Pre-existing reader limitation (NOT fixed — out of scope):**
+  `assignPeak` collapses alternative assignments differing in only one
+  dimension into one ambiguous dim (2 PDC), and the exporter's
+  `contribDimMap` dict keeps only one resonance per dim → e.g. the
+  Commented HBy peak alt row is lost. Existing tests only compare
+  counts/values so this was never caught; the new test deliberately does
+  NOT compare peak-dim identities for this reason.
+- New test `tests/test_nef_export.py::test_native_legacy_project_round_trip`
+  — 7 stub branch cases (every fallback arm) + strip-all-RG-names
+  integration round trip asserting: every exported identity column
+  non-`'.'`, zero import warnings, counts + shift-identity multiset +
+  peak positions preserved.
+- Verified on the user's LIVE sswt (memopsIo.loadProject read-only →
+  export → reimport): uninterpretable **0** (was 1183); peaks 550/550,
+  assigned 495/495, shifts 270/270; only residual diff is the writer's
+  PRE-EXISTING `%.10g` float format (GenericStarParser
+  `_floatingPointFormat` — ~1e-8 ppm, below NMR precision; not touched).
+- Gates: pytest **72 passed, 4 skipped** (71+4 baseline + 1 new, all
+  green); import_smoke TOTAL **931** FAILED **0** / BY-DESIGN 1
+  (unchanged); ruff zero-new — nefExport **0**, test file **0**; gui_boot
+  **1/1 PASS** (no GUI edits this round).
+- Committed 6b0913e3 + pushed; fresh fixed export written to the user's
+  ~/NMR/sswt_new.nef (old sswt.nef left intact).
+
