@@ -1,6 +1,6 @@
 # NEF Integration Plan — adopt CCPNMR v3 NEF + project code into py3lite
 
-**Status: STAGE 35 DONE** (core ported + 12/12 tests; Stage 36 in progress)
+**Status: STAGE 36 DONE** (import path restored + 8/8 tests; Stage 37 next = export)
 
 ## Context (user directive 2026-08-25)
 
@@ -193,4 +193,67 @@ push. Accept: all gates ≥ baseline, zero new ruff.
 - Packaging: no pyproject change needed (`ccpnmr*` include + `"*": ["*"]`
   package-data already cover `.dic`/`.nef`).
 
-<!-- Stage 36 log appended here -->
+**Stage 36 — NEF import → legacy model (the "NEF→MOPS" path) — ✅ 2026-08-25**
+- PROVENANCE (verified byte-identical, `diff=0` vs git history `bc4059f1^` —
+  the S28-removed set, S34-style restore): `ccpnmr/v2io/NefIo.py` (2045; the
+  original 2.5 "CCPN V2, data model 2.1.2" importer — the same file v3 retained
+  in `ccpn/util/v2io/` for back-compat), `ccpnmr/v2io/Constants.py` (36312,
+  generated chemComp tables), `ccpnmr/v2io/__init__.py` (27),
+  `ccpnmr/Common.py` (876: `resetSerial`, `name2IsotopeCode`,
+  `isotopeCode2Nucleus`, axis-code utils), `ccpnmr/Constants.py` (595:
+  `DEFAULT_ISOTOPE_DICT`), `ccp/lib/NmrExpPrototype.py` (348:
+  `refExpDimRefCodeMap`, `getAtomSiteAxisCode`, …). NOT restored: legacy
+  `v2io/TestNefIo.py` (gated on `/Users/ejb66/...` external data — would pass
+  vacuously; replaced by the new test below).
+- NO edits needed: the legacy file is already (a) written against this
+  exact model, (b) import-free of anything removed since S28/S30 except the
+  three helpers above (all present again), and (c) already imports
+  `..nef.StarIo` — which Stage 35 restored as `ccpnmr.nef`, so the legacy
+  binding meets the new core at the original v2-era import path. Public API
+  as-is: `loadNefFile(path, memopsRoot, overwriteExisting)`,
+  `loadProject(nefFilePath, pdbFilePaths, projectName, pdbFileType)`,
+  `CcpnNefReader`, `createMoleculeFromNef`, `extendMolResidues`,
+  `makeNefAxisCodes`, `addDataStore`, `fetchDataUrl`, `assignPeak`,
+  `saveFrameReadingOrder`.
+- NEW tests `ccpnmr2.5/python/tests/test_v2io_nef.py` — **8 tests** (pytest,
+  bundled testdata, network-independent: ChemComp download for the dummy
+  residues falls back to UNK offline), ground truths probed on the live
+  legacy model:
+  - public API surface + `saveFrameReadingOrder` order
+  - Commented: 235 residues / 15 chains; experiments
+    `('15N NOESY-HSQC', 3)` + `('HNCCCCCCCCCCCCC', 15)`; 2 DataSources,
+    2 PeakLists, 6 peaks all resonance-assigned (peakContribs →
+    peakDimContribs); 2 ShiftLists / **108 Shifts** (104 NEF rows expand
+    via wildcard resonances, e.g. HD%); 1 NmrConstraintStore with
+    Dihedral(6)/Distance(3)/HBond(4)/Rdc(2)
+  - XPLOR: restraints only (no spectra): Distance **735**, Dihedral 161,
+    Rdc 147+152 (two lists)
+  - Sec5: 5 spectra (`15N HSQC/HMQC` 2D + 4 3D), 5 PeakLists,
+    **891 peaks**
+  - `loadProject(nef, projectName=...)` creates the full project dir
+  - **saveProject → loadProject round-trip** preserves 235 residues / 6
+    peaks / 108 shifts / 4 constraint lists — exercises the legacy memops
+    XML persistence path (incl. the S34 version-compat island)
+- Legacy-model API notes (needed by Stage 37-38): MolSystem residues live
+  under `MolSystem.getChains()` → `chain.sortedResidues()` (no direct
+  residue relation); "spectrum" = `NmrProject.sortedExperiments()` →
+  `Experiment.sortedDataSources()` → `DataSource.getPeakLists()` →
+  `PeakList.getPeaks()`; shifts = `AssignmentBasic.getShiftLists(nmr)`
+  (=`findAllMeasurementLists(className='ShiftList')`) →
+  `ShiftList.getMeasurements()` (frozensets); constraints =
+  `NmrProject.getNmrConstraintStores()` →
+  `NmrConstraintStore.getConstraintLists()` → typed list `getConstraints()`.
+- Gates: import_smoke TOTAL **928** (=920 + 6 restored modules + 1 test
+  + 1 `nefExport.py` WIP-on-disk) FAILED **0** / BY-DESIGN 1 (unchanged,
+  PyMC bayes); pytest **59 passed, 4 skipped** (51+4 baseline + 8 new, all
+  green); ruff on the 7 in-scope files: **69 findings** (UP031 54, E402 9,
+  E721 2, E722 1, UP028 1, F841 1, F601 1) — ALL in the
+  history-restored/upstream-source code (verified: legacy S28 `NefIo.py`
+  carries the same 40 UP031+F841; UP031 deferred per the Phase-3
+  "no bulk style" decision) — ZERO findings in the newly written test,
+  ZERO new findings on existing files; gui_boot_test **1/1 PASS** (the
+  suite's APPS list currently has one entry, `ccpnmr`).
+- Left for Stage 37 (scope: export): `ccpnmr/nefExport.py` (555-line WIP on
+  disk from the aborted session, untracked, imports cleanly — NOT part of
+  this commit).
+
