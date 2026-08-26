@@ -66,6 +66,10 @@ dev = [
 
 [project.scripts]
 ccpnmr = "ccpnmr.analysis.AnalysisGui:main"
+# NEF (BMRB NMR Enhanced Format v1.1) project import/export, non-GUI:
+#   ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force]
+#   ccpnmr-nef export <project-directory> <output.nef>
+ccpnmr-nef = "ccpnmr.nefCli:main"
 
 [project.urls]
 Homepage = "https://ccpnc.iqfr.csic.es/"

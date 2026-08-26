@@ -612,11 +612,12 @@ def exportProject(memopsRoot, fileName):
 
 if __name__ == '__main__':
     # quick CLI: exportProject <memopsRoot-directory-or-project-dir> <out.nef>
+    # (the full command-line interface is the ccpnmr-nef console entry
+    # point in ccpnmr/nefCli.py)
     if len(sys.argv) != 3:
         sys.stderr.write(f'usage: {sys.argv[0]} <project-directory> <output.nef>\n')
         sys.exit(1)
     from memops.general import Io as memopsIo
-    memopsIo.loadProject(sys.argv[1])
-    root = memopsIo.memopsRoot
+    root = memopsIo.loadProject(sys.argv[1])
     exportProject(root, sys.argv[2])
     print('wrote', sys.argv[2])

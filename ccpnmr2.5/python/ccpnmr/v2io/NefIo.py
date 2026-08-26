@@ -102,7 +102,7 @@ saveFrameReadingOrder = [
 # TODO: implement residue variants, disulfides. Test
 
 
-def loadProject(nefFilePath, pdbFilePaths=None, projectName=None, pdbFileType="pdb"):
+def loadProject(nefFilePath, pdbFilePaths=None, projectName=None, pdbFileType="pdb", removeExisting=False):
     """Create new CCPN project from files at nefFilepath and (optional) pdbFilepaths
 
     if one pdbFilePath is passed in, the routine reads all models in that file.
@@ -114,13 +114,16 @@ def loadProject(nefFilePath, pdbFilePaths=None, projectName=None, pdbFileType="p
     pdbFileType determines the pdb file format(s) to try:
     Default ('pdb') tries official PDB format, and robust read if that fails.
     Alternatively, 'cns' tries cns format, then robust read,
-    and 'rough' tries robust read directly."""
+    and 'rough' tries robust read directly.
+
+    If the project directory (in the current working directory) already
+    exists, raise OSError unless removeExisting is True (then it is deleted)."""
 
     nefReader = CcpnNefReader()
     dataBlock = nefReader.getNefData(nefFilePath)
     if not projectName:
         projectName = os.path.splitext(dataBlock.name)[0]
-    memopsRoot = memopsIo.newProject(projectName)
+    memopsRoot = memopsIo.newProject(projectName, removeExisting=removeExisting)
     nefReader.importNewProject(memopsRoot, dataBlock)
     if pdbFilePaths:
         if isinstance(pdbFilePaths, str):

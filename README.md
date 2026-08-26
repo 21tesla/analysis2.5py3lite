@@ -20,17 +20,35 @@ audit trail):
 | GUI launch under Xvfb | **4/4 console apps boot** (source and installed states) |
 | Distribution | sdist + wheel build; clean-venv install passes all of the above |
 
-## The four console commands
+## Console commands
 
 | Command | App |
 |---|---|
-| `ccpnmr` | CCPNMR Analysis (main workbench) |
-| `ccpnmr-data-shifter` | Project data shifter |
-| `ccpnmr-format-converter` | CCPN project format converter |
-| `ccpnmr-update` | Automatic project update (non-GUI) |
+| `ccpnmr` | CCPNMR Analysis (main workbench, GUI) |
+| `ccpnmr-nef` | NEF (BMRB NMR Enhanced Format) project import/export (non-GUI) |
 
-Each app's `main()` entry was added/repaired in Phase 4 (P4-1) so the entry points
-actually resolve.
+## NEF support
+
+CCPNMR Analysis reads and writes **NEF v1.1** (BMRB *Nmr_Exchange_Format*) project
+files.  A NEF file carries metadata, molecules/sequences, chemical shifts, restraints
+and peak lists — never raw spectrum matrix data.
+
+- **GUI** — *Project → Load NEF…* creates a new CCPN project from a `.nef` file
+  (project directory in the current working directory; save it with *Project → Save
+  As* to move it).  *Project → Export NEF…* writes the current project to a `.nef`
+  file.
+- **CLI** —
+  ```sh
+  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force]
+  ccpnmr-nef export <project-directory> <output.nef>
+  ```
+  (`--force` removes an existing project directory of the same name.)
+
+Implementation: `ccpnmr/nef/` (model-free NEF v1.1 core + the BMRB
+`mmcif_nef_v1_1.dic` dictionary), `ccpnmr/v2io/NefIo.py` (import into the legacy
+MOPS model), `ccpnmr/nefExport.py` (export from the legacy model),
+`ccpnmr/nefCli.py` (console entry point).  Three small sample files ship under
+`ccpnmr/nef/testdata/`.
 
 ## Installation
 

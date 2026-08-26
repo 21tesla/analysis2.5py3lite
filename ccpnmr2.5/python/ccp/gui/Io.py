@@ -125,3 +125,22 @@ def loadProject(parent, path, projectName=None):
             popup.destroy()
 
     return project
+
+
+def loadNefProject(parent, path, projectName=None, removeExisting=False):
+
+    """Load a NEF (BMRB NMR Enhanced Format, v1.1) file as a new CCPN project.
+
+    Thin GUI-side wrapper over ``ccpnmr.v2io.NefIo.loadProject``: a new
+    project directory is created on disk (in the current directory, named
+    after the NEF file unless ``projectName`` is given) and the resulting
+    project object is returned for ``initProject``.  Raises OSError if the
+    project directory already exists and ``removeExisting`` is False."""
+
+    from ccpnmr.v2io import NefIo
+
+    path = uniIo.normalisePath(path)
+    if not projectName:
+        projectName = os.path.splitext(os.path.basename(path))[0]
+
+    return NefIo.loadProject(path, projectName=projectName, removeExisting=removeExisting)

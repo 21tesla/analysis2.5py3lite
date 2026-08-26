@@ -1,6 +1,10 @@
 # NEF Integration Plan — adopt CCPNMR v3 NEF + project code into py3lite
 
-**Status: STAGE 37 DONE** (export round-trip green on all 3 testdata; Stage 38 next = app wiring)
+**Status: ✅ ALL 4 STAGES COMPLETE (35-38).** App wiring landed: GUI Project-menu
+"Load NEF…"/"Export NEF…" (via `ccp.gui.Io.loadNefProject` → `NefIo.loadProject` /
+`nefExport.exportProject`), the `ccpnmr-nef` console entry point
+(`ccpnmr/nefCli.py`), README/INSTALL NEF sections.  NEF v1.1 import AND export are
+now user-facing features (GUI + CLI) with a green gate set.
 
 ## Context (user directive 2026-08-25)
 
@@ -338,4 +342,68 @@ push. Accept: all gates ≥ baseline, zero new ruff.
   (via `ccp.gui.Io` → `NefIo.loadProject` / `nefExport.exportProject`),
   CLI console entry (check pyproject `[project.scripts]` style),
   README/INSTALL NEF section, final gates + plan COMPLETE + push.
+
+**Stage 38 — app wiring + docs + final gates — ✅ 2026-08-26**
+- GUI (Project menu, mirroring where 2.5's S28-removed "Load Nef" lived):
+  - "Load NEF…" — `AnalysisPopup.loadNefFile`: closes the open project,
+    FileSelectPopup (`*.nef`, must-exist), then `ccp.gui.Io.loadNefProject`
+    (NEW thin wrapper in `ccp/gui/Io.py`: `uniIo.normalisePath` +
+    `NefIo.loadProject(path, projectName, removeExisting)`; project dir in
+    the cwd, named after the file). Existing-directory case: OSError →
+    showYesNo "Remove it and continue?" → retry with `removeExisting=True`;
+    any other failure → `showError`. On success: `self.initProject(project)`
+    (the OpenProject callback) — in-memory until Project > Save As, exactly
+    like the "Open Project" flow.
+  - "Export NEF…" — `AnalysisPopup.exportNefFile`: FileSelectPopup
+    (save mode, `selected_file_must_exist=False`, default file `<project>.nef`)
+    → `nefExport.exportProject(self.project, fileName)` (lazy import) →
+    showInfo on success / showError on failure.
+  - Menu bookkeeping: `menu_items[ProjectMenu]` synced (14→16 labels);
+    `fixedActiveMenus` widget indices `(0,1,2,7)` → `(0,1,2,3,9)` (New /
+    Open Project / Open Spectra / Load NEF… / Quit stay enabled without a
+    project; Export NEF… requires one). Verified the entry-index semantics
+    against `AnalysisPopup.setMenuState` (+4-separator margin).
+  - `NefIo.loadProject` gained a pass-through `removeExisting=False` kwarg
+    → `memopsIo.newProject` (default behaviour unchanged; the S36 tests
+    still green).
+- CLI — new `ccpnmr/nefCli.py` (house docstring style, lazy imports):
+  `importNefFile(nefFilePath, projectName, pdbFilePaths, removeExisting)`
+  (saves the project to disk before returning — so the export subcommand and
+  the GUI's Open Project can both open it; returns the userData repo path)
+  and `exportNefProject(projectDir, outFilePath)` (`memopsIo.loadProject`
+  → `nefExport.exportProject`). `main(argv)` = argparse subcommands
+  `import <file.nef> [--project-name] [--pdb PDB ...] [--force]` /
+  `export <project-dir> <out.nef>`; exit code 0/1, one `--pdb` file = all
+  models, several = first model each (loadProject semantics). pyproject
+  `[project.scripts]` (house style): `ccpnmr-nef = "ccpnmr.nefCli:main"`.
+  `--pdb` + `--force` + project-name cover the practical import needs; the
+  GUI wrapper deliberately does NOT save (mirrors Open Project).
+  **BUG FIX in S37 `nefExport.__main__`**: it read the nonexistent module
+  global `memopsIo.memopsRoot` (never exercised by the tests) — now uses
+  `loadProject`'s return value.
+- Docs — README: stale "four console commands" table (data-shifter /
+  format-converter / update died in the simplification pass) replaced by
+  the real two (`ccpnmr`, `ccpnmr-nef`) + a "NEF support" section (GUI
+  items, CLI usage, implementation map, no-raw-matrices note). INSTALL.md:
+  short "NEF project files" section (GUI + CLI).
+- New tests `ccpnmr2.5/python/tests/test_nef_cli.py` — **5 tests**:
+  `import` creates a SAVED project dir (memops XML on disk) with the
+  Commented ground truths (235 res / 2 DS / 6 peaks / 108 shifts / 4
+  constraint lists, checked through a fresh `memopsIo.loadProject`);
+  re-import into an existing dir fails without `--force` (exit 1 + stderr)
+  and succeeds with it; `import` → `export` → reimport count round-trip;
+  `export` of a missing project exits 1 and writes no file; the GUI
+  wrapper `loadNefProject` returns an in-memory (NOT saved) project with
+  the same counts.
+- Gates: import_smoke TOTAL **931** (=929 + nefCli + test file) FAILED
+  **0** / BY-DESIGN 1 (unchanged, PyMC bayes); pytest **69 passed,
+  4 skipped** (64+4 baseline + 5 new, all green; 28s); ruff: new files
+  **0**; changed files worktree-vs-HEAD counts identical —
+  AnalysisPopup **38**=38 (two first-written UP031s converted to
+  f-strings), Io **5**=5, NefIo **40**=40, nefExport **0**=0 — zero-new
+  policy holds; gui_boot **1/1 PASS** (Project menu builds with the two
+  new items at startup).
+- PLAN COMPLETE — user-facing NEF v1.1 import + export (GUI + CLI) across
+  all 4 stages: 35 core (9bd76b97) → 36 import (2081731c) → 37 export
+  (2685df29) → 38 wiring (this commit).
 

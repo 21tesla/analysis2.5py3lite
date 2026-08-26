@@ -46,7 +46,7 @@ import tkinter as Tkinter
 import traceback
 
 from ccp.api.nmr import Nmr
-from ccp.gui.Io import loadProject
+from ccp.gui.Io import loadNefProject, loadProject
 from ccp.gui.NmrExpPrototypeEditor import NmrExpPrototypePopup
 from ccpnmr.analysis import Copyright
 from ccpnmr.analysis.Analysis import Analysis
@@ -698,6 +698,13 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.openSpectrum,
             tipText="Open spectrum data from disk, creating a default CCPN project if needed",
         )
+        menu.add_command(
+            label="Load NEF…",
+            image=self.iconOpenFile,
+            compound="left",
+            command=self.loadNefFile,
+            tipText="Load a NEF (BMRB NMR Enhanced Format) file, creating a new CCPN project",
+        )
 
         menu.add_command(
             label="Save",
@@ -714,6 +721,13 @@ class AnalysisPopup(BasePopup, Analysis):
             compound="left",
             command=self.saveAsProject,
             tipText="Save the current CCPN project under a different name (project directory)",
+        )
+        menu.add_command(
+            label="Export NEF…",
+            image=self.iconSaveAs,
+            compound="left",
+            command=self.exportNefFile,
+            tipText="Export the current CCPN project to a NEF (BMRB NMR Enhanced Format) file",
         )
 
         menu.add_cascade(label="Import", shortcut="I", image=self.iconImport, compound="left", menu=importsMenu)
@@ -787,8 +801,10 @@ class AnalysisPopup(BasePopup, Analysis):
             "New",
             "Open Project",
             "Open Spectra",
+            "Load NEF…",
             "Save",
             "Save As",
+            "Export NEF…",
             "Import",
             "Close",
             "Quit",
@@ -802,7 +818,7 @@ class AnalysisPopup(BasePopup, Analysis):
 
         # Menus that area active in absence of a project
         # for ii in (0,1,2,7,15,17):
-        for ii in (0, 1, 2, 7):
+        for ii in (0, 1, 2, 3, 9):
             self.fixedActiveMenus[(ProjectMenu, ii)] = True
 
     def openWindowGroup(self, spectrumWindowGroup=None):
@@ -1867,6 +1883,73 @@ class AnalysisPopup(BasePopup, Analysis):
     def openSpectrum(self):
 
         self.openPopup("open_spectrum", OpenSpectrumPopup)
+
+    def loadNefFile(self):
+        """Project menu 'Load NEF…' — load a NEF (BMRB v1.1) file as a new project."""
+
+        if self.project:
+            if not self.closeProject():
+                return
+
+        fileTypes = [FileType("NEF", ["*.nef"]), FileType("All", ["*"])]
+
+        fileSelectPopup = FileSelectPopup(
+            self,
+            file_types=fileTypes,
+            title="Load NEF file",
+            dismiss_text="Cancel",
+            selected_file_must_exist=True,
+            multiSelect=False,
+        )
+
+        fileName = fileSelectPopup.getFile()
+
+        if fileName:
+            name = os.path.splitext(os.path.basename(fileName))[0]
+            try:
+                try:
+                    project = loadNefProject(self, fileName, projectName=name)
+                except OSError:
+                    if not showYesNo(
+                        "Load NEF",
+                        f"A project named '{name}' already exists in the current directory.\nRemove it and continue?",
+                        parent=self,
+                    ):
+                        return
+                    project = loadNefProject(self, fileName, projectName=name, removeExisting=True)
+                self.initProject(project)
+            except Exception as es:
+                showError("Load NEF failed", str(es), parent=self)
+
+    def exportNefFile(self):
+        """Project menu 'Export NEF…' — write the current project as a NEF (BMRB v1.1) file."""
+
+        if not self.project:
+            return
+
+        fileTypes = [FileType("NEF", ["*.nef"]), FileType("All", ["*"])]
+
+        fileSelectPopup = FileSelectPopup(
+            self,
+            file_types=fileTypes,
+            title="Export NEF file",
+            dismiss_text="Cancel",
+            selected_file_must_exist=False,
+            multiSelect=False,
+            file=(self.projectName or self.project.name) + ".nef",
+        )
+
+        fileName = fileSelectPopup.getFile()
+
+        if fileName:
+            try:
+                from ccpnmr import nefExport
+
+                nefExport.exportProject(self.project, fileName)
+            except Exception as es:
+                showError("Export NEF failed", str(es), parent=self)
+            else:
+                showInfo(self, f"NEF file written to {fileName}", parent=self)
 
     def editSpectrum(self, spectrum=None):
 

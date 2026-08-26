@@ -57,3 +57,20 @@ To see the help menu, run:
 ```bash
 ./run-ccpnmr.sh help
 ```
+
+---
+
+## NEF Project Files
+
+CCPNMR Analysis reads and writes **NEF v1.1** (BMRB *Nmr_Exchange_Format*)
+project files — metadata, molecules, chemical shifts, restraints and peak lists
+(never raw spectrum matrix data):
+
+* **GUI:** *Project → Load NEF…* creates a new CCPN project from a `.nef` file;
+  *Project → Export NEF…* writes the current project to a `.nef` file.
+* **Command line** (source / virtualenv installs, where the `ccpnmr-nef`
+  console command is available):
+  ```bash
+  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force]
+  ccpnmr-nef export <project-directory> <output.nef>
+  ```
