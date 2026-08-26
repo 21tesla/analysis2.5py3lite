@@ -1639,7 +1639,13 @@ class CcpnNefReader:
                 if loop:
                     for row in loop.data:
                         # NB the self.defaultChainCode guards against chainCode being None
+                        # (it is set when the sequence contains a null-chain row, which
+                        # shift rows do not imply); a row still without a chainCode is
+                        # skipped here - the shift importer resolves it through the
+                        # defaultNmrChainCode fallback
                         chainCode = row["chain_code"] or self.defaultChainCode
+                        if chainCode is None:
+                            continue
                         if chainCode[0] in "@#":
                             # We want to treat unassigned chains first, to preserve the resonanceGroup serials
                             assignmentData = assignmentData1

@@ -407,3 +407,53 @@ push. Accept: all gates ≥ baseline, zero new ruff.
   all 4 stages: 35 core (9bd76b97) → 36 import (2081731c) → 37 export
   (2685df29) → 38 wiring (this commit).
 
+**Post-38 fix — real-data bugs reported by user — ✅ 2026-08-26**
+- **Bug 1 — export crash on duplicate DataSource names.** User's `sswt`
+  project (~/NMR/sswt) crashed on NEF export with `NmrDataBlock(name=sswt):
+  duplicate key name nef_nmr_spectrum_ftt`. Root cause: two of its
+  DataSources carry the same name 'ftt' (typical NMRpipe dataset
+  directory name), and `_makeSpectrum` derived the framecode
+  `nef_nmr_spectrum_<name>` unconditionally — NEF requires unique
+  framecodes per file, so the core `NmrDataBlock.newSaveFrame` raised.
+  Fix: new `nefExport._uniqueFramecode(db, base)` (appends `_2`, `_3`, ...
+  on collision), applied at every saveframe creation (spectrum / shift
+  list / restraint list). The second 'ftt' exports as
+  `nef_nmr_spectrum_ftt_2` and reimports as a DataSource named 'ftt_2'.
+- **Bug 2 — latent same-class crash: per-spectrum empty shift-list
+  placeholders.** A project with NO shift lists but ≥2 DataSources
+  synthesized one `nef_chemical_shift_list_1` placeholder frame PER
+  spectrum → duplicate on the second. Now `makeNefDataBlock` synthesizes
+  a single placeholder once (registered under
+  `_EMPTY_SHIFT_LIST_KEY = id(None)`) and shares it — every spectrum
+  saveframe's mandatory `chemical_shift_list` item points at it.
+- **Bug 3 — re-import crash on null-chain shift rows.** Re-importing the
+  (fixed) sswt export hit `TypeError: 'NoneType' object is not
+  subscriptable` in `NefIo.preloadAssignmentData` (`chainCode[0] in "@#"`):
+  its "self.defaultChainCode guards against chainCode being None" comment
+  only holds when `nef_sequence` has a null-chain row; sswt's sequence
+  has none, but 270 of its chemical-shift rows do (shifts on resonances
+  with no ResonanceGroup → exporter writes `.`). Fix: `preloadAssignmentData`
+  now skips unresolvable rows — the shift importer's
+  `fetchAtomMap`/`fetchResidueMap` already resolves them via the
+  `defaultNmrChainCode` ('@-') / `defaultNmrResidueCode` ('@') fallbacks.
+- **Bug 4 — spurious glyphs in the NEF menu items.** The "Load NEF…"/
+  "Export NEF…" labels used the U+2026 ellipsis — the ONLY non-ASCII in
+  any GUI label — which the Tk font rendered as spurious box characters
+  (user screenshot nef1.png). Replaced with ASCII `...` (menu labels,
+  `menu_items` entries, method docstrings, test comments).
+- New tests `tests/test_nef_export.py` — **2 tests**:
+  `test_duplicate_datasource_names_export` (renames two DataSources to a
+  shared name → framecodes `[base, base+'_2']` in the file; reimport keeps
+  both DataSources; peak positions + shift values preserved);
+  `test_export_no_shiftlists_shared_placeholder` (monkeypatched empty
+  `_shiftLists` → exactly one zero-row `nef_chemical_shift_list_1`,
+  both spectrum frames cross-reference it).
+- Verified on the user's real `sswt` project (~/NMR/sswt): export
+  succeeds; re-importing the exported file yields 5 experiments / 5 data
+  sources / 550 peaks / 1 shift list / 270 shifts — identical to the
+  original project (sole name diff: 'ftt' → 'ftt_2' disambiguation).
+- Gates: import_smoke TOTAL **931** FAILED **0** / BY-DESIGN 1 (unchanged);
+  pytest **71 passed, 4 skipped** (69+4 baseline + 2 new, all green);
+  ruff zero-new — AnalysisPopup **38**=38, NefIo **40**=40, nefExport
+  **0**=0, test files **0**; gui_boot **1/1 PASS**.
+

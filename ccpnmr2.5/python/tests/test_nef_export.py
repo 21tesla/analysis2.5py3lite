@@ -257,6 +257,54 @@ def test_xplor_round_trip(tmp_path):
     assert _constraintValues(c1) == _constraintValues(c2)
 
 
+def test_duplicate_datasource_names_export(tmp_path):
+    """Two DataSources sharing a name (typical of NMRpipe imports, e.g.
+    two datasets both named 'ftt') used to crash the export with
+    'duplicate key name nef_nmr_spectrum_ftt' - framecodes must be
+    unique per file, so the second one gets a '_2' suffix."""
+    root = _load(COMMENTED, tmp_path)
+    c1 = _counts(root)
+    expts = root.findFirstNmrProject().sortedExperiments()
+    ds_a = expts[0].findFirstDataSource()
+    expts[1].findFirstDataSource().name = ds_a.name
+    path = _export(root, tmp_path)
+    rows = _saveframeRows(path)
+    base = f'nef_nmr_spectrum_{ds_a.name}'
+    spectra = sorted(k for k in rows if k.startswith('nef_nmr_spectrum_'))
+    assert spectra == [base, f'{base}_2']
+
+    # the exported file re-imports with both data sources intact
+    c2 = _counts(_load(path, tmp_path, 'dup'))
+    assert len(c2['dataSources']) == len(c1['dataSources']) == 2
+    assert _peakPositions(c1) == _peakPositions(c2)
+    assert _shiftValues(c1) == _shiftValues(c2)
+
+
+def test_export_no_shiftlists_shared_placeholder(tmp_path, monkeypatch):
+    """A project without any shift lists but with several spectra used to
+    synthesize one empty placeholder shift-list frame per spectrum,
+    crashing on the second identical framecode - it must be created once
+    and shared by every spectrum saveframe."""
+    root = _load(COMMENTED, tmp_path)
+    monkeypatch.setattr(nefExport, '_shiftLists', lambda nmrProject: [])
+    path = _export(root, tmp_path)
+
+    imp = NefImporterModule.NefImporter()
+    imp.loadFile(path)
+    frames = {
+        sf['sf_framecode']: sf
+        for sf in imp.data.values()
+        if isinstance(sf, StarIo.NmrSaveFrame)
+    }
+    placeholders = [k for k in frames if k.startswith('nef_chemical_shift_list_')]
+    assert placeholders == ['nef_chemical_shift_list_1']
+    assert len(frames[placeholders[0]]['nef_chemical_shift'].data) == 0
+    spectra = [sf for sf in frames.values() if sf['sf_category'] == 'nef_nmr_spectrum']
+    assert len(spectra) == 2
+    for sf in spectra:
+        assert sf['chemical_shift_list'] == placeholders[0]
+
+
 def test_sec5_round_trip(tmp_path):
     c1 = _counts(_load(SEC5, tmp_path, 'rtA'))
     path = _export(_load(SEC5, tmp_path, 'rtB'), tmp_path)

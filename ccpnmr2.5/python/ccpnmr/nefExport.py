@@ -143,6 +143,26 @@ def _objectName(obj):
     return name
 
 
+def _uniqueFramecode(db, base):
+    """Return a saveframe framecode that is not yet used in db.
+
+    NEF requires unique framecodes per file, but different objects of the
+    same class can carry the same name (e.g. two DataSources both named
+    'ftt' when spectra are imported from NMRpipe), so a colliding base
+    gets a '_2', '_3', ... suffix."""
+    framecode = base
+    suffix = 2
+    while framecode in db:
+        framecode = f'{base}_{suffix}'
+        suffix += 1
+    return framecode
+
+
+# Key under which the synthesized empty shift-list placeholder frame is
+# registered in the per-project framecode map (makeNefDataBlock).
+_EMPTY_SHIFT_LIST_KEY = id(None)
+
+
 def _identityColumns(row, resonances, dimOffset=1, suffixed=True):
     """Fill chain/seq/res/atom columns for a list of (possibly absent) resonances.
 
@@ -224,7 +244,7 @@ def _shiftLists(nmrProject):
 
 
 def _makeChemicalShiftList(db, shiftList):
-    sf = db.newSaveFrame(f'nef_chemical_shift_list_{_objectName(shiftList)}',
+    sf = db.newSaveFrame(_uniqueFramecode(db, f'nef_chemical_shift_list_{_objectName(shiftList)}'),
                          'nef_chemical_shift_list')
     sf['atom_chem_shift_units'] = 'ppm'
     if getattr(shiftList, 'details', None):
@@ -327,7 +347,7 @@ def _makeRestraintList(db, constraintList):
         category, loopName, restraintType = ('ccpn_restraint_list', 'ccpn_restraint',
                                              className.replace('ConstraintList', '').replace('ChemShift', 'ChemicalShift'))
 
-    sf = db.newSaveFrame(f'{category}_{name}', category)
+    sf = db.newSaveFrame(_uniqueFramecode(db, f'{category}_{name}'), category)
     if category == 'ccpn_restraint_list':
         sf['restraint_type'] = restraintType
     else:
@@ -391,24 +411,21 @@ def _makeSpectrum(db, nmrProject, experiment, dataSource, shiftListFrameCodes):
     Returns (framecode, peakCodeBySerial) for the peak-restraint links."""
 
     name = _objectName(dataSource)
-    framecode = f'nef_nmr_spectrum_{name}'
+    framecode = _uniqueFramecode(db, f'nef_nmr_spectrum_{name}')
     sf = db.newSaveFrame(framecode, 'nef_nmr_spectrum')
 
     numDim = dataSource.numDim
     sf['num_dimensions'] = numDim
 
-    # Link to a chemical shift list frame (mandatory field)
+    # Link to a chemical shift list frame (mandatory field).  When the
+    # project has no shift lists at all, makeNefDataBlock registers one
+    # synthesized empty placeholder frame (the importer reads it as an
+    # empty ShiftList, which is harmless), shared by every spectrum.
     expShiftList = getattr(experiment, 'shiftList', None)
     if expShiftList is not None and id(expShiftList) in shiftListFrameCodes:
         sf['chemical_shift_list'] = shiftListFrameCodes[id(expShiftList)]
-    elif shiftListFrameCodes:
-        sf['chemical_shift_list'] = next(iter(shiftListFrameCodes.values()))
     else:
-        # Project without shift lists: synthesize an empty list frame for
-        # the mandatory cross-reference (importer will read it as an empty
-        # ShiftList, which is harmless).
-        empty = _makeChemicalShiftList(db, _EmptyShiftList())
-        sf['chemical_shift_list'] = empty['sf_framecode']
+        sf['chemical_shift_list'] = next(iter(shiftListFrameCodes.values()))
 
     if experiment.name:
         sf['experiment_type'] = experiment.name
@@ -556,6 +573,14 @@ def makeNefDataBlock(memopsRoot):
     for shiftList in _shiftLists(nmrProject):
         sf = _makeChemicalShiftList(db, shiftList)
         shiftListFrameCodes[id(shiftList)] = sf['sf_framecode']
+    if not shiftListFrameCodes:
+        # Project without shift lists: synthesize one empty list frame for
+        # the mandatory cross-reference on the spectrum saveframes (the
+        # importer reads it as an empty ShiftList, which is harmless).
+        # Created once and shared by all - framecodes must be unique
+        # per file.
+        sf = _makeChemicalShiftList(db, _EmptyShiftList())
+        shiftListFrameCodes[_EMPTY_SHIFT_LIST_KEY] = sf['sf_framecode']
 
     restraintFrameCodes = {}
     for store in sorted(nmrProject.nmrConstraintStores, key=lambda x: getattr(x, 'serial', 0)):

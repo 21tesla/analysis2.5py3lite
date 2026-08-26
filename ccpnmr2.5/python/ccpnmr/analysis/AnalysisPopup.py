@@ -699,7 +699,7 @@ class AnalysisPopup(BasePopup, Analysis):
             tipText="Open spectrum data from disk, creating a default CCPN project if needed",
         )
         menu.add_command(
-            label="Load NEF…",
+            label="Load NEF...",
             image=self.iconOpenFile,
             compound="left",
             command=self.loadNefFile,
@@ -723,7 +723,7 @@ class AnalysisPopup(BasePopup, Analysis):
             tipText="Save the current CCPN project under a different name (project directory)",
         )
         menu.add_command(
-            label="Export NEF…",
+            label="Export NEF...",
             image=self.iconSaveAs,
             compound="left",
             command=self.exportNefFile,
@@ -801,10 +801,10 @@ class AnalysisPopup(BasePopup, Analysis):
             "New",
             "Open Project",
             "Open Spectra",
-            "Load NEF…",
+            "Load NEF...",
             "Save",
             "Save As",
-            "Export NEF…",
+            "Export NEF...",
             "Import",
             "Close",
             "Quit",
@@ -1885,7 +1885,7 @@ class AnalysisPopup(BasePopup, Analysis):
         self.openPopup("open_spectrum", OpenSpectrumPopup)
 
     def loadNefFile(self):
-        """Project menu 'Load NEF…' — load a NEF (BMRB v1.1) file as a new project."""
+        """Project menu 'Load NEF...' — load a NEF (BMRB v1.1) file as a new project."""
 
         if self.project:
             if not self.closeProject():
@@ -1922,7 +1922,7 @@ class AnalysisPopup(BasePopup, Analysis):
                 showError("Load NEF failed", str(es), parent=self)
 
     def exportNefFile(self):
-        """Project menu 'Export NEF…' — write the current project as a NEF (BMRB v1.1) file."""
+        """Project menu 'Export NEF...' — write the current project as a NEF (BMRB v1.1) file."""
 
         if not self.project:
             return
