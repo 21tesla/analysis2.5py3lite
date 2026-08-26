@@ -161,6 +161,27 @@ style) for NEF import/export. Docs: NEF support section in README/INSTALL. Close
 plan marked COMPLETE + final gates (import_smoke / pytest / ruff / gui_boot 3/3) +
 push. Accept: all gates ≥ baseline, zero new ruff.
 
+**Stage 39 — NEF + spectrum relink (post-38 follow-up, user request 2026-08-26).**
+NEF never carries raw spectrum matrices — after "Load NEF", spectrum windows warn
+"data file None not accessible" and the original data files (e.g. the NMRpipe
+`yb-*` dataset directories) must be re-linked by hand. Add automatic relinking:
+**39a** new core module `ccpnmr/nefRelink.py` — scan a directory for spectrum
+data files (NmrPipe 2048-byte headers), match DataSources lacking a dataStore
+(exact name-stem > token match > generic-`ftt` disambiguation via numDim +
+experiment/directory names), link via `v2io.NefIo.addDataStore`, and restore each
+FreqDataDim's numPoints/numPointsOrig/valuePerPoint from the header (without
+`point_count` the importer defaults to a bogus 1280/2560). **39b** GUI Project
+menu "Import NEF + relink..." (after "Load NEF...": import, then relink against
+the NEF file's directory — one seamless step) + CLI `ccpnmr-nef import <file>
+[--relink [DIR]]`, one shared orchestration function. **39c** exporter emits
+`ccpn_spectrum_file_path` + `ccpn_file_*` + `nef_spectrum_dimension.point_count`
+for linked DataSources — the importer ALREADY reads all of them
+(`load_nef_nmr_spectrum`, NefIo.py:1032-1043 + 932-939), so plain "Load NEF"
+on the same machine relinks at import time; the directory scan stays for moved
+files / other machines. Accept: Stages 35-38 gates (smoke FAILED 0, pytest green,
+ruff zero-new, gui_boot) + live re-check: the user's sswt NEF relinks its
+spectra 5/5.
+
 ## Stage log (append per stage — commit + push + memory each)
 
 **Stage 35 — NEF format core (model-free) + tests — ✅ 2026-08-25**
@@ -510,4 +531,57 @@ push. Accept: all gates ≥ baseline, zero new ruff.
   **1/1 PASS** (no GUI edits this round).
 - Committed 6b0913e3 + pushed; fresh fixed export written to the user's
   ~/NMR/sswt_new.nef (old sswt.nef left intact).
+
+**Stage 39 planning — NEF + spectrum relink — 📋 2026-08-26 (plan checkpoint)**
+- User request (after the round-2 close-out): a new menu item "Import NEF +
+  relink" that automatically re-links the spectra in the directory, so the NEF
+  round trip is "truly seamless" (the "data file None not accessible" warnings
+  go away without a manual Open-Spectra / Data-Location pass).
+- Recon recovered from the context-limited session (chat f75c6ac1) and every
+  claim re-verified against the current tree:
+  - Original sswt linkage: DataUrl `path=/home/logan/NMR` (SAME directory as
+    the NEF file); 5× `DLOC.BlockedBinaryMatrix` (fileType `NmrPipe`,
+    headerSize 2048) — e.g. `yb-hsqc/sswt-298K-hsqc-1016.ft2` (427×160),
+    `yb-sswt-noesyn/ftt.ft3` (594×256×128). 3 of 5 DataSource names are the
+    exact file stems; the generic-`ftt` 3D ones need disambiguation via
+    experiment name + dataset directory name (7 `yb-*` dirs under ~/NMR).
+  - Link mechanism (verified): `v2io.NefIo.addDataStore(dataSource, path,
+    numPoints, blockSizes, isBigEndian, numberType, + headerSize, nByte,
+    fileType, complexStoredBy)` → `ccp.util.Spectrum.createBlockedMatrix` +
+    `fetchDataUrl` (auto-creates "standard" DataLocationStore/DataUrl); the
+    same param set the manual Open-Spectra flow
+    (`ExternalParams.createDataSource`) builds.
+  - Header source (verified): `ccp.format.spectra.params.NmrPipeParams` —
+    2048-byte header (`head = 4*512`; magic bytes 8-11 `40 16 14 7B` or
+    reversed; `x[0]==0`; ndim float-word 9, npts (99,219,15,32), sw
+    (229,100,11,29), sf (218,119,10,28), nuc (18,16,20,22)) exposes
+    `npts`/`block`/`big_endian`/`head`/`nbytes`/`sf`/`sw`/`nuc`; synthetic
+    test fixtures are trivially craftable from these constants.
+  - The importer ALREADY links at import time when the NEF carries the file
+    info: `load_nef_nmr_spectrum` reads `ccpn_spectrum_file_path` +
+    `ccpn_file_*` and calls `addDataStore` (NefIo.py:1032-1043), and
+    `point_count`/`total_point_count` in `nef_spectrum_dimension` set
+    dataDim numPoints (932-939). The exporter writes NONE of these; without
+    `point_count` the importer defaults dataDim numPoints to a bogus
+    1280/2560 (982-988) → relink must ALSO restore dims from the header.
+  - GUI (verified): the new item slots in directly after "Load NEF..."
+    (widget index 4 in the Project menu); `menu_items[ProjectMenu]` 16→17;
+    `fixedActiveMenus (0,1,2,3,9) → (0,1,2,3,4,10)` (Quit shifts 9→10).
+- Milestones (each = code + tests + gates + log entry + commit + push +
+  memory, then user go-ahead):
+  - **39a** `ccpnmr/nefRelink.py`: `scanSpectrumFiles(baseDir)` /
+    `matchSpectra(project, candidates)` / `relinkSpectra(project, baseDir)`
+    returning a linked/unlinked report; fixture E2E test; live check on the
+    user's sswt (expect 5/5).
+  - **39b** GUI "Import NEF + relink..." + CLI `ccpnmr-nef import <file>
+    [--relink [DIR]]` (no value → the NEF's directory), one shared
+    orchestration function; showInfo summary of linked/unmatched.
+  - **39c** exporter emits `ccpn_spectrum_file_path` + `ccpn_file_*` +
+    `point_count` for linked DataSources ONLY (guard: dataStore exists —
+    bundled-testdata round trips stay unchanged); verify the v3 parser's
+    tolerance empirically (0 new import warnings) — fallback: drop 39c.
+- Out of scope: embedding raw matrices in NEF (the format has no such
+  category); non-NmrPipe spectrum formats (extension point =
+  `ccp.format.spectra.OpenSpectrum` param-module list); BMRB-deposition
+  sanitising (emitted paths are a same-machine round-trip convenience).
 
