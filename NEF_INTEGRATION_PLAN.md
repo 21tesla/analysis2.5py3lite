@@ -639,3 +639,74 @@ spectra 5/5.
 - Left for 39b / 39c: GUI "Import NEF + relink..." + CLI `--relink`
   (shared orchestration), exporter file-link fields.
 
+**Stage 39b — GUI "Import NEF + relink..." + CLI `--relink` — ✅ 2026-08-26**
+- GUI (AnalysisPopup.py): new Project-menu item **"Import NEF +
+  relink..."** directly after "Load NEF..." (widget index 4; ASCII
+  `...` label per the round-1 Unicode-glyph lesson); `menu_items`
+  16→17; `fixedActiveMenus` active-in-absence-of-project indices
+  (0,1,2,3,9)→(0,1,2,3,4,10) (Quit shifts 9→10); new
+  `importNefRelink()`: closeProject if open → FileSelectPopup *.nef
+  must-exist → `loadNefProject` (OSError → showYesNo remove-and-retry,
+  same wording as loadNefFile, title "Import NEF + relink") →
+  initProject → `nefRelink.relinkSpectra(self.project, dirname(nef))`
+  (lazy import) → `showInfo(summarizeRelink(report))` /
+  showError("Spectrum relink failed"). `loadNefFile` untouched.
+- CLI (nefCli.py): `ccpnmr-nef import ... --relink [DIR]`
+  (`nargs='?'` const='' — with no value it scans the directory the NEF
+  file came from, the user's ~/NMR layout); `importNefFile(...,
+  relinkDir=None)`: after the initial saveProject it loadProjects the
+  saved dir, runs relinkSpectra, saves again (links + restored
+  geometry persist) and prints `summarizeRelink(report)`; module
+  docstring documents the flag.
+- `summarizeRelink(report)` (nefRelink.py): the GUI info-popup / CLI
+  text — "Import NEF + relink: linked N of M unlinked spectra to data
+  files under <baseDir>:" + per-entry lines (relpath + npts /
+  "no matching spectrum file found" / "skipped (N dimensions, not
+  NMRpipe)") / "nothing to do" when empty.
+- **Model-validity fix (found by the save+reload tests):** the NEF
+  importer caches `PeakDim.position`/`numAliasing` (the stored
+  point-domain twins of the derived ppm `value`; set when
+  load_nef_peak assigns `peakDim.value`, derived via
+  `dataDimRef.valueToPoint` + divmod folding by `numPointsOrig`) on the
+  importer's bogus 1280/2560 default grid.  Relink then shrinks
+  numPoints to the header's true values, leaving the stored positions
+  at importer-grid magnitudes (e.g. 825.6 > 64) — the model's
+  `checkValid` (position < dataDim.numPoints + 1, Nmr.py:56760) then
+  refuses to loadProject the saved project; the live menu/CLI flow
+  (import → relink → Save) hit the same wall (sswt: true npts 427/160,
+  594/256/128 vs 1280/2560-grid positions).  `_restoreDataDims` now:
+  captures the per-dimension ppm values first (self-consistent only
+  while the old grid is in place), restores the geometry, then
+  re-derives each peak dimension with the MODEL'S OWN formulas (the
+  ones `PeakDim.setValue`/`setValueError` use: valueToPoint + folding
+  by numPointsOrig → position/numAliasing; positionError =
+  valueError/valuePerPoint).  No model change, no fixture fudging —
+  the folding by numPointsOrig guarantees positions in-grid for any
+  header size.
+- Tests: `test_summarizeRelink` (text + "nothing to do" case); the
+  relinkSpectra E2E extended to pin the fix (after relink every
+  position satisfies the constraint and the derived ppm values are
+  unchanged, abs 1e-9); 3 new CLI tests, each doing the full save +
+  loadProject round trip: `--relink` default dir (linked 1 of 2, dataStore
+  NmrPipe (64,32,16) + fullPath exists, 15-dim dummy left off),
+  explicit `--relink DIR`, and no-files (rc 0, "no matching spectrum
+  file found", nothing linked).
+- **Live verification (user's sswt, read-only over ~/NMR, project in
+  /tmp this time WITH save+reload — the 39a run never saved):** import
+  sswt_new.nef → relink ~/NMR → **5/5** linked to the correct files
+  (identical mapping to 39a, incl. the fused-label `ftt_2` →
+  yb-sse-noesyn) → saveProject + loadProject → **0 ApiError**; 5
+  dataStores + geometries persist, all **1432** peakDims' positions
+  valid after reload.
+- Gates: pytest **83 passed, 4 skipped** (79 at 39a + 4 new);
+  import_smoke TOTAL **933** FAILED **0** (39b adds no importable
+  modules); ruff **zero-new on all 5 touched files** (AnalysisPopup
+  38 = HEAD baseline, the other four 0); gui_boot **1/1** (boots the
+  new menu item — a misnamed command would AttributeError at boot, and
+  the fixedActive indices must not crash setMenuState).
+- Left for 39c: exporter emits `ccpn_spectrum_file_path` +
+  `ccpn_file_*` + point_count/total_point_count for linked
+  DataSources — the importer already reads all of them (NefIo.py
+  932-939, 1032-1043), so a plain "Load NEF" of such a file will
+  auto-link on the same machine.
+

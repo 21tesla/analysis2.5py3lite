@@ -23,6 +23,7 @@ The read/write semantics themselves are pinned down by
 value-level round trip); these tests only re-check the counts.
 """
 import os
+import shutil
 from contextlib import redirect_stdout
 from io import StringIO
 
@@ -31,6 +32,7 @@ from ccpnmr import nefCli
 from ccpnmr.analysis.core import AssignmentBasic
 from ccpnmr.v2io import NefIo
 from memops.general import Io as memopsIo
+from tests.test_nef_relink import makePipeFile
 
 NEF_DIR = os.path.join(os.path.dirname(NefImporterModule.__file__))
 TESTDATA = os.path.join(NEF_DIR, 'testdata')
@@ -148,3 +150,85 @@ def test_gui_loadNefProject_wrapper(tmp_path, monkeypatch):
     assert c['residues'] == 235
     assert len(c['peaks']) == 6
     assert len(c['shifts']) == 108
+
+
+# ---------------------------------------------------------------------------
+# import --relink (spectrum relink, Project menu "Import NEF + relink...")
+# ---------------------------------------------------------------------------
+
+def _importedDataSources(projDir, projectName):
+    """Load the imported (saved) project; {numDim: DataSource}."""
+    with redirect_stdout(StringIO()):
+        root = memopsIo.loadProject(str(projDir), projectName=projectName)
+    out = {}
+    for expt in root.findFirstNmrProject().sortedExperiments():
+        for ds in expt.sortedDataSources():
+            out[ds.numDim] = ds
+    return out
+
+
+def test_cli_import_relink_default_dir(tmp_path, monkeypatch):
+    # the NEF and its dataset dirs in ONE directory (the user's ~/NMR
+    # layout): --relink with no value scans the NEF file's directory
+    nmrLayout = tmp_path / 'nmr'
+    nmrLayout.mkdir()
+    nefFile = nmrLayout / 'commented.nef'
+    shutil.copyfile(COMMENTED, nefFile)
+    dset = nmrLayout / 'yb-demo' / 'noesyn'
+    dset.mkdir(parents=True)
+    makePipeFile(str(dset / 'cnoesy1.ft3'), (64, 32, 16),
+                 sf=(600.0, 150.0, 100.0), sw=(8000.0, 2000.0, 1200.0),
+                 nuc=('1H', '15N', '13C'))
+    monkeypatch.chdir(tmp_path)
+    with redirect_stdout(StringIO()) as log:
+        rc = nefCli.main(['import', str(nefFile), '--project-name', 'rel',
+                          '--relink'])
+    assert rc == 0
+    # 1 of the 2 unlinked spectra links; the 15-dim dummy is skipped
+    assert 'linked 1 of 2' in log.getvalue()
+    assert 'not NMRpipe' in log.getvalue()
+
+    projDir = tmp_path / 'rel'
+    assert (projDir / 'memops' / 'Implementation' / 'rel.xml').is_file()
+    byDim = _importedDataSources(projDir, 'rel')
+    assert byDim[3].dataStore is not None
+    assert byDim[3].dataStore.fileType == 'NmrPipe'
+    assert tuple(byDim[3].dataStore.numPoints) == (64, 32, 16)
+    assert os.path.exists(byDim[3].dataStore.fullPath)
+    assert byDim[15].dataStore is None  # >4 dims: not NMRpipe, left off
+
+
+def test_cli_import_relink_explicit_dir(tmp_path, monkeypatch):
+    # data living NEXT TO the NEF directory: an explicit --relink DIR
+    nefDir = tmp_path / 'nefs'
+    nefDir.mkdir()
+    nefFile = nefDir / 'commented.nef'
+    shutil.copyfile(COMMENTED, nefFile)
+    dataRoot = tmp_path / 'elsewhere' / 'yb-demo'
+    dataRoot.mkdir(parents=True)
+    makePipeFile(str(dataRoot / 'cnoesy1.ft3'), (64, 32, 16))
+    monkeypatch.chdir(tmp_path)
+    with redirect_stdout(StringIO()) as log:
+        rc = nefCli.main(['import', str(nefFile), '--project-name', 'rel2',
+                          '--relink', str(tmp_path / 'elsewhere')])
+    assert rc == 0
+    assert 'linked 1 of 2' in log.getvalue()
+
+    byDim = _importedDataSources(tmp_path / 'rel2', 'rel2')
+    assert byDim[3].dataStore is not None
+    assert byDim[3].dataStore.fullPath.startswith(str(tmp_path / 'elsewhere'))
+
+
+def test_cli_import_relink_no_files(tmp_path, monkeypatch):
+    # no spectrum files anywhere under the NEF's directory: the import
+    # still succeeds, nothing links, the summary says so
+    monkeypatch.chdir(tmp_path)
+    with redirect_stdout(StringIO()) as log:
+        rc = nefCli.main(['import', COMMENTED, '--project-name', 'rel3',
+                          '--relink'])
+    assert rc == 0
+    assert 'no matching spectrum file found' in log.getvalue()
+
+    byDim = _importedDataSources(tmp_path / 'rel3', 'rel3')
+    assert byDim[3].dataStore is None
+    assert byDim[15].dataStore is None

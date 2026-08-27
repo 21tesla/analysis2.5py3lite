@@ -6,21 +6,31 @@ export implemented by ``ccpnmr/v2io/NefIo.py`` (read side) and
 Console entry point ``ccpnmr-nef`` (pyproject ``[project.scripts]``):
 
   ccpnmr-nef import <file.nef> [--project-name NAME] [--pdb PDB ...] [--force]
+      [--relink [DIR]]
       Create a new CCPN project from the NEF file.  The project directory
       is created in the current working directory (named after the NEF
       file unless --project-name is given) and can then be opened in the
       GUI via Project > Open Project.  Optional PDB file(s) supply
       coordinates: one file reads all its models, several files read the
-      first model of each (ensemble style).
+      first model of each (ensemble style).  --relink adds the spectrum
+      relink (see below): with no value it scans the directory the NEF
+      file came from, with a value it scans that directory.
 
   ccpnmr-nef export <project-directory> <output.nef>
       Write the NEF v1.1 file (metadata + molecular system + chemical
       shifts + restraints + peak lists) for an existing CCPN project.
 
 NEF files carry metadata, peaks, shifts and restraints - never raw
-spectrum matrix data.
+spectrum matrix data, so an imported project's DataSources start out
+without their data files ("data file None not accessible" when a
+spectrum is rendered).  The relink (``ccpnmr/nefRelink.py``) restores
+those links from the NMRpipe data files under a directory - typically
+the one the NEF file came from: --relink does that after the import and
+saves the links into the project.  The GUI equivalent is Project >
+"Import NEF + relink...".
 """
 import argparse
+import os
 import sys
 
 __copyright__ = "Copyright (C) CCPN project (https://www.ccpn.ac.uk) 2026"
@@ -29,7 +39,8 @@ __reference__ = ("Skinner, S.P., Fogh, R.H., Boucher, W., Ragan, T.J., Mureddu, 
                  "J.Biomol.Nmr (2016), 66, 111-124, https://doi.org/10.1007/s10858-016-0060-y")
 
 
-def importNefFile(nefFilePath, projectName=None, pdbFilePaths=None, removeExisting=False):
+def importNefFile(nefFilePath, projectName=None, pdbFilePaths=None,
+                  removeExisting=False, relinkDir=None):
     """Create a new CCPN project from a NEF file (NefIo.loadProject path).
 
     The project is saved to disk before returning, so it can be opened in
@@ -37,6 +48,11 @@ def importNefFile(nefFilePath, projectName=None, pdbFilePaths=None, removeExisti
     subcommand.  Returns the path of the created project directory (the
     'userData' repository).  Raises OSError if the project directory
     already exists and removeExisting is False.
+
+    With ``relinkDir``, the freshly saved project is then relinked to
+    NMRpipe data files under that directory (``ccpnmr.nefRelink``), the
+    links (and the restored data-dimension geometry) are saved into the
+    project, and the relink summary is printed.
     """
     from ccpnmr.v2io import NefIo
     from memops.general import Io as memopsIo
@@ -49,7 +65,15 @@ def importNefFile(nefFilePath, projectName=None, pdbFilePaths=None, removeExisti
     )
     memopsIo.saveProject(memopsRoot)
     repo = memopsRoot.findFirstRepository(name="userData")
-    return repo.url.path if repo is not None else None
+    projectDir = repo.url.path if repo is not None else None
+    if relinkDir is not None:
+        from ccpnmr import nefRelink
+
+        root = memopsIo.loadProject(projectDir)
+        report = nefRelink.relinkSpectra(root, relinkDir)
+        memopsIo.saveProject(root)
+        print(nefRelink.summarizeRelink(report))
+    return projectDir
 
 
 def exportNefProject(projectDir, outFilePath):
@@ -93,6 +117,17 @@ def main(argv=None):
         action="store_true",
         help="delete the project directory if it already exists",
     )
+    p_import.add_argument(
+        "--relink",
+        dest="relink",
+        nargs="?",
+        const="",
+        default=None,
+        metavar="DIR",
+        help="after the import, relink the unlinked spectra to NMRpipe data "
+             "files under DIR; with no value, under the directory the NEF "
+             "file came from",
+    )
 
     p_export = subparsers.add_parser("export", help="write a NEF file for a CCPN project directory")
     p_export.add_argument("project_dir", help="path to the project directory")
@@ -108,11 +143,17 @@ def main(argv=None):
 
     try:
         if args.command == "import":
+            relinkDir = None
+            if args.relink is not None:
+                # no value on --relink: the NEF file's own directory
+                relinkDir = args.relink or os.path.dirname(
+                    os.path.abspath(args.nef_file))
             projectDir = importNefFile(
                 args.nef_file,
                 projectName=args.project_name,
                 pdbFilePaths=pdbFilePaths,
                 removeExisting=args.force,
+                relinkDir=relinkDir,
             )
             print(f"wrote project directory {projectDir}")
             print("open it in the GUI via Project > Open Project")

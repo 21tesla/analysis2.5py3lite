@@ -705,6 +705,13 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.loadNefFile,
             tipText="Load a NEF (BMRB NMR Enhanced Format) file, creating a new CCPN project",
         )
+        menu.add_command(
+            label="Import NEF + relink...",
+            image=self.iconOpenFile,
+            compound="left",
+            command=self.importNefRelink,
+            tipText="Load a NEF file and automatically relink its spectra from data files in the same directory",
+        )
 
         menu.add_command(
             label="Save",
@@ -802,6 +809,7 @@ class AnalysisPopup(BasePopup, Analysis):
             "Open Project",
             "Open Spectra",
             "Load NEF...",
+            "Import NEF + relink...",
             "Save",
             "Save As",
             "Export NEF...",
@@ -818,7 +826,7 @@ class AnalysisPopup(BasePopup, Analysis):
 
         # Menus that area active in absence of a project
         # for ii in (0,1,2,7,15,17):
-        for ii in (0, 1, 2, 3, 9):
+        for ii in (0, 1, 2, 3, 4, 10):
             self.fixedActiveMenus[(ProjectMenu, ii)] = True
 
     def openWindowGroup(self, spectrumWindowGroup=None):
@@ -1920,6 +1928,54 @@ class AnalysisPopup(BasePopup, Analysis):
                 self.initProject(project)
             except Exception as es:
                 showError("Load NEF failed", str(es), parent=self)
+
+    def importNefRelink(self):
+        """Project menu 'Import NEF + relink...' — load a NEF file as a new
+        project, then automatically relink its spectra from the data files
+        in the directory the NEF file came from (ccpnmr.nefRelink)."""
+
+        if self.project:
+            if not self.closeProject():
+                return
+
+        fileTypes = [FileType("NEF", ["*.nef"]), FileType("All", ["*"])]
+
+        fileSelectPopup = FileSelectPopup(
+            self,
+            file_types=fileTypes,
+            title="Import NEF + relink spectrum files",
+            dismiss_text="Cancel",
+            selected_file_must_exist=True,
+            multiSelect=False,
+        )
+
+        fileName = fileSelectPopup.getFile()
+
+        if fileName:
+            name = os.path.splitext(os.path.basename(fileName))[0]
+            try:
+                try:
+                    project = loadNefProject(self, fileName, projectName=name)
+                except OSError:
+                    if not showYesNo(
+                        "Import NEF + relink",
+                        f"A project named '{name}' already exists in the current directory.\nRemove it and continue?",
+                        parent=self,
+                    ):
+                        return
+                    project = loadNefProject(self, fileName, projectName=name, removeExisting=True)
+                self.initProject(project)
+            except Exception as es:
+                showError("Import NEF + relink failed", str(es), parent=self)
+                return
+            try:
+                from ccpnmr import nefRelink
+
+                report = nefRelink.relinkSpectra(self.project, os.path.dirname(fileName))
+            except Exception as es:
+                showError("Spectrum relink failed", str(es), parent=self)
+            else:
+                showInfo(self, nefRelink.summarizeRelink(report), parent=self)
 
     def exportNefFile(self):
         """Project menu 'Export NEF...' — write the current project as a NEF (BMRB v1.1) file."""

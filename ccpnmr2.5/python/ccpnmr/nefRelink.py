@@ -207,8 +207,27 @@ def _restoreDataDims(dataSource, cand):
     ``numPoints`` from the dimension, so relinking must fix it.
     ``valuePerPoint`` follows the native convention (sw / numPoints, as
     written by ``ccp.util.Spectrum.createSpectrum``).
+
+    ``PeakDim.position``/``numAliasing`` (and ``positionError``) are the
+    stored point-domain twins of the derived ``value``/``valueError``
+    (ppm).  The importer cached them on its default grid, and the model
+    requires ``position < dataDim.numPoints + 1`` - shrinking the grid
+    without re-deriving would leave every peak dimension out of range
+    and the project could no longer be saved and re-loaded.  The per-dimension
+    ppm values are therefore captured first, the geometry restored, and
+    each peak dimension re-derived with the model's own formulas (the
+    ones ``PeakDim.setValue`` / ``setValueError`` use:
+    ``valueToPoint`` + folding by ``numPointsOrig``).
     """
-    for i, dataDim in enumerate(dataSource.sortedDataDims()):
+    dims = dataSource.sortedDataDims()
+    captured = []
+    for peakList in dataSource.getPeakLists():
+        for peak in peakList.getPeaks():
+            for peakDim in peak.sortedPeakDims():
+                if peakDim.dim <= len(cand['npts']):
+                    captured.append(
+                        (peakDim, peakDim.value, peakDim.valueError))
+    for i, dataDim in enumerate(dims):
         if i >= len(cand['npts']):
             break
         numPoints = cand['npts'][i]
@@ -217,6 +236,18 @@ def _restoreDataDims(dataSource, cand):
         sw = cand['sw'][i]
         if sw:
             dataDim.valuePerPoint = sw / numPoints
+    for peakDim, value, valueError in captured:
+        if value is None:
+            continue
+        dataDimRef = peakDim.dataDimRef
+        if dataDimRef is None:
+            continue
+        pp = dataDimRef.valueToPoint(value)
+        nn, pp = divmod(pp - 1.0, dataDimRef.dataDim.numPointsOrig)
+        peakDim.numAliasing = int(nn)
+        peakDim.position = pp + 1.0
+        if valueError is not None:
+            peakDim.positionError = valueError / dataDimRef.valuePerPoint
 
 
 def relinkSpectra(memopsRoot, baseDir):
@@ -285,3 +316,31 @@ def relinkSpectra(memopsRoot, baseDir):
                 'numPoints': cand['npts'],
             })
     return report
+
+
+def summarizeRelink(report):
+    """One-paragraph human summary of a ``relinkSpectra`` report
+    (GUI info popup / CLI output)."""
+    nLinked = len(report['linked'])
+    nUnlinked = len(report['unlinked'])
+    nSkipped = len(report['skipped'])
+    if not (nLinked or nUnlinked or nSkipped):
+        return ("Import NEF + relink: nothing to do - every spectrum already "
+                "has a data file.")
+    lines = [
+        f"Import NEF + relink: linked {nLinked} of "
+        f"{nLinked + nUnlinked + nSkipped} unlinked spectra to data files "
+        f"under {report['baseDir']}:",
+    ]
+    for e in report['linked']:
+        lines.append(
+            f"  {e['name']}: {os.path.relpath(e['file'], report['baseDir'])} "
+            f"({e['numPoints']})"
+        )
+    for e in report['unlinked']:
+        lines.append(f"  {e['name']}: no matching spectrum file found")
+    for e in report['skipped']:
+        lines.append(
+            f"  {e['name']}: skipped ({e['numDim']} dimensions, not NMRpipe)"
+        )
+    return '\n'.join(lines)

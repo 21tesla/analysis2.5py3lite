@@ -15,6 +15,8 @@ import struct
 from contextlib import redirect_stdout
 from io import StringIO
 
+import pytest
+
 import ccpnmr.nef.NefImporter as NefImporterModule
 from ccp.format.spectra.params import NmrPipeParams
 from ccpnmr import nefRelink
@@ -80,8 +82,29 @@ def makePipeFile(path, npts, sw=None, sf=None, nuc=None):
 # ---------------------------------------------------------------------------
 
 def test_public_api():
-    for name in ('scanSpectrumFiles', 'matchSpectra', 'relinkSpectra'):
+    for name in ('scanSpectrumFiles', 'matchSpectra', 'relinkSpectra',
+                 'summarizeRelink'):
         assert hasattr(nefRelink, name), name
+
+
+def test_summarizeRelink():
+    report = {
+        'baseDir': '/data',
+        'candidates': 3,
+        'linked': [{'experiment': 'noesy', 'name': 'cnoesy1',
+                    'file': '/data/yb/cnoesy1.ft3', 'numPoints': [64, 32, 16]}],
+        'unlinked': [{'experiment': 'hsqc', 'name': 'foo', 'numDim': 2}],
+        'skipped': [{'experiment': '15D', 'name': 'dummy15d', 'numDim': 15}],
+        'alreadyLinked': 0,
+    }
+    text = nefRelink.summarizeRelink(report)
+    assert 'linked 1 of 3' in text
+    assert 'yb/cnoesy1.ft3' in text
+    assert 'foo: no matching spectrum file found' in text
+    assert 'dummy15d: skipped (15 dimensions, not NMRpipe)' in text
+
+    empty = dict(report, linked=[], unlinked=[], skipped=[])
+    assert 'nothing to do' in nefRelink.summarizeRelink(empty)
 
 
 def test_makePipeFile_readable(tmp_path):
@@ -212,6 +235,14 @@ def test_relinkSpectra_e2e(tmp_path):
     # the data dimensions (1280/2560)
     before = [dd.numPoints for dd in ds.sortedDataDims()]
     assert before != [64, 32, 16]
+    # the ppm values carried by the NEF (self-consistent with the
+    # importer's grid while it is still in place) - relink must keep them
+    valuesBefore = {
+        (peak.serial, peakDim.dim): peakDim.value
+        for peakList in ds.getPeakLists()
+        for peak in peakList.getPeaks()
+        for peakDim in peak.sortedPeakDims()
+    }
 
     base = tmp_path / 'yb-demo' / 'noesyn'
     base.mkdir(parents=True)
@@ -240,6 +271,19 @@ def test_relinkSpectra_e2e(tmp_path):
     assert [d.numPointsOrig for d in dims] == [64, 32, 16]
     assert [d.valuePerPoint for d in dims] == [
         8000.0 / 64, 2000.0 / 32, 1200.0 / 16]
+
+    # relink re-derived the peak positions on the restored grid: the
+    # stored positions satisfy the model constraint (position <
+    # numPoints + 1 - a project saved with the importer-grid positions
+    # fails validation at loadProject) and the derived ppm values are
+    # unchanged
+    for peakList in ds.getPeakLists():
+        for peak in peakList.getPeaks():
+            for peakDim in peak.sortedPeakDims():
+                assert 1.0 <= peakDim.position < \
+                    dims[peakDim.dim - 1].numPoints + 1.0
+                assert peakDim.value == pytest.approx(
+                    valuesBefore[(peak.serial, peakDim.dim)], abs=1e-9)
 
     # second pass: everything already linked, nothing to do
     report2 = nefRelink.relinkSpectra(root, str(tmp_path / 'yb-demo'))
