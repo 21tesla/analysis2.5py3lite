@@ -30,6 +30,12 @@ Non-trivial export conventions the round trip pins down:
 - shift rows for resonances the importer deliberately names ``None``
   (the reserved ``element@serial`` atom form) must recreate that form.
 
+Stage 39c adds the one exception: a DataSource LINKED to a data file
+exports the reference (ccpn_spectrum_file_path + ccpn_file_* + the
+data-dimension point counts) so a plain same-machine reimport auto-links
+it (test_linked_datasource_export_reimport); unlinked DataSources export
+exactly as before (test_unlinked_export_unchanged).
+
 Notes:
 - NEF carries metadata / peaks / shifts / restraints, never raw matrices,
   so DataStore content is out of scope here.
@@ -43,6 +49,8 @@ import os
 from collections import Counter
 from contextlib import redirect_stdout
 from io import StringIO
+
+import pytest
 
 import ccpnmr.nef.NefImporter as NefImporterModule
 from ccpnmr import nefExport
@@ -453,3 +461,121 @@ def test_native_legacy_project_round_trip(tmp_path):
     assert len(c2['shifts']) == len(c1['shifts'])
     assert shiftIdentityMultiset(root) == shiftIdentityMultiset(reRoot)
     assert _peakPositions(c1) == _peakPositions(c2)
+
+
+# ---------------------------------------------------------------------------
+# stage 39c: file reference in the NEF -> same-machine auto-relink
+# ---------------------------------------------------------------------------
+
+def _spectrumSaveframes(path):
+    """{framecode: NmrSaveFrame} of the exported nef_nmr_spectrum frames."""
+    imp = NefImporterModule.NefImporter()
+    imp.loadFile(path)
+    return {
+        name: sf for name, sf in imp.data.items()
+        if isinstance(sf, StarIo.NmrSaveFrame)
+        and sf['sf_category'] == 'nef_nmr_spectrum'
+    }
+
+
+def test_linked_datasource_export_reimport(tmp_path):
+    """39c round trip: relink -> export -> PLAIN reimport (no relink step)
+    restores the data file link, the restored data-dim geometry (via
+    point_count) and the peak positions on that grid."""
+    from ccpnmr import nefRelink
+    from tests.test_nef_relink import makePipeFile
+
+    root = _load(COMMENTED, tmp_path)
+    ds3 = None
+    for expt in root.findFirstNmrProject().sortedExperiments():
+        if expt.numDim == 3:
+            ds3 = expt.findFirstDataSource()
+    assert ds3 is not None and ds3.dataStore is None
+    # the ppm values carried by the NEF - they must survive the whole
+    # relink -> export -> import cycle
+    valuesBefore = {
+        (peak.serial, peakDim.dim): peakDim.value
+        for peakList in ds3.getPeakLists()
+        for peak in peakList.getPeaks()
+        for peakDim in peak.sortedPeakDims()
+    }
+
+    base = tmp_path / 'yb-demo' / 'noesyn'
+    base.mkdir(parents=True)
+    dataFile = str(base / 'cnoesy1.ft3')
+    makePipeFile(dataFile, (64, 32, 16),
+                 sf=(600.0, 150.0, 100.0), sw=(8000.0, 2000.0, 1200.0),
+                 nuc=('1H', '15N', '13C'))
+    report = nefRelink.relinkSpectra(root, str(tmp_path / 'yb-demo'))
+    assert [e['name'] for e in report['linked']] == ['cnoesy1']
+
+    path = _export(root, tmp_path)
+    frames = _spectrumSaveframes(path)
+    cnoesy = frames['nef_nmr_spectrum_cnoesy1']
+
+    # the linked spectrum carries the file reference + format items and
+    # the point counts on the dimension rows
+    assert cnoesy.get('ccpn_spectrum_file_path') == dataFile
+    assert cnoesy.get('ccpn_file_type') == 'NmrPipe'
+    assert cnoesy.get('ccpn_file_header_size') == 2048
+    assert cnoesy.get('ccpn_file_byte_number') == 4
+    assert cnoesy.get('ccpn_file_number_type') == 'float'
+    assert cnoesy.get('ccpn_file_is_big_endian') is False
+    # the point counts ride on the ccpn extension loop (the importer
+    # reads them from there, not from nef_spectrum_dimension)
+    pts = {row['dimension_id']: (row['point_count'], row['total_point_count'])
+           for row in cnoesy['ccpn_spectrum_dimension'].data}
+    assert pts == {1: (64, 64), 2: (32, 32), 3: (16, 16)}
+
+    # the unlinked 15-dim dummy exports exactly as before 39c
+    dummy = frames['nef_nmr_spectrum_dummy15d']
+    assert dummy.get('ccpn_spectrum_file_path') is None
+    assert dummy.get('ccpn_file_type') is None
+    assert dummy.get('ccpn_spectrum_dimension') is None
+    for row in dummy['nef_spectrum_dimension'].data:
+        assert row.get('point_count') is None
+
+    # plain reimport: the link comes WITH the file, 0 import warnings
+    reRoot = memopsIo.newProject(
+        'linkedRe', path=os.path.join(str(tmp_path), 'reimport'),
+        removeExisting=True)
+    log = StringIO()
+    with redirect_stdout(log):
+        NefIo.loadNefFile(path, memopsRoot=reRoot)
+    assert '====>' not in log.getvalue()
+
+    reDs = None
+    for expt in reRoot.findFirstNmrProject().sortedExperiments():
+        if expt.numDim == 3:
+            reDs = expt.findFirstDataSource()
+    assert reDs.dataStore is not None
+    assert reDs.dataStore.fileType == 'NmrPipe'
+    assert reDs.dataStore.fullPath == dataFile
+    assert os.path.exists(reDs.dataStore.fullPath)
+    dims = reDs.sortedDataDims()
+    assert [d.numPoints for d in dims] == [64, 32, 16]
+    assert [d.valuePerPoint for d in dims] == pytest.approx([125.0, 62.5, 75.0])
+    # restored grid: model constraint satisfied, ppm values preserved
+    for peakList in reDs.getPeakLists():
+        for peak in peakList.getPeaks():
+            for peakDim in peak.sortedPeakDims():
+                assert 1.0 <= peakDim.position < \
+                    dims[peakDim.dim - 1].numPoints + 1.0
+                assert peakDim.value == pytest.approx(
+                    valuesBefore[(peak.serial, peakDim.dim)], abs=1e-9)
+
+
+def test_unlinked_export_unchanged(tmp_path):
+    """The 39c guard: with no linked DataSources the spectrum frames
+    carry no file items and no point_count columns (pre-39c output)."""
+    root = _load(COMMENTED, tmp_path)
+    path = _export(root, tmp_path)
+    frames = _spectrumSaveframes(path)
+    assert set(frames) == {'nef_nmr_spectrum_cnoesy1', 'nef_nmr_spectrum_dummy15d'}
+    for sf in frames.values():
+        assert sf.get('ccpn_spectrum_file_path') is None
+        assert sf.get('ccpn_file_type') is None
+        assert sf.get('ccpn_spectrum_dimension') is None
+        for row in sf['nef_spectrum_dimension'].data:
+            assert row.get('point_count') is None
+            assert row.get('total_point_count') is None

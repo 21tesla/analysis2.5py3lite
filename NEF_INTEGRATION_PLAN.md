@@ -704,9 +704,57 @@ spectra 5/5.
   38 = HEAD baseline, the other four 0); gui_boot **1/1** (boots the
   new menu item — a misnamed command would AttributeError at boot, and
   the fixedActive indices must not crash setMenuState).
-- Left for 39c: exporter emits `ccpn_spectrum_file_path` +
-  `ccpn_file_*` + point_count/total_point_count for linked
-  DataSources — the importer already reads all of them (NefIo.py
-  932-939, 1032-1043), so a plain "Load NEF" of such a file will
-  auto-link on the same machine.
+
+**Stage 39c — exporter file reference (same-machine auto-relink on
+plain "Load NEF") — ✅ 2026-08-26**
+- `nefExport._makeSpectrum`: a DataSource that is LINKED to a data
+  file now carries the reference in the NEF (GUARD: linked DataSources
+  only — unlinked frames export byte-identically to before, so the
+  bundled testdata round trips are untouched):
+  - `ccpn_spectrum_file_path` — `dataStore.fullPath` (absolute; the
+    importer hands it straight to `addDataStore`);
+  - `ccpn_file_type` / `ccpn_file_header_size` /
+    `ccpn_file_byte_number` / `ccpn_file_number_type` /
+    `ccpn_file_is_big_endian` /
+    `ccpn_file_complex_stored_by` — straight from the BlockedBinaryMatrix
+    (the exact items the importer's `dataStoreMapping` reads);
+  - a `ccpn_spectrum_dimension` loop (dimension_id, point_count,
+    total_point_count from the dataDim numPoints/numPointsOrig).
+    **Pitfall found by the test:** the importer reads the point counts
+    from the `ccpn_spectrum_dimension` EXTENSION loop (NefIo.py
+    914-945), NOT from `nef_spectrum_dimension` — writing them as
+    columns of the nef loop parses but is silently ignored (the
+    reimported dims kept the bogus 1280/2560 grid).
+- Reimport semantics (no import-side changes): the dataDims get the
+  true grid from point_count (no bogus defaults), the dataStore is
+  created via the existing `addDataStore` path, and the peak positions
+  are derived on the true grid at import time (the 39b re-derivation
+  is only needed when the grid changes AFTER import).
+- Module docstring updated (the "DataStore is not exported" note is
+  now the linked-reference exception).
+- Tests (test_nef_export.py, +2): `test_linked_datasource_export_reimport`
+  (Commented → relink synthetic cnoesy1.ft3 (64,32,16) → export:
+  asserts every file item + the point-count rows on
+  ccpn_spectrum_dimension + the UNLINKED dummy15d frame stays clean;
+  plain reimport (no relink): 0 warnings, dataStore restored
+  (NmrPipe/fullPath/exists), dims 64/32/16 + valuePerPoint, positions
+  satisfy the model constraint and the ppm values are unchanged
+  through relink→export→import, abs 1e-9);
+  `test_unlinked_export_unchanged` (the guard: no file items, no
+  ccpn_spectrum_dimension loop, no point_count anywhere in spectrum
+  frames).
+- **Live verification (user's sswt, read-only over ~/NMR, /tmp
+  projects):** import sswt_new.nef → relink ~/NMR (5/5) → export
+  (128 KB) → **PLAIN reimport: 5/5 auto-linked** to the correct
+  yb-* files with true npts ((427,160)×3 / (594,256,128)×2),
+  **0 import warnings**, all 1432 peakDims' positions valid, save +
+  loadProject — 5 dataStores persist. I.e. exporting a relinked project
+  and "Load NEF"ing the result is now a zero-effort round trip
+  (pre-39c NEF files like the existing sswt_new.nef still need
+  "Import NEF + relink...").
+- Gates: pytest **85 passed, 4 skipped** (83 at 39b + 2 new);
+  import_smoke TOTAL **933** FAILED **0**; ruff **0** on both
+  touched files (= HEAD); gui_boot **1/1** (no GUI edits this
+  milestone).
+- Stage 39 COMPLETE (39a core + 39b GUI/CLI + 39c exporter).
 

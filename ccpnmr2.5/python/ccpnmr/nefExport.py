@@ -37,8 +37,12 @@ Conventions
   * A peak with N alternative assignments (N PeakContribs) is written as
     N rows sharing the same ``peak_id``, exactly the multi-row form the
     importer understands.
-  * DataStore / raw spectrum matrix data is not part of NEF and is not
-    exported (NEF carries peaks + shifts + restraints + metadata).
+  * Raw spectrum matrix data is not part of NEF.  A DataSource linked
+    to a data file additionally carries the reference (file path +
+    file-format items + the data-dimension point counts) so a plain
+    same-machine reimport auto-links it; unlinked DataSources export
+    with no file fields (the NEF carries peaks + shifts + restraints
+    + metadata either way).
 
 Public API
 ----------
@@ -458,6 +462,14 @@ def _makeSpectrum(db, nmrProject, experiment, dataSource, shiftListFrameCodes):
     if refExperiment is not None and getattr(refExperiment, 'name', None):
         sf['experiment_classification'] = refExperiment.name
 
+    # A DataSource linked to a data file carries the link in the NEF so a
+    # plain reimport (Load NEF, no relink step) restores it: the importer
+    # (v2io.NefIo) reads ccpn_spectrum_file_path + the ccpn_file_* items
+    # into a dataStore (addDataStore) and point_count/total_point_count
+    # onto the data dimensions.  Unlinked DataSources export exactly as
+    # before (same columns, no file items).
+    dataStore = getattr(dataSource, 'dataStore', None)
+
     # ------------------------------------------------------------------ dims
     dimColumns = ('dimension_id', 'axis_unit', 'axis_code', 'spectrometer_frequency',
                   'spectral_width', 'value_first_point', 'folding', 'is_acquisition')
@@ -487,6 +499,31 @@ def _makeSpectrum(db, nmrProject, experiment, dataSource, shiftListFrameCodes):
             row['value_first_point'] = dataDimRef.refValue
         row['is_acquisition'] = bool(expDim.isAcquisition) if expDim is not None else False
         dimLoop.newRow(row)
+
+    # ------------------------------------------------------------- file link
+    if dataStore is not None:
+        # absolute path: the importer hands it straight to addDataStore
+        sf['ccpn_spectrum_file_path'] = dataStore.fullPath
+        for nefKey, attr in (
+            ('ccpn_file_type', 'fileType'),
+            ('ccpn_file_header_size', 'headerSize'),
+            ('ccpn_file_byte_number', 'nByte'),
+            ('ccpn_file_number_type', 'numberType'),
+            ('ccpn_file_is_big_endian', 'isBigEndian'),
+            ('ccpn_file_complex_stored_by', 'complexStoredBy'),
+        ):
+            value = getattr(dataStore, attr, None)
+            if value is not None:
+                sf[nefKey] = value
+        # the point counts ride on the ccpn extension loop - the
+        # importer reads them from ccpn_spectrum_dimension (NOT from
+        # nef_spectrum_dimension, whose column set it does not extend)
+        pcLoop = sf.newLoop('ccpn_spectrum_dimension',
+                            ('dimension_id', 'point_count', 'total_point_count'))
+        for dataDim in sorted(dataSource.dataDims, key=lambda x: x.dim):
+            pcLoop.newRow({'dimension_id': dataDim.dim,
+                           'point_count': dataDim.numPoints,
+                           'total_point_count': dataDim.numPointsOrig})
 
     # ---------------------------------------------------------------- transfer
     transferColumnSet = ('dimension_1', 'dimension_2', 'transfer_type', 'is_indirect')
