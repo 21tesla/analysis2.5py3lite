@@ -125,7 +125,7 @@ static Drawing_funcs drawing_funcs = {PAPER_DRAWING,     ps_start_draw,        p
 
 Drawing_funcs *ps_drawing_funcs(void) { return &drawing_funcs; }
 
-Ps_handler new_ps_handler(CcpnString *file_name, float width, float height, CcpnString output_style) {
+Ps_handler new_ps_handler(CcpnString file_name, float width, float height, CcpnString output_style) {
     Ps_handler ps_handler;
 
     MALLOC_NEW(ps_handler, struct Ps_handler, 1);

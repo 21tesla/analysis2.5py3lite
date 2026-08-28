@@ -272,7 +272,7 @@ CcpnStatus resize_mem_cache(Mem_cache mem_cache, int max_size)
 
     mem_cache->max_size = max_size;
 
-    if (mem_cache->size > max_size);
+    if (mem_cache->size > max_size)
 	make_room(mem_cache);
 
     CHECK_STATUS(unlock_mutex(mem_cache->mutex));
@@ -284,7 +284,7 @@ static CcpnStatus check_func(Generic_ptr list_data, Generic_ptr func_data, Bool 
 {
     Cache_entry entry = (Cache_entry) list_data;
 
-    printf("mem_cache: check_func: %x: %d: %d\n", (unsigned int) entry->object, entry->size, entry->lock_count);
+    printf("mem_cache: check_func: %p: %d: %d\n", entry->object, entry->size, entry->lock_count);
 
     return CCPN_OK;
 }

@@ -62,7 +62,7 @@ extern Drawing_funcs *pdf_drawing_funcs(void);
 
 //extern Pdf_handler new_pdf_handler(FILE *fp, float width, float height,
 //                                                CcpnString output_style);
-extern Pdf_handler new_pdf_handler(CcpnString *file_name, float width, float height,
+extern Pdf_handler new_pdf_handler(CcpnString file_name, float width, float height,
                                                 CcpnString output_style);
 
 extern void delete_pdf_handler(Pdf_handler pdf_handler);

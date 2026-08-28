@@ -167,6 +167,7 @@ float fit_volume_gaussian3_method(int ndim, float y,
         printf("  i = %d, vm = %3.2f, y = %3.2f, vp = %3.2f\n", i, vm, y, vp);
         */
         c = fit_center3(vm, y, vp, &b, CCPN_TRUE);
+        (void)c;
         /*
         	c = fit_center3(ym[i], y, yp[i], &b, CCPN_TRUE);
         */

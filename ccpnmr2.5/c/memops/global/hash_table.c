@@ -76,7 +76,7 @@ Bool equal_pointers(Hash_key key1, Hash_key key2)
 
 Hash_value hash_pointers(Hash_key key)
 {
-    return create_hash((int) key);
+    return create_hash((int)(size_t) key);
 }
 
 static Hash_entry *next_entry(Hash_table hash_table, Hash_entry *entry)

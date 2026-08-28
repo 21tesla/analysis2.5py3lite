@@ -44,7 +44,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 Bool valid_py_object(PyObject *obj, PyTypeObject *type_obj)
 {
-    return equal_strings(obj->ob_type->tp_name, type_obj->tp_name);
+    return equal_strings((CcpnString)obj->ob_type->tp_name, (CcpnString)type_obj->tp_name);
 }
 
 int get_python_list_size(PyObject *list)
@@ -63,7 +63,7 @@ int get_python_list_size(PyObject *list)
 
 PyObject *get_python_object_by_index(PyObject *list, int ind)
 {
-    PyObject *obj;
+    PyObject *obj = NULL;
 
     if (PyList_Check(list))
 	obj = PyList_GetItem(list, ind);

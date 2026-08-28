@@ -172,7 +172,7 @@ Drawing_funcs *pdf_drawing_funcs(void)
     return &drawing_funcs;
 }
 
-Pdf_handler new_pdf_handler(CcpnString *file_name, float width, float height,
+Pdf_handler new_pdf_handler(CcpnString file_name, float width, float height,
                                                 CcpnString output_style)
 {
     Pdf_handler pdf_handler;

@@ -276,10 +276,10 @@ extern int fseek_relative_safe(FILE *fp, long int offset);
 #endif
 
 #define  FREAD(x, size, n, fp) \
-	 (fread((void *) (x), (size), (n), (fp)) != (n))
+	 (fread((void *) (x), (size), (n), (fp)) != (size_t)(n))
 
 #define  FWRITE(x, size, n, fp) \
-	 (fwrite((void *) (x), (size), (n), (fp)) != (n))
+	 (fwrite((void *) (x), (size), (n), (fp)) != (size_t)(n))
 
 #ifdef  MALLOC
 #undef  MALLOC

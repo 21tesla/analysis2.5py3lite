@@ -261,7 +261,7 @@ static struct PyMethodDef py_handler_methods[] =
  * BASIC TYPE-OPERATIONS
  *****************************************************************************/
 
-static PyObject *new_py_pdf_handler(CcpnString *file_name, float width, float height,
+static PyObject *new_py_pdf_handler(CcpnString file_name, float width, float height,
                                                         CcpnString output_style)
 {
     Py_Pdf_handler obj;

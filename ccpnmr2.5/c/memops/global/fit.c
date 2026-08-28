@@ -1191,7 +1191,7 @@ static CcpnStatus fit_nonlinear(Non_linear_fit fit, int n, float *x, float *y,
     int i, cond, iter, nparams = get_method_nparams(fit->method);
     float lambda, chisq, old_chisq, chisq_stop_criterion;/*, ysum;*//*, chisq_scale;*/
     Bool singular;
-    Nonlinear_model_func f;
+    Nonlinear_model_func f = NULL;
 
 /*
 printf("method = %s, n = %d\n", fit_methods[method], n);

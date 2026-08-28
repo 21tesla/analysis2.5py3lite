@@ -698,7 +698,7 @@ static void _fitting_func(float xind, float *a, float *y_fit, float *dy_da, void
     int method = fitPeak->method;
     Bool *dim_done = fitPeak->dim_done;
     int ind = NEAREST_INTEGER(xind);
-    int nparams_per_peak, ndim_done;
+    int nparams_per_peak = 0, ndim_done;
     int i, j, x[MAX_NDIM];
     float *position = a+1;
 

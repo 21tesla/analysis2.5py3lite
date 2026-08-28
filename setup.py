@@ -144,60 +144,60 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/clipping.c"]
 if DARWIN:
     # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
-    DRAWLIBS = ["tk8.6", "tcl8.6", "m"]
+    DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
 else:
-    DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
+    DRAWLIBS = ["GL", "glut", "tcl9tk9.0", "tcl9.0", "m"]
 DRAWINC_EXTRA = [TKINC] + GLX_INC
 
 # ------------------------------------------------------------------ family defs
 # name -> (sources, include_dirs, libs).  Tier-1 = no GL/Tk/X11.
 FAM = {
     # --- clouds (import:  ccpnmr.c.<Name>) ----------------------------------
-    "Bacus":           ([f"{CLOUD}/py_bacus.c", f"{CLOUD}/bacus.c"] + GU,
+    "ccpnmr.c.Bacus":           ([f"{CLOUD}/py_bacus.c", f"{CLOUD}/bacus.c"] + GU,
                         [CLOUD, G], ["m"]),
 
     # --- analysis, Tier-1 (import:  ccpnmr.c.<Name>) ------------------------
-    "ContourLevels":   ([f"{ANA}/py_contour_levels.c", f"{ANA}/contour_levels.c"] + GU,
+    "ccpnmr.c.ContourLevels":   ([f"{ANA}/py_contour_levels.c", f"{ANA}/contour_levels.c"] + GU,
                         [ANA, G], []),
-    "ContourStyle":    ([f"{ANA}/py_contour_style.c", f"{ANA}/contour_style.c"] + GU,
+    "ccpnmr.c.ContourStyle":    ([f"{ANA}/py_contour_style.c", f"{ANA}/contour_style.c"] + GU,
                         [ANA, G], []),
-    "PeakList":        ([f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
+    "ccpnmr.c.PeakList":        ([f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
                          f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
                         + GU + GBLK + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"],
                         [ANA, G], ["m"]),
 
     # --- analysis, Py3-migrated Phase 4 (import:  ccpnmr.c.<Name>) ----------
-    "WinPeakList":     ([f"{ANA}/py_win_peak_list.c", f"{ANA}/win_peak_list.c",
+    "ccpnmr.c.WinPeakList":     ([f"{ANA}/py_win_peak_list.c", f"{ANA}/win_peak_list.c",
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/peak_list.c",
                          f"{ANA}/symbol.c", f"{ANA}/py_peak.c", f"{ANA}/py_peak_list.c"]
                         + DRAWDEPS + [f"{G}/nonlinear_model.c", f"{G}/gauss_jordan.c"] + GU + GBLK,
                         [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
-    "PeakCluster":     ([f"{ANA}/py_peak_cluster.c", f"{ANA}/peak_cluster.c",
+    "ccpnmr.c.PeakCluster":     ([f"{ANA}/py_peak_cluster.c", f"{ANA}/peak_cluster.c",
                          f"{ANA}/method.c", f"{ANA}/peak.c", f"{ANA}/symbol.c",
                          f"{ANA}/py_peak.c", f"{G}/nonlinear_model.c",
                          f"{G}/gauss_jordan.c"]
                         + DRAWDEPS + GU + GBLK, [ANA, G] + DRAWINC_EXTRA, DRAWLIBS,
                         GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
-    "ContourFile":     ([f"{ANA}/py_contour_file.c", f"{ANA}/contour_file.c",
+    "ccpnmr.c.ContourFile":     ([f"{ANA}/py_contour_file.c", f"{ANA}/contour_file.c",
                          f"{ANA}/contour_data.c", f"{ANA}/contour_levels.c",
                          f"{ANA}/contour_style.c", f"{ANA}/py_contour_levels.c",
                          f"{ANA}/py_contour_style.c"]
                         + DRAWDEPS + GU + GBLK + [f"{G}/store_file.c", f"{G}/py_store_file.c",
                                                    f"{G}/contourer.c"],
                         [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
-    "SliceFile":       ([f"{ANA}/py_slice_file.c", f"{ANA}/slice_file.c"]
+    "ccpnmr.c.SliceFile":       ([f"{ANA}/py_slice_file.c", f"{ANA}/slice_file.c"]
                         + DRAWDEPS + GU + GBLK,
                         [ANA, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
 
     # --- ccp structure, Tier-1 (import:  ccp.c.<Name>) ----------------------
-    "StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
+    "ccp.c.StructAtom":      ([f"{STR}/py_atom.c", f"{STR}/atom.c", f"{STR}/bond.c"]
                         + [f"{G}/color.c"] + GU, [STR, G], []),
-    "StructBond":      ([f"{STR}/py_bond.c", f"{STR}/py_atom.c", f"{STR}/atom.c",
+    "ccp.c.StructBond":      ([f"{STR}/py_bond.c", f"{STR}/py_atom.c", f"{STR}/atom.c",
                          f"{STR}/bond.c"] + [f"{G}/color.c"] + GU, [STR, G], []),
-    "StructUtil":      ([f"{STR}/py_struct_util.c", f"{STR}/struct_util.c"]
+    "ccp.c.StructUtil":      ([f"{STR}/py_struct_util.c", f"{STR}/struct_util.c"]
                         + [f"{G}/geometry.c", f"{G}/eigenvalue.c", f"{G}/linalg.c"] + GU,
                         [STR, G], ["m"]),
-    "StructStructure": ([f"{STR}/py_structure.c", f"{STR}/structure.c",
+    "ccp.c.StructStructure": ([f"{STR}/py_structure.c", f"{STR}/structure.c",
                          f"{STR}/atom.c", f"{STR}/bond.c", f"{STR}/struct_util.c",
                          f"{STR}/py_atom.c", f"{STR}/py_bond.c"]
                         + DRAWDEPS + [f"{G}/color.c", f"{G}/geometry.c", f"{G}/eigenvalue.c",
@@ -205,18 +205,18 @@ FAM = {
                         [STR, G] + DRAWINC_EXTRA, DRAWLIBS, GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
 
     # --- cambridge bayes (import:  cambridge.c.BayesPeakSeparator) ----------
-    "BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
+    "cambridge.c.BayesPeakSeparator": ([f"{BAYES}/py_bayes.c", f"{BAYES}/bayes_nmr.c",
                         f"{BAYES}/app.c", f"{BAYES}/distribution.c", f"{BAYES}/random.c",
                         f"{BAYES}/hilbert.c", f"{BAYES}/bayesys3.c"]
                         + GU + GBLK, [BAYES, G], ["m"]),
 
     # --- memops window handlers (Tier-2: needs Tk/TK headers + GL/glut/X11) --
     # import:  memops.c.GlHandler / memops.c.TkHandler
-    "GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
+    "memops.c.GlHandler":       ([f"{G}/py_gl_handler.c", f"{G}/gl_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
                         + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
                         GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
-    "TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
+    "memops.c.TkHandler":       ([f"{G}/py_tk_handler.c", f"{G}/tk_handler.c", f"{G}/py_tk_util.c",
                          f"{G}/clipping.c"]
                         + GU, [G, TKINC] + GLX_INC, DRAWLIBS,
                         GLX_LIBDIRS, GLX_DEFINE, GLX_LINK),
@@ -233,20 +233,20 @@ def ext(name, sources, extra_sources=None):
 
 
 BACKBONE = [
-    ext("ShapeFile", ["py_shape_file.c", "shape_file.c", "python_util.c", "utility.c"]),
-    ext("MemCache", ["py_mem_cache.c", "mem_cache.c", "hash_list.c", "hash_table.c",
+    ext("memops.c.ShapeFile", ["py_shape_file.c", "shape_file.c", "python_util.c", "utility.c"]),
+    ext("memops.c.MemCache", ["py_mem_cache.c", "mem_cache.c", "hash_list.c", "hash_table.c",
                      "int_array.c", "list.c", "mutex.c", "python_util.c", "utility.c"]),
-    ext("BlockFile", ["py_block_file.c", "block_file.c", "py_mem_cache.c", "py_shape_file.c",
+    ext("memops.c.BlockFile", ["py_block_file.c", "block_file.c", "py_mem_cache.c", "py_shape_file.c",
                       "hash_list.c", "hash_table.c", "int_array.c", "list.c", "mutex.c",
                       "mem_cache.c", "shape_file.c", "python_util.c", "utility.c"]),
-    ext("FitMethod", ["py_fit.c", "fit.c", "fit1d.c", "nonlinear_model.c", "cpmg.c",
+    ext("memops.c.FitMethod", ["py_fit.c", "fit.c", "fit1d.c", "nonlinear_model.c", "cpmg.c",
                       "line_fit.c", "random.c", "gauss_jordan.c", "gamma.c",
                       "python_util.c", "utility.c"]),
-    ext("StoreFile", ["py_store_file.c", "store_file.c", "python_util.c", "utility.c"]),
-    ext("StoreHandler", ["py_store_handler.c", "store_handler.c", "python_util.c", "utility.c"]),
-    ext("PdfHandler", ["py_pdf_handler.c", "pdf_handler.c", "clipping.c",
+    ext("memops.c.StoreFile", ["py_store_file.c", "store_file.c", "python_util.c", "utility.c"]),
+    ext("memops.c.StoreHandler", ["py_store_handler.c", "store_handler.c", "python_util.c", "utility.c"]),
+    ext("memops.c.PdfHandler", ["py_pdf_handler.c", "pdf_handler.c", "clipping.c",
                        "python_util.c", "utility.c"]),
-    ext("PsHandler", ["py_ps_handler.c", "ps_handler.c", "clipping.c",
+    ext("memops.c.PsHandler", ["py_ps_handler.c", "ps_handler.c", "clipping.c",
                       "python_util.c", "utility.c"]),
 ]
 

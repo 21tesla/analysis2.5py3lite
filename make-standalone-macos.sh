@@ -75,11 +75,10 @@ chmod -R u+w "$STAGE/runtime"      # uv's pythons are r-x; pip needs to write
 
 # --- 4. install the wheel (+ deps) into the private runtime ----------------------
 echo "==> installing wheel into private runtime"
-uv pip install --python "$STAGE/runtime/bin/python" "$WHEEL" 2>/dev/null \
-  || uv pip install --python "$STAGE/runtime/bin/python" --break-system-packages "$WHEEL"
+PYTHONHOME="$TOP/$STAGE/runtime" "$TOP/$STAGE/runtime/bin/python" -m pip install --force-reinstall "$WHEEL" --break-system-packages
 # sanity: the package must import from INSIDE the staged runtime, full stop
 # (cd / proves independence from the source tree - hence absolute paths)
-(cd / && "$TOP/$STAGE/runtime/bin/python" -c "
+(cd / && PYTHONHOME="$TOP/$STAGE/runtime" "$TOP/$STAGE/runtime/bin/python" -c "
 import ccpnmr.analysis.AnalysisGui as G, ccpnmr.nefCli as N, ccp.gui.Io as Io
 assert G.__file__.startswith('$TOP/$STAGE/runtime')
 assert hasattr(Io, 'loadNefProject')
@@ -95,6 +94,7 @@ cat > "$STAGE/bin/paths.sh" <<'EOF'
 CCPNMR_TOP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit; pwd)"
 export CCPNMR_TOP_DIR
 export CONDA="${CCPNMR_TOP_DIR}"/runtime
+export PYTHONHOME="${CONDA}"
 EOF
 cat > "$STAGE/bin/analysis" <<'EOF'
 #!/usr/bin/env bash
