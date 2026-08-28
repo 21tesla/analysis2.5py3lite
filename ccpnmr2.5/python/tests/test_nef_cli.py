@@ -1,7 +1,8 @@
 """
 Stage-38 app-wiring tests: the ``ccpnmr-nef`` command-line entry point
-(``ccpnmr/nefCli.py``) and the GUI-side wrapper
-``ccp.gui.Io.loadNefProject`` behind the Project menu's "Load NEF..." item.
+(``ccpnmr/nefCli.py``) and the import wrapper
+``ccp.gui.Io.loadNefProject`` (formerly behind the Project menu's
+"Load NEF..." item, which has since been removed).
 
 Covers (bundled testdata, headless, network-independent):
 
@@ -133,7 +134,7 @@ def test_cli_export_missing_project_fails(tmp_path, monkeypatch, capsys):
 
 
 # ---------------------------------------------------------------------------
-# GUI-side wrapper (Project menu "Load NEF...")
+# Import wrapper (formerly the Project menu "Load NEF..." item)
 # ---------------------------------------------------------------------------
 
 def test_gui_loadNefProject_wrapper(tmp_path, monkeypatch):
