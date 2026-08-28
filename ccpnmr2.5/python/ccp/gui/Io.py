@@ -131,16 +131,37 @@ def loadNefProject(parent, path, projectName=None, removeExisting=False):
 
     """Load a NEF (BMRB NMR Enhanced Format, v1.1) file as a new CCPN project.
 
-    Thin GUI-side wrapper over ``ccpnmr.v2io.NefIo.loadProject``: a new
-    project directory is created on disk (in the current directory, named
-    after the NEF file unless ``projectName`` is given) and the resulting
-    project object is returned for ``initProject``.  Raises OSError if the
-    project directory already exists and ``removeExisting`` is False."""
+    Thin GUI-side wrapper over ``ccpnmr.v2io.NefIo``: a new project
+    directory is created on disk (in the current directory, named after the
+    NEF file unless ``projectName`` is given) and the resulting project
+    object is returned for ``initProject``.  Raises OSError if the project
+    directory already exists and ``removeExisting`` is False.
+
+    The new root is handed the GUI's ``Application`` before the import runs.
+    Unlike a project read from disk (model notifies are disabled while
+    reading), the NEF import builds the model live, so any GUI notifier still
+    registered from an earlier project fires as objects are created - and the
+    root only gets its ``application`` in ``Analysis.initProject``, AFTER the
+    import.  Without this, those callbacks (DataSource __init__ ->
+    initSpectrum -> ``spectrum.root.application``) raise AttributeError:
+    'MemopsRoot' object has no attribute 'application' on the fresh root."""
 
     from ccpnmr.v2io import NefIo
+    from memops.general import Io as memopsIo
 
     path = uniIo.normalisePath(path)
     if not projectName:
         projectName = os.path.splitext(os.path.basename(path))[0]
 
-    return NefIo.loadProject(path, projectName=projectName, removeExisting=removeExisting)
+    # Parse first (as NefIo.loadProject does) so an unreadable NEF does not
+    # leave an empty project directory behind.
+    nefReader = NefIo.CcpnNefReader()
+    dataBlock = nefReader.getNefData(path)
+
+    memopsRoot = memopsIo.newProject(projectName, removeExisting=removeExisting)
+    application = getattr(parent, "application", None)
+    if application is not None:
+        memopsRoot.application = application
+    nefReader.importNewProject(memopsRoot, dataBlock)
+    #
+    return memopsRoot

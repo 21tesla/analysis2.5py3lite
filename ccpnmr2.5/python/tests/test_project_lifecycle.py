@@ -123,3 +123,56 @@ class TestProjectLifecycle:
         assert len(freqDims) == 1
         assert freqDims[0].numPoints == 128
 
+
+class TestLoadNefProjectGui:
+    """The GUI "Load NEF..." (ccp.gui.Io.loadNefProject) regression —
+    AttributeError: 'MemopsRoot' object has no attribute 'application'.
+
+    The NEF import builds the model live (model notifies are disabled while
+    reading a project from disk, but not while NefIo constructs it), so a
+    GUI notifier still registered from a previously open project (e.g. the
+    DataSource __init__ -> Analysis.initSpectrum -> Util.setupAnalysisSpectrum
+    chain, which reads ``spectrum.root.application``) fires while DataSources
+    are created.  The fresh root only gets its ``application`` in
+    ``Analysis.initProject`` - AFTER the import.  ``loadNefProject`` must
+    attach the GUI's Application to the root before the import runs.
+    """
+
+    NEF = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "ccpnmr", "nef", "testdata", "CCPN_Commented_Example.nef",
+    )
+
+    def test_root_gets_application_before_notifiers_run(self, tmp_path, monkeypatch):
+        import types
+
+        from memops.general import Implementation as memopsImpl
+        from memops.general.Application import Application
+
+        monkeypatch.chdir(tmp_path)
+        application = Application(name="gui_test")
+        parent = types.SimpleNamespace(application=application)
+
+        seen = []
+
+        def onDataInit(dataSource):
+            # as Analysis.initSpectrum -> Util.setupAnalysisSpectrum does
+            seen.append(dataSource.root.application)
+
+        memopsImpl.registerNotify(onDataInit, "ccp.nmr.Nmr.DataSource", "__init__")
+        try:
+            from ccp.gui import Io as guiIo
+            root = guiIo.loadNefProject(parent, self.NEF, projectName="nefapp")
+        finally:
+            memopsImpl.unregisterNotify(onDataInit, "ccp.nmr.Nmr.DataSource", "__init__")
+
+        assert root.application is application
+        assert seen, "no DataSource __init__ notifier fired during the import"
+        assert all(app is application for app in seen)
+
+    def test_no_application_parent_still_works(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        from ccp.gui import Io as guiIo
+        root = guiIo.loadNefProject(None, self.NEF, projectName="nefapp2")
+        assert not hasattr(root, "application")
+
