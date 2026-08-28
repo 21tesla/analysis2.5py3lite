@@ -467,6 +467,41 @@ def test_native_legacy_project_round_trip(tmp_path):
 # stage 39c: file reference in the NEF -> same-machine auto-relink
 # ---------------------------------------------------------------------------
 
+def _pipeValue(pt):
+    """A distinct per-point value, used to detect misaligned matrix reads."""
+    value = 0.0
+    n = 1
+    for i in pt:
+        value += i * n
+        n *= 64
+    return value
+
+
+def _fillPipeMatrix(path, npts):
+    """Rewrite the matrix region of a NmrPipe file with distinct values.
+
+    Uses the reader's NmrPipe block convention (NmrPipeParams: blocks
+    (npts0, 1, ...), dim 0 fastest), under which the file offset in
+    points of point i is i[0] + i[1]*n[0] + i[2]*n[0]*n[1] + ... - i.e.
+    the file-linear index equals the points-linear index.  An all-zero
+    stub matrix would HIDE a wrong block layout (any offset reads 0), so
+    the values must be distinct to gate the layout."""
+    import struct
+
+    total = 1
+    for x in npts:
+        total *= x
+    with open(path, 'r+b') as f:
+        for lin in range(total):
+            pt = []
+            rest = lin
+            for n in npts:
+                pt.append(rest % n)
+                rest //= n
+            f.seek(2048 + lin * 4)
+            f.write(struct.pack('<f', _pipeValue(pt)))
+
+
 def _spectrumSaveframes(path):
     """{framecode: NmrSaveFrame} of the exported nef_nmr_spectrum frames."""
     imp = NefImporterModule.NefImporter()
@@ -506,6 +541,7 @@ def test_linked_datasource_export_reimport(tmp_path):
     makePipeFile(dataFile, (64, 32, 16),
                  sf=(600.0, 150.0, 100.0), sw=(8000.0, 2000.0, 1200.0),
                  nuc=('1H', '15N', '13C'))
+    _fillPipeMatrix(dataFile, (64, 32, 16))
     report = nefRelink.relinkSpectra(root, str(tmp_path / 'yb-demo'))
     assert [e['name'] for e in report['linked']] == ['cnoesy1']
 
@@ -526,6 +562,13 @@ def test_linked_datasource_export_reimport(tmp_path):
     pts = {row['dimension_id']: (row['point_count'], row['total_point_count'])
            for row in cnoesy['ccpn_spectrum_dimension'].data}
     assert pts == {1: (64, 64), 2: (32, 32), 3: (16, 16)}
+    # and the matrix block layout: without it the importer guesses block
+    # sizes from the grid (determineBlockSizes) and misreads the file -
+    # e.g. the (427, 1)-block NMRpipe files of the sswt project read as
+    # (128, 32) blocks, garbling the displayed spectrum and peak overlay
+    blk = {row['dimension_id']: row['dimension_block_size']
+           for row in cnoesy['ccpn_spectrum_dimension'].data}
+    assert blk == {1: 64, 2: 1, 3: 1}
 
     # the unlinked 15-dim dummy exports exactly as before 39c
     dummy = frames['nef_nmr_spectrum_dummy15d']
@@ -564,6 +607,121 @@ def test_linked_datasource_export_reimport(tmp_path):
                 assert peakDim.value == pytest.approx(
                     valuesBefore[(peak.serial, peakDim.dim)], abs=1e-9)
 
+    # the matrix block layout survived the round trip: reimported layout
+    # == exported column == the file's NMRpipe header convention
+    assert tuple(reDs.dataStore.blockSizes) == (64, 1, 1)
+
+    # and the data is actually read at the TRUE offsets, through the same
+    # C reader the GUI uses, with the reimported model's parameters (a
+    # wrong block layout would return the wrong values here - see
+    # _fillPipeMatrix)
+    from memops.c import BlockFile, MemCache
+
+    reDims = reDs.sortedDataDims()
+    points = [d.numPoints for d in reDims]
+    dimWrapped = [1 if d.numPoints == d.numPointsOrig else 0 for d in reDims]
+    cache = MemCache.MemCache(8 * 1024 * 1024)
+    blockFile = BlockFile.BlockFile(
+        reDs.dataStore.fullPath, len(points), points,
+        list(reDs.dataStore.blockSizes), dimWrapped, cache,
+        reDs.dataStore.nByte, 0, 1, reDs.dataStore.headerSize, 0, 0, 0)
+    blockFile.open()
+    for pt in ([0, 0, 0], [5, 3, 2], [63, 31, 15]):
+        assert blockFile.getPointValue(pt) == pytest.approx(
+            _pipeValue(pt), abs=1e-3)
+
+
+def test_import_block_sizes_from_nmrpipe_header(tmp_path):
+    """Import side of the layout fix: a NEF that carries a file reference
+    but NO dimension_block_size column (files written before the exporter
+    carried it, or by other programs) must still get the dataStore block
+    layout from the NMRpipe header - not the determineBlockSizes grid
+    guess, which misreads (npts0, 1, ...)-block files."""
+    from memops.universal.BlockData import determineBlockSizes
+    from tests.test_nef_relink import makePipeFile
+
+    base = tmp_path / 'yb-x' / 'hsqc'
+    base.mkdir(parents=True)
+    dataFile = str(base / 'x.hsqc.ft3')
+    makePipeFile(dataFile, (64, 32, 16),
+                 sf=(600.0, 150.0, 100.0), sw=(8000.0, 2000.0, 1200.0),
+                 nuc=('1H', '15N', '13C'))
+
+    root = memopsIo.newProject(
+        'blkHdr', path=str(tmp_path / 'proj'), removeExisting=True)
+    reader = NefIo.CcpnNefReader()
+    dataBlock = reader.getNefData(COMMENTED)
+    sf = dataBlock['nef_nmr_spectrum_cnoesy1']
+    sf['ccpn_spectrum_file_path'] = dataFile
+    sf['ccpn_file_type'] = 'NmrPipe'
+    sf['ccpn_file_header_size'] = 2048
+    sf['ccpn_file_byte_number'] = 4
+    sf['ccpn_file_number_type'] = 'float'
+    sf['ccpn_file_is_big_endian'] = False
+    sf['ccpn_file_complex_stored_by'] = 'dimension'
+    with redirect_stdout(StringIO()):
+        reader.importNewProject(root, dataBlock)
+
+    ds3 = None
+    for expt in root.findFirstNmrProject().sortedExperiments():
+        if expt.numDim == 3:
+            ds3 = expt.findFirstDataSource()
+    assert ds3 is not None
+    assert ds3.dataStore is not None
+    assert ds3.dataStore.fullPath == dataFile
+    # the layout came from the file header, not the grid guess
+    guess = determineBlockSizes([d.numPoints for d in ds3.sortedDataDims()])
+    assert tuple(ds3.dataStore.blockSizes) == (64, 1, 1)
+    assert tuple(ds3.dataStore.blockSizes) != tuple(guess)
+
+
+def test_export_block_size_column_is_respected(tmp_path):
+    """Explicit column wins over the header: whatever block layout the
+    source dataStore has is what a plain reimport must end up with (the
+    importer reads the column, it does not second-guess the file)."""
+    from ccpnmr import nefRelink
+    from tests.test_nef_relink import makePipeFile
+
+    root = _load(COMMENTED, tmp_path)
+    ds3 = None
+    for expt in root.findFirstNmrProject().sortedExperiments():
+        if expt.numDim == 3:
+            ds3 = expt.findFirstDataSource()
+    assert ds3 is not None and ds3.dataStore is None
+
+    base = tmp_path / 'yb-cols' / 'noesyn'
+    base.mkdir(parents=True)
+    dataFile = str(base / 'cnoesy1.ft3')
+    makePipeFile(dataFile, (64, 32, 16),
+                 sf=(600.0, 150.0, 100.0), sw=(8000.0, 2000.0, 1200.0),
+                 nuc=('1H', '15N', '13C'))
+    report = nefRelink.relinkSpectra(root, str(tmp_path / 'yb-cols'))
+    assert [e['name'] for e in report['linked']] == ['cnoesy1']
+
+    # a layout different from the header convention, still model-valid:
+    # if the reimported store ends up this way, the NEF column drove it
+    ds3.dataStore.blockSizes = (32, 16, 1)
+    assert tuple(ds3.dataStore.blockSizes) == (32, 16, 1)
+
+    path = _export(root, tmp_path)
+    frames = _spectrumSaveframes(path)
+    cnoesy = frames['nef_nmr_spectrum_cnoesy1']
+    blk = {row['dimension_id']: row['dimension_block_size']
+           for row in cnoesy['ccpn_spectrum_dimension'].data}
+    assert blk == {1: 32, 2: 16, 3: 1}
+
+    reRoot = memopsIo.newProject(
+        'blkCols', path=os.path.join(str(tmp_path), 'reimport'),
+        removeExisting=True)
+    with redirect_stdout(StringIO()):
+        NefIo.loadNefFile(path, memopsRoot=reRoot)
+    reDs = None
+    for expt in reRoot.findFirstNmrProject().sortedExperiments():
+        if expt.numDim == 3:
+            reDs = expt.findFirstDataSource()
+    assert reDs.dataStore is not None
+    assert tuple(reDs.dataStore.blockSizes) == (32, 16, 1)
+
 
 def test_unlinked_export_unchanged(tmp_path):
     """The 39c guard: with no linked DataSources the spectrum frames
@@ -579,3 +737,299 @@ def test_unlinked_export_unchanged(tmp_path):
         for row in sf['nef_spectrum_dimension'].data:
             assert row.get('point_count') is None
             assert row.get('total_point_count') is None
+
+
+# ---------------------------------------------------------------------------
+# post-39: resonance identity (native-legacy nameless resonances)
+# ---------------------------------------------------------------------------
+
+def test_nameless_resonances_export_canonical_atom_names(tmp_path):
+    """Regression ('the Resonance groups have all become None'): in a
+    natively created legacy project ``resonance.name`` is None - the atom
+    identity lives only in the resonanceSet (atomSets of MolSystem atoms).
+    The export must recover the canonical atom_name from those atoms
+    (matching the residue's ResidueMapping, the same mapping the importer
+    keys on) - NOT fall back to the element@serial pin - so a plain
+    reimport reconstructs named, atom-set-linked resonances.  Before the
+    fix every row of such a project exported as 'N@<serial>' and
+    reimported with name=None, resonanceSet=None (GUI label 'N@234[271]'),
+    i.e. all resonance identities lost."""
+    root = _load(COMMENTED, tmp_path)
+    nmr = root.findFirstNmrProject()
+    # simulate the native-legacy state: names wiped, atom-set links kept.
+    # A native project holds exactly ONE nameless resonance per atom group;
+    # the imported forms must keep a spelling that reimports one-for-one:
+    #  - a '%' EXPANSION pair (one row -> two resonances, e.g. 'HE%' + 'He*')
+    #    keeps only the '%' spelling (the writer collapses it to one row,
+    #    the reimport expands it back to the pair);
+    #  - a NONSTEREO '%' pair (two different rows, e.g. 'HDx%' + 'HDy%')
+    #    reimports cleanly as two resonances on the same two atom sets -
+    #    exactly the original round trip - so both keep their names.
+    wiped = []
+    for rg in nmr.resonanceGroups:
+        if rg.residue is None:
+            continue
+        classes = {}
+        for r in rg.resonances:
+            if r.name is None or r.resonanceSet is None:
+                continue
+            atomNames = tuple(sorted({
+                a.name for aS in r.resonanceSet.atomSets for a in aS.atoms}))
+            classes.setdefault((atomNames, r.isotopeCode), []).append(r)
+        for members in classes.values():
+            if len(members) == 1:
+                target = members[0]
+            else:
+                pct = [m for m in members if m.name.endswith('%')]
+                target = pct[0] if len(pct) == 1 else None
+            if target is not None:
+                target.name = None
+                wiped.append(target)
+    assert wiped, 'the Commented import names its placed resonances'
+    # the fix's matcher resolves a canonical name for every one of them
+    canonical = {
+        r.serial: nefExport._resonanceAtomName(r, r.resonanceGroup.residue)
+        for r in wiped
+    }
+    assert all(name is not None for name in canonical.values()), \
+        [w.name for w in wiped if canonical[w.serial] is None]
+    expectedNames = set(canonical.values())
+    c1 = _counts(root)
+
+    path = _export(root, tmp_path)
+
+    # what got written: the wiped resonances carry canonical atom names,
+    # not serial pins - no identity column in the file contains '@'
+    # (the unplaced resonances of this fixture keep their real names too)
+    imp = NefImporterModule.NefImporter()
+    imp.loadFile(path)
+    for sf in imp.data.values():
+        if not isinstance(sf, StarIo.NmrSaveFrame):
+            continue
+        category = sf.get('sf_category')
+        if category == 'nef_chemical_shift_list':
+            for row in sf['nef_chemical_shift'].data:
+                assert row.get('atom_name') is not None, row
+                assert '@' not in row['atom_name'], row
+        elif category == 'nef_nmr_spectrum':
+            loop = sf.get('nef_peak')
+            if loop is None:
+                continue
+            for row in loop.data:
+                for col in loop.columns:
+                    if col.startswith('atom_name_') and row[col] is not None:
+                        assert '@' not in row[col], row
+
+    # plain reimport: identity reconstructed
+    reRoot = memopsIo.newProject(
+        'namelessRe', path=os.path.join(str(tmp_path), 'reimport'),
+        removeExisting=True)
+    log = StringIO()
+    with redirect_stdout(log):
+        NefIo.loadNefFile(path, memopsRoot=reRoot)
+    assert 'Uninterpretable Peak assignment' not in log.getvalue()
+
+    c2 = _counts(reRoot)
+    assert len(c2['shifts']) == len(c1['shifts'])
+    assert _shiftValues(c1) == _shiftValues(c2)
+
+    rePlaced = [r for r in reRoot.findFirstNmrProject().resonances
+                if r.resonanceGroup is not None and r.resonanceGroup.residue is not None]
+    # every placed resonance comes back named (no serial-pinned 'None's)
+    assert rePlaced
+    assert all(r.name is not None for r in rePlaced)
+    assert all('@' not in r.name for r in rePlaced)
+    # every canonical name the export wrote is present on reimport, and
+    # those resonances have their atom-set links again
+    byName = {}
+    for r in rePlaced:
+        byName.setdefault(r.name, []).append(r)
+    missing = expectedNames - set(byName)
+    assert not missing, missing
+    for name in expectedNames:
+        assert all(r.resonanceSet is not None for r in byName[name]), name
+    # the GUI-facing labels are molecule identities, not serial pins
+    for r in rePlaced:
+        assert '@' not in AssignmentBasic.getResonanceName(r)
+
+
+def test_nameless_sibling_pair_distinct_spelling_round_trip(tmp_path):
+    """Regression (live sswt GLY A72/A88): a SIBLING class - several
+    nameless resonances over the SAME atom names (e.g. the two protons of
+    a GLY Halpha CH2, whose ResidueMapping offers nonstereo Hda/Hdb +
+    ambiguous Hda%/Hdb%/Ha* all covering the same set) - must export one
+    DISTINCT, import-resolvable atom_name per sibling.  Writing the
+    shared ambiguous '%' for all of them reimports as a re-expansion of
+    the first row plus a duplicate-identity collision for the second
+    (the model allows one Shift per (list, resonance)) which aborts the
+    whole import with an ApiError from Shift.__init__."""
+    from ccpnmr.analysis.core import MoleculeBasic
+
+    root = _load(COMMENTED, tmp_path)
+    nmr = root.findFirstNmrProject()
+
+    # PURE pick (no model mutation while scanning): find a two-member
+    # placed class - both resonances named, both on the SAME atom names,
+    # both holding a shift - whose residue mapping offers at least two
+    # distinct import-resolvable spellings (nonstereo first, then stereo).
+    # That is exactly the class the native-legacy export of a nameless
+    # sibling pair must spell apart.
+    def _resAtoms(r):
+        return frozenset(
+            a.name for aS in r.resonanceSet.atomSets for a in aS.atoms)
+
+    def _candidateAsms(residue, atoms):
+        rem = getattr(residue, 'residueMapping', None)
+        if rem is None:
+            rem = MoleculeBasic.getResidueMapping(residue, aromaticsEquivalent=True)
+        out = []
+        for asm in rem.atomSetMappings:
+            names = {
+                a.name for aS in asm.atomSets for a in (aS.atoms or ())
+                if getattr(a, 'name', None)}
+            if names == set(atoms):
+                out.append(asm)
+        return out
+
+    picked = None
+    for rg in sorted(list(nmr.resonanceGroups), key=lambda g: (g.serial or 0)):
+        if rg.residue is None:
+            continue
+        classes = {}
+        for r in sorted(list(rg.resonances), key=lambda r: (r.serial or 0)):
+            if r.name is None or r.resonanceSet is None:
+                continue
+            classes.setdefault((_resAtoms(r), r.isotopeCode), []).append(r)
+        for (atoms, iso), members in classes.items():
+            if len(members) != 2:
+                continue
+            if not all(
+                    any(m.resonance is r
+                        for sl in AssignmentBasic.getShiftLists(nmr)
+                        for m in sl.measurements)
+                    for r in members):
+                continue
+            asms = _candidateAsms(rg.residue, atoms)
+            spellings = sorted(
+                (asm for asm in asms
+                 if getattr(asm, 'mappingType', None) in ('nonstereo', 'stereo')),
+                key=lambda asm: (getattr(asm, 'name', '') or ''))
+            if len(spellings) >= 2:
+                picked = (rg, tuple(members), atoms, iso)
+                break
+    assert picked is not None, (
+        'the Commented data must contain a two-member placed class whose '
+        'residue mapping offers two distinct resolvable spellings')
+    rg, (r0, r1), atoms, iso = picked
+
+    # simulate the native-legacy state: both siblings nameless
+    r0.name = None
+    r1.name = None
+    n0 = nefExport._resonanceAtomName(r0, rg.residue)
+    n1 = nefExport._resonanceAtomName(r1, rg.residue)
+    assert n0 is not None and n1 is not None and n0 != n1, (n0, n1)
+
+    c1 = _counts(root)
+    path = _export(root, tmp_path)
+
+    # what got written: the two siblings carry DISTINCT atom names, no '@'
+    imp = NefImporterModule.NefImporter()
+    imp.loadFile(path)
+    elem = nefExport._isotopeToElement(iso)[0]
+    chain, seq, resName, _ = nefExport._resonanceIdentity(r0)
+    pairRows = []
+    for sf in imp.data.values():
+        if not isinstance(sf, StarIo.NmrSaveFrame):
+            continue
+        if sf.get('sf_category') != 'nef_chemical_shift_list':
+            continue
+        for row in sf['nef_chemical_shift'].data:
+            if (row.get('chain_code') == chain and row.get('sequence_code') == seq
+                    and row.get('residue_name') == resName
+                    and row.get('element') == elem):
+                pairRows.append(row)
+    names = [row['atom_name'] for row in pairRows]
+    # one row per sibling, in distinct spellings (the residue's other H
+    # rows - backbone 'H', 'HA', ... - are unrelated classes)
+    assert names.count(n0) == 1 and names.count(n1) == 1, (names, n0, n1)
+    assert all('@' not in name for name in names), names
+
+    # plain reimport (the pre-fix shape aborted the whole import here)
+    reRoot = memopsIo.newProject(
+        'sibPairRe', path=os.path.join(str(tmp_path), 'reimport'),
+        removeExisting=True)
+    log = StringIO()
+    with redirect_stdout(log):
+        NefIo.loadNefFile(path, memopsRoot=reRoot)
+    assert 'Uninterpretable Peak assignment' not in log.getvalue()
+
+    c2 = _counts(reRoot)
+    assert len(c2['shifts']) == len(c1['shifts'])
+    assert _shiftValues(c1) == _shiftValues(c2)
+
+    # both siblings come back named, atom-set linked, and unlabeled '@'
+    reSibs = [
+        r for r in reRoot.findFirstNmrProject().resonances
+        if r.resonanceGroup is not None and r.resonanceGroup.residue is not None
+        and r.resonanceGroup.residue.chain.code == chain
+        and str(r.resonanceGroup.residue.seqCode) == seq
+        and r.isotopeCode == iso
+        and set(_resAtoms(r)) == set(atoms)
+        and r.resonanceSet is not None]
+    assert len(reSibs) == 2, reSibs
+    assert all(r.name is not None and '@' not in r.name for r in reSibs)
+    assert all('@' not in AssignmentBasic.getResonanceName(r) for r in reSibs)
+
+
+def test_import_repeated_identity_shift_row(tmp_path):
+    """Importer robustness: a foreign NEF may list several measurements
+    that resolve to the SAME atom identity in one chemical shift list.
+    The model allows exactly one Shift per (list, resonance), so the
+    repeated row must create a sibling resonance (same atom sets)
+    instead of aborting the whole import from a Shift.__init__ ApiError
+    ('pre-existing object had same key')."""
+    import re as _re
+
+    root = _load(COMMENTED, tmp_path)
+    c1 = _counts(root)
+    path = _export(root, tmp_path)
+    text = open(path).read()
+    lines = text.splitlines(keepends=True)
+
+    frame = next(
+        i for i, l in enumerate(lines)
+        if l.strip().startswith('save_nef_chemical_shift_list'))
+    rowRe = _re.compile(r"^\s+\S+\s+\S+\s+\S+\s+\S+\s+-?[0-9]")
+    j = frame + 1
+    # first data row with its element column set (the common path; col 6)
+    while not rowRe.match(lines[j]) or lines[j].split()[6] == '.':
+        j += 1
+    valueTok = lines[j].split()[4]
+    newValue = '%.6f' % (float(valueTok) + 0.111111)
+    # duplicate the row right below with a different value (same identity)
+    lines.insert(j + 1, lines[j].replace(valueTok, newValue, 1))
+    dupPath = os.path.join(str(tmp_path), 'dup.nef')
+    with open(dupPath, 'w') as fp:
+        fp.writelines(lines)
+
+    # baseline: the UNMODIFIED export reimports without the extra row
+    baseRoot = memopsIo.newProject(
+        'dupRowBase', path=os.path.join(str(tmp_path), 'base'),
+        removeExisting=True)
+    with redirect_stdout(StringIO()):
+        NefIo.loadNefFile(path, memopsRoot=baseRoot)
+    cBase = _counts(baseRoot)
+
+    reRoot = memopsIo.newProject(
+        'dupRowRe', path=os.path.join(str(tmp_path), 'reimport'),
+        removeExisting=True)
+    with redirect_stdout(StringIO()):
+        NefIo.loadNefFile(dupPath, memopsRoot=reRoot)
+
+    c2 = _counts(reRoot)
+    # the repeated measurement came back as one extra resonance + shift
+    assert len(c2['shifts']) == len(cBase['shifts']) + 1
+    assert len(list(reRoot.findFirstNmrProject().resonances)) == \
+        len(list(baseRoot.findFirstNmrProject().resonances)) + 1
+    newValues = set(_shiftValues(c2)) - set(_shiftValues(cBase))
+    assert newValues and all(abs(v - float(newValue)) < 1e-9 for v in newValues), newValues

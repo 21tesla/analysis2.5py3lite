@@ -88,6 +88,139 @@ def _residueName(residue):
     return 'UNK'
 
 
+def _canonicalAtomName(name, mappingType):
+    """NEF-canonical atom_name for a model AtomSetMapping name.
+
+    Byte-for-byte the transform the importer applies when it builds its
+    per-residue atomMappings keys (``NefIo.load_nef_sequence``): pseudoatom
+    ``*`` -> ``%``, upper cased, and nonstereo prochiral endings A/B ->
+    x/y (%%-suffixed first, since they never end in a bare letter).  A
+    row carrying this name resolves to the mapped AtomSetMapping on
+    reimport; the raw model name would not."""
+    atName = name.replace("*", "%").upper()
+    if mappingType == "nonstereo":
+        for tag, val in (("A", "x"), ("B", "y"), ("A%", "x%"), ("B%", "y%")):
+            if atName.endswith(tag):
+                return atName[: -len(tag)] + val
+    return atName
+
+
+def _resonanceAtomNames(resonance):
+    """The set of MolSystem atom names covered by a resonance's Set.
+
+    None when the resonance carries no atom identity (no resonanceSet or
+    no atom names on its sets)."""
+    resonanceSet = getattr(resonance, 'resonanceSet', None)
+    if resonanceSet is None:
+        return None
+    names = set()
+    for atomSet in resonanceSet.atomSets:
+        for atom in atomSet.atoms:
+            atomName = getattr(atom, 'name', None)
+            if atomName:
+                names.add(atomName)
+    return names or None
+
+
+def _resonanceAtomName(resonance, residue):
+    """Recover the NEF-canonical atom_name from a nameless resonance's atoms.
+
+    In a natively created legacy project ``resonance.name`` is None - the
+    atom identity lives only in the resonance's resonanceSet (atomSets of
+    MolSystem atoms).  Matching those atoms against the residue's
+    ResidueMapping atomSetMappings (the same mapping the importer builds
+    and its ``fetchAtomMap`` keys on) yields the model name, which
+    ``_canonicalAtomName`` then converts to the form the importer
+    resolves.  Returns None when the resonance carries no usable atom
+    identity (no resonanceSet, no matching mapping) so the caller can fall
+    back to the element@serial pin."""
+    if residue is None:
+        return None
+    resoAtoms = _resonanceAtomNames(resonance)
+    if not resoAtoms:
+        return None
+    try:
+        residueMapping = getattr(residue, 'residueMapping', None)
+        if residueMapping is None:
+            from ccpnmr.analysis.core import MoleculeBasic
+
+            residueMapping = MoleculeBasic.getResidueMapping(residue, aromaticsEquivalent=True)
+    except Exception:
+        return None
+    candidates = []
+    for atomSetMapping in residueMapping.atomSetMappings:
+        mappedAtoms = set()
+        for atomSet in atomSetMapping.atomSets:
+            for atom in atomSet.atoms:
+                atomName = getattr(atom, 'name', None)
+                if atomName:
+                    mappedAtoms.add(atomName)
+        if mappedAtoms and mappedAtoms == resoAtoms:
+            name = getattr(atomSetMapping, 'name', None)
+            if name:
+                candidates.append(atomSetMapping)
+    if not candidates:
+        return None
+    # one atom group can carry several mappings - e.g. the HE2/HE3 pair
+    # has stereo (He2/He3), nonstereo (Hda/Hdb covering the pair) AND
+    # ambiguous (He*) spellings, all resolving from the same atom names
+    # (the ResidueMapping reuses ONE AtomSet across differently-named
+    # asms, so neither object nor name-set identity can pick one); the
+    # spelling choice must be deterministic AND import-safe, because one
+    # NEF row per DISTINCT atom_name resolves one-for-one, a '%' row over
+    # an ambiguous mapping EXPANDS on reimport (one row -> two resonances,
+    # duplicating the row's shift), and a REPEATED row identity collides
+    # (the second row resolves to the first's resonance, which already
+    # holds a Shift in the list - the model allows one Shift per
+    # (list, resonance)).  Hence:
+    # - a LONE resonance over its group takes the nonstereo spelling
+    #   (reimports one-for-one; writing it '%' would expand into a
+    #   phantom second resonance), else the ambiguous '%' (which recreates
+    #   exactly the pair a single real NEF '%' row carries);
+    # - a SIBLING class (several nameless resonances over the same atom
+    #   names, e.g. the two protons of a GLY Halpha CH2) gets DISTINCT
+    #   import-resolvable spellings, one per sibling - nonstereo first
+    #   (its combined atom sets recreate each sibling's own resonanceSet
+    #   shape), then per-atom stereo; deterministic by resonance serial.
+    #   A group offering no distinct spelling past the shared '%' form is
+    #   left to the element@serial pin (import-safe).
+    def _byName(asm):
+        return (getattr(asm, 'name', '') or '')
+
+    nonstereo = sorted(
+        (asm for asm in candidates if getattr(asm, 'mappingType', None) == 'nonstereo'),
+        key=_byName)
+    stereo = sorted(
+        (asm for asm in candidates if getattr(asm, 'mappingType', None) == 'stereo'),
+        key=_byName)
+    ambiguous = [asm for asm in candidates if getattr(asm, 'mappingType', None) == 'ambiguous']
+
+    siblings = []
+    group = getattr(resonance, 'resonanceGroup', None)
+    for other in (list(getattr(group, 'resonances', None) or [])):
+        if other is resonance:
+            continue
+        if getattr(other, 'isotopeCode', None) != getattr(resonance, 'isotopeCode', None):
+            continue
+        if _resonanceAtomNames(other) == resoAtoms:
+            siblings.append(other)
+
+    if siblings:
+        ordered = sorted([resonance] + siblings, key=lambda r: (r.serial or 0))
+        index = ordered.index(resonance)
+        spellings = nonstereo + stereo
+        if index >= len(spellings):
+            return None
+        atomSetMapping = spellings[index]
+    else:
+        pool = nonstereo or ambiguous or candidates
+        atomSetMapping = sorted(pool, key=_byName)[0]
+    name = getattr(atomSetMapping, 'name', None)
+    if name:
+        return _canonicalAtomName(name, getattr(atomSetMapping, 'mappingType', None))
+    return None
+
+
 def _resonanceIdentity(resonance):
     """Return the NEF identity 4-tuple (chainCode, sequenceCode, residueName, atomName).
 
@@ -105,7 +238,13 @@ def _resonanceIdentity(resonance):
     carry no chain/sequence and the reader drops the assignment on
     reimport.  For a group linked to a residue the standard 3-letter code
     is used (matching the ``nef_sequence`` rows); otherwise the
-    importer-assigned group ``ccpCode`` is kept."""
+    importer-assigned group ``ccpCode`` is kept.
+
+    The atom_name is normally ``resonance.name``.  In a native legacy
+    project that is None, so the name is recovered from the resonance's
+    ``resonanceSet`` atoms matched against the residue's ResidueMapping
+    (``_resonanceAtomName``); only resonances with no usable atom identity
+    at all are exported in the element@serial pin form."""
     rg = getattr(resonance, 'resonanceGroup', None)
     residue = getattr(rg, 'residue', None) if rg is not None else None
     name = getattr(rg, 'name', None) if rg is not None else None
@@ -140,6 +279,8 @@ def _resonanceIdentity(resonance):
     else:
         residueName = None
     atomName = resonance.name
+    if not atomName:
+        atomName = _resonanceAtomName(resonance, residue)
     if not atomName:
         # The importer deliberately names resonances None for the reserved
         # 'element@serial' atom form (e.g. H@237); recreate that form so the
@@ -235,7 +376,7 @@ def _makeMolecularSystem(db, memopsRoot):
     index = 0
     molSystem = memopsRoot.currentMolSystem
     if molSystem is not None:
-        for chain in sorted(molSystem.chains):
+        for chain in sorted(molSystem.chains, key=lambda c: (c.code or '')):
             for residue in chain.sortedResidues():
                 index += 1
                 seqCode = residue.seqCode
@@ -292,7 +433,9 @@ def _makeChemicalShiftList(db, shiftList):
     # canonical upper-case '%' form).  Same-spelling duplicates (two identical
     # rows in the source file) are kept as-is, one row per shift.
     groups = {}
-    for shift in sorted(shiftList.measurements):
+    for shift in sorted(shiftList.measurements,
+                        key=lambda m: ((getattr(m.resonance, 'serial', 0) or 0),
+                                       round(m.value or 0.0, 10))):
         reso = shift.resonance
         element, isotopeNumber = _isotopeToElement(getattr(reso, 'isotopeCode', None))
         row = {
@@ -420,7 +563,8 @@ def _makeRestraintList(db, constraintList):
                 resonances = [_fixedResonance(reso)]
                 limits = _constraintLimits(constraint)
             else:
-                resonances = [_fixedResonance(r) for r in sorted(item.resonances)]
+                resonances = [_fixedResonance(r) for r in
+                              sorted(item.resonances, key=lambda r: (r.serial or 0))]
                 limits = _constraintLimits(constraint)
 
             row = {'index': index, 'restraint_id': constraint.serial}
@@ -515,15 +659,25 @@ def _makeSpectrum(db, nmrProject, experiment, dataSource, shiftListFrameCodes):
             value = getattr(dataStore, attr, None)
             if value is not None:
                 sf[nefKey] = value
-        # the point counts ride on the ccpn extension loop - the
-        # importer reads them from ccpn_spectrum_dimension (NOT from
-        # nef_spectrum_dimension, whose column set it does not extend)
+        # the point counts (and the matrix block layout) ride on the ccpn
+        # extension loop - the importer reads them from
+        # ccpn_spectrum_dimension (NOT from nef_spectrum_dimension, whose
+        # column set it does not extend).  dimension_block_size is load
+        # bearing: without it the importer guesses block sizes from the
+        # grid (determineBlockSizes) and misreads NMRpipe files whose real
+        # layout is (npts_dim1, 1, ...) - e.g. (427, 1) read as (128, 32).
         pcLoop = sf.newLoop('ccpn_spectrum_dimension',
-                            ('dimension_id', 'point_count', 'total_point_count'))
+                            ('dimension_id', 'point_count', 'total_point_count',
+                             'dimension_block_size'))
+        storeBlocks = tuple(getattr(dataStore, 'blockSizes', None) or ())
         for dataDim in sorted(dataSource.dataDims, key=lambda x: x.dim):
-            pcLoop.newRow({'dimension_id': dataDim.dim,
-                           'point_count': dataDim.numPoints,
-                           'total_point_count': dataDim.numPointsOrig})
+            row = {'dimension_id': dataDim.dim,
+                   'point_count': dataDim.numPoints,
+                   'total_point_count': dataDim.numPointsOrig}
+            ii = dataDim.dim - 1
+            if 0 <= ii < len(storeBlocks):
+                row['dimension_block_size'] = int(storeBlocks[ii])
+            pcLoop.newRow(row)
 
     # ---------------------------------------------------------------- transfer
     transferColumnSet = ('dimension_1', 'dimension_2', 'transfer_type', 'is_indirect')

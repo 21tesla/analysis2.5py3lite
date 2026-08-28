@@ -478,7 +478,25 @@ class CcpnNefReader:
                     isotopeCode = None
 
                 atomMap = self.fetchAtomMap(row["chain_code"], row["sequence_code"], name, isotopeCode=isotopeCode)
-                for resonance in atomMap["resonances"]:
+                resonances = list(atomMap["resonances"])
+                shifted = {shiftObj.resonance for shiftObj in shiftList.measurements}
+                targets = [rez for rez in resonances if rez not in shifted]
+                if not targets:
+                    # The row repeats an identity whose resonances all
+                    # already carry a Shift in this list (a real NEF file
+                    # may hold several measurements that resolve to the
+                    # same atom); one Shift per (list, resonance) is all
+                    # the model allows, so the measurement becomes a new
+                    # sibling resonance on the same atom sets.
+                    if isotopeCode is None:
+                        # mirror fetchAtomMap's own fallback for rows
+                        # without element/isotope columns
+                        isotopeCode = commonUtil.name2IsotopeCode(name) or "unknown"
+                    residueMap = self.fetchResidueMap(row["chain_code"], row["sequence_code"])
+                    targets = [self._makeResonanceForAtomMap(
+                        atomMap, residueMap, name, isotopeCode, row.get("ccpn_comment"),
+                        row.get("ccpn_serial"), expand=False)]
+                for resonance in targets:
                     # There will be more than one resonance for e.g. Ser HB% or Leu HD%
                     shiftList.newShift(
                         resonance=resonance,
@@ -1035,10 +1053,24 @@ class CcpnNefReader:
                 dataLocationStore = memopsRoot.findFirstDataLocationStore()
                 if not dataLocationStore:
                     dataLocationStore = memopsRoot.newDataLocationStore(name="default")
+                numPoints = [x.numPoints for x in dataSource.sortedDataDims()]
+                # The matrix layout (blockSizes) is not derivable from the
+                # grid alone.  NEFs without the dimension_block_size column
+                # (files written before the exporter carried it, or by other
+                # programs) would fall back to createBlockedMatrix'
+                # determineBlockSizes guess - e.g. (128, 32) for a
+                # (427, 1)-block NMRpipe file - and every data point would
+                # be read at the wrong offset.  NMRpipe headers carry the
+                # layout convention (see NmrPipeParams); read it so the
+                # matrix is usable straight after a plain "Load NEF".
+                if "blockSizes" not in dataStoreParams:
+                    blockSizes = _nmrPipeHeaderBlockSizes(filePath, len(numPoints))
+                    if blockSizes is not None:
+                        dataStoreParams["blockSizes"] = blockSizes
                 addDataStore(
                     dataSource,
                     filePath,
-                    numPoints=[x.numPoints for x in dataSource.sortedDataDims()],
+                    numPoints=numPoints,
                     **dataStoreParams,
                 )
 
@@ -1437,39 +1469,60 @@ class CcpnNefReader:
 
         if atomMap.get("resonances") is None:
             # Make resonance
-            resonanceGroup = residueMap["resonanceGroup"]
-            resonance = self.memopsRoot.currentNmrProject.newResonance(
-                name=nameForSetting, isotopeCode=isotopeCode, resonanceGroup=resonanceGroup, details=comment
+            self._makeResonanceForAtomMap(
+                atomMap, residueMap, nameForSetting, isotopeCode, comment, serial
             )
-            if serial:
-                try:
-                    commonUtil.resetSerial(resonance, serial)
-                except Exception as es:
-                    print(str(es))
-
-            atomMap["resonances"] = [resonance]
-
-            atomSets = atomMap.get("atomSets")
-            if atomSets:
-                resonanceSet = AssignmentBasic.assignAtomsToRes(atomSets, resonance)
-                asm = atomMap["atomSetMapping"]
-                # assert asm is not None  # This is set together with the atomSets
-                if name[-1] == "%":
-                    if asm.mappingType == "ambiguous":
-                        # This is e.g. Lys HG%, Val CG% or Ley HG% - we need two resonances here
-                        resonance2 = self.memopsRoot.currentNmrProject.newResonance(
-                            name=atomMap["name"],
-                            isotopeCode=isotopeCode,
-                            resonanceGroup=resonanceGroup,
-                            details=comment,
-                        )
-                        atomMap["resonances"].append(resonance2)
-                        AssignmentBasic.assignAtomsToRes(atomSets, resonance2, resonanceSet)
-                        # AssignmentBasic.assignAtomsToRes(atomSets, resonance2)
-            else:
-                resonance.assignNames = [atomMap["name"]]
         #
         return atomMap
+
+    def _makeResonanceForAtomMap(self, atomMap, residueMap, name, isotopeCode=None,
+                                 comment=None, serial=None, expand=True):
+        """Create one resonance attached to atomMap (and, for the FIRST
+        '%' row over an ambiguous mapping, its second expansion
+        resonance as well) and append it to atomMap["resonances"].
+
+        Called by fetchAtomMap for the first row with a given atom name
+        (expand=True: a '%' name over an ambiguous mapping, e.g. Lys
+        HG%, carries two resonances in the original file).  It is also
+        called directly by load_nef_chemical_shift_list for a row that
+        REPEATS an identity whose resonances all already hold a Shift in
+        the list - one Shift per (list, resonance) is all the model
+        allows, so the repeated measurement becomes a new sibling
+        resonance on the same atom sets (expand=False: no '%' re-expansion).
+        """
+        resonanceGroup = residueMap["resonanceGroup"]
+        resonance = self.memopsRoot.currentNmrProject.newResonance(
+            name=name, isotopeCode=isotopeCode, resonanceGroup=resonanceGroup, details=comment
+        )
+        if serial:
+            try:
+                commonUtil.resetSerial(resonance, serial)
+            except Exception as es:
+                print(str(es))
+
+        if atomMap.get("resonances") is None:
+            atomMap["resonances"] = []
+        atomMap["resonances"].append(resonance)
+
+        atomSets = atomMap.get("atomSets")
+        if atomSets:
+            resonanceSet = AssignmentBasic.assignAtomsToRes(atomSets, resonance)
+            asm = atomMap["atomSetMapping"]
+            # assert asm is not None  # This is set together with the atomSets
+            if expand and name[-1] == "%":
+                if asm.mappingType == "ambiguous":
+                    # This is e.g. Lys HG%, Val CG% or Ley HG% - we need two resonances here
+                    resonance2 = self.memopsRoot.currentNmrProject.newResonance(
+                        name=atomMap["name"],
+                        isotopeCode=isotopeCode,
+                        resonanceGroup=resonanceGroup,
+                        details=comment,
+                    )
+                    atomMap["resonances"].append(resonance2)
+                    AssignmentBasic.assignAtomsToRes(atomSets, resonance2, resonanceSet)
+        else:
+            resonance.assignNames = [atomMap["name"]]
+        return resonance
 
     def fetchResidueMap(self, chainCode, sequenceCode, residueType=None, linkToMap=None, serial=None):
         """Return _chainMapping entry (if necessary)"""
@@ -1953,6 +2006,28 @@ def extendMolResidues(molecule, sequence, startNumber=1, isCyclic=False):
 
     #
     return result
+
+
+def _nmrPipeHeaderBlockSizes(filePath, numDim):
+    """Per-dimension block sizes of ``filePath`` from its NMRpipe header,
+    or None when the file is absent, does not parse as NMRpipe, or has a
+    different dimension count (the caller then keeps the legacy behaviour
+    and createBlockedMatrix determines block sizes from the grid).
+
+    NmrPipeParams is the codebase's single NMRpipe parser (it also backs
+    ccpnmr.nefRelink) and its block layout is the convention the C data
+    readers use for these files."""
+    if not filePath or not os.path.isfile(filePath):
+        return None
+    try:
+        from ccp.format.spectra.params import NmrPipeParams
+
+        params = NmrPipeParams.NmrPipeParams(filePath)
+    except Exception:
+        return None
+    if params.ndim != numDim:
+        return None
+    return [int(params.block[i]) for i in range(numDim)]
 
 
 def addDataStore(dataSource, spectrumPath, **params):
