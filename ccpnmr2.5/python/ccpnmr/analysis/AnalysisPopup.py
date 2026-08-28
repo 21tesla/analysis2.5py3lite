@@ -1778,7 +1778,7 @@ class AnalysisPopup(BasePopup, Analysis):
             self.menus[name].entryconfig(index, state=state)
 
     def newProject(self, name=""):
-        print(f"DEBUG: AnalysisPopup.newProject called with name='{name}'")
+        # print(f"DEBUG: AnalysisPopup.newProject called with name='{name}'")
 
         def validName(name):
             if len(name) > 32:
@@ -1791,32 +1791,32 @@ class AnalysisPopup(BasePopup, Analysis):
             return True
 
         if self.project:
-            print("DEBUG: AnalysisPopup.newProject closing existing project...")
+            # print("DEBUG: AnalysisPopup.newProject closing existing project...")
             if not self.closeProject():
-                print("DEBUG: AnalysisPopup.newProject closeProject returned False. Aborting.")
+                # print("DEBUG: AnalysisPopup.newProject closeProject returned False. Aborting.")
                 return
-            print("DEBUG: AnalysisPopup.newProject existing project closed.")
+            # print("DEBUG: AnalysisPopup.newProject existing project closed.")
 
         prompt = "Enter project name:"
         while not name:
-            print(f"DEBUG: AnalysisPopup.newProject calling askString(title='Project : New', prompt='{prompt}')")
+            # print(f"DEBUG: AnalysisPopup.newProject calling askString(title='Project : New', prompt='{prompt}')")
             name = askString(title="Project : New", prompt=prompt, parent=self)
-            print(f"DEBUG: AnalysisPopup.newProject askString returned: {name}")
+            # print(f"DEBUG: AnalysisPopup.newProject askString returned: {name}")
 
             if name is None:
-                print("DEBUG: AnalysisPopup.newProject user cancelled. Breaking loop.")
+                # print("DEBUG: AnalysisPopup.newProject user cancelled. Breaking loop.")
                 break
 
             elif not validName(name):
-                print(f"DEBUG: AnalysisPopup.newProject invalid name '{name}'. Looping again.")
+                # print(f"DEBUG: AnalysisPopup.newProject invalid name '{name}'. Looping again.")
                 name = ""
                 prompt = 'Name invalid.\nEnter project name\n(between 1 and 32 chars; alphanumeric and "_" only):'
 
         if name:
-            print(f"DEBUG: AnalysisPopup.newProject proceeding with valid name '{name}'")
+            # print(f"DEBUG: AnalysisPopup.newProject proceeding with valid name '{name}'")
             project = Impl.MemopsRoot(name=name)
             self.initProject(project)
-            print("DEBUG: AnalysisPopup.newProject initProject complete.")
+            # print("DEBUG: AnalysisPopup.newProject initProject complete.")
 
     def openPopup(self, popup_name, clazz, oldStyle=False, *args, **kw):
 

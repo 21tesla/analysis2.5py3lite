@@ -6,7 +6,7 @@ import sys
 def LOG(msg):
     with open('/tmp/ccpn_modal_debug.log', 'a') as f:
         f.write(f"[{time.time():.3f}] {msg}\n")
-    print(f"DEBUG: {msg}")
+    # print(f"DEBUG: {msg}")
     sys.stdout.flush()
 
 from memops.gui.Base import Base
