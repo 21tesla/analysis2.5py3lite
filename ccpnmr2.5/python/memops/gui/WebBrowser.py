@@ -94,10 +94,16 @@ class WebBrowser:
 
     def openHtml(self, htmlString):
 
-        tmpfile = tempfile.NamedTemporaryFile()
+        # text mode (a str write to the default 'wb' file is a py3 TypeError)
+        # and delete=False: open() hands the path to a browser that reads it
+        # AFTER close, so the file must still be at that path.
+        tmpfile = tempfile.NamedTemporaryFile("w", delete=False)
         tmpfile.write(htmlString)
         tmpfile.flush()
-        self.open("file://%s" % tmpfile.name)
+        try:
+            self.open("file://%s" % tmpfile.name)
+        finally:
+            tmpfile.close()
 
 
 class WebBrowserPulldown(PulldownList):
