@@ -144,9 +144,12 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/clipping.c"]
 if DARWIN:
     # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
+    # Homebrew's tcl-tk 9.x ships the combined tcl9tk9.0 + tcl9.0 libraries.
     DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
 else:
-    DRAWLIBS = ["GL", "glut", "tcl9tk9.0", "tcl9.0", "m"]
+    # Distro Linux ships Tk/Tcl 8.6 (libtk8.6.so / libtcl8.6.so) - the
+    # versioned link names must match what the system ld can resolve.
+    DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
 DRAWINC_EXTRA = [TKINC] + GLX_INC
 
 # ------------------------------------------------------------------ family defs
