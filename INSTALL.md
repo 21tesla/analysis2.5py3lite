@@ -60,17 +60,49 @@ To see the help menu, run:
 
 ---
 
+# Installing and Running CCPNMR Analysis 2.5.2 (Portable Linux x86_64)
+
+The Linux standalone distribution is self-contained in the same way: an
+embedded private CPython 3.13 runtime, the compiled C extensions, and all
+dependencies. No system Python and no `pip` are involved at run time.
+
+1. Unpack the standalone archive (e.g. `ccpnmr-2.5.2-linux-x86_64-standalone.tar.gz`):
+   ```bash
+   tar -xzf ccpnmr-2.5.2-linux-x86_64-standalone.tar.gz
+   cd ccpnmr-2.5.2-linux-x86_64-standalone
+   ```
+2. Run it (optionally pointing at an existing project directory):
+   ```bash
+   ./bin/analysis                 # or: ./bin/analysis /path/to/project
+   ```
+3. Non-GUI utilities (NEF import/export):
+   ```bash
+   ./runtime/bin/ccpnmr-nef import file.nef [--project-name NAME] [--force]
+   ./runtime/bin/ccpnmr-nef export <project-directory> <output.nef>
+   ```
+
+Host requirements: a Linux x86_64 desktop with the usual X11 graphics
+libraries (`libX11`, `libGL`) — nothing else is read from or written to
+the system. The tree is relocatable: move it anywhere after unpacking.
+
+> The standalone tree is produced by `./make-standalone-linux.sh` in the
+> source repository (it rebuilds the wheel and packs it with the private
+> runtime into `dist/`).
+
+---
+
 ## NEF Project Files
 
 CCPNMR Analysis reads and writes **NEF v1.1** (BMRB *Nmr_Exchange_Format*)
 project files — metadata, molecules, chemical shifts, restraints and peak lists
 (never raw spectrum matrix data):
 
-* **GUI:** *Project → Load NEF…* creates a new CCPN project from a `.nef` file;
-  *Project → Export NEF…* writes the current project to a `.nef` file.
-* **Command line** (source / virtualenv installs, where the `ccpnmr-nef`
-  console command is available):
+* **GUI:** *Project → Export NEF…* writes the current project to a `.nef`
+  file (NEF is metadata + model, never raw spectrum matrix data — import is
+  command-line only).
+* **Command line** (standalone: `./runtime/bin/ccpnmr-nef`; source /
+  virtualenv installs: the `ccpnmr-nef` console command):
   ```bash
-  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force]
+  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force] [--relink [DIR]]
   ccpnmr-nef export <project-directory> <output.nef>
   ```
