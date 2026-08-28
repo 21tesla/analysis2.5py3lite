@@ -28,6 +28,7 @@ class TestWebBrowserOpenHtml:
         path = url[len("file://"):]
         try:
             assert os.path.exists(path)  # delete=False: browser reads it after close
+            assert path.endswith(".html")  # browsers sniff the type from the extension
             with open(path) as f:
                 assert f.read() == html
         finally:

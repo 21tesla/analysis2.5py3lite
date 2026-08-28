@@ -96,8 +96,9 @@ class WebBrowser:
 
         # text mode (a str write to the default 'wb' file is a py3 TypeError)
         # and delete=False: open() hands the path to a browser that reads it
-        # AFTER close, so the file must still be at that path.
-        tmpfile = tempfile.NamedTemporaryFile("w", delete=False)
+        # AFTER close, so the file must still be at that path.  suffix=".html"
+        # because browsers infer the content type from the extension.
+        tmpfile = tempfile.NamedTemporaryFile("w", suffix=".html", delete=False)
         tmpfile.write(htmlString)
         tmpfile.flush()
         try:
