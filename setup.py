@@ -1,4 +1,4 @@
-"""Build script for CCPNMR C extensions (Python 3.13).
+"""Build script for CCPNMR C extensions (Python 3.14).
 
 Two families of C extension modules live in this tree:
 
@@ -46,9 +46,11 @@ def _venv_base_prefix():
 
 
 def _tkinc():
-    """Find a dir containing tk.h, in preference order: $CCP_TK_PREFIX/include,
-    the conda-style <prefix>/include of the running (or venv BASE) interpreter
-    (conda envs ship tk.h there), Homebrew tcl-tk, then the raw interpreter
+    """Find a dir containing tk.h, in preference order: the $CCP_TK_PREFIX
+    include dir (Homebrew tcl-tk 9 in the standalone flow; both the
+    <prefix>/include/tcl-tk and conda/classic <prefix>/include layouts are
+    accepted), the conda-style <prefix>/include of the running (or venv BASE)
+    interpreter, then Homebrew tcl-tk, and finally the raw interpreter
     include dir as last resort."""
     cands = []
     if os.environ.get("CCP_TK_PREFIX"):
@@ -89,14 +91,14 @@ if DARWIN:
     GLX_DEFINE = (("IGNORE_GL", "1"),)
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
-    # Library search paths (must be -L library_dirs, emitted BEFORE the -ltk8.6
-    # etc. references — macOS ld resolves -l left-to-right).  FIRST the build
-    # python's own lib dir: in the standalone flow that IS the private runtime
-    # (uv-managed CPython 3.13, which bundles its Tcl/Tk 8.6 dylibs) — linking
-    # those exact dylibs records the same install names _tkinter uses, so the
-    # process ends up with exactly ONE copy of Tk at runtime.  The prefix
-    # that supplied tk.h (conda env / $CCP_TK_PREFIX) is the fallback; X11 in
-    # XQuartz.
+    # Library search paths (must be -L library_dirs, emitted BEFORE the
+    # -ltcl9tk9.0 etc. references — macOS ld resolves -l left-to-right).
+    # FIRST the build python's own lib dir: in the standalone flow that IS
+    # the private runtime (uv-managed CPython 3.14, which bundles its Tcl/Tk
+    # 9 dylibs) — linking those exact dylibs records the same install names
+    # _tkinter uses, so the process ends up with exactly ONE copy of Tk at
+    # runtime.  The prefix that supplied tk.h (Homebrew tcl-tk /
+    # $CCP_TK_PREFIX) is the fallback; X11 in XQuartz.
     if TKINC.endswith("/include/tcl-tk"):
         _tk_base = TKINC[:-15]
     elif TKINC.endswith("/include"):
@@ -155,15 +157,18 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/clipping.c"]
 if DARWIN:
     # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
-    # Tcl/Tk 8.6, NOT 9: the private runtime (uv-managed CPython 3.13 — the
-    # same install `uv build` runs under in make-standalone-macos.sh) bundles
-    # its Tcl/Tk 8.6 dylibs and its _tkinter loads them.  Linking Tk 9 while
-    # _tkinter loads 8.6 puts TWO Tk copies in one process, and the canvas-XOR
-    # crosshair then ghosts over the spectrum.  -ltk8.6/-ltcl8.6 resolve to
-    # the runtime's own dylibs (sys.base_prefix/lib is first in GLX_LIBDIRS);
-    # a conda env with tcl-tk 8 (e.g. "analysis") supplies ONLY the headers
-    # (tk.h/tcl.h) via CCP_TK_PREFIX.
-    DRAWLIBS = ["tk8.6", "tcl8.6", "m"]
+    # Tcl/Tk 9: the private runtime (uv-managed CPython 3.14 — the same
+    # install `uv build` runs under in make-standalone-macos.sh) bundles its
+    # Tcl/Tk 9 dylibs (lib/libtcl9.0.dylib + lib/libtcl9tk9.0.dylib — on
+    # macOS Tk lives in the combined tcl9tk dylib, there is no separate
+    # libtk9.0) and its _tkinter loads exactly those.  The C extensions must
+    # link the SAME pair, or the process runs TWO Tk copies and the canvas-
+    # XOR crosshair ghosts over the spectrum.  -ltcl9tk9.0/-ltcl9.0 resolve
+    # to the runtime's own dylibs (sys.base_prefix/lib is first in
+    # GLX_LIBDIRS); Homebrew tcl-tk 9 (brew install tcl-tk) supplies ONLY the
+    # headers (tk.h/tcl.h) via CCP_TK_PREFIX.  Same lib pair as the Linux
+    # branch below.
+    DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
 else:
     # Linux Tcl/Tk 9 migration (2026-08-28): /usr/local carries a from-source
     # 9.0 install.  libtcl9tk9.0.so exports ONLY the Tk_* symbols and

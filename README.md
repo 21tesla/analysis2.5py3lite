@@ -1,8 +1,8 @@
 # Installing and Running CCPNMR Analysis 2.5.2 (Portable macOS)
 
-This guide explains how to install and run the portable, self-contained standalone distribution of CCPNMR Analysis 2.5.2 on macOS (modernized for Python 3.13).
+This guide explains how to install and run the portable, self-contained standalone distribution of CCPNMR Analysis 2.5.2 on macOS (modernized for Python 3.14).
 
-The standalone archive is fully self-contained. It embeds its own private Python 3.13 runtime, compiled C/Cython extension libraries, and all required scientific and graphical dependencies. **No developer tools, Xcode, or system python configurations are needed.**
+The standalone archive is fully self-contained. It embeds its own private Python 3.14 runtime, compiled C/Cython extension libraries, and all required scientific and graphical dependencies. **No developer tools, Xcode, or system python configurations are needed.**
 
 ---
 
@@ -63,7 +63,7 @@ To see the help menu, run:
 # Installing and Running CCPNMR Analysis 2.5.2 (Portable Linux x86_64)
 
 The Linux standalone distribution is self-contained in the same way: an
-embedded private CPython 3.13 runtime, the compiled C extensions, and all
+embedded private CPython 3.14 runtime, the compiled C extensions, and all
 dependencies. No system Python and no `pip` are involved at run time.
 
 1. Unpack the standalone archive (e.g. `ccpnmr-2.5.2-linux-x86_64-standalone.tar.gz`):

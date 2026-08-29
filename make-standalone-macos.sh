@@ -4,7 +4,7 @@
 #   dist/ccpnmr-<ver>-macos-<arch>-standalone.tar.gz
 #
 # A fresh user unpacks the tarball and runs ./bin/analysis - no system python,
-# no pip, no venv: the tree embeds a private CPython 3.13 runtime (uv-managed
+# no pip, no venv: the tree embeds a private CPython 3.14 runtime (uv-managed
 # python-build-standalone, relocatable) with the ccpnmr wheel (dependencies
 # included) installed into its own site-packages.  Same model as the Linux
 # standalone (make-standalone-linux.sh) and the portable macOS distribution
@@ -18,12 +18,12 @@
 # Prerequisites on the build Mac:
 #   - uv            (curl -LsSf https://astral.sh/uv/install.sh | sh)
 #   - C compiler    (Xcode Command Line Tools: xcode-select --install)
-#   - Tcl/Tk 8 headers for the C extensions (section 1b): a conda env at
-#     <conda>/envs/analysis (`conda create -n analysis python=3.13 tcl-tk=8`),
-#     auto-detected - or set CCP_TK_PREFIX to any prefix with
-#     include/tcl-tk/tk.h (Tcl/Tk 8).  The C extensions LINK the private
-#     runtime's OWN bundled Tcl/Tk 8.6 dylibs (not the conda env's), so a
-#     fresh user's mac needs neither conda nor tcl-tk - XQuartz only.
+#   - Tcl/Tk 9 headers for the C extensions (section 1b): Homebrew
+#     `brew install tcl-tk` (auto-detected at /opt/homebrew/opt/tcl-tk or
+#     /usr/local/opt/tcl-tk) - or set CCP_TK_PREFIX to any prefix with
+#     include/tcl-tk/tk.h (Tcl/Tk 9).  The C extensions LINK the private
+#     runtime's OWN bundled Tcl/Tk 9 dylibs (not the prefix's), so a fresh
+#     user's mac needs no tcl-tk at all - XQuartz only.
 #
 # Usage:  ./make-standalone-macos.sh
 set -euo pipefail
@@ -45,7 +45,7 @@ VER="$(awk -F'"' '/^version/{print $2; exit}' pyproject.toml)"
 ARCH="$(uname -m)"                    # arm64 (Apple Silicon) or x86_64 (Intel)
 NAME="ccpnmr-${VER}-macos-${ARCH}-standalone"
 STAGE="dist/${NAME}"
-PYTAG="3.13"                          # must match the wheel's cp313 tags
+PYTAG="3.14"                          # must match the wheel's cp314 tags
 
 echo "==> standalone dist: ${NAME} (built on $(sw_vers -productVersion 2>/dev/null || echo 'macOS'))"
 
@@ -58,51 +58,65 @@ if [ -z "$UVPY" ]; then
   uv python install "$PYTAG"
   UVPY="$(uv python find "$PYTAG" --system --python-preference only-managed)"
 fi
-UVHOME="$(cd "$(dirname "$UVPY")/.." && pwd)"
+# pwd -P, NOT plain pwd: uv keeps a version-prefixed SYMLINK
+# (cpython-3.14-macos-aarch64-none -> cpython-3.14.7-macos-aarch64-none) and
+# `uv python find` returns it.  cp -a preserves symlinks, so staging through
+# the link would make dist/runtime a link into the build machine's uv prefix
+# (pip would pollute that prefix, and the tarball would ship a dangling
+# one-line entry).  Always stage the physical prefix.
+UVHOME="$(cd "$(dirname "$UVPY")/.." && pwd -P)"
 echo "==> runtime: $UVHOME"
 "$UVPY" -c "import _tkinter" || { echo "error: managed python lacks _tkinter - abort"; exit 1; }
 
-# --- 1b. Tcl/Tk 8 headers for the C extensions --------------------------------
+# --- 1b. Tcl/Tk 9 headers for the C extensions --------------------------------
 # The C draw extensions must link the SAME Tcl/Tk the runtime _tkinter loads -
-# that is this uv-managed CPython's bundled Tcl/Tk 8.6 dylibs ($UVHOME/lib,
+# that is this uv-managed CPython's bundled Tcl/Tk 9 dylibs ($UVHOME/lib,
 # which becomes the staged runtime's lib; setup.py puts sys.base_prefix/lib
-# first in the linker search, so -ltk8.6/-ltcl8.6 pick those exact dylibs and
-# the install names recorded in the .so match _tkinter's: ONE Tk copy per
-# process).  A second Tk (Homebrew's tcl9, or the conda env's own dylibs)
-# makes the canvas-XOR crosshair ghost over the spectrum.  python-build-
-# standalone ships NO tcl/tk headers, so take them from a Tcl/Tk 8 prefix:
-# the conda 'analysis' env (auto-detect) or $CCP_TK_PREFIX.  The conda python
-# itself is not used for the build.
+# first in the linker search, so -ltcl9tk9.0/-ltcl9.0 pick those exact dylibs
+# and the install names recorded in the .so match _tkinter's: ONE Tk copy per
+# process).  A second Tk (e.g. the header prefix's own dylibs leaking into an
+# ld path) makes the canvas-XOR crosshair ghost over the spectrum.  python-
+# build-standalone ships NO tcl/tk headers, so take them from Homebrew's
+# tcl-tk 9 (`brew install tcl-tk`, auto-detected) or $CCP_TK_PREFIX.  The
+# header prefix's own dylibs are never linked - Homebrew's tcl-tk is a pure
+# header source for the build.
+has_tk_headers() {
+  [ -f "$1/include/tcl-tk/tk.h" ] || [ -f "$1/include/tk.h" ]
+}
+# Marker that the prefix's Tcl/Tk is v9, what the runtime links (avoids
+# picking a v8 prefix whose headers would not match the 9.0 dylibs).  One
+# glob: ls exits non-zero if the pattern matches nothing.
+has_tk9_libs() {
+  ls "$1"/lib/libtcl9* >/dev/null 2>&1
+}
 if [ -z "${CCP_TK_PREFIX:-}" ]; then
-  for c in "$HOME/miniconda3/envs/analysis" "$HOME/anaconda3/envs/analysis" \
-           "$HOME/miniforge3/envs/analysis" /opt/miniconda3/envs/analysis \
-           /opt/anaconda3/envs/analysis; do
-    if [ -f "$c/include/tcl-tk/tk.h" ]; then
+  for c in /opt/homebrew/opt/tcl-tk /usr/local/opt/tcl-tk; do
+    if has_tk_headers "$c" && has_tk9_libs "$c"; then
       CCP_TK_PREFIX="$c"
       break
     fi
   done
 fi
 if [ -z "${CCP_TK_PREFIX:-}" ]; then
-  echo "error: no Tcl/Tk 8 header prefix found (needed for the C extensions)."
-  echo "  create the conda env (used for its headers only):"
-  echo "    conda create -n analysis python=3.13 tcl-tk=8"
-  echo "  or point CCP_TK_PREFIX at any prefix with include/tcl-tk/tk.h (Tcl/Tk 8)."
+  echo "error: no Tcl/Tk 9 header prefix found (needed for the C extensions)."
+  echo "  install it with Homebrew (used for its headers only):"
+  echo "    brew install tcl-tk"
+  echo "  or point CCP_TK_PREFIX at any prefix with include/tcl-tk/tk.h or include/tk.h (Tcl/Tk 9)."
   exit 1
 fi
-[ -f "$CCP_TK_PREFIX/include/tcl-tk/tk.h" ] || { echo "error: $CCP_TK_PREFIX has no include/tcl-tk/tk.h"; exit 1; }
+has_tk_headers "$CCP_TK_PREFIX" || { echo "error: $CCP_TK_PREFIX has neither include/tcl-tk/tk.h nor include/tk.h"; exit 1; }
 echo "==> Tcl/Tk headers: $CCP_TK_PREFIX (dylibs: the runtime python's own)"
 export CCP_TK_PREFIX
 
 # --- 2. fresh wheel, compiled for THIS mac --------------------------------------
-# --python pins the build interpreter to the managed 3.13: a newer Homebrew
+# --python pins the build interpreter to the managed 3.14: a newer Homebrew
 # python on the mac would otherwise yield cp3xx extensions the private runtime
-# (3.13) can't load.  This is the slow step (30 C extensions).
+# (3.14) can't load.  This is the slow step (30 C extensions).
 echo "==> building wheel (compiles the C extensions for macos/${ARCH})"
 uv build --wheel --python "$UVPY"
 # setuptools platform tags vary (macosx_11_0_arm64 vs macosx_10_9_x86_64)
-WHEEL="$(ls dist/ccpnmr-${VER}-cp313-*.whl 2>/dev/null | grep 'macosx' | head -n1 || true)"
-[ -n "$WHEEL" ] && [ -f "$WHEEL" ] || { echo "error: no macos wheel found in dist/ (expected ccpnmr-${VER}-cp313-*-macosx*.whl)"; exit 1; }
+WHEEL="$(ls dist/ccpnmr-${VER}-cp314-*.whl 2>/dev/null | grep 'macosx' | head -n1 || true)"
+[ -n "$WHEEL" ] && [ -f "$WHEEL" ] || { echo "error: no macos wheel found in dist/ (expected ccpnmr-${VER}-cp314-*-macosx*.whl)"; exit 1; }
 echo "==> wheel: $WHEEL"
 
 # --- 3. stage the tree -----------------------------------------------------------
@@ -124,16 +138,16 @@ print('runtime import OK:', G.__file__)")
 
 # --- 4b. one-Tk-per-process audit ----------------------------------------------
 # Proves 1b held: every tcl/tk reference in the installed C extensions must
-# resolve to the runtime's own Tcl/Tk 8.6 copy.  @rpath-family names resolve
-# through the python binary's rpath to runtime/lib.  Any OTHER tcl/tk
-# (Homebrew tcl9, the conda env's dylibs, ...) = a second Tk in the process =
-# the crosshair ghosting.
+# resolve to the runtime's own Tcl/Tk 9 copy.  @rpath-family names resolve
+# through the python binary's rpath to runtime/lib.  Any OTHER tcl/tk (a v8
+# lib or an absolute path into the build machine's Homebrew prefix) = a
+# second Tk in the process = the crosshair ghosting.
 echo "==> auditing tcl/tk linkage of the installed C extensions"
 AUDIT_TMP="$(mktemp)"
-find "$STAGE/runtime/lib/python3.13/site-packages" \( -name '*.so' -o -name '*.dylib' \) -type f > "$AUDIT_TMP" 2>/dev/null || true
+find "$STAGE/runtime/lib/python3.14/site-packages" \( -name '*.so' -o -name '*.dylib' \) -type f > "$AUDIT_TMP" 2>/dev/null || true
 tk_link_fail=0
 while IFS= read -r so; do
-  for ref in $(otool -L "$so" 2>/dev/null | awk 'NR>1{print $1}' | grep -E 'libtcl8\.6|libtk8\.6|tcl9|tk9' || true); do
+  for ref in $(otool -L "$so" 2>/dev/null | awk 'NR>1{print $1}' | grep -E 'libtcl[89]|libtk[89]|libtcl9tk9' || true); do
     case "$ref" in
       @rpath/*|@loader_path/*|@executable_path/*) : ;;
       "$STAGE/runtime/"*) : ;;
@@ -143,7 +157,7 @@ while IFS= read -r so; do
   done
 done < "$AUDIT_TMP"
 rm -f "$AUDIT_TMP"
-[ "$tk_link_fail" -eq 0 ] || { echo "two Tcl/Tk copies would load in one process (ghosting) - rebuild with the section-1b Tcl/Tk 8 header prefix"; exit 1; }
+[ "$tk_link_fail" -eq 0 ] || { echo "two Tcl/Tk copies would load in one process (ghosting) - rebuild with the section-1b Tcl/Tk 9 header prefix"; exit 1; }
 echo "==> tcl/tk linkage OK (single Tk copy per process)"
 
 # --- 5. portable launcher ---------------------------------------------------------
@@ -199,8 +213,8 @@ Host requirements:
     re-login or restart so /usr/X11 is initialised)
   - nothing else is read from or written to the system (except the project
     you open/save and your default browser for Project > Summary).  Tcl/Tk
-    8.6 is embedded in the runtime (runtime/lib) - a matching build-time
-    tcl-tk (conda 'analysis' env / CCP_TK_PREFIX) is a BUILD-machine
+    9 is embedded in the runtime (runtime/lib) - a matching build-time
+    tcl-tk (brew install tcl-tk / CCP_TK_PREFIX) is a BUILD-machine
     requirement only.
 
 CLI utilities (non-GUI):
