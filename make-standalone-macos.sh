@@ -46,11 +46,11 @@ echo "==> standalone dist: ${NAME} (built on $(sw_vers -productVersion 2>/dev/nu
 # --- 1. private relocatable interpreter (also pins the BUILD interpreter) ------
 # The venv/homebrew/pythons here are NOT relocatable; the runtime must be a
 # uv-managed python-build-standalone (self-contained, moves anywhere).
-UVPY="$(uv python find "$PYTAG" --python-preference only-managed 2>/dev/null || true)"
+UVPY="$(uv python find "$PYTAG" --system --python-preference only-managed 2>/dev/null || true)"
 if [ -z "$UVPY" ]; then
   echo "==> installing managed CPython ${PYTAG} (one-time network download)"
   uv python install "$PYTAG"
-  UVPY="$(uv python find "$PYTAG" --python-preference only-managed)"
+  UVPY="$(uv python find "$PYTAG" --system --python-preference only-managed)"
 fi
 UVHOME="$(cd "$(dirname "$UVPY")/.." && pwd)"
 echo "==> runtime: $UVHOME"

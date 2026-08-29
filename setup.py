@@ -99,7 +99,9 @@ if DARWIN:
         _tk_base = TKINC[:-8]
     else:
         _tk_base = os.path.dirname(TKINC)
-    GLX_LIBDIRS = [os.path.join(_tk_base, "lib"),
+    _pylib = os.path.join(sys.base_prefix, "lib")
+    GLX_LIBDIRS = [_pylib,
+                   os.path.join(_tk_base, "lib"),
                    os.path.join(_x11p, "lib")]
     GLX_LINK = ["-lX11"]
 else:
