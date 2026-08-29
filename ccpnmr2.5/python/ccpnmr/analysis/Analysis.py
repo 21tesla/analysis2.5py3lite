@@ -1752,8 +1752,7 @@ class Analysis:
             del view.storedContourFiles
 
         if hasattr(view, "sliceFile"):
-            labels = view.sliceFile.keys()
-            for label in labels:
+            for label in list(view.sliceFile.keys()):
                 del view.sliceFile[label]
 
         view.sliceFile = {}

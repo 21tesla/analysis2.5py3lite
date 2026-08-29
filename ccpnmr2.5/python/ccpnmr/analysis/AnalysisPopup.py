@@ -844,7 +844,7 @@ class AnalysisPopup(BasePopup, Analysis):
     def changedWindowGroupWindows(self, *extra):
 
         windows = self.getActiveWindows()
-        for key in self.popups.keys():
+        for key in list(self.popups.keys()):
             if key.startswith(window_popup_prefix):  # bit of a hack
                 popup = self.popups[key]
 
@@ -1650,6 +1650,7 @@ class AnalysisPopup(BasePopup, Analysis):
                 if type(ee) == type(type):
                     ee = ee.__name__
                 error_msg = "%s: %s" % (ee, exc[1])
+                traceback.print_exc()
                 showError("Project invalid", errText + error_msg, parent=self)
                 self.curatePopupNotifiers(self.unregisterNotify)
                 self.project = None
