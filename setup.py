@@ -55,7 +55,7 @@ def _tkinc():
         cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include", "tcl-tk"))
         cands.append(os.path.join(os.environ["CCP_TK_PREFIX"], "include"))
     inc = sysconfig.get_paths()["include"]
-    cands.append(os.path.join(os.path.dirname(inc), "include"))   # conda layout
+    cands.append(os.path.join(os.path.dirname(inc), "tcl-tk"))    # conda layout: <prefix>/include/tcl-tk
     base = _venv_base_prefix()
     if base:
         cands.append(os.path.join(base, "include"))               # venv -> base python
@@ -90,9 +90,13 @@ if DARWIN:
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
     # Library search paths (must be -L library_dirs, emitted BEFORE the -ltk8.6
-    # etc. references — macOS ld resolves -l left-to-right).  Tk/Tcl live in
-    # the prefix that supplied tk.h (conda env, Homebrew tcl-tk, or
-    # $CCP_TK_PREFIX); X11 in XQuartz.
+    # etc. references — macOS ld resolves -l left-to-right).  FIRST the build
+    # python's own lib dir: in the standalone flow that IS the private runtime
+    # (uv-managed CPython 3.13, which bundles its Tcl/Tk 8.6 dylibs) — linking
+    # those exact dylibs records the same install names _tkinter uses, so the
+    # process ends up with exactly ONE copy of Tk at runtime.  The prefix
+    # that supplied tk.h (conda env / $CCP_TK_PREFIX) is the fallback; X11 in
+    # XQuartz.
     if TKINC.endswith("/include/tcl-tk"):
         _tk_base = TKINC[:-15]
     elif TKINC.endswith("/include"):
@@ -151,8 +155,15 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/clipping.c"]
 if DARWIN:
     # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
-    # Homebrew's tcl-tk 9.x ships the combined tcl9tk9.0 + tcl9.0 libraries.
-    DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
+    # Tcl/Tk 8.6, NOT 9: the private runtime (uv-managed CPython 3.13 — the
+    # same install `uv build` runs under in make-standalone-macos.sh) bundles
+    # its Tcl/Tk 8.6 dylibs and its _tkinter loads them.  Linking Tk 9 while
+    # _tkinter loads 8.6 puts TWO Tk copies in one process, and the canvas-XOR
+    # crosshair then ghosts over the spectrum.  -ltk8.6/-ltcl8.6 resolve to
+    # the runtime's own dylibs (sys.base_prefix/lib is first in GLX_LIBDIRS);
+    # a conda env with tcl-tk 8 (e.g. "analysis") supplies ONLY the headers
+    # (tk.h/tcl.h) via CCP_TK_PREFIX.
+    DRAWLIBS = ["tk8.6", "tcl8.6", "m"]
 else:
     # Linux Tcl/Tk 9 migration (2026-08-28): /usr/local carries a from-source
     # 9.0 install.  libtcl9tk9.0.so exports ONLY the Tk_* symbols and

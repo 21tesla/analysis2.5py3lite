@@ -18,6 +18,12 @@
 # Prerequisites on the build Mac:
 #   - uv            (curl -LsSf https://astral.sh/uv/install.sh | sh)
 #   - C compiler    (Xcode Command Line Tools: xcode-select --install)
+#   - Tcl/Tk 8 headers for the C extensions (section 1b): a conda env at
+#     <conda>/envs/analysis (`conda create -n analysis python=3.13 tcl-tk=8`),
+#     auto-detected - or set CCP_TK_PREFIX to any prefix with
+#     include/tcl-tk/tk.h (Tcl/Tk 8).  The C extensions LINK the private
+#     runtime's OWN bundled Tcl/Tk 8.6 dylibs (not the conda env's), so a
+#     fresh user's mac needs neither conda nor tcl-tk - XQuartz only.
 #
 # Usage:  ./make-standalone-macos.sh
 set -euo pipefail
@@ -56,6 +62,38 @@ UVHOME="$(cd "$(dirname "$UVPY")/.." && pwd)"
 echo "==> runtime: $UVHOME"
 "$UVPY" -c "import _tkinter" || { echo "error: managed python lacks _tkinter - abort"; exit 1; }
 
+# --- 1b. Tcl/Tk 8 headers for the C extensions --------------------------------
+# The C draw extensions must link the SAME Tcl/Tk the runtime _tkinter loads -
+# that is this uv-managed CPython's bundled Tcl/Tk 8.6 dylibs ($UVHOME/lib,
+# which becomes the staged runtime's lib; setup.py puts sys.base_prefix/lib
+# first in the linker search, so -ltk8.6/-ltcl8.6 pick those exact dylibs and
+# the install names recorded in the .so match _tkinter's: ONE Tk copy per
+# process).  A second Tk (Homebrew's tcl9, or the conda env's own dylibs)
+# makes the canvas-XOR crosshair ghost over the spectrum.  python-build-
+# standalone ships NO tcl/tk headers, so take them from a Tcl/Tk 8 prefix:
+# the conda 'analysis' env (auto-detect) or $CCP_TK_PREFIX.  The conda python
+# itself is not used for the build.
+if [ -z "${CCP_TK_PREFIX:-}" ]; then
+  for c in "$HOME/miniconda3/envs/analysis" "$HOME/anaconda3/envs/analysis" \
+           "$HOME/miniforge3/envs/analysis" /opt/miniconda3/envs/analysis \
+           /opt/anaconda3/envs/analysis; do
+    if [ -f "$c/include/tcl-tk/tk.h" ]; then
+      CCP_TK_PREFIX="$c"
+      break
+    fi
+  done
+fi
+if [ -z "${CCP_TK_PREFIX:-}" ]; then
+  echo "error: no Tcl/Tk 8 header prefix found (needed for the C extensions)."
+  echo "  create the conda env (used for its headers only):"
+  echo "    conda create -n analysis python=3.13 tcl-tk=8"
+  echo "  or point CCP_TK_PREFIX at any prefix with include/tcl-tk/tk.h (Tcl/Tk 8)."
+  exit 1
+fi
+[ -f "$CCP_TK_PREFIX/include/tcl-tk/tk.h" ] || { echo "error: $CCP_TK_PREFIX has no include/tcl-tk/tk.h"; exit 1; }
+echo "==> Tcl/Tk headers: $CCP_TK_PREFIX (dylibs: the runtime python's own)"
+export CCP_TK_PREFIX
+
 # --- 2. fresh wheel, compiled for THIS mac --------------------------------------
 # --python pins the build interpreter to the managed 3.13: a newer Homebrew
 # python on the mac would otherwise yield cp3xx extensions the private runtime
@@ -83,6 +121,30 @@ import ccpnmr.analysis.AnalysisGui as G, ccpnmr.nefCli as N, ccp.gui.Io as Io
 assert G.__file__.startswith('$TOP/$STAGE/runtime')
 assert hasattr(Io, 'loadNefProject')
 print('runtime import OK:', G.__file__)")
+
+# --- 4b. one-Tk-per-process audit ----------------------------------------------
+# Proves 1b held: every tcl/tk reference in the installed C extensions must
+# resolve to the runtime's own Tcl/Tk 8.6 copy.  @rpath-family names resolve
+# through the python binary's rpath to runtime/lib.  Any OTHER tcl/tk
+# (Homebrew tcl9, the conda env's dylibs, ...) = a second Tk in the process =
+# the crosshair ghosting.
+echo "==> auditing tcl/tk linkage of the installed C extensions"
+AUDIT_TMP="$(mktemp)"
+find "$STAGE/runtime/lib/python3.13/site-packages" \( -name '*.so' -o -name '*.dylib' \) -type f > "$AUDIT_TMP" 2>/dev/null || true
+tk_link_fail=0
+while IFS= read -r so; do
+  for ref in $(otool -L "$so" 2>/dev/null | awk 'NR>1{print $1}' | grep -E 'libtcl8\.6|libtk8\.6|tcl9|tk9' || true); do
+    case "$ref" in
+      @rpath/*|@loader_path/*|@executable_path/*) : ;;
+      "$STAGE/runtime/"*) : ;;
+      *) echo "error: $(basename "$so") links tcl/tk outside the private runtime: $ref"
+         tk_link_fail=1 ;;
+    esac
+  done
+done < "$AUDIT_TMP"
+rm -f "$AUDIT_TMP"
+[ "$tk_link_fail" -eq 0 ] || { echo "two Tcl/Tk copies would load in one process (ghosting) - rebuild with the section-1b Tcl/Tk 8 header prefix"; exit 1; }
+echo "==> tcl/tk linkage OK (single Tk copy per process)"
 
 # --- 5. portable launcher ---------------------------------------------------------
 # The wheel ships the packages AND the model/doc data at the package root
@@ -136,7 +198,10 @@ Host requirements:
   - XQuartz (Tk/X11 for the GUI: brew install --cask xquartz, then
     re-login or restart so /usr/X11 is initialised)
   - nothing else is read from or written to the system (except the project
-    you open/save and your default browser for Project > Summary)
+    you open/save and your default browser for Project > Summary).  Tcl/Tk
+    8.6 is embedded in the runtime (runtime/lib) - a matching build-time
+    tcl-tk (conda 'analysis' env / CCP_TK_PREFIX) is a BUILD-machine
+    requirement only.
 
 CLI utilities (non-GUI):
   ./runtime/bin/ccpnmr-nef import file.nef [--project-name NAME] [--force]
