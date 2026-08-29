@@ -1,189 +1,108 @@
-# CCPNMR 2.5.2 (Python 3.13)
+# Installing and Running CCPNMR Analysis 2.5.2 (Portable macOS)
 
-CCPNMR Analysis is a workbench for NMR (nuclear magnetic resonance) data analysis:
-peak picking/fitting, assignment, restraints, structure calculation and validation —
-built on the CCPN data model (MOPS) with a Tkinter GUI. This tree is the 2.5.2
-release (circa 2020) modernized to run cleanly on **Python 3.13**, with the C
-extension layers rebuilt and a pip-installable distribution.
+This guide explains how to install and run the portable, self-contained standalone distribution of CCPNMR Analysis 2.5.2 on macOS (modernized for Python 3.13).
 
-## What works (verified gates)
+The standalone archive is fully self-contained. It embeds its own private Python 3.13 runtime, compiled C/Cython extension libraries, and all required scientific and graphical dependencies. **No developer tools, Xcode, or system python configurations are needed.**
 
-All of the following are green on this tree (see `_phase4_checkpoints.md` for the
-audit trail):
+---
 
-| Gate | Result |
-|---|---|
-| Whole-tree compile (Python 3.13) | 0 syntax errors |
-| Import smoke — every module in the tree | 1277 attempted: 1265 OK / 2 failed (`cherrypy` web module, optional dep) / 10 documented-by-design |
-| Functional test suite (pytest) | 45 passed / 4 skipped |
-| C extensions | all setup.py C extensions import and pass functional checks |
-| GUI launch under Xvfb | **4/4 console apps boot** (source and installed states) |
-| Distribution | sdist + wheel build; clean-venv install passes all of the above |
+## Prerequisites
 
-## Console commands
+CCPNMR Analysis uses a Tkinter/OpenGL interface, which requires **XQuartz** to run on macOS:
 
-| Command | App |
-|---|---|
-| `ccpnmr` | CCPNMR Analysis (main workbench, GUI) |
-| `ccpnmr-nef` | NEF (BMRB NMR Enhanced Format) project import/export (non-GUI) |
+1. **Install XQuartz** (if you don't already have it):
+   * **Via Homebrew**: `brew install --cask xquartz`
+   * **Via Web Installer**: Download and install the `.pkg` from [xquartz.org](https://www.xquartz.org).
+2. **Restart your Mac or Log out and back in** after the installation to initialize X11 services.
 
-## NEF support
-
-CCPNMR Analysis reads and writes **NEF v1.1** (BMRB *Nmr_Exchange_Format*) project
-files.  A NEF file carries metadata, molecules/sequences, chemical shifts, restraints
-and peak lists — never raw spectrum matrix data.
-
-- **GUI** — *Project → Load NEF…* creates a new CCPN project from a `.nef` file
-  (project directory in the current working directory; save it with *Project → Save
-  As* to move it).  *Project → Export NEF…* writes the current project to a `.nef`
-  file.
-- **CLI** —
-  ```sh
-  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force]
-  ccpnmr-nef export <project-directory> <output.nef>
-  ```
-  (`--force` removes an existing project directory of the same name.)
-
-Implementation: `ccpnmr/nef/` (model-free NEF v1.1 core + the BMRB
-`mmcif_nef_v1_1.dic` dictionary), `ccpnmr/v2io/NefIo.py` (import into the legacy
-MOPS model), `ccpnmr/nefExport.py` (export from the legacy model),
-`ccpnmr/nefCli.py` (console entry point).  Three small sample files ship under
-`ccpnmr/nef/testdata/`.
+---
 
 ## Installation
 
-### Prebuilt distribution (recommended)
+1. Download the portable tarball (e.g., `ccpnmr-macos-arm64-standalone.tar.gz`).
+2. Extract the archive in your Terminal:
+   ```bash
+   tar -xzf ccpnmr-macos-arm64-standalone.tar.gz
+   cd ccpnmr-macos
+   ```
 
-```sh
-uv venv --python 3.13 .venv            # or: python3.13 -m venv .venv
-uv pip install --python .venv/bin/python <ccpnmr-2.5.2-...whl>
-# optional web/plotting stack (see "Optional features"):
-uv pip install --python .venv/bin/python "matplotlib" "cherrypy" \
-    "decorator" "mako"
+---
+
+## Running the Application
+
+Use the provided `./run-ccpnmr.sh` launcher script. It will verify XQuartz is active and launch the respective application.
+
+### 1. Launch the main CCPNMR Analysis GUI (Default)
+```bash
+./run-ccpnmr.sh
 ```
 
-### Build from source
+### 2. Launch other CCPN Utilities
+The single launcher wrapper also serves all other sub-applications by passing a command argument:
 
-```sh
-uv build                                # -> dist/*.whl + dist/*.tar.gz
+* **Project Data Shifter:**
+  ```bash
+  ./run-ccpnmr.sh data-shifter
+  ```
+* **Project Format Converter:**
+  ```bash
+  ./run-ccpnmr.sh format-converter
+  ```
+* **Project Updater (Non-GUI):**
+  ```bash
+  ./run-ccpnmr.sh update
+  ```
+
+To see the help menu, run:
+```bash
+./run-ccpnmr.sh help
 ```
 
-Build-time requirements (Linux):
+---
 
-- C compiler with GL/Tk in the sysroot (on this host: `CC=/usr/bin/gcc CXX=/usr/bin/g++`
-  — Anaconda's bundled compiler lacks `GL/glx.h`)
-- `freeglut` (glut), Tk/Tcl 8.6 headers + libs, `libX11.so.6`, Python 3.13 headers,
-  system GL (`libGL`)
+# Installing and Running CCPNMR Analysis 2.5.2 (Portable Linux x86_64)
 
-`sdist install` gives the Python tree + data model. The C extensions are built
-against the **running interpreter** via the root `setup.py` (MANIFEST.in ships
-all C sources so any checkout can build):
+The Linux standalone distribution is self-contained in the same way: an
+embedded private CPython 3.13 runtime, the compiled C extensions, and all
+dependencies. No system Python and no `pip` are involved at run time.
 
-```sh
-python setup.py build_ext --inplace   # builds every ext
-./scripts/copy_cext.sh               # places the .so files at their import sites
-```
+1. Unpack the standalone archive (e.g. `ccpnmr-2.5.2-linux-x86_64-standalone.tar.gz`):
+   ```bash
+   tar -xzf ccpnmr-2.5.2-linux-x86_64-standalone.tar.gz
+   cd ccpnmr-2.5.2-linux-x86_64-standalone
+   ```
+2. Run it (optionally pointing at an existing project directory):
+   ```bash
+   ./bin/analysis                 # or: ./bin/analysis /path/to/project
+   ```
+3. Non-GUI utilities (NEF import/export):
+   ```bash
+   ./runtime/bin/ccpnmr-nef import file.nef [--project-name NAME] [--force]
+   ./runtime/bin/ccpnmr-nef export <project-directory> <output.nef>
+   ```
 
-The Linux wheel ships the compiled extensions (cp313, linux_x86_64) and works
-as-is; other platforms build from source as above.
+Host requirements: a Linux x86_64 desktop with the usual X11 graphics
+libraries (`libX11`, `libGL`) — nothing else is read from or written to
+the system. The tree is relocatable: move it anywhere after unpacking.
 
-### macOS
+> The standalone tree is produced by `./make-standalone-linux.sh` in the
+> source repository (it rebuilds the wheel and packs it with the private
+> runtime into `dist/`).
 
-The Linux wheel does not install on macOS — the C extensions must be compiled
-on the Mac (they are the only platform-compiled part). `setup.py`
-auto-detects XQuartz, Homebrew (`tcl-tk`, `gsl`) and conda layouts, so a
-naive user needs **no environment variables**.
+---
 
-**The easy way — Homebrew only, no conda/uv:**
+## NEF Project Files
 
-```sh
-xcode-select --install                       # one-time: cc
-brew install --cask xquartz                  # one-time: X11 — log out/in after
-brew install python-tk@3.13                  # Python 3.13 with Tk
-python3.13 -m venv ~/ccpnmr && source ~/ccpnmr/bin/activate
-pip install --upgrade pip setuptools
-pip install numpy pandas PyOpenGL Pillow olefile requests python-dateutil pytz
+CCPNMR Analysis reads and writes **NEF v1.1** (BMRB *Nmr_Exchange_Format*)
+project files — metadata, molecules, chemical shifts, restraints and peak lists
+(never raw spectrum matrix data):
 
-git clone https://github.com/21tesla/analysis2.5py3lite.git && cd analysis2.5py3lite
-python setup.py build_ext --inplace          # compiles every ext
-./scripts/copy_cext.sh                       # places the .so files at import sites
-pip install .                                # → the 4 console commands
-ccpnmr                                       # main workbench (GUI)
-```
-
-**Conda variant** (e.g. if you are already a conda user):
-
-```sh
-conda create -n ccpnmr3 -c conda-forge python=3.13 tk tcl -y
-conda activate ccpnmr3
-git clone https://github.com/21tesla/analysis2.5py3lite.git && cd analysis2.5py3lite
-python setup.py build_ext --inplace
-./scripts/copy_cext.sh
-pip install .            # or just run ./bin/analysis straight from the tree
-```
-
-macOS notes:
-
-- macOS has no GLX: the GL window-handler extensions compile with `IGNORE_GL`
-  (2D drawing, data layer and fitting keep full function; 3D GL structure
-  rendering is off).
-- Unusual layouts: override prefixes with `CCP_TK_PREFIX` (dir with
-  `include/tk.h` + `lib/libtk8.6*`) and `CCP_X11_PREFIX` (default `/opt/X11`).
-
-### Optional features
-
-- **Web server + plotting extras** — `pip install ccpnmr[optional]`
-  (matplotlib, cherrypy, decorator, mako). These cover the kept web-server
-  module and the plotting code exercised by the by-design-kept packages.
-
-## Running the gates (how to re-verify)
-
-```sh
-# 1. syntax
-.venv/bin/python -m compileall -q ccpnmr2.5/python/          # 0 errors
-# 2. import smoke (source tree)
-MPLBACKEND=Agg .venv/bin/python import_smoke.py             # 1265 ok / 2 failed (cherrypy) / 10 by-design
-# 3. functional tests
-.venv/bin/python -m pytest -q                                # 45 passed / 4 skipped
-# 4. GUI launch (needs xvfb: apt install xvfb / conda-forge xvfb)
-MPLBACKEND=Agg .venv/bin/python gui_boot_test.py            # 4/4 PASS
-# 5. installed-state (fresh venv + the optional extras): same gates, with
-#    CCP_SMOKE_ROOT pointed at site-packages and FAILED required to be 0.
-```
-
-`import_smoke.py` classifies the 10 modules that are non-importable *by design*
-(live/env-gated services, py2-only external deps) — see its
-`KNOWN_NON_IMPORTABLE` table.
-
-## Repository layout
-
-```
-ccpnmr2.5/python/   the Python packages (memops, ccp, ccpnmr, cambridge, ...)
-ccpnmr2.5/model/    XML data model (loaded at import time)
-ccpnmr2.5/data/     runtime data
-ccpnmr2.5/doc/      in-program HTML documentation
-ccpnmr2.5/c/        C sources for the C extensions
-import_smoke.py     whole-tree import smoke harness
-gui_boot_test.py    Xvfb GUI launch harness
-tests (ccpnmr2.5/python/tests)  functional pytest suite
-```
-
-## Publishing (upstream)
-
-- **Tag:** `v2.5.2-py3` (this release).
-- **Install / publish docs:** [`docs/PUBLISHING.md`](./docs/PUBLISHING.md) — build env,
-  gate set, `scripts/publish.sh` (build → verify → `twine check`/`upload`),
-  plus a PyPI name caveat.
-- **Conda-forge recipe (starting point):** [`recipe/meta.yaml`](./recipe/meta.yaml).
-
-## Scope notes
-
-- Legacy single-purpose modules (some CASD/education scripts, ...) are **kept in
-  the distribution but excluded from the functional test scope** — they import
-  cleanly (smoke) but are not exercised end-to-end.
-- The 14 legacy third-party tool packages (PALES, MODULE, NOE/3J, DANGLE, ARIA,
-  CYANA, HADDOCK, MECCANO, PyRPF, CING, ECI, Structure Viewer, H-bond
-  restraints, ...) were removed in the 2026-08 simplification pass — see
-  `SIMPLIFICATION_PLAN.md` and the git history for the stage-by-stage record.
-- `survey.md` is the internal migration survey; the phase-by-phase audit trail
-  lives in `_phase1a..4_checkpoints.md` / `_phase*_recipe.md`.
+* **GUI:** *Project → Export NEF…* writes the current project to a `.nef`
+  file (NEF is metadata + model, never raw spectrum matrix data — import is
+  command-line only).
+* **Command line** (standalone: `./runtime/bin/ccpnmr-nef`; source /
+  virtualenv installs: the `ccpnmr-nef` console command):
+  ```bash
+  ccpnmr-nef import file.nef [--project-name NAME] [--pdb PDB ...] [--force] [--relink [DIR]]
+  ccpnmr-nef export <project-directory> <output.nef>
+  ```

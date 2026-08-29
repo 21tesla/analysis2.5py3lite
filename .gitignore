@@ -13,6 +13,7 @@ env/
 # Build artifacts
 build/
 dist/
+work/
 *.egg-info/
 *.so
 !ccpnmr2.5/c/**/*.so
@@ -43,3 +44,10 @@ _probe*
 _fix*
 .qwen/
 .aider*
+
+gha-creds-*.json
+
+fix_has_key.py  
+gui_boot_test.py  
+import_smoke.py  
+migrate_syntax.py
