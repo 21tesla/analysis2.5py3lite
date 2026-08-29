@@ -64,6 +64,8 @@ def _tkinc():
         "/opt/homebrew/opt/tcl-tk/include",                       # Homebrew (Apple silicon)
         "/usr/local/opt/tcl-tk/include/tcl-tk",
         "/usr/local/opt/tcl-tk/include",                          # Homebrew (Intel)
+        "/usr/local/include/tcl-tk",
+        "/usr/local/include",                                     # from-source Tcl/Tk 9 -> /usr/local (Linux)
         inc
     ]
     for c in cands:
@@ -103,8 +105,11 @@ if DARWIN:
 else:
     GLX_DEFINE = ()
     GLX_INC = ["/usr/include"]
-    GLX_LIBDIRS = ["/usr/lib/x86_64-linux-gnu", "/usr/lib"]
-    GLX_LINK = ["-l:libX11.so.6"]
+    # Tcl/Tk 9 (from-source install) lives in /usr/local; the distro dirs
+    # keep serving GL/glut/X11.  The rpath keeps the tcl9 libs resolvable
+    # even when the host ld cache has no entry for them.
+    GLX_LIBDIRS = ["/usr/local/lib", "/usr/lib/x86_64-linux-gnu", "/usr/lib"]
+    GLX_LINK = ["-l:libX11.so.6", "-Wl,-rpath,/usr/local/lib"]
 
 if DARWIN:
     CFLAGS = ["-Wall", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-error=incompatible-function-pointer-types"]
@@ -147,9 +152,11 @@ if DARWIN:
     # Homebrew's tcl-tk 9.x ships the combined tcl9tk9.0 + tcl9.0 libraries.
     DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
 else:
-    # Distro Linux ships Tk/Tcl 8.6 (libtk8.6.so / libtcl8.6.so) - the
-    # versioned link names must match what the system ld can resolve.
-    DRAWLIBS = ["GL", "glut", "tk8.6", "tcl8.6", "m"]
+    # Linux Tcl/Tk 9 migration (2026-08-28): /usr/local carries a from-source
+    # 9.0 install.  libtcl9tk9.0.so exports ONLY the Tk_* symbols and
+    # libtcl9.0.so ONLY the Tcl_* symbols (verified with --no-undefined link
+    # probes), so both are required - the same pair the macOS build uses.
+    DRAWLIBS = ["GL", "glut", "tcl9tk9.0", "tcl9.0", "m"]
 DRAWINC_EXTRA = [TKINC] + GLX_INC
 
 # ------------------------------------------------------------------ family defs
