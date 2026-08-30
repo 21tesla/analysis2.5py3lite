@@ -596,6 +596,127 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
         tkc_eval(tk_handler_p, n, argv);
         for (i = 0; i < n; i++)
             Tcl_DecrRefCount(argv[i]);
+
+        /* The canvas covers the host widget 1:1, so the pointer is always
+           over the CANVAS - Tk dispatches pointer events through the
+           canvas bindtags only, and the bindings the app registers on the
+           host widget (crosshair <Motion>, peak-select <ButtonPress-1>
+           + <B1-Motion> + <ButtonRelease-1> + modifier variants, wheel
+           zoom, ...) never fire.  Replay every pointer event on the host
+           widget with "event generate": the host's bindings run with
+           event.widget = host (the app requires the host's attributes
+           there) and identical coordinates (the canvas sits at 0,0).
+           The BASE type to generate is passed per binding - "event
+           generate" does not accept modifier-qualified sequences.
+           Configure/Expose/keyboard are NOT replayed: the host receives
+           its own real ones (no duplicates). */
+        /* one word per argv slot (Tcl_EvalObjv: argv[0] is the command
+           name, the rest the arguments); newlines are Tcl command
+           separators inside the body */
+        n = 0;
+        argv[n++] = Tcl_NewStringObj("proc", -1);
+        argv[n++] = Tcl_NewStringObj("ccp_canvas_forward", -1);
+        argv[n++] = Tcl_NewStringObj("{parent type}", -1);
+        argv[n++] = Tcl_NewStringObj(
+            "{\n"
+            "set a \"\"\n"
+            "if {[info exists event(x)]} {append a \" -x $event(x) -y $event(y)\"}\n"
+            "if {[info exists event(state)]} {append a \" -state $event(state)\"}\n"
+            /* -button is only valid for Button press/release types: "<B1-Motion>" rejects it */
+            "if {[info exists event(num)] && [string match <Button* $type]} {append a \" -button $event(num)\"}\n"
+            "if {[info exists event(detail)]} {append a \" -detail $event(detail)\"}\n"
+            "if {[info exists event(xRoot)]} {append a \" -rootx $event(xRoot) -rooty $event(yRoot)\"}\n"
+            "catch {event generate $parent $type $a}\n"
+            "}", -1);
+        tkc_eval(tk_handler_p, n, argv);
+        for (i = 0; i < n; i++)
+            Tcl_DecrRefCount(argv[i]);
+
+        {
+            static const char *mods[] = { "", "Control-", "Shift-", "Control-Shift-" };
+            static const char *plain_seq[] = { "<Motion>", "<Enter>", "<Leave>",
+                                              "<Double-1>", "<MouseWheel>",
+                                              "<Button-4>", "<Button-5>" };
+            char seq[80];
+            char script[200];
+            int mi, pi, b, e3;
+
+            for (pi = 0; pi < (int) (sizeof plain_seq / sizeof plain_seq[0]); pi++)
+            {
+                n = 0;
+                argv[n++] = Tcl_NewStringObj("bind", -1);
+                argv[n++] = Tcl_NewStringObj(path, -1);
+                argv[n++] = Tcl_NewStringObj(plain_seq[pi], -1);
+                sprintf(script, "ccp_canvas_forward %s %s", win_path, plain_seq[pi]);
+                argv[n++] = Tcl_NewStringObj(script, -1);
+                tkc_eval(tk_handler_p, n, argv);
+                for (i = 0; i < n; i++)
+                    Tcl_DecrRefCount(argv[i]);
+            }
+            for (mi = 0; mi < 4; mi++)
+                for (b = 1; b <= 3; b++)
+                    for (e3 = 0; e3 < 3; e3++)
+                    {
+                        if (e3 == 0)
+                            snprintf(seq, sizeof seq, "<%sButtonPress-%d>", mods[mi], b);
+                        else if (e3 == 1)
+                            snprintf(seq, sizeof seq, "<%sB%d-Motion>", mods[mi], b);
+                        else
+                            snprintf(seq, sizeof seq, "<%sButtonRelease-%d>", mods[mi], b);
+                        n = 0;
+                        argv[n++] = Tcl_NewStringObj("bind", -1);
+                        argv[n++] = Tcl_NewStringObj(path, -1);
+                        argv[n++] = Tcl_NewStringObj(seq, -1);
+                        if (e3 == 1)
+                            sprintf(script, "ccp_canvas_forward %s <B%d-Motion>", win_path, b);
+                        else if (e3 == 0)
+                            sprintf(script, "ccp_canvas_forward %s <ButtonPress-%d>", win_path, b);
+                        else
+                            sprintf(script, "ccp_canvas_forward %s <ButtonRelease-%d>", win_path, b);
+                        argv[n++] = Tcl_NewStringObj(script, -1);
+                        tkc_eval(tk_handler_p, n, argv);
+                        for (i = 0; i < n; i++)
+                            Tcl_DecrRefCount(argv[i]);
+                    }
+        }
+
+        /* Tk 9.0.4 (Aqua) dispatch quirk: a window's bindtag storage is
+           materialized lazily and pointer events (real or generated) do
+           not reach its per-window bindings until a "bindtags" READ has
+           run for the window (a single write before any read does not
+           count).  Touch AFTER the binds above: the read materializes
+           the list that carries the forwarder bindings, then the very
+           same list is written back (covers builds where the write is
+           the effective step).  The result string is interpreter-owned
+           and reset by the next eval, so copy it first. */
+        {
+            char listbuf[512];
+
+            n = 0;
+            argv[n++] = Tcl_NewStringObj("bindtags", -1);
+            argv[n++] = Tcl_NewStringObj(path, -1);
+            tkc_eval(tk_handler_p, n, argv);
+            for (i = 0; i < n; i++)
+                Tcl_DecrRefCount(argv[i]);
+
+            {
+                const char *ls = Tcl_GetStringResult(tk_handler_p->interp);
+                int l = ls ? (int) strlen(ls) : 0;
+
+                if (l >= (int) sizeof listbuf)
+                    l = (int) sizeof listbuf - 1;
+                memcpy(listbuf, ls, l);
+                listbuf[l] = '\0';
+            }
+
+            n = 0;
+            argv[n++] = Tcl_NewStringObj("bindtags", -1);
+            argv[n++] = Tcl_NewStringObj(path, -1);
+            argv[n++] = Tcl_NewStringObj(listbuf[0] ? listbuf : "", -1);
+            tkc_eval(tk_handler_p, n, argv);
+            for (i = 0; i < n; i++)
+                Tcl_DecrRefCount(argv[i]);
+        }
     }
 #else
     display = Tk_Display(tk_win);
