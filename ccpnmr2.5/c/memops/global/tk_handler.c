@@ -38,6 +38,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 
 ===========================REFERENCE END===============================
 */
+#include <stdio.h>
 #include "tk_handler.h"
 
 #include "clipping.h"
@@ -65,6 +66,24 @@ typedef struct Tk_handler_p
     float color[NCOLORS];
     XColor *xcolor;
     Bool is_double_buffer;
+#ifdef __APPLE__
+    /* Native (Aqua) Tk: the widget is NOT an X11 window, so the Xlib path
+       below cannot reach it.  All drawing is issued to a canvas child
+       widget that fills tk_win:
+         back buffer  ->  canvas items tagged "ccpBack"
+         front / XOR  ->  canvas items tagged "ccpFront"
+         swapBuffers  ->  nothing (items only become visible when the Tk
+                          event loop runs, i.e. after the Python draw pass
+                          finishes - the same visible timing as the pixmap
+                          swap, and no ghosting is possible) */
+    CcpnString canvas_path;    /* path of the drawing canvas */
+    CcpnString font_spec;      /* canvas -font spec, kept in sync with font */
+    char canvas_color[8];      /* current draw color "#rrggbb" */
+    float cur_line_width;
+    int front_layer;           /* 1: items go on the front layer */
+    char dash[16];             /* active dash pattern ("d g") */
+    Bool dash_set;
+#endif
 }   *Tk_handler_p;
 
 #define  SCALE_X(x)  ((int) (tk_handler_p->width * (tk_handler_p->sx*(x))))
@@ -77,6 +96,226 @@ typedef struct Tk_handler_p
 static char default_font_name[] = "Helvetica";
 
 static int default_font_size = 10;
+
+/*
+================ macOS (Aqua) canvas drawing backend ================
+
+On macOS the Tk window is a native (Aqua) widget - there is no X11 window
+or Display behind it, so the Xlib primitives further down cannot target
+it.  The same C drawing API is served here from a single borderless
+canvas child widget that fills tk_win.  Items are tagged by layer
+("ccpBack" / "ccpFront"); clearing a tag replaces the X pixmap/XOR
+erase semantics.
+*/
+#ifdef __APPLE__
+
+static const char *ccp_tag_back  = "ccpBack";
+static const char *ccp_tag_front = "ccpFront";
+
+static void tkc_fill_color(char *out, const float *c)
+{
+    int i, v[3];
+
+    for (i = 0; i < 3; i++)
+    v[i] = (int) (255.0 * (c[i] < 0.0 ? 0.0 : (c[i] > 1.0 ? 1.0 : c[i])) + 0.5);
+
+    sprintf(out, "#%02x%02x%02x", v[0], v[1], v[2]);
+}
+
+/*
+    Tcl 9 refcount contract: Tcl_New*Obj objects start at refCount 0 - the
+    holder's reference is NOT counted (in Tcl 8 it was counted: refCount 1).
+    A command that retains an argument INCRs it (0 → 1), and if the caller
+    then DECREFs afterwards "once per object" (the Tcl 8 idiom used by every
+    tkc_* caller below), the retained object is freed while the command
+    still points at it → use-after-free at canvas render time.  INCRef
+    each argument here so the caller's hold is counted (0 → 1): retained
+    objects survive the caller's DECRef (1 → 0 happens after the command
+    has INCRed itself, i.e. 2 → 1), and non-retained ones are freed exactly
+    once by the caller.
+*/
+static void tkc_eval(Tk_handler_p tk_handler_p, int argc, Tcl_Obj **argv)
+{
+    Tcl_Interp *interp = tk_handler_p->interp;
+    int i;
+
+    for (i = 0; i < argc; i++)
+        if (argv[i])
+            Tcl_IncrRefCount(argv[i]);
+
+    if (getenv("CCP_TK_DEBUG"))
+        for (i = 0; i < argc; i++)
+            if (argv[i])
+                fprintf(stderr, "  arg[%d]=%p '%s'\n", i, (void *) argv[i],
+                        Tcl_GetString(argv[i]));
+            else
+                fprintf(stderr, "  arg[%d]=<NULL>\n", i);
+
+    if (Tcl_EvalObjv(interp, argc, argv, TCL_EVAL_GLOBAL) != TCL_OK)
+    {
+        char *msg = Tcl_GetStringResult(interp);
+
+        fprintf(stderr, "TkHandler canvas error: %s\n", msg ? msg : "(no message)");
+        /* Tcl 9: the failed eval's result is owned by the interpreter and
+           freed on the next eval - nothing to reset */
+    }
+}
+
+static void tkc_item_options(Tk_handler_p tk_handler_p, Tcl_Obj **argv, int *n,
+                             int filled, const char *color)
+{
+    int lw;
+
+    lw = (int) (tk_handler_p->cur_line_width + 0.5);
+    if (lw < 1)
+        lw = 1;
+
+    if (filled)
+    {
+        /* outline = fill: the X11 fills (XFillArc/XFillRectangle/
+           XFillPolygon) draw NO border, and an empty-string color is
+           not a valid canvas color ("unknown color name") */
+        argv[(*n)++] = Tcl_NewStringObj("-fill", -1);
+        argv[(*n)++] = Tcl_NewStringObj(color, -1);
+        argv[(*n)++] = Tcl_NewStringObj("-outline", -1);
+        argv[(*n)++] = Tcl_NewStringObj(color, -1);
+    }
+    else
+    {
+        argv[(*n)++] = Tcl_NewStringObj("-outline", -1);
+        argv[(*n)++] = Tcl_NewStringObj(color, -1);
+        argv[(*n)++] = Tcl_NewStringObj("-width", -1);
+        argv[(*n)++] = Tcl_NewIntObj(lw);
+    }
+    argv[(*n)++] = Tcl_NewStringObj("-tags", -1);
+    argv[(*n)++] = Tcl_NewStringObj(tk_handler_p->front_layer ? ccp_tag_front
+                                                              : ccp_tag_back, -1);
+}
+
+static void tkc_delete_layer(Tk_handler_p tk_handler_p, const char *tag)
+{
+    Tcl_Obj *argv[3];
+
+    argv[0] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[1] = Tcl_NewStringObj("delete", -1);
+    argv[2] = Tcl_NewStringObj(tag, -1);
+    tkc_eval(tk_handler_p, 3, argv);
+    Tcl_DecrRefCount(argv[0]);
+    Tcl_DecrRefCount(argv[1]);
+    Tcl_DecrRefCount(argv[2]);
+}
+
+static void tkc_line(Tk_handler_p tk_handler_p, int x0, int y0, int x1, int y1)
+{
+    Tcl_Obj *argv[18] = {0};
+    int n = 0;
+    int lw;
+
+    lw = (int) (tk_handler_p->cur_line_width + 0.5);
+    if (lw < 1)
+        lw = 1;
+
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[n++] = Tcl_NewStringObj("create", -1);
+    argv[n++] = Tcl_NewStringObj("line", -1);
+    argv[n++] = Tcl_NewIntObj(x0);
+    argv[n++] = Tcl_NewIntObj(y0);
+    argv[n++] = Tcl_NewIntObj(x1);
+    argv[n++] = Tcl_NewIntObj(y1);
+    if (tk_handler_p->dash_set)
+    {
+        argv[n++] = Tcl_NewStringObj("-dash", -1);
+        argv[n++] = Tcl_NewStringObj(tk_handler_p->dash, -1);
+    }
+    argv[n++] = Tcl_NewStringObj("-fill", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_color, -1);
+    argv[n++] = Tcl_NewStringObj("-width", -1);
+    argv[n++] = Tcl_NewIntObj(lw);
+    argv[n++] = Tcl_NewStringObj("-tags", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->front_layer ? ccp_tag_front
+                                                           : ccp_tag_back, -1);
+    tkc_eval(tk_handler_p, n, argv);
+    for (n = 0; n < 18; n++)
+        if (argv[n])
+            Tcl_DecrRefCount(argv[n]);
+}
+
+static void tkc_oval(Tk_handler_p tk_handler_p, int x0, int y0, int x1, int y1,
+                     int filled)
+{
+    Tcl_Obj *argv[24] = {0};
+    int n = 0;
+
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[n++] = Tcl_NewStringObj("create", -1);
+    argv[n++] = Tcl_NewStringObj("oval", -1);
+    argv[n++] = Tcl_NewIntObj(x0);
+    argv[n++] = Tcl_NewIntObj(y0);
+    argv[n++] = Tcl_NewIntObj(x1);
+    argv[n++] = Tcl_NewIntObj(y1);
+    tkc_item_options(tk_handler_p, argv, &n, filled,
+                     tk_handler_p->canvas_color);
+    tkc_eval(tk_handler_p, n, argv);
+    for (n = 0; n < 24; n++)
+        if (argv[n])
+            Tcl_DecrRefCount(argv[n]);
+}
+
+static void tkc_rect(Tk_handler_p tk_handler_p, int x0, int y0, int x1, int y1,
+                     int filled, const char *color)
+{
+    Tcl_Obj *argv[24] = {0};
+    int n = 0;
+
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[n++] = Tcl_NewStringObj("create", -1);
+    argv[n++] = Tcl_NewStringObj("rectangle", -1);
+    argv[n++] = Tcl_NewIntObj(x0);
+    argv[n++] = Tcl_NewIntObj(y0);
+    argv[n++] = Tcl_NewIntObj(x1);
+    argv[n++] = Tcl_NewIntObj(y1);
+    tkc_item_options(tk_handler_p, argv, &n, filled, color);
+    tkc_eval(tk_handler_p, n, argv);
+    for (n = 0; n < 24; n++)
+        if (argv[n])
+            Tcl_DecrRefCount(argv[n]);
+}
+
+static void tkc_text(Tk_handler_p tk_handler_p, CcpnString text, int x, int y)
+{
+/*
+    (x, y) is the TOP-LEFT corner of the text box, exactly as Tk_DrawChars
+    uses it on X11 - the caller has already applied its anchor factors to
+    the coordinates, so the canvas item is always placed with the "nw"
+    (box top-left) anchor.
+*/
+    Tcl_Obj *argv[20] = {0};
+    int n = 0;
+
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[n++] = Tcl_NewStringObj("create", -1);
+    argv[n++] = Tcl_NewStringObj("text", -1);
+    argv[n++] = Tcl_NewIntObj(x);
+    argv[n++] = Tcl_NewIntObj(y);
+    argv[n++] = Tcl_NewStringObj("-text", -1);
+    argv[n++] = Tcl_NewStringObj(text, -1);
+    argv[n++] = Tcl_NewStringObj("-font", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->font_spec ? tk_handler_p->font_spec
+                                                         : "", -1);
+    argv[n++] = Tcl_NewStringObj("-fill", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_color, -1);
+    argv[n++] = Tcl_NewStringObj("-anchor", -1);
+    argv[n++] = Tcl_NewStringObj("nw", -1);
+    argv[n++] = Tcl_NewStringObj("-tags", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->front_layer ? ccp_tag_front
+                                                           : ccp_tag_back, -1);
+    tkc_eval(tk_handler_p, n, argv);
+    for (n = 0; n < 20; n++)
+        if (argv[n])
+            Tcl_DecrRefCount(argv[n]);
+}
+
+#endif /* __APPLE__ */
 
 static void tk_start_draw(Generic_ptr data)
 {
@@ -255,11 +494,16 @@ static void end_tk_handler(Tk_handler tk_handler)
 */
 }
 
-Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win)
+Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_path)
 {
     int i;
     Tk_handler tk_handler;
     Tk_handler_p tk_handler_p;
+#ifdef __APPLE__
+    char path[300];
+    Tcl_Obj *argv[24] = {0};
+    int n;
+#else
     Display *display;
     GC gc;
     XGCValues gcv;
@@ -278,11 +522,82 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win)
         0x88, 0x88, 0x88, 0x88, 0x22, 0x22, 0x22, 0x22,
         0x88, 0x88, 0x88, 0x88, 0x22, 0x22, 0x22, 0x22,
         0x88, 0x88, 0x88, 0x88, 0x22, 0x22, 0x22, 0x22,
-        0x88, 0x88, 0x88, 0x88, 0x22, 0x22, 0x22, 0x22,
         0x88, 0x88, 0x88, 0x88, 0x22, 0x22, 0x22, 0x22
     };
-    
+#endif
+
     Tk_MakeWindowExist(tk_win);
+
+    MALLOC_NEW(tk_handler_p, struct Tk_handler_p, 1);
+
+    tk_handler_p->tk_win = tk_win;
+    tk_handler_p->interp = interp;
+    tk_handler_p->display = NULL;
+    tk_handler_p->gc = (GC) 0;
+    tk_handler_p->pixmap = (Pixmap) 0;
+    tk_handler_p->drawable = 0;
+    tk_handler_p->font_name = NULL;
+    tk_handler_p->font_size = 10;
+    tk_handler_p->font = NULL;
+    for (i = 0; i < NCOLORS; i++)
+        tk_handler_p->color[i] = -1;
+    tk_handler_p->xcolor = NULL;
+    tk_handler_p->is_double_buffer = CCPN_TRUE;
+
+#ifdef __APPLE__
+    {
+        static int canvas_seq = 0;
+        char child_name[40];
+
+        snprintf(child_name, sizeof child_name, "ccpCanvas%d", ++canvas_seq);
+        sprintf(path, "%s.%s", win_path, child_name);
+
+        /* MALLOC_NEW: returns NULL from this function on OOM */
+        MALLOC_NEW(tk_handler_p->canvas_path, char, strlen(path) + 1);
+        strcpy(tk_handler_p->canvas_path, path);
+
+        tk_handler_p->font_spec = NULL;
+        tk_handler_p->front_layer = 0;
+        tk_handler_p->cur_line_width = 1.0;
+        tk_handler_p->dash_set = CCPN_FALSE;
+        sprintf(tk_handler_p->canvas_color, "#ffffff");
+
+        /* borderless canvas filling the widget (place: agnostic to the
+           layout manager the parent uses).  Tk 9 class commands take the
+           widget's FULL path as the single path argument ("canvas
+           <path> ?options?"); the Tk 8 "canvas <parent> <name>" split
+           is rejected (the first arg is the path to create). */
+        n = 0;
+        argv[n++] = Tcl_NewStringObj("canvas", -1);
+        argv[n++] = Tcl_NewStringObj(path, -1);
+        argv[n++] = Tcl_NewStringObj("-bd", -1);
+        argv[n++] = Tcl_NewStringObj("0", -1);
+        argv[n++] = Tcl_NewStringObj("-highlightthickness", -1);
+        argv[n++] = Tcl_NewStringObj("0", -1);
+        argv[n++] = Tcl_NewStringObj("-bg", -1);
+        argv[n++] = Tcl_NewStringObj("#ffffff", -1);
+        tkc_eval(tk_handler_p, n, argv);
+        for (i = 0; i < n; i++)
+            Tcl_DecrRefCount(argv[i]);
+
+        /* geometry managers are standalone commands: "place <path> ..."
+           (never a method of the widget, on any Tk version) */
+        n = 0;
+        argv[n++] = Tcl_NewStringObj("place", -1);
+        argv[n++] = Tcl_NewStringObj(path, -1);
+        argv[n++] = Tcl_NewStringObj("-x", -1);
+        argv[n++] = Tcl_NewStringObj("0", -1);
+        argv[n++] = Tcl_NewStringObj("-y", -1);
+        argv[n++] = Tcl_NewStringObj("0", -1);
+        argv[n++] = Tcl_NewStringObj("-relwidth", -1);
+        argv[n++] = Tcl_NewStringObj("1.0", -1);
+        argv[n++] = Tcl_NewStringObj("-relheight", -1);
+        argv[n++] = Tcl_NewStringObj("1.0", -1);
+        tkc_eval(tk_handler_p, n, argv);
+        for (i = 0; i < n; i++)
+            Tcl_DecrRefCount(argv[i]);
+    }
+#else
     display = Tk_Display(tk_win);
 
     Tk_DefineBitmap(interp, Tk_GetUid("stipple_data"), (char *) stipple_data, 32, 32);
@@ -291,24 +606,15 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win)
     gc = XCreateGC(display, Tk_WindowId(tk_win), GCForeground | GCBackground | GCStipple, &gcv);
 
     if (!gc)
+    {
+        FREE(tk_handler_p, struct Tk_handler_p);
         return NULL;
+    }
 
-    MALLOC_NEW(tk_handler_p, struct Tk_handler_p, 1);
-
-    tk_handler_p->tk_win = tk_win;
-    tk_handler_p->interp = interp;
     tk_handler_p->display = display;
-    tk_handler_p->pixmap = (Pixmap) 0;
     tk_handler_p->drawable = Tk_WindowId(tk_win);
-
     tk_handler_p->gc = gc;
-    tk_handler_p->font_name = NULL;
-    tk_handler_p->font_size = 10;
-    tk_handler_p->font = NULL;
-    for (i = 0; i < NCOLORS; i++)
-        tk_handler_p->color[i] = -1;
-    tk_handler_p->xcolor = NULL;
-    tk_handler_p->is_double_buffer = CCPN_TRUE;
+#endif
 
     tk_handler = (Tk_handler) tk_handler_p;
 
@@ -338,6 +644,25 @@ void delete_tk_handler(Tk_handler tk_handler)
     {
 	end_tk_handler(tk_handler);
 
+#ifdef __APPLE__
+        /* NOTE: the canvas WIDGET destroy is not done here - it is a Tcl
+           call, and this function also runs from the Python destructor
+           during Py_Finalize, by which time the interpreter is already
+           gone (Tcl calls crash on a finalized interp).  The Python layer
+           calls destroy_tk_canvas() for that, guarded by
+           Py_IsFinalizing().  Everything here is plain C. */
+        if (tk_handler_p->canvas_path)
+        {
+            FREE(tk_handler_p->canvas_path, char);
+            tk_handler_p->canvas_path = NULL;
+        }
+
+        if (tk_handler_p->font_spec)
+        {
+            FREE(tk_handler_p->font_spec, char);
+            tk_handler_p->font_spec = NULL;
+        }
+#else
 	XFreeGC(tk_handler_p->display, tk_handler_p->gc);
 
         if (tk_handler_p->pixmap)
@@ -349,6 +674,7 @@ void delete_tk_handler(Tk_handler tk_handler)
         {
             Tk_FreeColor(tk_handler_p->xcolor);
 	}
+#endif
 
         if (tk_handler_p->font)
         {
@@ -362,9 +688,42 @@ void delete_tk_handler(Tk_handler tk_handler)
     }
 }
 
+#ifdef __APPLE__
+/*
+    Destroy the canvas child widget (only while the interpreter is alive -
+    the Python layer checks Py_IsFinalizing() before calling this; Tcl
+    calls crash on a finalized interp).  If the parent widget has already
+    gone with the window, the error is harmlessly swallowed by tkc_eval.
+*/
+void destroy_tk_canvas(Tk_handler tk_handler)
+{
+    Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+    if (tk_handler && tk_handler_p->canvas_path && tk_handler_p->interp)
+    {
+        Tcl_Obj *argv[2] = { 0 };
+
+        argv[0] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+        argv[1] = Tcl_NewStringObj("destroy", -1);
+        tkc_eval(tk_handler_p, 2, argv);
+        Tcl_DecrRefCount(argv[0]);
+        Tcl_DecrRefCount(argv[1]);
+    }
+}
+#endif
+
 void resize_tk_handler(Tk_handler tk_handler, int width, int height)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+    /* the canvas track-fits tk_win; only the coordinate scaling changes */
+    if ((tk_handler_p->width == width) && (tk_handler_p->height == height))
+        return;
+
+    tk_handler_p->width = width;
+    tk_handler_p->height = height;
+#else
     Window win = Tk_WindowId(tk_handler_p->tk_win);
 
 /*
@@ -390,13 +749,11 @@ void resize_tk_handler(Tk_handler tk_handler, int width, int height)
     if (width && height)
         tk_handler_p->pixmap = Tk_GetPixmap(tk_handler_p->display, win, width, height,
 		                            Tk_Depth(tk_handler_p->tk_win));
-/* below crashes on OSX native (i.e. Aqua)
-                            DefaultDepthOfScreen(Tk_Screen(tk_handler_p->tk_win)));
-*/
 
 /*
     printf("resize_tk_handler: pixmap = %d\n", tk_handler_p->pixmap);
 */
+#endif
 }
 
 void expose_tk_handler(Tk_handler tk_handler, int x, int y, int w, int h)
@@ -409,9 +766,18 @@ void expose_tk_handler(Tk_handler tk_handler, int x, int y, int w, int h)
     if (!make_current_tk_handler(tk_handler))
       return;
 
+#ifdef __APPLE__
+    {
+        char bg[8];
+
+        tkc_fill_color(bg, tk_handler_p->background);
+        tkc_rect(tk_handler_p, x, y, x + w, y + h, CCPN_TRUE, bg);
+    }
+#else
     set_color_tk_handler(tk_handler, tk_handler_p->background);
     XFillRectangle(tk_handler_p->display, tk_handler_p->drawable,
                                 tk_handler_p->gc, x, y, w, h);
+#endif
 }
 
 void flush_tk_handler(Tk_handler tk_handler)
@@ -473,6 +839,12 @@ Bool make_current_tk_handler(Tk_handler tk_handler)
 void swap_buffers_tk_handler(Tk_handler tk_handler)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+    /* canvas items become visible on the next Tk event-loop turn, i.e.
+       once this Python draw pass has finished - nothing to copy */
+    (void) tk_handler_p;
+#else
     Window win = Tk_WindowId(tk_handler_p->tk_win);
 
 /*
@@ -483,6 +855,7 @@ void swap_buffers_tk_handler(Tk_handler tk_handler)
     if (tk_handler_p->drawable == tk_handler_p->pixmap)
         XCopyArea(tk_handler_p->display, tk_handler_p->pixmap, win, tk_handler_p->gc,
                         0, 0, tk_handler_p->width, tk_handler_p->height, 0, 0);
+#endif
 }
 
 void draw_box_tk_handler(Tk_handler tk_handler,
@@ -519,7 +892,11 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
     int xx1 = CONVERT_X(x1);
     int yy1 = CONVERT_Y(y1);
     int w, h;
+#ifdef __APPLE__
+    int x;
+#else
     XGCValues gcv;
+#endif
 
     if (xx0 > xx1)
 	SWAP(xx0, xx1, int);
@@ -540,12 +917,25 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
     draw_box_tk_handler(tk_handler, x0, y0, x1, y1);
 */
 
+#ifdef __APPLE__
+    /* same look as the X11 version: two offset passes of dashed verticals
+       (simulating the stipple) plus a solid border, all on the front layer */
+    for (x = xx0 + 1; x < xx1; x += 4)
+        tkc_line(tk_handler_p, x, yy0 + 1, x, yy1 - 1);
+
+    for (x = xx0 + 3; x < xx1; x += 4)
+        tkc_line(tk_handler_p, x, yy0 + 1, x, yy1 - 1);
+
+    tkc_rect(tk_handler_p, xx0, yy0, xx0 + w, yy0 + h, CCPN_FALSE,
+             tk_handler_p->canvas_color);
+#else
     // NOTE:ED - change to draw a series of dotted lines to simulate stipple - doesn't work in MacOS
     int dash_length = 1;
     int gap_length = 3;
     int dash_offset = (gap_length+dash_length)/2;
     int ndashes = 2;
     char dash_list[2];
+    int x;
 
     dash_list[0] = (char) dash_length;
     dash_list[1] = (char) gap_length;
@@ -555,7 +945,6 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
 
     // draw alternating lines to give offset to stippling
     XSetDashes(tk_handler_p->display, tk_handler_p->gc, 0, dash_list, sizeof(dash_list));
-    int x;
     for (x=xx0+1; x<xx1; x+=(gap_length+dash_length))
         XDrawLine(tk_handler_p->display, tk_handler_p->drawable,
                                 tk_handler_p->gc, x, yy0+1, x, yy1-1);
@@ -570,6 +959,7 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
     gcv.line_style = LineSolid;
     XChangeGC(tk_handler_p->display, tk_handler_p->gc, GCLineStyle, &gcv);
     XDrawRectangle(tk_handler_p->display, tk_handler_p->drawable, tk_handler_p->gc, xx0, yy0, w, h);
+#endif
 
     finish_xor_tk_handler(tk_handler);
 }
@@ -581,6 +971,11 @@ void start_xor_tk_handler(Tk_handler tk_handler)
     printf("start_xor_tk_handler\n");
     clear_xor_tk_handler(tk_handler);
 */
+#ifdef __APPLE__
+    /* canvas: "XOR" marks are managed front-layer items, so a fresh pass
+       just clears the front layer and draws again */
+    start_front_tk_handler(tk_handler);
+#else
     swap_buffers_tk_handler(tk_handler);
 /* below is because Solaris seems to require equiv to do xor (not sure why) */
 #ifdef XOR_IS_EQUIV
@@ -589,12 +984,19 @@ void start_xor_tk_handler(Tk_handler tk_handler)
     XSetFunction(tk_handler_p->display, tk_handler_p->gc, GXxor);
 #endif
     start_front_tk_handler(tk_handler);
+#endif
 }
 
 void finish_xor_tk_handler(Tk_handler tk_handler)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
 
+#ifdef __APPLE__
+    /* front items stay on top until the next frame/crosshair pass clears
+       the front layer - mirroring how the X11 XOR marks survive until the
+       next swap; back-buffer drawing resumes */
+    tk_handler_p->front_layer = 0;
+#else
     XSetFunction(tk_handler_p->display, tk_handler_p->gc, GXcopy);
 /*
     swap_buffers_tk_handler(tk_handler);
@@ -603,6 +1005,7 @@ void finish_xor_tk_handler(Tk_handler tk_handler)
 /* but whole xor'ing procedure implemented here doesn't work unless using back to start with */
     if (tk_handler_p->is_double_buffer)
 	start_back_tk_handler(tk_handler);
+#endif
 }
 
 void reset_xor_tk_handler(Tk_handler tk_handler)
@@ -628,18 +1031,40 @@ void clear_xor_tk_handler(Tk_handler tk_handler)
 void start_front_tk_handler(Tk_handler tk_handler)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+/*
+    printf("start_front_tk_handler\n");
+*/
+    tkc_delete_layer(tk_handler_p, ccp_tag_front);
+    tk_handler_p->front_layer = 1;
+#else
     Window win = Tk_WindowId(tk_handler_p->tk_win);
 
 /*
     printf("start_front_tk_handler\n");
 */
     tk_handler_p->drawable = win;
+#endif
 }
 
 void start_back_tk_handler(Tk_handler tk_handler)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
 
+#ifdef __APPLE__
+/*
+    printf("start_back_tk_handler\n");
+*/
+/*
+    A new frame invalidates the back layer; clear the front layer as well
+    or stale crosshair items would sit above the new frame (the GUI
+    redraws crosshairs after every frame, so none is ever missed).
+*/
+    tkc_delete_layer(tk_handler_p, ccp_tag_back);
+    tkc_delete_layer(tk_handler_p, ccp_tag_front);
+    tk_handler_p->front_layer = 0;
+#else
 /*
     printf("start_back_tk_handler\n");
 */
@@ -647,6 +1072,7 @@ void start_back_tk_handler(Tk_handler tk_handler)
         tk_handler_p->drawable = (Drawable) tk_handler_p->pixmap;
     else
         start_front_tk_handler(tk_handler);
+#endif
 }
 
 void end_back_tk_handler(Tk_handler tk_handler)
@@ -658,6 +1084,23 @@ void set_background_tk_handler(Tk_handler tk_handler, float *background)
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
 
     COPY_VECTOR(tk_handler_p->background, background, NCOLORS);
+
+#ifdef __APPLE__
+    {
+        Tcl_Obj *argv[3] = {0};
+        char bg[8];
+        int n = 0;
+
+        tkc_fill_color(bg, background);
+        argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+        argv[n++] = Tcl_NewStringObj("-bg", -1);
+        argv[n++] = Tcl_NewStringObj(bg, -1);
+        tkc_eval(tk_handler_p, n, argv);
+        for (n = 0; n < 3; n++)
+            if (argv[n])
+                Tcl_DecrRefCount(argv[n]);
+    }
+#endif
 }
 
 void draw_text_tk_handler(Tk_handler tk_handler, CcpnString text, float x, float y,
@@ -685,8 +1128,13 @@ void draw_text_tk_handler(Tk_handler tk_handler, CcpnString text, float x, float
     get_text_size_tk_handler(tk_handler, text, &w, &h);
     s -= a * w;
     t += b * h;
+
+#ifdef __APPLE__
+    tkc_text(tk_handler_p, text, s, t);
+#else
     Tk_DrawChars(tk_handler_p->display, tk_handler_p->drawable,
                         tk_handler_p->gc, font, text, strlen(text), s, t);
+#endif
 
 /*
     printf("draw_text_tk_handler2\n");
@@ -712,12 +1160,16 @@ void draw_line_tk_handler(Tk_handler tk_handler,
     printf("draw_line_tk_handler3: %d\n", tk_handler_p->drawable);
 */
 
+#ifdef __APPLE__
+    tkc_line(tk_handler_p, s0, t0, s1, t1);
+#else
     XDrawLine(tk_handler_p->display, tk_handler_p->drawable,
                                 tk_handler_p->gc, s0, t0, s1, t1);
 /**
     XDrawLine(tk_handler_p->display, win,
                                 tk_handler_p->gc, s0, t0, s1, t1);
 **/
+#endif
 }
 
 void draw_clipped_line_tk_handler(Tk_handler tk_handler,
@@ -751,8 +1203,13 @@ void fill_ellipse_tk_handler(Tk_handler tk_handler, float x, float y, float rx, 
     printf("draw_circle_tk_handler2: %d %d %d %d\n", xx, yy, rx, ry);
 */
 
+#ifdef __APPLE__
+    if (rxx > 0 && ryy > 0)
+        tkc_oval(tk_handler_p, xx - rxx, yy - ryy, xx + rxx, yy + ryy, CCPN_TRUE);
+#else
     XFillArc(tk_handler_p->display, tk_handler_p->drawable,
                 tk_handler_p->gc, xx-rxx, yy-ryy, 2*rxx, 2*ryy, 64*0, 64*360);
+#endif
 }
 
 void draw_circle_tk_handler(Tk_handler tk_handler, float x, float y, float r)
@@ -773,19 +1230,69 @@ void draw_ellipse_tk_handler(Tk_handler tk_handler, float x, float y, float rx, 
     printf("draw_circle_tk_handler2: %d %d %d %d\n", xx, yy, rx, ry);
 */
 
+#ifdef __APPLE__
+    if (rxx > 0 && ryy > 0)
+        tkc_oval(tk_handler_p, xx - rxx, yy - ryy, xx + rxx, yy + ryy, CCPN_FALSE);
+#else
     XDrawArc(tk_handler_p->display, tk_handler_p->drawable,
                 tk_handler_p->gc, xx-rxx, yy-ryy, 2*rxx, 2*ryy, 64*0, 64*360);
+#endif
 }
 
 void draw_polyline_tk_handler(Tk_handler tk_handler, Poly_line polyline)
 {
     int i, n = polyline->nvertices;
     Point2f *v = polyline->vertices;
-    float x0, y0, x1, y1;
+#ifdef __APPLE__
+    Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+    int lw;
 
-/*
-printf("tk_draw_polyline: n = %2d\n", n);
-*/
+    /* one canvas item for the WHOLE polyline - far fewer Tcl calls than
+       one XDrawLine (or one create_line) per segment */
+    {
+        int npoints = polyline->closed ? (2 * n + 2) : 2 * n;
+        Tcl_Obj **argv;
+
+        lw = (int) (tk_handler_p->cur_line_width + 0.5);
+        if (lw < 1)
+            lw = 1;
+
+        /* plain malloc: this function returns void, the MALLOC_* macros
+           would `return` on OOM */
+        argv = (Tcl_Obj **) malloc((3 + npoints + 10) * sizeof (Tcl_Obj *));
+        if (!argv)
+            return;
+        argv[0] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+        argv[1] = Tcl_NewStringObj("create", -1);
+        argv[2] = Tcl_NewStringObj("line", -1);
+        for (i = 0; i < n; i++)
+        {
+            argv[3 + 2 * i] = Tcl_NewIntObj(CONVERT_X(v[i].x));
+            argv[3 + 2 * i + 1] = Tcl_NewIntObj(CONVERT_Y(v[i].y));
+        }
+        {
+            int k = 3 + npoints;
+
+            if (polyline->closed)
+            {
+                argv[k++] = Tcl_NewIntObj(CONVERT_X(v[0].x));
+                argv[k++] = Tcl_NewIntObj(CONVERT_Y(v[0].y));
+            }
+            argv[k++] = Tcl_NewStringObj("-fill", -1);
+            argv[k++] = Tcl_NewStringObj(tk_handler_p->canvas_color, -1);
+            argv[k++] = Tcl_NewStringObj("-width", -1);
+            argv[k++] = Tcl_NewIntObj(lw);
+            argv[k++] = Tcl_NewStringObj("-tags", -1);
+            argv[k++] = Tcl_NewStringObj(tk_handler_p->front_layer ? ccp_tag_front
+                                                                   : ccp_tag_back, -1);
+            tkc_eval(tk_handler_p, k, argv);
+            for (i = 0; i < k; i++)
+                Tcl_DecrRefCount(argv[i]);
+        }
+        FREE(argv, Tcl_Obj *);
+    }
+#else
+    float x0, y0, x1, y1;
 
     x0 = v[0].x;
     y0 = v[0].y;
@@ -800,6 +1307,7 @@ printf("tk_draw_polyline: n = %2d\n", n);
 
     if (polyline->closed)
         draw_line_tk_handler(tk_handler, x0, y0, v[0].x, v[0].y);
+#endif
 
 /*
 printf("tk_draw_polyline2\n");
@@ -823,6 +1331,16 @@ void draw_dash_line_tk_handler(Tk_handler tk_handler,
 			int dash_length, int gap_length)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+    /* canvas: the dash pattern is per-item, carried as transient context
+       (clipped re-entry goes through tk_draw_line -> draw_line) */
+    snprintf(tk_handler_p->dash, sizeof tk_handler_p->dash, "%d %d",
+             dash_length, gap_length);
+    tk_handler_p->dash_set = CCPN_TRUE;
+    draw_line_tk_handler(tk_handler, x0, y0, x1, y1);
+    tk_handler_p->dash_set = CCPN_FALSE;
+#else
     int dash_offset = 0, ndashes = 2;
     char dash_list[2];
     XGCValues gcv;
@@ -836,6 +1354,7 @@ void draw_dash_line_tk_handler(Tk_handler tk_handler,
     draw_line_tk_handler(tk_handler, x0, y0, x1, y1);
     gcv.line_style = LineSolid;
     XChangeGC(tk_handler_p->display, tk_handler_p->gc, GCLineStyle, &gcv);
+#endif
 }
 
 void draw_clipped_dash_line_tk_handler(Tk_handler tk_handler,
@@ -843,6 +1362,14 @@ void draw_clipped_dash_line_tk_handler(Tk_handler tk_handler,
 			int dash_length, int gap_length)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+    snprintf(tk_handler_p->dash, sizeof tk_handler_p->dash, "%d %d",
+             dash_length, gap_length);
+    tk_handler_p->dash_set = CCPN_TRUE;
+    draw_clipped_line_tk_handler(tk_handler, x0, y0, x1, y1);
+    tk_handler_p->dash_set = CCPN_FALSE;
+#else
     int dash_offset = 0, ndashes = 2;
     char dash_list[2];
     XGCValues gcv;
@@ -856,6 +1383,7 @@ void draw_clipped_dash_line_tk_handler(Tk_handler tk_handler,
     draw_clipped_line_tk_handler(tk_handler, x0, y0, x1, y1);
     gcv.line_style = LineSolid;
     XChangeGC(tk_handler_p->display, tk_handler_p->gc, GCLineStyle, &gcv);
+#endif
 }
 
 #define  CONVERT_COLOR(t) ((unsigned short) MIN(65535, 65536*(t)))
@@ -864,7 +1392,9 @@ void set_color_tk_handler(Tk_handler tk_handler, float *color)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
     int i;
+#ifndef __APPLE__
     XColor c, *cc;
+#endif
 
     if (tk_handler_p->xcolor)
     {
@@ -888,6 +1418,9 @@ void set_color_tk_handler(Tk_handler tk_handler, float *color)
 */
     COPY_VECTOR(tk_handler_p->color, color, NCOLORS);
 
+#ifdef __APPLE__
+    tkc_fill_color(tk_handler_p->canvas_color, color);
+#else
     c.red = CONVERT_COLOR(color[0]);
     c.green = CONVERT_COLOR(color[1]);
     c.blue = CONVERT_COLOR(color[2]);
@@ -902,6 +1435,7 @@ void set_color_tk_handler(Tk_handler tk_handler, float *color)
 */
 
     XSetForeground(tk_handler_p->display, tk_handler_p->gc, cc->pixel);
+#endif
 }
 
 void set_black_tk_handler(Tk_handler tk_handler)
@@ -927,10 +1461,15 @@ void set_white_tk_handler(Tk_handler tk_handler)
 void set_line_width_tk_handler(Tk_handler tk_handler, float line_width)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+
+#ifdef __APPLE__
+    tk_handler_p->cur_line_width = line_width;
+#else
     XGCValues gcv;
 
     gcv.line_width = (unsigned int) line_width;
     XChangeGC(tk_handler_p->display, tk_handler_p->gc, GCLineWidth, &gcv);
+#endif
 }
 
 void reset_line_width_tk_handler(Tk_handler tk_handler)
@@ -968,7 +1507,14 @@ CcpnStatus set_font_tk_handler(Tk_handler tk_handler, CcpnString name, int size)
     if (tk_handler_p->font)
         Tk_FreeFont(tk_handler_p->font);
 
+#ifdef __APPLE__
+    /* canvas -font takes the same spec Tk_GetFont used */
+    if (tk_handler_p->font_spec)
+        FREE(tk_handler_p->font_spec, char);
+    STRING_MALLOC_COPY(tk_handler_p->font_spec, fontstring);
+#else
     XSetFont(tk_handler_p->display, tk_handler_p->gc, Tk_FontId(font));
+#endif
 
     tk_handler_p->font = font;
     tk_handler_p->font_size = size;
@@ -1022,6 +1568,31 @@ void fill_triangle_tk_handler(Tk_handler tk_handler, float x0, float y0,
                                 float x1, float y1, float x2, float y2)
 {
     Tk_handler_p tk_handler_p = (Tk_handler_p) tk_handler;
+#ifdef __APPLE__
+    Tcl_Obj *argv[18] = {0};
+    int n = 0;
+
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+    argv[n++] = Tcl_NewStringObj("create", -1);
+    argv[n++] = Tcl_NewStringObj("polygon", -1);
+    argv[n++] = Tcl_NewIntObj(CONVERT_X(x0));
+    argv[n++] = Tcl_NewIntObj(CONVERT_Y(y0));
+    argv[n++] = Tcl_NewIntObj(CONVERT_X(x1));
+    argv[n++] = Tcl_NewIntObj(CONVERT_Y(y1));
+    argv[n++] = Tcl_NewIntObj(CONVERT_X(x2));
+    argv[n++] = Tcl_NewIntObj(CONVERT_Y(y2));
+    argv[n++] = Tcl_NewStringObj("-fill", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_color, -1);
+    argv[n++] = Tcl_NewStringObj("-outline", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_color, -1);
+    argv[n++] = Tcl_NewStringObj("-tags", -1);
+    argv[n++] = Tcl_NewStringObj(tk_handler_p->front_layer ? ccp_tag_front
+                                                           : ccp_tag_back, -1);
+    tkc_eval(tk_handler_p, n, argv);
+    for (n = 0; n < 18; n++)
+        if (argv[n])
+            Tcl_DecrRefCount(argv[n]);
+#else
     int npoints = 3;
     XPoint points[3];
 
@@ -1034,6 +1605,7 @@ void fill_triangle_tk_handler(Tk_handler tk_handler, float x0, float y0,
 
     XFillPolygon(tk_handler_p->display, tk_handler_p->drawable,
 	tk_handler_p->gc, points, npoints, Convex, CoordModeOrigin);
+#endif
 }
 
 void set_is_double_buffer_tk_handler(Tk_handler tk_handler, Bool is_double_buffer)

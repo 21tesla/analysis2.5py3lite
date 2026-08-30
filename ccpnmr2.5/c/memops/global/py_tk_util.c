@@ -145,3 +145,37 @@ Tk_Window get_tk_window(PyObject *widget, Tcl_Interp *tcl_interp,
     return tk_display_win;
 }
 
+CcpnString get_tk_widget_path(PyObject *widget, CcpnString error_msg)
+{
+    PyObject *o = NULL;
+    const char *p = NULL;
+    CcpnString result = NULL;
+
+    if (!PyObject_HasAttrString(widget, "_w"))
+    {
+        sprintf(error_msg, "argument not a Tk widget");
+    }
+    else
+    {
+        o = PyObject_GetAttrString(widget, "_w");
+        if (o == Py_None)
+        {
+            sprintf(error_msg, "widget _w is None");
+        }
+        else
+        {
+            p = PyUnicode_AsUTF8(o);
+            if (p)
+            {
+                /* MALLOC_NEW: returns NULL from this function on OOM */
+                MALLOC_NEW(result, char, strlen(p) + 1);
+                strcpy(result, p);
+            }
+        }
+    }
+
+    Py_XDECREF(o);
+
+    return result;
+}
+

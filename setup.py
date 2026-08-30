@@ -89,16 +89,23 @@ TKINC = _tkinc()
 #    those headers + libX11.  GLUT is then not needed at all.
 if DARWIN:
     GLX_DEFINE = (("IGNORE_GL", "1"),)
+    # XQuartz headers: DECLARATIONS ONLY.  The shared C code still declares
+    # X11 types (struct fields, prototypes) and tk.h's X11-decl chain needs
+    # them at compile time, but the mac drawing backend (tk_handler.c
+    # #ifdef __APPLE__ branch) is Tk-canvas based and emits no Xlib calls,
+    # so nothing from /opt/X11 is LINKED — no XQuartz is required on the
+    # build host at runtime or on the user's Mac at all.
     _x11p = os.environ.get("CCP_X11_PREFIX", "/opt/X11")
     GLX_INC = [os.path.join(_x11p, "include")]
     # Library search paths (must be -L library_dirs, emitted BEFORE the
-    # -ltcl9tk9.0 etc. references — macOS ld resolves -l left-to-right).
+    # -ltcl9tk9.1 etc. references — macOS ld resolves -l left-to-right).
     # FIRST the build python's own lib dir: in the standalone flow that IS
-    # the private runtime (uv-managed CPython 3.14, which bundles its Tcl/Tk
-    # 9 dylibs) — linking those exact dylibs records the same install names
+    # the private runtime (/Applications/Darwin/py14: from-source CPython
+    # 3.14.7 + Tcl/Tk 9.1 Aqua, one prefix for interpreter, headers and
+    # dylibs) — linking those exact dylibs records the same install names
     # _tkinter uses, so the process ends up with exactly ONE copy of Tk at
-    # runtime.  The prefix that supplied tk.h (Homebrew tcl-tk /
-    # $CCP_TK_PREFIX) is the fallback; X11 in XQuartz.
+    # runtime.  The prefix that supplied tk.h ($CCP_TK_PREFIX) is the
+    # fallback.
     if TKINC.endswith("/include/tcl-tk"):
         _tk_base = TKINC[:-15]
     elif TKINC.endswith("/include"):
@@ -107,9 +114,8 @@ if DARWIN:
         _tk_base = os.path.dirname(TKINC)
     _pylib = os.path.join(sys.base_prefix, "lib")
     GLX_LIBDIRS = [_pylib,
-                   os.path.join(_tk_base, "lib"),
-                   os.path.join(_x11p, "lib")]
-    GLX_LINK = ["-lX11"]
+                   os.path.join(_tk_base, "lib")]
+    GLX_LINK = []
 else:
     GLX_DEFINE = ()
     GLX_INC = ["/usr/include"]
@@ -157,17 +163,16 @@ DRAWDEPS = [f"{G}/py_draw_handler.c",
             f"{G}/clipping.c"]
 if DARWIN:
     # IGNORE_GL removes every GL/glut reference; macOS has no GLUT by default.
-    # Tcl/Tk 9: the private runtime (uv-managed CPython 3.14 — the same
-    # install `uv build` runs under in make-standalone-macos.sh) bundles its
-    # Tcl/Tk 9 dylibs (lib/libtcl9.0.dylib + lib/libtcl9tk9.0.dylib — on
-    # macOS Tk lives in the combined tcl9tk dylib, there is no separate
-    # libtk9.0) and its _tkinter loads exactly those.  The C extensions must
-    # link the SAME pair, or the process runs TWO Tk copies and the canvas-
-    # XOR crosshair ghosts over the spectrum.  -ltcl9tk9.0/-ltcl9.0 resolve
-    # to the runtime's own dylibs (sys.base_prefix/lib is first in
-    # GLX_LIBDIRS); Homebrew tcl-tk 9 (brew install tcl-tk) supplies ONLY the
-    # headers (tk.h/tcl.h) via CCP_TK_PREFIX.  Same lib pair as the Linux
-    # branch below.
+    # Tcl/Tk 9.0.4 (stable): the private runtime (uv-managed CPython 3.14 —
+    # uv python install 3.14) bundles exactly these dylibs (lib/libtcl9.0.dylib
+    # + lib/libtcl9tk9.0.dylib — on macOS Tk lives in the combined tcl9tk dylib,
+    # there is no separate libtk9.0) and its _tkinter loads them.  The C
+    # extensions must link the SAME pair, or the process runs TWO Tk copies and
+    # the crosshair/selection marks ghost over the spectrum.  -ltcl9tk9.0/
+    # -ltcl9.0 resolve to the runtime's own dylibs (sys.base_prefix/lib is
+    # first in GLX_LIBDIRS); $CCP_TK_PREFIX (Homebrew tcl-tk 9.0.4) supplies
+    # ONLY the headers (tk.h/tcl.h).  NOTE: the from-source Tcl/Tk 9.1b0
+    # (py14) build was abandoned 2026-08-30 as an unstable beta.
     DRAWLIBS = ["tcl9tk9.0", "tcl9.0", "m"]
 else:
     # Linux Tcl/Tk 9 migration (2026-08-28): /usr/local carries a from-source

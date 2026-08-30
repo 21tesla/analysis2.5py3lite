@@ -54,4 +54,8 @@ extern Tcl_Interp *get_tcl_interp(PyObject *widget, CcpnString error_msg);
 extern Tk_Window get_tk_window(PyObject *widget, Tcl_Interp *tcl_interp,
 							CcpnString error_msg);
 
+/* MALLOC'd copy of the widget's Tcl path (widget._w); NULL + error_msg on
+   failure.  Caller must FREE it. */
+extern CcpnString get_tk_widget_path(PyObject *widget, CcpnString error_msg);
+
 #endif /* _incl_py_tk_util */

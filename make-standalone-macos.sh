@@ -23,7 +23,9 @@
 #     /usr/local/opt/tcl-tk) - or set CCP_TK_PREFIX to any prefix with
 #     include/tcl-tk/tk.h (Tcl/Tk 9).  The C extensions LINK the private
 #     runtime's OWN bundled Tcl/Tk 9 dylibs (not the prefix's), so a fresh
-#     user's mac needs no tcl-tk at all - XQuartz only.
+#     user's mac needs no tcl-tk and no XQuartz at all: the mac drawing
+#     backend (tk_handler.c) is native Tk canvas based and emits no Xlib
+#     calls (section 1b headers are compile-time declarations only).
 #
 # Usage:  ./make-standalone-macos.sh
 set -euo pipefail
@@ -208,9 +210,8 @@ Run:
   ./bin/analysis                 (optionally: ./bin/analysis /path/to/project)
 
 Host requirements:
-  - macOS ${ARCH}
-  - XQuartz (Tk/X11 for the GUI: brew install --cask xquartz, then
-    re-login or restart so /usr/X11 is initialised)
+  - macOS ${ARCH} - that is all.  The GUI renders through native Tk 9
+    canvas widgets; nothing in the tree depends on X11/XQuartz.
   - nothing else is read from or written to the system (except the project
     you open/save and your default browser for Project > Summary).  Tcl/Tk
     9 is embedded in the runtime (runtime/lib) - a matching build-time

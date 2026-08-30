@@ -52,9 +52,18 @@ typedef void* Tk_handler;
 
 extern Drawing_funcs *tk_drawing_funcs(void);
 
-extern Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win);
+/* win_path: Tcl path of tk_win (only used by the native (Aqua) drawing
+   backend, which creates a canvas child under it) */
+extern Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win,
+                                 CcpnString win_path);
 
 extern void delete_tk_handler(Tk_handler tk_handler);
+
+#ifdef __APPLE__
+/* destroys the canvas child widget; only valid while the Tcl interpreter
+   is alive (caller must check Py_IsFinalizing() first) */
+extern void destroy_tk_canvas(Tk_handler tk_handler);
+#endif
 
 extern void resize_tk_handler(Tk_handler tk_handler, int width, int height);
 

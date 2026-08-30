@@ -543,6 +543,7 @@ static PyObject *new_py_tk_handler(PyObject *widget)
     Tcl_Interp *tcl_interp;
     Tk_Window tk_display_win;
     Line error_msg;
+    CcpnString win_path;
 
 /*  cannot do this when using Anaconda Python, it doesn't work
     if (!PyInstance_Check(widget))
@@ -556,11 +557,21 @@ static PyObject *new_py_tk_handler(PyObject *widget)
     tk_display_win = get_tk_window(widget, tcl_interp, error_msg);
     if (!tk_display_win)
 	RETURN_OBJ_ERROR(error_msg);
- 
-    tk_handler = new_tk_handler(tcl_interp, tk_display_win);
+
+    /* path needed by the native (Aqua) drawing backend */
+    win_path = get_tk_widget_path(widget, error_msg);
+    if (!win_path)
+	RETURN_OBJ_ERROR(error_msg);
+
+    tk_handler = new_tk_handler(tcl_interp, tk_display_win, win_path);
 
     if (!tk_handler)
+    {
+        FREE(win_path, char);
 	 RETURN_OBJ_ERROR("allocating Tk_handler object");
+    }
+
+    FREE(win_path, char);
 
     obj = (Py_Tk_handler) PyObject_New(struct Py_Tk_handler, &Tk_handler_type);
 
@@ -580,6 +591,24 @@ static void delete_py_tk_handler(PyObject *self)
 {
     Py_Tk_handler obj = (Py_Tk_handler) self;
     Tk_handler tk_handler = obj->tk_handler;
+
+#ifdef __APPLE__
+    if (Py_IsFinalizing())
+    {
+        /* interpreter shutdown: tkinter finalizes the Tcl interp in a
+           racy order vs these deallocs, and EVERY Tk/Tcl call here
+           (canvas destroy, Tk_FreeFont, Tk_FreePixmap, ...) then hits
+           torn-down state and Tcl_Panics.  Just detach - the OS
+           reclaims the interpreter-side storage with the process. */
+        Py_TYPE(self)->tp_free(self);
+        return;
+    }
+
+    /* the canvas die-off must precede delete_tk_handler (it frees
+       canvas_path); the widget may already be gone, tkc_eval swallows
+       that error */
+    destroy_tk_canvas(tk_handler);
+#endif
 
     delete_tk_handler(tk_handler);
 
