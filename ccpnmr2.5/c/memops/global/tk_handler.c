@@ -581,6 +581,12 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
            WindowCanvas frame) would be lost after the first click on it. */
         argv[n++] = Tcl_NewStringObj("-takefocus", -1);
         argv[n++] = Tcl_NewStringObj("0", -1);
+        /* The pointer rests on THIS canvas (it covers the host), so the
+           host's cursor setting can never apply - hide the pointer over
+           the spectrum (cursor "none" is valid on Tk 9/Aqua) and leave
+           only the crosshair / selection marks to show the position. */
+        argv[n++] = Tcl_NewStringObj("-cursor", -1);
+        argv[n++] = Tcl_NewStringObj("none", -1);
         tkc_eval(tk_handler_p, n, argv);
         for (i = 0; i < n; i++)
             Tcl_DecrRefCount(argv[i]);
@@ -645,6 +651,18 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
         static const char ccp_forward_proc_src[] =
 "proc ccp_canvas_forward {pt} {\n"
 "    lassign $pt w type x y btn state\n"
+"    # Tk 9.x (Aqua): on this C-created canvas the binding's %X/%Y are\n"
+"    # SCREEN-ABSOLUTE - event dispatch computes the widget origin as\n"
+"    # (0,0) even though winfo rootx reports the true origin, and\n"
+"    # tkinter-created widgets are unaffected (measured 2026-08-31: a\n"
+"    # pointer at screen 980,448 over a canvas at 630,128 reported\n"
+"    # %X/%Y = 980,448, while the identical tkinter canvas reported\n"
+"    # 350,320).  Translate into the host's coordinate space - every\n"
+"    # app handler reads replayed events in host-relative coords and\n"
+"    # the canvas fills the host at 0,0, so the origins coincide.\n"
+"    # (winfo toscreen was removed in Tk 9 - use rootx/rooty.)\n"
+"    set x [expr {$x - [winfo rootx $w]}]\n"
+"    set y [expr {$y - [winfo rooty $w]}]\n"
 "    if {$state eq {}} {set state 0}\n"
 "    if {[string match <B*-Motion> $type]} {\n"
 "        # Tk 9.0.4 mac: a generated B-Motion whose -state lacks the\n"
