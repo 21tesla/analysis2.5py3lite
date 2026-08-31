@@ -259,7 +259,12 @@ class ScrolledMatrix(Frame):
             width=50,
             height=(self.initialRows + 1) * 30,
         )
-        self.canvas.pack()
+        # Tk 9: switching this canvas to 'place' (drawCanvas) drops its
+        # contribution to the frame's requested size, so parent dialogs that
+        # autogrow from content (BasePopup position-only geometry) collapse
+        # the table to a header sliver; keep it pack-managed and let fill
+        # track the frame size instead
+        self.canvas.pack(fill="both", expand=True)
 
         self.bind("<Configure>", self.refreshSizeAfter)
 
@@ -1540,8 +1545,6 @@ class ScrolledMatrix(Frame):
 
         if self.multiSelect:
             self.hilightRange()
-
-        self.canvas.place(x=0, y=0, width=canvasWidth, height=canvasHeight)
 
     def doEditMark(self, row, col):
 

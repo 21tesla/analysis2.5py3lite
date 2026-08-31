@@ -539,6 +539,13 @@ class BrowseResonancesPopup(BasePopup):
 
         self.curateNotifiers(self.registerNotify)
 
+        # this dialog grows from content (position-only geometry); on Tk 9 the
+        # toplevel is sized from whatever request has propagated by first
+        # mapping, and the table canvas request only propagates on the next
+        # idle, so force the geometry idle pass while still unmapped,
+        # otherwise the Resonance Table row opens as a header sliver
+        self.update_idletasks()
+
         self.refresh = False
         self.updateAfter()
 

@@ -1854,6 +1854,20 @@ class AnalysisPopup(BasePopup, Analysis):
 
             if geom:
                 popup.geometry(geom)
+                # Tk 9 honours an explicit geometry instead of autogrowing:
+                # a size stored while the dialog was itself broken (e.g. a
+                # collapsed ScrolledMatrix request) would re-shrink the
+                # dialog below its content request on reopen, so clamp the
+                # restored size up to the current request as a floor
+                popup.update_idletasks()
+                w, h, x, y = popup.getGeometry()
+                if w < popup.winfo_reqwidth() or h < popup.winfo_reqheight():
+                    popup.setGeometry(
+                        max(w, popup.winfo_reqwidth()),
+                        max(h, popup.winfo_reqheight()),
+                        x,
+                        y,
+                    )
 
         return popup
 
