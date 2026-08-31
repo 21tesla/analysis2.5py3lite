@@ -65,6 +65,7 @@ from ccpnmr.analysis.core.WindowBasic import (
 )
 from ccpnmr.analysis.macros.ArgumentServer import ArgumentServer
 from ccpnmr.analysis.popups.AddContourFile import AddContourFilePopup
+from ccpnmr.analysis.popups.AddPeaksPopup import AddPeaksPopup
 from ccpnmr.analysis.popups.BackupProject import BackupProjectPopup
 from ccpnmr.analysis.popups.BasePopup import BasePopup, determineHelpUrl
 from ccpnmr.analysis.popups.BrowseAtoms import BrowseAtomsPopup
@@ -205,6 +206,7 @@ class AnalysisPopup(BasePopup, Analysis):
             "open_spectrum": self.openSpectrum,
             "edit_spectrum": self.editSpectrum,
             "add_contour_file": self.addSpectrumContourFile,
+            "add_peaks": self.addPeaks,
             "create_contour_file": self.createSpectrumContourFile,
             "edit_experiment": self.editExperiment,
             "edit_experiment_series": self.editExpSeries,
@@ -1015,6 +1017,14 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.viewSelectedPeaks,
             tipText="A table of the peaks currently selected in spectrum windows",
         )
+        menu.add_command(
+            label="Add Peaks",
+            shortcut="A",
+            image=self.iconTable,
+            compound="left",
+            command=self.addPeaks,
+            tipText="Add peaks and resonance assignments from an NMRdraw .tab peak list file",
+        )
         ## dans menu option
         # menu.add_command(label='Peak Separator',
         #                 image=self.iconTool, compound='left',
@@ -1044,6 +1054,7 @@ class AnalysisPopup(BasePopup, Analysis):
         self.menu_items[PeaksMenu] = [
             "Peak Lists",
             "Selected Peaks",
+            "Add Peaks",
             "Peak Separator",
             "Peak Finding",
             "Draw Parameters",
@@ -2033,6 +2044,11 @@ class AnalysisPopup(BasePopup, Analysis):
     def editPeakLists(self):
 
         popup = self.openPopup("edit_peak_lists", EditPeakListsPopup)
+        return popup
+
+    def addPeaks(self):
+
+        popup = self.openPopup("add_peaks", AddPeaksPopup)
         return popup
 
     def copyAssignments(self):
