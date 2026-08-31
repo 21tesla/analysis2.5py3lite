@@ -576,6 +576,11 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
         argv[n++] = Tcl_NewStringObj("0", -1);
         argv[n++] = Tcl_NewStringObj("-bg", -1);
         argv[n++] = Tcl_NewStringObj("#ffffff", -1);
+        /* The canvas sits over the host and covers it 1:1. It must never take
+           keyboard focus, or the app's key commands (routed to the focused
+           WindowCanvas frame) would be lost after the first click on it. */
+        argv[n++] = Tcl_NewStringObj("-takefocus", -1);
+        argv[n++] = Tcl_NewStringObj("0", -1);
         tkc_eval(tk_handler_p, n, argv);
         for (i = 0; i < n; i++)
             Tcl_DecrRefCount(argv[i]);
@@ -600,45 +605,94 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
         /* The canvas covers the host widget 1:1, so the pointer is always
            over the CANVAS - Tk dispatches pointer events through the
            canvas bindtags only, and the bindings the app registers on the
-           host widget (crosshair <Motion>, peak-select <ButtonPress-1>
-           + <B1-Motion> + <ButtonRelease-1> + modifier variants, wheel
-           zoom, ...) never fire.  Replay every pointer event on the host
-           widget with "event generate": the host's bindings run with
-           event.widget = host (the app requires the host's attributes
-           there) and identical coordinates (the canvas sits at 0,0).
+           host widget (crosshair <Motion>, peak-select
+           <ButtonPress-1> + <B1-Motion> + <ButtonRelease-1> and their
+           Shift/Control variants, drag-<Button-2/3>, right-click menu,
+           <Enter>/<Leave> ...) never fire.  Replay each pointer event on
+           the host widget with "event generate": the host's bindings run
+           with event.widget = host (the app reads its attributes off the
+           host there) and identical coordinates (the canvas sits at 0,0).
            The BASE type to generate is passed per binding - "event
            generate" does not accept modifier-qualified sequences.
-           Configure/Expose/keyboard are NOT replayed: the host receives
-           its own real ones (no duplicates). */
-        /* one word per argv slot (Tcl_EvalObjv: argv[0] is the command
-           name, the rest the arguments); newlines are Tcl command
-           separators inside the body */
-        n = 0;
-        argv[n++] = Tcl_NewStringObj("proc", -1);
-        argv[n++] = Tcl_NewStringObj("ccp_canvas_forward", -1);
-        argv[n++] = Tcl_NewStringObj("{parent type}", -1);
-        argv[n++] = Tcl_NewStringObj(
-            "{\n"
-            "set a \"\"\n"
-            "if {[info exists event(x)]} {append a \" -x $event(x) -y $event(y)\"}\n"
-            "if {[info exists event(state)]} {append a \" -state $event(state)\"}\n"
-            /* -button is only valid for Button press/release types: "<B1-Motion>" rejects it */
-            "if {[info exists event(num)] && [string match <Button* $type]} {append a \" -button $event(num)\"}\n"
-            "if {[info exists event(detail)]} {append a \" -detail $event(detail)\"}\n"
-            "if {[info exists event(xRoot)]} {append a \" -rootx $event(xRoot) -rooty $event(yRoot)\"}\n"
-            "catch {event generate $parent $type $a}\n"
-            "}", -1);
-        tkc_eval(tk_handler_p, n, argv);
-        for (i = 0; i < n; i++)
-            Tcl_DecrRefCount(argv[i]);
+           Configure/Expose/keyboard are NOT replayed: the host (not the
+           focus-stealing canvas, see -takefocus 0) receives its own real
+           ones, so keyboard and geometry events are unaffected. */
+        /* Defined with Tcl_Eval on a full source string, NOT tkc_eval /
+           Tcl_EvalObjv.  Passing the multi-command BODY to Tcl_EvalObjv as
+           one argv word pre-compiles it into a SINGLE literal token, and
+           `proc` then stores/executes the whole body as one command
+           ("invalid command name <body>") - the crosshair dies silently.
+           Tcl_Eval parses the body as an ordinary script.  (The single-level
+           canvas/place/bind calls above are fine with Tcl_EvalObjv because
+           every argv word there is just a value.)
+           The body never touches the $event array: the coordinates,
+           button and modifier state are substituted into the binding
+           SCRIPT itself (%X %Y %s - the core Tk binding mechanism,
+           evaluated where the event is actually dispatched) and passed
+           in as ONE braced list "{<win> <seq> x y btn state}".  The
+           earlier proc-scope `global event` read of event(x)/event(y)
+           resolved to an EMPTY set for real pointer events, so every
+           replay arrived at the host with the default x=0 y=0 (the
+           stuck-at-origin crosshair).  Only the fields the app's
+           handlers read are replayed (-x -y -state -button); -detail /
+           -rootx / -rooty are omitted (unused, and event(detail) is an
+           integer Notify code that `event generate` rejects - it
+           requires the name).  With the CCP_FWD_DIAG env var set, the
+           first forwarded events are recorded to
+           $TMPDIR/ccp-fwd-diag.log for on-site diagnosis.  `{*}$opts`
+           handles the empty-options case that a trailing empty argument
+           would not. */
+        static const char ccp_forward_proc_src[] =
+"proc ccp_canvas_forward {pt} {\n"
+"    lassign $pt w type x y btn state\n"
+"    if {$state eq {}} {set state 0}\n"
+"    if {[string match <B*-Motion> $type]} {\n"
+"        # Tk 9.0.4 mac: a generated B-Motion whose -state lacks the\n"
+"        # button's mask is demoted to a plain Motion (the host's\n"
+"        # <B1-Motion> etc. never fires).  OR the mask in (idempotent if\n"
+"        # the real %s already carries it) to keep the drag event type.\n"
+"        set state [expr {$state | (1 << (7 + $btn))}]\n"
+"    }\n"
+"    set opts [list -x $x -y $y]\n"
+"    if {$state ne {}} {lappend opts -state $state}\n"
+"    if {$btn > 0 && [string match <Button* $type]} {lappend opts -button $btn}\n"
+"    if {[info exists ::env(CCP_FWD_DIAG)]} {\n"
+"        if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
+"        if {![info exists ::ccp_fwd_diag_n]} {set ::ccp_fwd_diag_n 0}\n"
+"        if {$::ccp_fwd_diag_n < 50} {\n"
+"            incr ::ccp_fwd_diag_n\n"
+"            catch {\n"
+"                set f [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
+"                puts $f [list $type \"->\" $w \"x=$x\" \"y=$y\" \"button=$btn\" \"state=$state\" \"opts=[$opts]\"]\n"
+"                close $f\n"
+"            }\n"
+"        }\n"
+"    }\n"
+"    catch {event generate $w $type {*}$opts}\n"
+"}\n";
+        if (Tcl_Eval(tk_handler_p->interp, ccp_forward_proc_src) != TCL_OK)
+        {
+            const char *msg = Tcl_GetStringResult(tk_handler_p->interp);
+
+            fprintf(stderr, "TkHandler forwarder-proc error: %s\n",
+                    msg ? msg : "(no message)");
+        }
 
         {
+            /* Pointer sequences forwarded to the host.  The three button
+               families below (press / B-Motion / release for buttons 1-3,
+               with none/Shift/Control/Control-Shift modifiers) cover
+               click-select, drag/translate and the right-click menu.
+               <Double-1> is NOT forwarded (it cannot be `event generate`d;
+               the host still receives its Double-click from the two forwarded
+               ButtonPress-1 events).  Scroll-wheel is NOT forwarded here: its
+               handler lives on an ancestor window (not the host) and the
+               direction would be lost in the replay anyway. */
             static const char *mods[] = { "", "Control-", "Shift-", "Control-Shift-" };
-            static const char *plain_seq[] = { "<Motion>", "<Enter>", "<Leave>",
-                                              "<Double-1>", "<MouseWheel>",
-                                              "<Button-4>", "<Button-5>" };
+            static const char *plain_seq[] = { "<Motion>", "<Enter>", "<Leave>" };
             char seq[80];
-            char script[200];
+            char gseq[40];
+            char script[400];
             int mi, pi, b, e3;
 
             for (pi = 0; pi < (int) (sizeof plain_seq / sizeof plain_seq[0]); pi++)
@@ -647,7 +701,9 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                 argv[n++] = Tcl_NewStringObj("bind", -1);
                 argv[n++] = Tcl_NewStringObj(path, -1);
                 argv[n++] = Tcl_NewStringObj(plain_seq[pi], -1);
-                sprintf(script, "ccp_canvas_forward %s %s", win_path, plain_seq[pi]);
+                /* %X %Y %s are substituted by the binding machinery at
+                   dispatch time (no $event in the proc at all) */
+                sprintf(script, "ccp_canvas_forward {%s %s %%X %%Y 0 %%s}", win_path, plain_seq[pi]);
                 argv[n++] = Tcl_NewStringObj(script, -1);
                 tkc_eval(tk_handler_p, n, argv);
                 for (i = 0; i < n; i++)
@@ -668,11 +724,12 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                         argv[n++] = Tcl_NewStringObj(path, -1);
                         argv[n++] = Tcl_NewStringObj(seq, -1);
                         if (e3 == 1)
-                            sprintf(script, "ccp_canvas_forward %s <B%d-Motion>", win_path, b);
+                            snprintf(gseq, sizeof gseq, "<B%d-Motion>", b);
                         else if (e3 == 0)
-                            sprintf(script, "ccp_canvas_forward %s <ButtonPress-%d>", win_path, b);
+                            snprintf(gseq, sizeof gseq, "<ButtonPress-%d>", b);
                         else
-                            sprintf(script, "ccp_canvas_forward %s <ButtonRelease-%d>", win_path, b);
+                            snprintf(gseq, sizeof gseq, "<ButtonRelease-%d>", b);
+                        sprintf(script, "ccp_canvas_forward {%s %s %%X %%Y %d %%s}", win_path, gseq, b);
                         argv[n++] = Tcl_NewStringObj(script, -1);
                         tkc_eval(tk_handler_p, n, argv);
                         for (i = 0; i < n; i++)
@@ -680,43 +737,6 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                     }
         }
 
-        /* Tk 9.0.4 (Aqua) dispatch quirk: a window's bindtag storage is
-           materialized lazily and pointer events (real or generated) do
-           not reach its per-window bindings until a "bindtags" READ has
-           run for the window (a single write before any read does not
-           count).  Touch AFTER the binds above: the read materializes
-           the list that carries the forwarder bindings, then the very
-           same list is written back (covers builds where the write is
-           the effective step).  The result string is interpreter-owned
-           and reset by the next eval, so copy it first. */
-        {
-            char listbuf[512];
-
-            n = 0;
-            argv[n++] = Tcl_NewStringObj("bindtags", -1);
-            argv[n++] = Tcl_NewStringObj(path, -1);
-            tkc_eval(tk_handler_p, n, argv);
-            for (i = 0; i < n; i++)
-                Tcl_DecrRefCount(argv[i]);
-
-            {
-                const char *ls = Tcl_GetStringResult(tk_handler_p->interp);
-                int l = ls ? (int) strlen(ls) : 0;
-
-                if (l >= (int) sizeof listbuf)
-                    l = (int) sizeof listbuf - 1;
-                memcpy(listbuf, ls, l);
-                listbuf[l] = '\0';
-            }
-
-            n = 0;
-            argv[n++] = Tcl_NewStringObj("bindtags", -1);
-            argv[n++] = Tcl_NewStringObj(path, -1);
-            argv[n++] = Tcl_NewStringObj(listbuf[0] ? listbuf : "", -1);
-            tkc_eval(tk_handler_p, n, argv);
-            for (i = 0; i < n; i++)
-                Tcl_DecrRefCount(argv[i]);
-        }
     }
 #else
     display = Tk_Display(tk_win);
@@ -824,8 +844,10 @@ void destroy_tk_canvas(Tk_handler tk_handler)
     {
         Tcl_Obj *argv[2] = { 0 };
 
-        argv[0] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
-        argv[1] = Tcl_NewStringObj("destroy", -1);
+        /* "destroy" is a standalone command, not a widget method:
+           "destroy <path>" (the reverse order is "bad option destroy") */
+        argv[0] = Tcl_NewStringObj("destroy", -1);
+        argv[1] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
         tkc_eval(tk_handler_p, 2, argv);
         Tcl_DecrRefCount(argv[0]);
         Tcl_DecrRefCount(argv[1]);
@@ -1208,16 +1230,17 @@ void set_background_tk_handler(Tk_handler tk_handler, float *background)
 
 #ifdef __APPLE__
     {
-        Tcl_Obj *argv[3] = {0};
+        Tcl_Obj *argv[4] = {0};
         char bg[8];
         int n = 0;
 
         tkc_fill_color(bg, background);
         argv[n++] = Tcl_NewStringObj(tk_handler_p->canvas_path, -1);
+        argv[n++] = Tcl_NewStringObj("configure", -1);
         argv[n++] = Tcl_NewStringObj("-bg", -1);
         argv[n++] = Tcl_NewStringObj(bg, -1);
         tkc_eval(tk_handler_p, n, argv);
-        for (n = 0; n < 3; n++)
+        for (n = 0; n < 4; n++)
             if (argv[n])
                 Tcl_DecrRefCount(argv[n]);
     }
