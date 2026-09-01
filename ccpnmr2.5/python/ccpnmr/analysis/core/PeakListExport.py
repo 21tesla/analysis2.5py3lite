@@ -27,13 +27,7 @@ def _format_tab_atom(atom):
     }
     one_letter = CCPN_TO_ONE_LETTER.get(res_code, res_code[0] if res_code else "?")
     seq_num = residue.seqCode
-    chain = residue.chain
-    chain_code = chain.code if chain else None
-    
-    if chain_code:
-        return f"{chain_code}-{one_letter}{seq_num}-{atom.name}"
-    else:
-        return f"{one_letter}{seq_num}-{atom.name}"
+    return f"{one_letter}{seq_num}-{atom.name}"
 
 def get_tab_ass(peak):
     # Try to find a proton atom first
