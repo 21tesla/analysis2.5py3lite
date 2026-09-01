@@ -120,6 +120,75 @@ def parseTabFile(filePath):
     return varNames, rows
 
 
+def axis_name_to_element(name):
+    """
+    Map an XEASY axis name to a normalized CCPN isotope code.
+    """
+    if not name:
+        return ""
+    name_upper = name.strip().upper()
+    if name_upper.startswith("H"):
+        return "1H"
+    elif name_upper.startswith("N"):
+        return "15N"
+    elif name_upper.startswith("C"):
+        return "13C"
+    return ""
+
+
+def parseXeasyPeaksFile(filePath):
+    """
+    Parse an XEASY style .peaks file.
+    Returns num_dims, xeasy_dims mapping, and a list of parsed rows.
+    """
+    num_dims = 2
+    xeasy_dims = {}
+    rows = []
+    
+    with open(filePath, "r") as f:
+        for line in f:
+            line_str = line.strip()
+            if not line_str:
+                continue
+            if line_str.startswith("#"):
+                if "Number of dimensions" in line_str:
+                    try:
+                        num_dims = int(line_str.split()[-1])
+                    except (ValueError, IndexError):
+                        pass
+                elif line_str.startswith("#INAME"):
+                    parts = line_str.split()
+                    if len(parts) >= 3:
+                        try:
+                            dim_num = int(parts[1])
+                            axis_name = parts[2]
+                            xeasy_dims[axis_name_to_element(axis_name)] = dim_num
+                        except (ValueError, IndexError):
+                            pass
+                continue
+                
+            parts = line_str.split()
+            expected_min_len = 1 + num_dims + 6
+            if len(parts) >= expected_min_len:
+                try:
+                    row_id = parts[0]
+                    positions = [float(x) for x in parts[1 : 1 + num_dims]]
+                    metadata = parts[1 + num_dims : 1 + num_dims + 6]
+                    assignments = parts[1 + num_dims + 6 : 1 + num_dims + 6 + num_dims]
+                    
+                    rows.append({
+                        "index": row_id,
+                        "positions": positions,
+                        "volume": float(metadata[2]),
+                        "height": float(metadata[2]),
+                        "assignments": assignments,
+                    })
+                except (ValueError, IndexError):
+                    continue
+                    
+    return num_dims, xeasy_dims, rows
+
+
 def parseAssString(ass):
     """
     Parse an NMRdraw ASS assignment string, e.g. ``W81-HE1`` or
@@ -200,6 +269,8 @@ _ASS_RESIDUE_CODES = {
 
 def _assResidueCode(res):
     """The three-letter residue code implied by an ASS residue token."""
+    if not res:
+        return None
     if len(res) == 1:
         return _ASS_RESIDUE_CODES.get(res.upper())
     entry = Constants.residueName2chemCompId.get(res.upper())
@@ -397,6 +468,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
 
     prefix = "Add Peaks: "
     isNef = filePath.lower().endswith(".nef")
+    isPeaks = filePath.lower().endswith(".peaks")
     try:
         if isNef:
             from ccpnmr.nef import StarIo
@@ -438,6 +510,13 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
                 dim_loop = peak_saveframe["nef_spectrum_dimension"]
                 for dim_row in dim_loop.data:
                     nef_dims[dim_row["axis_code"].strip().upper()] = int(dim_row["dimension_id"])
+        elif isPeaks:
+            xeasy_num_dims, xeasy_dims, xeasy_rows = parseXeasyPeaksFile(filePath)
+            varNames = ["index", "volume", "height"]
+            for dim in range(1, xeasy_num_dims + 1):
+                varNames.append("position_%d" % dim)
+                varNames.append("assignment_%d" % dim)
+            rows = xeasy_rows
         else:
             varNames, rows = parseTabFile(filePath)
     except Exception as e:
@@ -467,7 +546,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
         return report
 
     axisLetters = "XYZWUV"
-    if isNef:
+    if isNef or isPeaks:
         missing = [dim for dim in range(1, dataSource.numDim + 1) if "position_%d" % dim not in varNames]
         if missing:
             report["error"] = "File is missing the position_%s column(s) for a %dD spectrum" % (", ".join(str(dim) for dim in missing), dataSource.numDim)
@@ -515,6 +594,21 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
                     nef_dim = nef_dims.get(iso, dataDim.dim)
                     positions.append(float(row["position_%d" % nef_dim]))
             except (KeyError, TypeError, ValueError):
+                report["peaksSkipped"] += 1
+                print(prefix + "row %s: unmappable (missing position values) - ignored" % rowNumber)
+                continue
+        elif isPeaks:
+            if "height" in row:
+                row["HEIGHT"] = row["height"]
+            if "volume" in row:
+                row["VOL"] = row["volume"]
+            try:
+                positions = []
+                for dataDim in dataDims:
+                    iso = dimIsotopes[dataDim.dim].strip().upper()
+                    xeasy_dim = xeasy_dims.get(iso, dataDim.dim)
+                    positions.append(float(row["positions"][xeasy_dim - 1]))
+            except (IndexError, KeyError, TypeError, ValueError):
                 report["peaksSkipped"] += 1
                 print(prefix + "row %s: unmappable (missing position values) - ignored" % rowNumber)
                 continue
@@ -583,6 +677,66 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
                 continue
                 
             peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=annotation)
+        elif isPeaks:
+            has_any_assignment = False
+            dim_assignments = {}
+            dim_groups = {}
+            annotation_parts = []
+            
+            for dataDim in dataDims:
+                iso = dimIsotopes[dataDim.dim].strip().upper()
+                xeasy_dim = xeasy_dims.get(iso, dataDim.dim)
+                
+                if xeasy_dim - 1 < len(row["assignments"]):
+                    ass = row["assignments"][xeasy_dim - 1]
+                    if ass in (None, "-", ".", "?"):
+                        continue
+                        
+                    if "." in ass:
+                        atom_name, seq_code = ass.split(".", 1)
+                    else:
+                        match = re.match(r"([A-Za-z]+[0-9]*)(\d+)", ass)
+                        if match:
+                            atom_name, seq_code = match.groups()
+                        else:
+                            atom_name, seq_code = ass, None
+                            
+                    if not seq_code:
+                        continue
+                        
+                    try:
+                        seq_num = int(seq_code)
+                    except (TypeError, ValueError):
+                        seq_num = seq_code
+                        
+                    dimAssInfo = {
+                        "chain": None,
+                        "num": seq_num,
+                        "res": None,
+                        "atom": atom_name,
+                    }
+                    
+                    residue = _findResidue(molSystems, dimAssInfo)
+                    atom = None
+                    if residue is not None:
+                        atom = _resolveAtom(residue, atom_name)
+                        
+                    if atom is not None:
+                        has_any_assignment = True
+                        dim_assignments[dataDim.dim] = atom
+                        dim_groups[dataDim.dim] = _resonanceGroupFor(residue, nmrProject, groups)
+                        res_name = residue.ccpCode if hasattr(residue, "ccpCode") else ""
+                        annotation_parts.append("%s%s-%s" % (res_name, seq_code, atom_name))
+            
+            annotation = " ".join(annotation_parts) if annotation_parts else None
+            
+            if not has_any_assignment:
+                peak = _makePeak(peakList, row, hasHeight, hasVolume)
+                report["peaksUnassigned"] += 1
+                print(prefix + "row %s: no assignment - peak at %s added unassigned" % (rowNumber, tuple(positions)))
+                continue
+                
+            peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=annotation)
         else:
             ass = row.get("ASS")
             assInfo = parseAssString(ass)
@@ -619,7 +773,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
             peakDim.value = position
             isotopeCode = dimIsotopes[dataDim.dim]
             
-            if isNef:
+            if isNef or isPeaks:
                 targetAtom = dim_assignments.get(dataDim.dim)
                 group = dim_groups.get(dataDim.dim)
             else:
@@ -635,7 +789,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
                 )
                 report["resonancesCreated"] += 1
                 report["dimResonancesUnassigned"] += 1
-                if isNef:
+                if isNef or isPeaks:
                     print(prefix + "row %s: dim %d has no atom assigned (position %s) - resonance left unassigned to an atom"
                           % (rowNumber, dataDim.dim, position))
                 else:
@@ -649,14 +803,14 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
             if existing is not None:
                 if not overwrite:
                     report["assignmentsKept"] += 1
-                    if isNef:
+                    if isNef or isPeaks:
                         print(prefix + "row %s: %s of %s already has a resonance (name %s, serial %s) - kept, new dim left unassigned (Overwrite resonance off)"
                               % (rowNumber, isotopeCode, targetAtom.name, existing.name, existing.serial))
                     else:
                         print(prefix + "row %s: %s of %s already has a resonance (name %s, serial %s) - kept, new dim left unassigned (Overwrite resonance off)"
                               % (rowNumber, isotopeCode, ass, existing.name, existing.serial))
                     continue
-                if isNef:
+                if isNef or isPeaks:
                     print(prefix + "row %s: overwriting - reusing existing %s resonance (name %s, serial %s) for %s"
                           % (rowNumber, isotopeCode, existing.name, existing.serial, targetAtom.name))
                 else:

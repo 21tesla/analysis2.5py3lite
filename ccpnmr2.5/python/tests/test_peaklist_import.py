@@ -199,5 +199,22 @@ def test_add_peaks_popup_select_file(monkeypatch):
     assert popup.fileEntry.set.call_args[0][0] == "/path/to/some/spectrum/chosen_peak_list.nef"
 
 
+def test_import_xeasy_peaks_integration():
+    from memops.general import Io as memopsIo
+    from ccpnmr.analysis.core.PeakListImport import importTabPeaks
+    
+    proj_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "addpeaks")
+    peaks_file = os.path.join(os.path.dirname(__file__), "..", "..", "..", "sswt_assigned.peaks")
+    
+    root = memopsIo.loadProject(proj_dir, projectName="allpeaks2")
+    nmr_project = root.currentNmrProject
+    spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
+    
+    report = importTabPeaks(root, peaks_file, spectrum)
+    assert report["error"] is None
+    assert report["peaksAdded"] == 116
+    assert report["resonancesCreated"] == 222
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))

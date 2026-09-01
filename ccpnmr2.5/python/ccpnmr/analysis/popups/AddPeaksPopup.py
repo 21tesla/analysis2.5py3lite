@@ -83,7 +83,7 @@ class AddPeaksPopup(BasePopup):
         self.shiftList = None
         self.fileChanged = False
 
-        BasePopup.__init__(self, parent=parent, title="Add Peaks from NMRdraw .tab or NEF file", **kw)
+        BasePopup.__init__(self, parent=parent, title="Add Peaks from NMRdraw .tab, NEF, or XEASY file", **kw)
 
     def body(self, master):
 
@@ -102,10 +102,10 @@ class AddPeaksPopup(BasePopup):
         row = row + 1
         label = Label(master, text="File:")
         label.grid(row=row, column=0, sticky="e")
-        tipText = "Choose an NMRdraw .tab or NEF peak list file"
+        tipText = "Choose an NMRdraw .tab, NEF, or XEASY peak list file"
         self.fileEntry = Entry(master, tipText=tipText)
         self.fileEntry.grid(row=row, column=1, sticky="ew")
-        tipText = "Browse for an NMRdraw .tab or NEF peak list file"
+        tipText = "Browse for an NMRdraw .tab, NEF, or XEASY peak list file"
         browseButton = Button(master, text="Browse...", command=self.selectFile, tipText=tipText)
         browseButton.grid(row=row, column=2, sticky="w")
 
@@ -252,6 +252,7 @@ class AddPeaksPopup(BasePopup):
             file_types=[
                 FileType("NMRdraw .tab files", ["*.tab"]),
                 FileType("NEF peak files", ["*.nef"]),
+                FileType("XEASY .peaks files", ["*.peaks"]),
                 FileType("All files", ["*"]),
             ],
         )
@@ -278,7 +279,7 @@ class AddPeaksPopup(BasePopup):
 
         fileName = self.fileEntry.get()
         if not fileName or not os.path.exists(fileName):
-            showError("No file", "Choose an existing NMRdraw .tab or NEF file first", parent=self)
+            showError("No file", "Choose an existing NMRdraw .tab, NEF, or XEASY file first", parent=self)
             return
 
         listName = self.nameEntry.get().strip()
