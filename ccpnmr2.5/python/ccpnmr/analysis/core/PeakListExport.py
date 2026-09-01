@@ -102,3 +102,11 @@ def exportTabPeaks(peakList, filePath):
         
     with open(filePath, "w") as fp:
         fp.write("\n".join(lines) + "\n")
+
+
+def exportNefPeaks(peakList, filePath):
+    """
+    Export the peaks of a CCPN PeakList into a NEF (.nef) file.
+    """
+    from ccpnmr import nefExport
+    nefExport.exportProject(peakList.root, filePath)
