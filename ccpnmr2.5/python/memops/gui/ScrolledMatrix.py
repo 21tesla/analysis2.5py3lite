@@ -270,11 +270,9 @@ class ScrolledMatrix(Frame):
 
         self.canvas.bind("<Button-1>", self.mouseClick)
 
-        if useWheelMouse():
-            self.canvas.bind("<MouseWheel>", self.windowsOsScroll)
-        else:
-            self.canvas.bind("<Button-4>", self.scrollUp)
-            self.canvas.bind("<Button-5>", self.scrollDown)
+        self.canvas.bind("<MouseWheel>", self.windowsOsScroll)
+        self.canvas.bind("<Button-4>", self.scrollUp)
+        self.canvas.bind("<Button-5>", self.scrollDown)
 
         self.canvas.bind("<Double-1>", self.mouseDoubleClick)
         self.canvas.bind("<Motion>", self.mouseEnter)

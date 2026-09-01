@@ -339,12 +339,9 @@ class WindowFrame(Frame, WindowDraw):
         # NOTE:ED - change the menu binding for MacOS
         scrolledWindow.menuBind(button=OSButton(3), menu_items=self.menu_items, update_func=self.updateMenuState)
 
-        if useWheelMouse():
-            self.windowPopup.bind("<MouseWheel>", self.windowsZoom)
-            # self.windowPopup.bind('<KeyPress>', self.keypress)
-        else:
-            scrolledWindow.canvasBind("<Button-4>", self.zoomIn)
-            scrolledWindow.canvasBind("<Button-5>", self.zoomOut)
+        scrolledWindow.canvasBind("<MouseWheel>", self.windowsZoom)
+        scrolledWindow.canvasBind("<Button-4>", self.zoomIn)
+        scrolledWindow.canvasBind("<Button-5>", self.zoomOut)
 
         if not self.hasValueAxis:
             scrolledWindow.sliceMenuBind(
@@ -2443,21 +2440,26 @@ class WindowFrame(Frame, WindowDraw):
         canvas = event.widget
         state = event.state
 
+        if delta > 0:
+            step = -1
+            scale = 0.8
+        elif delta < 0:
+            step = 1
+            scale = 1.2
+        else:
+            return
+
         if state & 4:  # Control
-            self.scrollZPlane(canvas, "z1", delta)
+            self.scrollZPlane(canvas, "z1", step)
 
         elif state & 1:  # Shift
-            self.scrollZPlane(canvas, "z2", delta)
+            self.scrollZPlane(canvas, "z2", step)
 
-        ## djo35 - in Windows 7 state seems to be constantly 8
-        # elif state & 8: # Alt
-        #  self.scrollZPlane(canvas, 'z1', delta)
+        elif state & 8:  # Alt
+            self.scrollZPlane(canvas, "z1", step)
 
         else:
-            if delta > 0:
-                self.scrolled_window.zoom(canvas, 0.8)
-            elif delta < 0:
-                self.scrolled_window.zoom(canvas, 1.2)
+            self.scrolled_window.zoom(canvas, scale)
 
     def zoomIn(self, event):
 

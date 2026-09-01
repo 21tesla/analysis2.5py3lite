@@ -201,11 +201,9 @@ class ScrolledGraph(Frame):
         if font:
             self.font = font
 
-        if useWheelMouse():
-            self.canvas.bind("<MouseWheel>", self.windowsOsZoom)
-        else:
-            self.canvas.bind("<Button-4>", lambda event: self.setZoom(self.zoom * 1.2))
-            self.canvas.bind("<Button-5>", lambda event: self.setZoom(self.zoom / 1.2))
+        self.canvas.bind("<MouseWheel>", self.windowsOsZoom)
+        self.canvas.bind("<Button-4>", lambda event: self.setZoom(self.zoom * 1.2))
+        self.canvas.bind("<Button-5>", lambda event: self.setZoom(self.zoom / 1.2))
 
         self.configMenu()
         self.draw()
