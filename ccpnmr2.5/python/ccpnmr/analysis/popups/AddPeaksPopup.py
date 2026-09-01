@@ -42,7 +42,7 @@ Development of a Software Pipeline. Proteins 59, 687 - 696.
 import os
 
 from ccpnmr.analysis.core.AssignmentBasic import getShiftLists
-from ccpnmr.analysis.core.NmrdrawImport import importTabPeaks
+from ccpnmr.analysis.core.PeakListImport import importTabPeaks
 from ccpnmr.analysis.popups.BasePopup import BasePopup
 from memops.gui.Button import Button
 from memops.gui.ButtonList import UtilityButtonList
@@ -83,7 +83,7 @@ class AddPeaksPopup(BasePopup):
         self.shiftList = None
         self.fileChanged = False
 
-        BasePopup.__init__(self, parent=parent, title="Add Peaks from NMRdraw .tab file", **kw)
+        BasePopup.__init__(self, parent=parent, title="Add Peaks from NMRdraw .tab or NEF file", **kw)
 
     def body(self, master):
 
@@ -102,10 +102,10 @@ class AddPeaksPopup(BasePopup):
         row = row + 1
         label = Label(master, text="File:")
         label.grid(row=row, column=0, sticky="e")
-        tipText = "Choose an NMRdraw .tab peak list file"
+        tipText = "Choose an NMRdraw .tab or NEF peak list file"
         self.fileEntry = Entry(master, tipText=tipText)
         self.fileEntry.grid(row=row, column=1, sticky="ew")
-        tipText = "Browse for an NMRdraw .tab peak list file"
+        tipText = "Browse for an NMRdraw .tab or NEF peak list file"
         browseButton = Button(master, text="Browse...", command=self.selectFile, tipText=tipText)
         browseButton.grid(row=row, column=2, sticky="w")
 
@@ -249,7 +249,11 @@ class AddPeaksPopup(BasePopup):
         popup = FileSelectPopup(
             self,
             directory=directory,
-            file_types=[FileType("NMRdraw .tab files", ["*.tab"]), FileType("All files", ["*"])],
+            file_types=[
+                FileType("NMRdraw .tab files", ["*.tab"]),
+                FileType("NEF peak files", ["*.nef"]),
+                FileType("All files", ["*"]),
+            ],
         )
         fileName = popup.getFile()
         popup.destroy()
@@ -274,7 +278,7 @@ class AddPeaksPopup(BasePopup):
 
         fileName = self.fileEntry.get()
         if not fileName or not os.path.exists(fileName):
-            showError("No file", "Choose an existing NMRdraw .tab file first", parent=self)
+            showError("No file", "Choose an existing NMRdraw .tab or NEF file first", parent=self)
             return
 
         listName = self.nameEntry.get().strip()

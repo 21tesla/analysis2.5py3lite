@@ -13,7 +13,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from ccpnmr.analysis.core.NmrdrawImport import (  # noqa: E402
+from ccpnmr.analysis.core.PeakListImport import (  # noqa: E402
     _assResidueCode,
     _isotopeElement,
     _rowIntensity,
@@ -123,6 +123,41 @@ def test_row_intensity():
     assert _rowIntensity(row, "WEIRD") is None
     assert _rowIntensity(row, "MISSING") is None
     assert _rowIntensity(row, "NEG") == pytest.approx(-666.0)  # -666 is a legal int here
+
+
+def test_import_tab_peaks_integration():
+    from memops.general import Io as memopsIo
+    from ccpnmr.analysis.core.PeakListImport import importTabPeaks
+    
+    # Locate project directory relative to tests directory
+    proj_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "addpeaks")
+    tab_file = os.path.join(os.path.dirname(__file__), "..", "..", "..", "sswt_assigned.tab")
+    
+    root = memopsIo.loadProject(proj_dir, projectName="allpeaks2")
+    nmr_project = root.currentNmrProject
+    spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
+    
+    report = importTabPeaks(root, tab_file, spectrum)
+    assert report["error"] is None
+    assert report["peaksAdded"] == 116
+    assert report["resonancesCreated"] == 231
+
+
+def test_import_nef_peaks_integration():
+    from memops.general import Io as memopsIo
+    from ccpnmr.analysis.core.PeakListImport import importTabPeaks
+    
+    proj_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "addpeaks")
+    nef_file = os.path.join(os.path.dirname(__file__), "..", "..", "..", "sswt_assigned.nef")
+    
+    root = memopsIo.loadProject(proj_dir, projectName="allpeaks2")
+    nmr_project = root.currentNmrProject
+    spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
+    
+    report = importTabPeaks(root, nef_file, spectrum)
+    assert report["error"] is None
+    assert report["peaksAdded"] == 116
+    assert report["resonancesCreated"] == 231
 
 
 if __name__ == "__main__":
