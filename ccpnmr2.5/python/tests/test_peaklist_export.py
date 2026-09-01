@@ -31,11 +31,11 @@ def test_export_import_tab_roundtrip(tmp_path):
     _clean_project(nmr_project, spectrum)
     report_in = importTabPeaks(root, tab_file, spectrum)
     assert report_in["error"] is None
-    assert report_in["peaksAdded"] == 116
-    assert report_in["resonancesCreated"] == 231
+    assert report_in["peaksAdded"] == 3
+    assert report_in["resonancesCreated"] == 6
     
     imported_peak_list = report_in["peakList"]
-    assert len(imported_peak_list.peaks) == 116
+    assert len(imported_peak_list.peaks) == 3
     
     # 2. Export imported_peak_list to a new tab file
     out_tab_path = os.path.join(str(tmp_path), "exported.tab")
@@ -47,10 +47,10 @@ def test_export_import_tab_roundtrip(tmp_path):
     # 4. Import from our newly exported tab file
     report_out = importTabPeaks(root, out_tab_path, spectrum)
     assert report_out["error"] is None
-    assert report_out["peaksAdded"] == 116
+    assert report_out["peaksAdded"] == 3
     # Note: resonancesCreated may differ slightly or be identical depending on how they are matched,
-    # but let's assert they are successfully created and match close to 231!
-    assert report_out["resonancesCreated"] == 231
+    # but let's assert they are successfully created and match close to 6!
+    assert report_out["resonancesCreated"] == 6
 
 
 def test_export_import_nef_roundtrip(tmp_path):

@@ -57,6 +57,10 @@ ASS_PATTERN = re.compile(
     r"^(?:(?P<chain>[A-Za-z0-9]{1,2})-)?(?P<res>[A-Za-z]+)(?P<num>\d+)-(?P<atom>.+)$"
 )
 
+PART_PATTERN = re.compile(
+    r"^(?:(?P<chain>[A-Za-z0-9]{1,2})-)?(?P<res>[A-Za-z]+)(?P<num>\d+)(?P<atom>.+)$"
+)
+
 _ISOTOPE_ELEMENT_PATTERN = re.compile(r"\d+([A-Z][a-z]?)")
 
 
@@ -209,6 +213,23 @@ def parseAssString(ass):
     if not ass or ass.lower() in ("none", "unassigned"):
         return None
     match = ASS_PATTERN.match(ass)
+    if match is None:
+        return None
+    return {
+        "chain": match.group("chain"),
+        "res": match.group("res"),
+        "num": int(match.group("num")),
+        "atom": match.group("atom"),
+    }
+
+
+def parseAssPart(part):
+    if part is None:
+        return None
+    part = part.strip()
+    if not part or part.lower() in ("none", "unassigned", "*", ".", "?"):
+        return None
+    match = PART_PATTERN.match(part)
     if match is None:
         return None
     return {
@@ -739,26 +760,62 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
             peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=annotation)
         else:
             ass = row.get("ASS")
-            assInfo = parseAssString(ass)
-
-            if assInfo is None:
-                peak = _makePeak(peakList, row, hasHeight, hasVolume)
-                report["peaksUnassigned"] += 1
-                print(prefix + "row %s: no assignment (%s) - peak at %s added unassigned" % (rowNumber, ass, tuple(positions)))
-                continue
-            else:
-                residue = _findResidue(molSystems, assInfo)
-                atom = None
-                if residue is not None:
-                    atom = _resolveAtom(residue, assInfo["atom"])
-                if atom is None:
-                    report["peaksSkipped"] += 1
-                    print(prefix + "row %s: unmappable (no atom %s on residue %s%d in the molecule) - ignored"
-                          % (rowNumber, assInfo["atom"], assInfo["res"], assInfo["num"]))
+            is_new_explicit = False
+            dim_assignments = {}
+            dim_groups = {}
+            annotation_parts = []
+            
+            if ass and ass not in (None, "*", "None", "unassigned"):
+                parts = ass.split("-")
+                if len(parts) >= 2:
+                    parts_info = [parseAssPart(part.strip()) for part in parts]
+                    if all(info is not None for info in parts_info):
+                        is_new_explicit = True
+                        
+            if is_new_explicit:
+                has_any_assignment = False
+                for dim_idx, dataDim in enumerate(dataDims):
+                    if dim_idx < len(parts_info):
+                        partInfo = parts_info[dim_idx]
+                        residue = _findResidue(molSystems, partInfo)
+                        atom = None
+                        if residue is not None:
+                            atom = _resolveAtom(residue, partInfo["atom"])
+                        if atom is not None:
+                            has_any_assignment = True
+                            dim_assignments[dataDim.dim] = atom
+                            dim_groups[dataDim.dim] = _resonanceGroupFor(residue, nmrProject, groups)
+                            res_name = residue.ccpCode if hasattr(residue, "ccpCode") else ""
+                            annotation_parts.append("%s%s-%s" % (res_name, partInfo["num"], partInfo["atom"]))
+                annotation = " ".join(annotation_parts) if annotation_parts else None
+                
+                if not has_any_assignment:
+                    peak = _makePeak(peakList, row, hasHeight, hasVolume)
+                    report["peaksUnassigned"] += 1
+                    print(prefix + "row %s: no assignment - peak at %s added unassigned" % (rowNumber, tuple(positions)))
                     continue
+                peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=annotation)
+            else:
+                assInfo = parseAssString(ass)
 
-                peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=ass.strip())
-                group = _resonanceGroupFor(residue, nmrProject, groups)
+                if assInfo is None:
+                    peak = _makePeak(peakList, row, hasHeight, hasVolume)
+                    report["peaksUnassigned"] += 1
+                    print(prefix + "row %s: no assignment (%s) - peak at %s added unassigned" % (rowNumber, ass, tuple(positions)))
+                    continue
+                else:
+                    residue = _findResidue(molSystems, assInfo)
+                    atom = None
+                    if residue is not None:
+                        atom = _resolveAtom(residue, assInfo["atom"])
+                    if atom is None:
+                        report["peaksSkipped"] += 1
+                        print(prefix + "row %s: unmappable (no atom %s on residue %s%d in the molecule) - ignored"
+                              % (rowNumber, assInfo["atom"], assInfo["res"], assInfo["num"]))
+                        continue
+
+                    peak = _makePeak(peakList, row, hasHeight, hasVolume, annotation=ass.strip())
+                    group = _resonanceGroupFor(residue, nmrProject, groups)
 
         for dataDim, position in zip(dataDims, positions):
             peakDim = None
@@ -773,7 +830,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
             peakDim.value = position
             isotopeCode = dimIsotopes[dataDim.dim]
             
-            if isNef or isPeaks:
+            if isNef or isPeaks or is_new_explicit:
                 targetAtom = dim_assignments.get(dataDim.dim)
                 group = dim_groups.get(dataDim.dim)
             else:
@@ -789,7 +846,7 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
                 )
                 report["resonancesCreated"] += 1
                 report["dimResonancesUnassigned"] += 1
-                if isNef or isPeaks:
+                if isNef or isPeaks or is_new_explicit:
                     print(prefix + "row %s: dim %d has no atom assigned (position %s) - resonance left unassigned to an atom"
                           % (rowNumber, dataDim.dim, position))
                 else:
@@ -803,14 +860,14 @@ def importTabPeaks(api, filePath, dataSource, listName=None, shiftList=None, ove
             if existing is not None:
                 if not overwrite:
                     report["assignmentsKept"] += 1
-                    if isNef or isPeaks:
+                    if isNef or isPeaks or is_new_explicit:
                         print(prefix + "row %s: %s of %s already has a resonance (name %s, serial %s) - kept, new dim left unassigned (Overwrite resonance off)"
                               % (rowNumber, isotopeCode, targetAtom.name, existing.name, existing.serial))
                     else:
                         print(prefix + "row %s: %s of %s already has a resonance (name %s, serial %s) - kept, new dim left unassigned (Overwrite resonance off)"
                               % (rowNumber, isotopeCode, ass, existing.name, existing.serial))
                     continue
-                if isNef or isPeaks:
+                if isNef or isPeaks or is_new_explicit:
                     print(prefix + "row %s: overwriting - reusing existing %s resonance (name %s, serial %s) for %s"
                           % (rowNumber, isotopeCode, existing.name, existing.serial, targetAtom.name))
                 else:

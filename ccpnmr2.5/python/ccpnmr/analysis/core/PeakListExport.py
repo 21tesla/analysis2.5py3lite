@@ -16,7 +16,7 @@ def _getPeakDimAtom(peak_dim):
                     return atom
     return None
 
-def _format_tab_atom(atom):
+def _format_tab_atom_new(atom):
     residue = atom.residue
     res_code = residue.ccpCode or ""
     CCPN_TO_ONE_LETTER = {
@@ -27,19 +27,33 @@ def _format_tab_atom(atom):
     }
     one_letter = CCPN_TO_ONE_LETTER.get(res_code, res_code[0] if res_code else "?")
     seq_num = residue.seqCode
-    return f"{one_letter}{seq_num}-{atom.name}"
+    return f"{one_letter}{seq_num}{atom.name}"
 
 def get_tab_ass(peak):
-    # Try to find a proton atom first
-    for pd in peak.sortedPeakDims():
-        atom = _getPeakDimAtom(pd)
-        if atom is not None and atom.chemAtom is not None and atom.chemAtom.elementSymbol == 'H':
-            return _format_tab_atom(atom)
-    # Fallback to any atom
+    parts = []
     for pd in peak.sortedPeakDims():
         atom = _getPeakDimAtom(pd)
         if atom is not None:
-            return _format_tab_atom(atom)
+            parts.append(_format_tab_atom_new(atom))
+        else:
+            parts.append(None)
+            
+    if all(p is not None for p in parts):
+        return "-".join(parts)
+        
+    # If not all dimensions are assigned, fallback to any assigned atom using old style format, or "*"
+    for pd in peak.sortedPeakDims():
+        atom = _getPeakDimAtom(pd)
+        if atom is not None:
+            res_code = atom.residue.ccpCode or ""
+            CCPN_TO_ONE_LETTER = {
+                'Ala': 'A', 'Arg': 'R', 'Asn': 'N', 'Asp': 'D', 'Cys': 'C',
+                'Gln': 'Q', 'Glu': 'E', 'Gly': 'G', 'His': 'H', 'Ile': 'I',
+                'Leu': 'L', 'Lys': 'K', 'Met': 'M', 'Phe': 'F', 'Pro': 'P',
+                'Ser': 'S', 'Thr': 'T', 'Trp': 'W', 'Tyr': 'Y', 'Val': 'V'
+            }
+            one_letter = CCPN_TO_ONE_LETTER.get(res_code, res_code[0] if res_code else "?")
+            return f"{one_letter}{atom.residue.seqCode}-{atom.name}"
     return "*"
 
 def exportTabPeaks(peakList, filePath):

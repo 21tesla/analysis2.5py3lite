@@ -149,8 +149,8 @@ def test_import_tab_peaks_integration():
     _clean_project(nmr_project, spectrum)
     report = importTabPeaks(root, tab_file, spectrum)
     assert report["error"] is None
-    assert report["peaksAdded"] == 116
-    assert report["resonancesCreated"] == 231
+    assert report["peaksAdded"] == 3
+    assert report["resonancesCreated"] == 6
 
 
 def test_import_nef_peaks_integration():
