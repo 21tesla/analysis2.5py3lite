@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from memops.general import Io as memopsIo
 from ccpnmr.analysis.core.PeakListImport import importTabPeaks
-from ccpnmr.analysis.core.PeakListExport import exportTabPeaks, exportNefPeaks
+from ccpnmr.analysis.core.PeakListExport import exportTabPeaks, exportNefPeaks, exportXeasyPeaks
 
 def _clean_project(nmr_project, spectrum):
     for peak_list in list(spectrum.peakLists):
@@ -83,3 +83,35 @@ def test_export_import_nef_roundtrip(tmp_path):
     assert report_out["error"] is None
     assert report_out["peaksAdded"] == 116
     assert report_out["resonancesCreated"] == 231
+
+
+def test_export_import_xeasy_roundtrip(tmp_path):
+    proj_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "addpeaks")
+    peaks_file = os.path.join(os.path.dirname(__file__), "..", "..", "..", "sswt_assigned.peaks")
+    
+    root = memopsIo.loadProject(proj_dir, projectName="allpeaks2")
+    nmr_project = root.currentNmrProject
+    spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
+    
+    # 1. Clean and Import sswt_assigned.peaks
+    _clean_project(nmr_project, spectrum)
+    report_in = importTabPeaks(root, peaks_file, spectrum, overwrite=True)
+    assert report_in["error"] is None
+    assert report_in["peaksAdded"] == 116
+    assert report_in["resonancesCreated"] == 222
+    
+    imported_peak_list = report_in["peakList"]
+    assert len(imported_peak_list.peaks) == 116
+    
+    # 2. Export imported_peak_list to a new peaks file
+    out_peaks_path = os.path.join(str(tmp_path), "exported.peaks")
+    exportXeasyPeaks(imported_peak_list, out_peaks_path)
+    
+    # 3. Clean project again
+    _clean_project(nmr_project, spectrum)
+    
+    # 4. Import from our newly exported peaks file
+    report_out = importTabPeaks(root, out_peaks_path, spectrum, overwrite=True)
+    assert report_out["error"] is None
+    assert report_out["peaksAdded"] == 116
+    assert report_out["resonancesCreated"] == 222

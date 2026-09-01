@@ -110,3 +110,77 @@ def exportNefPeaks(peakList, filePath):
     """
     from ccpnmr import nefExport
     nefExport.exportProject(peakList.root, filePath)
+
+
+def _isotope_to_xeasy_axis(isotope_code):
+    if not isotope_code:
+        return "H"
+    isotope_upper = isotope_code.upper()
+    if "H" in isotope_upper:
+        return "H"
+    if "N" in isotope_upper:
+        return "N"
+    if "C" in isotope_upper:
+        return "C"
+    return "H"
+
+
+def _get_xeasy_dim_ass(peak_dim):
+    atom = _getPeakDimAtom(peak_dim)
+    if atom is not None:
+        return f"{atom.name}.{atom.residue.seqCode}"
+    return "-"
+
+
+def exportXeasyPeaks(peakList, filePath):
+    """
+    Export the peaks of a CCPN PeakList into an XEASY .peaks file.
+    """
+    dataSource = peakList.dataSource
+    num_dim = dataSource.numDim
+    dataDims = sorted(dataSource.dataDims, key=lambda x: x.dim)
+    
+    # Get isotope codes
+    dimIsotopes = {}
+    for dataDim in dataDims:
+        ref = dataDim.findFirstDataDimRef()
+        if ref is not None and ref.expDimRef is not None and ref.expDimRef.isotopeCodes:
+            dimIsotopes[dataDim.dim] = ref.expDimRef.isotopeCodes[0]
+        else:
+            dimIsotopes[dataDim.dim] = "unknown"
+            
+    xeasy_axes = [_isotope_to_xeasy_axis(dimIsotopes[dd.dim]) for dd in dataDims]
+    
+    lines = [
+        f"# Number of dimensions {num_dim}",
+        f"#FORMAT xeasy{num_dim}D"
+    ]
+    for dim_idx, axis in enumerate(xeasy_axes):
+        lines.append(f"#INAME {dim_idx + 1} {axis}")
+        
+    spec_name = dataSource.name or "Spectrum"
+    lines.append(f"#SPECTRUM {spec_name} " + " ".join(xeasy_axes))
+    
+    for ii, peak in enumerate(sorted(peakList.peaks, key=lambda x: x.serial)):
+        row_id = ii + 1
+        pos_parts = []
+        assignments = []
+        for pd in peak.sortedPeakDims():
+            pos_parts.append(pd.value if pd.value is not None else 0.0)
+            assignments.append(_get_xeasy_dim_ass(pd))
+            
+        # Get height or volume
+        volume = peak.volume if peak.volume is not None else 0.0
+        volume_err = 0.0
+        
+        # Build line
+        line = f"{row_id:7d}"
+        for pos in pos_parts:
+            line += f" {pos:8.3f}"
+        line += f" 1 U {volume:11.3E} {volume_err:9.3E} e 0"
+        for ass in assignments:
+            line += f" {ass:<9s}"
+        lines.append(line)
+        
+    with open(filePath, "w") as fp:
+        fp.write("\n".join(lines) + "\n")
