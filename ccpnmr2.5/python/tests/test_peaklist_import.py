@@ -160,5 +160,44 @@ def test_import_nef_peaks_integration():
     assert report["resonancesCreated"] == 231
 
 
+def test_add_peaks_popup_select_file(monkeypatch):
+    from ccpnmr.analysis.popups.AddPeaksPopup import AddPeaksPopup
+    from unittest.mock import MagicMock, patch
+    
+    # Mock BasePopup.__init__ so it doesn't try to open a Tkinter window
+    monkeypatch.setattr(AddPeaksPopup, "__init__", lambda self, *args, **kwargs: None)
+    
+    # Create popup instance
+    popup = AddPeaksPopup(None)
+    
+    # Mock spectrum and dataStore with fullPath
+    mock_data_store = MagicMock()
+    mock_data_store.fullPath = "/path/to/some/spectrum/file.ft2"
+    mock_spectrum = MagicMock()
+    mock_spectrum.dataStore = mock_data_store
+    
+    popup.spectrum = mock_spectrum
+    popup.fileEntry = MagicMock()
+    popup.nameEntry = MagicMock()
+    
+    # Patch FileSelectPopup to verify the directory argument and simulate file selection
+    dir_passed = []
+    class MockFileSelectPopup:
+        def __init__(self, parent, directory, file_types):
+            dir_passed.append(directory)
+        def getFile(self):
+            return "/path/to/some/spectrum/chosen_peak_list.nef"
+        def destroy(self):
+            pass
+            
+    with patch("ccpnmr.analysis.popups.AddPeaksPopup.FileSelectPopup", MockFileSelectPopup):
+        popup.selectFile()
+        
+    assert len(dir_passed) == 1
+    assert dir_passed[0] == "/path/to/some/spectrum"
+    assert popup.fileEntry.set.called
+    assert popup.fileEntry.set.call_args[0][0] == "/path/to/some/spectrum/chosen_peak_list.nef"
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))

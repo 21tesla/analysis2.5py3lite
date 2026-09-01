@@ -243,7 +243,7 @@ class AddPeaksPopup(BasePopup):
 
         directory = os.getcwd()
         if self.spectrum is not None and self.spectrum.dataStore is not None:
-            location = self.spectrum.dataStore.dataLocation
+            location = self.spectrum.dataStore.fullPath
             if location:
                 directory = os.path.dirname(location)
         popup = FileSelectPopup(
