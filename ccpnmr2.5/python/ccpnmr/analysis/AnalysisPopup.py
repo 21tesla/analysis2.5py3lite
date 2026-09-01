@@ -66,6 +66,7 @@ from ccpnmr.analysis.core.WindowBasic import (
 from ccpnmr.analysis.macros.ArgumentServer import ArgumentServer
 from ccpnmr.analysis.popups.AddContourFile import AddContourFilePopup
 from ccpnmr.analysis.popups.AddPeaksPopup import AddPeaksPopup
+from ccpnmr.analysis.popups.SavePeaksPopup import SavePeaksPopup
 from ccpnmr.analysis.popups.BackupProject import BackupProjectPopup
 from ccpnmr.analysis.popups.BasePopup import BasePopup, determineHelpUrl
 from ccpnmr.analysis.popups.BrowseAtoms import BrowseAtomsPopup
@@ -207,6 +208,7 @@ class AnalysisPopup(BasePopup, Analysis):
             "edit_spectrum": self.editSpectrum,
             "add_contour_file": self.addSpectrumContourFile,
             "add_peaks": self.addPeaks,
+            "save_peaks": self.savePeaks,
             "create_contour_file": self.createSpectrumContourFile,
             "edit_experiment": self.editExperiment,
             "edit_experiment_series": self.editExpSeries,
@@ -1025,6 +1027,13 @@ class AnalysisPopup(BasePopup, Analysis):
             command=self.addPeaks,
             tipText="Add peaks and resonance assignments from an NMRdraw .tab peak list file",
         )
+        menu.add_command(
+            label="Save Peaks",
+            image=self.iconTable,
+            compound="left",
+            command=self.savePeaks,
+            tipText="Save peaks to an NMRdraw .tab, NEF, or XEASY .peaks file",
+        )
         ## dans menu option
         # menu.add_command(label='Peak Separator',
         #                 image=self.iconTool, compound='left',
@@ -1055,6 +1064,7 @@ class AnalysisPopup(BasePopup, Analysis):
             "Peak Lists",
             "Selected Peaks",
             "Add Peaks",
+            "Save Peaks",
             "Peak Separator",
             "Peak Finding",
             "Draw Parameters",
@@ -2049,6 +2059,11 @@ class AnalysisPopup(BasePopup, Analysis):
     def addPeaks(self):
 
         popup = self.openPopup("add_peaks", AddPeaksPopup)
+        return popup
+
+    def savePeaks(self):
+
+        popup = self.openPopup("save_peaks", SavePeaksPopup)
         return popup
 
     def copyAssignments(self):

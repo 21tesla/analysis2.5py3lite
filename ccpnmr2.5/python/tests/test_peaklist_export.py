@@ -115,3 +115,43 @@ def test_export_import_xeasy_roundtrip(tmp_path):
     assert report_out["error"] is None
     assert report_out["peaksAdded"] == 116
     assert report_out["resonancesCreated"] == 222
+
+
+def test_save_peaks_popup_select_file(monkeypatch):
+    from ccpnmr.analysis.popups.SavePeaksPopup import SavePeaksPopup
+    from unittest.mock import MagicMock, patch
+    
+    # Mock BasePopup.__init__ so it doesn't try to open a Tkinter window
+    monkeypatch.setattr(SavePeaksPopup, "__init__", lambda self, *args, **kwargs: None)
+    
+    # Create popup instance
+    popup = SavePeaksPopup(None)
+    
+    # Mock peakList and its dataStore with fullPath
+    mock_data_store = MagicMock()
+    mock_data_store.fullPath = "/path/to/some/spectrum/file.ft2"
+    mock_spectrum = MagicMock()
+    mock_spectrum.dataStore = mock_data_store
+    mock_peak_list = MagicMock()
+    mock_peak_list.dataSource = mock_spectrum
+    
+    popup.peakList = mock_peak_list
+    popup.fileEntry = MagicMock()
+    
+    # Patch FileSelectPopup to verify the directory argument and simulate file selection
+    dir_passed = []
+    class MockFileSelectPopup:
+        def __init__(self, parent, directory, file_types):
+            dir_passed.append(directory)
+        def getFile(self):
+            return "/path/to/some/spectrum/chosen_save.tab"
+        def destroy(self):
+            pass
+            
+    with patch("ccpnmr.analysis.popups.SavePeaksPopup.FileSelectPopup", MockFileSelectPopup):
+        popup.selectFile()
+        
+    assert len(dir_passed) == 1
+    assert dir_passed[0] == "/path/to/some/spectrum"
+    assert popup.fileEntry.set.called
+    assert popup.fileEntry.set.call_args[0][0] == "/path/to/some/spectrum/chosen_save.tab"
