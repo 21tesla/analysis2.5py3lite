@@ -681,12 +681,11 @@ def useWheelMouse():
 
 
 def OSButton(button):
-    MACOSBUTTONBINDING = (None, 1, 3, 2)
 
     if not (0 < button < 4):
         raise ValueError("Button must be 1-3")
 
-    return int(MACOSBUTTONBINDING[button] if isMacOS() else button)
+    return int(button)
 
 
 def buttonClick(button):

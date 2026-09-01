@@ -24,7 +24,15 @@ def _import_cc_ext(name):
     except ImportError:
         # Look in ccpnmr2.5/python/ for the .so file
         lib_dir = Path(__file__).resolve().parent.parent
-        for so_file in lib_dir.glob(f"{name}.cpython-*.so"):
+        so_files = list(lib_dir.glob(f"**/{name}.cpython-*.so"))
+        if not so_files:
+            so_files = list(lib_dir.glob(f"**/{name}.so"))
+        
+        if so_files:
+            suffix = "darwin" if sys.platform == "darwin" else "linux"
+            matched_files = [f for f in so_files if suffix in f.name]
+            so_file = matched_files[0] if matched_files else so_files[0]
+            
             spec = importlib.util.spec_from_file_location(name, so_file)
             mod = importlib.util.module_from_spec(spec)
             sys.modules[name] = mod

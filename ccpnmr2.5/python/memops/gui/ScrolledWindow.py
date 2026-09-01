@@ -63,7 +63,7 @@ from memops.gui.Separator import Separator
 from memops.universal.Region1D import Region1D
 from memops.universal.Region2D import Region2D
 from memops.universal.Ticks import Ticks
-from memops.universal.Util import OSButton, isArray
+from memops.universal.Util import OSButton, isArray, isMacOS
 
 no_key_state = 0
 shift_key_state = 1
@@ -992,6 +992,10 @@ class ScrolledWindow(Frame):
 
         self.menu.setMenuItems(menu_items)
         self.setupBind(button, self.menu.popupMenu)
+        if isMacOS():
+            # Support Command + Click (Button-1) and Alt/Option + Click (Button-1) as right-click
+            self.canvasBind("<Command-ButtonPress-1>", self.menu.popupMenu)
+            self.canvasBind("<Alt-ButtonPress-1>", self.menu.popupMenu)
 
         if update_func:
             self.menu.config(postcommand=update_func)
@@ -1004,12 +1008,17 @@ class ScrolledWindow(Frame):
         self.sliceMenu.setMenuItems(menu_items)
         s = "<ButtonPress-" + str(button) + ">"
         self.sliceBind(s, self.sliceMenu.popupMenu)
+        if isMacOS():
+            # Support Command + Click (Button-1) and Alt/Option + Click (Button-1) as right-click
+            self.sliceBind("<Command-ButtonPress-1>", self.sliceMenu.popupMenu)
+            self.sliceBind("<Alt-ButtonPress-1>", self.sliceMenu.popupMenu)
 
         if update_func:
             self.sliceMenu.config(postcommand=update_func)
 
     def pressFunc(self, event, button, state):
 
+        self.button = button
         # self.menu.unpost()
 
         # state = event.state
@@ -1633,18 +1642,19 @@ class ScrolledWindow(Frame):
 
     def selectLocation(self, event):
 
-        if (event.x == self.x) and (event.y == self.y) and self.select_single_func:
-            (a, b, x, y) = self.calcWorldCoord(event.widget, event.x, event.y)
-            button = event.num
-            state = event.state & 255
-            self.select_single_func(event.widget, a, b, x, y, button, state, event=event)
+        if self.select_single_func and self.x is not None and self.y is not None:
+            if (abs(event.x - self.x) < 5) and (abs(event.y - self.y) < 5):
+                (a, b, x, y) = self.calcWorldCoord(event.widget, event.x, event.y)
+                button = event.num or getattr(self, "button", 1)
+                state = event.state & 255
+                self.select_single_func(event.widget, a, b, x, y, button, state, event=event)
 
     def selectRegion(self, event):
 
         if self.select_multi_func and self.x is not None and self.y is not None:
             (a0, b0, x0, y0) = self.calcWorldCoord(event.widget, self.x, self.y)
             (a1, b1, x1, y1) = self.calcWorldCoord(event.widget, event.x, event.y)
-            button = event.num
+            button = event.num or getattr(self, "button", 1)
             state = event.state & 255
             self.select_multi_func(event.widget, a0, b0, a1, b1, x0, y0, x1, y1, button, state, event=event)
             self.x = None

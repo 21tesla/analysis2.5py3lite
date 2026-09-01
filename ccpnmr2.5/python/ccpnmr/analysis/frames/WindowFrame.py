@@ -329,7 +329,6 @@ class WindowFrame(Frame, WindowDraw):
         scrolledWindow.translateBind(button=OSButton(2))
         scrolledWindow.zoomBind(button=OSButton(2), state=shift_key_state)
         scrolledWindow.regionBind(button=OSButton(2), state=ctrl_key_state)
-        # scrolledWindow.selectSingleBind(button=OSButton(1))
         scrolledWindow.selectSingleBind(button=OSButton(1), state=ctrl_key_state)
         scrolledWindow.selectMultiBind(button=OSButton(1), state=no_key_state)
         scrolledWindow.selectMultiBind(button=OSButton(1), state=shift_key_state)
@@ -3019,7 +3018,10 @@ class WindowFrame(Frame, WindowDraw):
         self.topPopup.currentRegion = (a0, b0, a1, b1)
         self.topPopup.startSelection()
 
-        if (x0 == x1) and (y0 == y1):
+        if state != shift_key_state and state != ctrl_key_state:
+            state = no_key_state
+
+        if (abs(x0 - x1) < 5) and (abs(y0 - y1) < 5):
             if state == shift_key_state:
                 newSelection = False
             else:

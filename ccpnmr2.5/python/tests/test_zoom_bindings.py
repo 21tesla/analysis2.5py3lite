@@ -137,3 +137,29 @@ def test_windows_zoom_zero_delta():
     # Assert neither scroll nor zoom is called
     self_mock.scrollZPlane.assert_not_called()
     self_mock.scrolled_window.zoom.assert_not_called()
+
+
+def test_windows_zoom_macos_delta():
+    # Verify small macOS delta values (+1 and -1) work correctly
+    self_mock = MagicMock(spec=WindowFrame)
+    self_mock.scrolled_window = MagicMock()
+    self_mock.scrollZPlane = MagicMock()
+
+    canvas = MagicMock()
+
+    # 1. macOS Zoom In (delta = 1)
+    event_mac_in = MockEvent(delta=1, state=0, widget=canvas)
+    WindowFrame.windowsZoom(self_mock, event_mac_in)
+
+    self_mock.scrolled_window.zoom.assert_called_once_with(canvas, 0.8)
+    self_mock.scrollZPlane.assert_not_called()
+
+    # Reset
+    self_mock.scrolled_window.zoom.reset_mock()
+
+    # 2. macOS Zoom Out (delta = -1)
+    event_mac_out = MockEvent(delta=-1, state=0, widget=canvas)
+    WindowFrame.windowsZoom(self_mock, event_mac_out)
+
+    self_mock.scrolled_window.zoom.assert_called_once_with(canvas, 1.2)
+    self_mock.scrollZPlane.assert_not_called()

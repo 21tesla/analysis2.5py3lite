@@ -650,7 +650,7 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
            would not. */
         static const char ccp_forward_proc_src[] =
 "proc ccp_canvas_forward {pt} {\n"
-"    lassign $pt w type x y btn state\n"
+"    lassign $pt w type rx ry btn state delta\n"
 "    # Tk 9.x (Aqua): on this C-created canvas the binding's %X/%Y are\n"
 "    # SCREEN-ABSOLUTE - event dispatch computes the widget origin as\n"
 "    # (0,0) even though winfo rootx reports the true origin, and\n"
@@ -661,8 +661,8 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
 "    # app handler reads replayed events in host-relative coords and\n"
 "    # the canvas fills the host at 0,0, so the origins coincide.\n"
 "    # (winfo toscreen was removed in Tk 9 - use rootx/rooty.)\n"
-"    set x [expr {$x - [winfo rootx $w]}]\n"
-"    set y [expr {$y - [winfo rooty $w]}]\n"
+"    set x [expr {$rx - [winfo rootx $w]}]\n"
+"    set y [expr {$ry - [winfo rooty $w]}]\n"
 "    if {$state eq {}} {set state 0}\n"
 "    if {[string match <B*-Motion> $type]} {\n"
 "        # Tk 9.0.4 mac: a generated B-Motion whose -state lacks the\n"
@@ -671,9 +671,10 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
 "        # the real %s already carries it) to keep the drag event type.\n"
 "        set state [expr {$state | (1 << (7 + $btn))}]\n"
 "    }\n"
-"    set opts [list -x $x -y $y]\n"
+"    set opts [list -x $x -y $y -rootx $rx -rooty $ry]\n"
 "    if {$state ne {}} {lappend opts -state $state}\n"
 "    if {$btn > 0 && [string match <Button* $type]} {lappend opts -button $btn}\n"
+"    if {$delta ne {}} {lappend opts -delta $delta}\n"
 "    if {[info exists ::env(CCP_FWD_DIAG)]} {\n"
 "        if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
 "        if {![info exists ::ccp_fwd_diag_n]} {set ::ccp_fwd_diag_n 0}\n"
@@ -681,7 +682,7 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
 "            incr ::ccp_fwd_diag_n\n"
 "            catch {\n"
 "                set f [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
-"                puts $f [list $type \"->\" $w \"x=$x\" \"y=$y\" \"button=$btn\" \"state=$state\" \"opts=[$opts]\"]\n"
+"                puts $f [list $type \"->\" $w \"x=$x\" \"y=$y\" \"rootx=$rx\" \"rooty=$ry\" \"button=$btn\" \"state=$state\" \"delta=$delta\" \"opts=[$opts]\"]\n"
 "                close $f\n"
 "            }\n"
 "        }\n"
@@ -706,7 +707,11 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                ButtonPress-1 events).  Scroll-wheel is NOT forwarded here: its
                handler lives on an ancestor window (not the host) and the
                direction would be lost in the replay anyway. */
-            static const char *mods[] = { "", "Control-", "Shift-", "Control-Shift-" };
+            static const char *mods[] = {
+                "", "Control-", "Shift-", "Control-Shift-",
+                "Command-", "Alt-", "Command-Alt-", "Control-Alt-",
+                "Shift-Alt-", "Control-Shift-Alt-"
+            };
             static const char *plain_seq[] = { "<Motion>", "<Enter>", "<Leave>" };
             char seq[80];
             char gseq[40];
@@ -727,7 +732,7 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                 for (i = 0; i < n; i++)
                     Tcl_DecrRefCount(argv[i]);
             }
-            for (mi = 0; mi < 4; mi++)
+            for (mi = 0; mi < (int) (sizeof mods / sizeof mods[0]); mi++)
                 for (b = 1; b <= 3; b++)
                     for (e3 = 0; e3 < 3; e3++)
                     {
@@ -753,6 +758,38 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                         for (i = 0; i < n; i++)
                             Tcl_DecrRefCount(argv[i]);
                     }
+
+            /* Scroll-wheel / MouseWheel and touchpad events on macOS Aqua are sent to the C-created canvas
+               covering the host. Bind and forward them to the host window, preserving delta. */
+            static const char *wheel_mods[] = { "", "Control-", "Shift-", "Control-Shift-", "Alt-", "Control-Alt-", "Shift-Alt-", "Control-Shift-Alt-" };
+            for (mi = 0; mi < (int) (sizeof wheel_mods / sizeof wheel_mods[0]); mi++)
+            {
+                /* MouseWheel (physical mouse wheel zooming/scrolling) */
+                snprintf(seq, sizeof seq, "<%sMouseWheel>", wheel_mods[mi]);
+                n = 0;
+                argv[n++] = Tcl_NewStringObj("bind", -1);
+                argv[n++] = Tcl_NewStringObj(path, -1);
+                argv[n++] = Tcl_NewStringObj(seq, -1);
+                /* %X %Y %s are substituted by the binding machinery at
+                   dispatch time. %D is the mouse wheel delta. */
+                sprintf(script, "ccp_canvas_forward {%s <MouseWheel> %%X %%Y 0 %%s %%D}", win_path);
+                argv[n++] = Tcl_NewStringObj(script, -1);
+                tkc_eval(tk_handler_p, n, argv);
+                for (i = 0; i < n; i++)
+                    Tcl_DecrRefCount(argv[i]);
+
+                /* TouchpadScroll (trackpad two-finger translation/scrolling - supported in Tk 9 on macOS) */
+                snprintf(seq, sizeof seq, "<%sTouchpadScroll>", wheel_mods[mi]);
+                n = 0;
+                argv[n++] = Tcl_NewStringObj("bind", -1);
+                argv[n++] = Tcl_NewStringObj(path, -1);
+                argv[n++] = Tcl_NewStringObj(seq, -1);
+                sprintf(script, "ccp_canvas_forward {%s <TouchpadScroll> %%X %%Y 0 %%s %%D}", win_path);
+                argv[n++] = Tcl_NewStringObj(script, -1);
+                tkc_eval(tk_handler_p, n, argv);
+                for (i = 0; i < n; i++)
+                    Tcl_DecrRefCount(argv[i]);
+            }
         }
 
     }
