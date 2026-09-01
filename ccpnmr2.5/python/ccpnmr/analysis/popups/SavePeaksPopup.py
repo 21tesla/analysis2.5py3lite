@@ -144,7 +144,7 @@ class SavePeaksPopup(BasePopup):
 
     def savePeaks(self):
 
-        peakList = self.peakListPulldown.getSelected()
+        peakList = self.peakListPulldown.getObject()
         if peakList is None:
             showError("No peak list", "Select a peak list to save first", parent=self)
             return
