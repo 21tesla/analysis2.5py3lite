@@ -125,6 +125,15 @@ def test_row_intensity():
     assert _rowIntensity(row, "NEG") == pytest.approx(-666.0)  # -666 is a legal int here
 
 
+def _clean_project(nmr_project, spectrum):
+    for peak_list in list(spectrum.peakLists):
+        peak_list.delete()
+    for resonance in list(nmr_project.resonances):
+        resonance.delete()
+    for resonance_group in list(nmr_project.resonanceGroups):
+        resonance_group.delete()
+
+
 def test_import_tab_peaks_integration():
     from memops.general import Io as memopsIo
     from ccpnmr.analysis.core.PeakListImport import importTabPeaks
@@ -137,6 +146,7 @@ def test_import_tab_peaks_integration():
     nmr_project = root.currentNmrProject
     spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
     
+    _clean_project(nmr_project, spectrum)
     report = importTabPeaks(root, tab_file, spectrum)
     assert report["error"] is None
     assert report["peaksAdded"] == 116
@@ -154,6 +164,7 @@ def test_import_nef_peaks_integration():
     nmr_project = root.currentNmrProject
     spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
     
+    _clean_project(nmr_project, spectrum)
     report = importTabPeaks(root, nef_file, spectrum)
     assert report["error"] is None
     assert report["peaksAdded"] == 116
@@ -210,6 +221,7 @@ def test_import_xeasy_peaks_integration():
     nmr_project = root.currentNmrProject
     spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
     
+    _clean_project(nmr_project, spectrum)
     report = importTabPeaks(root, peaks_file, spectrum)
     assert report["error"] is None
     assert report["peaksAdded"] == 116

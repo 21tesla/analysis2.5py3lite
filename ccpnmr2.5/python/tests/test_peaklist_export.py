@@ -1,0 +1,53 @@
+"""Unit and integration tests for the peak list export features.
+"""
+
+import os
+import sys
+import pytest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from memops.general import Io as memopsIo
+from ccpnmr.analysis.core.PeakListImport import importTabPeaks
+from ccpnmr.analysis.core.PeakListExport import exportTabPeaks
+
+def _clean_project(nmr_project, spectrum):
+    for peak_list in list(spectrum.peakLists):
+        peak_list.delete()
+    for resonance in list(nmr_project.resonances):
+        resonance.delete()
+    for resonance_group in list(nmr_project.resonanceGroups):
+        resonance_group.delete()
+
+def test_export_import_tab_roundtrip(tmp_path):
+    proj_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "addpeaks")
+    tab_file = os.path.join(os.path.dirname(__file__), "..", "..", "..", "sswt_assigned.tab")
+    
+    root = memopsIo.loadProject(proj_dir, projectName="allpeaks2")
+    nmr_project = root.currentNmrProject
+    spectrum = nmr_project.findFirstExperiment(name="sswt").findFirstDataSource(name="sswt-298K-hsqc-1016")
+    
+    # 1. Clean and Import sswt_assigned.tab
+    _clean_project(nmr_project, spectrum)
+    report_in = importTabPeaks(root, tab_file, spectrum)
+    assert report_in["error"] is None
+    assert report_in["peaksAdded"] == 116
+    assert report_in["resonancesCreated"] == 231
+    
+    imported_peak_list = report_in["peakList"]
+    assert len(imported_peak_list.peaks) == 116
+    
+    # 2. Export imported_peak_list to a new tab file
+    out_tab_path = os.path.join(str(tmp_path), "exported.tab")
+    exportTabPeaks(imported_peak_list, out_tab_path)
+    
+    # 3. Clean project again
+    _clean_project(nmr_project, spectrum)
+    
+    # 4. Import from our newly exported tab file
+    report_out = importTabPeaks(root, out_tab_path, spectrum)
+    assert report_out["error"] is None
+    assert report_out["peaksAdded"] == 116
+    # Note: resonancesCreated may differ slightly or be identical depending on how they are matched,
+    # but let's assert they are successfully created and match close to 231!
+    assert report_out["resonancesCreated"] == 231
