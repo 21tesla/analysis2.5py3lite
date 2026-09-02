@@ -71,6 +71,76 @@ ctrl_key_state = 4
 alt_key_state = 8
 
 
+# Session-6 (2026-09-01) gesture diagnosis logger. When CCP_GUI_DIAG is set in
+# the environment, host-side press/motion/release + dragBox events are appended
+# to /tmp/ccp-gui-events.log. Paired with the C-side CCP_FWD_DIAG forwarder log
+# ($TMPDIR/ccp-fwd-diag.log) it lets us compare, per gesture, the raw
+# C-canvas %X/%Y/%s/%D against the host-replayed event.x/y/state/num that the
+# app handlers actually see, and the pixel fractions the selection box is drawn
+# from. Env-gated so it is a no-op in normal runs; kept (not removed) for
+# future on-site diagnosis.
+if __import__("os").environ.get("CCP_GUI_DIAG"):
+    import os as _ccp_diag_os
+
+    def _ccp_diag_log(*parts):
+        path = "/tmp/ccp-gui-events.log"
+        stamp = _ccp_diag_os.times()[4]
+        try:
+            with open(path, "a") as fh:
+                fh.write(
+                    " ".join(str(p) for p in (stamp,) + parts)
+                    + "\n"
+                )
+        except Exception:
+            pass
+else:
+    _ccp_diag_log = lambda *p: None
+
+
+def _ccp_event_parts(event):
+    """Fields every host pointer handler cares about, in stable order."""
+    try:
+        return (
+            event.type,
+            getattr(event, "widget", None),
+            getattr(event, "x", "?"),
+            getattr(event, "y", "?"),
+            getattr(event, "x_root", getattr(event, "xRoot", "?")),
+            getattr(event, "y_root", getattr(event, "yRoot", "?")),
+            getattr(event, "state", "?"),
+            getattr(event, "num", "?"),
+        )
+    except Exception as exc:  # never let diagnosis break the event path
+        return ("ERR", repr(exc))
+
+
+def _ccp_diag_child_geom(widget):
+    """Describe the C-canvas child under `widget`: size@origin + whether its
+    <ButtonPress-1> binding is the forwarder. Confirms, per drag, whether the
+    child covers the host 1:1 (session-6 gesture diagnosis). Never raises."""
+    try:
+        kids = widget.winfo_children()
+        for c in kids:
+            if "ccpCanvas" not in c.winfo_pathname():
+                continue
+            try:
+                b = c.bind("<ButtonPress-1>")
+                binder = "fwd" if "ccp_canvas_forward" in b else (b or "none")[:16]
+            except Exception:
+                binder = "ERR"
+            return "%s[%dx%d@%d,%d]b1=%s" % (
+                c.winfo_pathname().split(".")[-1],
+                c.winfo_width(),
+                c.winfo_height(),
+                c.winfo_rootx(),
+                c.winfo_rooty(),
+                binder,
+            )
+        return "none(children=%d)" % len(kids)
+    except Exception as exc:
+        return "ERR:" + repr(exc)
+
+
 # internal class
 class WindowScrollbar(Scrollbar):
     def __init__(self, parent, *args, **kw):
@@ -1019,6 +1089,13 @@ class ScrolledWindow(Frame):
     def pressFunc(self, event, button, state):
 
         self.button = button
+        _ccp_diag_log(
+            "press",
+            button,
+            state,
+            _ccp_event_parts(event),
+            "mark=(%s,%s)" % (self.x, self.y),
+        )
         # self.menu.unpost()
 
         # state = event.state
@@ -1036,6 +1113,7 @@ class ScrolledWindow(Frame):
     def motionFunc(self, event, button, state):
 
         key = (button, self.state)
+        _ccp_diag_log("motion", button, self.state, _ccp_event_parts(event))
         # print 'motionFunc', key
         func = self.motionFuncs[key]
         if func:
@@ -1045,6 +1123,13 @@ class ScrolledWindow(Frame):
     def releaseFunc(self, event, button, state):
 
         key = (button, self.state)
+        _ccp_diag_log(
+            "release",
+            button,
+            self.state,
+            _ccp_event_parts(event),
+            "mark=(%s,%s)" % (self.x, self.y),
+        )
         # print 'releaseFunc', key
         func = self.releaseFuncs[key]
         if func:
@@ -1492,6 +1577,16 @@ class ScrolledWindow(Frame):
         # print 'markLocation', event.state, event.x, event.y
         self.x = event.x
         self.y = event.y
+        canvas = getattr(event, "widget", None)
+        _ccp_diag_log(
+            "mark",
+            _ccp_event_parts(event),
+            "size=(%s,%s)"
+            % (
+                getattr(canvas, "winfo_width", lambda: "?")(),
+                getattr(canvas, "winfo_height", lambda: "?")(),
+            ),
+        )
 
     def unmarkLocation(self, event):
 
@@ -1512,6 +1607,12 @@ class ScrolledWindow(Frame):
         dy = event.y - self.y
         s = -dx / float(w)
         t = dy / float(h)
+        _ccp_diag_log(
+            "translate",
+            _ccp_event_parts(event),
+            "mark=(%s,%s)" % (self.x, self.y),
+            "st=(%f,%f)" % (s, t),
+        )
         # print 'translateEvent2', s, t
 
         # TBD: Trial only
@@ -1671,6 +1772,26 @@ class ScrolledWindow(Frame):
             (a1, b1, x1, y1) = self.calcWorldCoord(widget, event.x, event.y)
             button = event.num
             state = event.state & 255
+            _ccp_diag_log(
+                "dragBox",
+                _ccp_event_parts(event),
+                "press=(%s,%s)" % (self.x, self.y),
+                "frac=(%f,%f)-( %f,%f)" % (x0, y0, x1, y1),
+                "winfo_rootx=%s winfo_rooty=%s"
+                % (widget.winfo_rootx(), widget.winfo_rooty()),
+            )
+            _ccp_diag_log(
+                "geom",
+                "host(%dx%d@%d,%d)"
+                % (
+                    widget.winfo_width(),
+                    widget.winfo_height(),
+                    widget.winfo_rootx(),
+                    widget.winfo_rooty(),
+                ),
+                "child=%s"
+                % _ccp_diag_child_geom(widget),
+            )
             self.drag_func(widget, a0, b0, a1, b1, x0, y0, x1, y1, button, state, event=event)
 
     # input: (x, y) = pixel coordinates (relative to view)

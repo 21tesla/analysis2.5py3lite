@@ -678,7 +678,9 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
 "    if {[info exists ::env(CCP_FWD_DIAG)]} {\n"
 "        if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
 "        if {![info exists ::ccp_fwd_diag_n]} {set ::ccp_fwd_diag_n 0}\n"
-"        if {$::ccp_fwd_diag_n < 50} {\n"
+"        if {$::ccp_fwd_diag_n < 1000} {\n"
+"            # session-6 (2026-09-01) gesture diagnosis: capture enough events\n"
+"            # for the full trackpad-and-mouse CSV matrix.\n"
 "            incr ::ccp_fwd_diag_n\n"
 "            catch {\n"
 "                set f [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
@@ -789,6 +791,54 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
                 tkc_eval(tk_handler_p, n, argv);
                 for (i = 0; i < n; i++)
                     Tcl_DecrRefCount(argv[i]);
+            }
+        }
+
+        /* session-6 (2026-09-01) gesture diagnosis: one per-handler header
+           line proving the C-canvas child was created in THIS process.
+           Emitted C-side (not via the pointer proc) so it appears even when
+           zero pointer events reach the canvas - the empty-fwd-log "hypothesis
+           A": does the C-canvas child exist in the real app at all?
+           Also dumps the actual Tcl widget tree around the host + the
+           C-canvas's real parent and rootx/rooty so we can see whether the
+           canvas is at 0,0 in its parent or if it's placed somewhere else
+           (session 7: winfo_children on the host Python side returned 0
+           but the C-canvas is where the box is drawn - we need to figure
+           out where in the tree it actually is). */
+        if (getenv("CCP_FWD_DIAG"))
+        {
+            /* session-8 (2026-09-01s8) tree dump at C-canvas creation.
+               Widget paths are ~100 chars and appear 3 times each; buffer
+               sized accordingly.  We want: the canvas's parent path, and
+               whether the host already has other children the app might
+               be drawing on.  At creation time, sizes/rootx are 0 (nothing
+               is laid out yet) so we only log the tree - the live
+               rootx/width measurements happen per draw_xor_box (see
+               that call site for the "geometry dump at box time" block). */
+            char hscript[2500];
+
+            /* C positional args: %1$s = win_path, %2$s = path.  The
+               widget path has no spaces (verified: Tcl path name
+               grammar), so unquoted substitution is safe. */
+            snprintf(hscript, sizeof hscript,
+                     "if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
+                     "catch {\n"
+                     "  set _h %1$s\n"
+                     "  set _c %2$s\n"
+                     "  set _parent [winfo parent $_c]\n"
+                     "  set _hkids [winfo children $_h]\n"
+                     "  set _ischild [expr {[$_parent eq $_h]}]\n"
+                     "  set hf [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
+                     "  puts $hf [list \"=== new_tk_handler parent=$_parent canvas_is_host_child=$_ischild host_children_at_creation=$_hkids ===\"]\n"
+                     "  close $hf\n"
+                     "}",
+                     win_path, path);
+            if (Tcl_Eval(tk_handler_p->interp, hscript) != TCL_OK)
+            {
+                const char *msg = Tcl_GetStringResult(tk_handler_p->interp);
+
+                fprintf(stderr, "TkHandler fwd-diag header error: %s\n",
+                        msg ? msg : "(none)");
             }
         }
 
@@ -1101,6 +1151,75 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
 
     if (yy0 > yy1)
 	SWAP(yy0, yy1, int);
+
+    /* session-8 (2026-09-01s8) gesture diagnosis: log the box's computed
+       pixel corners + the active world<->pixel transform + canvas size, so
+       we can see exactly which pixels the C-canvas draws and whether
+       tk_handler_p->width matches the host canvas winfo_width. Gated so it
+       is a no-op without CCP_FWD_DIAG.  Also log live geometry: the
+       canvas's parent path + canvas rootx/rooty/width/height + parent
+       rootx/rooty/width/height at the moment we draw.  The user reports
+       the box is ~100px right AND ~100px lower than the pointer; a
+       consistent axis-pair offset in screen space points at a canvas-vs-
+       host screen-origin mismatch, and this is the direct measurement
+       for that. */
+    if (getenv("CCP_FWD_DIAG"))
+    {
+        fprintf(stderr, "draw_xor_box world=(%g,%g,%g,%g) px=(%d,%d,%d,%d) "
+                        "w/h=%d/%d sx=%g sy=%g tx=%g ty=%g\n",
+                x0, y0, x1, y1, xx0, yy0, xx1, yy1,
+                (int) tk_handler_p->width, (int) tk_handler_p->height,
+                tk_handler_p->sx, tk_handler_p->sy,
+                tk_handler_p->tx, tk_handler_p->ty);
+        {
+            /* Write one line to /tmp/boxgeom.log per box draw via a small
+               Tcl script.  Appends so we can tail it.  The line carries
+               the canvas path, its parent's path, and the live
+               rootx/rooty/width/height of both.  A diff of those tells us
+               the exact screen-space offset between the two - i.e. the
+               ~100 px on each axis the user reported. */
+            char gscript[1500];
+            Tcl_Interp *interp = tk_handler_p->interp;
+            const char *tmp = getenv("TMPDIR");
+            const char *logpath = (tmp && *tmp) ? tmp : "/tmp";
+            char logfile[300];
+
+            snprintf(logfile, sizeof logfile, "%s/boxgeom.log", logpath);
+            /* We already captured the C-side box pixels via fprintf
+               above, so here we just emit the live widget geometry.  The
+               widget paths have no spaces (Tcl path grammar), so they
+               are safe to inline.  The C canvas path is in
+               tk_handler_p->canvas_path. */
+            /* One line per box draw, appended to $TMPDIR/boxgeom.log.
+               Carries the canvas's parent path and the live
+               rootx/rooty/width/height of both canvas and parent; a
+               diff of canvas vs. parent gives the on-screen offset. */
+            snprintf(gscript, sizeof gscript,
+                     "set _c %s\n"
+                     "set _p [winfo parent $_c]\n"
+                     "set _cx [winfo rootx $_c]\n"
+                     "set _cy [winfo rooty $_c]\n"
+                     "set _cwd [winfo width $_c]\n"
+                     "set _chd [winfo height $_c]\n"
+                     "set _px [winfo rootx $_p]\n"
+                     "set _py [winfo rooty $_p]\n"
+                     "set _pwd [winfo width $_p]\n"
+                     "set _phd [winfo height $_p]\n"
+                     "if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
+                     "set _log [file join $::env(TMPDIR) boxgeom.log]\n"
+                     "set _f [open $_log a]\n"
+                     "set _line [format \"canvas@(%d,%d %dx%d) parent@(%d,%d %dx%d)\" $_cx $_cy $_cwd $_chd $_px $_py $_pwd $_phd]\n"
+                     "puts $_f $_line\n"
+                     "close $_f",
+                     tk_handler_p->canvas_path);
+            if (Tcl_Eval(interp, gscript) != TCL_OK)
+            {
+                const char *msg = Tcl_GetStringResult(interp);
+
+                fprintf(stderr, "boxgeom eval error: %s\n", msg ? msg : "(none)");
+            }
+        }
+    }
 
     w = xx1 - xx0;
     h = yy1 - yy0;
