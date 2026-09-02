@@ -826,15 +826,21 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
             /* session-9: log to stderr (no catch, no file IO).  An
                uncaught error propagates to the Tcl_Eval below - which is
                exactly what we want to SEE instead of silent emptiness. */
+            /* session-9b: variable substitution ($_v) NOT command
+               invocation ($_v) in the report string, and string equal for
+               the child test (expr {[aWidget eq b]} invokes aWidget as a
+               command with arg eq).  At creation time the canvas has no
+               geometry yet, so only tree identity is logged here; the live
+               on-screen origin is printed per draw_xor_box below. */
             snprintf(hscript, sizeof hscript,
                      "set _h %1$s\n"
                      "set _c %2$s\n"
                      "set _parent [winfo parent $_c]\n"
                      "set _pclass [winfo class $_parent]\n"
                      "set _hkids [winfo children $_h]\n"
-                     "set _ischild [expr {[$_parent eq $_h]}]\n"
+                     "set _ischild [string equal $_parent $_h]\n"
                      "set _pkids [winfo children $_parent]\n"
-                     "puts stderr \"HANDLER-CREATED host=$_h canvas=$_c parent=$_parent class=$_pclass is_host_child=$_ischild host_children=[$_hkids] parent_children_of_canvas=[$_pkids]\"\n",
+                     "puts stderr \"HANDLER-CREATED host=$_h canvas=$_c parent=$_parent class=$_pclass is_host_child=$_ischild host_children=$_hkids parent_children_of_canvas=$_pkids\"\n",
                      win_path, path);
             if (Tcl_Eval(tk_handler_p->interp, hscript) != TCL_OK)
             {
@@ -1175,46 +1181,37 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
                 tk_handler_p->sx, tk_handler_p->sy,
                 tk_handler_p->tx, tk_handler_p->ty);
         {
-            /* Write one line to /tmp/boxgeom.log per box draw via a small
-               Tcl script.  Appends so we can tail it.  The line carries
-               the canvas path, its parent's path, and the live
-               rootx/rooty/width/height of both.  A diff of those tells us
-               the exact screen-space offset between the two - i.e. the
-               ~100 px on each axis the user reported. */
-            char gscript[1500];
+            /* session-9b: report to stderr (no file append - the catch'd
+               file block swallowed its own errors).  The C-canvas's OWN
+               [winfo rootx width] returns UNINITIALIZED garbage on this
+               Tk build (1073741824...), so we do NOT read the canvas's
+               rootx/width at all.  Instead we read, from a reliable
+               ancestor, what we actually need to locate the box ON
+               SCREEN: the canvas's x/y IN ITS PARENT (should be 0,0 if
+               place -x0 -y0 -relwidth1 -relheight1 held), and the
+               PARENT's on-screen origin (rootx/rooty) + size.  Then:
+                 box on-screen = (parent.rootx + canvas-x-in-parent + box_px)
+               The host (the widget receiving the pointer events) is the
+               PARENT, so diffing "parent.rootx + canvas-x" against the
+               pointer's x_root - host.winfo_rootx (both on the host) is
+               exactly the ~100px offset the user reports, or reveals the
+               canvas is mis-placed / mis-sized. */
+            char gscript[1200];
             Tcl_Interp *interp = tk_handler_p->interp;
-            const char *tmp = getenv("TMPDIR");
-            const char *logpath = (tmp && *tmp) ? tmp : "/tmp";
-            char logfile[300];
 
-            snprintf(logfile, sizeof logfile, "%s/boxgeom.log", logpath);
-            /* We already captured the C-side box pixels via fprintf
-               above, so here we just emit the live widget geometry.  The
-               widget paths have no spaces (Tcl path grammar), so they
-               are safe to inline.  The C canvas path is in
-               tk_handler_p->canvas_path. */
-            /* One line per box draw, appended to $TMPDIR/boxgeom.log.
-               Carries the canvas's parent path and the live
-               rootx/rooty/width/height of both canvas and parent; a
-               diff of canvas vs. parent gives the on-screen offset. */
             snprintf(gscript, sizeof gscript,
                      "set _c %s\n"
                      "set _p [winfo parent $_c]\n"
-                     "puts stderr \"BOXGEOM canvas=[$_c] parent=[$_p] pclass=[winfo class $_p] pchildren=[winfo children $_p]\"\n"
-                     "set _cx [winfo rootx $_c]\n"
-                     "set _cy [winfo rooty $_c]\n"
-                     "set _cwd [winfo width $_c]\n"
-                     "set _chd [winfo height $_c]\n"
+                     "set _cxin [winfo x $_c]\n"
+                     "set _cyin [winfo y $_c]\n"
+                     "set _pwd [winfo width $_c]\n"
+                     "set _phd [winfo height $_c]\n"
                      "set _px [winfo rootx $_p]\n"
                      "set _py [winfo rooty $_p]\n"
-                     "set _pwd [winfo width $_p]\n"
-                     "set _phd [winfo height $_p]\n"
-                     "if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
-                     "set _log [file join $::env(TMPDIR) boxgeom.log]\n"
-                     "set _f [open $_log a]\n"
-                     "set _line [format \"canvas@(%d,%d %dx%d) parent@(%d,%d %dx%d)\" $_cx $_cy $_cwd $_chd $_px $_py $_pwd $_phd]\n"
-                     "puts $_f $_line\n"
-                     "close $_f",
+                     "set _pw [winfo width $_p]\n"
+                     "set _ph [winfo height $_p]\n"
+                     "puts stderr \"BOXGEOM canvas=$_c parent=$_p \"\n"
+                     "puts stderr \"  canvas_in_parent=($_cxin,$_cyin) canvas_wh=$_pwd x $_phd parent_origin=($_px,$_py) parent_wh=$_pw x $_ph\"\n",
                      tk_handler_p->canvas_path);
             if (Tcl_Eval(interp, gscript) != TCL_OK)
             {
