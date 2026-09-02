@@ -159,6 +159,15 @@ class FakeSlice:
 
 # public class
 class WindowFrame(Frame, WindowDraw):
+
+    # Gain for the macOS 2-finger trackpad scroll -> zoom mapping
+    # (trackpadZoom).  scale = exp(-touchpad_zoom_speed * dy_per_tick).  A
+    # typical precise trackpad tick is only a handful of pixel-units of dy, so
+    # 0.005 gives a small, controllable zoom per tick that still accumulates to
+    # a large zoom over a full swipe.  Tune here if the trackpad feels too
+    # twitchy (>0.005 -> calmer) or too sluggish (<0.005).
+    touchpad_zoom_speed = 0.005
+
     def __init__(self, parent, windowPane):
 
         self.windowPopup = parent.parent
@@ -341,6 +350,11 @@ class WindowFrame(Frame, WindowDraw):
         scrolledWindow.canvasBind("<MouseWheel>", self.windowsZoom)
         scrolledWindow.canvasBind("<Button-4>", self.zoomIn)
         scrolledWindow.canvasBind("<Button-5>", self.zoomOut)
+        # macOS 2-finger trackpad scroll arrives as <TouchpadScroll> (a physical
+        # mouse wheel is the separate <MouseWheel> above).  Route the vertical
+        # 2-finger scroll to continuous zoom.  Inert on Linux/Windows where
+        # <TouchpadScroll> never fires.
+        scrolledWindow.canvasBind("<TouchpadScroll>", self.trackpadZoom)
 
         if not self.hasValueAxis:
             scrolledWindow.sliceMenuBind(
@@ -2491,6 +2505,40 @@ class WindowFrame(Frame, WindowDraw):
 
         else:
             self.scrolled_window.zoom(canvas, 1.2)
+
+    def trackpadZoom(self, event):
+
+        # macOS 2-finger trackpad scroll (NOT a physical mouse wheel -- that is
+        # the separate <MouseWheel> -> windowsZoom path).  Tk 9.0 on Aqua packs
+        # the per-tick scroll as deltaX (high 16, signed) | deltaY (low 16,
+        # signed) into one 32-bit value delivered in event.delta, so it must be
+        # unpacked.  Measured on this build: up-swipe -> dy positive, down ->
+        # negative (mirrors MouseWheel).  The VERTICAL component drives zoom:
+        #   up (dy>0)  -> zoom in  (scale < 1)
+        #   down (dy<0)-> zoom out (scale > 1)
+        # The scale is exp(-k*dy) so a light scroll is a small zoom and a hard
+        # flick is a big one (continuous, unlike the fixed 0.8/1.2 steps of the
+        # mouse wheel).  Modifier handling mirrors windowsZoom so Ctrl/Shift/Alt
+        # + 2-finger scroll still scrolls the z-plane instead of zooming.
+        dy = event.delta & 0xFFFF
+        if dy & 0x8000:
+            dy -= 0x10000
+        if dy == 0:
+            return
+
+        canvas = event.widget
+        state = event.state & 255
+        step = -1 if dy > 0 else 1
+
+        if state & 4:  # Control
+            self.scrollZPlane(canvas, "z1", step)
+        elif state & 1:  # Shift
+            self.scrollZPlane(canvas, "z2", step)
+        elif state & 8:  # Alt
+            self.scrollZPlane(canvas, "z1", step)
+        else:
+            scale = math.exp(-self.touchpad_zoom_speed * dy)
+            self.scrolled_window.zoom(canvas, scale)
 
     def scrollZPlane(self, canvas, label, step):
 
