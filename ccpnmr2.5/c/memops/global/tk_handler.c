@@ -676,20 +676,23 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
 "    if {$btn > 0 && [string match <Button* $type]} {lappend opts -button $btn}\n"
 "    if {$delta ne {}} {lappend opts -delta $delta}\n"
 "    if {[info exists ::env(CCP_FWD_DIAG)]} {\n"
-"        if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
+"        # session-9 (2026-09-01s9): diagnostics go to stderr, NEVER\n"
+"        # caught - the s8 file-append block here (and in the\n"
+"        # new_tk_handler header) was silently swallowing its own errors\n"
+"        # inside catch, which is why ccp-fwd-diag.log stayed empty while\n"
+"        # its mtime proved it was opened.  stderr is captured by the\n"
+"        # launcher to /tmp/ccp-stderr.log.\n"
 "        if {![info exists ::ccp_fwd_diag_n]} {set ::ccp_fwd_diag_n 0}\n"
-"        if {$::ccp_fwd_diag_n < 1000} {\n"
-"            # session-6 (2026-09-01) gesture diagnosis: capture enough events\n"
-"            # for the full trackpad-and-mouse CSV matrix.\n"
-"            incr ::ccp_fwd_diag_n\n"
-"            catch {\n"
-"                set f [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
-"                puts $f [list $type \"->\" $w \"x=$x\" \"y=$y\" \"rootx=$rx\" \"rooty=$ry\" \"button=$btn\" \"state=$state\" \"delta=$delta\" \"opts=[$opts]\"]\n"
-"                close $f\n"
-"            }\n"
+"        incr ::ccp_fwd_diag_n\n"
+"        if {$::ccp_fwd_diag_n <= 500} {\n"
+"            puts stderr \"FWD $type -> $w x=$x y=$y rx=$rx ry=$ry btn=$btn state=$state delta=$delta\"\n"
 "        }\n"
 "    }\n"
-"    catch {event generate $w $type {*}$opts}\n"
+"    if {[catch {event generate $w $type {*}$opts} ->_egerr]} {\n"
+"        if {[info exists ::env(CCP_FWD_DIAG)] && [info exists ::ccp_fwd_diag_n] && $::ccp_fwd_diag_n <= 500} {\n"
+"            puts stderr \"FWD-ERR $type -> $w [$opts] err=$->_egerr\"\n"
+"        }\n"
+"    }\n"
 "}\n";
         if (Tcl_Eval(tk_handler_p->interp, ccp_forward_proc_src) != TCL_OK)
         {
@@ -820,18 +823,18 @@ Tk_handler new_tk_handler(Tcl_Interp *interp, Tk_Window tk_win, CcpnString win_p
             /* C positional args: %1$s = win_path, %2$s = path.  The
                widget path has no spaces (verified: Tcl path name
                grammar), so unquoted substitution is safe. */
+            /* session-9: log to stderr (no catch, no file IO).  An
+               uncaught error propagates to the Tcl_Eval below - which is
+               exactly what we want to SEE instead of silent emptiness. */
             snprintf(hscript, sizeof hscript,
-                     "if {![info exists ::env(TMPDIR)]} {set ::env(TMPDIR) /tmp}\n"
-                     "catch {\n"
-                     "  set _h %1$s\n"
-                     "  set _c %2$s\n"
-                     "  set _parent [winfo parent $_c]\n"
-                     "  set _hkids [winfo children $_h]\n"
-                     "  set _ischild [expr {[$_parent eq $_h]}]\n"
-                     "  set hf [open [file join $::env(TMPDIR) ccp-fwd-diag.log] a]\n"
-                     "  puts $hf [list \"=== new_tk_handler parent=$_parent canvas_is_host_child=$_ischild host_children_at_creation=$_hkids ===\"]\n"
-                     "  close $hf\n"
-                     "}",
+                     "set _h %1$s\n"
+                     "set _c %2$s\n"
+                     "set _parent [winfo parent $_c]\n"
+                     "set _pclass [winfo class $_parent]\n"
+                     "set _hkids [winfo children $_h]\n"
+                     "set _ischild [expr {[$_parent eq $_h]}]\n"
+                     "set _pkids [winfo children $_parent]\n"
+                     "puts stderr \"HANDLER-CREATED host=$_h canvas=$_c parent=$_parent class=$_pclass is_host_child=$_ischild host_children=[$_hkids] parent_children_of_canvas=[$_pkids]\"\n",
                      win_path, path);
             if (Tcl_Eval(tk_handler_p->interp, hscript) != TCL_OK)
             {
@@ -1197,6 +1200,7 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
             snprintf(gscript, sizeof gscript,
                      "set _c %s\n"
                      "set _p [winfo parent $_c]\n"
+                     "puts stderr \"BOXGEOM canvas=[$_c] parent=[$_p] pclass=[winfo class $_p] pchildren=[winfo children $_p]\"\n"
                      "set _cx [winfo rootx $_c]\n"
                      "set _cy [winfo rooty $_c]\n"
                      "set _cwd [winfo width $_c]\n"
