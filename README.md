@@ -8,55 +8,43 @@ The standalone archive is fully self-contained. It embeds its own private Python
 
 ## Prerequisites
 
-CCPNMR Analysis uses a Tkinter/OpenGL interface, which requires **XQuartz** to run on macOS:
-
-1. **Install XQuartz** (if you don't already have it):
-   * **Via Homebrew**: `brew install --cask xquartz`
-   * **Via Web Installer**: Download and install the `.pkg` from [xquartz.org](https://www.xquartz.org).
-2. **Restart your Mac or Log out and back in** after the installation to initialize X11 services.
+**None.** The macOS standalone is fully self-contained: it embeds its own
+private CPython 3.14 runtime together with Tcl/Tk 9.0.4 (native Aqua canvas
+port — no X11 / XQuartz required). Just download, extract, and run.
 
 ---
 
 ## Installation
 
-1. Download the portable tarball (e.g., `ccpnmr-macos-arm64-standalone.tar.gz`).
+1. Download the portable tarball (e.g., `ccpnmr-2.5.2-macos-arm64-standalone.tar.gz`).
 2. Extract the archive in your Terminal:
    ```bash
-   tar -xzf ccpnmr-macos-arm64-standalone.tar.gz
-   cd ccpnmr-macos
+   tar -xzf ccpnmr-2.5.2-macos-arm64-standalone.tar.gz
+   cd ccpnmr-2.5.2-macos-arm64-standalone
    ```
+
+> The archive is built for the architecture of the Mac that built it
+> (Apple Silicon = `arm64`, Intel = `x86_64`) — run it on a matching Mac.
 
 ---
 
 ## Running the Application
 
-Use the provided `./run-ccpnmr.sh` launcher script. It will verify XQuartz is active and launch the respective application.
+There is no launcher script — the tree is self-contained. Run:
 
 ### 1. Launch the main CCPNMR Analysis GUI (Default)
 ```bash
-./run-ccpnmr.sh
+./bin/analysis                # or: ./bin/analysis /path/to/project
 ```
 
-### 2. Launch other CCPN Utilities
-The single launcher wrapper also serves all other sub-applications by passing a command argument:
-
-* **Project Data Shifter:**
-  ```bash
-  ./run-ccpnmr.sh data-shifter
-  ```
-* **Project Format Converter:**
-  ```bash
-  ./run-ccpnmr.sh format-converter
-  ```
-* **Project Updater (Non-GUI):**
-  ```bash
-  ./run-ccpnmr.sh update
-  ```
-
-To see the help menu, run:
+### 2. NEF import / export (non-GUI)
 ```bash
-./run-ccpnmr.sh help
+./runtime/bin/ccpnmr-nef import file.nef [--project-name NAME] [--force]
+./runtime/bin/ccpnmr-nef export <project-directory> <output.nef>
 ```
+
+The tree reads nothing from and writes nothing to the system except the project
+you open/save (and your default browser for Project > Summary).
 
 ---
 

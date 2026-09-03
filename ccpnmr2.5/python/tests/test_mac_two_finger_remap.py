@@ -1,29 +1,30 @@
 """
-Unit tests for the macOS two-finger -> middle (Button-2) remap
-(ScrolledWindow.macTwoFingerToMiddle / macTwoFingerMotion / macTwoFingerRelease).
+Unit tests for the macOS Button-3 (right button / two-finger) tap-vs-drag
+state machine (ScrolledWindow.macB3Press / macB3Motion / macB3Release).
 
-On macOS a trackpad two-finger tap and a physical right-click both arrive
-as <ButtonPress-3>, and a two-finger tap-drag arrives as
-<ButtonPress-3> + <B3-Motion>* + <ButtonRelease-3>.  The remap distinguishes
-by modifier:
-  - Control / Command / Option held  -> open the action menu (right-click)
-  - no such modifier -> remap the whole Button-3 sequence to a middle
-    (Button-2) sequence so the app's normal Button-2 handlers run: a tap
-    becomes a neutral middle click (press -> release, no translate) and a
-    tap-drag becomes a middle drag that translates the spectrum.
+On macOS a physical right-click and a trackpad two-finger press are
+byte-identical at the Tk layer (probe btn3_probe.py, 2026-09-02, Tk 9.0.4:
+press num=3 state=0; release num=3 state=1024 = button mask; no keycode/char/
+delta distinguish them, for either a bare tap or a drag). So the app routes by
+GESTURE SHAPE, not source, via a deferred state machine:
+  - no-modifier Button-3 press  -> remember origin, wait for motion/release
+  - first B3-Motion past a 5px threshold -> commit to a drag: fire <ButtonPress-2>
+    and forward motions to <B2-Motion> (the app's Button-2 translate pipeline)
+  - Button-3 release with no commit -> a TAP -> open the action menu
+  - Command/Control/Option press -> open the action menu immediately
 
-These tests drive the unbound methods with a mock `self` that only provides
-`menu` and `_mac_two_finger`, so no tkinter widget (and no display) is
-required.  (The full press->motion->release flow is exercised against a real
-Tk canvas in manual verification.)
+These tests drive the (unbound by default) methods with a mock `self`, so no
+tkinter widget or display is required.
 """
 
 from unittest.mock import MagicMock
 
 from memops.gui.ScrolledWindow import ScrolledWindow
 
-# Button-2 state mask used for a generated <B2-Motion>
+# Button-2 state mask used for a generated <B2-Motion>.
 B2MASK = 1 << (7 + 2)
+# Matches ScrolledWindow._mac_b3_drag_threshold.
+THRESHOLD = 5
 
 
 class _Event:
@@ -35,145 +36,208 @@ class _Event:
 
 
 def _self():
-    return MagicMock()
+    m = MagicMock()
+    # Give the state fields honest starting values (a fresh ScrolledWindow).
+    m._mac_b3_pressed = False
+    m._mac_b3_x0 = 0
+    m._mac_b3_y0 = 0
+    m._mac_two_finger = False
+    # The threshold is a CLASS attribute on ScrolledWindow, but the test passes
+    # a bare MagicMock as `self`, so seed the real value here.
+    m._mac_b3_drag_threshold = ScrolledWindow._mac_b3_drag_threshold
+    return m
 
 
-def test_two_finger_press_generates_middle_press():
+def test_no_modifier_press_remembers_origin_and_does_nothing_else():
     self_mock = _self()
-    event = _Event(state=0)  # no modifiers: bare two-finger press
+    event = _Event(state=0, x=100, y=120)
 
-    ret = ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
+    ret = ScrolledWindow.macB3Press(self_mock, event)
 
-    # Action menu must NOT open on a two-finger press.
+    # No menu, no <ButtonPress-2>: the tap-vs-drag outcome is deferred.
     self_mock.menu.popupMenu.assert_not_called()
-    # Only a middle Press-2 is generated here; the release is produced by
-    # macTwoFingerRelease when the user lets go.
-    gens = event.widget.event_generate.call_args_list
-    assert [g.args[0] for g in gens] == ["<ButtonPress-2>"]
-    for g in gens:
-        assert g.kwargs.get("x") == 55
-        assert g.kwargs.get("y") == 60
-        assert g.kwargs.get("button") == 2
-    # Remap is armed for the follow-on motion/release handlers.
-    assert self_mock._mac_two_finger is True
-    assert ret == "break"
-
-
-def test_two_finger_release_closes_middle_and_disarms():
-    self_mock = _self()
-    self_mock._mac_two_finger = True
-    event = _Event(state=0, x=70, y=80)
-
-    ret = ScrolledWindow.macTwoFingerRelease(self_mock, event)
-
-    assert [g.args[0] for g in event.widget.event_generate.call_args_list] == ["<ButtonRelease-2>"]
-    assert event.widget.event_generate.call_args.kwargs["button"] == 2
+    event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_b3_pressed is True
+    assert self_mock._mac_b3_x0 == 100
+    assert self_mock._mac_b3_y0 == 120
     assert self_mock._mac_two_finger is False
     assert ret == "break"
 
 
-def test_two_finger_release_is_noop_when_not_remapping():
+def test_motion_within_threshold_is_ignored():
     self_mock = _self()
-    self_mock._mac_two_finger = False
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    # 3px in x, 0px in y: below the 5px threshold -> still a tap candidate.
+    event = _Event(state=B2MASK | 1 << (7 + 3), x=103, y=120)
+
+    ret = ScrolledWindow.macB3Motion(self_mock, event)
+
+    event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_two_finger is False
+    assert ret == "break"
+
+
+def test_motion_past_threshold_commits_to_b2_translate():
+    self_mock = _self()
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    # 10px in x: crosses the threshold.
+    event = _Event(state=B2MASK | 1 << (7 + 3), x=110, y=120)
+
+    ret = ScrolledWindow.macB3Motion(self_mock, event)
+
+    gens = [g.args[0] for g in event.widget.event_generate.call_args_list]
+    # ButtonPress-2 is fired first (at the press origin), then the B2-Motion.
+    assert gens == ["<ButtonPress-2>", "<B2-Motion>"]
+    press_gen = event.widget.event_generate.call_args_list[0]
+    assert press_gen.kwargs.get("button") == 2
+    assert press_gen.kwargs.get("x") == 100  # origin, not the current x
+    assert press_gen.kwargs.get("y") == 120
+    move_gen = event.widget.event_generate.call_args_list[1]
+    assert (move_gen.kwargs.get("state") & B2MASK) == B2MASK  # carries Button-2 mask
+    assert move_gen.kwargs.get("x") == 110
+    assert move_gen.kwargs.get("y") == 120
+    assert self_mock._mac_two_finger is True
+    assert ret == "break"
+
+
+def test_subsequent_motion_after_commit_forwards_b2_only():
+    self_mock = _self()
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    ScrolledWindow.macB3Motion(self_mock, _Event(state=B2MASK | 1 << (7 + 3), x=120, y=120))  # commits
+    event = _Event(state=B2MASK | 1 << (7 + 3), x=130, y=125)
+
+    ret = ScrolledWindow.macB3Motion(self_mock, event)
+
+    # Already committed: only the B2-Motion fires, no second ButtonPress-2.
+    gens = [g.args[0] for g in event.widget.event_generate.call_args_list]
+    assert gens == ["<B2-Motion>"]
+    assert (event.widget.event_generate.call_args.kwargs.get("state") & B2MASK) == B2MASK
+    assert ret == "break"
+
+
+def test_motion_without_press_is_noop():
+    self_mock = _self()
+    event = _Event(state=B2MASK | 1 << (7 + 3), x=10, y=10)
+
+    ret = ScrolledWindow.macB3Motion(self_mock, event)
+
+    event.widget.event_generate.assert_not_called()
+    assert ret == "break"
+
+
+def test_release_after_commit_closes_b2_sequence():
+    self_mock = _self()
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    ScrolledWindow.macB3Motion(self_mock, _Event(state=B2MASK | 1 << (7 + 3), x=120, y=120))  # commits
+    event = _Event(state=0, x=140, y=130)
+
+    ret = ScrolledWindow.macB3Release(self_mock, event)
+
+    gens = [g.args[0] for g in event.widget.event_generate.call_args_list]
+    assert gens == ["<ButtonRelease-2>"]
+    assert event.widget.event_generate.call_args.kwargs.get("button") == 2
+    self_mock.menu.popupMenu.assert_not_called()
+    assert self_mock._mac_two_finger is False
+    assert ret == "break"
+
+
+def test_release_with_no_commit_is_a_tap_that_opens_menu():
+    self_mock = _self()
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    event = _Event(state=0, x=100, y=120)
+
+    ret = ScrolledWindow.macB3Release(self_mock, event)
+
+    # A stationary tap opens the menu.
+    self_mock.menu.popupMenu.assert_called_once_with(event)
+    event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_b3_pressed is False
+    assert self_mock._mac_two_finger is False
+    assert ret == "break"
+
+
+def test_release_after_small_motion_is_still_a_tap():
+    self_mock = _self()
+    ScrolledWindow.macB3Press(self_mock, _Event(state=0, x=100, y=120))
+    # 2px jiggle, below threshold: no commit.
+    ScrolledWindow.macB3Motion(self_mock, _Event(state=B2MASK | 1 << (7 + 3), x=102, y=120))
+    event = _Event(state=0, x=102, y=120)
+
+    ret = ScrolledWindow.macB3Release(self_mock, event)
+
+    self_mock.menu.popupMenu.assert_called_once_with(event)
+    event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_two_finger is False
+    assert ret == "break"
+
+
+def test_release_with_no_state_is_noop():
+    self_mock = _self()
     event = _Event(state=0)
 
-    ret = ScrolledWindow.macTwoFingerRelease(self_mock, event)
+    ret = ScrolledWindow.macB3Release(self_mock, event)
 
     event.widget.event_generate.assert_not_called()
-    assert self_mock._mac_two_finger is False
+    self_mock.menu.popupMenu.assert_not_called()
     assert ret == "break"
 
 
-def test_two_finger_motion_generates_middle_motion_with_mask():
+def test_control_click_opens_menu_immediately():
     self_mock = _self()
-    self_mock._mac_two_finger = True
-    event = _Event(state=1 << (7 + 3), x=60, y=72)  # B3-Motion carries its B3 mask
+    event = _Event(state=0x4, x=12, y=34)  # Control bit (& 255 -> 4)
 
-    ret = ScrolledWindow.macTwoFingerMotion(self_mock, event)
+    ret = ScrolledWindow.macB3Press(self_mock, event)
 
-    gens = event.widget.event_generate.call_args_list
-    assert [g.args[0] for g in gens] == ["<B2-Motion>"]
-    kwargs = gens[0].kwargs
-    # A generated <B2-Motion> needs the button-2 mask in -state to be
-    # recognised as a button-2 motion (state 0 demotes to plain <Motion>).
-    assert (kwargs.get("state") & B2MASK) == B2MASK
-    assert kwargs.get("x") == 60
-    assert kwargs.get("y") == 72
-    assert self_mock._mac_two_finger is True
-    assert ret == "break"
-
-
-def test_two_finger_motion_is_noop_when_not_remapping():
-    self_mock = _self()
-    self_mock._mac_two_finger = False
-    event = _Event(state=1 << (7 + 3))
-
-    ret = ScrolledWindow.macTwoFingerMotion(self_mock, event)
-
-    event.widget.event_generate.assert_not_called()
-    assert ret == "break"
-
-
-def test_control_click_opens_menu_not_middle():
-    self_mock = _self()
-    # Real Tk events carry the button mask high bits too; the handler must
-    # mask with & 255 so a Control press is still recognised as Control.
-    event = _Event(state=0x4, x=12, y=34)  # Control
-
-    ret = ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
-
-    # Menu requested with the original Button-3 event.
     self_mock.menu.popupMenu.assert_called_once_with(event)
-    # No middle (Button-2) event is generated for a Control click, and no
-    # remap is armed (clears any stale state).
     event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_b3_pressed is False
     assert self_mock._mac_two_finger is False
     assert ret == "break"
 
 
 def test_control_click_with_button_mask_bits():
     self_mock = _self()
-    # Control (0x4) plus the Button-3 mask bits Tk adds on macOS.  After
-    # masking with & 255 the Control bit must remain set -> menu.
-    event = _Event(state=0x4 | 0x200 | 0x800)
+    # Control (0x4) plus the Button-3 mask bits Tk adds: & 255 keeps the Control.
+    event = _Event(state=0x4 | (1 << (7 + 3)))
 
-    ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
+    ScrolledWindow.macB3Press(self_mock, event)
 
     self_mock.menu.popupMenu.assert_called_once_with(event)
     event.widget.event_generate.assert_not_called()
 
 
-def test_command_click_opens_menu_not_middle():
+def test_command_click_opens_menu_immediately():
     self_mock = _self()
     event = _Event(state=0x10)  # Command
 
-    ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
+    ScrolledWindow.macB3Press(self_mock, event)
 
     self_mock.menu.popupMenu.assert_called_once_with(event)
     event.widget.event_generate.assert_not_called()
+    assert self_mock._mac_b3_pressed is False
     assert self_mock._mac_two_finger is False
 
 
-def test_option_click_opens_menu_not_middle():
+def test_option_click_opens_menu_immediately():
     self_mock = _self()
     event = _Event(state=0x80)  # Option
 
-    ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
+    ScrolledWindow.macB3Press(self_mock, event)
 
     self_mock.menu.popupMenu.assert_called_once_with(event)
     event.widget.event_generate.assert_not_called()
-    assert self_mock._mac_two_finger is False
+    assert self_mock._mac_b3_pressed is False
 
 
-def test_shift_only_press_remapped_not_menu():
+def test_shift_only_press_is_not_menu_but_is_tracked():
     self_mock = _self()
-    # Shift alone is not a menu modifier -> treated as a (shift) two-finger
-    # press, i.e. remapped to middle, not the menu.
-    event = _Event(state=0x1)
+    # Shift is not a menu modifier: it should arm the tap-vs-drag path, NOT open
+    # the menu, so a shift+right tap/drag still resolves by shape.
+    event = _Event(state=0x1, x=50, y=60)
 
-    ret = ScrolledWindow.macTwoFingerToMiddle(self_mock, event)
+    ret = ScrolledWindow.macB3Press(self_mock, event)
 
     self_mock.menu.popupMenu.assert_not_called()
-    assert [g.args[0] for g in event.widget.event_generate.call_args_list] == ["<ButtonPress-2>"]
-    assert self_mock._mac_two_finger is True
+    assert self_mock._mac_b3_pressed is True
+    assert self_mock._mac_b3_x0 == 50
     assert ret == "break"

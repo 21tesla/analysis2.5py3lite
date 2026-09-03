@@ -808,9 +808,20 @@ class ScrolledWindow(Frame):
         self.x = None
         self.y = None
         self.state = no_key_state
-        # True while remapping a bare trackpad two-finger Button-3 sequence
-        # (press/motion/release) to a middle Button-2 sequence.  Set in
-        # macTwoFingerToMiddle, consumed by macTwoFingerMotion/Release.
+        # Button-3 (right button / trackpad two-finger) tap-vs-drag state.
+        # On macOS a physical right-click and a trackpad two-finger tap/drag are
+        # indistinguishable at the Tk layer (probe btn3_probe.py: both press
+        # num=3 state=0). We therefore decide by GESTURE SHAPE, not source:
+        #   _mac_b3_pressed  a no-modifier Button-3 is held, tap vs drag unknown
+        #   _mac_b3_x0/y0    the press origin, for the 5px drag threshold
+        #   _mac_two_finger  movement has crossed the threshold, so we have
+        #                    committed to the Button-2 translate pipeline
+        # A no-modifier press arms _mac_b3_pressed; a motion past the threshold
+        # commits (fires <ButtonPress-2> and arms _mac_two_finger); a release
+        # that never committed is a tap -> opens the menu.
+        self._mac_b3_pressed = False
+        self._mac_b3_x0 = 0
+        self._mac_b3_y0 = 0
         self._mac_two_finger = False
         self.pressFuncs = {}
         self.motionFuncs = {}
@@ -1070,82 +1081,111 @@ class ScrolledWindow(Frame):
             # Support Command + Click (Button-1) and Alt/Option + Click (Button-1) as right-click
             self.canvasBind("<Command-ButtonPress-1>", self.menu.popupMenu)
             self.canvasBind("<Alt-ButtonPress-1>", self.menu.popupMenu)
-            # A trackpad two-finger tap is indistinguishable from a right
-            # click at the Tk layer (both arrive as Button-3). Rebind the
-            # press to a handler that remaps the bare two-finger
-            # press/motion/release sequence to a middle (Button-2) sequence
-            # so it no longer opens the action menu: a tap becomes a neutral
-            # middle click and a tap-drag becomes a middle drag that
-            # translates the spectrum.  A Control/Command press still opens
-            # the menu (macTwoFingerToMiddle calls popupMenu itself).  Note a
-            # same-sequence .bind REPLACES the menu's <ButtonPress-3>,
-            # <B3-Motion> and <ButtonRelease-3> bound via setupBind above, so
-            # the menu case is handled in the handler rather than by leaving
-            # the original bindings in place.
-            self.canvasBind("<ButtonPress-3>", self.macTwoFingerToMiddle)
-            self.canvasBind("<B3-Motion>", self.macTwoFingerMotion)
-            self.canvasBind("<ButtonRelease-3>", self.macTwoFingerRelease)
+            # Right button (physical mouse) and trackpad two-finger tap/drag are
+            # byte-identical at the Tk layer on macOS (probe btn3_probe.py,
+            # 2026-09-02, Tk 9.0.4: press num=3 state=0, release state=1024, no
+            # keycode/char/delta tell them apart -- confirmed for both a bare tap
+            # AND a drag). So we can't route by SOURCE; we route by the gesture's
+            # SHAPE via a deferred state machine (macB3Press/Motion/Release):
+            #   - no-modifier press: remember the origin, wait to see if it turns
+            #     into a drag (no <ButtonPress-2> yet, so no menu pops on press
+            #     and no translate starts early)
+            #   - motion past a 5px threshold: commit to the Button-2 translate
+            #     pipeline -> two-finger drag (and mouse right-drag) MOVE the
+            #     spectrum
+            #   - release that never committed: a TAP -> open the action menu
+            #     (so the mouse's right-click opens the menu; a stationary
+            #     two-finger tap does too -- the agreed, unavoidable cost)
+            # A Command/Ctrl/Option press opens the menu immediately, as before.
+            # These .bind calls REPLACE the <ButtonPress-3> that setupBind above
+            # bound directly to popupMenu (same sequence -> last .bind wins); the
+            # menu is now triggered from the release handler instead.
+            self.canvasBind("<ButtonPress-3>", self.macB3Press)
+            self.canvasBind("<B3-Motion>", self.macB3Motion)
+            self.canvasBind("<ButtonRelease-3>", self.macB3Release)
 
         if update_func:
             self.menu.config(postcommand=update_func)
 
-    def macTwoFingerToMiddle(self, event):
+    # A right-button / two-finger press only counts as a drag (not a tap) after
+    # moving at least this many pixels. Chosen to sit between the ~1px jitter
+    # of a stationary two-finger tap and the ~15px+ of a deliberate drag (see
+    # the btn3_probe.py captures: a tap produces zero B3-Motion events, a drag
+    # moves ~15-40px across 14-20 events).
+    _mac_b3_drag_threshold = 5
 
-        # macOS: a trackpad two-finger tap and a physical right-click both
-        # surface here as <ButtonPress-3>.  Distinguish them by modifier:
-        #   - with Control/Option/Command held -> it is a deliberate menu
-        #     request (Control-click / Command-click), open the menu.
-        #   - no modifier -> it is the two-finger press.  Remap the whole
-        #     Button-3 press/motion/release sequence to a middle (Button-2)
-        #     sequence so the action menu no longer pops and the app's normal
-        #     Button-2 handlers run: a tap becomes a neutral middle click
-        #     (mark on press, unmark on release, no translate because no
-        #     motion) and a tap-drag becomes a middle drag that translates the
-        #     spectrum (translateBind(2)'s motion handler).
-        # This handler REPLACES the <ButtonPress-3> that setupBind bound to
-        # self.menu.popupMenu (a same-sequence .bind overwrites the prior
-        # binding), so the menu case is routed through popupMenu explicitly.
-        # No reentry guard is needed on the generated Button-2 events: this
-        # handler is bound to Button-3 while it only generates Button-2, so it
-        # cannot fire on its own output.
+    def macB3Press(self, event):
+
+        # <ButtonPress-3>: physical right-click OR trackpad two-finger press --
+        # identical at the Tk layer. Decide by shape, with a deferred outcome:
+        #   - Command/Control/Option held -> an explicit menu request: open the
+        #     action menu immediately (no drag machinery).
+        #   - no modifier -> only REMEMBER that a right/two-finger press began
+        #     (origin for the threshold). We deliberately generate NOTHING here:
+        #     no menu pop, no <ButtonPress-2>. Whether this becomes a TAP (menu)
+        #     or a DRAG (translate) is decided by subsequent motion/release.
+        # We REPLACES setupBind's direct <ButtonPress-3> -> popupMenu, so the
+        # menu is no longer opened on press.
         state = event.state & 255
         # Tk macOS modifier bits: Control 0x4, Command 0x10, Option 0x80.
         if state & (0x4 | 0x10 | 0x80):
-            # A modifier press is the menu, not a two-finger remap.  Clear any
-            # stale remap state so a later stray motion/release is a no-op.
+            self._mac_b3_pressed = False
             self._mac_two_finger = False
             self.menu.popupMenu(event)
         else:
-            self._mac_two_finger = True
-            event.widget.event_generate("<ButtonPress-2>", x=event.x, y=event.y, button=2)
+            self._mac_b3_pressed = True
+            self._mac_b3_x0 = event.x
+            self._mac_b3_y0 = event.y
+            self._mac_two_finger = False
         return "break"
 
-    def macTwoFingerMotion(self, event):
+    def macB3Motion(self, event):
 
-        # Companion to macTwoFingerToMiddle, bound to <B3-Motion> (which
-        # otherwise maps to an empty motion handler).  While a bare two-finger
-        # press is being remapped, forward each motion to the middle-button
-        # translate pipeline.  <B*-Motion> generated events are only recognised
-        # as a button-2 motion when -state carries the button-2 mask (1 << (7 +
-        # 2)); with state 0 Tk demotes it to a plain <Motion>, so OR the mask
-        # in.  translateBind's <B2-Motion> lambda ignores the event's own state
-        # (it uses self.state), so only the mask matters here.
-        if not self._mac_two_finger:
+        # <B3-Motion> while a right/two-finger press is held. On the first
+        # motion past _mac_b3_drag_threshold we COMMIT to a drag: fire
+        # <ButtonPress-2> to start the app's Button-2 (translate) pipeline,
+        # arm _mac_two_finger, and from then on forward every B3-Motion to a
+        # <B2-Motion>. A press that never crosses the threshold stays a tap.
+        # A generated <B2-Motion> carries the Button-2 mask (1 << (7 + 2)) in
+        # -state so Tk keeps it as a button-2 motion rather than demoting it to
+        # a plain <Motion>. We return "break" so setupBind's (empty) B3 handler
+        # does not also fire.
+        if not self._mac_b3_pressed and not self._mac_two_finger:
             return "break"
-        # Button-2 state mask for a generated <B2-Motion>.
-        b2mask = 1 << (7 + 2)
-        event.widget.event_generate("<B2-Motion>", x=event.x, y=event.y, state=b2mask)
+        if not self._mac_two_finger:
+            if (
+                abs(event.x - self._mac_b3_x0) < self._mac_b3_drag_threshold
+                and abs(event.y - self._mac_b3_y0) < self._mac_b3_drag_threshold
+            ):
+                return "break"
+            # Crossed the threshold: commit to the translate pipeline.
+            self._mac_two_finger = True
+            event.widget.event_generate("<ButtonPress-2>", x=self._mac_b3_x0, y=self._mac_b3_y0, button=2)
+        event.widget.event_generate(
+            "<B2-Motion>", x=event.x, y=event.y, state=1 << (7 + 2)
+        )
         return "break"
 
-    def macTwoFingerRelease(self, event):
+    def macB3Release(self, event):
 
-        # Companion to macTwoFingerToMiddle, bound to <ButtonRelease-3>
-        # (which otherwise maps to an empty release handler).  Close out the
-        # remapped middle sequence so the Button-2 release handler runs (mark
-        # -> unmark, i.e. no lingering selection for a pure tap-drag).
+        # <ButtonRelease-3>. Two cases:
+        #   - committed to a drag (_mac_two_finger): close out the Button-2
+        #     sequence with <ButtonRelease-2> so translateBind's release runs
+        #     (finalize the translate).
+        #   - still just a press (a TAP, never dragged): open the action menu.
+        #     This is what makes the mouse's right-click open the menu; a
+        #     stationary two-finger tap does the same (unavoidable -- the two
+        #     are indistinguishable at the Tk layer).
         if self._mac_two_finger:
             self._mac_two_finger = False
             event.widget.event_generate("<ButtonRelease-2>", x=event.x, y=event.y, button=2)
+        elif self._mac_b3_pressed:
+            self._mac_b3_pressed = False
+            self.menu.popupMenu(event)
+        else:
+            # Stale press with no matching tracked press (e.g. a modifier click
+            # that was already handled on press): nothing to do.
+            pass
         return "break"
 
     def sliceMenuBind(self, button, menu_items=None, update_func=None):
