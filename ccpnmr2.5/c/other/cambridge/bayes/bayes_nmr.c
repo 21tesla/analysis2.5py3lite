@@ -99,7 +99,7 @@ int bayesNMR(
     double          * data;
     double          * dif_sigma, * max_mean, * min_mean, * dif_mean;
 
-    int             code, plane_flag = -1;
+    int             plane_flag = -1;
     double          max_max_sigma;
     double          Z;                  /* some stats value */
 
@@ -390,7 +390,7 @@ int bayesNMR(
     t0 = time(NULL);
     c0 = clock();
 #endif /*__DEBUG__*/
-    code = BayeSys3(Common, Objects);
+    (void) BayeSys3(Common, Objects);
 #ifdef __DEBUG__
     t1 = time(NULL);
     c1 = clock();
@@ -506,7 +506,7 @@ int UserMonitor(            /*   O  0 = continue, +ve = finish, -ve = abort*/
 
     PyObject  * py_sample_obj;
 
-    double      pr_unc, pr_llhood;
+    double      pr_llhood;
     int         pr_na;
     double      NormCube[MAX_NDIM];
 
@@ -574,7 +574,6 @@ int UserMonitor(            /*   O  0 = continue, +ve = finish, -ve = abort*/
             cubes_priors_to_ncubes( Object->Cubes[j], prior, UserCommon->spec_dim, Common->Ndim, NormCube );
 
             /* set up print variables for each permutation */
-            pr_unc    = Object->Cubes[j][Common->Ndim + Common->Valency];
             pr_llhood = Object->Lhood;
             pr_na     = Object->Natoms;
 

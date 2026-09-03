@@ -91,7 +91,7 @@ static void free_coords_memory(int natoms, float **coords1, float **coords2, flo
 */
 static PyObject *py_align_coordinates(PyObject *self, PyObject *args)
 {
-    int i, natoms, n1, n2;
+    int i, natoms = 0, n1, n2;
     float **coords1 = NULL, **coords2 = NULL, *weight = NULL, err;
     PyObject *obj, *rot_obj, *err_obj, *coords1_obj, *coords2_obj, *weight_obj = NULL;
     static float r0[COORD_NDIMS], r1[COORD_NDIMS], r2[COORD_NDIMS];

@@ -177,9 +177,8 @@ static PyObject *run_bayes(PyObject *self, PyObject *args)
 
 
     PyObject *py_list;
-    
+
     Line error_msg;
-    int return_code;
 
     /* parse the python args and test */
     if (!PyArg_ParseTuple(args, "siiOOOOffOOddOiiiid", 
@@ -263,7 +262,7 @@ static PyObject *run_bayes(PyObject *self, PyObject *args)
 
     py_list = (PyObject* ) PyList_New( 0 );
 
-    return_code = bayesNMR(spc_file, ndim, endianess, npoints, block_size, 
+    (void) bayesNMR(spc_file, ndim, endianess, npoints, block_size,
                 sample_start, sample_end, max_height, min_height, max_sigma, min_sigma, max_Q, min_Q,
                 dim_wrapped_int, shape, pos_peaks, min_atoms, max_atoms, rate, py_list);
 

@@ -1,0 +1,6 @@
+# Phase 4 distribution (2026-08-21): make the sdist self-contained so
+# `pip install .` (or `uv build`) can compile the 30 C extensions.
+include setup.py
+include pyproject.toml
+include README.md
+recursive-include ccpnmr2.5/c *.c *.h

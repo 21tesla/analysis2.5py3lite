@@ -145,11 +145,13 @@ static void tkc_eval(Tk_handler_p tk_handler_p, int argc, Tcl_Obj **argv)
 
     if (getenv("CCP_TK_DEBUG"))
         for (i = 0; i < argc; i++)
+        {
             if (argv[i])
                 fprintf(stderr, "  arg[%d]=%p '%s'\n", i, (void *) argv[i],
                         Tcl_GetString(argv[i]));
             else
                 fprintf(stderr, "  arg[%d]=<NULL>\n", i);
+        }
 
     if (Tcl_EvalObjv(interp, argc, argv, TCL_EVAL_GLOBAL) != TCL_OK)
     {

@@ -380,7 +380,7 @@ static PyObject *zoom(PyObject *self, PyObject *args)
 {
     Py_Structure obj = (Py_Structure) self;
     Structure structure = obj->structure;
-    float delta;
+    float delta = 0.0;
     Line error_msg;
     sprintf(error_msg, "Camera IN %f", delta);
 

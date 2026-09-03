@@ -5882,7 +5882,8 @@ double*  dLtry2)   //   O  (1/cool) INT dprior[2] (L/L0)^cool
         v2 = Xindex[v1];
         if( v2 >= 0 )                     // pick up Atom1/Atom2 cross term...
         {
-            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) ;
+            /* advance k2/i across the first v2 nbitx entries (empty body) */
+            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) {}
             CALL( Poiss2Marginal(MassInf, cool, q, ProbON,
                                  Mock, Data, Acc, Counts, Foot,
                                  nbits[v1], &ibits[k1], &zbits[k1],
@@ -5990,7 +5991,8 @@ double*  Flux2)    //   O  Fluxes of 2nd atom      [Valency]
         v2 = Xindex[v1];
         if( v2 >= 0 )
         {
-            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) ;
+            /* advance k2/i across the first v2 nbitx entries (empty body) */
+            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) {}
             CALL( Poiss2Sample(MassInf, Rand, cool, q, ProbON,
                                Mock, Data, Acc, Counts, Foot,
                                nbits[v1], &ibits[k1], &zbits[k1],
@@ -6085,7 +6087,8 @@ double*  Flux2)    // I    Fluxes of 2nd atom      [Valency]
         v2 = Xindex[v1];
         if( v2 >= 0 )
         {
-            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) ;
+            /* advance k2/i across the first v2 nbitx entries (empty body) */
+            for( k2 = i = 0; i < v2; k2 += nbitx[i++] ) {}
             poiss2lhood(Flux1[v1], Flux2[v2], Mock, Data, Acc, Foot,
                         nbits[v1], &ibits[k1], &zbits[k1],
                         nbitx[v2], &ibitx[k2], &zbitx[k2], &t1, &t2);

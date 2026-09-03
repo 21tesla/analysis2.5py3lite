@@ -344,7 +344,7 @@ CcpnStatus region_contour_file(Contour_file contour_file,
     Block_file block_file = contour_file->block_file;
     Store_file store_file = contour_file->store_file;
     int i, s;
-    int ndim, *block_size;
+    int ndim = 0, *block_size;
     int xdim = contour_file->xdim, ydim = contour_file->ydim;
     int cum_blocks[MAX_NDIM], block[MAX_NDIM];
     int block_min[MAX_NDIM], nblocks[MAX_NDIM], block_max[MAX_NDIM];

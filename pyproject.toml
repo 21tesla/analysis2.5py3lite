@@ -1,5 +1,7 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+# license uses the SPDX string form (requires setuptools>=77); wheel is the
+# default PEP 517 backend's companion and is kept explicit for clarity.
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,8 +9,10 @@ name = "ccpnmr"
 version = "2.5.2"
 description = "CCP NMR — NMR data analysis workbench (biochemistry)"
 readme = "README.md"
-requires-python = ">=3.13"
-license = {text = "LGPL-2.1"}
+# The whole toolchain (docs, CI, standalone build, C extensions) is unified on
+# Python 3.14; require the minimum that matches.
+requires-python = ">=3.14"
+license = "LGPL-2.1"
 authors = [
     {name = "CCP NMR Consortium"},
 ]
@@ -17,7 +21,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
 dependencies = [
@@ -112,7 +116,7 @@ include = [
 # ---------------------------------------------------------------------------
 
 [tool.ruff]
-target-version = "py313"
+target-version = "py314"
 line-length = 120
 src = ["ccpnmr2.5/python"]
 extend-exclude = [
@@ -165,7 +169,7 @@ python_files = ["test_*.py"]
 addopts = "-v --tb=short"
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.14"
 mypy_path = "ccpnmr2.5/python"
 ignore_missing_imports = true
 check_untyped_defs = false

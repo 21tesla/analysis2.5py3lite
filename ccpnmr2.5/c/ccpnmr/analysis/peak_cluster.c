@@ -181,7 +181,7 @@ void draw_peak_cluster(Peak_cluster peak_cluster, int xdim, int ydim,
                        Drawing_funcs *drawing_funcs, Generic_ptr data)
 {
     int i, ndim = peak_cluster->ndim, npeaks = peak_cluster->npeaks;
-    float xmin, xmax, ymin, ymax, p, x, y, dx, dy, offset;
+    float xmin, xmax, ymin, ymax, p, x, y;
     CcpnString text;
     Peak *peaks = peak_cluster->peaks;
 
@@ -213,8 +213,6 @@ void draw_peak_cluster(Peak_cluster peak_cluster, int xdim, int ydim,
 
     x = HALF * (xmin + xmax);
     y = HALF * (ymin + ymax);
-    dx = xmax - xmin;
-    dy = ymax - ymin;
 
     text = peak_cluster->dim_text[xdim];
     if (*text)
