@@ -3066,10 +3066,21 @@ class WindowFrame(Frame, WindowDraw):
         self.topPopup.currentRegion = (a0, b0, a1, b1)
         self.topPopup.startSelection()
 
-        if state != shift_key_state and state != ctrl_key_state:
+        # strip any stray modifier bits (CapsLock, Command, Option) so only the
+        # four real gesture states reach examineRegion (no_key->select, shift->
+        # select, ctrl->stats, shift+ctrl->pick).  shift+ctrl (==5) must be kept
+        # out of the "strip" set, or pick is silently demoted to select.
+        if state not in (no_key_state, shift_key_state, ctrl_key_state, shift_key_state + ctrl_key_state):
             state = no_key_state
 
-        if (abs(x0 - x1) < 5) and (abs(y0 - y1) < 5):
+        # x0,x1,y0,y1 are 0..1 fractions of the canvas, not pixels, so a raw
+        # abs(fraction - fraction) is always < 1 and hence always < 5 -- every
+        # drag was mis-classified as a click and examineRegion (the code that
+        # actually runs searchPeaks/findPeaks) was never reached.  Scale the
+        # fraction deltas back to pixels to get a real ~5px tap tolerance.
+        w = canvas.winfo_width()
+        h = canvas.winfo_height()
+        if (abs(x0 - x1) * w < 5) and (abs(y0 - y1) * h < 5):
             if state == shift_key_state:
                 newSelection = False
             else:
