@@ -29,6 +29,8 @@ ccpnmr2.5/python/cing/Libs/cython/superpose.c
 
 # OS
 .DS_Store
+._*
+__MACOSX/
 Thumbs.db
 
 # uv
