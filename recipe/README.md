@@ -17,8 +17,7 @@ Python 3.13 port of ccpnmr 2.5.2. It is **not** yet a complete, CI-ready package
 
 ## Why this is optional
 
-The canonical, primary distribution for this project is the **PyPI** sdist/wheel
-(see [`../docs/PUBLISHING.md`](../docs/PUBLISHING.md)), which already builds the
-C extensions at install time and is the "others can use it" path. The conda
-recipe exists so the same 3.13 build can be offered in the conda world without
-diverging the packaging logic.
+The canonical, primary distribution for this project is the **PyPI** sdist/wheel,
+which already builds the C extensions at install time and is the "others can use
+it" path. The conda recipe exists so the same build can be offered in the conda
+world without diverging the packaging logic.
