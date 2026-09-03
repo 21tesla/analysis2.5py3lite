@@ -1182,6 +1182,7 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
                 (int) tk_handler_p->width, (int) tk_handler_p->height,
                 tk_handler_p->sx, tk_handler_p->sy,
                 tk_handler_p->tx, tk_handler_p->ty);
+#ifdef __APPLE__
         {
             /* session-9b: report to stderr (no file append - the catch'd
                file block swallowed its own errors).  The C-canvas's OWN
@@ -1222,6 +1223,7 @@ void draw_xor_box_tk_handler(Tk_handler tk_handler,
                 fprintf(stderr, "boxgeom eval error: %s\n", msg ? msg : "(none)");
             }
         }
+#endif
     }
 
     w = xx1 - xx0;
