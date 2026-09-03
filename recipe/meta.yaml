@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# conda-forge recipe for ccpnmr 2.5.2 (Python 3.13)
+# conda-forge recipe for ccpnmr 2.5.2 (Python 3.14)
 #
 # STARTING POINT only — not a complete, CI-ready conda-forge package. To publish
 # you must:
@@ -27,7 +27,7 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<313]
+  skip: true  # [py<314]
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
@@ -70,10 +70,10 @@ about:
   license: LGPL-2.1
   license_family: LGPL
   license_file:
-  summary: "CCP NMR — NMR data analysis workbench (Python 3.13 port)"
+  summary: "CCP NMR — NMR data analysis workbench (Python 3.14 port)"
   description: |
     CcpNmr analysis: assignment, structure, dynamics, format conversion and
-    deposition tools for NMR, ported and built for Python 3.13 with rebuilt C
+    deposition tools for NMR, ported and built for Python 3.14 with rebuilt C
     extension layers.
   doc_url: https://ccpnc.iqfr.csic.es/
 

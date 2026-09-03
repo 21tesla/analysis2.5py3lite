@@ -1,7 +1,7 @@
 # Conda-forge recipe — ccpnmr (starting point)
 
 `meta.yaml` in this directory is a **starting-point** conda-forge recipe for the
-Python 3.13 port of ccpnmr 2.5.2. It is **not** yet a complete, CI-ready package.
+Python 3.14 port of ccpnmr 2.5.2. It is **not** yet a complete, CI-ready package.
 
 ## To actually publish to conda-forge
 
